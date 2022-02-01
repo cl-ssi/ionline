@@ -168,7 +168,7 @@
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.395, de 2021 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2022; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República.
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession->category == "A")
         Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
@@ -253,7 +253,7 @@
         </tr>
       </table>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession->category == "A")
       <table class="siete">
         <tr>
           <th>Nombre</th>
@@ -354,7 +354,7 @@
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>SÉPTIMO:</strong>
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
@@ -441,7 +441,7 @@
 
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -485,7 +485,7 @@
           <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession->category == "A")
         <p class="justify">
           <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
         </p>
@@ -526,7 +526,7 @@
           Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas. Los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession->category == "A")
         <p class="justify">
           <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
           se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio,
@@ -547,7 +547,7 @@
           <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession->category == "A")
         <p class="justify">
           <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
@@ -599,7 +599,7 @@
           <ins>Feriado Legal:</ins><br>
           Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.<br><br>
 
-          
+
           <ins>Permiso Administrativo (Solo para convenios por 3 meses):</ins><br>
           Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
 
@@ -618,10 +618,10 @@
         <div class="page-break"></div>
         @endif
 
-        
+
 
         Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        {{$ServiceRequest->employee->getFullNameAttribute()}} 
+        {{$ServiceRequest->employee->getFullNameAttribute()}}
         <br><br>
 
         <p class="">
@@ -632,7 +632,7 @@
         <p class="">
 
           <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
-          @if($ServiceRequest->estate == "Profesional Médico")
+          @if($ServiceRequest->profession->category == "A")
           Médico,
           @else
           No Médico,
@@ -646,7 +646,7 @@
           Unidad demandante COVID-19.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession->category == "A")
         <p class="">
 
 
@@ -654,15 +654,15 @@
 
           IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
 
-          
 
-          
-          
+
+
+
         </p>
         @else
         <p class="">
           <strong>3.</strong>
-          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.                   
+          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
         </p>
         @endif
         @endif
