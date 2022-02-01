@@ -118,6 +118,14 @@
                     </span>
                     <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
                     <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                    @if($event->comment)
+                      <br>
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $event->id }}">
+                          <i class="fas fa-comment"></i>
+                      </button>
+                    @endif
+                    @include('request_form.partials.modals.signature_comment')
                   @endif
                   @if($event->StatusValue == 'Rechazado')
                     <span style="color: Tomato;">
@@ -125,6 +133,14 @@
                     </span>
                     <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
                     <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                    @if($event->comment)
+                      <br>
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $event->id }}">
+                          <i class="fas fa-comment"></i>
+                      </button>
+                    @endif
+                    @include('request_form.partials.modals.signature_comment')
                   @endif
                 </td>
               @endforeach
@@ -234,6 +250,17 @@
     </table>
 </div>
 @endif
+
+<div class="card">
+  <div class="card-header">
+      <i class="fas fa-comment"></i> Observaciones
+  </div>
+  <div class="card-body">
+    <ul class="list-group">
+
+    </ul>
+  </div>
+</div>
 
 @endsection
 @section('custom_js')

@@ -27,6 +27,7 @@ use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -1357,6 +1358,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
+    Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
+
+    Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
+        Route::post('/{requestForm}/store/{eventType}', [RequestFormMessageController::class, 'store'])->name('store');
+    });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
@@ -1374,6 +1380,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::post('/{requestForm}/create_fund_to_be_settled', [PurchasingProcessController::class, 'create_fund_to_be_settled'])->name('create_fund_to_be_settled');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
         Route::post('/{requestForm}/create_oc', [PurchasingProcessController::class, 'create_oc'])->name('create_oc');
+        Route::post('/{requestForm}/create_convenio_marco', [PurchasingProcessController::class, 'create_convenio_marco'])->name('create_convenio_marco');
+        Route::post('/{requestForm}/create_direct_deal', [PurchasingProcessController::class, 'create_direct_deal'])->name('create_direct_deal');
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
         Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
@@ -1383,6 +1391,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+    Route::get('/create_view_document/{requestForm}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
     Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');

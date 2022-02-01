@@ -319,7 +319,8 @@
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
-                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->position_signer_user }}</td>
+                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->position_signer_user }}
+                      {{ $requestForm->eventSigner('leader_ship_event', 'approved')->signerOrganizationalUnit->name }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>
@@ -375,19 +376,21 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->signerUser->FullName }}</td>
+                  <td>{{ auth()->user()->FullName }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->position_signer_user }}</td>
+                  <td>{{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->position }}
+                      {{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->organizationalUnit->name }}
+                  </td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
+                  <td>{{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Estado</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->StatusValue }}</td>
+                  <td>Aprobado</td>
               </tr>
           </tbody>
       </table>

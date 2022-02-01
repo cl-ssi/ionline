@@ -129,7 +129,5 @@
         <button type="submit" class="btn btn-primary float-right" id="save_btn">
             <i class="fas fa-save"></i> Guardar
         </button>
-
-        </form>
     </div>
 </div>
