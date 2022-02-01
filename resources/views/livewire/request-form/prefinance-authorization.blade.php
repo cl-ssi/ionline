@@ -24,13 +24,15 @@
                   <td class="text-center">{{$key+1}}</td>
                   <td class="text-center">{{$item->id}}</td>
                   <td>
-                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError"
+                    <div wire:ignore id="for-bootstrap-select">
+                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select"
                         class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
                           <!-- <option value="">Seleccione...</option> -->
                           @foreach($lstBudgetItem as $val)
                             <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                           @endforeach
                       </select>
+                    </div>
                   </td>
                   <td>{{$item->article}}</td>
                   <td>{{$item->unit_of_measurement}}</td>
