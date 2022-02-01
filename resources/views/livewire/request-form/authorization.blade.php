@@ -87,9 +87,9 @@
 
           <div class="form-row">
               <fieldset class="form-group col-sm">
-                  <label for="forRejectedComment">Comentario de Rechazo:</label>
-                  <textarea wire:model="rejectedComment" wire:click="resetError" name="rejectedComment" class="form-control form-control-sm" rows="3"></textarea>
-                  @error('rejectedComment') <span class="error text-danger">{{ $message }}</span> @enderror
+                  <label for="for_comment">Observación:</label>
+                  <textarea wire:model="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                  @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
               </fieldset>
           </div>
 
