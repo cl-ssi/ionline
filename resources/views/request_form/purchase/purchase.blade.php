@@ -170,6 +170,14 @@
                 @endif
             @endif
 
+            @if($requestForm->purchase_mechanism_id == 2)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
+            @endif
+
+            @if($requestForm->purchase_mechanism_id == 3)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">s
+            @endif
+
             @if($requestForm->purchase_mechanism_id == 4)
                 @if($requestForm->father) <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
                 <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
@@ -178,8 +186,9 @@
                 @endif
             @endif
 
-            @if($requestForm->purchase_mechanism_id == 3)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">s
+            <!-- compra ágil -->
+            @if($requestForm->purchase_mechanism_id == 5)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
             @endif
 
             @csrf
@@ -281,10 +290,9 @@
     @if($requestForm->purchase_type_id == 3)
     @include('request_form.purchase.partials.fund_to_be_settled_form')
     @endif
-
 @endif
 
-<!-- Trato Directo -->
+<!-- Convenio Marco -->
 @if($requestForm->purchase_mechanism_id == 2)
     @include('request_form.purchase.partials.convenio_marco_form')
 @endif
