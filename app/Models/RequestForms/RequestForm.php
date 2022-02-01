@@ -62,7 +62,11 @@ class RequestForm extends Model implements Auditable
 
     public function user() {
       return $this->belongsTo(User::class, 'request_user_id');
-  }
+    }
+
+    public function messages() {
+        return $this->hasMany(RequestFormMessage::class);
+    }
 
     public function requestFormFiles() {
         return $this->hasMany(RequestFormFile::class);
