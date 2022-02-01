@@ -600,7 +600,7 @@
         @endif
 
 
-        @if($ServiceRequest->program_contract_type == "Horas")
+        @if($ServiceRequest->program_contract_type == "Mensual")
           @if($ServiceRequest->profession->category != "A")
             <p class="justify">
               <strong>{{$text}}</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
