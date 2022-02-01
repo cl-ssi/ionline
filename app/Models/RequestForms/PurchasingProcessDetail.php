@@ -57,7 +57,7 @@ class PurchasingProcessDetail extends Pivot
         elseif($this->pettyCash) return 'Fondo menor';
         elseif($this->fundToBeSettled) return 'Fondo a rendir';
         elseif($this->tender) return $this->tender->purchaseType->name ?? '';
-        elseif($this->immediatePurchase) return 'Orden de compra';
+        elseif($this->immediatePurchase) return $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
     }

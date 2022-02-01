@@ -46,7 +46,7 @@ class PurchaseMechanism extends Model
               return 'Trato Directo';
               break;
 
-          case "LICITACIÓN PÚBLICA":
+          case "LICITACIÓN PUBLICA":
               return 'Licitación Pública';
               break;
 

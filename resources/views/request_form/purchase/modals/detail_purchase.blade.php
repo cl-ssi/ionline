@@ -179,6 +179,12 @@
                                 <th class="table-active" style="width: 33%">ID OC</th>
                                 <td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
                             </tr>
+                            @if($requestForm->purchase_mechanism_id == 5)
+                            <tr>
+                                <th class="table-active" style="width: 33%">ID cotización</th>
+                                <td>{{ $detail->pivot->immediatePurchase->cot_id }}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <th class="table-active" scope="row">Descripción</th>
                                 <td>{{ $detail->pivot->immediatePurchase->description }}</td>
@@ -198,6 +204,14 @@
                             <tr>
                                 <th class="table-active" scope="row">Fecha OC aceptada</th>
                                 <td>{{ $detail->pivot->immediatePurchase->po_accepted_date ? $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Dias</th>
+                                <td>{{ $detail->pivot->immediatePurchase->days_type_delivery }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Plazo entrega en días</th>
+                                <td>{{ $detail->pivot->immediatePurchase->days_delivery }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" scope="row">Fecha estimada entrega</th>
@@ -224,7 +238,7 @@
                     <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}" class="list-group-item list-group-item-action py-2" target="_blank">
                         <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
                     @empty
-                    <p>No existen archivos adjuntos a esta OC.</p>
+                    <p>No existen archivos adjuntos.</p>
                     @endforelse
                 </div>
             @endif
