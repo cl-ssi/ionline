@@ -295,8 +295,8 @@
     @include('request_form.purchase.partials.tender_form')
 @endif
 
-<!-- COMPRA INMEDIATA -->
-@if($requestForm->purchase_mechanism_id == 4 && $requestForm->father)
+<!-- COMPRA INMEDIATA A PARTIR DE LICITACIÓN PÚBLICA o COMPRA ÁGIL -->
+@if(($requestForm->purchase_mechanism_id == 4 && $requestForm->father) || $requestForm->purchase_mechanism_id == 5)
     @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
