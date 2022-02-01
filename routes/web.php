@@ -27,6 +27,7 @@ use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -1358,6 +1359,10 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
+
+    Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
+        Route::post('/{requestForm}/store/{eventType}', [RequestFormMessageController::class, 'store'])->name('store');
+    });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');

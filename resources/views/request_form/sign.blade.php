@@ -275,6 +275,39 @@
 
 <livewire:request-form.authorization :requestForm="$requestForm" :eventType="$eventType" >
 
+
+@if($requestForm->messages->count() > 0)
+<br>
+<div class="card" id="message">
+  <div class="card-header">
+      <i class="fas fa-comment"></i> Mensajes
+  </div>
+  <div class="card-body">
+      @foreach($requestForm->messages as $message)
+      <ul class="list-group">
+          <li class="list-group-item text-left">
+              <p><i class="fas fa-user"></i> {{ $message->user->FullName }}</p>
+              <p><i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}</p>
+              <p class="font-italic"><i class="fas fa-comment"></i> {{ $message->message }}</p>
+          </li>
+      </ul>
+      @endforeach
+  </div>
+</div>
+
+@endif
+
+<br>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}">
+    <i class="fas fa-comment"></i> Agregar Mensaje
+</button>
+
+@include('request_form.partials.modals.create_message')
+
+<br><br>
+
 @endif
 
 @endsection
