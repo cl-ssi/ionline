@@ -19,6 +19,7 @@ use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PettyCash;
 use App\Models\RequestForms\PurchasingProcessDetail;
 use App\Models\RequestForms\Tender;
+use App\Models\RequestForms\DirectDeal;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -112,6 +113,7 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
+        session()->flash('success', 'La Orden de compra interna ha sido creado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -150,6 +152,7 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
+        session()->flash('success', 'El fondo menor (caja chica) ha sido creado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -182,6 +185,7 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
+        session()->flash('success', 'El fondo a rendir ha sido creado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -233,6 +237,7 @@ class PurchasingProcessController extends Controller
             }
         }
 
+        session()->flash('success', 'La Licitación ha sido creado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
 
     }
@@ -276,6 +281,27 @@ class PurchasingProcessController extends Controller
         }
         
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+
+    }
+
+
+
+    public function create_direct_deal(Request $request, RequestForm $requestForm)
+    {
+        //dd('entre ctm');
+        $requestForm->load('purchasingProcess.details');
+        if($this->estimated_expense_exceeded($requestForm)){
+            session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
+            return redirect()->back()->withInput();
+        }
+        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+
+        $directdeal = new DirectDeal($request->all());
+        $directdeal->save();
+
+        session()->flash('success', 'El trato directo ha sido creado exitosamentes');
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+
 
     }
 }

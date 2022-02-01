@@ -178,6 +178,10 @@
                 @endif
             @endif
 
+            @if($requestForm->purchase_mechanism_id == 3)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">s
+            @endif
+
             @csrf
             @method('POST')
 
