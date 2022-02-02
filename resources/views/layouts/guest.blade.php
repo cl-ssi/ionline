@@ -72,7 +72,7 @@
 
         <main class="container pt-3">
             <div class="d-none d-print-block">
-                <strong>{{ config('app.ss') }}</strong><br>
+                <strong>{{ env('APP_SS') }}</strong><br>
                 Ministerio de Salud
             </div>
             @include('layouts.partials.errors')

@@ -72,7 +72,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
     <div  style="width: 100%">
         <span class="uppercase">{{ $protocol->user->FullName }}</span><br>
         {{ $protocol->user->position }} <br>
-        {{ config('app.ss') }}<br style="padding-bottom: 6px;">
+        {{ env('APP_SS') }}<br style="padding-bottom: 6px;">
     </div>
 </div>
 
@@ -81,7 +81,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
 
 
 <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
-    width="120" alt="Logo {{ config('app.ss') }}"><br>
+    width="120" alt="Logo {{ env('APP_SS') }}"><br>
 <div class="siete" style="padding-top: 3px;">Unidad de Drogas</div>
 <div class="siete" style="padding-top: 4px;">
     {{ $protocol->user->Initials }}
@@ -134,7 +134,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
     <div  style="width: 100%">
         <span class="uppercase">{{ $protocol->user->FullName }}</span><br>
         {{ $protocol->user->position }} <br>
-        {{ config('app.ss') }}<br style="padding-bottom: 6px;">
+        {{ env('app.ss') }}<br style="padding-bottom: 6px;">
     </div>
 </div>
 
