@@ -80,7 +80,7 @@
                                 font-family: Arial, Helvetica, sans-serif;
                                 color: #505050;
                                 font-weight: 800;
-                                width: 140px;">{{ config('app.ss') }}</div>
+                                width: 140px;">{{ env('APP_SS') }}</div>
                     <div class="letra_ministerio"
                         style="font-size:9.0pt;
                                 font-family: Arial, Helvetica, sans-serif;

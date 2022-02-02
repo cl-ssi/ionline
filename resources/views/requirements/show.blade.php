@@ -68,13 +68,13 @@ bottom: 5px;
             @csrf
             @method('GET')
             <input type="hidden" value="{{ $requirement->id }}" name="requirement_id">
-            <div class="form-group mb-2">
-                <label for="asignarCategoria" class="sr-only">Asignar categoría:</label>
+            <!-- <div class="form-group mb-2">
+                <label for="asignarCategoria" class="sr-only"></label>
                 <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-            </div>
+            </div> -->
             <div class="form-group mx-sm-3 mb-2">
-                <label for="category_id" class="sr-only">Categorias</label>
-                <select name="category_id[]" id="category_id" class="selectpicker input-sm"
+                <label for="category_id">Asignar categoría:</label>
+                <select name="category_id[]" id="category_id" class="selectpicker input-md"
                     multiple title="Elige tus categorías" >
                     @foreach($categories as $key => $category)
                         {{$flag = 0}}

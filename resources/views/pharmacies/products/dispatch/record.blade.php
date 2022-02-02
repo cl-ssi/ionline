@@ -10,7 +10,7 @@
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
-                Droguería - {{ config('app.ss') }}
+                Droguería - {{ env('APP_SS') }}
             </div>
             <div class="siete" style="padding-top: 3px;">
                 <i>fernando.molina@redsalud.gob.cl</i>
@@ -25,7 +25,7 @@
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
-                Bodega APS - {{ config('app.ss') }}
+                Bodega APS - {{ env('APP_SS') }}
             </div>
             <div class="siete" style="padding-top: 3px;">
                 <i>bodega.ssi@redsalud.gov.cl</i>
@@ -43,7 +43,7 @@
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
-                Bodega Servicios Generales - {{ config('app.ss') }}
+                Bodega Servicios Generales - {{ env('APP_SS') }}
             </div>
             <div class="siete" style="padding-top: 3px;">
                 <i>bodega.ssi@redsalud.gov.cl</i>

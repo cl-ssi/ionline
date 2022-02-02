@@ -37,5 +37,5 @@
     perfil de cargo establecido para dicha función
 </p>
 
-{{ config('app.ss') }}
+{{ env('APP_SS') }}
 @endsection
