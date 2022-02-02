@@ -37,7 +37,7 @@
                     <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i></button>
                 </div>
 
-                @if($reception->recordToCourt && $reception->recordToCourt->document_date)
+                @if($reception->recordToCourt)
                 <div class="col-1">
                     <label for="">&nbsp;</label>
                     <a class="btn btn-outline-secondary form-control" target="_blank"
