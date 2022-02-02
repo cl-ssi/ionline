@@ -8,7 +8,7 @@
 
   <br>
 
-  <p>A través del presente, se informa ingreso de nuevo formulario de compras:</p>
+  <p>A través del presente, se informa ingreso de nuevo formulario de requerimiento de compras:</p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $req->id }}</li>
