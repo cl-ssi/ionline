@@ -35,6 +35,7 @@
                 <option value=""></option>
                 <option value="2020" @if($request->input('year')==2020) selected @endif>2020</option>
                 <option value="2021" @if($request->input('year')==2021) selected @endif>2021</option>
+                <option value="2022" @if($request->input('year')==2022) selected @endif>2022</option>
             </select>
         </fieldset>
 
