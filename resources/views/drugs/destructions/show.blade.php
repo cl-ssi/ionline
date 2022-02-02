@@ -129,19 +129,19 @@
     <div class="center" style="width: 33%">
         {{ $destruction->manager->FullName }}<br>
         {{ $destruction->manager->position }} {{ $destruction->manager->organizationalUnit->name }}<br>
-        {{ config('app.ss') }}<br>
+        {{ env('APP_SS') }}<br>
     </div>
 
     <div class="center" style="width: 33%">
         {{ $destruction->observer->FullName }}<br>
         Ministro de Fe<br>
-        {{ config('app.ss') }}
+        {{ env('APP_SS') }}
     </div>
 
     <div class="center" style="width: 32%;">
         {{ $destruction->lawyer_observer->FullName }}<br>
         Departamento de Asesoría Jurídica<br>
-        {{ config('app.ss') }}<br>
+        {{ env('APP_SS') }}<br>
     </div>
 
 </div>
