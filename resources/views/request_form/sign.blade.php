@@ -297,7 +297,7 @@
       @endforeach
   </div>
 </div>
-@else
+@endif
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}">
@@ -307,7 +307,5 @@
 @include('request_form.partials.modals.create_message')
 
 <br><br>
-
-@endif
 
 @endsection
