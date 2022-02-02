@@ -24,7 +24,7 @@
 
   <br>
 
-  <p>Para mayor infromación favor ingresar a su Bandeja de Solicitudes en iOnline.</p>
+  <p>Para mayor información favor ingresar a su Bandeja de Solicitudes en iOnline.</p>
 
   <br>
 
