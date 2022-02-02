@@ -37,7 +37,7 @@
     <strong>DE:</strong>
 </div>
 <div style="weight: bold;float:left; text-transform: uppercase;">
-    <strong>{{ $reception->sampleToIsp->lawyer->position }}<br>{{ config('app.ss') }}</strong>
+    <strong>{{ $reception->sampleToIsp->lawyer->position }}<br>{{ env('APP_SS') }}</strong>
 </div>
 
 <div style="clear: both; padding-bottom: 10px"></div>
@@ -79,14 +79,14 @@
         <li style="padding-bottom: 10px;">
             La presente delegación de firma se aprobó por resolución exenta
             <strong>{{ $mandato }}</strong> de la Dirección
-            del {{ config('app.ss') }}.
+            del {{ env('APP_SS') }}.
         </li>
     </ol>
 </p>
 
 <!-- FIXME: El genero del director debería estar en parametro -->
 <p>
-    Saluda atentamente a usted, "Por orden del Director del {{ config('app.ss') }}".
+    Saluda atentamente a usted, "Por orden del Director del {{ env('APP_SS') }}".
 </p>
 
 
@@ -95,7 +95,7 @@
         <p class="uppercase">
             {{ $reception->sampleToIsp->lawyer->FullName }}<br>
             {{ $reception->sampleToIsp->lawyer->position }}<br>
-            {{ config('app.ss') }}
+            {{ env('APP_SS') }}
         </p>
     </div>
 </div> -->

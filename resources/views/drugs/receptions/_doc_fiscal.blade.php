@@ -19,7 +19,7 @@
 </div>
 <div style="clear: both; padding-bottom: 10px"></div>
 <div style="width: 60px; float:left;"><strong>DE:</strong></div>
-<div style="weight: bold;float:left; text-transform: uppercase;"><strong>JEFE DEPARTAMENTO ASESORIA JURIDICA<br>{{ config('app.ss') }}</strong></div>
+<div style="weight: bold;float:left; text-transform: uppercase;"><strong>JEFE DEPARTAMENTO ASESORIA JURIDICA<br>{{ env('APP_SS') }}</strong></div>
 <div style="clear: both; padding-bottom: 10px"></div>
 <div style="width: 60px; float:left;"><strong>PARA:</strong></div>
 <div style="weight: bold; float:left; text-transform: uppercase;"><strong>SR. FISCAL<br>{{ $reception->court->name }}</strong></div>
@@ -42,14 +42,14 @@
         <li style="padding-bottom: 10px;">
             La presente delegación de firma se aprobó por resolución exenta
             <strong>{{ $mandato }}</strong> de la Dirección
-            del {{ config('app.ss') }}.
+            del {{ env('APP_SS') }}.
         </li>
     </ol>
 </p>
 
 
 <p>
-    Saluda atentamente a usted, <strong>por orden de la dirección del {{ config('app.ss') }}</strong>.
+    Saluda atentamente a usted, <strong>por orden de la dirección del {{ env('APP_SS') }}</strong>.
 </p>
 
 <p>
@@ -60,7 +60,7 @@
 
     <!--
     Remito a usted Acta de Recepción N° <strong>{{ $reception->id }}</strong>
-    de la Unidad de Drogas del <strong>{{ config('app.ss') }}</strong>.
+    de la Unidad de Drogas del <strong>{{ env('APP_SS') }}</strong>.
     Formulario cadena de custodia ininterrumpido, correspondiente;
     Informe sobre tráfico y acción de la <strong>
         @foreach($substances as $substance) {{ $substance->substance->name }}, @endforeach
@@ -81,7 +81,7 @@
         <p class="uppercase">
             {{ $reception->lawyer->FullName }}<br>
             {{ $reception->lawyer->position }}<br>
-            {{ config('app.ss') }}
+            {{ env('APP_SS') }}
         </p>
     </div>
 </div>
