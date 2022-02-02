@@ -171,11 +171,19 @@
             @endif
 
             @if($requestForm->purchase_mechanism_id == 2)
+                @if($requestForm->father || $requestForm->purchase_type_id == 4) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                @else
                 <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
+                @endif
             @endif
 
             @if($requestForm->purchase_mechanism_id == 3)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">s
+                @if($requestForm->father) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                @else
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
+                @endif
             @endif
 
             @if($requestForm->purchase_mechanism_id == 4)
@@ -292,13 +300,14 @@
     @endif
 @endif
 
-<!-- Convenio Marco -->
-@if($requestForm->purchase_mechanism_id == 2)
+
+<!-- Convenio Marco menos CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
+@if($requestForm->purchase_mechanism_id == 2 && !$requestForm->father && $requestForm->purchase_type_id != 4)
     @include('request_form.purchase.partials.convenio_marco_form')
 @endif
 
 <!-- Trato Directo -->
-@if($requestForm->purchase_mechanism_id == 3)
+@if($requestForm->purchase_mechanism_id == 3 && !$requestForm->father)
     @include('request_form.purchase.partials.direct_deal_form')
 @endif
 
@@ -307,8 +316,8 @@
     @include('request_form.purchase.partials.tender_form')
 @endif
 
-<!-- COMPRA INMEDIATA A PARTIR DE LICITACIÓN PÚBLICA o COMPRA ÁGIL -->
-@if(($requestForm->purchase_mechanism_id == 4 && $requestForm->father) || $requestForm->purchase_mechanism_id == 5)
+<!-- COMPRA INMEDIATA A PARTIR DE OTRO RF o COMPRA ÁGIL (cod 7) o CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
+@if( $requestForm->father || in_array($requestForm->purchase_type_id, [4, 7]))
     @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 

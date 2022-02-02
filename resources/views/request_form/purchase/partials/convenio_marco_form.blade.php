@@ -35,7 +35,7 @@
             <fieldset class="form-group col-sm-2">
               <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
               <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
-                  value="{{ old('estimated_delivery_date') }}"  disabled required>
+                  value="{{ old('estimated_delivery_date') }}"  readonly required>
             </fieldset>
             <fieldset class="form-group col-sm-3">
               <label for="for_po_with_confirmed_receipt_date">Fecha OC con recepción conforme</label>
