@@ -264,14 +264,38 @@
                 @endcan
 
                 @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)', 'Pharmacy: Servicios generales (id:4)'])
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pharmacies.index') }}">
-                            @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)']) <i class="fas fa-prescription-bottle-alt"></i> Droguería @endcan
-                            @can('Pharmacy: APS (id:3)') <i class="fas fa-list-ul"></i> Bodega APS @endcan
-                            @can('Pharmacy: Servicios generales (id:4)') <i class="fas fa-list-ul"></i> Bodega Servicios Generales @endcan
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-warehouse"></i> Bodega
                         </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
+                            <a class="dropdown-item"
+                                href="{{ route('pharmacies.index') }}">
+                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> Droguería 
+                            </a>
+                            @endcanany
+
+                            @can('Pharmacy: APS (id:3)')
+                            <a class="dropdown-item"
+                                href="{{ route('pharmacies.index') }}">
+                                <i class="fas fa-fw fa-medkit"></i> APS
+                            </a>
+                            @endcan
+
+                            @can('Pharmacy: Servicios generales (id:4)')
+                            <a class="dropdown-item"
+                                href="{{ route('pharmacies.index') }}">
+                                <i class="fas fa-fw fa-warehouse"></i> Servicios Generales
+                            </a>
+                            @endcan
+
+                        </div>
                     </li>
-                @endcan
+                @endcanany
+
 
                 @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
                 <li class="nav-item dropdown">
