@@ -289,14 +289,18 @@ class RequestFormController extends Controller {
     {
         $requestForm->load('itemRequestForms');
         $newRequestForm = $requestForm->replicate();
+        $newRequestForm->folio = $requestForm->folio.'-'.($requestForm->children()->withTrashed()->count() + 1);
         $newRequestForm->request_form_id = $requestForm->id;
         $newRequestForm->request_user_id = Auth::id();
         $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
         $newRequestForm->estimated_expense = 0;
+        $newRequestForm->has_increased_expense = null;
         $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
         $newRequestForm->sigfe = null;
         $newRequestForm->status = 'pending';
         $newRequestForm->signatures_file_id = null;
+        $newRequestForm->signatures_file_id = null;
+        $newRequestForm->old_signatures_file_id = null;
         $newRequestForm->push();
 
         $total = 0;
@@ -318,8 +322,8 @@ class RequestFormController extends Controller {
         EventRequestform::createFinanceEvent($newRequestForm);
         EventRequestform::createSupplyEvent($newRequestForm);
 
-        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->id.' fue creado con éxito. <br>
-                                  Recuerde que es un formulario dependiente de ID N° '.$requestForm->id.'. <br>
+        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->folio.' fue creado con éxito. <br>
+                                  Recuerde que es un formulario dependiente de ID N° '.$requestForm->folio.'. <br>
                                   Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
         return redirect()->route('request_forms.edit', $newRequestForm);
     }

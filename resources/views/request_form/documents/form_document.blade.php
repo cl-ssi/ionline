@@ -154,7 +154,7 @@
 
       <div class="right" style="float: right; width: 340px;">
         <div class="left" style="padding-bottom: 6px;">
-          <strong>NÚMERO DE FORMULARIO DE REQUERIMIENTO: {{ number_format($requestForm->id,0,",",".") }}</strong>
+          <strong>N° DE FORMULARIO DE REQUERIMIENTO: {{ $requestForm->folio }}</strong>
         </div>
         <div class="left" style="padding-bottom: 2px;">
           <strong>Iquique, {{ $requestForm->eventSignatureDate('finance_event', 'approved') }}</strong>
@@ -211,30 +211,37 @@
               <td colspan="2">{{ $requestForm->justification }}</td>
           </tr>
           <tr>
-              <th align="left" rowspan="4">Mecanismo de adquisición</th>
+              <th align="left" rowspan="5">Mecanismo de adquisición</th>
               <td>Menores a 3 UTM</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'MENORES A 3 UTM')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 1)
                       X
                   @endif
               </td>
           </tr>
           <tr>
               <td>Convenio Marco</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'CONVENIO MARCO')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 2)
                       X
                   @endif
               </td>
           </tr>
           <tr>
               <td>Licitación Pública</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'LICITACIÓN PUBLICA')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 3)
                       X
                   @endif
               </td>
           </tr>
           <tr>
               <td>Trato Directo</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'TRATO DIRECTO')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 4)
+                      X
+                  @endif
+              </td>
+          </tr>
+          <tr>
+              <td>Compra Ágil</td>
+              <td align="center">@if($requestForm->purchase_mechanism_id == 5)
                       X
                   @endif
               </td>
@@ -247,7 +254,7 @@
           <thead>
               <tr>
                   <th>#</th>
-                  <th>Ítem Presupuestario</th>
+                  <th>Ítem Pres.</th>
                   <th>Articulo</th>
                   <th>Especificaciones Técnicas</th>
                   <th>Cantidad</th>

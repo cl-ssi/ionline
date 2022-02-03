@@ -20,6 +20,10 @@
         <table class="table table-sm table-bordered">
             <tbody class="small">
                 <tr>
+                    <th class="table-active" colspan="2" scope="row">Folio</th>
+                    <td>{{ $requestForm->folio }}</td>
+                </tr>
+                <tr>
                     <th class="table-active" colspan="2" scope="row">Fecha de Creación</th>
                     <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                 </tr>
