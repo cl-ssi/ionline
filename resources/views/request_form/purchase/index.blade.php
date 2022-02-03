@@ -16,6 +16,7 @@
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
+                    <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
                     <th>Tipo</th>
                     <th>Descripción</th>
@@ -32,6 +33,7 @@
                 @foreach($my_request_forms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
+                            <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
                             <td>{{ $requestForm->name }}</td>
@@ -89,6 +91,7 @@
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
+                    <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
                     <th>Tipo</th>
                     <th>Descripción</th>
@@ -106,6 +109,7 @@
                 @foreach($request_forms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
+                            <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
                             <td>{{ $requestForm->name }}</td>

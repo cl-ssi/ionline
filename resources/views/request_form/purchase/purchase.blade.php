@@ -19,6 +19,10 @@
                 </thead> -->
                 <tbody class="small">
                     <tr>
+                        <th class="table-active" scope="row">Folio</th>
+                        <td>{{ $requestForm->folio }}</td>
+                    </tr>
+                    <tr>
                         <th class="table-active" scope="row">Fecha de Creación</th>
                         <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                     </tr>
@@ -437,6 +441,7 @@
                     <tr>
                         <th>Item</th>
                         <th>ID</th>
+                        <th>Folio</th>
                         <th style="width: 7%">Fecha Creación</th>
                         <th>Tipo</th>
                         <th>Descripción</th>
@@ -476,6 +481,7 @@
 
                                 @endswitch
                         </td>
+                        <td>{{ $requestForm->folio }}</td>
                         <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
                         <td>{{ $child->SubtypeValue }}</td>
                         <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->name }}</a> @else {{ $child->name }} @endif</td>

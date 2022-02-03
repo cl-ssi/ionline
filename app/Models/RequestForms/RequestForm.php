@@ -50,8 +50,13 @@ class RequestForm extends Model implements Auditable
         'name', 'subtype', 'justification', 'superior_chief',
         'type_form', 'bidding_number', 'request_user_id',
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
-        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency'
+        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
+        'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id'
     ];
+
+    public function getFolioAttribute($value){
+      return $value . ($this->has_increased_expense ? '-M' : '');
+    }
 
     public function father(){
       return $this->belongsTo(RequestForm::class, 'request_form_id');

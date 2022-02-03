@@ -30,6 +30,7 @@
                   <thead class="small">
                     <tr class="text-center">
                       <th>ID</th>
+                      <th>Folio</th>
                       <th style="width: 7%">Fecha Creación</th>
                       <th>Tipo / <br>Mecanismo de Compra</th>
                       <th>Descripción</th>
@@ -57,6 +58,7 @@
 
                                     @endswitch
                                 </td>
+                                <td>{{ $requestForm->folio }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
@@ -118,6 +120,7 @@
                   <thead class="small">
                     <tr class="text-center">
                       <th>ID</th>
+                      <th>Folio</th>
                       <th style="width: 7%">Fecha Creación</th>
                       <th>Tipo</th>
                       <th>Descripción</th>
@@ -133,6 +136,7 @@
                       @foreach($new_budget_pending_to_sign as $requestForm)
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
+                                <td>{{ $requestForm->folio }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ $requestForm->SubtypeValue }}</td>
                                 <td>{{ $requestForm->name }}</td>
@@ -194,6 +198,7 @@
               <thead class="small">
                 <tr>
                   <th>ID</th>
+                  <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
                   <th>Tipo</th>
                   <th>Descripción</th>
@@ -230,6 +235,7 @@
 
                                 @endswitch
                             </th>
+                            <td>{{ $requestForm->folio }}</td>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
@@ -303,6 +309,7 @@
               <thead class="small">
                 <tr>
                   <th>ID</th>
+                  <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
                   <th>Tipo</th>
                   <th>Descripción</th>
@@ -339,6 +346,7 @@
 
                                 @endswitch
                             </th>
+                            <td>{{ $requestForm->folio }}</td>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
