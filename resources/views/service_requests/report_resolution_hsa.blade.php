@@ -225,7 +225,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
