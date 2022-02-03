@@ -38,7 +38,7 @@
                 <tr>
                     <th class="table-active" rowspan="2" scope="row">Solicitante</th>
                     <th class="table-active" scope="row">Usuario Gestor</th>
-                    <td>{{ $requestForm->user->getFullNameAttribute()}}</td>
+                    <td>{{ $requestForm->user->FullName }}</td>
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -47,7 +47,7 @@
                 <tr>
                     <th class="table-active" rowspan="2" scope="row">Administrador de Contrato</th>
                     <th class="table-active" scope="row">Usuario</th>
-                    <td>{{ $requestForm->contractManager->name }}</td>
+                    <td>{{ $requestForm->contractManager->FullName }}</td>
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Unidad Organizacional</th>
@@ -157,6 +157,8 @@
 @if($eventType == 'pre_finance_event')
 
 <livewire:request-form.prefinance-authorization :requestForm="$requestForm" :eventType="$eventType" :round_trips="$round_trips" :baggages="$baggages" >
+
+<br>
 
 @else
 
@@ -275,8 +277,6 @@
 
 <livewire:request-form.authorization :requestForm="$requestForm" :eventType="$eventType" >
 
-<br>
-
 @endif
 
 @if($requestForm->messages->count() > 0)
@@ -286,25 +286,30 @@
       <i class="fas fa-comment"></i> Mensajes
   </div>
   <div class="card-body">
-      @foreach($requestForm->messages as $message)
+      @foreach($requestForm->messages->sortByDesc('created_at') as $message)
       <ul class="list-group">
           <li class="list-group-item text-left">
               <p><i class="fas fa-user"></i> {{ $message->user->FullName }}</p>
               <p><i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}</p>
-              <p class="font-italic"><i class="fas fa-comment"></i> {{ $message->message }}</p>
+              <p class="font-italic"><i class="fas fa-comment"></i> "{{ $message->message }}"</p>
           </li>
+          <br>
       </ul>
       @endforeach
   </div>
 </div>
 @endif
 
+<br>
+
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}">
     <i class="fas fa-comment"></i> Agregar Mensaje
 </button>
 
-@include('request_form.partials.modals.create_message')
+@include('request_form.partials.modals.create_message', [
+  'from' => 'signature'
+])
 
 <br><br>
 

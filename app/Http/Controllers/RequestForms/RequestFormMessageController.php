@@ -36,18 +36,25 @@ class RequestFormMessageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, RequestForm $requestForm, $eventType)
+    public function store(Request $request, RequestForm $requestForm, $eventType, $from)
     {
         $message = new RequestFormMessage($request->All());
         $message->user()->associate(Auth::user());
         $message->requestForm()->associate($requestForm);
         $message->save();
 
-        return redirect()
-           ->to(route('request_forms.sign',[
-             'requestForm' => $requestForm,
-             'eventType' => $eventType
-             ]).'#message');
+        if($from == 'signature'){
+            return redirect()
+               ->to(route('request_forms.sign',[
+                 'requestForm' => $requestForm,
+                 'eventType' => $eventType
+                 ]).'#message');
+        }
+        if($from == 'show'){
+            return redirect()
+               ->to(route('request_forms.show',[
+                 'requestForm' => $requestForm]).'#message');
+        }
     }
 
     /**

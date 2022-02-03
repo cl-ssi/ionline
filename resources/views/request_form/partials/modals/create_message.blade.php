@@ -10,10 +10,10 @@
       </div>
       <div class="modal-body">
           <p class="text-left"><i class="fas fa-user"></i> {{ auth()->user()->FullName }}</p>
-
           <form method="POST" class="form-horizontal" action="{{ route('request_forms.message.store', [
             'requestForm' => $requestForm,
-            'eventType' => $eventType]) }}">
+            'eventType' => $eventType,
+            'from' => $from]) }}">
               @csrf
               @method('POST')
               <div class="form-row">

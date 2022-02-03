@@ -1361,7 +1361,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
-        Route::post('/{requestForm}/store/{eventType}', [RequestFormMessageController::class, 'store'])->name('store');
+        Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
     });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {

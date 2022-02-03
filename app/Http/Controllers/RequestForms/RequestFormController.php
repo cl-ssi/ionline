@@ -239,37 +239,39 @@ class RequestFormController extends Controller {
 
     public function callbackSign($message, $modelId, SignaturesFile $signaturesFile = null)
     {
-        $requestForm = RequestForm::find($modelId);
-
-        //ACTUALIZAO EVENTO DE FINANZAS
-        $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
-          'signature_date'       => Carbon::now(),
-          'position_signer_user' => auth()->user()->position,
-          'status'               => 'approved',
-          'signer_user_id'       => auth()->id()
-        ]);
-        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->position_signer_user = auth()->user()->position;
-        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->status  = 'approved';
-        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->signerUser()->associate(auth()->user());
-        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->save();
-
         if (!$signaturesFile) {
             session()->flash('danger', $message);
             return redirect()->route('request_forms.pending_forms');
         }
-        $requestForm->signatures_file_id = $signaturesFile->id;
-        $requestForm->save();
+        else{
+            $requestForm = RequestForm::find($modelId);
 
-        //Envío de notificación para comprador.
-        // if($requestForm->purchasers->first()->email){
-        //     Mail::to($requestForm->purchasers->first()->email)
-        //       ->cc(env('APP_RF_MAIL'))
-        //       ->send(new PurchaserNotification($requestForm));
-        // }
-        //--------------------------------------
+            //ACTUALIZAO EVENTO DE FINANZAS
+            $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
+              'signature_date'       => Carbon::now(),
+              'position_signer_user' => auth()->user()->position,
+              'status'               => 'approved',
+              'signer_user_id'       => auth()->id()
+            ]);
 
-        session()->flash('success', $message);
-        return redirect()->route('request_forms.pending_forms');
+            $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+            $now = Carbon::now();
+            $type = 'manager';
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+            Mail::to($emails)
+              ->cc(env('APP_RF_MAIL'))
+              ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+
+
+            $requestForm->signatures_file_id = $signaturesFile->id;
+            $requestForm->save();
+
+            session()->flash('success', $message);
+            return redirect()->route('request_forms.pending_forms');
+        }
+
     }
 
     public function signedRequestFormPDF(RequestForm $requestForm)
