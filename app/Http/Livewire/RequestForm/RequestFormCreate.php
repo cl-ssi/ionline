@@ -193,7 +193,11 @@ class RequestFormCreate extends Component
                                     empresa que indique la compra asociada, y un correo de respaldo que
                                     la empresa acepta la nueva adquisición.";
               break;
-          case "":
+          case 5: //COMPRA ÁGIL
+              $this->messagePM[] = "Especificaciones Técnicas";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
               break;
       }
     }
