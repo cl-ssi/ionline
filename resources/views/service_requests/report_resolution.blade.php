@@ -230,7 +230,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -252,13 +252,13 @@
           <th>Valor por Hora</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
-          <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
-          <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
-          <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
-          <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->employee->runFormat()}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->start_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->end_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->responsabilityCenter->name}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
         </tr>
       </table>
@@ -276,7 +276,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
@@ -307,9 +307,19 @@
       <p class="justify">
         <strong>PRIMERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+          Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de 
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del 
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a 
+          {{$ServiceRequest->employee->getFullNameAttribute()}}, 
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}), 
+          para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+          D. {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de 
+          {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del 
+          Servicio de Salud Iquique de Iquique, contrata a 
+          {{$ServiceRequest->employee->getFullNameAttribute()}}, 
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}), 
+          para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
 
@@ -707,11 +717,19 @@
       <p class="">
 
         <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
-        @if($ServiceRequest->profession->category == "A")
-        Médico,
+        @if($ServiceRequest == NULL)
+          @if($ServiceRequest->profession->category == "A")
+            Médico,
+          @else
+            No Médico,
+          @endif
+        {{-- Compatibilidad con el antigo state --}}
+        @elseif($ServiceRequest->estate == 'Profesional Médico')
+         Médico,
         @else
-        No Médico,
+          No Médico,
         @endif
+
         del presupuesto del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital “Dr. Ernesto Torres Galdames” de Iquique.
