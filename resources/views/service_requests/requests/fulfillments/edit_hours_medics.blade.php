@@ -166,64 +166,16 @@
 						@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
 					</div>
 
+
+					{{-- Fue reemplazado por el livewire attachments-fulfillments sólo se muestra para 9 registros que quedaron con asistencia cargada --}}
+					@if($fulfillment->backup_assistance)
 					<hr>
+					Respaldo de asistencia (antiguo): 
+					<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$fulfillment->backup_assistance}}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver respaldo asistencia">
+						<span class="fas fa-file" aria-hidden="true"></span>
+					</a>
+					@endif
 
-					<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
-						<div class="form-row">
-							<fieldset class="form-group col">
-								<label for="for_backup_assistance">Respaldo de asistencia</label>
-								<input type="file" name="backup_assistance" value="{{$fulfillment->backup_assistance}}">
-							</fieldset>
-							@if($fulfillment->backup_assistance)
-							<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$fulfillment->backup_assistance}}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver respaldo asistencia">
-								<span class="fas fa-file" aria-hidden="true"></span>
-							</a>
-							@endif
-
-							@can('Service Request: fulfillments responsable')
-							@if($fulfillment->responsable_approver_id == NULL)
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary">Guardar</button>
-							</fieldset>
-							@else
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-							</fieldset>
-							@endif
-							@endcan
-
-							@can('Service Request: fulfillments rrhh')
-							@if($fulfillment->rrhh_approver_id == NULL)
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary">Guardar</button>
-							</fieldset>
-							@else
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-							</fieldset>
-							@endif
-							@endcan
-
-							@can('Service Request: fulfillments finance')
-							@if($fulfillment->finances_approver_id == NULL)
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary">Guardar</button>
-							</fieldset>
-							@else
-							<fieldset class="form-group col">
-								<label for="for_estate"><br /></label>
-								<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-							</fieldset>
-							@endif
-							@endcan
-
-						</div>
-					</form>
 
 				</div>
 

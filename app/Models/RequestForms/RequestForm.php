@@ -14,6 +14,7 @@ use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class RequestForm extends Model implements Auditable
@@ -312,7 +313,11 @@ class RequestForm extends Model implements Auditable
     }
 
     public function quantityOfItems(){
-      return $this->type_form == 'bienes y/o servicios' ? count($this->itemRequestForms) : count($this->passengers);
+      return $this->type_form == 'bienes y/o servicios' ? $this->itemRequestForms()->count() : $this->passengers()->count();
+    }
+
+    public function iAmPurchaser(){
+      return $this->purchasers->where('id', Auth::id())->count() > 0;
     }
 
 
