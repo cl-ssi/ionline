@@ -389,6 +389,7 @@
                   @endforeach
               </tbody>
             </table>
+            {{$not_pending_forms->links()}}
           </div>
         </div>
     @else
