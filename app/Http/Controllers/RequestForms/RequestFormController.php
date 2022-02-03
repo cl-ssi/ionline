@@ -40,16 +40,16 @@ class RequestFormController extends Controller {
         //     return view('request_form.index', compact('empty'));}
         // return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
 
-        $my_pending_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+        $my_pending_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->where('request_user_id', Auth::user()->id)
             ->where('status', 'pending')
-            ->orderBy('id', 'DESC')
+            ->latest('id')
             ->get();
 
-        $my_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+        $my_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->where('request_user_id', Auth::user()->id)
             ->whereIn('status', ['approved', 'rejected'])
-            ->orderBy('id', 'DESC')
+            ->latest('id')
             ->get();
 
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
@@ -85,30 +85,34 @@ class RequestFormController extends Controller {
         if($event_type){
             $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
             // return $prev_event_type;
-            $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
-                                                    ->whereHas('eventRequestForms', function($q) use ($event_type){
-                                                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
-                                                    })->when($prev_event_type, function($q) use ($prev_event_type) {
-                                                        return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
-                                                            return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
-                                                        });
-                                                    })->get();
+            $my_pending_forms_to_signs = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                ->where('status', 'pending')
+                ->whereHas('eventRequestForms', function($q) use ($event_type){
+                    return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
+                })->when($prev_event_type, function($q) use ($prev_event_type) {
+                    return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                        return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
+                    });
+                })->get();
         }
 
         if(in_array($event_type, ['pre_finance_event', 'finance_event'])){  
             if($event_type == 'finance_event'){
-                $new_budget_pending_to_sign = RequestForm::where('status', 'approved')
-                                                        ->whereHas('eventRequestForms', function($q){
-                                                            return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
-                                                        })->get();
+                $new_budget_pending_to_sign = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                    ->where('status', 'approved')
+                    ->whereHas('eventRequestForms', function($q){
+                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
+                    })->get();
             }
 
-            $not_pending_forms = RequestForm::where('status', '!=', 'pending')->orderBy('id', 'DESC')->get();
+            $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                ->where('status', '!=', 'pending')->latest('id')->paginate(15);
         }
 
-        $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
-                                        return $q->where('signer_user_id', Auth::user()->id);
-                                    })->orderBy('id', 'DESC')->get();
+        $my_forms_signed = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+            ->whereHas('eventRequestForms', $filter = function($q){
+                return $q->where('signer_user_id', Auth::user()->id);
+            })->latest('id')->get();
 
         return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
     }
