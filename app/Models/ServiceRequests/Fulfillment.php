@@ -175,6 +175,12 @@ class Fulfillment extends Model implements Auditable
       });
     }
 
+    if ($request->input('programm_name') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('programm_name', $request->input('programm_name'));
+      });
+    }
+
     if ($request->input('resolution') != "") {
       if ($request->input('resolution') == 'Yes') {
         $query->whereHas('serviceRequest', function ($q) use ($request) {

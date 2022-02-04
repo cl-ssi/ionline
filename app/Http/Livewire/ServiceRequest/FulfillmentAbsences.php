@@ -36,6 +36,40 @@ class FulfillmentAbsences extends Component
         return;
       }
 
+
+      switch ($this->type) {
+      case 'Inasistencia Injustificada':
+          if($this->end_date==null and $this->start_date==null){
+            $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
+    				return;
+          }
+      case 'Licencia no covid':
+        if($this->end_date==null and $this->start_date==null){
+          $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
+          return;
+        }
+      case 'Abandono de funciones':
+        if($this->end_date==null and $this->start_date==null){
+          $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
+          return;
+        }
+      case 'Renuncia voluntaria':
+        if($this->end_date==null){
+          $this->msg = "No se pudo ingresar, debe existir fecha de término";
+          return;
+        }
+      case 'Término de contrato anticipado':
+        if($this->end_date==null){
+          $this->msg = "No se pudo ingresar, debe existir fecha de término";
+          return;
+        }
+      case 'Atraso':
+        if($this->end_date==null and $this->start_date==null){
+          $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
+          return;
+        }
+      }
+
       // //validation
       // if (Auth::user()->can('Service Request: fulfillments rrhh')) {
       //   if (Fulfillment::where('id',$this->fulfillment->id)->first()->responsable_approver_id == NULL) {
