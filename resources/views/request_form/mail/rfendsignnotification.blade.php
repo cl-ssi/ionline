@@ -4,17 +4,17 @@
 
 <div style="text-align: justify;">
 
-  <h4>Estimado/a: </h4>
+  <h4>Estimados/as: </h4>
 
   <br>
 
-  <p>A través del presente, se informa que se encuentra disponible en {{ env('APP_NAME') }}
-    un formulario de requerimiento de compras pendiente de firma digital, favor ingresar
-    al módulo de <strong>Abastecimento</strong> para firmar documento.
+  <p>A través del presente, se informa que el <strong>Departamento de Gestión de Abastecimiento y Logística</strong>
+    ha aprobado el formulario de requerimiento de compras, el cual se encuentra disponible para iniciar el proceso de compra.
   </p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $req->id }}</li>
+      <li><strong>Folio</strong>: {{ $req->folio }}</li>
       <li><strong>Fecha Solicitud</strong>: {{ $req->created_at->format('d-m-Y H:i:s') }}</li>
       <li><strong>Nombre Solicitud</strong>: {{ $req->name }}</li>
   </ul>
@@ -25,6 +25,7 @@
       <li><strong>Solicitado por</strong>: {{ $req->user->FullName }}</li>
       <li><strong>Unidad Organizacional</strong>: {{ $req->userOrganizationalUnit->name }}</li>
       <li><strong>Administrador de Contrato</strong>: {{ $req->contractManager->FullName }}</li>
+      <li><strong>Comprador asignado</strong>: {{ $req->purchasers()->first()->FullName }}</li>
   </ul>
 
   <br>

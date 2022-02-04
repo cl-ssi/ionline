@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use App\Mail\RequestFormDirectorNotification;
+use App\Mail\RequestFormSignNotification;
 use App\Models\RequestForms\EventRequestForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
@@ -260,13 +260,23 @@ class RequestFormController extends Controller {
               'signer_user_id'       => auth()->id()
             ]);
 
-            $now = Carbon::now();
-            $type = 'manager';
-            $mail_notification_ou_manager = Authority::getAuthorityFromDate(37, Carbon::now(), $type);
+            $nextEvent = $requestForm->eventRequestForms->where('cardinal_number', $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->cardinal_number + 1);
 
-            Mail::to($mail_notification_ou_manager)
-              ->cc(env('APP_RF_MAIL'))
-              ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+            if(!$nextEvent->isEmpty()){
+                //Envío de notificación para visación.
+                $now = Carbon::now();
+                //manager
+                $type = 'manager';
+                $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+                $emails = [$mail_notification_ou_manager->user->email];
+
+                if($mail_notification_ou_manager){
+                    Mail::to($emails)
+                      ->cc(env('APP_RF_MAIL'))
+                      ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+                }
+            }
 
             $requestForm->signatures_file_id = $signaturesFile->id;
             $requestForm->save();
