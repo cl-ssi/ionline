@@ -23,11 +23,7 @@
               </span>
             </p>
           @endif
-          <ul class="list-group">
-            <li class="list-group-item text-left">
-                <p class="font-italic"><i class="fas fa-comment"></i> {{ $event->comment }}</p>
-            </li>
-          </ul>
+          <p class="text-left font-italic"><i class="fas fa-comment"></i> "{{ $event->comment }}"</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>

@@ -253,30 +253,31 @@
       </tfoot>
     </table>
 </div>
+
 @endif
 
 @if($requestForm->messages->count() > 0)
-<div class="card" id="message">
-  <div class="card-header">
-      <i class="fas fa-comment"></i> Mensajes
-  </div>
-  <div class="card-body">
-      @foreach($requestForm->messages->sortByDesc('created_at') as $message)
-      <ul class="list-group">
-          <li class="list-group-item text-left">
-              <p><i class="fas fa-user"></i> {{ $message->user->FullName }}</p>
-              <p><i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}</p>
-              <p class="font-italic"><i class="fas fa-comment"></i> "{{ $message->message }}"</p>
-          </li>
-          <br>
-      </ul>
-      @endforeach
-  </div>
-</div>
+    <!-- <div class="row bg-light"> -->
+    <div class="col bg-light">
+        <br>
+        <h6><i class="fas fa-comment"></i> Mensajes</h6>
+        @foreach($requestForm->messages->sortByDesc('created_at') as $message)
+            <div class="card" id="message">
+                <div class="card-header col-sm">
+                    <i class="fas fa-user"></i> {{ $message->user->FullName }}
+
+                </div>
+                <div class="card-body">
+                    <i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}
+                    <p class="font-italic"><i class="fas fa-comment"></i> "{{ $message->message }}"</p>
+                </div>
+            </div>
+            <br>
+        @endforeach
+    </div>
+    <!-- </div> -->
 @endif
-
 <br>
-
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}">
     <i class="fas fa-comment"></i> Agregar Mensaje

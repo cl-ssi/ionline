@@ -96,7 +96,7 @@ class RequestFormController extends Controller {
                 })->get();
         }
 
-        if(in_array($event_type, ['pre_finance_event', 'finance_event'])){  
+        if(in_array($event_type, ['pre_finance_event', 'finance_event'])){
             if($event_type == 'finance_event'){
                 $new_budget_pending_to_sign = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                     ->where('status', 'approved')
@@ -260,16 +260,13 @@ class RequestFormController extends Controller {
               'signer_user_id'       => auth()->id()
             ]);
 
-            $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
-
             $now = Carbon::now();
             $type = 'manager';
-            $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate(37, Carbon::now(), $type);
 
             Mail::to($emails)
               ->cc(env('APP_RF_MAIL'))
               ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
-
 
             $requestForm->signatures_file_id = $signaturesFile->id;
             $requestForm->save();
