@@ -16,7 +16,7 @@
         </fieldset>
         <fieldset class="form-group col-2">
             <label for="">&nbsp;</label>
-            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})">Agregar</button>
+            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})"> <i class="fa fa-user-plus"></i> Agregar Visador</button>
 {{--            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})" {{$disabledAddButton}}>Agregar</button>--}}
         </fieldset>
 
