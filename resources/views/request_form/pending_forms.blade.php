@@ -192,7 +192,7 @@
     @if(count($my_forms_signed) > 0)
     </div>
         <div class="col">
-            <h6><i class="fas fa-archive"></i> Formularios aprobados o rechazados por mi</h6>
+            <h6><i class="fas fa-archive"></i> Mis formularios aprobados o rechazados</h6>
             <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
               <thead class="small">
@@ -291,7 +291,7 @@
     @else
         </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios firmados o rechazados</h6>
+            <h6><i class="fas fa-inbox"></i> Mis formularios firmados o rechazados</h6>
             <div class="card mb-3 bg-light">
                 <div class="card-body">
                   No hay formularios de requerimiento firmados o rechazados.
