@@ -264,7 +264,7 @@ class RequestFormController extends Controller {
             $type = 'manager';
             $mail_notification_ou_manager = Authority::getAuthorityFromDate(37, Carbon::now(), $type);
 
-            Mail::to($emails)
+            Mail::to($mail_notification_ou_manager)
               ->cc(env('APP_RF_MAIL'))
               ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
 
