@@ -136,7 +136,7 @@
 
         </div>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)">Crear</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)"> <i class="fa fa-file"></i> Crear Solicitud</button>
 
     </form>
 
