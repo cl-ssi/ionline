@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
-use App\Mail\RfElectronicSignatureNotification;
+use App\Mail\RfEndSignNotification;
 
 class Authorization extends Component
 {
@@ -158,12 +158,13 @@ class Authorization extends Component
           }
           else{
               if($event->event_type == 'supply_event'){
-                  $type = 'manager';
-                  $mail_notification_ou_manager = Authority::getAuthorityFromDate(40, Carbon::now(), $type);
-                  $emails = [$mail_notification_ou_manager->user->email];
+                  $emails = [$this->requestForm->user->email,
+                      $this->requestForm->contractManager->email,
+                      $this->requestForm->purchasers->first()->email
+                  ];
                   Mail::to($emails)
                     ->cc(env('APP_RF_MAIL'))
-                    ->send(new RfElectronicSignatureNotification($event->requestForm));
+                    ->send(new RfEndSignNotification($event->requestForm));
               }
           }
           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
