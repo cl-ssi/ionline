@@ -16,7 +16,7 @@ class RstFundamentManage extends Model
     ];
 
     public function rstDetailFundament() {
-        return $this->hasMany('App\Models\ReplacementStaff\RstDetailFundament');
+        return $this->hasMany('App\Models\ReplacementStaff\RstDetailFundament', 'fundament_manage_id');
     }
 
     public function getNameValueAttribute(){
@@ -32,6 +32,9 @@ class RstFundamentManage extends Model
               break;
             case 'other':
               return 'Otro';
+              break;
+            case 'retirement':
+              return 'Retiro o Jubilación';
               break;
             case '':
               return '';

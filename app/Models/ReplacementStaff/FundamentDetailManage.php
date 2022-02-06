@@ -39,6 +39,10 @@ class FundamentDetailManage extends Model
               return 'Convocatoria mixta';
               break;
             case '':
+            case 'other':
+              return 'Otro';
+              break;
+            case '':
               return '';
               break;
         }
