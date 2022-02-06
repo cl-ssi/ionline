@@ -8,39 +8,35 @@
 
 <h5><i class="fas fa-cog"></i> Mantenedor de Fundamentos de Contratación.</h5>
 
-<br>
-
 <div class="row">
     <div class="col-sm-12">
-        <br>
         <table class="table table-sm table-striped table-bordered">
             <thead class="text-center small">
                 <tr>
                     <th>#</th>
                     <th>Fundamentos</th>
                     <th>Detalle</th>
-                    <th style="width: 5%"></th>
-                    <th style="width: 5%"></th>
+                    <th colspan="2" style="width: 10%"></th>
                 </tr>
             </thead>
             <tbody class="small">
                 @foreach($fundaments as $key => $fundament)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
+                    <td class="text-center">{{ $key + 1 }}</td>
                     <td>{{ $fundament->NameValue }}</td>
                     <td>
                       <ul>
-                       {{-- @foreach($fundament->rstDetailFundament as $detailFundament)
-                          <li>{{ $detailFundament }}</li>
-                        @endforeach --}}
+                        @foreach($fundament->rstDetailFundament as $detailFundament)
+                          <li>{{ $detailFundament->fundamentDetailManage->NameValue }}</li>
+                        @endforeach
                       </ul>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <a href="{{ route('replacement_staff.manage.fundament.edit', $fundament) }}"
                           class="btn btn-outline-secondary btn-sm"
                           title="Editar"> <i class="fas fa-edit"></i></a>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <form method="POST" class="form-horizontal" action="{{-- route('replacement_staff.manage.profession.destroy', $profession) --}}">
                             @csrf
                             @method('DELETE')

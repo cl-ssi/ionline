@@ -18,5 +18,6 @@ class RstFundamentSeeder extends Seeder
         RstFundamentManage::Create(['name'=>'quit']);
         RstFundamentManage::Create(['name'=>'expand work position']);
         RstFundamentManage::Create(['name'=>'other']);
+        RstFundamentManage::Create(['name'=>'retirement']);
     }
 }
