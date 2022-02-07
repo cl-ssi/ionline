@@ -270,14 +270,16 @@
                                 @if($requestForm->signatures_file_id)
                                     <a class="btn btn-info btn-sm"
                                         title="Ver Formulario de Requerimiento firmado"
-                                        href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                        href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}"
                                         target="_blank" title="Certificado">
                                           <i class="fas fa-file-contract"></i>
                                     </a>
-                                @else
-                                    @if($requestForm->status == 'approved')
-                                    <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
-                                        <i class="fas fa-file-alt"></i>
+                                    @if($requestForm->old_signatures_file_id)
+                                    <a class="btn btn-secondary btn-sm"
+                                        title="Ver Formulario de Requerimiento Anterior firmado"
+                                        href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}"
+                                        target="_blank" title="Certificado">
+                                            <i class="fas fa-file-contract"></i>
                                     </a>
                                     @endif
                                 @endif
@@ -381,14 +383,16 @@
                                 @if($requestForm->signatures_file_id)
                                     <a class="btn btn-info btn-sm"
                                         title="Ver Formulario de Requerimiento firmado"
-                                        href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                        href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}"
                                         target="_blank" title="Certificado">
                                           <i class="fas fa-file-contract"></i>
                                     </a>
-                                @else
-                                    @if($requestForm->status == 'approved')
-                                    <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
-                                        <i class="fas fa-file-alt"></i>
+                                    @if($requestForm->old_signatures_file_id)
+                                    <a class="btn btn-secondary btn-sm"
+                                        title="Ver Formulario de Requerimiento Anterior firmado"
+                                        href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}"
+                                        target="_blank" title="Certificado">
+                                            <i class="fas fa-file-contract"></i>
                                     </a>
                                     @endif
                                 @endif

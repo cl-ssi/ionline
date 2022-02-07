@@ -157,7 +157,7 @@
           <strong>N° DE FORMULARIO DE REQUERIMIENTO: {{ $requestForm->folio }}</strong>
         </div>
         <div class="left" style="padding-bottom: 2px;">
-          <strong>Iquique, {{ $requestForm->eventSignatureDate('finance_event', 'approved') }}</strong>
+          <strong>Iquique, {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</strong>
         </div>
       </div>
 
