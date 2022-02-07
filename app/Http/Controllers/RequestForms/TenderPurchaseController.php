@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\RequestForms;
 
 use App\Models\TenderPurchase;
 use Illuminate\Http\Request;
