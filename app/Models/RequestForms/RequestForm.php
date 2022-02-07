@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Documents\SignaturesFile;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\User;
@@ -138,7 +139,12 @@ class RequestForm extends Model implements Auditable
 
     public function signedRequestForm()
     {
-        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    }
+
+    public function signedOldRequestForm()
+    {
+        return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
     }
 
     public function getTotalEstimatedExpense()
