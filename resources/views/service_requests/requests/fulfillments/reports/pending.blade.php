@@ -112,6 +112,7 @@
             <th>Periodo</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
+            <th>Programa</th>
             <th>Hitos</th>
             <th></th>
         </tr>
@@ -135,6 +136,7 @@
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
+            <td>{{$fulfillment->servicerequest->programm_name?? ''}}</td>
             <td>
                 <i title="Contrato" class="fas fa-file-signature
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
