@@ -21,7 +21,7 @@ class Authorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
-    public $estimated_expense, $purchaser_amount;
+    public $estimated_expense, $new_estimated_expense;
 
     protected $rules = [
         'comment' => 'required|min:6',
@@ -54,10 +54,10 @@ class Authorization extends Component
           $this->title = 'Autorización Jefatura';
       }elseif($eventType=='superior_leader_ship_event'){
           $this->title = 'Autorización Dirección';
-      }elseif($eventType=='budget_event'){
-          $this->title = 'Autorización Nuevo presupuesto';
-          $this->estimated_expense = $requestForm->estimated_expense;
-          $this->purchaser_amount = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+      }elseif(in_array($eventType, ['pre_budget_event', 'budget_event'])){
+          $this->title = 'Autorización nuevo presupuesto';
+          $this->estimated_expense = number_format($requestForm->estimated_expense, 0, ',', '.');
+          $this->new_estimated_expense = number_format($requestForm->new_estimated_expense, 0, ',', '.');
       }
     }
 

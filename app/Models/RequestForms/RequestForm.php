@@ -291,6 +291,13 @@ class RequestForm extends Model implements Auditable
       }
     }
 
+    public function eventPurchaserNewBudget(){
+      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type', 'budget_event')->first();
+      if(!is_null($event)){
+        return $event->purchaser;
+      }
+    }
+
     public function eventSignerName($event_type, $status){
       $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
       if(!is_null($event)){

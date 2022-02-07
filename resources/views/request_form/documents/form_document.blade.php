@@ -169,6 +169,12 @@
               <th align="left" style="width: 50%">Gasto Estimado</th>
               <td colspan="2">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
           </tr>
+          @if($requestForm->has_increased_expense)
+          <tr>
+              <th align="left" style="width: 50%">Nuevo presupuesto</th>
+              <td colspan="2">${{ number_format($requestForm->new_estimated_expense,0,",",".") }}</td>
+          </tr>
+          @endif
           <tr>
               <th align="left">Solicitante</th>
               <td colspan="2">{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
