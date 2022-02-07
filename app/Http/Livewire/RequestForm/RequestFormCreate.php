@@ -227,7 +227,7 @@ class RequestFormCreate extends Component
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
-          'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
+          // 'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
           ($this->isRFItems ? 'items' : 'passengers') => 'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
@@ -235,7 +235,7 @@ class RequestFormCreate extends Component
           'subtype.required'             =>  'Seleccione el tipo para este formulario.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
-          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
+          // 'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
           ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
         ],
@@ -339,9 +339,9 @@ class RequestFormCreate extends Component
 
           if($mail_contract_manager){
               $emails = [$mail_contract_manager];
-              Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new NewRequestFormNotification($req));
+              // Mail::to($emails)
+              //   ->cc(env('APP_RF_MAIL'))
+              //   ->send(new NewRequestFormNotification($req));
           }
           //---------------------------------------------------------
 
@@ -357,9 +357,9 @@ class RequestFormCreate extends Component
           $emails = [$mail_notification_ou_manager->user->email];
 
           if($mail_notification_ou_manager){
-              Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+              // Mail::to($emails)
+              //   ->cc(env('APP_RF_MAIL'))
+              //   ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
           }
           //---------------------------------------------------------
 

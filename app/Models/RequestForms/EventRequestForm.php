@@ -16,12 +16,16 @@ class EventRequestForm extends Model
 
     protected $fillable = [
         'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
-        'comment', 'signature_date', 'event_type',
+        'comment', 'signature_date', 'event_type', 'purchaser_id', 'purchaser_amount'
     ];
 
 
     public function signerUser(){
         return $this->belongsTo(User::class, 'signer_user_id');
+    }
+
+    public function purchaser(){
+        return $this->belongsTo(User::class, 'purchaser_id');
     }
 
     public function signerOrganizationalUnit(){
@@ -62,6 +66,9 @@ class EventRequestForm extends Model
                 break;
             case "supply_event":
                 return 'Abastecimiento';
+                break;
+            case "pre_budget_event":
+                return 'Solicitud Nuevo Presupuesto';
                 break;
             case "budget_event":
                 return 'Solicitud Nuevo Presupuesto';
@@ -126,14 +133,25 @@ class EventRequestForm extends Model
 
     public static function createNewBudgetEvent(RequestForm $requestForm){
         $event = new EventRequestForm();
-        $event->ou_signer_user      =   40;
+        $event->ou_signer_user      =   37; // Abastecimiento
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
-        $event->event_type          =   'budget_event';
-        $event->purchaser_amount    =   $requestForm->newBudget;
+        $event->event_type          =   'pre_budget_event';
+        $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
         $event->purchaser_id        =   Auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
+
+        $event = new EventRequestForm();
+        $event->ou_signer_user      =   40; //Finanzas
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 7 : 6;
+        $event->status              =   'pending';
+        $event->event_type          =   'budget_event';
+        $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
+        $event->purchaser_id        =   Auth()->user()->id;
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+
         return true;
     }
 

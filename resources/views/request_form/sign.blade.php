@@ -35,6 +35,12 @@
                     <th class="table-active" colspan="2" style="width: 33%">Gasto Estimado</th>
                     <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                 </tr>
+                @if($requestForm->has_increased_expense)
+                <tr>
+                    <th class="table-active" colspan="2" style="width: 33%">Nuevo presupuesto</th>
+                    <td>${{ number_format($requestForm->new_estimated_expense,0,",",".") }}</td>
+                </tr>
+                @endif
                 <tr>
                     <th class="table-active" colspan="2" scope="row">Tipo de moneda</th>
                     <td>{{ $requestForm->TypeOfCurrencyValue }}</td>
@@ -65,7 +71,7 @@
                     <th class="table-active" colspan="2" scope="row">Programa Asociado</th>
                     <td>{{ $requestForm->program }}</td>
                 </tr>
-                @if(in_array($eventType, ['finance_event', 'supply_event']))
+                @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
                 <tr>
                     <th class="table-active" colspan="2" scope="row">Folio SIGFE</th>
                     <td>{{ $requestForm->sigfe }}</td>
@@ -179,7 +185,7 @@
         <tr>
           <th>Item</th>
           <th>ID</th>
-          @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event'])) <th>Item Pres.</th> @endif
+          @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event'])) <th>Item Pres.</th> @endif
           <th>Artículo</th>
           <th>UM</th>
           <th>Especificaciones Técnicas</th>
@@ -195,7 +201,7 @@
                 <tr>
                     <td>{{ $key+1 }}</td>
                     <td>{{ $itemRequestForm->id }}</td>
-                    @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event']))
+                    @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
                     <td>{{ $itemRequestForm->budgetItem->fullName() ?? '' }}</td>
                     @endif
                     <td>{{ $itemRequestForm->article }}</td>
@@ -216,7 +222,7 @@
       </tbody>
       <tfoot class="text-right small">
         <tr>
-          @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event']))
+          @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
           <td colspan="10">Valor Total</td>
           @else
           <td colspan="9">Valor Total</td>
@@ -239,7 +245,7 @@
           <th>RUT</th>
           <th>Nombres</th>
           <th>Apellidos</th>
-          @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event'])) <th>Item Pres.</th> @endif
+          @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event'])) <th>Item Pres.</th> @endif
           <th>Tipo viaje</th>
           <th>Origen</th>
           <th>Destino</th>
@@ -256,7 +262,7 @@
                     <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
                     <td>{{ $passenger->name }}</td>
                     <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
-                    @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event']))
+                    @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
                     <td>-</td>
                     @endif
                     <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
@@ -271,7 +277,7 @@
       </tbody>
       <tfoot class="text-right small">
         <tr>
-          <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'budget_event']) ? 11 : 10 }}">Valor Total</td>
+          <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']) ? 11 : 10 }}">Valor Total</td>
           <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
         </tr>
       </tfoot>
