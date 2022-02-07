@@ -152,4 +152,13 @@ class ReplacementStaffController extends Controller
 
         return view('replacement_staff.show_replacement_staff', compact('replacementStaff', 'professionManage', 'profileManage'));
     }
+
+    public function replacement_staff_historical(Request $request){
+        $replacementStaff = ReplacementStaff::where('run', $request->run)->first();
+        if($replacementStaff){
+            $applicants = Applicant::where('replacement_staff_id', $replacementStaff->id)->get();
+            return view('replacement_staff.reports.replacement_staff_historical', compact('request', 'replacementStaff', 'applicants'));
+        }
+        return view('replacement_staff.reports.replacement_staff_historical', compact('request', 'replacementStaff'));
+    }
 }

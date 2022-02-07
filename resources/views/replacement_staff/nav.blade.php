@@ -80,6 +80,9 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-file"></i> Reportes
         </a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ route('replacement_staff.reports.replacement_staff_historical') }}">Staff: Historico por Persona</a>
+        </div>
    </li>
    @endcan
 

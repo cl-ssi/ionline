@@ -239,7 +239,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
     });
 
     Route::prefix('reports')->name('reports.')->group(function(){
-        Route::get('/replacement_staff_selected_report', [ReplacementStaffController::class, 'replacement_staff_selected_report'])->name('replacement_staff_selected_report');
+        //Route::get('/replacement_staff_selected_report', [ReplacementStaffController::class, 'replacement_staff_selected_report'])->name('replacement_staff_selected_report');
+        Route::get('/replacement_staff_historical', [ReplacementStaffController::class, 'replacement_staff_historical'])->name('replacement_staff_historical');
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
