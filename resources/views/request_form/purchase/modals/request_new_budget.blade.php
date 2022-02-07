@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="requestBudgetLabel">Solicitar presupuesto</h5>
+                <h5 class="modal-title" id="requestBudgetLabel">Solicitar nuevo presupuesto</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,7 +13,7 @@
                     @csrf
                     <div class="form-row">
                         <fieldset class="form-group col-sm">
-                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese monto" required>
+                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese nuevo presupuesto" min="{{$requestForm->estimated_expense + 1}}" required>
                         </fieldset>
                     </div>
                     <button type="submit" class="btn btn-primary float-right btn-sm">Enviar solicitud</button>

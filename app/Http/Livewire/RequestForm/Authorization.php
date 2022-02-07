@@ -21,7 +21,7 @@ class Authorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
-    public $estimated_expense, $purchaser_amount;
+    public $estimated_expense, $new_estimated_expense;
 
     protected $rules = [
         'comment' => 'required|min:6',
@@ -54,10 +54,10 @@ class Authorization extends Component
           $this->title = 'Autorización Jefatura';
       }elseif($eventType=='superior_leader_ship_event'){
           $this->title = 'Autorización Dirección';
-      }elseif($eventType=='budget_event'){
-          $this->title = 'Autorización Nuevo presupuesto';
-          $this->estimated_expense = $requestForm->estimated_expense;
-          $this->purchaser_amount = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+      }elseif(in_array($eventType, ['pre_budget_event', 'budget_event'])){
+          $this->title = 'Autorización nuevo presupuesto';
+          $this->estimated_expense = number_format($requestForm->estimated_expense, 0, ',', '.');
+          $this->new_estimated_expense = number_format($requestForm->new_estimated_expense, 0, ',', '.');
       }
     }
 
@@ -140,9 +140,9 @@ class Authorization extends Component
 
               if($mail_notification_ou_manager){
                 if($nextEvent->first()->event_type == 'pre_finance_event'){
-                  Mail::to($emails)
-                    ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
-                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                  // Mail::to($emails)
+                  //   ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
+                  //   ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 }
                 // elseif($nextEvent->event_type = 'supply_event'){
                 //   Mail::to($mail_notification_ou_manager)
@@ -150,9 +150,9 @@ class Authorization extends Component
                 //     ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 // }
                 else{
-                  Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                  // Mail::to($emails)
+                  //   ->cc(env('APP_RF_MAIL'))
+                  //   ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 }
               }
           }
@@ -162,9 +162,9 @@ class Authorization extends Component
                       $this->requestForm->contractManager->email,
                       $this->requestForm->purchasers->first()->email
                   ];
-                  Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new RfEndSignNotification($event->requestForm));
+                  // Mail::to($emails)
+                  //   ->cc(env('APP_RF_MAIL'))
+                  //   ->send(new RfEndSignNotification($event->requestForm));
               }
           }
           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
