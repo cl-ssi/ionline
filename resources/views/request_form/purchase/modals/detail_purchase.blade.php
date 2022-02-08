@@ -157,6 +157,10 @@
                                 <td>{{ $detail->pivot->tender->has_taking_of_reason ? 'SÍ' : 'NO' }}</td>
                             </tr>
                             @endif
+                            <tr>
+                                <th class="table-active" style="width: 33%">Registrado por</th>
+                                <td>{{ $detail->pivot->user->fullName ?? '' }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -167,6 +171,55 @@
                         <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
                     @empty
                     <p>No existen archivos adjuntos a esta licitación.</p>
+                    @endforelse
+                </div>
+            @endif
+
+            @if($detail->pivot->directDeal)
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Descripción de la compra</th>
+                                <td>{{ $detail->pivot->directDeal->description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">RUT proveedor</th>
+                                <td>{{ number_format($detail->pivot->directDeal->supplier->run,0,",",".") }}-{{ $detail->pivot->directDeal->supplier->dv }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre proveedor</th>
+                                <td>{{ $detail->pivot->directDeal->supplier->name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nº Resol. de trato directo</th>
+                                <td>{{ $detail->pivot->directDeal->resol_direct_deal }}</td>
+                            </tr>
+                            <!-- Trato directo distinto a MAYOR A 30 Y MENOR A 1.000 UTM -->
+                            @if($detail->pivot->directDeal->purchase_type_id != 8)
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nº Resol. de Contrato</th>
+                                <td>{{ $detail->pivot->directDeal->resol_contract }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nº Boleta de Garantía</th>
+                                <td>{{ $detail->pivot->directDeal->guarantee_ticket }}</td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <th class="table-active" style="width: 33%">Registrado por</th>
+                                <td>{{ $detail->pivot->user->fullName ?? '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h6><i class="fas fas fa-paperclip" aria-hidden="true"></i> Anexos</h6>
+                <div class="list-group">
+                    @forelse($detail->pivot->directDeal->attachedFiles as $attachedFile)
+                    <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}" class="list-group-item list-group-item-action py-2" target="_blank">
+                        <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
+                    @empty
+                    <p>No existen archivos adjuntos al trato directo.</p>
                     @endforelse
                 </div>
             @endif

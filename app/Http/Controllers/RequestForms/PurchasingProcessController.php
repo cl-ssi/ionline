@@ -339,7 +339,6 @@ class PurchasingProcessController extends Controller
 
     public function create_direct_deal(Request $request, RequestForm $requestForm)
     {
-        //dd('entre ctm');
         $requestForm->load('purchasingProcess.details');
         if($this->estimated_expense_exceeded($requestForm)){
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
@@ -350,9 +349,40 @@ class PurchasingProcessController extends Controller
         $directdeal = new DirectDeal($request->all());
         $directdeal->save();
 
+        foreach($request->item_id as $key => $item){
+            $detail = new PurchasingProcessDetail();
+            $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->item_request_form_id       = $item;
+            $detail->direct_deal_id             = $directdeal->id;
+            $detail->user_id                    = Auth::user()->id;
+            $detail->quantity                   = $request->quantity[$key];
+            $detail->unit_value                 = $request->unit_value[$key];
+            $detail->expense                    = $request->item_total[$key];
+            $detail->status                     = 'total';
+            $detail->save();
+        }
+
+        //Aqui falta registrar suministro o compra inmediata
+
+        //Registrar archivos en attached_files
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
+                  'resol_contract_file' => 'Resolución de contrato', 
+                  'guarantee_ticket_file' => 'Boleta de garantía'];
+
+        foreach($files as $key => $file){
+            if($request->hasFile($key)){
+                $archivo = $request->file($key);
+                $file_name = $now.'_'.$key.'_'.$directdeal->id;
+                $attachedFile = new AttachedFile();
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->document_type = $file;
+                $attachedFile->direct_deal_id = $directdeal->id;
+                $attachedFile->save();
+            }
+        }
+
         session()->flash('success', 'El trato directo ha sido creado exitosamentes');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
-
-
     }
 }
