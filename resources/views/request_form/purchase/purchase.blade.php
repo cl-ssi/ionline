@@ -413,13 +413,11 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                      <td colspan="10"></td>
-                      <th class="text-right">Valor Total</td>
+                      <th colspan="11" class="text-right">Valor Total</td>
                       <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
                     </tr>
                     <tr>
-                      <td colspan="10"></td>
-                      <th class="text-right">Disponible</td>
+                      <th colspan="11" class="text-right">Saldo Disponible Requerimiento</td>
                       <th class="text-right">${{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
                     </tr>
                 </tfoot>
@@ -446,6 +444,7 @@
                         <th>Tipo</th>
                         <th>Descripción</th>
                         <th>Usuario Gestor</th>
+                        <th>Comprador</th>
                         <th>Mecanismo de Compra</th>
                         <th>Items</th>
                         <th>Monto total</th>
@@ -487,6 +486,7 @@
                         <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->name }}</a> @else {{ $child->name }} @endif</td>
                         <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
                         {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
+                        <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
                         <td>{{ $child->purchaseMechanism->name }}</td>
                         <td align="center">{{ $child->quantityOfItems() }}</td>
                         <td align="right">${{ number_format($child->estimated_expense,0,",",".") }}</td>
