@@ -614,6 +614,38 @@ function formatDateInput(date) {
     return date.getFullYear() + "-" + ("0"+(date.getMonth()+1)).slice(-2) +"-"+("0" + date.getDate()).slice(-2);
 }
 
+$('form').submit(function() {
+    $('#save_btn').attr("disabled", true);
+    return true;
+});
+
+$('input[type="file"]').bind('change', function(e) {
+    //Validación de tamaño
+    for (let i = 0; i < this.files.length; i++) {
+      if((this.files[i].size / 1024 / 1024) > 3){
+          alert('No puede cargar archivos de más de 3 MB.');
+          $(this).val('');
+          break;
+      }
+    }
+    //Validación de pdf
+    // const allowedExtension = ".pdf";
+    // let hasInvalidFiles = false;
+
+    // for (let i = 0; i < this.files.length; i++) {
+    //     let file = this.files[i];
+
+    //     if (!file.name.endsWith(allowedExtension)) {
+    //         hasInvalidFiles = true;
+    //     }
+    // }
+
+    // if(hasInvalidFiles) {
+    //     $('#for_document').val('');
+    //     alert("Debe seleccionar un archivo pdf.");
+    // }
+  });
+
 </script>
 
 @endsection
