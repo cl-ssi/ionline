@@ -17,7 +17,7 @@
 <div class="form-group">
 
 		<div class="form-row">
-			<div class="form-group col-12 col-md-3">
+			<div class="form-group col-12 col-md-2">
 				<label>Establecimiento</label>
         <select class="form-control" name="establishment_id">
           <option value="">Todos</option>
@@ -26,7 +26,7 @@
           <option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
         </select>
       </div>
-      <div class="form-group col-12 col-md-3">
+      <div class="form-group col-12 col-md-2">
         <label>Tipo de Contrato</label>
         <select class="form-control" name="type">
           <option value=""></option>
@@ -34,7 +34,7 @@
           <option value="Suma Alzada" @if($request->input('type')=='Suma Alzada') selected @endif>Suma Alzada</option>
         </select>
       </div>
-      <div class="form-group col-9 col-md-3">
+      <div class="form-group col-9 col-md-2">
         <label>Estado de aprobacion</label>
         <select class="form-control" name="type" disabled>
           <option value=""></option>
@@ -44,7 +44,49 @@
         </select>
       </div>
 
-			<div class="form-group col-3 col-md-3">
+      <div class="form-group col-9 col-md-2">
+        <label>Programa</label>
+        <select name="programm_name" class="form-control">
+          <option value="">Todos</option>
+          <option value="Covid19-APS No Médicos" @if($request->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
+          <option value="Covid19-APS Médicos" @if($request->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
+          <option value="Covid19 No Médicos" @if($request->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
+          <option value="Covid19 Médicos" @if($request->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
+
+          @if(Auth::user()->organizationalUnit->establishment_id == 1)
+          <option value="Covid 2022" @if($request->programm_name == 'Covid 2022') selected @endif>Covid 2022</option>
+          <option value="CONSULTORIO DE LLAMADA" @if($request->programm_name == 'CONSULTORIO DE LLAMADA') selected @endif>CONSULTORIO DE LLAMADA</option>
+          <option value="33 MIL HORAS" @if($request->programm_name == '33 MIL HORAS') selected @endif>33 MIL HORAS</option>
+          <option value="DFL" @if($request->programm_name == 'DFL') selected @endif>DFL</option>
+          <option value="TURNOS VACANTES" @if($request->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
+          <option value="OTROS PROGRAMAS HETG" @if($request->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
+          <option value="CAMPAÑA INVIERNO" @if($request->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+          <option value="PABELLON TARDE" @if($request->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
+          <option value="PABELLON GINE" @if($request->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
+          <option value="TURNO DE RESIDENCIA" @if($request->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+          <option value="SENDA" @if($request->programm_name == 'SENDA') selected @endif>SENDA</option>
+
+          @else
+          <option value="PRAPS" @if($request->programm_name == 'PRAPS') selected @endif>PRAPS</option>
+          <option value="PESPI" @if($request->programm_name == 'PESPI') selected @endif>PESPI</option>
+          <option value="CHILE CRECE CONTIGO" @if($request->programm_name == 'CHILE CRECE CONTIGO') selected @endif>CHILE CRECE CONTIGO</option>
+          <option value="OTROS PROGRAMAS SSI" @if($request->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
+          <option value="LISTA ESPERA" @if($request->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
+          <option value="CAMPAÑA INVIERNO" @if($request->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+
+          <option value="ADP DIRECTOR" @if($request->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
+          <option value="SENDA" @if($request->programm_name == 'SENDA') selected @endif>SENDA</option>
+          <option value="LEY DE ALCOHOL" @if($request->programm_name == 'LEY DE ALCOHOL') selected @endif>LEY DE ALCOHOL</option>
+          <option value="SENDA UHCIP" @if($request->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
+          <option value="SENDA PSIQUIATRIA ADULTO" @if($request->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
+          <option value="SENADIS" @if($request->programm_name == 'SENADIS') selected @endif>SENADIS</option>
+          <option value="SUBT.31" @if($request->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
+          @endif
+
+        </select>
+      </div>
+
+			<div class="form-group col-3 col-md-4">
         <label>&nbsp;</label>
 				<button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i> Buscar</button>
 			</div>
@@ -69,6 +111,7 @@
         <th>Estab</th>
         <th>Centro de Resp</th>
         <th>Tipo de Contrato</th>
+        <th>Programa</th>
         <th>Periodo</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
@@ -90,6 +133,7 @@
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name ?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->type ?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->programm_name}}</td>
           <td>
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}
