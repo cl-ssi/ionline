@@ -15,7 +15,7 @@ class PurchasingProcessDetail extends Pivot
 
     protected $fillable = [
         'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
-        'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'expense', 'status'
+        'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'expense', 'status'
     ];
 
     public function purchasingProcess() {
@@ -43,6 +43,11 @@ class PurchasingProcessDetail extends Pivot
         return $this->belongsTo(Tender::class);
     }
 
+    public function directDeal()
+    {
+        return $this->belongsTo(DirectDeal::class);
+    }
+
     public function immediatePurchase()
     {
         return $this->belongsTo(ImmediatePurchase::class);
@@ -57,6 +62,7 @@ class PurchasingProcessDetail extends Pivot
         elseif($this->pettyCash) return 'Fondo menor';
         elseif($this->fundToBeSettled) return 'Fondo a rendir';
         elseif($this->tender) return $this->tender->purchaseType->name ?? '';
+        elseif($this->directDeal) return $this->directDeal->purchaseType->name ?? '';
         elseif($this->immediatePurchase) return $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));

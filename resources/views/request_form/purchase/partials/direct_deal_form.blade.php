@@ -6,26 +6,28 @@
 
     <div class="card-body">
         <div class="form-row">
-            <fieldset class="form-group col-sm-2">
-                <label for="for_tender_number">ID de la OC:</label>
-                <input type="text" class="form-control form-control-sm" name="po_id" value="{{ old('po_id') }}">
-            </fieldset>
-            <fieldset class="form-group col-sm-2">
-                <label for="for_tender_number">ID de la Cotización:</label>
-                <input type="text" class="form-control form-control-sm">
-            </fieldset>
-            <fieldset class="form-group col-sm-4">
-                <label for="">Fecha de la Creación de la OC:</label>
-                <input type="date" class="form-control form-control-sm" max={{Carbon\Carbon::today()}} id="for_po_date" name="po_date" value="{{ old('po_date') }}">
-            </fieldset>
-            <fieldset class="form-group col-sm-10">
+            <fieldset class="form-group col-sm-12">
                 <label for="for_description">Descripción de la compra:</label>
                 <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
             </fieldset>
         </div>
 
         <div class="form-row">
-            <fieldset class="form-group col-sm-6">
+            <fieldset class="form-group col-sm-2">
+                <label for="for_resol_direct_deal">Nº Resol. trato directo:</label>
+                <input type="text" class="form-control form-control-sm" id="for_resol_direct_deal" name="resol_direct_deal" value="{{ old('resol_direct_deal') }}" required>
+            </fieldset>
+            @if($requestForm->purchase_type_id != 8)
+            <fieldset class="form-group col-sm-2">
+                <label for="for_resol_contract">Nº Resol. del contrato:</label>
+                <input type="text" class="form-control form-control-sm" id="for_resol_contract" name="resol_contract" value="{{ old('resol_contract') }}" required>
+            </fieldset>
+            <fieldset class="form-group col-sm-2">
+                <label for="for_guarantee_ticket">Nº Boleta de garantía:</label>
+                <input type="text" class="form-control form-control-sm" id="for_guarantee_ticket" name="guarantee_ticket" value="{{ old('guarantee_ticket') }}" required>
+            </fieldset>       
+            @endif
+            <fieldset class="form-group col">
                 <label for="for_supplier">Proveedor</label>
                 <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
                     <option value="">Seleccione...</option>
@@ -34,50 +36,24 @@
                     @endforeach
                 </select>
             </fieldset>
-            <fieldset class="form-group col-sm-3">
-                <label for="">Monto de la OC:</label>
-                <input type="number" class="form-control form-control-sm" id="for_amount" name="po_amount" value="{{ old('po_amount') }}" required>
-            </fieldset>
-            <fieldset class="form-group col-sm-3">
-                <label for="">Fecha Estimada de Entrega:</label>
-                <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date" value="{{ old('estimated_delivery_date') }}" s>
-            </fieldset>
         </div>
         <!-- Datos que comparten lo siguiente
         TRATO DIRECTO MAYOR A 30 Y MENOR A 1.000 UTM
         y
         TRATO DIRECTO MAYOR A 1.000 Y MENOR A 5.000 UTM -->
-        @if($requestForm->purchase_type_id == 8 or $requestForm->purchase_type_id == 9)
-        <div class="form-row">
-            <fieldset class="form-group col-sm-3">
-                <label for="">N° Resolución Trato Directo:</label>
-                <input type="number" class="form-control form-control-sm">
-            </fieldset>
-
-            <fieldset class="form-group col-sm-6">
-                <label for="for_supplier">Estado de Compra</label>
-                <select name="kaka" id="for_supplier_id" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
-                    <option value="Suministro">Suministro</option>
-                    <option value="Compra Inmediata">Compra Inmediata</option>
-                </select>
-            </fieldset>
-        </div>
-
+        
         <div class="form-row">
             <fieldset class="form-group col-sm-6">
-                <label for="forFile">Adjuntar Trato Directo</label>
-                <input type="file" class="form-control-file" id="forFile" name="" required>
+                <label for="forFile">Adjuntar Resol. Trato Directo</label>
+                <input type="file" class="form-control-file" id="forFile" name="resol_direct_deal_file" required>
             </fieldset>
 
-            <fieldset class="form-group col-sm-6">
+            <!-- <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar Orden de Compra (Si procede)</label>
                 <input type="file" class="form-control-file" id="forFile" name="">
-            </fieldset>
+            </fieldset> -->
 
-            @endif
-
-            @if($requestForm->purchase_type_id == 9)
+            @if($requestForm->purchase_type_id != 8)
             <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar archivo Res. de Contrato</label>
                 <input type="file" class="form-control-file" id="forFile" name="resol_contract_file" required>
@@ -88,13 +64,10 @@
                 <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file" required>
             </fieldset>
             @endif
-
-
-            <button type="submit" class="btn btn-primary float-right" id="save_btn">
+        </div>
+        <button type="submit" class="btn btn-primary float-right" id="save_btn">
                 <i class="fas fa-save"></i> Guardar
             </button>
-        </div>
-
 
 
     </div>
