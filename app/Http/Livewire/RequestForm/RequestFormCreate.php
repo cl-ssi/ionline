@@ -213,7 +213,7 @@ class RequestFormCreate extends Component
     private function createFolio(){
         $startOfYear = Carbon::now()->startOfYear();
         $endOfYear = Carbon::now()->endOfYear();
-        $counter = RequestForm::withTrashed()->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count();
+        $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count();
         $counter++;
         return Carbon::now()->year.'-'.$counter;
     }
