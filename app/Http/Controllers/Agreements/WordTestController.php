@@ -101,6 +101,11 @@ class WordTestController extends Controller
         $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
     	// $referente = $agreements->referente;
         $alcaldeApelativo = $agreements->representative_appelative;
+        if(Str::contains($alcaldeApelativo, 'Subrogante')){
+            $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+        }else{
+            $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+        }
         $alcalde = $agreements->representative;
         $alcaldeDecreto = $agreements->representative_decree;
     	$municipalidad = $municipality->name_municipality;
@@ -141,6 +146,7 @@ class WordTestController extends Controller
 		$templateProcesor->setValue('municipalidad',$municipalidad);
 		$templateProcesor->setValue('municipalidadDirec',$municipalidadDirec);
 		$templateProcesor->setValue('alcaldeApelativo',$alcaldeApelativo);
+		$templateProcesor->setValue('alcaldeApelativoFirma',mb_strtoupper($alcaldeApelativoFirma));
         $templateProcesor->setValue('alcalde',mb_strtoupper($alcalde));
 		$templateProcesor->setValue('alcaldeRut',$alcaldeRut);
         $templateProcesor->setValue('alcaldeDecreto',$alcaldeDecreto);
@@ -152,6 +158,13 @@ class WordTestController extends Controller
         $templateProcesor->setValue('directorDecreto',$directorDecreto);
         $templateProcesor->setValue('directorNationality',$directorNationality);
         $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
+
+        if(count($quotas) == 12){ // 12 cuotas
+            $totalQuotasText = $arrayQuota[0]['cuotaMonto'] == $arrayQuota[11]['cuotaMonto'] 
+                                ? 'doce cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].')'
+                                : 'once cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].') y una cuota de $'.$arrayQuota[11]['cuotaMonto'].' ('.$arrayQuota[11]['cuotaLetra'].')';
+            $templateProcesor->setValue('totalQuotasText', $totalQuotasText);
+        }
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
         ini_set("pcre.backtrack_limit", -1);
