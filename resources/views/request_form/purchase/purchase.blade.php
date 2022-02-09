@@ -263,13 +263,13 @@
                                 </div>
                             </fieldset>
                         </td>
-                        <td align="center">
+                        <!-- <td align="center">
                             <a href="">
                               <span style="color: Tomato;">
                                 <i class="fas fa-times-circle"></i>
                               </span>
                             </a>
-                        </td>
+                        </td> -->
                     </tr>
                   @endforeach
                 </tbody>
