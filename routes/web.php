@@ -1353,6 +1353,7 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
+    Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     Route::get('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
@@ -1376,7 +1377,6 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('supply')->as('supply.')->middleware('auth')->group(function () {
         Route::get('/', [PurchasingProcessController::class, 'index'])->name('index');
-        Route::get('/forms', [PurchasingProcessController::class, 'forms'])->name('forms');
         Route::get('/{requestForm}', [PurchasingProcessController::class, 'show'])->name('show');
         Route::get('/{requestForm}/purchase', [PurchasingProcessController::class, 'purchase'])->name('purchase');
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');

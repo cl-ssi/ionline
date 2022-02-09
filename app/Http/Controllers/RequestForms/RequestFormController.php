@@ -41,19 +41,31 @@ class RequestFormController extends Controller {
         //     return view('request_form.index', compact('empty'));}
         // return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
 
-        $my_pending_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+        $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_id', Auth::user()->id)
             ->where('status', 'pending')
             ->latest('id')
             ->get();
 
-        $my_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_id', Auth::user()->id)
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
 
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
+    }
+
+    public function all_forms()
+    {
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all')){
+            session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
+        $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
+        
+        return view('request_form.all_forms', compact('request_forms'));
     }
 
     public function get_event_type_user()
