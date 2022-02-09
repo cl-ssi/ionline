@@ -46,8 +46,8 @@ class PurchasingProcessController extends Controller
 
     public function forms()
     {
-        if(Auth()->user()->organizational_unit_id != 37){
-            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+        if(Auth()->user()->organizational_unit_id != 37 || !Auth()->user()->hasPermissionTo('Request Forms: all')){
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento o no tiene los permisos necesarios para ver los formularios.');
             return redirect()->route('request_forms.my_forms');
         }
 
