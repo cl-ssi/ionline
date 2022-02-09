@@ -12,6 +12,9 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
+      @if(Auth::user()->hasPermissionTo('Request Forms: all'))
+      <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
+      @endif
       <a class="dropdown-item" href="{{ route('request_forms.pending_forms') }}"><i class="fas fa-inbox"></i>
         {{-- @if(App\Models\RequestForms\RequestForm::getPendingRequestToSign() > 0)
             <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
@@ -31,9 +34,6 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{{ route('request_forms.supply.index') }}"><i class="fas fa-inbox"></i> Comprador</a>
-        @if(Auth::user()->hasPermissionTo('Request Forms: all'))
-        <a class="dropdown-item" href="{{ route('request_forms.supply.forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
-        @endif
       </div>
     </li>
   @endif
