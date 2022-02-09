@@ -225,6 +225,12 @@
                                   </a>
                                   @endif
                               @endif
+                              @if($requestForm->PurchasingProcess)
+                              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
+                                <a href="{{ route('request_forms.supply.show', $requestForm) }}"
+                                  class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
+                              </span>
+                              @endif
                             </td>
                         </tr>
                   @endforeach
