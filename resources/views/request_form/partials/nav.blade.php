@@ -31,7 +31,9 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         <a class="dropdown-item" href="{{ route('request_forms.supply.index') }}"><i class="fas fa-inbox"></i> Comprador</a>
-        <!-- <div class="dropdown-divider"></div> -->
+        @if(Auth::user()->hasPermissionTo('Request Forms: all'))
+        <a class="dropdown-item" href="{{ route('request_forms.supply.forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
+        @endif
       </div>
     </li>
   @endif
