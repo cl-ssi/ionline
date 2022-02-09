@@ -222,7 +222,7 @@ class RequestFormCreate extends Component
       // dd($this->items);
       $this->validate(
         [ 'name'                         =>  'required',
-          //'contractManagerId'            =>  'required',
+          'contractManagerId'            =>  'required',
           'subtype'                      =>  'required',
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
@@ -231,7 +231,7 @@ class RequestFormCreate extends Component
           ($this->isRFItems ? 'items' : 'passengers') => 'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
-          //'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+          'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
           'subtype.required'             =>  'Seleccione el tipo para este formulario.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
