@@ -58,7 +58,12 @@
 
                                     @endswitch
                                 </td>
-                                <td>{{ $requestForm->folio }}</td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
@@ -122,11 +127,10 @@
                       <th>ID</th>
                       <th>Folio</th>
                       <th style="width: 7%">Fecha Creación</th>
-                      <th>Tipo</th>
+                      <th>Tipo / Mecanismo de Compra</th>
                       <th>Descripción</th>
                       <th>Usuario Gestor</th>
                       <th>Comprador</th>
-                      <th>Mecanismo de Compra</th>
                       <th>Items</th>
                       <th>Espera</th>
                       <th>Estado</th>
@@ -137,15 +141,21 @@
                       @foreach($new_budget_pending_to_sign as $requestForm)
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
-                                <td>{{ $requestForm->folio }}</td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->SubtypeValue }}</td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
                                 </td>
                                 <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
@@ -202,11 +212,10 @@
                   <th>ID</th>
                   <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
-                  <th>Tipo</th>
+                  <th>Tipo / Mecanismo de Compra</th>
                   <th>Descripción</th>
                   <th>Usuario Gestor</th>
                   <th>Comprador</th>
-                  <th>Mecanismo de Compra</th>
                   <th>Items</th>
                   <th>Espera</th>
                   <th>Estado</th>
@@ -238,15 +247,21 @@
 
                                 @endswitch
                             </th>
-                            <td>{{ $requestForm->folio }}</td>
+                            <td>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                @if($requestForm->father)
+                                <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                @endif
+                            </td>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->SubtypeValue }}</td>
+                            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
                             <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
-                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                             <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td class="text-center">
@@ -318,11 +333,10 @@
                     <th>ID</th>
                     <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
-                    <th>Tipo</th>
+                    <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
                     <th>Comprador</th>
-                    <th>Mecanismo de Compra</th>
                     <th>Items</th>
                     <th>Espera</th>
                     <th>Estado</th>
@@ -354,15 +368,21 @@
 
                                     @endswitch
                                 </th>
-                                <td>{{ $requestForm->folio }}</td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->SubtypeValue }}</td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                     {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                                 </td>
                                 <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">

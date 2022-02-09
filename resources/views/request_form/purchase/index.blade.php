@@ -18,10 +18,9 @@
                     <th>ID</th>
                     <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
-                    <th>Tipo</th>
+                    <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
-                    <th>Mecanismo de Compra</th>
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
@@ -35,12 +34,13 @@
                             <td>{{ $requestForm->id }}</td>
                             <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
+                            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                {{ $requestForm->SubtypeValue }}
+                            </td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
-                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
                             <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                             <td>{{ $requestForm->created_at->diffForHumans() }}</td>
@@ -93,11 +93,10 @@
                     <th>ID</th>
                     <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
-                    <th>Tipo</th>
+                    <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
                     <th>Comprador a cargo</th>
-                    <th>Mecanismo de Compra</th>
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
@@ -111,13 +110,14 @@
                             <td>{{ $requestForm->id }}</td>
                             <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
+                            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                {{ $requestForm->SubtypeValue }}
+                            </td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
                             <td>@foreach($requestForm->purchasers as $purchaser) {{ $purchaser->FullName }} <br> @endforeach</td>
-                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
                             <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                             <td>{{ $requestForm->created_at->diffForHumans() }}</td>
