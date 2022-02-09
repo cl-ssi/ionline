@@ -21,11 +21,11 @@ class EventRequestForm extends Model
 
 
     public function signerUser(){
-        return $this->belongsTo(User::class, 'signer_user_id');
+        return $this->belongsTo(User::class, 'signer_user_id')->withTrashed();
     }
 
     public function purchaser(){
-        return $this->belongsTo(User::class, 'purchaser_id');
+        return $this->belongsTo(User::class, 'purchaser_id')->withTrashed();
     }
 
     public function signerOrganizationalUnit(){
