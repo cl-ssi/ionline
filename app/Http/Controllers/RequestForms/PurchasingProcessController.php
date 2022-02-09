@@ -47,7 +47,7 @@ class PurchasingProcessController extends Controller
     public function purchase(RequestForm $requestForm)
     {
         if(Auth()->user()->organizational_unit_id == 37){
-            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children');
+            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
             if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
@@ -58,6 +58,13 @@ class PurchasingProcessController extends Controller
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
+    }
+
+    public function show(RequestForm $requestForm)
+    {
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        // return $requestForm;
+        return view('request_form.purchase.show', compact('requestForm'));
     }
 
     public function create(RequestForm $requestForm)
@@ -339,7 +346,6 @@ class PurchasingProcessController extends Controller
 
     public function create_direct_deal(Request $request, RequestForm $requestForm)
     {
-        //dd('entre ctm');
         $requestForm->load('purchasingProcess.details');
         if($this->estimated_expense_exceeded($requestForm)){
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
@@ -350,9 +356,40 @@ class PurchasingProcessController extends Controller
         $directdeal = new DirectDeal($request->all());
         $directdeal->save();
 
+        foreach($request->item_id as $key => $item){
+            $detail = new PurchasingProcessDetail();
+            $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->item_request_form_id       = $item;
+            $detail->direct_deal_id             = $directdeal->id;
+            $detail->user_id                    = Auth::user()->id;
+            $detail->quantity                   = $request->quantity[$key];
+            $detail->unit_value                 = $request->unit_value[$key];
+            $detail->expense                    = $request->item_total[$key];
+            $detail->status                     = 'total';
+            $detail->save();
+        }
+
+        //Aqui falta registrar suministro o compra inmediata
+
+        //Registrar archivos en attached_files
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
+                  'resol_contract_file' => 'Resolución de contrato', 
+                  'guarantee_ticket_file' => 'Boleta de garantía'];
+
+        foreach($files as $key => $file){
+            if($request->hasFile($key)){
+                $archivo = $request->file($key);
+                $file_name = $now.'_'.$key.'_'.$directdeal->id;
+                $attachedFile = new AttachedFile();
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->document_type = $file;
+                $attachedFile->direct_deal_id = $directdeal->id;
+                $attachedFile->save();
+            }
+        }
+
         session()->flash('success', 'El trato directo ha sido creado exitosamentes');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
-
-
     }
 }

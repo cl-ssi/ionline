@@ -410,12 +410,15 @@
             @case('CUARTO TURNO - MODIFICADO')
             de turnos rotativos, en CUARTO TURNO, modificado por necesidades del servicio.
             @break
+            @case('TURNO DE REEMPLAZO')
+            de turnos de reemplazo.
+            @break
             @default
-            Con el solo objeto de verificar que el prestador cumple con los servicios para los que fue contratado, las partes han estipulado, de acuerdo con la jurisprudencia de la Contraloría General de la Republica, que el prestador registrará ingreso de lunes a viernes a las 08:00 y salida de lunes a viernes a las 16:48.
+            con el solo objeto de verificar que el prestador cumple con los servicios para los que fue contratado, las partes han estipulado, de acuerdo con la jurisprudencia de la Contraloría General de la Republica, que el prestador registrará ingreso de lunes a viernes a las 08:00 y salida de lunes a viernes a las 16:48.
             --
             @break
             @endswitch
-            @if($ServiceRequest->working_day_type_other)
+            @if($ServiceRequest->working_day_type != "TURNO DE REEMPLAZO" && $ServiceRequest->working_day_type_other)
             {{$ServiceRequest->working_day_type_other}}<br>
             @endif
 

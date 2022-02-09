@@ -1376,6 +1376,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('supply')->as('supply.')->middleware('auth')->group(function () {
         Route::get('/', [PurchasingProcessController::class, 'index'])->name('index');
+        Route::get('/{requestForm}', [PurchasingProcessController::class, 'show'])->name('show');
         Route::get('/{requestForm}/purchase', [PurchasingProcessController::class, 'purchase'])->name('purchase');
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');
         Route::post('/{requestForm}/create_petty_cash', [PurchasingProcessController::class, 'create_petty_cash'])->name('create_petty_cash');

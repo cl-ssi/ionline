@@ -78,7 +78,7 @@
 
                 <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento(s) de Respaldo:</label>
-                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
+                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" id="for_fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                 </fieldset>
             </div>
 
@@ -137,7 +137,7 @@
             <button wire:click="btnCancelRequestForm"  class="btn btn-secondary btn-sm float-right">Cancelar</button>
         </div> -->
         <div class="col-2">
-            <button wire:click="saveRequestForm"  class="btn btn-primary btn-sm float-right " type="button">
+            <button wire:click="saveRequestForm"  class="btn btn-primary btn-sm float-right " type="button" wire:loading.attr="disabled">
                 <i class="fas fa-save"></i> Guardar
             </button>
         </div>

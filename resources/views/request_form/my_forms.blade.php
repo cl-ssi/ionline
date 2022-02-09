@@ -58,7 +58,12 @@
 
                                     @endswitch
                                 </td>
-                                <td>{{ $requestForm->folio }}</td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
@@ -126,10 +131,10 @@
                   <th>ID</th>
                   <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
-                  <th>Tipo</th>
+                  <th>Tipo / Mecanismo de Compra</th>
                   <th>Descripción</th>
                   <th>Usuario Gestor</th>
-                  <th>Mecanismo de Compra</th>
+                  <th>Comprador</th>
                   <th>Items</th>
                   <th>Espera</th>
                   <th>Estado</th>
@@ -161,14 +166,20 @@
 
                                 @endswitch
                             </th>
-                            <td>{{ $requestForm->folio }}</td>
+                            <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                            </td>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->SubtypeValue }}</td>
+                            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                {{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
-                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
                             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                             <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td class="text-center">
@@ -213,6 +224,12 @@
                                       class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                                   </a>
                                   @endif
+                              @endif
+                              @if($requestForm->PurchasingProcess)
+                              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
+                                <a href="{{ route('request_forms.supply.show', $requestForm) }}"
+                                  class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
+                              </span>
                               @endif
                             </td>
                         </tr>
