@@ -2,6 +2,8 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Parameters\PurchaseType;
+use App\Models\Parameters\Supplier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +17,7 @@ class DirectDeal extends Model implements Auditable
 
 
     protected $fillable = [
-        'purchase_type_id' ,'description', 'supplier_id'
+        'purchase_type_id' ,'description', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'supplier_id'
     ];
 
     public function purchaseType()
