@@ -34,10 +34,7 @@
             <input type="address" class="form-control" id="for_address" name="address" required>
         </fieldset>
 
-        <fieldset class="form-group col-sm-4">
-            <label for="for_city">Ciudad</label>
-            <input type="city" class="form-control" id="for_city" name="city" required >
-        </fieldset>
+        @livewire('request-form.commune-region-select')
 
         <fieldset class="form-group col-sm-4">
             <label for="for_telephone">Teléfono</label>
