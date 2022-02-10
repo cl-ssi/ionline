@@ -214,7 +214,6 @@ class RequestFormCreate extends Component
         $startOfYear = Carbon::now()->startOfYear();
         $endOfYear = Carbon::now()->endOfYear();
         $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count();
-        $counter++;
         return Carbon::now()->year.'-'.$counter;
     }
 
@@ -269,11 +268,6 @@ class RequestFormCreate extends Component
             'status'                =>  'pending'
         ]);
 
-        if(!$this->idRF){
-          $req->folio = $this->createFolio();
-          $req->save();
-        }
-
         if($this->isRFItems){
           // save items
           foreach($this->items as $item){
@@ -326,7 +320,8 @@ class RequestFormCreate extends Component
           $this->isRFItems ? ItemRequestForm::destroy($this->deletedItems) : Passenger::destroy($this->deletedPassengers);
           session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue editado con exito.');
         }
-        else{
+        else{ // nuevo formulario de requerimiento
+          $req->update(['folio' => $this->createFolio()]);
           EventRequestform::createLeadershipEvent($req);
           EventRequestform::createPreFinanceEvent($req);
           EventRequestform::createFinanceEvent($req);
