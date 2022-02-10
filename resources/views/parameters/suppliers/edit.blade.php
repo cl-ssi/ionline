@@ -38,11 +38,7 @@
               value="{{ $supplier->address }}" name="address" required>
         </fieldset>
 
-        <fieldset class="form-group col-sm-4">
-            <label for="for_city">Ciudad</label>
-            <input type="city" class="form-control" id="for_city"
-              value="{{ $supplier->city }}" name="city" required >
-        </fieldset>
+        @livewire('request-form.commune-region-select', ['supplier' => $supplier])
 
         <fieldset class="form-group col-sm-4">
             <label for="for_telephone">Teléfono</label>
