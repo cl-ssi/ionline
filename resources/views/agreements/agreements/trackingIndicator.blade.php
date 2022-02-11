@@ -68,7 +68,7 @@
                 <a href="{{ route('agreements.show', $agreement->id) }}" class="">{{ $agreement->id }}</a>
               </th>
               <td>
-              <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px;" data-toggle="collapse" data-target="#coll{{ $agreement->id }}">+ {{ $agreement->program->name }}</button>
+              <button style ="outline: none !important;padding-top: 0;border: 0;vertical-align: baseline; font-size:10px;" data-toggle="collapse" data-target="#coll{{ $agreement->id }}">+ {{ $agreement->program->name ?? 'Retiro voluntario' }}</button>
                 <div id="coll{{ $agreement->id }}" class="collapse" >
                   <ul class="small" >
                     @foreach($agreement->agreement_amounts as $amount)
