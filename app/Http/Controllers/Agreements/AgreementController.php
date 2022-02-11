@@ -89,8 +89,6 @@ class AgreementController extends Controller
     {
         $agreement = new Agreement($request->All());
         $agreement->period = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
-        if($request->hasFile('file'))
-            $agreement->file = $request->file('file')->store('resolutions');
 
         $municipality = Municipality::where('commune_id', $request->commune_id)->first();
         $agreement->representative = $municipality->name_representative;
@@ -100,28 +98,36 @@ class AgreementController extends Controller
         $agreement->municipality_adress = $municipality->adress_municipality;
         $agreement->municipality_rut = $municipality->rut_municipality;
 
-        $quota_options = $this->getQuotaOptions();
-        $quota_option_selected = $quota_options->firstWhere('id', $request->quota_id);
-        $agreement->quotas = $quota_option_selected['quotas'];
-        $agreement->save();
-        
-        foreach($agreement->program->components as $component) {
-            $agreement->agreement_amounts()->create(['subtitle' => null, 'amount'=>0, 'program_component_id'=>$component->id]);
-        }
-        
-        $months = array (1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
-        $quota_percentages = explode(',', $quota_option_selected['percentages']);
-        
-        if($quota_option_selected['quotas'] == 1)
-            $agreement->agreement_quotas()->create(['description' => 'Descripción 1', 'amount' => 0]);
-        elseif($quota_option_selected['quotas'] == 12)
-            for($i = 1; $i <= 12; $i++) 
-                $agreement->agreement_quotas()->create(['description' => $months[$i], 'amount' => 0]);
-        else
-            for($i = 0; $i < $quota_option_selected['quotas']; $i++)
-                $agreement->agreement_quotas()->create(['description' => $quota_percentages[$i].'%', 'percentage' => $quota_percentages[$i], 'amount' => 0]);
+        if($request->has('total_amount')){ // Convenio con retiro voluntario
+            $agreement->total_amount = $request->total_amount;
+            $agreement->quotas = $request->quotas;
+            $agreement->save();
+        }else { // Convenio de ejecución
+            $quota_options = $this->getQuotaOptions();
+            $quota_option_selected = $quota_options->firstWhere('id', $request->quota_id);
+            $agreement->quotas = $quota_option_selected['quotas'];
 
-        return redirect('agreements');
+            $agreement->save();
+            
+            foreach($agreement->program->components as $component) {
+                $agreement->agreement_amounts()->create(['subtitle' => null, 'amount'=>0, 'program_component_id'=>$component->id]);
+            }
+            
+            $months = array (1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
+            $quota_percentages = explode(',', $quota_option_selected['percentages']);
+            
+            if($quota_option_selected['quotas'] == 1)
+                $agreement->agreement_quotas()->create(['description' => 'Descripción 1', 'amount' => 0]);
+            elseif($quota_option_selected['quotas'] == 12)
+                for($i = 1; $i <= 12; $i++) 
+                    $agreement->agreement_quotas()->create(['description' => $months[$i], 'amount' => 0]);
+            else
+                for($i = 0; $i < $quota_option_selected['quotas']; $i++)
+                    $agreement->agreement_quotas()->create(['description' => $quota_percentages[$i].'%', 'percentage' => $quota_percentages[$i], 'amount' => 0]);
+        }
+
+        session()->flash('info', 'El convenio #'.$agreement->id.' ha sido creado satisfactoriamente.');
+        return redirect()->route('agreements.show', $agreement);
     }
 
     /**
@@ -177,6 +183,9 @@ class AgreementController extends Controller
         $agreement->representative_decree = $request->representative_decree;
         $agreement->municipality_adress = $request->municipality_adress;
         $agreement->municipality_rut    = $request->municipality_rut;
+
+        $agreement->quotas = $request->quotas;
+        $agreement->total_amount = $request->total_amount;
 
         $agreement->establishment_list  = serialize($request->establishment);
         if($request->hasFile('file')){
@@ -326,16 +335,23 @@ class AgreementController extends Controller
 
         $agreement->load('program','commune.municipality','referrer');
         $municipio = (!Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$agreement->commune->name;
-        $first_word = explode(' ',trim($agreement->program->name))[0];
-        $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
+        if(!$agreement->total_amount){ // Convenios de ejecución
+            $first_word = explode(' ',trim($agreement->program->name))[0];
+            $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
+        }
 
         $signature = new Signature();
         $signature->request_date = $agreement->date;
         $signature->document_type = 'Convenios';
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
-        $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
-        $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
+        if(!$agreement->total_amount){ // Convenio de ejecución
+            $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+            $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
+        }else{ // Convenio retiro voluntario
+            $signature->subject = 'Convenio retiro voluntario comuna de '.$agreement->commune->name;
+            $signature->description = 'Documento convenio retiro voluntario año '.$agreement->period.' comuna de '.$agreement->commune->name;
+        }
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;

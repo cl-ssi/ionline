@@ -38,7 +38,7 @@
                 <td>{{ $agreement->commune->name }}</td>
                 <td>{{ $agreement->number }} <a href="#"><i class="fas fa-paperclip"></i></a></td>
                 <td nowrap>{{ $agreement->resolution_date ? \Carbon\Carbon::parse($agreement->resolution_date)->format('d-m-Y') : null }}</td>
-                <td>{{ $agreement->program->name }}</td>
+                <td>{{ $agreement->program->name ?? 'Retiro voluntario' }}</td>
                 <td class="small">
                     <ul>
                     @foreach($agreement->agreement_amounts as $amount)
@@ -46,7 +46,7 @@
                     @endforeach
                     </ul>
                 </td>
-                <td nowrap>@numero($agreement->agreement_amounts->sum('amount'))</td>
+                <td nowrap>@numero($agreement->total_amount ?? $agreement->agreement_amounts->sum('amount'))</td>
                 <td nowrap>{{ \Carbon\Carbon::parse($agreement->created_at)->format('d-m-Y') }}</td>
                 <td><a href="{{ route('agreements.show', $agreement->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a></td>
                 <!--<td> <a href="{{-- route('agreements.accountability.index', $agreement) --}}">Comuna</a></td>-->

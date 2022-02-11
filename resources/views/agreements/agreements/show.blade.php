@@ -2,6 +2,24 @@
 
 @section('title', 'Ver detall de convenio')
 
+@section('custom_css')
+<style>
+	.tooltip-wrapper {
+	display: inline-block; /* display: block works as well */
+	}
+
+	.tooltip-wrapper .btn[disabled] {
+	/* don't let button block mouse events from reaching wrapper */
+	pointer-events: none;
+	}
+
+	.tooltip-wrapper.disabled {
+	/* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+	cursor: not-allowed;
+	}
+</style>
+@endsection
+
 @section('content')
 
 @include('agreements/nav')
@@ -39,7 +57,9 @@
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
-        @if($agreement->period >= 2022)
+        @if($agreement->total_amount) <!-- convenio retiro voluntario -->
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+        @elseif($agreement->period >= 2022)
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectEvalOption"
                         data-formaction="{{ route('agreements.createWord', $agreement )}}">
@@ -75,12 +95,22 @@
         <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
     </li>
 
-    <li class="nav-item">
-        <a href="#" class="nav-link text-secondary" data-toggle="modal"
-                        data-target="#selectSignerRes"
-                        data-formaction="{{ route('agreements.createWordRes', $agreement )}}">
-                        <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
-    </li>
+        @if(!$agreement->total_amount) <!-- no está lista aun la planilla borrador resolucion -->
+            @if($agreement->file)
+            <li class="nav-item">
+                <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                                data-target="#selectSignerRes"
+                                data-formaction="{{ route('agreements.createWordRes', $agreement )}}">
+                                <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+            </li>
+            @else
+            <li class="nav-item">
+                <div class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final de Covenio Referentes, adjuntelo para habilitar esta opción">
+                    <a href="#" class="nav-link text-secondary disabled"><i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
+                </div>
+            </li>
+            @endif
+        @endif
     @endif
 
     @if($agreement->fileResEnd != null)
@@ -103,7 +133,7 @@
       </h5>
     </div>
 
-    <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordion">
+    <div id="collapseOne" class="collapse {{$agreement->total_amount ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordion">
       <div class="card-body">
         <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('agreements.update',$agreement->id) }}" >
             @csrf
@@ -116,12 +146,19 @@
                         <option>{{ $agreement->commune->name }}</option>
                     </select>
                 </div>
+                @if($agreement->total_amount)
+                <div class="form-group col-md-6">
+                    <label for="foragreement">Convenio</label>
+                    <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="Retiro voluntario">
+                </div>
+                @else
                 <div class="form-group col-md-6">
                     <label for="foragreement">Programa</label>
                     <select name="agreement" id="formagreement" class="form-control" disabled>
                         <option>{{ $agreement->program->name }}</option>
                     </select>
                 </div>
+                @endif
                 <fieldset class="form-group col-3">
                     <label for="for">Archivo 
                         @if($agreement->file != null)  
@@ -154,6 +191,16 @@
                     </select>
                 </fieldset>
 
+                @if($agreement->total_amount)
+                <fieldset class="form-group col-2">
+                    <label for="forquotas">N° de cuotas</label>
+                    <input type="integer" class="form-control" id="forquotas" name="quotas" min="1" value="{{$agreement->quotas}}" required>
+                </fieldset>
+                <fieldset class="form-group col-3">
+                    <label for="fortotal_amount">Monto total</label>
+                    <input type="integer" class="form-control" id="fortotal_amount" name="total_amount" min="100" value="{{$agreement->total_amount}}" required>
+                </fieldset>
+                @else
                 <fieldset class="form-group col-5">
                     <label for="forestablishment">Centros de Atencion</label>
                     <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple>
@@ -163,6 +210,7 @@
                     </select>
                     <small class="form-text text-muted">* Seleccionar uno o más centros de atención</small>
                 </fieldset>
+                @endif
             </div>
             <div class="form-row">
                 <fieldset class="form-group col-12">
@@ -223,6 +271,7 @@
                     <input type="date" name="resolution_date" class="form-control" id="fordate" value="{{ $agreement->resolution_date }}" >
                 </fieldset>
 
+                @if(!$agreement->total_amount)
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Distribuye Recursos</label>
                     <input type="integer" name="res_resource_number" class="form-control" id="fornumber" value="{{ $agreement->res_resource_number }}" >
@@ -233,6 +282,7 @@
                     <label for="fordate">Fecha Resolución Distribuye Recursos</label>
                     <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $agreement->res_resource_date }}" >
                 </fieldset>
+                @endif
             </div>
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
@@ -269,7 +319,7 @@
     </div>
   </div>
 </div>
-
+@if(!$agreement->total_amount)
     <div class="card mt-3 mb-3 small">
         <div class="card-body">
             <h5>Montos</h5>
@@ -454,6 +504,8 @@
     @include('agreements/agreements/modal_select_signer_res')
     @include('agreements/agreements/modal_select_evaluation_option')
 
+@endif
+
 @endsection
 
 @section('custom_js')
@@ -466,6 +518,7 @@
 <script type="text/javascript">
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
+        $('.tooltip-wrapper').tooltip({position: "bottom"})
         //var jobs = JSON.parse("{{!! json_encode($establishment_list) !!}}");
         var jobs =  @json($establishment_list);
         //console.log(jobs);
