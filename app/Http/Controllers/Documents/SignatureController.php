@@ -57,7 +57,7 @@ class SignatureController extends Controller
         if ($tab == 'mis_documentos') {
             $mySignatures = Signature::whereIn('responsable_id', $users)
                 ->orderByDesc('id')
-                ->get();
+                ->paginate(20);
         }
 
         if ($tab == 'pendientes') {
