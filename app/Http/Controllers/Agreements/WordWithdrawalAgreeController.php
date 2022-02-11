@@ -36,8 +36,8 @@ class WordWithdrawalAgreeController extends Controller
         $amountPerQuota = round($totalConvenio/$totalQuotas);
         $amountPerQuota = round($totalConvenio/$totalQuotas);
         $diff = $totalConvenio - $amountPerQuota * $totalQuotas; //residuo
-        $totalQuotasText = $diff ? ($totalQuotas - 1). ' cuotas de $'.$amountPerQuota.' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota,0, 'pesos','')).') y una cuota de $'.($amountPerQuota + $diff).' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota + $diff,0, 'pesos','')).')'
-                                 : $totalQuotas. ' cuotas de $'.$amountPerQuota.' ('.$this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos','')).')';
+        $totalQuotasText = $diff ? ($totalQuotas - 1). ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota,0, 'pesos','')).') y una cuota de $'.number_format($amountPerQuota + $diff,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota + $diff,0, 'pesos','')).')'
+                                 : $totalQuotas. ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos','')).')';
 
     	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenioretiro'.$agreement->period.'.docx'));
 
