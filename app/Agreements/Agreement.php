@@ -13,7 +13,8 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'total_amount', 'referente', 
+        'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
     ];
 
     protected $casts = [

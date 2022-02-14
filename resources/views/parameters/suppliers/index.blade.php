@@ -20,7 +20,8 @@
                 <th>Nombre</th>
                 <th>Run</th>
                 <th>Dirección</th>
-                <th>Ciudad</th>
+                <th>Región</th>
+                <th>Comuna</th>
                 <th>Teléfono</th>
                 <th></th>
             </tr>
@@ -32,7 +33,8 @@
                 <th>{{ $supplier->name }}</th>
                 <td>{{ $supplier->run }}-{{ $supplier->dv }}</td>
                 <td>{{ $supplier->address }}</td>
-                <td>{{ $supplier->city }}</td>
+                <td>{{ $supplier->region->name ?? '' }}</td>
+                <td>{{ $supplier->commune->name ?? '' }}</td>
                 <td>{{ $supplier->telephone }}</td>
                 <td>
                     <a href="{{ route('parameters.suppliers.edit', $supplier) }}">
