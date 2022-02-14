@@ -128,7 +128,7 @@ class ShowTotalHours extends Component
 
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' &&
                   $this->fulfillment->serviceRequest->responsability_center_ou_id == 138 &&
-                  (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($ServiceRequest->start_date <= '2021/12/31 23:59:59'))):
+                  (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($this->fulfillment->serviceRequest->end_date <= '2021/12/31 23:59:59'))):
                 $totalMinutes = 0;
                 $totalMinutesDay = 0;
                 $totalMinutesNight = 0;
