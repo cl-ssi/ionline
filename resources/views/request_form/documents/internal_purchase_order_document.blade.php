@@ -180,19 +180,19 @@
           </tr>
           <tr>
               <th align="left">DIRECCION</th>
-              <td></td>
-              <th align="left">CIUDAD</th>
-              <td></td>
-              <th align="left">REQ. FOLIO</th>
-              <td>{{ $purchasingProcessDetail->purchasingProcess->request_form_id }}</td>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->address ?? '' }}</td>
+              <th align="left">REGION</th>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->region->name ?? '' }}</td>
+              <th align="left">COMUNA</th>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->commune->name ?? '' }}</td>
           </tr>
           <tr>
               <th align="left">FONO</th>
-              <td></td>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->telephone ?? '' }}</td>
               <th align="left">COND. PAGO</th>
               <td>{{ $purchasingProcessDetail->internalPurchaseOrder->payment_condition }}</td>
-              <th align="left"></th>
-              <td></td>
+              <th align="left">REQ. FOLIO</th>
+              <td>{{ $purchasingProcessDetail->purchasingProcess->RequestForm->folio }}</td>
           </tr>
       </table>
 
