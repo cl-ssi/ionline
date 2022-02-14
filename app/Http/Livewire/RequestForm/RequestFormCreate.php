@@ -226,7 +226,7 @@ class RequestFormCreate extends Component
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
-          'type_of_currency'             =>  'required',
+          'typeOfCurrency'               =>  'required',
           // 'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
           ($this->isRFItems ? 'items' : 'passengers') => 'required'
         ],
@@ -237,7 +237,7 @@ class RequestFormCreate extends Component
           'program.required'             =>  'Ingrese un Programa Asociado.',
           // 'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          'type_of_currency'             =>  'Ingrese un tipo de moneda',
+          'typeOfCurrency'               =>  'Ingrese un tipo de moneda',
           ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
         ],
       );
