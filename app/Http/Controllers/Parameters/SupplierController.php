@@ -15,7 +15,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::All();
+        $suppliers = Supplier::with('region', 'commune')->get();
         return view('parameters.suppliers.index', compact('suppliers'));
     }
 

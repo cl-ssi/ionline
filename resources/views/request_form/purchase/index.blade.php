@@ -86,7 +86,7 @@
 </div>
 <div class="col">
     <div class="table-responsive">
-        <h6><i class="fas fa-inbox"></i> Mis Formularios asignados</h6>
+        <h6><i class="fas fa-inbox"></i> Formularios asignados</h6>
         <table class="table table-sm table-striped table-bordered small">
             <thead>
                 <tr class="text-center">
@@ -154,7 +154,7 @@
     {{ $request_forms->links() }}
 </div>
 @else
-    <h6><i class="fas fa-inbox"></i> Mis Formularios asignados</h6>
+    <h6><i class="fas fa-inbox"></i> Formularios asignados</h6>
     <div class="card">
         <div class="card-body">
         No hay formularios de requerimiento para mostrar.
