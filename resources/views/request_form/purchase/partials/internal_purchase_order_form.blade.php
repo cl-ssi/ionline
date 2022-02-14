@@ -23,13 +23,13 @@
           <fieldset class="form-group col-2">
               <label for="for_date">Condición de Pago</label>
               <input type="number" class="form-control form-control-sm" id="for_payment_condition" name="payment_condition"
-                  value="{{ old('payment_condition') }}">
+                  value="{{ old('payment_condition') }}" required>
           </fieldset>
 
           <fieldset class="form-group col-sm-2">
               <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
               <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
-                  value="{{ old('estimated_delivery_date') }}">
+                  value="{{ old('estimated_delivery_date') }}" required>
           </fieldset>
       </div>
 
