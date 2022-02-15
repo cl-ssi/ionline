@@ -74,7 +74,6 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      $this->fileRequests = [];
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
@@ -219,7 +218,7 @@ class RequestFormCreate extends Component
     }
 
     public function saveRequestForm(){
-      dd($this->fileRequests);
+      // dd($this->fileRequests);
       $this->validate(
         [ 'name'                         =>  'required',
           'contractManagerId'            =>  'required',
