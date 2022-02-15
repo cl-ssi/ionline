@@ -74,6 +74,7 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+      $this->fileRequests = [];
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
