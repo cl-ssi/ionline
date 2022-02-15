@@ -366,15 +366,13 @@ class RequestFormCreate extends Component
         // Se guarda los archivos del form req cuando ya todo lo anteior se guardó exitosamente
         foreach($this->fileRequests as $nFiles => $fileRequest){
           $reqFile = new RequestFormFile();
-          // if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
-              $now = Carbon::now()->format('Y_m_d_H_i_s');
-              $file_name = $now.'_req_file_'.$nFiles;
-              $reqFile->name = $fileRequest->getClientOriginalName();
-              $reqFile->file = $fileRequest->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$fileRequest->extension(), 'gcs');
-              $reqFile->request_form_id = $req->id;
-              $reqFile->user_id = Auth()->user()->id;
-              $reqFile->save();
-          // }
+          $now = Carbon::now()->format('Y_m_d_H_i_s');
+          $file_name = $now.'_req_file_'.$nFiles;
+          $reqFile->name = $fileRequest->getClientOriginalName();
+          $reqFile->file = $fileRequest->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$fileRequest->extension(), 'gcs');
+          $reqFile->request_form_id = $this->editRF ? $this->requestForm->id : $req->id;
+          $reqFile->user_id = Auth()->user()->id;
+          $reqFile->save();
         }
 
       });
@@ -417,4 +415,9 @@ class RequestFormCreate extends Component
     //   }
     //   return false;
     // }
+
+    public function updatedFileRequests($value)
+    {
+      $this->fileRequests = $value;
+    }
 }
