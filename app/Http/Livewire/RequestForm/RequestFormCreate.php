@@ -278,7 +278,7 @@ class RequestFormCreate extends Component
             'type_of_currency'      =>  $this->typeOfCurrency,
             'purchase_mechanism_id' =>  $this->purchaseMechanism,
             'program'               =>  $this->program,
-            'status'                =>  'pending'
+            'status'                =>  $this->editRF ? $this->requestForm->status : 'pending'
         ]);
 
         if($this->isRFItems){
