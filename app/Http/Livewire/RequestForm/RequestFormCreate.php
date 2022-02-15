@@ -263,11 +263,11 @@ class RequestFormCreate extends Component
           ],
           [
             'subtype'               =>  $this->subtype,
-            'contract_manager_id'   =>  $this->contractManagerId,
+            'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
             //contractManagerId
             //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
             //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-            'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+            'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
             'name'                  =>  $this->name,
             'superior_chief'        =>  $this->superiorChief,
             'justification'         =>  $this->justify,
