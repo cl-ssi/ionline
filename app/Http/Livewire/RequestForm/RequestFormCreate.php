@@ -20,7 +20,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
-use Illuminate\Validation\Validator;
+// use Illuminate\Validation\Validator;
 
 class RequestFormCreate extends Component
 {
