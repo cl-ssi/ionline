@@ -218,7 +218,7 @@ class RequestFormCreate extends Component
     }
 
     public function saveRequestForm(){
-      // dd($this->items);
+      dd($this->fileRequests);
       $this->validate(
         [ 'name'                         =>  'required',
           'contractManagerId'            =>  'required',
@@ -243,7 +243,7 @@ class RequestFormCreate extends Component
       );
 
       DB::transaction(function () {
-        dd($this->fileRequests);
+
         //dd("chequear por jefatura");
 
         $req = RequestForm::updateOrCreate(
