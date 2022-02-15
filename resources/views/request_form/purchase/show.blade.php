@@ -107,7 +107,8 @@
         <tbody class="text-center small">
             <tr>
               @foreach($requestForm->eventRequestForms as $event)
-                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+                <td><strong>{{ $event->EventTypeValue }}</strong>
+                </td>
               @endforeach
             </tr>
             <tr>
@@ -123,6 +124,9 @@
                       <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
                     </span>
                     <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <p style="font-size: 11px">
+                      {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
+                    </p>
                     <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
                   @endif
                   @if($event->StatusValue == 'Rechazado')
@@ -130,6 +134,9 @@
                       <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
                     </span>
                     <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <p style="font-size: 11px">
+                      {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
+                    </p>
                     <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
                   @endif
                 </td>
