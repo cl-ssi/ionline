@@ -20,6 +20,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
+use Illuminate\Validation\Validator;
 
 class RequestFormCreate extends Component
 {
@@ -242,6 +243,16 @@ class RequestFormCreate extends Component
         ],
       );
 
+      // $this->withValidator(function (Validator $validator) {
+      //   $validator->after(function ($validator) {
+      //       if ($this->available_balance_purchases_exceeded()) {
+      //           $validator->errors()->add('expense', 'Saldo disponible para compras excedido');
+      //       }
+      //   });
+      // })->validate();
+
+      // dd('pasé ctm');
+
       DB::transaction(function () {
 
         //dd("chequear por jefatura");
@@ -261,8 +272,8 @@ class RequestFormCreate extends Component
             'superior_chief'        =>  $this->superiorChief,
             'justification'         =>  $this->justify,
             'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
-            'request_user_id'       =>  Auth()->user()->id,
-            'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
+            'request_user_id'       =>  $this->editRF ? $this->request_user_id : Auth()->user()->id,
+            'request_user_ou_id'    =>  $this->editRF ? $this->request_user_ou_id : Auth()->user()->organizationalUnit->id,
             'estimated_expense'     =>  $this->totalForm(),
             'type_of_currency'      =>  $this->typeOfCurrency,
             'purchase_mechanism_id' =>  $this->purchaseMechanism,
@@ -402,5 +413,19 @@ class RequestFormCreate extends Component
           ->orderBy('name', 'ASC')
           ->get(['id', 'name', 'fathers_family', 'mothers_family']); //get specific columns equals best perfomance bench
         return view('livewire.request-form.request-form-create', compact('users'));
+    }
+
+    public function available_balance_purchases_exceeded()
+    {
+      if($this->requestForm->request_form_id){ // es suministro de req. form principal
+        //total del monto por items seleccionados en otros suministros + item registrados no debe sobrepasar el total adjudicado al formulario de requerimiento
+        $totalItemSelected = 0;
+        foreach($this->items as $item)
+            $totalItemSelected += $item['totalValue'];
+
+        $this->requestForm->load('father.purchasingProcess.details');
+        return $this->requestForm->father->purchasingProcess->getExpense() - $this->requestForm->father->getTotalExpense() < $totalItemSelected;
+      }
+      return false;
     }
 }
