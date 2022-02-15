@@ -254,7 +254,6 @@ class RequestFormCreate extends Component
       // dd('pasé ctm');
 
       DB::transaction(function () {
-        dd($this->fileRequests);
         //dd("chequear por jefatura");
 
         $req = RequestForm::updateOrCreate(
