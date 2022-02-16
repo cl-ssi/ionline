@@ -389,16 +389,12 @@ class MonthlyQuotes extends Component
                         $string = $nroCuotas . " cuotas,";
                         $interval = DateInterval::createFromDateString('1 month');
                         $periods   = new DatePeriod($serviceRequest->start_date->firstOfMonth(), $interval, $serviceRequest->end_date->endOfMonth());
-                        //dd($interval);
-                        //dd($periods);
                         $periods = iterator_to_array($periods);
-                        //dd($periods);
-                        $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                        //$valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                        //erg: comenté la linea siguiente porque desconozco el +1 que se hace al final, estaba afectando cálculo de nataly 16/02/2022
+                        // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                        $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
                         $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
-                        // dd('entre aca');
-                        //dd($periods);
-                        //$periods = $periods+1;
+
                         foreach ($periods as $key => $period) {
                             if ($key === array_key_first($periods)) {
                                 $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
