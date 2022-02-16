@@ -65,10 +65,6 @@ class MonthlyQuotes extends Component
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                     break;
-                case 'Licencia médica':
-                    $mes_completo = false;
-                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                    break;
                 case 'Abandono de funciones':
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
