@@ -160,18 +160,17 @@
                 </div>
                 @endif
                 <fieldset class="form-group col-3">
-                    <label for="for">Archivo 
+                    <label for="for">Archivo DOCX
                         @if($agreement->file != null)  
                             <a class="text-info" href="{{ route('agreements.download', $agreement->id) }}" target="_blank">
                                 <i class="fas fa-paperclip"></i> adjunto
                             </a>
                         @endif
                     </label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="forfile" name="file">
-                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión final de Covenio Referentes</small>
-                    </div>
+                    
+                    <input type="file" class="form-control-file" id="forfile" name="file" accept=".doc,.docx">
+                    <small class="form-text text-muted">* Adjuntar versión final de Convenio formato docx</small>
+                    
                 </fieldset>
             </div>
             <div class="form-row">
@@ -305,11 +304,9 @@
                             </a>
                         @endif
                     </label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="forfile" name="fileResEnd">
-                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión final de Resolución Función Exclusiva Encargado de Convenio</small>
-                    </div>
+                    <input type="file" class="form-control-file" id="forfileResEnd" name="fileResEnd" accept=".pdf">
+                    <small class="form-text text-muted">* Adjuntar versión final de Resolución Función Exclusiva Encargado de Convenio</small>
+                    
                 </fieldset>
             </div>
             <button type="submit" class="btn btn-primary ">Actualizar</button>
@@ -623,5 +620,13 @@
         $("#representative_appelative").val(appelatives[selected])
         $("#representative_decree").val(decrees[selected])
     })
+
+    $('#forfile').on( 'change', function() {
+        var ext = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext, ['doc','docx']) == -1) {
+            alert('.'+ ext + ' no es una extensión válida.');
+            $(this).val('');
+        }
+    });
 </script>
 @endsection
