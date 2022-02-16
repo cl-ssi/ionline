@@ -171,7 +171,7 @@
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->profession->category == "A")
+        @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
         Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
@@ -239,7 +239,7 @@
         </tr>
       </table>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <table class="siete">
         <tr>
           <th>Nombre</th>
@@ -307,18 +307,18 @@
       <p class="justify">
         <strong>PRIMERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-          Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de 
-          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del 
-          Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a 
-          {{$ServiceRequest->employee->getFullNameAttribute()}}, 
-          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}), 
+          Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a
+          {{$ServiceRequest->employee->getFullNameAttribute()}},
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}),
           para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-          D. {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de 
-          {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del 
-          Servicio de Salud Iquique de Iquique, contrata a 
-          {{$ServiceRequest->employee->getFullNameAttribute()}}, 
-          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}), 
+          D. {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de
+          {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del
+          Servicio de Salud Iquique de Iquique, contrata a
+          {{$ServiceRequest->employee->getFullNameAttribute()}},
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}),
           para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
@@ -377,7 +377,7 @@
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>SÉPTIMO:</strong>
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
@@ -500,7 +500,7 @@
         el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -545,7 +545,7 @@
         <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
       </p>
@@ -593,7 +593,7 @@
         Los reiterados atrasos e inasistencias deberán ser amonestados.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
         se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio,
@@ -614,7 +614,7 @@
         <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
@@ -680,7 +680,7 @@
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el presente convenio de honorarios covid, el prestador no dará derecho a beneficios de feriados legales, permisos administrativos y otro tipo de permisos contemplados y/o asimilados a funciones estatutarias, complementariamente con respecto al ausentismo por licencias médicas.
         <br><br>
@@ -718,7 +718,7 @@
 
         <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
         @if($ServiceRequest == NULL)
-          @if($ServiceRequest->profession->category == "A")
+          @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
             Médico,
           @else
             No Médico,
@@ -738,7 +738,7 @@
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->profession->category == "A")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="">
         <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
