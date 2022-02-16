@@ -369,6 +369,13 @@ class RequestFormController extends Controller {
 
     public function create_provision(RequestForm $requestForm)
     {
+        // Validar que la suma de total adjudicado de suministros registrados no sobrepase de lo adjudicado en el form req
+        $requestForm->load('purchasingProcess.details', 'children.purchasingProcess.details');
+        if($requestForm->purchasingProcess && ($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense() <= 0)){ // Ya no me queda saldo que gastar
+            session()->flash('info', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' no ha comenzado el proceso de compra aún o ya se ha ocupado el monto total de compra adjudicada.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
         $requestForm->load('itemRequestForms');
         $newRequestForm = $requestForm->replicate();
         $newRequestForm->folio = $requestForm->folio.'-'.($requestForm->children()->withTrashed()->count() + 1);
@@ -381,19 +388,20 @@ class RequestFormController extends Controller {
         $newRequestForm->sigfe = null;
         $newRequestForm->status = 'pending';
         $newRequestForm->signatures_file_id = null;
-        $newRequestForm->signatures_file_id = null;
         $newRequestForm->old_signatures_file_id = null;
         $newRequestForm->push();
 
         $total = 0;
         foreach($requestForm->getRelations() as $relation => $items){
-            foreach($items as $item){
-                unset($item->id);
-                $item->request_form_id = $newRequestForm->id;
-                $item->quantity = 1;
-                $item->expense = $this->totalValueWithTaxes($item->tax, $item->unit_value);
-                $total += $item->expense;
-                $newRequestForm->{$relation}()->create($item->toArray());
+            if($relation == 'itemRequestForms'){
+                foreach($items as $item){
+                    unset($item->id);
+                    $item->request_form_id = $newRequestForm->id;
+                    $item->quantity = 1;
+                    $item->expense = $this->totalValueWithTaxes($item->tax, $item->unit_value);
+                    $total += $item->expense;
+                    $newRequestForm->{$relation}()->create($item->toArray());
+                }
             }
         }
 
