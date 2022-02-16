@@ -93,19 +93,28 @@
             <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
             </a>
             @if($requestForm->signatures_file_id)
-            <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
-              <i class="fas fa-file-contract"></i>
-            </a>
-            @if($requestForm->old_signatures_file_id)
-            <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
-              <i class="fas fa-file-contract"></i>
-            </a>
-            @endif
+              @if($requestForm->signatures_file_id == 11)
+              <a class="btn btn-info btn-sm"
+                  title="Ver Formulario de Requerimiento firmado"
+                  href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}"
+                  target="_blank" title="Certificado">
+                    <i class="fas fa-file-contract"></i>
+              </a>
+              @else
+              <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
+                <i class="fas fa-file-contract"></i>
+              </a>
+              @endif
+              @if($requestForm->old_signatures_file_id)
+              <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
+                <i class="fas fa-file-contract"></i>
+              </a>
+              @endif
 
-            @if(Str::contains($requestForm->subtype, 'tiempo'))
-            <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
-            </a>
-            @endif
+              @if(Str::contains($requestForm->subtype, 'tiempo'))
+              <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+              </a>
+              @endif
             @endif
             @if($requestForm->PurchasingProcess)
             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
