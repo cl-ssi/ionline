@@ -10,7 +10,13 @@
 <div class="row">
     <div class="col-sm-8">
         <div class="table-responsive">
-            <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
+            <h6><i class="fas fa-info-circle"></i> Detalle Formulario 
+@if($requestForm->eventRequestForms->first()->status == 'pending')
+<a class="btn btn-link btn-sm float-right font-weight-bold align-top" href="{{route('request_forms.edit', $requestForm)}}">
+    <i class="fas fa-edit"></i> Editar formulario
+</a>
+@endif
+</h6>
             <table class="table table-sm table-bordered">
               <tbody class="small">
                   <tr>

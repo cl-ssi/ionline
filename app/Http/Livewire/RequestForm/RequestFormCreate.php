@@ -242,7 +242,7 @@ class RequestFormCreate extends Component
         ],
       );
 
-      DB::transaction(function () {
+      $req = DB::transaction(function () {
 
         //dd("chequear por jefatura");
 
@@ -375,9 +375,11 @@ class RequestFormCreate extends Component
           $reqFile->save();
         }
 
+        return $req;
+
       });
 
-      return redirect()->to('/request_forms/my_forms');
+      return redirect()->route('request_forms.show', $this->editRF ? $this->requestForm->id : $req->id);
     }
 
     public function btnCancelRequestForm(){
