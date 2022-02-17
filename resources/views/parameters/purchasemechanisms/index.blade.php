@@ -15,6 +15,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Mecanismo de Compra</th>
             <th>Tipo de Compra</th>
             <th>Días Hábiles</th>
@@ -25,6 +26,10 @@
     <tbody>
         @foreach($purchaseMechanisms as $purchaseMechanism)
         <tr>
+            <td
+            rowspan="{{ count($purchaseMechanism->purchaseTypes)==0?1:count($purchaseMechanism->purchaseTypes) }}"
+            colspan="{{ count($purchaseMechanism->purchaseTypes)==0?4:1 }}"
+            >{{ $purchaseMechanism->id }}</td>
             <td
             rowspan="{{ count($purchaseMechanism->purchaseTypes)==0?1:count($purchaseMechanism->purchaseTypes) }}"
             colspan="{{ count($purchaseMechanism->purchaseTypes)==0?4:1 }}"

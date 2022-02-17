@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Días Habiles Finanza</th>
             <th>Días Corridos Abastecimiento</th>
@@ -24,6 +25,7 @@
     <tbody>
         @foreach($purchaseTypes as $purchaseType)
         <tr>
+            <td>{{ $purchaseType->id }}</td>
             <td>{{ $purchaseType->name }}</td>
             <td>{{ $purchaseType->finance_business_day }}</td>
             <td>{{ $purchaseType->supply_continuous_day }}</td>

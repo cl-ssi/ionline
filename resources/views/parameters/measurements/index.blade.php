@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Prefijo</th>
             <th>Acciones</th>
@@ -23,6 +24,7 @@
     <tbody>
         @foreach($measurements as $measurement)
         <tr>
+            <td>{{ $measurement->id }}</td>
             <td>{{ $measurement->name }}</td>
             <td>{{ $measurement->prefix }}</td>
             <td>
