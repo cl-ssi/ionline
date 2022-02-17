@@ -18,42 +18,42 @@ class PurchasingProcessDetail extends Pivot
     ];
 
     public function purchasingProcess() {
-        return $this->belongsTo(PurchasingProcess::class);
+        return $this->belongsTo(PurchasingProcess::class, 'purchasing_process_id');
     }
 
     public function itemRequestForm() {
-        return $this->belongsTo(ItemRequestForm::class);
+        return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
     }
 
     public function internalPurchaseOrder() {
-        return $this->belongsTo(internalPurchaseOrder::class);
+        return $this->belongsTo(internalPurchaseOrder::class, 'internal_purchase_order_id');
     }
 
     public function pettyCash() {
-        return $this->belongsTo(PettyCash::class);
+        return $this->belongsTo(PettyCash::class, 'petty_cash_id');
     }
 
     public function fundToBeSettled(){
-        return $this->belongsTo(FundToBeSettled::class);
+        return $this->belongsTo(FundToBeSettled::class, 'fund_to_be_settled_id');
     }
 
     public function tender()
     {
-        return $this->belongsTo(Tender::class);
+        return $this->belongsTo(Tender::class, 'tender_id');
     }
 
     public function directDeal()
     {
-        return $this->belongsTo(DirectDeal::class);
+        return $this->belongsTo(DirectDeal::class, 'direct_deal_id');
     }
 
     public function immediatePurchase()
     {
-        return $this->belongsTo(ImmediatePurchase::class);
+        return $this->belongsTo(ImmediatePurchase::class, 'immediate_purchase_id');
     }
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function getPurchasingTypeName(){
