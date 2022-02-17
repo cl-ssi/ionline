@@ -460,6 +460,18 @@ class FulfillmentController extends Controller
         //   $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
         // }
 
+        // validacion items
+        if ($fulfillment->FulfillmentItems) {
+          foreach ($fulfillment->FulfillmentItems as $key => $fulfillmentItem) {
+            if ($fulfillmentItem->type == "Renuncia voluntaria") {
+              if ($fulfillmentItem->end_date == null) {
+                session()->flash('danger', 'La fecha de la renuncia involuntaria no está ingresada. Regularice esto antes de generar el certificado.');
+                return redirect()->back();
+              }
+            }
+          }
+        }
+
         /* Siempre firma el que está logeado */
         $signer = auth()->user();
         $pdf = app('dompdf.wrapper');
