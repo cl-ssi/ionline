@@ -2,8 +2,6 @@
 
 namespace App\Models\RequestForms;
 
-use App\Models\RequestForms\ItemRequestForm;
-use App\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,42 +17,42 @@ class PurchasingProcessDetail extends Pivot
     ];
 
     public function purchasingProcess() {
-        return $this->belongsTo(PurchasingProcess::class);
+        return $this->belongsTo('App\RequestForms\PurchasingProcess');
     }
 
     public function itemRequestForm() {
-        return $this->belongsTo(ItemRequestForm::class);
+        return $this->belongsTo('App\RequestForms\ItemRequestForm');
     }
 
     public function internalPurchaseOrder() {
-        return $this->belongsTo(internalPurchaseOrder::class);
+        return $this->belongsTo('App\RequestForms\InternalPurchaseOrder');
     }
 
     public function pettyCash() {
-        return $this->belongsTo(PettyCash::class);
+        return $this->belongsTo('App\RequestForms\PettyCash');
     }
 
     public function fundToBeSettled(){
-        return $this->belongsTo(FundToBeSettled::class);
+        return $this->belongsTo('App\RequestForms\FundToBeSettled');
     }
 
     public function tender()
     {
-        return $this->belongsTo(Tender::class);
+        return $this->belongsTo('App\RequestForms\Tender');
     }
 
     public function directDeal()
     {
-        return $this->belongsTo(DirectDeal::class);
+        return $this->belongsTo('App\RequestForms\DirectDeal');
     }
 
     public function immediatePurchase()
     {
-        return $this->belongsTo(ImmediatePurchase::class);
+        return $this->belongsTo('App\RequestForms\ImmediatePurchase');
     }
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo('App\User');
     }
 
     public function getPurchasingTypeName(){
