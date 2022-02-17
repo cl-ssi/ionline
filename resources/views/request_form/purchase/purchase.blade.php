@@ -10,7 +10,7 @@
 <div class="row">
     <div class="col-sm-8">
         <div class="table-responsive">
-            <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
+            <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}}</h6>
             <table class="table table-sm table-striped table-bordered">
                 <!-- <thead>
                     <tr class="table-active">
