@@ -43,7 +43,7 @@
         <fieldset class="form-group col-sm-4">
             <label for="for_telephone">Teléfono</label>
             <input type="telephone" placeholder="+569xxxxxxxx" class="form-control" id="for_telephone"
-              value="{{ $supplier->telephone }}" name="telephone" required>
+              value="{{ $supplier->telephone }}" name="telephone">
         </fieldset>
     </div>
 
