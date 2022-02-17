@@ -26,7 +26,7 @@ class PurchasingProcessDetail extends Pivot
     }
 
     public function internalPurchaseOrder() {
-        return $this->belongsTo(internalPurchaseOrder::class, 'internal_purchase_order_id');
+        return $this->belongsTo(InternalPurchaseOrder::class, 'internal_purchase_order_id');
     }
 
     public function pettyCash() {
