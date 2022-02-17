@@ -15,7 +15,7 @@ class InternalPurchaseOrder extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'date', 'supplier_id', 'payment_condition', 'user_id', 'request_form_id'.
+        'date', 'supplier_id', 'payment_condition', 'user_id', 'request_form_id',
         'estimated_delivery_date'
     ];
 
