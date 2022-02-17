@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Nombre</th>
             <th>Días Continuos</th>
             <th>Acciones</th>
@@ -23,6 +24,7 @@
     <tbody>
         @foreach($purchaseUnits as $purchaseUnit)
         <tr>
+            <td>{{ $purchaseUnit->id }}</td>
             <td>{{ $purchaseUnit->name }}</td>
             <td>{{ $purchaseUnit->supply_continuous_day }}</td>
             <td>

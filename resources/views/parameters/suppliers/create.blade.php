@@ -38,7 +38,7 @@
 
         <fieldset class="form-group col-sm-4">
             <label for="for_telephone">Teléfono</label>
-            <input type="telephone" placeholder="+569xxxxxxxx" class="form-control" id="for_telephone" name="telephone" required>
+            <input type="telephone" placeholder="+569xxxxxxxx" class="form-control" id="for_telephone" name="telephone">
         </fieldset>
     </div>
 

@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Código</th>
             <th>Nombre</th>
         </tr>
@@ -22,6 +23,7 @@
     <tbody>
         @foreach($budgetItems as $budgetItem)
         <tr>
+            <td>{{ $budgetItem->id }}</td>
             <td>{{ $budgetItem->code }}</td>
             <td>{{ $budgetItem->name }}</td>
             <td>
