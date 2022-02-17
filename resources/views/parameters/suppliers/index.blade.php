@@ -16,7 +16,7 @@
     <table class="table table-bordered table-sm small">
         <thead>
             <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Run</th>
                 <th>Dirección</th>
@@ -29,7 +29,7 @@
         <tbody>
             @foreach($suppliers as $key => $supplier)
             <tr>
-                <td class="text-center">{{ $key+1 }}</td>
+                <td class="text-center">{{ $supplier->id }}</td>
                 <th>{{ $supplier->name }}</th>
                 <td>{{ $supplier->run }}-{{ $supplier->dv }}</td>
                 <td>{{ $supplier->address }}</td>
