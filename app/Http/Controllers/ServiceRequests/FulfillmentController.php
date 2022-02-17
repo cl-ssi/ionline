@@ -237,7 +237,7 @@ class FulfillmentController extends Controller
         /* Envío al log de errores el id para su chequeo */
         logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
       }
-      
+
       //se hizo esto para los casos en que no existan fulfillments
       if ($serviceRequest->fulfillments->count() == 0) {
 
@@ -678,15 +678,26 @@ class FulfillmentController extends Controller
 
     public function downloadInvoice(Fulfillment $fulfillment)
     {
-        $storage_path = '/ionline/service_request/invoices/';
-        $file =  $storage_path . $fulfillment->id . '.pdf';
+      $storage_path = '/ionline/service_request/invoices/';
+      $file =  $storage_path . $fulfillment->id . '.pdf';
+      if (Storage::disk('gcs')->exists($file)) {
         return Storage::disk('gcs')->response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
+      }else{
+        session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente.');
+        return redirect()->back();
+      }
+
     }
     public function downloadResolution(ServiceRequest $serviceRequest)
     {
         $storage_path = '/ionline/service_request/resolutions/';
         $file =  $storage_path . $serviceRequest->id . '.pdf';
-        return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        if (Storage::disk('gcs')->exists($file)) {
+          return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        }else{
+          session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente.');
+          return redirect()->back();
+        }
         /* Para google storage */
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }
