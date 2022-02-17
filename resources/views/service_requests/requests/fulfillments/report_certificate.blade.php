@@ -230,10 +230,6 @@
               Junto con saludar, se adjunta renuncia voluntaria a honorarios del funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>. Además se registraron las siguientes ausencias:
             @else
-              <!-- ASI ESTABA ANTERIORMENTE ANTES DE LO PROPUESTO POR NATALY
-              Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
-              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
-              -->
               Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el
               <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>,
               @if($fulfillment->serviceRequest->type == 'Covid')
