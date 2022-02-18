@@ -10,7 +10,7 @@
 	}
 </style>
 
-<h3 class="mb-3">Logs <small> registros totales: {{ $logs->count() }}</small></h3>
+<h3 class="mb-3">Logs <small> registros totales: {{ $logs->total() }}</small></h3>
 
 
 <table class="table table-sm">
