@@ -14,8 +14,8 @@ class Visators extends Component
     public $i = 0;
     public $user;
     public $signature;
+    public $requiredVisator = '';
 //    public $endorseType;
-//    public $requiredVisator;
 //    public $disabledAddButton = 'disabled';
 
     public function add($i)
@@ -84,12 +84,21 @@ class Visators extends Component
 
     public function render()
     {
+        if($this->inputs){
+            $this->requiredVisator = 'required';
+        }
+
         //Agrega los usuarios según unidad organizacional
         foreach ($this->inputs as $key => $value) {
             if (!empty($this->organizationalUnit[$value])) {
                 $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users;
             }
+            else{
+                $this->users[$value] = [];
+                $this->user[$value] = null;
+            }
         }
+
 
         return view('livewire.signatures.visators')
             ->withOuRoots(OrganizationalUnit::where('level', 1)->whereIn('establishment_id', [38, 1])->get());
