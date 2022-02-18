@@ -695,7 +695,7 @@ class FulfillmentController extends Controller
       if (Storage::disk('gcs')->exists($file)) {
         return Storage::disk('gcs')->response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
       }else{
-        session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente.');
+        session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente en 10 minutos, si el problema persiste, suba nuevamente el archivo.');
         return redirect()->back();
       }
 
@@ -707,7 +707,7 @@ class FulfillmentController extends Controller
         if (Storage::disk('gcs')->exists($file)) {
           return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
         }else{
-          session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente.');
+          session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente en 10 minutos, si el problema persiste, suba nuevamente el archivo.');
           return redirect()->back();
         }
         /* Para google storage */
