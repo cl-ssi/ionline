@@ -15,6 +15,7 @@ class ShiftsControl extends Component
     public $shift_end_date;
     public $end_hour;
     public $observation;
+    public $msg = "";
 
     public function save()
     {
@@ -33,10 +34,15 @@ class ShiftsControl extends Component
 
     public function delete($shiftControl)
     {
-      $shiftControl = ShiftControl::find($shiftControl['id']);
-      $shiftControl->delete();
+      if ($shiftControl != null) {
+        $shiftControl = ShiftControl::find($shiftControl['id']);
+        $shiftControl->delete();
 
-      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+        $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+      }else{
+        $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
+        logger("Se intentó eliminar un shiftcontrol que venía vacío.");
+      }
     }
 
     public function render()
