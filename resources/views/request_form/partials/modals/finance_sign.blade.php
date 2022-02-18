@@ -20,7 +20,8 @@
         {{--modal firmador--}}
         @php 
             $idModelModal = $requestForm->id;
-            $routePdfSignModal = "/request_forms/create_form_document/$idModelModal/". $requestForm->has_increased_expense ?? 0;
+            $has_increase_expense = $requestForm->has_increased_expense ?? 0;
+            $routePdfSignModal = "/request_forms/create_form_document/$idModelModal/$has_increase_expense";
             $routeCallbackSignModal = $requestForm->has_increased_expense ? 'request_forms.callbackSignNewBudget' : 'request_forms.callbackSign';
         @endphp
 

@@ -232,14 +232,14 @@
               </td>
           </tr>
           <tr>
-              <td>Licitación Pública</td>
+              <td>Trato Directo</td>
               <td align="center">@if($requestForm->purchase_mechanism_id == 3)
                       X
                   @endif
               </td>
           </tr>
           <tr>
-              <td>Trato Directo</td>
+              <td>Licitación Pública</td>
               <td align="center">@if($requestForm->purchase_mechanism_id == 4)
                       X
                   @endif

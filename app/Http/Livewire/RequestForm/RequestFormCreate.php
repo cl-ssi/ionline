@@ -20,6 +20,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
+use Illuminate\Contracts\Validation\Validator;
 
 class RequestFormCreate extends Component
 {
@@ -242,6 +243,15 @@ class RequestFormCreate extends Component
         ],
       );
 
+      // $this->withValidator(function (Validator $validator) {
+      //   $validator->after(function ($validator) {
+      //       if ($this->available_balance_purchases_exceeded()) {
+      //           $validator->errors()->add('totalValue', 'Saldo disponible para compras del formulario de requerimiento principal excedido con los items y montos registrados en este suministro.');
+      //       }
+      //       return $validator;
+      //   });
+      // })->validate();
+
       $req = DB::transaction(function () {
 
         //dd("chequear por jefatura");
@@ -404,19 +414,19 @@ class RequestFormCreate extends Component
         return view('livewire.request-form.request-form-create', compact('users'));
     }
 
-    // public function available_balance_purchases_exceeded()
-    // {
-    //   if($this->requestForm->request_form_id){ // es suministro de req. form principal
-    //     //total del monto por items seleccionados en otros suministros + item registrados no debe sobrepasar el total adjudicado al formulario de requerimiento
-    //     $totalItemSelected = 0;
-    //     foreach($this->items as $item)
-    //         $totalItemSelected += $item['totalValue'];
+    public function available_balance_purchases_exceeded()
+    {
+      if($this->requestForm->request_form_id){ // es suministro de req. form principal
+        //total del monto por items seleccionados en otros suministros + item registrados no debe sobrepasar el total adjudicado al formulario de requerimiento
+        $totalItemSelected = 0;
+        foreach($this->items as $item)
+            $totalItemSelected += $item['totalValue'];
 
-    //     $this->requestForm->load('father.purchasingProcess.details');
-    //     return $this->requestForm->father->purchasingProcess->getExpense() - $this->requestForm->father->getTotalExpense() < $totalItemSelected;
-    //   }
-    //   return false;
-    // }
+        $this->requestForm->load('father.purchasingProcess.details');
+        return $this->requestForm->father->purchasingProcess->getExpense() - $this->requestForm->father->getTotalExpense() < $totalItemSelected;
+      }
+      return false;
+    }
 
     public function updatedFileRequests($value)
     {
