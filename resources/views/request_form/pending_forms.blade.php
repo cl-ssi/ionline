@@ -92,7 +92,7 @@
                                   @endforeach
                               </td>
                               <td>
-                                <a href="{{ route('request_forms.sign', [$requestForm, $event_type]) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                <a href="{{ route('request_forms.sign', [$requestForm, $requestForm->firstPendingEvent()->event_type]) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
                                   <i class="fas fa-signature"></i>
                                 </a>
                               </td>
@@ -114,7 +114,7 @@
         </div>
     @endif
 
-    @if(in_array($event_type, ['finance_event', 'supply_event'])){
+    @if(in_array($event_type, ['finance_event', 'supply_event']))
 
     @if(count($new_budget_pending_to_sign) > 0)
     </div>
@@ -316,6 +316,7 @@
                   @endforeach
               </tbody>
             </table>
+            {{$my_forms_signed->appends(Request::input())->links()}}
           </div>
         </div>
     @else
@@ -330,7 +331,7 @@
         </div>
     @endif
 
-    @if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event'])){
+    @if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']))
         @if(count($not_pending_forms) > 0)
         </div>
             <div class="col">
@@ -446,7 +447,7 @@
                     @endforeach
                 </tbody>
                 </table>
-                {{$not_pending_forms->links()}}
+                {{$not_pending_forms->appends(Request::input())->links()}}
             </div>
             </div>
         @else

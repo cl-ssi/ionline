@@ -319,6 +319,11 @@ class RequestForm extends Model implements Auditable
       }
     }
 
+    public function firstPendingEvent()
+    {
+      return $this->eventRequestForms->where('status', 'pending')->first();
+    }
+
 
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTime()
