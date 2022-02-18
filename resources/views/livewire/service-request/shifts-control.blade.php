@@ -42,6 +42,10 @@
           </fieldset>
         </div>
 
+        <div class="alert alert-info" role="alert">
+          {{$msg}}
+        </div>
+
         <table class="table table-sm">
             <thead>
                 <tr>
