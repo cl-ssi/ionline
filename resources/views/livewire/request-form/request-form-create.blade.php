@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    @if (count($errors) > 0 and ($errors->has('purchaseMechanism') or $errors->has('program') or $errors->has('justify') or $errors->has('items')))
+    @if (count($errors) > 0 and ($errors->has('purchaseMechanism') or $errors->has('program') or $errors->has('justify') or $errors->has('items') or $errors->has('balance')))
       <div class="row justify-content-around mt-0">
          <div class="alert alert-danger col-6 mt-1">
           <p>Corrige los siguientes errores:</p>
