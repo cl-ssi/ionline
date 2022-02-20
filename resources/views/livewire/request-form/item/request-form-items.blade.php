@@ -77,7 +77,7 @@
         </div>
     </div><!-- FILA 5 --><!--Valida la variable error para que solo contenga validación de los Items-->
 
-    @if (count($errors) > 0 and !$errors->has('program') and !$errors->has('justify') and !$errors->has('purchaseMechanism') and !$errors->has('items'))
+    @if (count($errors) > 0 and !$errors->has('program') and !$errors->has('justify') and !$errors->has('purchaseMechanism') and !$errors->has('items') and !$errors->has('balance'))
     <div class="row justify-content-around mt-0">
         <div class="alert alert-danger col-6 mt-1">
             <p>Corrige los siguientes errores:</p>

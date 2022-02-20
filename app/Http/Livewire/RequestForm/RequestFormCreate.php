@@ -41,27 +41,55 @@ class RequestFormCreate extends Component
 
     protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers'];
 
-    protected $rules = [
-        'unitValue'           =>  'required|numeric|min:1',
-        'quantity'            =>  'required|numeric|min:0.1',
-        'article'             =>  'required',
-        'unitOfMeasurement'   =>  'required',
-        'taxes'               =>  'required',
-        'typeOfCurrency'      =>  'required'
-    ];
+    // protected $rules = [
+    //     'unitValue'           =>  'required|numeric|min:1',
+    //     'quantity'            =>  'required|numeric|min:0.1',
+    //     'article'             =>  'required',
+    //     'unitOfMeasurement'   =>  'required',
+    //     'taxes'               =>  'required',
+    //     'typeOfCurrency'      =>  'required'
+    // ];
 
-    protected $messages = [
-        'unitValue.required'          => 'Valor Unitario no puede estar vacio.',
-        'unitValue.numeric'           => 'Valor Unitario debe ser numérico.',
-        'unitValue.min'               => 'Valor Unitario debe ser mayor o igual a 1.',
-        'quantity.required'           => 'Cantidad no puede estar vacio.',
-        'quantity.numeric'            => 'Cantidad debe ser numérico.',
-        'quantity.min'                => 'Cantidad debe ser mayor o igual a 0.1.',
-        'article.required'            => 'Debe ingresar un Artículo.',
-        'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
-        'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-        'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
-    ];
+    // protected $messages = [
+    //     'unitValue.required'          => 'Valor Unitario no puede estar vacio.',
+    //     'unitValue.numeric'           => 'Valor Unitario debe ser numérico.',
+    //     'unitValue.min'               => 'Valor Unitario debe ser mayor o igual a 1.',
+    //     'quantity.required'           => 'Cantidad no puede estar vacio.',
+    //     'quantity.numeric'            => 'Cantidad debe ser numérico.',
+    //     'quantity.min'                => 'Cantidad debe ser mayor o igual a 0.1.',
+    //     'article.required'            => 'Debe ingresar un Artículo.',
+    //     'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
+    //     'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
+    //     'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
+    // ];
+
+    protected function rules(){
+      return [
+        'name'                         =>  'required',
+        'contractManagerId'            =>  'required',
+        'subtype'                      =>  'required',
+        'purchaseMechanism'            =>  'required',
+        'program'                      =>  'required',
+        'justify'                      =>  'required',
+        'typeOfCurrency'               =>  'required',
+        // 'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
+        ($this->isRFItems ? 'items' : 'passengers') => 'required'
+      ];
+    }
+
+    protected function messages(){
+      return [
+        'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+        'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+        'subtype.required'             =>  'Seleccione el tipo para este formulario.',
+        'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
+        'program.required'             =>  'Ingrese un Programa Asociado.',
+        // 'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
+        'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
+        'typeOfCurrency'               =>  'Ingrese un tipo de moneda',
+        ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
+      ];
+    }
 
     public function mount($requestForm){
       $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios');
@@ -220,37 +248,13 @@ class RequestFormCreate extends Component
 
     public function saveRequestForm(){
       // dd($this->fileRequests);
-      $this->validate(
-        [ 'name'                         =>  'required',
-          'contractManagerId'            =>  'required',
-          'subtype'                      =>  'required',
-          'purchaseMechanism'            =>  'required',
-          'program'                      =>  'required',
-          'justify'                      =>  'required',
-          'typeOfCurrency'               =>  'required',
-          // 'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
-          ($this->isRFItems ? 'items' : 'passengers') => 'required'
-        ],
-        [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
-          'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
-          'subtype.required'             =>  'Seleccione el tipo para este formulario.',
-          'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
-          'program.required'             =>  'Ingrese un Programa Asociado.',
-          // 'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
-          'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          'typeOfCurrency'               =>  'Ingrese un tipo de moneda',
-          ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
-        ],
-      );
-
-      // $this->withValidator(function (Validator $validator) {
-      //   $validator->after(function ($validator) {
-      //       if ($this->available_balance_purchases_exceeded()) {
-      //           $validator->errors()->add('totalValue', 'Saldo disponible para compras del formulario de requerimiento principal excedido con los items y montos registrados en este suministro.');
-      //       }
-      //       return $validator;
-      //   });
-      // })->validate();
+      $this->withValidator(function (Validator $validator) {
+        $validator->after(function ($validator) {
+            if ($this->available_balance_purchases_exceeded()) {
+               return $validator->errors()->add('balance', 'Saldo disponible para compras del formulario de requerimiento principal excedido con los items y montos registrados en este suministro. Saldo disponible: '.number_format($this->requestForm->father->purchasingProcess->getExpense() - $this->requestForm->father->getTotalExpense(),0,",","."));
+            }
+        });
+      })->validate();
 
       $req = DB::transaction(function () {
 
