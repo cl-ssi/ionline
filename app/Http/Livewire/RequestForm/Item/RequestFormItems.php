@@ -10,7 +10,7 @@ class RequestFormItems extends Component
 {
     use WithFileUploads;
 
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $editRF,
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $editRF, $savedItems, $deletedItems,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax;
 
     protected $rules = [
@@ -19,6 +19,7 @@ class RequestFormItems extends Component
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
         'taxes'               =>  'required',
+        'technicalSpecifications' => 'required'
     ];
 
     protected $messages = [
@@ -31,6 +32,7 @@ class RequestFormItems extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
+        'technicalSpecifications.required' => 'Debe ingresar especificaciones técnicas al item.'
     ];
 
     protected function validationData()
@@ -98,8 +100,10 @@ class RequestFormItems extends Component
 
     public function deleteItem($key)
     {
-        if($this->editRF && array_key_exists('id',$this->items[$key]))
+        if($this->editRF && array_key_exists('id',$this->items[$key])){
           $this->deletedItems[]=$this->items[$key]['id'];
+          $this->emitUp('deletedItems', $this->deletedItems);
+        }
         unset($this->items[$key]);
         $this->estimateExpense();
         $this->cleanItem();
@@ -123,7 +127,7 @@ class RequestFormItems extends Component
         $this->articleFile = null;
     }
 
-    public function mount()
+    public function mount($savedItems)
     {
         $this->totalDocument          = 0;
         $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
@@ -133,6 +137,30 @@ class RequestFormItems extends Component
         $this->editRF                 = false;
         // Porcentaje retención boleta de honorarios según el año vigente
         $this->withholding_tax        = [2021 => 0.115, 2022 => 0.1225, 2023 => 0.13, 2024 => 0.1375, 2025 => 0.145, 2026 => 0.1525, 2027 => 0.16, 2028 => 0.17];
+        if(!is_null($savedItems)){
+            $this->editRF = true;
+            $this->savedItems = $savedItems;
+            $this->setSavedItems();
+          }
+    }
+
+    private function setSavedItems()
+    {
+        foreach($this->savedItems as $item){
+            $this->items[]=[
+                'id'                       => $item->id,
+                'article'                  => $item->article,
+                'unitOfMeasurement'        => $item->unit_of_measurement,
+                'technicalSpecifications'  => $item->specification,
+                'quantity'                 => $item->quantity,
+                'unitValue'                => $item->unit_value,
+                'taxes'                    => $item->tax,
+                'totalValue'               => $item->expense,
+                // 'articleFile'              => $item->articleFile ? $item->articleFile->getRealPath() : null,
+          ];
+        //   dd($this->items);
+          $this->estimateExpense();
+        }
     }
 
     public function render()

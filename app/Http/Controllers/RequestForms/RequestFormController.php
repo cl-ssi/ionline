@@ -16,14 +16,17 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use App\Mail\RequestFormDirectorNotification;
+use App\Mail\RequestFormSignNotification;
 use App\Models\RequestForms\EventRequestForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use PDF;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
 use App\User;
+use App\Mail\PurchaserNotification;
+use App\Mail\RfEndNewBudgetSignNotification;
+use Illuminate\Http\Response;
 
 class RequestFormController extends Controller {
 
@@ -38,26 +41,38 @@ class RequestFormController extends Controller {
         //     return view('request_form.index', compact('empty'));}
         // return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
 
-        $my_pending_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+        $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_id', Auth::user()->id)
             ->where('status', 'pending')
-            ->orderBy('id', 'DESC')
+            ->latest('id')
             ->get();
 
-        $my_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_id', Auth::user()->id)
             ->whereIn('status', ['approved', 'rejected'])
-            ->orderBy('id', 'DESC')
+            ->latest('id')
             ->get();
 
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
     }
 
-    public function pending_forms()
+    public function all_forms()
     {
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all')){
+            session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
+        $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
+        
+        return view('request_form.all_forms', compact('request_forms'));
+    }
+
+    public function get_events_type_user()
+    {
+        $events_type = [];
         $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
         // return $manager;
-        $my_pending_forms_to_signs = $approved_forms_pending_to_sign = $new_budget_pending_to_sign = $my_forms_signed = collect();
 
         //superchief?
         $result = RequestForm::whereHas('eventRequestForms', function($q){
@@ -65,70 +80,130 @@ class RequestFormController extends Controller {
         })->count();
 
         // Permisos
-        if($result > 0 && $manager->user_id == Auth::user()->id) $event_type = 'superior_leader_ship_event';
-        elseif(!in_array(Auth::user()->organizationalUnit->id, [37, 40]) && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
-        elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $event_type = 'pre_finance_event';
-        elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $event_type = 'finance_event';
-        elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
-        else $event_type = null;
+        if($result > 0 && $manager->user_id == Auth::user()->id) $events_type[] = 'superior_leader_ship_event';
+        if($manager->user_id == Auth::user()->id) $events_type[] = 'leader_ship_event';
+        if(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+        if(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $events_type[] = 'finance_event';
+        if(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $events_type[] = 'supply_event';
 
-        // return $event_type;
+        return $events_type;
+    }
 
-        if($event_type){
+    public function pending_forms()
+    {
+        $my_pending_forms_to_signs = $not_pending_forms = $new_budget_pending_to_sign = $my_forms_signed = collect();
+
+        $events_type = $this->get_events_type_user();
+
+        // return $events_type;
+
+        foreach($events_type as $event_type){
             $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
             // return $prev_event_type;
-            $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
-                                                    ->whereHas('eventRequestForms', function($q) use ($event_type){
-                                                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
-                                                    })->when($prev_event_type, function($q) use ($prev_event_type) {
-                                                        return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
-                                                            return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
-                                                        });
-                                                    })->get();
+            $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                ->where('status', 'pending')
+                ->whereHas('eventRequestForms', function($q) use ($event_type){
+                    return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
+                })->when($prev_event_type, function($q) use ($prev_event_type) {
+                    return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                        return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
+                    });
+                })->get();
+            $my_pending_forms_to_signs = $my_pending_forms_to_signs->concat($result);
         }
 
-        if($event_type == 'finance_event'){
-            $new_budget_pending_to_sign = RequestForm::where('status', 'approved')
-                                                    ->whereHas('eventRequestForms', function($q){
-                                                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
-                                                    })->get();
+        // return $my_pending_forms_to_signs;
 
-            $approved_forms_pending_to_sign = RequestForm::where('status', 'approved')->whereNull('signatures_file_id')->get();
+        foreach($events_type as $event_type){
+            if(in_array($event_type, ['finance_event', 'supply_event'])){
+                $prev_event_type = $event_type == 'finance_event' ? 'pre_budget_event' : null;
+                $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                    ->where('status', 'approved')
+                    ->whereHas('eventRequestForms', function($q) use ($event_type){
+                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type == 'finance_event' ? 'budget_event' : 'pre_budget_event');
+                    })->when($prev_event_type, function($q) use ($prev_event_type) {
+                        return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                            return $f->where('event_type', $prev_event_type)->where('status', 'pending');
+                        });
+                    })
+                    ->get();
+                $new_budget_pending_to_sign = $new_budget_pending_to_sign->concat($result);
+            }
         }
 
-        $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
-                                        return $q->where('signer_user_id', Auth::user()->id);
-                                    })->get();
+        // return $new_budget_pending_to_sign;
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'approved_forms_pending_to_sign', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
+        foreach($events_type as $event_type){
+            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || Auth::user()->organizationalUnit->id == 37){
+                $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                        ->where('status', '!=', 'pending')->latest('id')->paginate(15, ['*'], 'p1');
+            }
+        }
+
+        // return $not_pending_forms;
+
+        $my_forms_signed = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+            ->whereHas('eventRequestForms', $filter = function($q){
+                return $q->where('signer_user_id', Auth::user()->id);
+            })->latest('id')->paginate(15, ['*'], 'p2');
+
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'events_type'));
     }
 
 
-    public function edit(RequestForm $requestForm) {
-        if($requestForm->request_user_id != auth()->user()->id){
-          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
-          return redirect()->route('request_forms.my_forms');
-        }
-        if($requestForm->eventRequestForms->first()->status != 'pending'){
-          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
-          return redirect()->route('request_forms.my_forms');
-        }
-        //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
-        $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
-        if(is_null($manager))
-            $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
-        else
-            $manager = $manager->user->getFullNameAttribute();
-        $requestForms = RequestForm::all();
-        return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
+    // public function edit(RequestForm $requestForm) {
+    //     if($requestForm->request_user_id != auth()->user()->id){
+    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
+    //       return redirect()->route('request_forms.my_forms');
+    //     }
+    //     if($requestForm->eventRequestForms->first()->status != 'pending'){
+    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
+    //       return redirect()->route('request_forms.my_forms');
+    //     }
+    //     //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
+    //     $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
+    //     if(is_null($manager))
+    //         $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
+    //     else
+    //         $manager = $manager->user->getFullNameAttribute();
+    //     $requestForms = RequestForm::all();
+    //     return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
+    // }
+
+    public function edit(RequestForm $requestForm){
+        // $requestForm=null;
+        return  view('request_form.create', compact('requestForm'));
     }
 
     public function sign(RequestForm $requestForm, $eventType)
     {
+        $eventTypeBudget = null;
+        if(in_array($eventType, ['pre_budget_event', 'budget_event'])){
+            $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : 'finance_event';
+            $requestForm->has_increased_expense = true;
+            $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+        }
+
+        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'pre_budget_event' => 'Nuevo presupuesto', 'budget_event' => 'Nuevo presupuesto'];
+
+        $events_type_user = $this->get_events_type_user();
+        // return $events_type_user;
+        $countEventsType = count($events_type_user);
+        foreach($events_type_user as $event_type_user){
+            if($event_type_user != $eventType && $event_type_user != $eventTypeBudget){
+                $countEventsType--;
+            }
+        }
+
+        if(!$countEventsType){
+            session()->flash('danger', 'Estimado Usuario/a: Ud. no tiene los permisos para la autorización como '.$eventTitles[$eventType].'.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
         $requestForm->load('itemRequestForms');
-        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'budget_event' => 'Nuevo presupuesto'];
+
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
-        $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
+        $manager              = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
         $organizationalUnit   = $manager->organizationalUnit->name;
         if(is_null($manager))
@@ -146,8 +221,13 @@ class RequestFormController extends Controller {
         return redirect()->route('request_forms.supply.index');
     }
 
-    public function create_form_document(RequestForm $requestForm){
+    public function create_form_document(RequestForm $requestForm, $has_increased_expense){
         //dd($requestForm);
+
+        if($has_increased_expense){
+            $requestForm->has_increased_expense = true;
+            $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+        }
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('request_form.documents.form_document', compact('requestForm'));
@@ -158,6 +238,25 @@ class RequestFormController extends Controller {
         // return $formDocumentFile->download('pdf_file.pdf');
     }
 
+    public function create_view_document(RequestForm $requestForm, $has_increased_expense){
+
+        if($has_increased_expense){
+            $requestForm->has_increased_expense = true;
+            $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+        }
+
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('request_form.documents.form_document', compact('requestForm'));
+
+        $output = $pdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'inline; filename="formulario_requerimiento.pdf"']
+        );
+    }
+
     public function create(){
         $requestForm=null;
         return  view('request_form.create', compact('requestForm'));
@@ -166,30 +265,29 @@ class RequestFormController extends Controller {
 
     public function destroy(RequestForm $requestForm)
     {
-        $id = $requestForm->id;
         $requestForm->delete();
-        session()->flash('info', 'El formulario de requerimiento ID '.$id.' ha sido eliminado correctamente.');
+        session()->flash('info', 'El formulario de requerimiento N° '.$requestForm->folio.' ha sido eliminado correctamente.');
         return redirect()->route('request_forms.my_forms');
     }
 
 
-    public function supervisorUserIndex()
-    {
-        if(auth()->user()->organizationalUnit->id != '37' ){
-            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
-            return redirect()->route('request_forms.index');
-        }else
-          {
-            $waitingRequestForms = RequestForm::where('status', 'in_progress')
-                                   ->where('supervisor_user_id', auth()->user()->id)
-                                   ->whereHas('eventRequestForms', function ($q) {
-                                   $q->where('event_type','supply_event')
-                                  ->where('status', 'approved');})
-                                  ->get();
-            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
-            return view('request_form.supervisor_user_index', compact('waitingRequestForms', 'rejectedRequestForms'));
-          }
-    }
+    // public function supervisorUserIndex()
+    // {
+    //     if(auth()->user()->organizationalUnit->id != '37' ){
+    //         session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+    //         return redirect()->route('request_forms.index');
+    //     }else
+    //       {
+    //         $waitingRequestForms = RequestForm::where('status', 'in_progress')
+    //                                ->where('supervisor_user_id', auth()->user()->id)
+    //                                ->whereHas('eventRequestForms', function ($q) {
+    //                                $q->where('event_type','supply_event')
+    //                               ->where('status', 'approved');})
+    //                               ->get();
+    //         $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+    //         return view('request_form.supervisor_user_index', compact('waitingRequestForms', 'rejectedRequestForms'));
+    //       }
+    // }
 
     public function purchasingProcess(RequestForm $requestForm){
       $eventType = 'supply_event';
@@ -204,20 +302,149 @@ class RequestFormController extends Controller {
 
     public function callbackSign($message, $modelId, SignaturesFile $signaturesFile = null)
     {
-        $requestForm = RequestForm::find($modelId);
-
         if (!$signaturesFile) {
             session()->flash('danger', $message);
             return redirect()->route('request_forms.pending_forms');
         }
-        $requestForm->signatures_file_id = $signaturesFile->id;
-        $requestForm->save();
-        session()->flash('success', $message);
-        return redirect()->route('request_forms.pending_forms');
+        else{
+            $requestForm = RequestForm::find($modelId);
+
+            //ACTUALIZAO EVENTO DE FINANZAS
+            $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
+              'signature_date'       => Carbon::now(),
+              'position_signer_user' => auth()->user()->position,
+              'status'               => 'approved',
+              'signer_user_id'       => auth()->id()
+            ]);
+
+            $nextEvent = $requestForm->eventRequestForms->where('cardinal_number', $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->cardinal_number + 1);
+
+            if(!$nextEvent->isEmpty()){
+                //Envío de notificación para visación.
+                $now = Carbon::now();
+                //manager
+                $type = 'manager';
+                $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+                $emails = [$mail_notification_ou_manager->user->email];
+
+                // if($mail_notification_ou_manager){
+                //     Mail::to($emails)
+                //       ->cc(env('APP_RF_MAIL'))
+                //       ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+                // }
+            }
+
+            $requestForm->signatures_file_id = $signaturesFile->id;
+            $requestForm->save();
+
+            session()->flash('success', $message);
+            return redirect()->route('request_forms.pending_forms');
+        }
+
     }
 
-    public function signedRequestFormPDF(RequestForm $requestForm)
+    public function callbackSignNewBudget($message, $modelId, SignaturesFile $signaturesFile = null)
     {
-      return Storage::disk('gcs')->response($requestForm->signedRequestForm->signed_file);
+        if (!$signaturesFile) {
+            session()->flash('danger', $message);
+            return redirect()->route('request_forms.pending_forms');
+        }
+        else{
+            $requestForm = RequestForm::find($modelId);
+
+            //ACTUALIZAO EVENTO DE FINANZAS
+            $requestForm->eventRequestForms->where('event_type', 'budget_event')->first()->update([
+              'signature_date'       => Carbon::now(),
+              'position_signer_user' => auth()->user()->position,
+              'status'               => 'approved',
+              'signer_user_id'       => auth()->id()
+            ]);
+
+            $requestForm->has_increased_expense = true;
+            $requestForm->estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'approved')->where('event_type', 'budget_event')->first()->purchaser_amount;
+            $requestForm->old_signatures_file_id = $requestForm->signatures_file_id;
+            $requestForm->signatures_file_id = $signaturesFile->id;
+            $requestForm->save();
+
+            $emails = [$requestForm->user->email,
+                      $requestForm->contractManager->email,
+                      $requestForm->eventPurchaserNewBudget()->email
+                  ];
+
+            // Mail::to($emails)
+            // ->cc(env('APP_RF_MAIL'))
+            // ->send(new RfEndNewBudgetSignNotification($requestForm));
+
+            session()->flash('success', $message);
+            return redirect()->route('request_forms.pending_forms');
+        }
+
+    }
+
+    public function signedRequestFormPDF(RequestForm $requestForm, $original)
+    {
+      return Storage::disk('gcs')->response($original ? $requestForm->signedRequestForm->signed_file : $requestForm->signedOldRequestForm->signed_file);
+    }
+
+    public function create_provision(RequestForm $requestForm)
+    {
+        // Validar que la suma de total adjudicado de suministros registrados no sobrepase de lo adjudicado en el form req
+        $requestForm->load('purchasingProcess.details', 'children.purchasingProcess.details');
+        if($requestForm->purchasingProcess && ($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense() <= 0)){ // Ya no me queda saldo que gastar
+            session()->flash('info', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' no ha comenzado el proceso de compra aún o ya se ha ocupado el monto total de compra adjudicada.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
+        $requestForm->load('itemRequestForms');
+        $newRequestForm = $requestForm->replicate();
+        $newRequestForm->folio = $requestForm->folio.'-'.($requestForm->children()->withTrashed()->count() + 1);
+        $newRequestForm->request_form_id = $requestForm->id;
+        $newRequestForm->request_user_id = Auth::id();
+        $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
+        $newRequestForm->estimated_expense = 0;
+        $newRequestForm->has_increased_expense = null;
+        $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
+        $newRequestForm->sigfe = null;
+        $newRequestForm->status = 'pending';
+        $newRequestForm->signatures_file_id = null;
+        $newRequestForm->old_signatures_file_id = null;
+        $newRequestForm->push();
+
+        $total = 0;
+        foreach($requestForm->getRelations() as $relation => $items){
+            if($relation == 'itemRequestForms'){
+                foreach($items as $item){
+                    unset($item->id);
+                    $item->request_form_id = $newRequestForm->id;
+                    $item->quantity = 1;
+                    $item->expense = $this->totalValueWithTaxes($item->tax, $item->unit_value);
+                    $total += $item->expense;
+                    $newRequestForm->{$relation}()->create($item->toArray());
+                }
+            }
+        }
+
+        $newRequestForm->update(['estimated_expense' => $total]);
+
+        EventRequestform::createLeadershipEvent($newRequestForm);
+        EventRequestform::createPreFinanceEvent($newRequestForm);
+        EventRequestform::createFinanceEvent($newRequestForm);
+        EventRequestform::createSupplyEvent($newRequestForm);
+
+        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->folio.' fue creado con éxito. <br>
+                                  Recuerde que es un formulario dependiente de ID N° '.$requestForm->folio.'. <br>
+                                  Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
+        return redirect()->route('request_forms.edit', $newRequestForm);
+    }
+
+    public function totalValueWithTaxes($tax, $value)
+    {
+        // Porcentaje retención boleta de honorarios según el año vigente
+        $withholding_tax = [2021 => 0.115, 2022 => 0.1225, 2023 => 0.13, 2024 => 0.1375, 2025 => 0.145, 2026 => 0.1525, 2027 => 0.16, 2028 => 0.17];
+
+        if($tax == 'iva') return $value * 1.19;
+        if($tax == 'bh') return isset($withholding_tax[date('Y')]) ? round($value / (1 - $withholding_tax[date('Y')])) : round($value / (1 - end($withholding_tax)));
+        return $value;
     }
 }

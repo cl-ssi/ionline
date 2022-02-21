@@ -53,14 +53,15 @@
             <td>{{ $reception->partePoliceUnit->name }}</td>
             <td>
                 @if( $reception->haveItems() )
-                <a href="{{ route('drugs.receptions.record', $reception->id) }}" class="btn btn-outline-secondary btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
+                <a href="{{ route('drugs.receptions.record', $reception->id) }}" class="btn btn-outline-success btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                 @endif
             </td>
 
             <td style="text-align: center;">
                 @if($reception->haveItemsForDestruction() )
                     @if($reception->wasDestructed())
-                    <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}" class="btn btn-outline-secondary btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
+                    <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}" 
+                        class="btn btn-outline-danger btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                     @else
                         <span class="badge badge-secondary" title="Dias restantes para su destrucción">
                             {{ $reception->created_at->diffInDays(Carbon\Carbon::now()) -15 }}
@@ -71,7 +72,7 @@
                 @endif
             </td>
             <td class="d-print-none">
-                <a href="{{ route('drugs.receptions.show', ['reception' => $reception->id]) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-fw fa-edit"></i></a>
+                <a href="{{ route('drugs.receptions.show', $reception->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-fw fa-edit"></i></a>
             </td>
         </tr>
         @endforeach

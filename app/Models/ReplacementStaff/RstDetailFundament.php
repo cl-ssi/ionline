@@ -15,7 +15,7 @@ class RstDetailFundament extends Model
         'fundament_detail_id', 'fundament_manage_id'
     ];
 
-    public function rstFundamentDetail() {
+    public function fundamentDetailManage() {
         return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage', 'fundament_detail_id');
     }
 

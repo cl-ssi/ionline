@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte - Contratos Solapados')
+@section('title', 'Reporte - Contratos Duplicados')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte - Contratos Duplicados <small>(Prototipo-En Desarrollo)</small></h3>
+<h3 class="mb-3">Reporte - Contratos Duplicados  <small>(Funcionarios con más de 1 contrato)</small></h3>
 
 
 <table class="table table-sm table-bordered table-stripped" id="table_duplicated">

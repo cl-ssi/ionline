@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="col-12 col-md-4">
+        <fieldset class="col-12 col-md-5">
             <label>Nombre</label>
             <p class="form-control">
                 <strong>{{ $this->user->fullname?? '' }}</strong></p>
@@ -55,7 +55,7 @@
             @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
         
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_pay_method">Tipo de Pago</label>
             <select wire:model.lazy="pay_method" class="form-control">
             <option value="">Seleccionar Forma de Pago</option>

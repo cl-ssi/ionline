@@ -44,6 +44,22 @@ class ServiceRequestController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
+  public function test()
+
+  {
+    //16.152.174-
+    $a1 = User::find(16055586);
+    //dd($a1);
+
+    $au = Authority::getBossFromUser($a1->organizationalUnit->id,Carbon::now());
+
+
+    //$au = Authority::getBossFromUser(Auth::user()->organizationalUnit->id,Carbon::now());
+    dd($au);
+
+  }
+
+
   public function index()
   {
     $user_id = Auth::user()->id;
@@ -137,7 +153,8 @@ class ServiceRequestController extends Controller
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
-    $estate = $request->estate;
+    // $estate = $request->estate;
+    $profession_id = $request->profession_id;
     $id = $request->id;
     $type = $request->type;
 
@@ -154,8 +171,11 @@ class ServiceRequestController extends Controller
       ->when($type != NULL, function ($q) use ($type) {
         return $q->where('type', $type);
       })
-      ->when($estate != NULL, function ($q) use ($estate) {
-        return $q->where('estate', $estate);
+      // ->when($estate != NULL, function ($q) use ($estate) {
+      //   return $q->where('estate', $estate);
+      // })
+      ->when($profession_id != NULL, function ($q) use ($profession_id) {
+        return $q->where('profession_id', $profession_id);
       })
       ->when(($name != NULL), function ($q) use ($name) {
         return $q->whereHas("employee", function ($subQuery) use ($name) {
@@ -177,7 +197,9 @@ class ServiceRequestController extends Controller
       ->paginate(100);
     // ->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request'));
+    $professions = Profession::orderBy('name', 'ASC')->get();
+
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request','professions'));
   }
 
   public function transfer_requests(Request $request)
@@ -442,19 +464,6 @@ class ServiceRequestController extends Controller
 
 
 
-    //guarda control de turnos
-    if ($request->shift_start_date != null) {
-      foreach ($request->shift_start_date as $key => $shift_start_date) {
-        $shiftControl = new ShiftControl($request->All());
-        // $shiftControl->service_request_id = $serviceRequest->id;
-        $shiftControl->fulfillment_id = $fulfillment->id;
-        $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
-        $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
-        $shiftControl->observation = $request->shift_observation[$key];
-        $shiftControl->save();
-      }
-    }
-
     //get responsable_id organization in charge
     $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
     $employee = User::find($request->responsable_id)->position;
@@ -510,6 +519,21 @@ class ServiceRequestController extends Controller
       }
     }
 
+    //guarda control de turnos
+    if ($request->shift_start_date) {
+      if ($request->shift_start_date != null) {
+        foreach ($request->shift_start_date as $key => $shift_start_date) {
+          $shiftControl = new ShiftControl($request->All());
+          // $shiftControl->service_request_id = $serviceRequest->id;
+          $shiftControl->fulfillment_id = $fulfillment->id;
+          $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
+          $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
+          $shiftControl->observation = $request->shift_observation[$key];
+          $shiftControl->save();
+        }
+      }
+    }
+
     //send emails (2 flow position)
     if (env('APP_ENV') == 'production') {
       $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
@@ -556,6 +580,13 @@ class ServiceRequestController extends Controller
         return redirect()->route('rrhh.service-request.index');
       }
     }
+
+    if($serviceRequest->SignatureFlows->isEmpty())
+    {
+      /* Envío al log de errores el id para su chequeo */
+      logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
+    }
+
 
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
@@ -1185,6 +1216,59 @@ class ServiceRequestController extends Controller
     }
 
     session()->flash('info', $cont . ' solicitudes fueron derivadas.');
+    return redirect()->route('rrhh.service-request.index');
+  }
+
+  public function accept_all_requests()
+  {
+    $user_id = Auth::user()->id;
+
+    $serviceRequestsMyPendings = array();
+
+    $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                         $subQuery->where('responsable_id',$user_id);
+                                         //$subQuery->where('status', '<>', 2);
+                                         $subQuery->orwhere('user_id',$user_id);
+                                         //$subQuery->whereNull('derive_date');
+
+                                       })->with("SignatureFlows")
+
+                                       ->orderBy('id','asc')
+                                       ->get();
+
+    $cont = 0;
+    foreach ($serviceRequests as $key => $serviceRequest) {
+      if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+        foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+          if ($user_id == $signatureFlow->responsable_id) {
+            if ($signatureFlow->status == NULL) {
+              if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                }else{
+                  $serviceRequestsMyPendings[$cont] = $serviceRequest;
+                  $cont += 1;
+                }
+              }
+            }else{
+            }
+          }
+        }
+      }
+    }
+
+    //se aceptan todas las solicitudes
+    $count = 0;
+    foreach ($serviceRequestsMyPendings as $key => $serviceRequest) {
+      $SignatureFlow = $serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status')->first();
+      if ($SignatureFlow!=null) {
+        $SignatureFlow->signature_date = Carbon::now();
+        $SignatureFlow->status = 1;
+        $SignatureFlow->save();
+        $count += 1;
+      }
+    }
+
+    session()->flash('info', $count . ' solicitudes fueron aceptadas.');
     return redirect()->route('rrhh.service-request.index');
   }
 

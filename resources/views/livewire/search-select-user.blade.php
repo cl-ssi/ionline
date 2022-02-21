@@ -3,7 +3,7 @@
         <input
             type="text"
             class="form-control"
-            placeholder="Nombre"
+            placeholder="Nombre Funcionario"
             aria-label="Nombre"
             wire:keydown.escape="resetx"
         @if(!$user)
@@ -20,11 +20,9 @@
                 <i class="fas fa-eraser"></i> Limpiar</a>
         </div>
     </div>
-
-    @if($user)
-    <input type="hidden"  name="{{ $selected_id }}" value="{{ $user->id }}" required>
-    @endif
-
+    
+    <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" required>
+    
     @if(!empty($query))
         <ul class="list-group col-12" style="z-index: 3; position: absolute;">
             @if( count($users) >= 1 )

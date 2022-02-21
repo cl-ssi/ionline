@@ -11,8 +11,8 @@
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.store') }}">
 	@csrf
 
-@livewire('service-request.create-types',['subdirections' => $subdirections,
-                                          'responsabilityCenters' => $responsabilityCenters])
+	@livewire('service-request.create-types',['subdirections' => $subdirections,
+	'responsabilityCenters' => $responsabilityCenters])
 
 	<br>
 
@@ -20,231 +20,82 @@
 
 	<br>
 
-  	<div class="form-row">
+	<div class="form-row">
 
 		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_contract_type">Tipo de Contrato</label>
 			<select name="contract_type" class="form-control" required>
-			<option value=""></option>
-			<option value="NUEVO">Nuevo</option>
-			<option value="ANTIGUO">Antiguo</option>
-			<option value="CONTRATO PERM.">Permanente</option>
-			<option value="PRESTACION">Prestación</option>
+				<option value=""></option>
+				<option value="NUEVO">Nuevo</option>
+				<option value="ANTIGUO">Antiguo</option>
+				<option value="CONTRATO PERM.">Permanente</option>
+				<option value="PRESTACION">Prestación</option>
 			</select>
 		</fieldset>
 
 		<fieldset class="form-group col-6 col-md-3">
-		    <label for="for_request_date">Fecha Solicitud</label>
-		    <input type="date" class="form-control" id="for_request_date"
-				name="request_date" max="2022-12-31" required>
+			<label for="for_request_date">Fecha Solicitud</label>
+			<input type="date" class="form-control" id="for_request_date" name="request_date" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-12 col-md-3">
-		    <label for="for_start_date">Fecha Inicio de Contrato</label>
-		    <input type="date" class="form-control" id="for_start_date"
-				name="start_date" min="2020-01-01" max="2022-12-31" required>
+		<fieldset class="form-group col-12 col-md-3">
+			<label for="for_start_date">Fecha Inicio de Contrato</label>
+			<input type="date" class="form-control" id="for_start_date" name="start_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-12 col-md-3">
-		    <label for="for_end_date">Fecha Término de Contrato</label>
-		    <input type="date" class="form-control" id="for_end_date"
-				name="end_date" min="2020-01-01" max="2022-12-31" required>
+		<fieldset class="form-group col-12 col-md-3">
+			<label for="for_end_date">Fecha Término de Contrato</label>
+			<input type="date" class="form-control" id="for_end_date" name="end_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
-  </div>
-
-  <hr>
-
-  <div class="form-row">
-    <fieldset class="form-group col-12">
-        <label for="for_service_description">Descripción Servicio*</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
-	</fieldset>
-
-	<fieldset class="form-group">
-		<div id="id_descripcion_servicio">
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_enfermeros">Enfermeras/os</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_kinesiologos">Kinesiólogos/as</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_paramedicos">Técnicos paraméricos</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_medico">Médico</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_auxiliares">Auxiliares de servicio</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_psicologo">Psicólogo</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_administrativos">Administrativos/as</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_matronas">Matronas</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_tm_imageneologia">T.M. Imagenología</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_fonoaudiologas">Fonoaudiologas</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
-		</div>
-	</fieldset>
-  </div>
-
-	<div id="control_turnos">
-		<br>
-		<div class="card" id="card">
-		  <div class="card-header">
-		    Control de Turnos
-		  </div>
-		  <ul class="list-group list-group-flush">
-		    <li class="list-group-item">
-					<div class="row">
-						<fieldset class="form-group col-3">
-								<label for="for_estate">Entrada</label>
-								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="start_hour" id="start_hour">
-						</fieldset>
-						<fieldset class="form-group col-3">
-								<label for="for_estate">Salida</label>
-								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="end_hour" id="end_hour">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Observación</label>
-								<input type="text" class="form-control" name="observation" id="observation">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate"><br/></label>
-								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-						</fieldset>
-					</div>
-
-					<table class="table table-sm">
-			        <thead>
-			            <tr>
-			                <th>Select</th>
-			                <th>Entrada</th>
-			                <th>H.Entrada</th>
-							<th>Salida</th>
-							<th>H.Salida</th>
-							<th>Horas</th>
-							<th>Observación</th>
-			            </tr>
-			        </thead>
-			        <tbody>
-
-			        </tbody>
-			    </table>
-					<button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
-				</li>
-		  </ul>
-		</div>
-		<br>
 	</div>
 
-  <div class="form-row">
-	<fieldset class="form-group col-12 col-md-3">
-		<label for="for_estate">Estamento al que corresponde CS</label>
-		<select name="estate" class="form-control" required id="estate">
-			<option value=""></option>
-			<option value="Profesional Médico">Profesional Médico</option>
-			<option value="Profesional">Profesional</option>
-			<option value="Técnico">Técnico</option>
-			<option value="Administrativo">Administrativo</option>
-			<option value="Farmaceutico">Farmaceutico</option>
-			<option value="Odontólogo">Odontólogo</option>
-			<option value="Bioquímico">Bioquímico</option>
-			<option value="Auxiliar">Auxiliar</option>
-			<!--
-			<option value="Otro (justificar)">Otro (justificar)</option>
-			-->
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col-6 col-md-3">
-		<label for="for_contractual_condition">Calidad Contractual</label>
-		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
-		<option value=""></option>
-		<option value="SUPLENTE" >SUPLENTE</option>
-		<option value="CONTRATA" >CONTRATA</option>
-		<option value="TITULAR" >TITULAR</option>
-		<!--
-		<option value="HONORARIO COVID" >HONORARIO COVID</option>
-		<option value="SUMA ALZADA" >SUMA ALZADA</option>
-		-->
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col-6 col-md-2">
-		<label for="for_weekly_hours">Hrs.Semanales</label>
-		<select name="weekly_hours" class="form-control" id="for_weekly_hours">
-			<option value=""></option>
-			<option value="44">44</option>
-			<option value="33">33</option>
-			<option value="30">30</option>
-			<option value="28">28</option>
-			<option value="22">22</option>
-			<option value="20">20</option>
-			<option value="16">16</option>
-			<option value="15">15</option>
-			<option value="11">11</option>
-			<option value="9">9</option>
-			<option value="8.5">8.5</option>
-			<option value="7.5">7.5</option>
-			<option value="5">5</option>
-			<option value="4">4</option>
-			<option value="3">3</option>
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col">
-		<label for="for_establishment_id">Establecimiento</label>
-		<select name="establishment_id" class="form-control" required>
-			<option value=""></option>
-			@foreach($establishments as $key => $establishment)
-			<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
-			@endforeach
-		</select>
-	</fieldset>
-
-
-  </div>
+	<hr>
 
 	<div class="form-row">
 
-		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_programm_name">Nombre Programa</label>
-			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
-			<select name="programm_name" class="form-control" required id="programm_name">
+		<fieldset class="form-group col-12 col-md-4">
+			<label for="for_establishment_id">Establecimiento*</label>
+			<select name="establishment_id" class="form-control" required>
 				<option value=""></option>
-				<option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
-				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
-				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
-				<option value="Covid19 Médicos">Covid19 Médicos</option>
-
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-					<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
-					<option value="33 MIL HORAS">33 MIL HORAS</option>
-					<option value="DFL">DFL</option>
-					<option value="TURNOS VACANTES">TURNOS VACANTES</option>
-					<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
-					<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
-					<option value="PABELLON TARDE">PABELLON TARDE</option>
-					<option value="PABELLON GINE">PABELLON GINE</option>
-					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
-					<option value="SENDA">SENDA</option>
-				@else
-					<option value="PRAPS">PRAPS</option>
-					<option value="PESPI">PESPI</option>
-					<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
-					<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
-					<option value="LISTA ESPERA">LISTA ESPERA</option>
-					<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
-
-					<option value="ADP DIRECTOR">ADP DIRECTOR</option>
-					<option value="SENDA">SENDA</option>
-					<option value="SENDA LEY ALCOHOLES">SENDA LEY ALCOHOLES</option>
-					<option value="SENDA UHCIP">SENDA UHCIP</option>
-					<option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
-					<option value="SENADIS">SENADIS</option>
-					<option value="SUBT.31">SUBT.31</option>
-				@endif
+				@foreach($establishments as $key => $establishment)
+				<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
+				@endforeach
 			</select>
 		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_profession_id">Profesión*</label>
+			<select name="profession_id" class="form-control" required id="profession_id" required>
+				<option value=""></option>
+				@foreach($professions as $profession)
+				<option value="{{$profession->id}}">{{$profession->name}}</option>
+				@endforeach
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-2">
+			<label for="for_weekly_hours">Hrs.Semanales</label>
+			<select name="weekly_hours" class="form-control" id="for_weekly_hours">
+				<option value=""></option>
+				<option value="44">44</option>
+				<option value="33">33</option>
+				<option value="30">30</option>
+				<option value="28">28</option>
+				<option value="22">22</option>
+				<option value="20">20</option>
+				<option value="16">16</option>
+				<option value="15">15</option>
+				<option value="11">11</option>
+				<option value="9">9</option>
+				<option value="8.5">8.5</option>
+				<option value="7.5">7.5</option>
+				<option value="5">5</option>
+				<option value="4">4</option>
+				<option value="3">3</option>
+			</select>
+		</fieldset>
+
 
 		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_working_day_type">Jornada de Trabajo</label>
@@ -263,79 +114,141 @@
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 				<option value="QUIRURGICO">QUIRÚRGICO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
-				<option value=""></option>
 				<option value="DIARIO">DIARIO</option>
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-12 col-md-6">
-			<label for="for_estate_other">Detalle estamento</label>
-			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
-		</fieldset>
-
 		<fieldset class="form-group col-12 col-md-12">
-			<label for="for_working_day_type_other">Otro<small> (Saldrá en la resolución luego del horario)</small></label>
+			<label for="for_working_day_type_other">Otra jornada de trabajo<small> (Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
-  	</div>
+	</div>
 
 	<div class="form-row">
-		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_profession_id">Profesión</label>
-			<select name="profession_id" class="form-control" required id="profession_id">
-				<option value=""></option>
-				@foreach($professions as $profession)
-					<option value="{{$profession->id}}">{{$profession->name}}</option>
-				@endforeach
-			</select>
+
+		<fieldset class="form-group col-12">
+			<label for="for_service_description">Descripción Servicio*</label>
+			<textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
 		</fieldset>
 
+		<fieldset class="form-group">
+			<div id="id_descripcion_servicio">
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_enfermeros">Enfermeras/os</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_kinesiologos">Kinesiólogos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_paramedicos">Técnicos paraméricos</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_medico">Médico</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_auxiliares">Auxiliares de servicio</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_psicologo">Psicólogo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_administrativos">Administrativos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_matronas">Matronas</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_tm_imageneologia">T.M. Imagenología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_fonoaudiologas">Fonoaudiologas</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
+			</div>
+		</fieldset>
+	</div>
+
+	<div id="control_turnos">
+		<br>
+		<div class="card" id="card">
+			<div class="card-header">
+				Control de Turnos
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="row">
+						<fieldset class="form-group col-3">
+							<label for="for_shift_start_date">Entrada</label>
+							<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
+						</fieldset>
+						<fieldset class="form-group col">
+							<label for="for_start_hour">Hora</label>
+							<input type="time" class="form-control" name="start_hour" id="start_hour">
+						</fieldset>
+						<fieldset class="form-group col-3">
+							<label for="for_shift_end_date">Salida</label>
+							<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
+						</fieldset>
+						<fieldset class="form-group col">
+							<label for="for_end_hour">Hora</label>
+							<input type="time" class="form-control" name="end_hour" id="end_hour">
+						</fieldset>
+						<fieldset class="form-group col">
+							<label for="for_observation">Observación</label>
+							<input type="text" class="form-control" name="observation" id="observation">
+						</fieldset>
+						<fieldset class="form-group col">
+							<label for="for_shift_button_add"><br /></label>
+							<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+						</fieldset>
+					</div>
+
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Select</th>
+								<th>Entrada</th>
+								<th>H.Entrada</th>
+								<th>Salida</th>
+								<th>H.Salida</th>
+								<th>Horas</th>
+								<th>Observación</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+					<button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+				</li>
+			</ul>
+		</div>
+		<br>
+	</div>
+
+	<div class="form-row">
+
 		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_rrhh_team">Equipo RRHH*</label>
-			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
+			<label for="for_programm_name">Nombre Programa*</label>
+			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
+			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
-				<option value="Residencia Médica" >Residencia Médica</option>
-				<option value="Médico Diurno" >Médico Diurno</option>
-				<option value="Enfermera Supervisora">Enfermera Supervisora</option>
-				<option value="Enfermera Diurna" >Enfermera Diurna</option>
-				<option value="Enfermera Turno" >Enfermera Turno</option>
-				<option value="Kinesiólogo Diurno" >Kinesiólogo Diurno</option>
-				<option value="Kinesiólogo Turno">Kinesiólogo Turno</option>
-				<option value="Téc.Paramédicos Diurno">Téc.Paramédicos Diurno</option>
-				<option value="Téc.Paramédicos Turno" >Téc.Paramédicos Turno</option>
-				<option value="Auxiliar Diurno" >Auxiliar Diurno</option>
-				<option value="Auxiliar Turno">Auxiliar Turno</option>
-				<option value="Terapeuta Ocupacional" >Terapeuta Ocupacional</option>
-				<option value="Químico Farmacéutico" >Químico Farmacéutico</option>
-				<option value="Bioquímico" >Bioquímico</option>
-				<option value="Fonoaudiologo" >Fonoaudiologo</option>
-				<option value="Prevencionista Diurno">Prevencionista Diurno</option>
-				<option value="Administrativo Diurno" >Administrativo Diurno</option>
-				<option value="Administrativo Turno" >Administrativo Turno</option>
-				<option value="Biotecnólogo Turno" >Biotecnólogo Turno</option>
-				<option value="Matrona Turno" >Matrona Turno</option>
-				<option value="Matrona Diurno" >Matrona Diurno</option>
-				<option value="Otros técnicos" >Otros técnicos</option>
-				<option value="Psicólogo" >Psicólogo</option>
-				<option value="Tecn. Médico Diurno" >Tecn. Médico Diurno</option>
-				<option value="Tecn. Médico Turno" >Tecn. Médico Turno</option>
-				<option value="Trabajador Social" >Trabajador Social</option>
-				<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
-				<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
-				<option value="Nutricionista turno" >Nutricionista turno</option>
-				<option value="Informático">Informático</option>
-				<option value="Ingeniero">Ingeniero</option>
-				<option value="Constructor civil">Constructor civil</option>
-				<option value="Arquitecto">Arquitecto</option>
-				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
-				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
-				<option value="Psiquiatra">Psiquiatra</option>
-				<option value="Monitor/a">Monitor/a</option>
-				<option value="Preparador físico">Preparador físico</option>
-				<option value="Otros técnicos">Otros técnicos</option>
-				<option value="Otros profesionales">Otros profesionales</option>
-				<option value="Médico por prestación">Médico por prestación</option>
+				<option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
+				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
+				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
+				<option value="Covid19 Médicos">Covid19 Médicos</option>
+
+
+				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				<option value="Covid 2022">Covid 2022</option>
+				<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
+				<option value="33 MIL HORAS">33 MIL HORAS</option>
+				<option value="DFL">DFL</option>
+				<option value="TURNOS VACANTES">TURNOS VACANTES</option>
+				<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
+				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+				<option value="PABELLON TARDE">PABELLON TARDE</option>
+				<option value="PABELLON GINE">PABELLON GINE</option>
+				<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+				<option value="SENDA">SENDA</option>
+				@else
+				<option value="Covid 2022">Covid 2022</option>
+				<option value="PRAPS">PRAPS</option>
+				<option value="PESPI">PESPI</option>
+				<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
+				<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
+				<option value="LISTA ESPERA">LISTA ESPERA</option>
+				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+
+				<option value="ADP DIRECTOR">ADP DIRECTOR</option>
+				<option value="SENDA">SENDA</option>
+				<option value="LEY DE ALCOHOL">LEY DE ALCOHOL</option>
+				<option value="SENDA UHCIP">SENDA UHCIP</option>
+				<option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
+				<option value="SENADIS">SENADIS</option>
+				<option value="SUBT.31">SUBT.31</option>
+				@endif
 			</select>
 		</fieldset>
 
@@ -343,20 +256,41 @@
 			<label for="for_digera_strategy">Estrategia Digera C.</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
-				<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
-				<option value="Camas MEDIAS Complejizadas" >Camas MEDIAS Complejizadas</option>
-				<option value="Camas UCI Aperturadas" >Camas UCI Aperturadas</option>
-				<option value="Camas UCI Complejizadas" >Camas UCI Complejizadas</option>
-				<option value="Camas UTI Aperturadas" >Camas UTI Aperturadas</option>
-				<option value="Camas UTI Complejizadas" >Camas UTI Complejizadas</option>
-				<option value="Cupos Hosp. Domiciliaria" >Cupos Hosp. Domiciliaria</option>
-				<option value="Refuerzo Anatomía Patologica" >Refuerzo Anatomía Patologica</option>
-				<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
-				<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
-				<option value="Refuerzo UEH" >Refuerzo UEH</option>
+				<option value="Camas MEDIAS Aperturadas">Camas MEDIAS Aperturadas</option>
+				<option value="Camas MEDIAS Complejizadas">Camas MEDIAS Complejizadas</option>
+				<option value="Camas UCI Aperturadas">Camas UCI Aperturadas</option>
+				<option value="Camas UCI Complejizadas">Camas UCI Complejizadas</option>
+				<option value="Camas UTI Aperturadas">Camas UTI Aperturadas</option>
+				<option value="Camas UTI Complejizadas">Camas UTI Complejizadas</option>
+				<option value="Cupos Hosp. Domiciliaria">Cupos Hosp. Domiciliaria</option>
+				<option value="Refuerzo Anatomía Patologica">Refuerzo Anatomía Patologica</option>
+				<option value="Refuerzo Laboratorio">Refuerzo Laboratorio</option>
+				<option value="Refuerzo SAMU">Refuerzo SAMU</option>
+				<option value="Refuerzo UEH">Refuerzo UEH</option>
+				<!-- Los enviado por correo por Nati -->
+				<option value="Flujo de Urgencia Diferenciadas">Flujo de Urgencia Diferenciada</option>
+				<option value="Complejización de Cama">Complejización de Cama</option>
+				<option value="Hospitales Modulares">Hospitales Modulares</option>
+				<option value="Hospitalizacion Domiciliaria">Hospitalizacion Domiciliaria</option>
+				<option value="Rehabilitación">Rehabilitación</option>
+				<!-- Fin de lo enviado por correo -->
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-					<option value="Migración Colchane" >Migración Colchane</option>
+				<option value="Migración Colchane">Migración Colchane</option>
 				@endif
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_contractual_condition">Calidad Contractual</label>
+			<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
+				<option value=""></option>
+				<option value="SUPLENTE">SUPLENTE</option>
+				<option value="CONTRATA">CONTRATA</option>
+				<option value="TITULAR">TITULAR</option>
+				<!--
+			<option value="HONORARIO COVID">HONORARIO COVID</option>
+			<option value="SUMA ALZADA">SUMA ALZADA</option>
+			-->
 			</select>
 		</fieldset>
 
@@ -376,19 +310,102 @@
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" placeholder="" name="hsa_schedule_detail">
 		</fieldset>
 
+	</div>
+
+
+
+	{{--
+
+	<div class="form-row">
+
+		<fieldset class="form-group col-12 col-md-3">
+			<label for="for_estate">Estamento al que corresponde CS</label>
+			<select name="estate" class="form-control" required id="estate" disabled>
+				<option value=""></option>
+				<option value="Profesional Médico">Profesional Médico</option>
+				<option value="Profesional">Profesional</option>
+				<option value="Técnico">Técnico</option>
+				<option value="Administrativo">Administrativo</option>
+				<option value="Farmaceutico">Farmaceutico</option>
+				<option value="Odontólogo">Odontólogo</option>
+				<option value="Bioquímico">Bioquímico</option>
+				<option value="Auxiliar">Auxiliar</option>
+				<!--
+				<option value="Otro (justificar)">Otro (justificar)</option>
+				-->
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-12 col-md-6">
+			<label for="for_estate_other">Detalle estamento</label>
+			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
+		</fieldset>
+
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_rrhh_team">Equipo RRHH*</label>
+			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
+				<option value=""></option>
+				<option value="Residencia Médica">Residencia Médica</option>
+				<option value="Médico Diurno">Médico Diurno</option>
+				<option value="Enfermera Supervisora">Enfermera Supervisora</option>
+				<option value="Enfermera Diurna">Enfermera Diurna</option>
+				<option value="Enfermera Turno">Enfermera Turno</option>
+				<option value="Kinesiólogo Diurno">Kinesiólogo Diurno</option>
+				<option value="Kinesiólogo Turno">Kinesiólogo Turno</option>
+				<option value="Téc.Paramédicos Diurno">Téc.Paramédicos Diurno</option>
+				<option value="Téc.Paramédicos Turno">Téc.Paramédicos Turno</option>
+				<option value="Auxiliar Diurno">Auxiliar Diurno</option>
+				<option value="Auxiliar Turno">Auxiliar Turno</option>
+				<option value="Terapeuta Ocupacional">Terapeuta Ocupacional</option>
+				<option value="Químico Farmacéutico">Químico Farmacéutico</option>
+				<option value="Bioquímico">Bioquímico</option>
+				<option value="Fonoaudiologo">Fonoaudiologo</option>
+				<option value="Prevencionista Diurno">Prevencionista Diurno</option>
+				<option value="Administrativo Diurno">Administrativo Diurno</option>
+				<option value="Administrativo Turno">Administrativo Turno</option>
+				<option value="Biotecnólogo Turno">Biotecnólogo Turno</option>
+				<option value="Matrona Turno">Matrona Turno</option>
+				<option value="Matrona Diurno">Matrona Diurno</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Psicólogo">Psicólogo</option>
+				<option value="Tecn. Médico Diurno">Tecn. Médico Diurno</option>
+				<option value="Tecn. Médico Turno">Tecn. Médico Turno</option>
+				<option value="Trabajador Social">Trabajador Social</option>
+				<option value="Nutricionista Diurno">Nutricionista Diurno</option>
+				<option value="Prevencionista de Riesgo">Prevencionista de Riesgo</option>
+				<option value="Nutricionista turno">Nutricionista turno</option>
+				<option value="Informático">Informático</option>
+				<option value="Ingeniero">Ingeniero</option>
+				<option value="Constructor civil">Constructor civil</option>
+				<option value="Arquitecto">Arquitecto</option>
+				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>
+				<option value="Médico por prestación">Médico por prestación</option>
+			</select>
+		</fieldset>
 
 	</div>
 
+
+	--}}
+
+
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Objetivos*</label>
-				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
+			<label for="for_objectives">Objetivos*</label>
+			<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
 
 	<!-- <div class="form-row" id="div_resolve" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Resuelvo</label>
+				<label for="for_resolve">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div> -->
@@ -399,40 +416,36 @@
 	@else
 	<div class="form-row" id="div_subt31" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
-				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+			<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+			<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
 	@endif
 
 	<div class="form-row">
 		<fieldset class="form-group col">
-				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
-				<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
+			<label for="for_bonus_indications">Aguinaldos (se inserta en cláusula 8va)</label>
+			<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
 		</fieldset>
 	</div>
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
-				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
+			<label for="for_additional_benefits">Beneficios adicionales (se inserta en cláusula 14)</label>
+			<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-				@else
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
-				@endif
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
-
-
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+			@if(Auth::user()->organizationalUnit->establishment_id == 1)
+			@else
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+			@endif
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 		</fieldset>
 	</div>
-
-
 
 	<br>
 	<button type="submit" id="principal_form" class="btn btn-primary">Crear</button>
@@ -444,8 +457,7 @@
 @section('custom_js')
 <script src='{{asset("js/jquery.rut.chileno.js")}}'></script>
 <script type="text/javascript">
-
-	$( document ).ready(function() {
+	$(document).ready(function() {
 
 		$("#control_turnos").hide();
 		$("#div_turno").hide();
@@ -461,7 +473,7 @@
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
-		$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+		$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 		$("#programm_name option[value='SENDA UHCIP']").hide();
 		$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 		$("#programm_name option[value='SENADIS']").hide();
@@ -503,9 +515,9 @@
 				$("#working_day_type option[value='HORA EXTRA']").show();
 				$("#working_day_type option[value='TURNO EXTRA']").show();
 
-				$("#contractual_condition").prop('required',true);
+				$("#contractual_condition").prop('required', true);
 
-			}else{
+			} else {
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
 				$('#for_weekly_hours').removeAttr('disabled');
@@ -524,20 +536,20 @@
 				$("#working_day_type option[value='HORA EXTRA']").hide();
 				$("#working_day_type option[value='TURNO EXTRA']").hide();
 
-				$("#contractual_condition").prop('required',false);
+				$("#contractual_condition").prop('required', false);
 			}
 		});
 
-		$('#estate').on('change', function() {
-			if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
-				$('#programm_name').val('Covid19 No Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-			if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
-				$('#programm_name').val('Covid19 Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-		});
+		// $('#estate').on('change', function() {
+		// 	if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
+		// 		$('#programm_name').val('Covid19 No Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// 	if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
+		// 		$('#programm_name').val('Covid19 Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// });
 
 		$('#working_day_type').on('change', function() {
 			$('#schedule_detail').attr('disabled', 'disabled');
@@ -548,10 +560,10 @@
 			if (this.value == "DIURNO PASADO A TURNO") {
 				if ($('#program_contract_type').val() == "Horas") {
 					$('#contractual_condition').removeAttr('disabled');
-				}else{
+				} else {
 					$('#contractual_condition').attr('disabled', 'disabled');
 				}
-			}else{
+			} else {
 				$('#contractual_condition').attr('disabled', 'disabled');
 			}
 			if (this.value == "DIURNO") {
@@ -568,86 +580,104 @@
 
 		$('#responsability_center_ou_id').on('change', function() {
 			if ($("#responsability_center_ou_id option:selected").text() == "Departamento de Salud Ocupacional" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
-					$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Medicina" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión de Camas" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Ginecología" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
-				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				//						Comentado como era el DIGERA antes
+				//   $("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Servicio de Medicina" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión de Camas" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Ginecología" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {		
+				$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
+				$("#responsability_center_ou_id option:selected").text() == "Programa Control de Infecciones" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Neurocirugía" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Anestesia y Pabellones" ||
+				$("#responsability_center_ou_id option:selected").text() == "Centro de Responsabilidad Consultorio Adosado Especialidades" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Medicina Transfusional" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Traumatología" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
+				$("#responsability_center_ou_id option:selected").text() == "UHCIP Infanto Adolescente"
+			) {
+				$('#digera_strategy').val('Complejización de Cama');
 				$('#digera_strategy').selectpicker('refresh');
 			}
-			if ($("#responsability_center_ou_id option:selected").text() == "Servicio de Anestesia y Pabellones" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Pediatrico") {
+			if ($("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
+				$("#responsability_center_ou_id option:selected").text() == "Departamento de Finanzas" ||
+				$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Informática" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Mantención" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión en Red" ||
+				$("#responsability_center_ou_id option:selected").text() == "Departamento Recursos Fisicos y Abastesimiento"
+			) {
+				$('#digera_strategy').val('Hospitales Modulares');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			// if ($("#responsability_center_ou_id option:selected").text() == "Unidad de Hospitalización Domiciliaria") {
+			// 	$('#digera_strategy').val('Camas UCI Complejizadas');
+			// 	$('#digera_strategy').selectpicker('refresh');
+			// }
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional"
+			) {
+				$('#digera_strategy').val('Rehabilitación');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+
+			if ($("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Pediatrico") {
 				$('#digera_strategy').val('Camas UCI Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
-			if ($("#responsability_center_ou_id option:selected").text() == "Unidad de Hospitalización Domiciliaria" ) {
-				$('#digera_strategy').val('Cupos Hosp. Domiciliaria');
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad de Hospitalización Domiciliaria") {
+				$('#digera_strategy').val('Hospitalizacion Domiciliaria');
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Subdirección de Gestion Asistencial / Subdirección Médica" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Unidad Laboratorio Clínico") {
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Laboratorio Clínico") {
 				$('#digera_strategy').val('Refuerzo Laboratorio');
 				$('#digera_strategy').selectpicker('refresh');
 			}
-			if ($("#responsability_center_ou_id option:selected").text() == "Establecimientos de Red de Urgencias" ) {
+			if ($("#responsability_center_ou_id option:selected").text() == "Establecimientos de Red de Urgencias") {
 				$('#digera_strategy').val('Refuerzo SAMU');
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Consultorio General Urbano Dr. Hector Reyno" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Servicio de Emergencia Hospitalaria" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio Urgencia Ginecoobstetricia") {
-				$('#digera_strategy').val('Refuerzo UEH');
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Emergencia Hospitalaria" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio Urgencia Ginecoobstetricia") {
+				//$('#digera_strategy').val('Refuerzo UEH');
+				$('#digera_strategy').val('Flujo de Urgencia Diferenciadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
-			if ($("#responsability_center_ou_id option:selected").text() == "Departamento Operaciones" ) {
+			if ($("#responsability_center_ou_id option:selected").text() == "Departamento Operaciones") {
 				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
-			if ($("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ) {
-				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
-				$('#digera_strategy').selectpicker('refresh');
-			}
+			// if ($("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ) {
+			// 	$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+			// 	$('#digera_strategy').selectpicker('refresh');
+			// }
 		});
 
 
 
 		//obtiene digito verificador
-    $('input[name=user_id]').keyup(function(e) {
-        var str = $("#for_user_id").val();
-        $('#for_dv').val($.rut.dv(str));
-    });
+		$('input[name=user_id]').keyup(function(e) {
+			var str = $("#for_user_id").val();
+			$('#for_dv').val($.rut.dv(str));
+		});
 	});
 
-	// $('#subdirection_ou_id').on('change', function() {
-	// 	var value = this.value;
-	//
-	// 	//subdirección gestión del cuidado al paciente
-	// 	if (value == 85) {
-	// 		$("#Subdirector option[value=13835321]").removeAttr('disabled');
-	// 		$('#Subdirector').val(13835321);
-	// 		$('#Subdirector').selectpicker('refresh');
-	//
-	// 		// $("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
-	// 		// $('#SubdirectorTurnos').val(13835321);
-	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
-	// 	}
-	// 	if (value != 85) {
-	// 		$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-	// 		$('#Subdirector').selectpicker('refresh');
-	//
-	// 		// $('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
-	// 	}
-	// });
+
 
 	$('#type').on('change', function() {
 		var value = this.value;
@@ -667,7 +697,7 @@
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
-			$("#objectives").prop('required',true);
+			$("#objectives").prop('required', true);
 			//$('#objectives').removeAttr('disabled');
 			$('#subt31').removeAttr('disabled');
 			$("#div_subt31").show();
@@ -688,7 +718,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").hide();
 				$("#programm_name option[value='SENDA']").hide();
-				$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+				$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 				$("#programm_name option[value='SENDA UHCIP']").hide();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 				$("#programm_name option[value='SENADIS']").hide();
@@ -707,7 +737,7 @@
 
 
 
-			}else{
+			} else {
 				$("#programm_name option[value='PRAPS']").show();
 				$("#programm_name option[value='PESPI']").show();
 				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
@@ -717,7 +747,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").show();
 				$("#programm_name option[value='SENDA']").show();
-				$("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+				$("#programm_name option[value='LEY DE ALCOHOL']").show();
 				$("#programm_name option[value='SENDA UHCIP']").show();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
 				$("#programm_name option[value='SENADIS']").show();
@@ -732,11 +762,9 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
-//				$("#programm_name option[value='SENDA']").hide();
+				//				$("#programm_name option[value='SENDA']").hide();
 			}
-		}
-		else
-		{
+		} else {
 			$("#div_hsa_schedule").hide();
 			$("#div_covid_schedule").show();
 			$("#programm_name option[value='Covid19-APS No Médicos']").show();
@@ -749,7 +777,7 @@
 			$("#id_descripcion_servicio").show();
 
 			$('#objectives').attr('disabled', 'disabled');
-			$("#objectives").prop('required',false);
+			$("#objectives").prop('required', false);
 			// $('#resolve').attr('disabled', 'disabled');
 			$('#additional_benefits').attr('disabled', 'disabled');
 			$("#div_objectives").hide();
@@ -765,7 +793,7 @@
 
 			$("#programm_name option[value='ADP DIRECTOR']").hide();
 			$("#programm_name option[value='SENDA']").hide();
-			$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+			$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 			$("#programm_name option[value='SENDA UHCIP']").hide();
 			$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 			$("#programm_name option[value='SENADIS']").hide();
@@ -780,6 +808,15 @@
 			$("#programm_name option[value='PABELLON TARDE']").hide();
 			$("#programm_name option[value='PABELLON GINE']").hide();
 			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		}
+	});
+
+	$('#programm_name').on('change', function() {
+		var value = this.value;
+		if (value == "Covid 2022") {
+			$('#additional_benefits').attr('disabled', 'disabled');
+		} else {
+			$('#additional_benefits').removeAttr('disabled');
 		}
 	});
 
@@ -799,133 +836,132 @@
 	// });
 
 	$('#btn_fonasa').click(function() {
-	    var btn = $(this);
-	    btn.prop('disabled',true);
+		var btn = $(this);
+		btn.prop('disabled', true);
 
-	    var run = $("#for_user_id").val();
-	    var dv  = $("#for_dv").val();
-	    var url = '{{route('webservices.fonasa')}}/?run='+run+'&dv='+dv;
+		var run = $("#for_user_id").val();
+		var dv = $("#for_dv").val();
+		var url = '{{route('webservices.fonasa')}}/?run='+run+'&dv='+dv;
 
-	    $.getJSON(url, function(data) {
-	        if(data){
-	            document.getElementById("for_name").value = data.name;
-	            document.getElementById("for_fathers_family").value = data.fathers_family;
-	            document.getElementById("for_mothers_family").value = data.mothers_family;
-	            // document.getElementById("for_birthday").value = data.birthday;
+		$.getJSON(url, function(data) {
+			if (data) {
+				document.getElementById("for_name").value = data.name;
+				document.getElementById("for_fathers_family").value = data.fathers_family;
+				document.getElementById("for_mothers_family").value = data.mothers_family;
+				// document.getElementById("for_birthday").value = data.birthday;
 
-	            // //CALCULO DE FECHA EN CACHO QUE EXISTA EL DATO DE FECHA DE NACIMIENTO
-	            // var birthDate =data.birthday;
-	            // var d = new Date(birthDate);
-	            // var mdate = birthDate.toString();
-	            // var yearThen = parseInt(mdate.substring(0,4), 10);
-	            // var monthThen = parseInt(mdate.substring(5,7), 10);
-	            // var dayThen = parseInt(mdate.substring(8,10), 10);
-	            // var today = new Date();
-	            // var birthday = new Date(yearThen, monthThen-1, dayThen);
-	            // var differenceInMilisecond = today.valueOf() - birthday.valueOf();
-	            // var year_age = Math.floor(differenceInMilisecond / 31536000000);
-	            // $("#for_age").val(year_age);
-	            // //FIN DE CALCULO DE EDAD
+				// //CALCULO DE FECHA EN CACHO QUE EXISTA EL DATO DE FECHA DE NACIMIENTO
+				// var birthDate =data.birthday;
+				// var d = new Date(birthDate);
+				// var mdate = birthDate.toString();
+				// var yearThen = parseInt(mdate.substring(0,4), 10);
+				// var monthThen = parseInt(mdate.substring(5,7), 10);
+				// var dayThen = parseInt(mdate.substring(8,10), 10);
+				// var today = new Date();
+				// var birthday = new Date(yearThen, monthThen-1, dayThen);
+				// var differenceInMilisecond = today.valueOf() - birthday.valueOf();
+				// var year_age = Math.floor(differenceInMilisecond / 31536000000);
+				// $("#for_age").val(year_age);
+				// //FIN DE CALCULO DE EDAD
 
-	        } else {
-	            document.getElementById("for_name").value = "";
-	            document.getElementById("for_fathers_family").value = "";
-	            document.getElementById("for_mothers_family").value = "";
-	            // // document.getElementById("for_gender").value = "";
-	            // document.getElementById("for_birthday").value = "";
-	        }
-	}).done(function() {
-	        btn.prop('disabled',false);
-	    });
+			} else {
+				document.getElementById("for_name").value = "";
+				document.getElementById("for_fathers_family").value = "";
+				document.getElementById("for_mothers_family").value = "";
+				// // document.getElementById("for_gender").value = "";
+				// document.getElementById("for_birthday").value = "";
+			}
+		}).done(function() {
+			btn.prop('disabled', false);
+		});
 	});
 
 
-	$(".add-row").click(function(){
-      var shift_start_date = $("#shift_start_date").val();
-      var start_hour = $("#start_hour").val();
-			var shift_end_date = $("#shift_end_date").val();
-			var end_hour = $("#end_hour").val();
+	$(".add-row").click(function() {
+		var shift_start_date = $("#shift_start_date").val();
+		var start_hour = $("#start_hour").val();
+		var shift_end_date = $("#shift_end_date").val();
+		var end_hour = $("#end_hour").val();
 
-			var start_date = new Date(shift_start_date + ' ' + start_hour);
-			var end_date = new Date(shift_end_date + ' ' + end_hour);
+		var start_date = new Date(shift_start_date + ' ' + start_hour);
+		var end_date = new Date(shift_end_date + ' ' + end_hour);
 
-			if (start_date > end_date) {
-				alert("La fecha de salida es menor a la fecha de inicio, revise la información.");
-				return;
-			}
+		if (start_date > end_date) {
+			alert("La fecha de salida es menor a la fecha de inicio, revise la información.");
+			return;
+		}
 
-			const diffTime = Math.abs(start_date - end_date); //diffTime/3600000
+		const diffTime = Math.abs(start_date - end_date); //diffTime/3600000
 
-			var observation = $("#observation").val();
-      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td>" + diffTime/3600000 + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
-      $("table tbody").append(markup);
-  });
+		var observation = $("#observation").val();
+		var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='" + shift_start_date + "'>" + shift_start_date + "</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='" + start_hour + "'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='" + shift_end_date + "'>" + shift_end_date + "</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='" + end_hour + "'>" + end_hour + "</td><td>" + diffTime / 3600000 + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='" + observation + "'>" + observation + "</td></tr>";
+		$("table tbody").append(markup);
+	});
 
 	// Find and remove selected table rows
-  $(".delete-row").click(function(){
-      $("table tbody").find('input[name="record"]').each(function(){
-      	if($(this).is(":checked")){
-              $(this).parents("tr").remove();
-          }
-      });
-  });
+	$(".delete-row").click(function() {
+		$("table tbody").find('input[name="record"]').each(function() {
+			if ($(this).is(":checked")) {
+				$(this).parents("tr").remove();
+			}
+		});
+	});
 
-	$("#alias_enfermeros").click(function(){
+	$("#alias_enfermeros").click(function() {
 		$('#service_description').val("Prestará servicios de enfermería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_kinesiologos").click(function(){
+	$("#alias_kinesiologos").click(function() {
 		$('#service_description').val("Prestará servicios de kinesiología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_paramedicos").click(function(){
+	$("#alias_paramedicos").click(function() {
 		$('#service_description').val("Prestará servicios como técnico paramédico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_auxiliares").click(function(){
+	$("#alias_auxiliares").click(function() {
 		$('#service_description').val("Prestará servicios como auxiliar de servicio realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_administrativos").click(function(){
+	$("#alias_administrativos").click(function() {
 		$('#service_description').val("Prestará servicios en el área administrativa realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_matronas").click(function(){
+	$("#alias_matronas").click(function() {
 		$('#service_description').val("Prestará servicios de matronería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_tm_imageneologia").click(function(){
+	$("#alias_tm_imageneologia").click(function() {
 		$('#service_description').val("Prestará servicios de Tecnología Médica en Imagenología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_medico").click(function(){
+	$("#alias_medico").click(function() {
 		$('#service_description').val("Prestará servicios de médico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
 	});
-	$("#alias_fonoaudiologas").click(function(){
+	$("#alias_fonoaudiologas").click(function() {
 		$('#service_description').val("Prestará servicios de Fonoaudiologia realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
 	});
-	$("#alias_terapeuta_ocupacional").click(function(){
+	$("#alias_terapeuta_ocupacional").click(function() {
 		$('#service_description').val("Prestará servicios de Terapia Ocupacional realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
 	});
-	$("#alias_psicologo").click(function(){
+	$("#alias_psicologo").click(function() {
 		$('#service_description').val("Prestará servicios de psicología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
 	});
 
 
-	$("#alias_dias_descanzo").click(function(){
+	$("#alias_dias_descanzo").click(function() {
 		$('#additional_benefits').append("Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación.\n\n");
 	});
-	$("#alias_ausentarse_motivos_particulares").click(function(){
+	$("#alias_ausentarse_motivos_particulares").click(function() {
 		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
 	});
-	$("#alias_capacitacion").click(function(){
+	$("#alias_capacitacion").click(function() {
 		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
 	});
-	$("#alias_fiestas_patrias").click(function(){
+	$("#alias_fiestas_patrias").click(function() {
 		$('#additional_benefits').append("Aguinaldo de fiestas Patrias, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (septiembre).\n\n");
 	});
-	$("#alias_navidad").click(function(){
+	$("#alias_navidad").click(function() {
 		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
 	});
-	$("#alias_viaticos").click(function(){
+	$("#alias_viaticos").click(function() {
 		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
 	});
-	$("#alias_devolucion").click(function(){
+	$("#alias_devolucion").click(function() {
 		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
 	});
-
 </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\FulfillmentItem;
 use App\Models\ServiceRequests\ShiftControl;
+use App\Models\Parameters\Profession;
 use App\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
@@ -34,7 +35,8 @@ class FulfillmentController extends Controller
 
         $responsability_center_ou_id = $request->responsability_center_ou_id;
         $program_contract_type = $request->program_contract_type;
-        $estate = $request->estate;
+        // $estate = $request->estate;
+        $profession_id = $request->profession_id;
         $name = $request->name;
         $id = $request->id;
 
@@ -60,9 +62,12 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                          ->when($estate != NULL, function ($q) use ($estate) {
-                                                return $q->where('estate',$estate);
-                                               })
+                                          // ->when($estate != NULL, function ($q) use ($estate) {
+                                          //       return $q->where('estate',$estate);
+                                          //      })
+                                          ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                            return $q->where('profession_id', $profession_id);
+                                          })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
@@ -92,9 +97,12 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                           ->when($estate != NULL, function ($q) use ($estate) {
-                                                 return $q->where('estate',$estate);
-                                                })
+                                           // ->when($estate != NULL, function ($q) use ($estate) {
+                                           //       return $q->where('estate',$estate);
+                                           //      })
+                                           ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                             return $q->where('profession_id', $profession_id);
+                                           })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
@@ -143,8 +151,9 @@ class FulfillmentController extends Controller
         }
 
         $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+        $professions = Profession::orderBy('name', 'ASC')->get();
 
-        return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request'));
+        return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request','professions'));
     }
 
     /**
@@ -223,6 +232,11 @@ class FulfillmentController extends Controller
 
     public function edit_fulfillment(ServiceRequest $serviceRequest)
     {
+      if($serviceRequest->SignatureFlows->isEmpty())
+      {
+        /* Envío al log de errores el id para su chequeo */
+        logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
+      }
 
       //se hizo esto para los casos en que no existan fulfillments
       if ($serviceRequest->fulfillments->count() == 0) {
@@ -446,6 +460,18 @@ class FulfillmentController extends Controller
         //   $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
         // }
 
+        // validacion items
+        if ($fulfillment->FulfillmentItems) {
+          foreach ($fulfillment->FulfillmentItems as $key => $fulfillmentItem) {
+            if ($fulfillmentItem->type == "Renuncia voluntaria") {
+              if ($fulfillmentItem->end_date == null) {
+                session()->flash('danger', 'La fecha de la renuncia involuntaria no está ingresada. Regularice esto antes de generar el certificado.');
+                return redirect()->back();
+              }
+            }
+          }
+        }
+
         /* Siempre firma el que está logeado */
         $signer = auth()->user();
         $pdf = app('dompdf.wrapper');
@@ -664,15 +690,26 @@ class FulfillmentController extends Controller
 
     public function downloadInvoice(Fulfillment $fulfillment)
     {
-        $storage_path = '/ionline/service_request/invoices/';
-        $file =  $storage_path . $fulfillment->id . '.pdf';
+      $storage_path = '/ionline/service_request/invoices/';
+      $file =  $storage_path . $fulfillment->id . '.pdf';
+      if (Storage::disk('gcs')->exists($file)) {
         return Storage::disk('gcs')->response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
+      }else{
+        session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente en 10 minutos, si el problema persiste, suba nuevamente el archivo.');
+        return redirect()->back();
+      }
+
     }
     public function downloadResolution(ServiceRequest $serviceRequest)
     {
         $storage_path = '/ionline/service_request/resolutions/';
         $file =  $storage_path . $serviceRequest->id . '.pdf';
-        return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        if (Storage::disk('gcs')->exists($file)) {
+          return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        }else{
+          session()->flash('warning', 'No se ha encontrado el archivo. Intente nuevamente en 10 minutos, si el problema persiste, suba nuevamente el archivo.');
+          return redirect()->back();
+        }
         /* Para google storage */
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }

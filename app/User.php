@@ -151,6 +151,10 @@ class User extends Authenticatable implements Auditable
         return $name[0].$fathers[0].$mothers[0];
     }
 
+    public function serviceRequests() {
+      return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
+  }
+
     public function documentEvents() {
         return $this->hasMany('\App\Documents\DocumentEvent');
     }
@@ -330,14 +334,15 @@ class User extends Authenticatable implements Auditable
      * @return Patient[]|Builder[]|Collection
      */
     public static function getUsersBySearch($searchText){
-                  $users = User::query();
+                  $users = User::query()->withTrashed();
                   $array_search = explode(' ', $searchText);
                   foreach($array_search as $word){
                   $users->where(function($q) use($word){
                             $q->where('name', 'LIKE', '%'.$word.'%')
                             ->orwhere('fathers_family','LIKE', '%'.$word.'%')
                             ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('id','LIKE', '%'.$word.'%');
+                            ->orwhere('id','LIKE', '%'.$word.'%')
+                            ;
                             //->orwhere('dv','LIKE', '%'.$word.'%');
                       });
                   }//End foreach
@@ -385,4 +390,13 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $dates = ['deleted_at', 'birthday'];
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+    	'remember_token', 'password'
+	];
 }

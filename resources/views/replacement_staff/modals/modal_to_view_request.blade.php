@@ -12,7 +12,24 @@
           <table class="table table-sm table-bordered">
             <thead>
                 <tr class="table-active">
-                    <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
+                    <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                        @switch($requestReplacementStaff->request_status)
+                            @case('pending')
+                                <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('complete')
+                                <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('rejected')
+                                <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @default
+                                Default case...
+                        @endswitch
+                    </th>
                 </tr>
             </thead>
               <tbody>
@@ -112,6 +129,19 @@
                         </td>
                       @endforeach
                   </tr>
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
+                      $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+                      <tr>
+                          <th class="table-active">Estado de Solicitud</th>
+                          <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Fecha de Cierre</th>
+                          <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                      </tr>
+                    @endif
+                  @endif
               </tbody>
           </table>
 
@@ -126,6 +156,8 @@
                   @endif
               </div>
           </div>
+
+          <br>
 
           @if($requestReplacementStaff->technicalEvaluation &&
                   $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
@@ -163,6 +195,26 @@
           @endif
 
           @if($requestReplacementStaff->technicalEvaluation &&
+            $requestReplacementStaff->technicalEvaluation->reason != NULL)
+
+          <div class="row">
+              <div class="col">
+                  <div class="alert alert-danger" role="alert">
+                      <h6><i class="fas fa-exclamation-circle"></i> Proceso Selección Finalizado</h6>
+                      <ul>
+                          <li><strong>Motivo:</strong> {{ $requestReplacementStaff->technicalEvaluation->ReasonValue }}</li>
+                          <li><strong>Observación:</strong> {{ $requestReplacementStaff->technicalEvaluation->observation }}</li>
+                          <li><strong>Fecha:</strong> {{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+          <br>
+
+          @endif
+
+          @if($requestReplacementStaff->technicalEvaluation &&
                   $requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
 
           <div class="card" id="applicant">
@@ -175,19 +227,34 @@
                       <table class="table table-sm table-striped table-bordered">
                           <thead class="text-center">
                               <tr>
-                                <th style="width: 22%">Nombre</th>
-                                <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
-                                <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                                <th style="width: 15%">Nombre</th>
+                                <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
+                                <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                                 <th style="width: 22%">Observaciones</th>
+                                <th>Ingreso Efectivo</th>
+                                <th>Fin</th>
                               </tr>
                           </thead>
                           <tbody>
                               @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                               <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                                  <td>{{ $applicant->replacement_staff->FullName }}</td>
+                                  <td>
+                                    <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
+                                      target="_blank">{{ $applicant->replacementStaff->FullName }}
+                                    </a>
+                                    <br>
+                                    @if($applicant->selected == 1 && $applicant->desist == NULL)
+                                      <span class="badge bg-success">Seleccionado</span>
+                                    @endif
+                                    @if($applicant->desist == 1)
+                                      <span class="badge bg-danger">Desiste Selección</span>
+                                    @endif
+                                  </td>
                                   <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                                   <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                                   <td>{{ $applicant->observations }}</td>
+                                  <td class="text-center">{{ ($applicant->start_date) ? $applicant->start_date->format('d-m-Y') : '' }}</td>
+                                  <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
                               </tr>
                               @endforeach
                           </tbody>

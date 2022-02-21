@@ -37,8 +37,16 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['database','single'],
             'ignore_exceptions' => false,
+        ],
+
+        // Log to MySQL
+        'database' => [
+            'driver' => 'custom',
+            'handler' => App\Logging\DatabaseHandler::class,
+            'via' => App\Logging\DatabaseVia::class,
+            'level' => 'debug',
         ],
 
         'single' => [

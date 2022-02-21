@@ -13,7 +13,7 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_entered_at">Fecha Ingreso</label>
             <p class="form-static mt-2" id="for_entered_at" name="entered_at">
@@ -29,7 +29,7 @@
 
         <fieldset class="form-group col">
             <label for="for_type">Tipo</label>
-            <select name="type" id="for_type" class="form-control">
+            <select name="type" id="for_type" class="form-control" required>
                 <option {{ ($parte->type == 'Carta')?'selected':'' }} value="Carta">Carta</option>
                 <option {{ ($parte->type == 'Circular')?'selected':'' }} value="Circular">Circular</option>
                 <option {{ ($parte->type == 'Decreto')?'selected':'' }} value="Decreto">Decreto</option>
@@ -81,7 +81,7 @@
 
 
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-5">
             <!--<label for="for_file">Archivo</label>-->
             <div class="custom-file">
@@ -103,8 +103,6 @@
 
 
 
-
-
         <fieldset class="form-group col-2">
             <label for="for_file">&nbsp;</label>
             <div>
@@ -114,7 +112,7 @@
 
         </form>
 
-        <fieldset class="form-group col-5">
+        <fieldset class="form-group col-10">
             <label for="for_file">Archivos</label>
             <div>
             @if($parte->files->count()>0)
@@ -142,6 +140,31 @@
             @endif
             </div>
         </fieldset>
+
+        @can('Partes: delete')
+            <fieldset class="form-group col-2">
+                <label for="for_delete">&nbsp;</label>
+                <div>
+                    @if($parte->created_at->diffInDays('now') <= 5)
+                    <form method="POST" style="display:inline-block;"
+                        action="{{ route('documents.partes.destroy', $parte) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </form>
+                    @else
+                        <button type="button" class="btn btn-outline-secondary" title="Han pasado más de 5 días" disabled>
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    @endif
+                </div>
+            </fieldset>
+            
+            
+        @endcan
+        
 
     </div>
 

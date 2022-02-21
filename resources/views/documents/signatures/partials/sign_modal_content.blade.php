@@ -1,7 +1,12 @@
 <div>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle"> @if(count($pendingSignaturesFlow->validationMessages) === 0)
-                Nro. OTP @else No es posible firmar aún @endif</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle"> 
+            @if(count($pendingSignaturesFlow->validationMessages) === 0)
+                Nro. OTP 
+            @else 
+                No es posible firmar aún 
+            @endif
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

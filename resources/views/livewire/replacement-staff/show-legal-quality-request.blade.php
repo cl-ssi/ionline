@@ -25,7 +25,7 @@
             <option value="">Seleccione...</option>
             @if(!is_null($detailFundaments))
             @foreach($detailFundaments as $detailFundament)
-                <option value="{{ $detailFundament->rstFundamentDetail->id }}">{{ $detailFundament->rstFundamentDetail->NameValue }}</option>
+                <option value="{{ $detailFundament->fundamentDetailManage->id }}">{{ $detailFundament->fundamentDetailManage->NameValue }}</option>
             @endforeach
             @endif
         </select>

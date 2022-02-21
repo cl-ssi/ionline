@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('drugs.nav')
+
 <h3>Editar Unidades Policiales</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('drugs.police_units.update', $policeUnit->id) }}">
@@ -22,7 +24,7 @@
 
     <div class="float-right">
         <a href="{{ route('drugs.police_units.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Enviar</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
     </div>
 
 </form>

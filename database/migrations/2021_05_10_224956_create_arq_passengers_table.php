@@ -32,7 +32,7 @@ class CreateArqPassengersTable extends Migration
             $table->dateTime('departure_date');
             $table->dateTime('return_date')->nullable();
             $table->string('baggage');
-            $table->float('unit_value');
+            $table->float('unit_value', 15, 2);
             $table->foreignId('request_form_id')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');

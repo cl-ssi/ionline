@@ -12,9 +12,9 @@ class Indicator extends Model
     use SoftDeletes;
     
     protected $fillable = ['number', 'name', 'weighting_by_section', 'evaluated_section_states', 'numerator',  
-                           'numerator_source','denominator', 'denominator_source',
-                           'numerator_cods','numerator_cols','denominator_cods',
-                           'denominator_cols','goal','weighting', 'establishment_cods'];
+                           'numerator_source', 'denominator', 'denominator_source', 'numerator_acum_last_year',
+                           'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_acum_last_year',
+                           'denominator_cols', 'goal', 'weighting', 'precision', 'establishment_cods'];
 
     public function indicatorable()
     {
@@ -114,9 +114,10 @@ class Indicator extends Model
 
     public function getContribution()
     {
+        if($this->values->isEmpty()) return 0;
         if(Str::contains(str_replace('≤', '<=', $this->goal), '<=')) return $this->getCompliance() <= preg_replace('/[^0-9.]/', '', $this->goal) ? $this->weighting : 0;
         $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
-        return $result > $this->weighting ? $this->weighting : $result;
+        return $result > $this->weighting ? $this->weighting : (!$this->precision ? $result : 0);
     }
 
     public function isFactorSourceREM($factor)

@@ -9,7 +9,7 @@
 
       <fieldset class="form-group col">
           <label for="for_product">Producto</label>
-          <select id="for_product" class="form-control" name="product_id" wire:model.lazy="product_id">
+          <select id="for_product" class="form-control" name="product_id" wire:model.lazy="product_id" required="">
               <option></option>
             @foreach ($products as $key => $product)
               <option value="{{$product->id}}">{{$product->name}}</option>

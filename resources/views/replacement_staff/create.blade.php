@@ -89,7 +89,7 @@
       <fieldset class="form-group col mt">
           <div class="mb-3">
               <label for="forcv_file" class="form-label">Adjuntar Curriculum</label>
-              <input class="form-control" type="file" name="cv_file" accept="application/pdf" required>
+              <input class="form-control" type="file" name="cv_file" id="for_cv_file" accept="application/pdf" required>
           </div>
       </fieldset>
     </div>
@@ -97,7 +97,7 @@
     <hr>
     <h5>Perfil Profesional</h5>
     <br>
-    
+
     @livewire('replacement-staff.profile')
 
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
@@ -119,6 +119,33 @@
   $(".custom-file-input").on("change", function() {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+
+
+  $('#for_cv_file').bind('change', function() {
+      //Validación de tamaño
+      if((this.files[0].size / 1024 / 1024) > 3){
+          alert('No puede cargar un pdf de mas de 3 MB.');
+          $('#for_cv_file').val('');
+      }
+
+      //Validación de pdf
+      const allowedExtension = ".pdf";
+      let hasInvalidFiles = false;
+
+      for (let i = 0; i < this.files.length; i++) {
+          let file = this.files[i];
+
+          if (!file.name.endsWith(allowedExtension)) {
+              hasInvalidFiles = true;
+          }
+      }
+
+      if(hasInvalidFiles) {
+          $('#for_cv_file').val('');
+          alert("Debe seleccionar un archivo pdf.");
+      }
+
   });
 </script>
 

@@ -39,8 +39,8 @@ class ReplacementStaff extends Model
         return $this->belongsTo('\App\Models\ClRegion');
     }
 
-    public function commune() {
-        return $this->belongsTo('\App\Models\ClCommune');
+    public function clCommune() {
+        return $this->belongsTo('\App\Models\ClCommune', 'commune_id');
     }
 
     public function profiles() {
@@ -79,6 +79,27 @@ class ReplacementStaff extends Model
               break;
         }
     }
+
+    public function getGenderValueAttribute()
+    {
+        switch ($this->gender) {
+            case 'male':
+              return 'Masculino';
+              break;
+            case 'female':
+              return 'Femenino';
+              break;
+            case 'other':
+              return 'Otro';
+              break;
+            case 'unknown':
+              return 'Desconocido';
+              break;
+            default:
+              return '';
+              break;
+        }
+      }
 
     public function scopeSearch($query, $search, $profile_search, $profession_search)
     {

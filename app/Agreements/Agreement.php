@@ -13,7 +13,8 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'total_amount', 'referente', 
+        'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
     ];
 
     protected $casts = [
@@ -37,7 +38,7 @@ class Agreement extends Model
     }
 
     public function referrer() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function municipality() {
@@ -88,22 +89,25 @@ class Agreement extends Model
     }
 
     public function getEndorseStateBySignPos($i){
-        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-            if($signatureFlow->sign_position == $i)
-                return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        if($this->fileToEndorse)
+            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == $i)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
         return 'fa-ellipsis-h';
     }
 
     public function getEndorseObservationBySignPos($i){
-        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-            if($signatureFlow->sign_position == $i)
-                return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        if($this->fileToEndorse)
+            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == $i)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
         return 'En espera';
     }
 
     public function isEndorsePendingBySignPos($i){
-        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
-            if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
+        if($this->fileToEndorse)
+            foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
         return false;
     }
     

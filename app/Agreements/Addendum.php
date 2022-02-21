@@ -22,7 +22,7 @@ class Addendum extends Model
     }
 
     public function referrer() {
-        return $this->belongsTo('App\User', 'referrer_id');
+        return $this->belongsTo('App\User', 'referrer_id')->withTrashed();
     }
 
     public function director_signer() {

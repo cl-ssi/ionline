@@ -463,11 +463,13 @@ class RequirementController extends Controller
         }
 
         //se ingresan los otros tipos de eventos (que no sean "en copia")
-        $user_aux = User::where('id', $user)->get();
         $firstEvent = new Event($request->All());
         //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
-        $firstEvent->to_user_id = $user;
-        $firstEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
+        $user_aux = User::find($user);
+        if($user_aux){
+          $firstEvent->to_user_id = $user_aux->id;
+          $firstEvent->to_ou_id = $user_aux->organizational_unit_id;
+        }
         $firstEvent->from_user()->associate(Auth::user());
         $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
         $firstEvent->requirement()->associate($requirement);
@@ -598,7 +600,7 @@ class RequirementController extends Controller
         ->get();
     }
 
-    //dd('entro aca');
+    
     return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 

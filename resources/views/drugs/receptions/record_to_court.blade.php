@@ -41,7 +41,7 @@
     <strong>DE:</strong>
 </div>
 <div style="weight: bold;float:left; text-transform: uppercase;">
-    <strong>{{ $recordToCourt->lawyer->position }}<br>{{ config('app.ss') }}</strong>
+    <strong>{{ $recordToCourt->lawyer->position }}<br>{{ env('APP_SS') }}</strong>
 </div>
 
 <div style="clear: both; padding-bottom: 10px"></div>
@@ -63,7 +63,7 @@
         <li style="padding-bottom: 10px;">
             <strong>Acta de recepción N°: {{ $reception->id }}</strong>
             del <strong>{{ $reception->created_at->format('d-m-Y') }}</strong>
-            de la Unidad de Drogas del Servicio de Salud de Iquique.
+            de la Unidad de Drogas del {{ env('APP_SS') }}.
         </li>
 
         <li style="padding-bottom: 10px;">
@@ -78,7 +78,7 @@
         @if(count($itemsSEREMI) >= 1)
         <li style="padding-bottom: 10px;">
             Protocolos de análisis de la Unidad de Análisis del
-            Servicio de Salud de Iquique, correspondiente
+            {{ env('APP_SS') }}, correspondiente
             al decomiso del parte señalado en los antecedentes.
             <ol>
                 @foreach($itemsSEREMI as $itemSEREMI)
@@ -115,7 +115,7 @@
         <li style="padding-bottom: 10px;">
             La presente delegación de firma se aprobó por resolución exenta
             <strong>{{ $mandato }}</strong> de la Dirección
-            del {{ config('app.ss') }}.
+            del {{ env('APP_SS') }}.
         </li>
 
     </ol>
@@ -123,19 +123,19 @@
 
 <!-- FIXME: El genero del director debería estar en parametro -->
 <p>
-    Saluda atentamente a usted, "Por orden del Director del {{ config('app.ss') }}".
+    Saluda atentamente a usted, "Por orden del Director del {{ env('APP_SS') }}".
 </p>
 
 
-<div id="firmas">
+<!-- <div id="firmas">
     <div class="center" style="width: 100%;">
         <p class="uppercase">
             {{ $recordToCourt->lawyer->FullName }}<br>
             {{ $recordToCourt->lawyer->position }}<br>
-            {{ config('app.ss') }}
+            {{ env('APP_SS') }}
         </p>
     </div>
-</div>
+</div> -->
 
 
 <div class="row">
@@ -150,13 +150,13 @@
         </p>
     </div>
 
-    <div class="column right">
+    <!-- <div class="column right">
             <p style="padding-right: 117px">
                 <strong>Responsables:</strong>
-            </p>
+            </p> -->
             <!--li>Departamento de Asesoría Jurídica  {{ $reception->recordToCourt->lawyer->Initials }}  _______</li-->
-            Unidad de Drogas &nbsp;&nbsp; {{ $reception->recordToCourt->manager->Initials }} &nbsp;&nbsp; _______
-    </div>
+            <!-- Unidad de Drogas &nbsp;&nbsp; {{ $reception->recordToCourt->manager->Initials }} &nbsp;&nbsp; _______
+    </div> -->
 </div>
 
 @endsection

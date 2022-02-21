@@ -104,7 +104,7 @@ class ApplicantController extends Controller
 
         return redirect()
           ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
-          ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacement_staff->FullName);
+          ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
     }
 
     /**
@@ -140,17 +140,20 @@ class ApplicantController extends Controller
             $applicant_evaluated->selected = 1;
             $applicant_evaluated->save();
 
-            $technicalEvaluation = TechnicalEvaluation::Find($applicant->technicalEvaluation)->first();
+            $technicalEvaluation = TechnicalEvaluation::
+              where('id', $applicant_evaluated->technical_evaluation_id)
+              ->first();
+
             $now = Carbon::now();
             $technicalEvaluation->date_end = $now;
             $technicalEvaluation->technical_evaluation_status = 'complete';
             $technicalEvaluation->save();
 
-            $technicalEvaluation->applicants->find($applicant_evaluated)->replacement_staff->status = 'selected';
-            $technicalEvaluation->applicants->find($applicant_evaluated)->replacement_staff->save();
-
             $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
             $technicalEvaluation->requestReplacementStaff->save();
+
+            $applicant_evaluated->replacementStaff->status = 'selected';
+            $applicant_evaluated->replacementStaff->save();
 
             //Request
             $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
@@ -172,5 +175,52 @@ class ApplicantController extends Controller
         return redirect()
           ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
           ->with('message-success-aplicant-finish', 'Estimado usuario, ha completado el proceso de selección');
+    }
+
+    public function decline_selected_applicant(Applicant $applicant){
+        $applicant->desist = 1;
+        $applicant->save();
+
+        $applicants = Applicant::where('technical_evaluation_id', $applicant->technical_evaluation_id)
+          ->where('selected', 1)
+          ->where('desist', NULL)
+          ->get();
+
+        if($applicants->count() == 0){
+            $applicant->technicalEvaluation->technical_evaluation_status = 'rejected';
+            $applicant->technicalEvaluation->date_end = Carbon::now();
+            $applicant->technicalEvaluation->reason = 'rechazo oferta laboral';
+            $applicant->technicalEvaluation->observation = 'Totalidad de postulantes rechazan proceso de selección';
+            $applicant->technicalEvaluation->save();
+
+            $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'rejected';
+            $applicant->technicalEvaluation->requestReplacementStaff->save();
+
+            $applicant->replacementStaff->status = 'immediate_availability';
+            $applicant->replacementStaff->save();
+
+            //Request
+            $mail_request = $applicant->technicalEvaluation->requestReplacementStaff->user->email;
+            //Manager
+            $type = 'manager';
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate($applicant->technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), $type);
+
+            $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
+
+            $emails = [$mail_request,
+                        $mail_notification_ou_manager->user->email,
+                        $ou_personal_manager->user->email];
+
+            Mail::to($emails)
+              ->cc(env('APP_RYS_MAIL'))
+              ->send(new EndSelectionNotification($applicant->technicalEvaluation));
+
+            return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $applicant->technicalEvaluation]);
+        }
+        else{
+            return redirect()
+              ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+              ->with('message-danger-aplicant-desist', 'Estimado usuario, el postulante ha desestimado el proceso de selección');
+        }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Drugs\SampleToIsp;
-use App\Drugs\Reception;
+use App\Models\Drugs\SampleToIsp;
+use App\Models\Drugs\Reception;
 use App\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

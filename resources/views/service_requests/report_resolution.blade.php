@@ -171,7 +171,7 @@
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->estate == "Profesional Médico")
+        @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
         Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
@@ -230,7 +230,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{ $ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -239,7 +239,7 @@
         </tr>
       </table>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <table class="siete">
         <tr>
           <th>Nombre</th>
@@ -252,13 +252,13 @@
           <th>Valor por Hora</th>
         </tr>
         <tr>
-          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
-          <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
-          <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
-          <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
-          <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->employee->runFormat()}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->working_day_type}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->start_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->end_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{ $ServiceRequest->responsabilityCenter->name}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
         </tr>
       </table>
@@ -276,7 +276,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
@@ -307,9 +307,19 @@
       <p class="justify">
         <strong>PRIMERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+          Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a
+          {{$ServiceRequest->employee->getFullNameAttribute()}},
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}),
+          para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+          D. {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de
+          {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del
+          Servicio de Salud Iquique de Iquique, contrata a
+          {{$ServiceRequest->employee->getFullNameAttribute()}},
+          ({{ optional($ServiceRequest->profession)->name ?? $ServiceRequest->estate }} - {{$ServiceRequest->working_day_type}}),
+          para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
 
@@ -367,7 +377,7 @@
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>SÉPTIMO:</strong>
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
@@ -382,7 +392,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         del Hospital Dr. Ernesto Torres Galdames de Iquique,
         @else
@@ -399,7 +415,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
       @endif
       @endif
@@ -423,7 +445,13 @@
       @else
       Servicio de Salud Iquique,
       @endif
-      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+      10
+      @else
+      5
+      @endif
+      del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       del Hospital Dr. Ernesto Torres Galdames de Iquique,
       @else
@@ -455,7 +483,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br>
         Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -466,7 +500,7 @@
         el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -475,7 +509,13 @@
         Jefe
         @endif del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
         <br><br>
-        El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+        El pago será efectuado el día
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br><br>
         Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Unidad de Honorarios Covid del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -505,7 +545,7 @@
         <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
       </p>
@@ -546,14 +586,20 @@
         Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
         se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
         jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
-        los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
+        Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
+        Los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
         como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
-        informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+        informe de prestaciones mensual.
+        Los reiterados atrasos e inasistencias deberán ser amonestados.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
-        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de sus horas realizadas.
+        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
+        se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio,
+        en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+        si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
+        Los atrasos superiores a una hora, serán descontados de sus horas realizadas.
       </p>
       @else
       <p class="justify">
@@ -568,7 +614,7 @@
         <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
@@ -634,7 +680,7 @@
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="justify">
         <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el presente convenio de honorarios covid, el prestador no dará derecho a beneficios de feriados legales, permisos administrativos y otro tipo de permisos contemplados y/o asimilados a funciones estatutarias, complementariamente con respecto al ausentismo por licencias médicas.
         <br><br>
@@ -671,11 +717,19 @@
       <p class="">
 
         <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
-        @if($ServiceRequest->estate == "Profesional Médico")
-        Médico,
+        @if($ServiceRequest == NULL)
+          @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
+            Médico,
+          @else
+            No Médico,
+          @endif
+        {{-- Compatibilidad con el antigo state --}}
+        @elseif($ServiceRequest->estate == 'Profesional Médico')
+         Médico,
         @else
-        No Médico,
+          No Médico,
         @endif
+
         del presupuesto del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital “Dr. Ernesto Torres Galdames” de Iquique.
@@ -684,7 +738,7 @@
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
       <p class="">
         <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)

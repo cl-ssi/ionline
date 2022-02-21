@@ -97,15 +97,32 @@
 								<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 								<td nowrap>{{$serviceRequest->programm_name}}</td>
 								<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-								<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+								@if($serviceRequest->profession)
+									<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+								@else
+									<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+								@endif
 								<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 								<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+								@if($serviceRequest->profession)
+									<td nowrap>{{$serviceRequest->profession->estamento}}</td>
+									<td nowrap>
+											@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+												Apoyo Administrativo
+											@else
+												Apoyo Clínico
+											@endif
+									</td>
+								@else
 								<td nowrap>{{$serviceRequest->estate}}</td>
-								<td nowrap>@if($serviceRequest->estate == "Administrativo")
-														Apoyo Administrativo
-													@else
-														Apoyo Clínico
-													@endif</td>
+								<td nowrap>
+										@if($serviceRequest->estate == "Administrativo")
+											Apoyo Administrativo
+										@else
+											Apoyo Clínico
+										@endif
+								</td>
+								@endif
 								<td nowrap>{{$serviceRequest->gross_amount}}</td>
 								<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
 													 @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
@@ -142,15 +159,32 @@
 										<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 										<td nowrap>{{$serviceRequest->programm_name}}</td>
 										<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-										<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+										@if($serviceRequest->profession)
+											<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+										@else
+											<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+										@endif
 										<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 										<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+										@if($serviceRequest->profession)
+											<td nowrap>{{$serviceRequest->profession->estamento}}</td>
+											<td nowrap>
+													@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+														Apoyo Administrativo
+													@else
+														Apoyo Clínico
+													@endif
+											</td>
+										@else
 										<td nowrap>{{$serviceRequest->estate}}</td>
-										<td nowrap>@if($serviceRequest->estate == "Administrativo")
-																Apoyo Administrativo
-															@else
-																Apoyo Clínico
-															@endif</td>
+										<td nowrap>
+												@if($serviceRequest->estate == "Administrativo")
+													Apoyo Administrativo
+												@else
+													Apoyo Clínico
+												@endif
+										</td>
+										@endif
 										<td nowrap>{{$serviceRequest->gross_amount}}</td>
 										<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
 															 @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
@@ -185,15 +219,32 @@
 									<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 									<td nowrap>{{$serviceRequest->programm_name}}</td>
 									<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-									<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+									@if($serviceRequest->profession)
+										<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+									@else
+										<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+									@endif
 									<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 									<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+									@if($serviceRequest->profession)
+										<td nowrap>{{$serviceRequest->profession->estamento}}</td>
+										<td nowrap>
+												@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+													Apoyo Administrativo
+												@else
+													Apoyo Clínico
+												@endif
+										</td>
+									@else
 									<td nowrap>{{$serviceRequest->estate}}</td>
-									<td nowrap>@if($serviceRequest->estate == "Administrativo")
-															Apoyo Administrativo
-														@else
-															Apoyo Clínico
-														@endif</td>
+									<td nowrap>
+											@if($serviceRequest->estate == "Administrativo")
+												Apoyo Administrativo
+											@else
+												Apoyo Clínico
+											@endif
+									</td>
+									@endif
 									<td nowrap>{{$serviceRequest->gross_amount}}</td>
 									<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
 														 @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
@@ -232,15 +283,32 @@
 						<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 						<td nowrap>{{$serviceRequest->programm_name}}</td>
 						<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-						<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+						@if($serviceRequest->profession)
+							<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+						@else
+							<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+						@endif
 						<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 						<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+						@if($serviceRequest->profession)
+							<td nowrap>{{$serviceRequest->profession->estamento}}</td>
+							<td nowrap>
+									@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+										Apoyo Administrativo
+									@else
+										Apoyo Clínico
+									@endif
+							</td>
+						@else
 						<td nowrap>{{$serviceRequest->estate}}</td>
-						<td nowrap>@if($serviceRequest->estate == "Administrativo")
-												Apoyo Administrativo
-											@else
-												Apoyo Clínico
-											@endif</td>
+						<td nowrap>
+								@if($serviceRequest->estate == "Administrativo")
+									Apoyo Administrativo
+								@else
+									Apoyo Clínico
+								@endif
+						</td>
+						@endif
 						<td nowrap>{{$serviceRequest->gross_amount}}</td>
 						<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
 											 @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
@@ -317,15 +385,32 @@
 					<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
-          <td nowrap>{{$serviceRequest->rrhh_team}}</td>
+					@if($serviceRequest->profession)
+						<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+					@else
+						<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+					@endif
           <td nowrap>{{$serviceRequest->weekly_hours}}</td>
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-          <td nowrap>{{$serviceRequest->estate}}</td>
-          <td nowrap>@if($serviceRequest->estate == "Administrativo")
-                      Apoyo Administrativo
-                    @else
-                      Apoyo Clínico
-                    @endif</td>
+					@if($serviceRequest->profession)
+						<td nowrap>{{$serviceRequest->profession->estamento}}</td>
+						<td nowrap>
+								@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+									Apoyo Administrativo
+								@else
+									Apoyo Clínico
+								@endif
+						</td>
+					@else
+					<td nowrap>{{$serviceRequest->estate}}</td>
+					<td nowrap>
+							@if($serviceRequest->estate == "Administrativo")
+								Apoyo Administrativo
+							@else
+								Apoyo Clínico
+							@endif
+					</td>
+					@endif
           <td nowrap>{{$serviceRequest->gross_amount}}</td>
           <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
                      @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>

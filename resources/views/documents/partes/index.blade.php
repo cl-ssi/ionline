@@ -110,15 +110,6 @@
                         <i class="fas fa-rocket"></i>
                     </a>
 
-                    @can('be god')
-                    <a class="btn btn-sm btn-primary" href="{{ route('documents.partes.edit', $parte) }}"
-                        disabled
-                        data-toggle="tooltip" data-placement="top"
-                        data-original-title="Informar">
-                        <i class="fas fa-paper-plane"></i>
-                    </a>
-                    @endcan
-
                     @if($parte->viewed_at)
                         <button class="btn btn-sm btn-outline-dark"
                             data-toggle="tooltip" data-placement="top" readonly

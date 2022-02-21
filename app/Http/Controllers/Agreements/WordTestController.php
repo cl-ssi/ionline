@@ -30,7 +30,7 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 
 class WordTestController extends Controller
 {
-    public function createWordDocx($id)
+    public function createWordDocx(Request $request, $id)
     {
     	// SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
     	$agreements     = Agreement::with('Program','Commune','agreement_amounts','director_signer.user')->where('id', $id)->first();
@@ -69,7 +69,7 @@ class WordTestController extends Controller
 
     	// ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
     	foreach ($amounts as $key => $amount) {
-			$arrayComponent[] = array('index' => $key+1, 'componenteNombre' => $amount->program_component->name);
+			$arrayComponent[] = array('componenteIndex' => $key+1, 'componenteNombre' => $amount->program_component->name);
     	}
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
@@ -82,14 +82,16 @@ class WordTestController extends Controller
         foreach ($quotas as $key => $quota) {
                 $cuotaConvenioLetras = $this->correctAmountText($formatter->toMoney($quota->amount,0, 'pesos',''));
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
+                                      ,'percentage' => $quota->percentage ?? 0
                                       ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30 del año 2015, de la Contraloría General de la República que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
                                       ,'cuotaLetra' => $cuotaConvenioLetras);
              } 
 
         $totalQuotas = mb_strtolower($formatter->toMoney(count($quotas),0));
+        if($totalQuotas == 'un ') $totalQuotas = 'una cuota'; else $totalQuotas .= 'cuotas';
 
-    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio2021.docx'));
+    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio'.$agreements->period.'.docx'));
 
     	$periodoConvenio = $agreements->period;
     	// $fechaConvenio = $agreements->date;
@@ -99,6 +101,11 @@ class WordTestController extends Controller
         $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
     	// $referente = $agreements->referente;
         $alcaldeApelativo = $agreements->representative_appelative;
+        if(Str::contains($alcaldeApelativo, 'Subrogante')){
+            $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+        }else{
+            $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+        }
         $alcalde = $agreements->representative;
         $alcaldeDecreto = $agreements->representative_decree;
     	$municipalidad = $municipality->name_municipality;
@@ -139,6 +146,7 @@ class WordTestController extends Controller
 		$templateProcesor->setValue('municipalidad',$municipalidad);
 		$templateProcesor->setValue('municipalidadDirec',$municipalidadDirec);
 		$templateProcesor->setValue('alcaldeApelativo',$alcaldeApelativo);
+		$templateProcesor->setValue('alcaldeApelativoFirma',mb_strtoupper($alcaldeApelativoFirma));
         $templateProcesor->setValue('alcalde',mb_strtoupper($alcalde));
 		$templateProcesor->setValue('alcaldeRut',$alcaldeRut);
         $templateProcesor->setValue('alcaldeDecreto',$alcaldeDecreto);
@@ -151,11 +159,47 @@ class WordTestController extends Controller
         $templateProcesor->setValue('directorNationality',$directorNationality);
         $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
 
+        if(count($quotas) == 12){ // 12 cuotas
+            $totalQuotasText = $arrayQuota[0]['cuotaMonto'] == $arrayQuota[11]['cuotaMonto'] 
+                                ? 'doce cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].')'
+                                : 'once cuotas de $'.$arrayQuota[0]['cuotaMonto'].' ('.$arrayQuota[0]['cuotaLetra'].') y una cuota de $'.$arrayQuota[11]['cuotaMonto'].' ('.$arrayQuota[11]['cuotaLetra'].')';
+            $templateProcesor->setValue('totalQuotasText', $totalQuotasText);
+        }
+
         // CLONE BLOCK PARA LISTAR COMPONENTES
-        if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
+        ini_set("pcre.backtrack_limit", -1);
         $templateProcesor->cloneBlock('componentesListado', 0, true, false,$arrayComponent);
         // CLONE BLOCK PARA LISTAR CUOTAS
         $templateProcesor->cloneBlock('cuotasListado', 0, true, false,$arrayQuota);
+        //CLONE BLOCK PARA 1, 2, 3 Y 12 CUOTAS
+        $blocks = [1 => 'ONE_QUOTA_BLOCK', 2 => 'TWO_QUOTAS_BLOCK', 3 => 'THREE_QUOTAS_BLOCK', 12 => 'TWELVE_QUOTAS_BLOCK'];
+
+        foreach($blocks as $n => $block){
+            if(count($quotas) == $n){
+                if($n == 1){
+                    $templateProcesor->cloneBlock($block, 1, true, false, $arrayQuota);
+                } else {
+                    $templateProcesor->cloneBlock($block, 1, true, false);
+                    foreach ($arrayQuota as $key => $item){
+                        foreach ($item as $search => $replace){
+                            $templateProcesor->setValue($search."#".($key+1), $replace, ($n == 12 && ($key+1) == 1) ? 2 : 1); //repeat values (only first quota) 2 times when twelve quotas block is cloned 
+                        }
+                    }
+                }
+            } else {
+                $templateProcesor->cloneBlock($block, 0); //Borrar este bloque no se va a ocupar
+            }
+        }
+
+        if($request->has('eval_option')){
+            //CLONE BLOCK PARA OPCIONES EVALUACIONES TECNICAS
+            $blocks = [1 => 'FIRST_EVAL_OPTION_BLOCK', 2 => 'SECOND_EVAL_OPTION_BLOCK', 3 => 'THIRD_EVAL_OPTION_BLOCK'];
+            foreach($blocks as $n => $block)
+                if($n == $request->eval_option)
+                    $templateProcesor->cloneBlock($block, 1, true, false);
+                else
+                    $templateProcesor->cloneBlock($block, 0); //Borrar este bloque no se va a ocupar
+        }
 
         $templateProcesor->setValue('establecimientosListado',$arrayEstablishmentConcat);
 
@@ -179,9 +223,9 @@ class WordTestController extends Controller
         $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio, 0, 'pesos',''));
         
         // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
-        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead.docx'));
+        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead'.$agreements->period.'.docx'));
         $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
-        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter.docx'));
+        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter'.$agreements->period.'.docx'));
 
         // Parametros a imprimir en los archivos abiertos
         $periodoConvenio = $agreements->period;
@@ -197,6 +241,7 @@ class WordTestController extends Controller
         $comuna = $agreements->Commune->name; 
         $first_word = explode(' ',trim($agreements->Program->name))[0];
         $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
+        if($agreements->period >= 2022) $programa = mb_strtoupper($programa);
         
         //Director ssi quien firma a la fecha de hoy
         $director = Signer::find($request->signer_id);
@@ -231,15 +276,19 @@ class WordTestController extends Controller
         // extract internal xml from template that will be merged inside main template
         $innerXml = $midTemplateProcessor->tempDocumentMainPart;
         $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
-        
+        // dd($innerXml);
         // remove tag containing header, footer, images
         // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
         
         //remove signature blocks
-        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
-        // dd($innerXml);
-        $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año 2021”.</w:t></w:r></w:p>';
-        
+        // if($agreements->period >= 2022){
+            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique año');
+            $innerXml .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        // }else{
+        //     $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
+        //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        // }
+
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
         $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);

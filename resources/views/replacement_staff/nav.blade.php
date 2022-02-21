@@ -11,7 +11,7 @@
 
     @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
         Auth::user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
-        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
+        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id ))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-inbox"></i> Solicitudes
@@ -22,7 +22,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.own_index') }}"><i class="fas fa-inbox"></i> Mis Solicitudes</a>
 
-                <a class="dropdown-item disabled" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
+                <a class="dropdown-item" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
@@ -41,7 +41,7 @@
     @canany(['Replacement Staff: assign request', 'Replacement Staff: technical evaluation'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-            <i class="fas fa-users"></i> Unidad de Reclutamiento
+            <i class="fas fa-users"></i> Reclutamiento
         </a>
 
         <div class="dropdown-menu">
@@ -52,8 +52,28 @@
             <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Evaluación Técnica</a>
             @endcan
         </div>
-   </li>
-   @endcan
+    </li>
+    @endcan
+
+    @if(Auth::user()->hasPermissionTo('Replacement Staff: view requests') ||
+      Auth::user()->hasRole('Replacement Staff: admin') ||
+      App\Rrhh\Authority::getAuthorityFromDate(46, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id)
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <i class="fas fa-users"></i> Personal y Ciclo de Vida laboral
+        </a>
+
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.pending_personal_index') }}">
+              <i class="fas fa-inbox"></i> Solicitudes Pendientes
+            </a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.personal_index') }}">
+              <i class="fas fa-inbox"></i> Solicitudes Finalizadas
+            </a>
+        </div>
+    </li>
+    @endif
+
 
     @canany(['Replacement Staff: manage'])
     <li class="nav-item dropdown">
@@ -61,9 +81,7 @@
             <i class="fas fa-file"></i> Reportes
         </a>
         <div class="dropdown-menu">
-            @can('Replacement Staff: manage')
-            <a class="dropdown-item" href=""><i class="fas fa-file"></i> Evaluaciones por RR.HH.</a>
-            @endcan
+            <a class="dropdown-item" href="{{ route('replacement_staff.reports.replacement_staff_historical') }}">Staff: Historico por Persona</a>
         </div>
    </li>
    @endcan

@@ -113,7 +113,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
                 <div style="padding-bottom: 4px;">___________________________________</div>
                 <div style="padding-bottom: 4px;">{{Auth::user()->fullName}}</div>
                 <div style="padding-bottom: 4px;">REFERENTE TÉCNICO PROGRAMA DE REHABILITACIÓN INTEGRAL</div>
-                <div>{{ config('app.ss') }}</div>
+                <div>{{ env('APP_SS') }}</div>
             </div>
 
 
@@ -133,7 +133,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
             </div>
 
             <div class="pie_pagina seis center">
-                <!--{{ config('app.ss') }}<br-->
+                <!--{{ env('APP_SS') }}<br-->
                 {{ env('APP_SS_ADDRESS') }} - Fono: {{ env('APP_SS_TELEPHONE') }} - {{ env('APP_SS_WEBSITE') }}
             </div>
         </div>

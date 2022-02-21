@@ -187,7 +187,7 @@
         @endforeach
     @endif
 @endif
-@php($commune_tab = isset($iaps->communes) && !array_search("IQUIQUE", $iaps->communes->toArray()) ? "#".str_replace(" ","_",$iaps->communes[0]) : "#IQUIQUE")
+@php($commune_tab = isset($iaps->communes) && !$iaps->communes->isEmpty() && !array_search("IQUIQUE", $iaps->communes->toArray()) ? "#".str_replace(" ","_",$iaps->communes[0]) : "#IQUIQUE")
 @endsection
 
 @section('custom_js')

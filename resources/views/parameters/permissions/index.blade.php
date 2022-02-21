@@ -30,7 +30,7 @@
         <tr>
             <td>{{ $permission->id }}</td>
             <td>{{ $permission->name }}</td>
-            <td>{{ $permission->descripcion }}</td>
+            <td>{{ $permission->description }}</td>
             <td>{{ $permission->guard_name }}</td>
             <td>
                 <a href="{{ route('parameters.permissions.edit', $permission->id )}}">

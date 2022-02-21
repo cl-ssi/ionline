@@ -41,7 +41,7 @@
             <div class="form-row">
                   <fieldset class="form-group col-sm-5">
                       <label for="exampleFormControlTextarea1" class="form-label">Especificaciones Técnicas:</label>
-                      <textarea wire:model.defer="technicalSpecifications" name="technicalSpecifications" class="form-control" rows="2"></textarea>
+                      <textarea wire:model.defer="technicalSpecifications" name="technicalSpecifications" class="form-control form-control-sm" rows="2"></textarea>
                   </fieldset>
                   <fieldset class="form-group col-sm-3">
                       <label>Tipo de Impuestos:</label><br>
@@ -50,7 +50,7 @@
                         <option value="iva">I.V.A. 19%</option>
                         <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
                         <option value="srf">S.R.F Zona Franca 0%</option>
-                        <option value="e">Excento 0%</option>
+                        <option value="e">Exento 0%</option>
                         <option value="nd">No Definido</option>
                       </select>
                   </fieldset>
@@ -77,7 +77,7 @@
         </div>
     </div><!-- FILA 5 --><!--Valida la variable error para que solo contenga validación de los Items-->
 
-    @if (count($errors) > 0 and !$errors->has('program') and !$errors->has('justify') and !$errors->has('purchaseMechanism') and !$errors->has('items'))
+    @if (count($errors) > 0 and !$errors->has('program') and !$errors->has('justify') and !$errors->has('purchaseMechanism') and !$errors->has('items') and !$errors->has('balance'))
     <div class="row justify-content-around mt-0">
         <div class="alert alert-danger col-6 mt-1">
             <p>Corrige los siguientes errores:</p>

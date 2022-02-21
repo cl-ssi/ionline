@@ -21,5 +21,6 @@ class RstFundamentDetailSeeder extends Seeder
         FundamentDetailManage::Create(['name'=>'replacement previous announcement']);
         FundamentDetailManage::Create(['name'=>'internal announcement']);
         FundamentDetailManage::Create(['name'=>'mixed announcement']);
+        FundamentDetailManage::Create(['name'=>'other']);
     }
 }

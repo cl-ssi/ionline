@@ -154,10 +154,10 @@
 
       <div class="right" style="float: right; width: 340px;">
         <div class="left" style="padding-bottom: 6px;">
-          <strong>NÚMERO DE FORMULARIO DE REQUERIMIENTO: {{ number_format($requestForm->id,0,",",".") }}</strong>
+          <strong>N° DE FORMULARIO DE REQUERIMIENTO: {{ $requestForm->folio }}</strong>
         </div>
         <div class="left" style="padding-bottom: 2px;">
-          <strong>Iquique, {{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</strong>
+          <strong>Iquique, {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</strong>
         </div>
       </div>
 
@@ -169,6 +169,12 @@
               <th align="left" style="width: 50%">Gasto Estimado</th>
               <td colspan="2">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
           </tr>
+          @if($requestForm->has_increased_expense)
+          <tr>
+              <th align="left" style="width: 50%">Nuevo presupuesto</th>
+              <td colspan="2">${{ number_format($requestForm->new_estimated_expense,0,",",".") }}</td>
+          </tr>
+          @endif
           <tr>
               <th align="left">Solicitante</th>
               <td colspan="2">{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
@@ -207,30 +213,41 @@
               <td colspan="2">{{ $requestForm->program }}</td>
           </tr>
           <tr>
-              <th align="left" rowspan="4">Mecanismo de adquisición</th>
+              <th align="left">Justificación</th>
+              <td colspan="2">{{ $requestForm->justification }}</td>
+          </tr>
+          <tr>
+              <th align="left" rowspan="5">Mecanismo de adquisición</th>
               <td>Menores a 3 UTM</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'MENORES A 3 UTM')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 1)
                       X
                   @endif
               </td>
           </tr>
           <tr>
               <td>Convenio Marco</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'CONVENIO MARCO')
-                      X
-                  @endif
-              </td>
-          </tr>
-          <tr>
-              <td>Licitación Pública</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'LICITACIÓN PUBLICA')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 2)
                       X
                   @endif
               </td>
           </tr>
           <tr>
               <td>Trato Directo</td>
-              <td align="center">@if($requestForm->getPurchaseMechanism() == 'TRATO DIRECTO')
+              <td align="center">@if($requestForm->purchase_mechanism_id == 3)
+                      X
+                  @endif
+              </td>
+          </tr>
+          <tr>
+              <td>Licitación Pública</td>
+              <td align="center">@if($requestForm->purchase_mechanism_id == 4)
+                      X
+                  @endif
+              </td>
+          </tr>
+          <tr>
+              <td>Compra Ágil</td>
+              <td align="center">@if($requestForm->purchase_mechanism_id == 5)
                       X
                   @endif
               </td>
@@ -242,23 +259,63 @@
       <table class="siete">
           <thead>
               <tr>
-                  <th style="width: 5%">Ítem</th>
-                  <th style="width: 40%">Articulo</th>
-                  <th style="width: 10%">Cantidad</th>
-                  <th style="width: 45%">Especificaciones Técnicas</th>
+                  <th>#</th>
+                  <th>Ítem Pres.</th>
+                  <th>Articulo</th>
+                  <th>Especificaciones Técnicas</th>
+                  <th>Cantidad</th>
+                  <th>Valor Unitario Neto</th>
+                  <th>Valor Total *</th>
               </tr>
           </thead>
           <tbody>
               @foreach($requestForm->itemRequestForms as $key => $item)
               <tr>
                   <td>{{ $key+1 }}</td>
+                  <td>{{ $item->budgetItem->code }}</td>
                   <td>{{ $item->article }}</td>
-                  <td align="right">{{ $item->quantity }}</td>
                   <td>{{ $item->specification }}</td>
+                  <td align="right">{{ number_format($item->quantity,0,",",".") }}</td>
+                  <td align="right">
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($item->unit_value,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($item->unit_value,2,",",".") }}
+                    @else
+                      UF ${{ number_format($item->unit_value,2,",",".") }}
+                    @endif
+                  </td>
+                  <td align="right">
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($item->expense,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($item->expense,2,",",".") }}
+                    @else
+                      UF ${{ number_format($item->expense,2,",",".") }}
+                    @endif
+                  </td>
               </tr>
               @endforeach
           </tbody>
+          <tfoot>
+              <tr align="right">
+                  <th colspan="6">Total</th>
+                  <th>
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($requestForm->estimated_expense,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($requestForm->estimated_expense,2,",",".") }}
+                    @else
+                      UF ${{ number_format($requestForm->estimated_expense,2,",",".") }}
+                    @endif
+                  </th>
+              </tr>
+          </tfoot>
       </table>
+
+      <div>
+          <p align="right">* El valor total presenta impuestos incluidos.</p>
+      </div>
 
       <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
@@ -275,15 +332,16 @@
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
-                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->position_signer_user }}</td>
+                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->position_signer_user }}
+                      {{ $requestForm->eventSigner('leader_ship_event', 'approved')->signerOrganizationalUnit->name }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>
                   <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->StatusValue }}</td>
               </tr>
           </tbody>
       </table>
@@ -310,14 +368,6 @@
                   <td></td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Ítem Presupuestario</th>
-                  <td>
-                      @foreach($requestForm->itemRequestForms as $item)
-                          {{ $item->budgetItem->code }}
-                      @endforeach
-                  </td>
-              </tr>
-              <tr>
                   <th align="left" style="width: 50%">Monto $</th>
                   <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
               </tr>
@@ -339,24 +389,26 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">Nombre</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->signerUser->FullName }}</td>
+                  <td>{{ auth()->user()->FullName }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Cargo</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->position_signer_user }}</td>
+                  <td>{{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->position }}
+                      {{ App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->id())[0]->organizationalUnit->name }}
+                  </td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>
-                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
+                  <td>{{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>Aprobado</td>
               </tr>
           </tbody>
       </table>
 
-      <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
+      {{-- <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
       <table class="siete">
           <thead>
@@ -378,8 +430,8 @@
                   <td>{{ $requestForm->eventSigner('supply_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>{{ $requestForm->eventSigner('supply_event', 'approved')->StatusValue }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">COMPRADOR(ES) ASIGNADO(S): </th>
@@ -388,7 +440,7 @@
                   @endforeach
               </tr>
           </tbody>
-      </table>
+      </table> --}}
 
     </div>
 </body>

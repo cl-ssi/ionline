@@ -1,12 +1,13 @@
 <div>
     <div class="table-responsive">
+      @if($requestForm->type_form == 'bienes y/o servicios')
       <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
       <table class="table table-condensed table-hover table-bordered table-sm small">
           <thead>
               <tr>
                   <th>Item</th>
                   <th>ID</th>
-                  <th>Item Pres.</th>
+                  <th width="250 px">Item Pres.</th>
                   <th>Artículo</th>
                   <th>UM</th>
                   <th>Especificaciones Técnicas</th>
@@ -23,12 +24,15 @@
                   <td class="text-center">{{$key+1}}</td>
                   <td class="text-center">{{$item->id}}</td>
                   <td>
-                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" class="form-control form-control-sm" required>
-                          <option value="">Seleccione...</option>
+                    <div wire:ignore id="for-bootstrap-select">
+                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select"
+                        class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
+                          <!-- <option value="">Seleccione...</option> -->
                           @foreach($lstBudgetItem as $val)
                             <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                           @endforeach
                       </select>
+                    </div>
                   </td>
                   <td>{{$item->article}}</td>
                   <td>{{$item->unit_of_measurement}}</td>
@@ -55,6 +59,52 @@
           </tfoot>
       </table>
       @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
+      @else
+      <!-- Pasajeros -->
+        <h6><i class="fas fa-info-circle"></i> Lista de Pasajeros</h6>
+        <table class="table table-condensed table-hover table-bordered table-sm">
+        <thead class="text-center small">
+            <tr>
+            <th>#</th>
+            <th>RUT</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Item Pres.</th>
+            <th>Tipo viaje</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Fecha ida</th>
+            <th>Fecha vuelta</th>
+            <th>Equipaje</th>
+            <th>Total pasaje</th>
+            </tr>
+        </thead>
+        <tbody class="small">
+            @foreach($requestForm->passengers as $key => $passenger)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                        <td>{{ $passenger->name }}</td>
+                        <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                        <td>-</td>
+                        <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
+                        <td>{{ $passenger->origin }}</td>
+                        <td>{{ $passenger->destination }}</td>
+                        <td>{{ $passenger->departure_date }}</td>
+                        <td>{{ $passenger->return_date }}</td>
+                        <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
+                        <td align="right">${{ number_format($passenger->unit_value, $requestForm->type_of_currency == 'peso' ? 0 : 2, ",", ".") }}</td>
+                    </tr>
+            @endforeach
+        </tbody>
+        <tfoot class="text-right small">
+            <tr>
+            <td colspan="11">Valor Total</td>
+            <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
+            </tr>
+        </tfoot>
+        </table>
+    @endif
 
         <div class="card">
             <div class="card-header bg-primary text-white">
@@ -95,9 +145,9 @@
 
                 <div class="form-row">
                     <fieldset class="form-group col-sm-12">
-                        <label for="forRejectedComment">Comentario de Rechazo:</label>
-                        <textarea wire:model="rejectedComment" wire:click="resetError" name="rejectedComment" class="form-control form-control-sm" rows="3"></textarea>
-                        @error('rejectedComment') <span class="error text-danger">{{ $message }}</span> @enderror
+                        <label for="for_comment">Observación:</label>
+                        <textarea wire:model="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                        @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
                         </fieldset>
                 </div>
 

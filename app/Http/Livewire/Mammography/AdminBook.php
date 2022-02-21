@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Vaccination;
+namespace App\Http\Livewire\Mammography;
 
 use Livewire\Component;
 use App\Models\Vaccination\Slot;
