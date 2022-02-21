@@ -328,11 +328,11 @@ class RequestFormController extends Controller {
 
                 $emails = [$mail_notification_ou_manager->user->email];
 
-                // if($mail_notification_ou_manager){
-                //     Mail::to($emails)
-                //       ->cc(env('APP_RF_MAIL'))
-                //       ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
-                // }
+                if($mail_notification_ou_manager){
+                    Mail::to($emails)
+                      ->cc(env('APP_RF_MAIL'))
+                      ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+                }
             }
 
             $requestForm->signatures_file_id = $signaturesFile->id;
@@ -372,9 +372,9 @@ class RequestFormController extends Controller {
                       $requestForm->eventPurchaserNewBudget()->email
                   ];
 
-            // Mail::to($emails)
-            // ->cc(env('APP_RF_MAIL'))
-            // ->send(new RfEndNewBudgetSignNotification($requestForm));
+            Mail::to($emails)
+            ->cc(env('APP_RF_MAIL'))
+            ->send(new RfEndNewBudgetSignNotification($requestForm));
 
             session()->flash('success', $message);
             return redirect()->route('request_forms.pending_forms');
