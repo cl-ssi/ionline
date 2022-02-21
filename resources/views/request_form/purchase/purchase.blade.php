@@ -650,6 +650,11 @@ $('input[type="file"]').bind('change', function(e) {
     // }
   });
 
+  $('#for_has_taking_of_reason').change(function() {
+    $('input[name=taking_of_reason_file]').prop('required',this.checked);
+    $('input[name=taking_of_reason_file]').prop('disabled',!this.checked);
+});
+
 </script>
 
 @endsection
