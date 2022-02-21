@@ -140,9 +140,9 @@ class Authorization extends Component
 
               if($mail_notification_ou_manager){
                 if($nextEvent->first()->event_type == 'pre_finance_event'){
-                  // Mail::to($emails)
-                  //   ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
-                  //   ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                  Mail::to($emails)
+                    ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
+                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 }
                 // elseif($nextEvent->event_type = 'supply_event'){
                 //   Mail::to($mail_notification_ou_manager)
@@ -150,9 +150,9 @@ class Authorization extends Component
                 //     ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 // }
                 else{
-                  // Mail::to($emails)
-                  //   ->cc(env('APP_RF_MAIL'))
-                  //   ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
                 }
               }
           }
@@ -162,9 +162,9 @@ class Authorization extends Component
                       $this->requestForm->contractManager->email,
                       $this->requestForm->purchasers->first()->email
                   ];
-                  // Mail::to($emails)
-                  //   ->cc(env('APP_RF_MAIL'))
-                  //   ->send(new RfEndSignNotification($event->requestForm));
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RfEndSignNotification($event->requestForm));
               }
           }
           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' AUTORIZADO correctamente!');
