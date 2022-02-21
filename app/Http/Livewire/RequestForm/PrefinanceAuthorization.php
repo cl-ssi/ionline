@@ -101,10 +101,10 @@ class PrefinanceAuthorization extends Component
                }
            }
 
-           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
+           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' AUTORIZADO correctamente!');
            return redirect()->route('request_forms.pending_forms');
           }
-      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' NO se puede Autorizar!');
       return redirect()->route('request_forms.pending_forms');
     }
 
@@ -121,10 +121,10 @@ class PrefinanceAuthorization extends Component
            $event->status = 'rejected';
            $event->signerUser()->associate(auth()->user());
            $event->save();
-           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' fue RECHAZADO!');
+           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' fue RECHAZADO!');
            return redirect()->route('request_forms.pending_forms');
           }
-      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Rechazar!');
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' NO se puede Rechazar!');
       return redirect()->route('request_forms.pending_forms');
     }
 

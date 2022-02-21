@@ -420,7 +420,7 @@ class RequestFormCreate extends Component
 
     public function available_balance_purchases_exceeded()
     {
-      if($this->requestForm->request_form_id){ // es suministro de req. form principal
+      if($this->requestForm && $this->requestForm->request_form_id){ // es suministro de req. form principal
         //total del monto por items seleccionados en otros suministros + item registrados no debe sobrepasar el total adjudicado al formulario de requerimiento
         $totalItemSelected = 0;
         foreach($this->items as $item)
