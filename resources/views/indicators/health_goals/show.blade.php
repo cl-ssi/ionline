@@ -5,7 +5,7 @@
         $healthGoal = $indicator->indicatorable;
         $communes = array('ALTO HOSPICIO', 'CAMIÑA', 'COLCHANE', 'HUARA', 'IQUIQUE', 'PICA', 'POZO ALMONTE');
         $goals = array_map('trim', explode(',', $indicator->goal)); //metas ordenadas por comuna index
-    } 
+    }
 @endphp
 @section('title', 'Metas Sanitarias Ley N° ' . $healthGoal->law . ' / '. $healthGoal->year . ' : ' . (isset($indicator) ? 'Meta N° ' . $healthGoal->number . ' - Indicador N° ' . $indicator->number : $healthGoal->name))
 
@@ -62,7 +62,7 @@
                 <tbody>
                 <!-- numerador comuna -->
                     <tr class="text-center">
-                        <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
+                        <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{ $indicator->numerator_source }}</span></td>
                         <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                         <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2($commune, null), 2, ',', '.')}}%</td>
                         <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', $commune, null) : $indicator->getValuesAcum2('numerador', $commune, null), 0, ',', '.')}}</td>
@@ -72,7 +72,7 @@
                     </tr>
                 <!-- denominador comuna -->
                     <tr class="text-center">
-                        <td class="text-left glosa">{{$indicator->denominator}}.</td>
+                        <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->denominator_source }}</span></td>
                         <td class="text-center">{{number_format(isset($indicator->isDenRemP) ? $indicator->getLastValueByFactor2('denominador', $commune, null) : $indicator->getValuesAcum2('denominador', $commune, null), 0, ',', '.')}}</td>
                         @foreach($months as $number => $month)
                         <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null), 0, ',', '.') : ''}}</td>
