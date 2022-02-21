@@ -138,7 +138,7 @@
 
 
             <div class="pie_pagina center seis">
-                <!--{{ config('app.ss') }}<br-->
+                <!--{{ env('APP_SS') }}<br-->
                 {{ env('APP_SS_ADDRESS') }} - Fono: {{ env('APP_SS_TELEPHONE') }} - {{ env('APP_SS_WEBSITE') }}
             </div>
         </div>

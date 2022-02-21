@@ -8,30 +8,33 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\BudgetItem;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
-//use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestFormSignNotification;
 
 class PrefinanceAuthorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment,
            $lstBudgetItem, $program, $sigfe, $codigo;
     public $arrayItemRequest = [['budgetId' => '']];
-
+    public $round_trips, $baggages;
 
     protected $rules = [
-        'rejectedComment' => 'required|min:6',
+        'comment' => 'required|min:6',
     ];
 
 
     protected $messages = [
-        'rejectedComment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
-        'rejectedComment.min'       => 'Mínimo 6 caracteres.',
+        'comment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
+        'comment.min'       => 'Mínimo 6 caracteres.',
     ];
 
 
-    public function mount(RequestForm $requestForm, $eventType) {
+    public function mount(RequestForm $requestForm, $eventType, $roundTrips, $baggages) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
-      $this->rejectedComment    = '';
+      $this->round_trips        = $roundTrips;
+      $this->baggages           = $baggages;
+      $this->comment    = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
@@ -67,18 +70,41 @@ class PrefinanceAuthorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           //  $this->requestForm->status = 'pending';
-           $this->requestForm->program = $this->program;
-           $this->requestForm->sigfe = $this->sigfe;
-           $this->requestForm->save();
-           $event->signature_date = Carbon::now();
-           $event->position_signer_user = $this->position;
-           $event->status  = 'approved';
-           $event->signerUser()->associate(auth()->user());
-           $event->save();
-           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
+          $this->requestForm->program = $this->program;
+          $this->requestForm->sigfe = $this->sigfe;
+          $this->requestForm->save();
+          $event->signature_date = Carbon::now();
+          $event->position_signer_user = $this->position;
+          $event->status  = 'approved';
+          $event->comment = $this->comment;
+          $event->signerUser()->associate(auth()->user());
+          $event->save();
+
+          $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+           if(!$nextEvent->isEmpty()){
+               //Envío de notificación para visación.
+               $now = Carbon::now();
+               //manager
+               $type = 'manager';
+               $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+               //secretary
+               // $type_adm = 'secretary';
+               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+               $emails = [$mail_notification_ou_manager->user->email];
+
+               if($mail_notification_ou_manager){
+                  // Mail::to($emails)
+                  //   ->cc(env('APP_RF_MAIL'))
+                  //   ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+               }
+           }
+
+           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' AUTORIZADO correctamente!');
            return redirect()->route('request_forms.pending_forms');
           }
-      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' NO se puede Autorizar!');
       return redirect()->route('request_forms.pending_forms');
     }
 
@@ -90,15 +116,15 @@ class PrefinanceAuthorization extends Component
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
            $event->signature_date = Carbon::now();
-           $event->comment = $this->rejectedComment;
+           $event->comment = $this->comment;
            $event->position_signer_user = $this->position;
            $event->status = 'rejected';
            $event->signerUser()->associate(auth()->user());
            $event->save();
-           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' fue RECHAZADO!');
+           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' fue RECHAZADO!');
            return redirect()->route('request_forms.pending_forms');
           }
-      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Rechazar!');
+      session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->folio.' NO se puede Rechazar!');
       return redirect()->route('request_forms.pending_forms');
     }
 

@@ -39,7 +39,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function organizationalUnit() {
@@ -112,6 +112,20 @@ class RequestReplacementStaff extends Model
             break;
           case 'other':
             return 'Otro';
+            break;
+        }
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->request_status) {
+          case 'pending':
+            return 'Pendiente';
+            break;
+          case 'complete':
+            return 'Completa';
+            break;
+          case 'rejected':
+            return 'Rechazada';
             break;
         }
     }

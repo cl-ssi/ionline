@@ -128,7 +128,7 @@ class ShowTotalHours extends Component
 
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' &&
                   $this->fulfillment->serviceRequest->responsability_center_ou_id == 138 &&
-                  (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($ServiceRequest->start_date <= '2021/12/31 23:59:59'))):
+                  (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($this->fulfillment->serviceRequest->end_date <= '2021/12/31 23:59:59'))):
                 $totalMinutes = 0;
                 $totalMinutesDay = 0;
                 $totalMinutesNight = 0;
@@ -229,8 +229,11 @@ class ShowTotalHours extends Component
                 $this->totalAmount = $this->totalHours * $value;
                 break;
 
-            case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00'))):
-            case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00'))):
+            case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00'))
+                                                                                       && (Carbon::parse('31-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('31-12-2021 00:00'))):
+            case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00'))
+                                                                                        && (Carbon::parse('31-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('31-12-2021 00:00'))):
+
               $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
                   ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
                   ->get();
@@ -297,6 +300,60 @@ class ShowTotalHours extends Component
 
               break;
 
+            // 14/02/2022: nataly solicita que desde enero del 2022, no se incluya la multiplicación de 1.5 para horarios nocturnos
+            case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))):
+            case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))):
+
+              $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
+                  ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
+                  ->get();
+
+              $holidaysArray = array();
+              foreach ($holidays as $holiday) {
+                  array_push($holidaysArray, $holiday->date);
+              }
+
+              foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
+                  $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+                      function ($date) use ($holidaysArray) {
+                          if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
+                              return true;
+                          else return false;
+                      },
+                      $shiftControl->end_date
+                  );
+
+                  $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+                      function ($date) use ($holidaysArray) {
+                          if (
+                              in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                              (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray)))
+                          )
+                              return true;
+                          else return false;
+                      },
+                      $shiftControl->end_date
+                  );
+
+                  $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
+                  $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
+                  $this->hoursDetailArray[$keyShiftControl]['hours_day'] = $hoursDay;
+                  $this->hoursDetailArray[$keyShiftControl]['hours_night'] = $hoursNight;
+                  $this->hoursDetailArray[$keyShiftControl]['observation'] = $shiftControl->observation;
+                  $this->hoursDetailArray[$keyShiftControl]['is_start_date_holiday'] = $shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray);
+                  $this->hoursDetailArray[$keyShiftControl]['is_end_date_holiday'] = $shiftControl->end_date->dayOfWeek == 6 || $shiftControl->end_date->dayOfWeek == 0 || in_array($shiftControl->end_date->toDateString(), $holidaysArray);
+
+                  $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
+                  $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+              }
+
+              $totalAmountDayRefund = $this->totalHoursDay * $value;
+              $totalAmountNight = $this->totalHoursNight * $value;
+
+              $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
+              $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
+              $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
+              break;
 
             case 'DIURNO PASADO A TURNO':
                 $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)

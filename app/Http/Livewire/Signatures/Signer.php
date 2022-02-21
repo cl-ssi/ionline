@@ -20,7 +20,7 @@ class Signer extends Component
         }
 
         if (!empty($this->organizationalUnit)) {
-            $this->users = OrganizationalUnit::find($this->organizationalUnit)->users;
+            $this->users = OrganizationalUnit::find($this->organizationalUnit)->users->sortBy('name');
             if ($this->signaturesFlowSigner) {
                 $this->user = $this->signaturesFlowSigner->user_id;
             }
@@ -29,10 +29,13 @@ class Signer extends Component
 
     public function render()
     {
-        ($this->organizationalUnit) ? $this->userRequired = 'required' : $this->userRequired = '';
-
         if (!empty($this->organizationalUnit)) {
-            $this->users = OrganizationalUnit::find($this->organizationalUnit)->users;
+            $this->userRequired = 'required';
+            $this->users = OrganizationalUnit::find($this->organizationalUnit)->users->sortBy('name');
+        }else{
+            $this->userRequired = '';
+            $this->user = null;
+            $this->users = [];
         }
 
         return view('livewire.signatures.signer')

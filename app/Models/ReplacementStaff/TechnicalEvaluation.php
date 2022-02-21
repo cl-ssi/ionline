@@ -18,7 +18,7 @@ class TechnicalEvaluation extends Model implements Auditable
     ];
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function requestReplacementStaff() {
@@ -55,6 +55,10 @@ class TechnicalEvaluation extends Model implements Auditable
         switch($this->reason) {
           case 'falta oferta laboral':
             return 'Falta de oferta laboral';
+            break;
+
+          case 'rechazo oferta laboral':
+            return 'Rechazo de oferta laboral';
             break;
         }
     }

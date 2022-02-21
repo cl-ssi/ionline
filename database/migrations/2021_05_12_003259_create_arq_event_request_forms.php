@@ -24,7 +24,7 @@ class CreateArqEventRequestForms extends Migration
             $table->string('event_type')->nullable();
             $table->longText('comment')->nullable();
             $table->foreignId('purchaser_id')->nullable()->constrained('users');
-            $table->float('purchaser_amount')->nullable();
+            $table->float('purchaser_amount', 15, 2)->nullable();
             $table->dateTime('signature_date', $precision = 0)->nullable();
             $table->foreign('signer_user_id')->references('id')->on('users');
             $table->foreign('ou_signer_user')->references('id')->on('organizational_units');

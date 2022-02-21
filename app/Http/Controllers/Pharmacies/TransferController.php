@@ -59,6 +59,11 @@ class TransferController extends Controller
 
             $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')->orderBy('id','DESC')->paginate(15, ['*'], 'p3');
         } else {
+            if (Auth::user()->establishments->count()==0) {
+                session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+                return redirect()->route('pharmacies.index');
+            }
+
             $filter = Auth::user()->establishments->first()->id;
             $establishment = Establishment::find($filter);
             $filterEstablishment = function($query) use ($filter) {
@@ -144,6 +149,11 @@ class TransferController extends Controller
 
     public function auth($establishment_id)
     {     
+        if(!Auth::user()->can('Pharmacy: transfer view ortesis')){
+            session()->flash('warning', 'Ud. no tiene permiso para autorizar la solicitud de stock via documento.');
+            return redirect()->route('pharmacies.products.deliver.index');
+        }
+
         $filterAATT = function($q){
             $q->where('pharmacy_id',session('pharmacy_id'))
               ->where('program_id', 46) //APS ORTESIS
@@ -232,6 +242,11 @@ class TransferController extends Controller
      */
     public function edit($filter, Request $request)
     {
+        if(!Auth::user()->can('Pharmacy: transfer view ortesis')){
+            session()->flash('warning', 'Ud. no tiene permiso para modificar stock de productos por establecimiento.');
+            return redirect()->route('pharmacies.products.deliver.index');
+        }
+
         if($request->has('filter')) return redirect()->route('pharmacies.products.transfer.edit', $request->get('filter'));
         // Editar stock de ayudas de tecnicas para cada establecimiento
         // $filterAATT = function($q){

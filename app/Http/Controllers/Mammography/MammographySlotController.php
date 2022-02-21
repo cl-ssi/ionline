@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Mammography;
 
 use App\Models\Mammography\MammographySlot;
 use Illuminate\Http\Request;

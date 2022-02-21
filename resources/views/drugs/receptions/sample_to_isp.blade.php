@@ -37,7 +37,7 @@
     <strong>DE:</strong>
 </div>
 <div style="weight: bold;float:left; text-transform: uppercase;">
-    <strong>{{ $reception->sampleToIsp->lawyer->position }}<br>{{ config('app.ss') }}</strong>
+    <strong>{{ $reception->sampleToIsp->lawyer->position }}<br>{{ env('APP_SS') }}</strong>
 </div>
 
 <div style="clear: both; padding-bottom: 10px"></div>
@@ -79,26 +79,26 @@
         <li style="padding-bottom: 10px;">
             La presente delegación de firma se aprobó por resolución exenta
             <strong>{{ $mandato }}</strong> de la Dirección
-            del {{ config('app.ss') }}.
+            del {{ env('APP_SS') }}.
         </li>
     </ol>
 </p>
 
 <!-- FIXME: El genero del director debería estar en parametro -->
 <p>
-    Saluda atentamente a usted, "Por orden del Director del {{ config('app.ss') }}".
+    Saluda atentamente a usted, "Por orden del Director del {{ env('APP_SS') }}".
 </p>
 
 
-<div id="firmas">
+<!-- <div id="firmas">
     <div class="center" style="width: 100%;">
         <p class="uppercase">
             {{ $reception->sampleToIsp->lawyer->FullName }}<br>
             {{ $reception->sampleToIsp->lawyer->position }}<br>
-            {{ config('app.ss') }}
+            {{ env('APP_SS') }}
         </p>
     </div>
-</div>
+</div> -->
 
 
 <div class="row">
@@ -114,13 +114,13 @@
         </p>
     </div>
 
-    <div class="column right">
+    <!-- <div class="column right">
             <p style="padding-right: 117px">
-                <strong>Responsables:</strong>
+                <strong>Responsables:</strong> -->
             </p>
             <!--li>Departamento de Asesoría Jurídica  {{ $reception->sampleToIsp->lawyer->Initials }}  _______</li-->
-            Unidad de Drogas &nbsp;&nbsp; {{ $reception->sampleToIsp->manager->Initials }} &nbsp;&nbsp; _______
-    </div>
+            <!-- Unidad de Drogas &nbsp;&nbsp; {{ $reception->sampleToIsp->manager->Initials }} &nbsp;&nbsp; _______
+    </div> -->
 </div>
 
 @endsection

@@ -27,6 +27,7 @@ use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -66,7 +67,8 @@ use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
-
+use App\Http\Controllers\Parameters\LogController;
+use App\Http\Controllers\RequestForms\AttachedFilesController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -83,7 +85,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //maqueteo calendario
 Route::get('/calendar', function () {
@@ -193,6 +195,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
+        Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
+        Route::get('/pending_personal_index', [RequestReplacementStaffController::class, 'pending_personal_index'])->name('pending_personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
@@ -222,6 +226,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
                 Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
                 Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
+                Route::post('/decline_selected_applicant/{applicant}', [ApplicantController::class, 'decline_selected_applicant'])->name('decline_selected_applicant');
             });
             Route::prefix('file')->name('file.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [TechnicalEvaluationFileController::class, 'store'])->name('store');
@@ -231,6 +236,11 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             });
         });
 
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function(){
+        //Route::get('/replacement_staff_selected_report', [ReplacementStaffController::class, 'replacement_staff_selected_report'])->name('replacement_staff_selected_report');
+        Route::get('/replacement_staff_historical', [ReplacementStaffController::class, 'replacement_staff_historical'])->name('replacement_staff_historical');
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
@@ -377,6 +387,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('tracking', 'Agreements\AgreementController@indexTracking')->name('tracking.index');
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
+    Route::get('/createWordWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createWordDocx')->name('createWordWithdrawal');
     Route::post('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
     Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
@@ -505,6 +516,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
+        Route::get('/test', [ServiceRequestController::class, 'test'])->name('test');
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
         Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
@@ -523,6 +535,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/change-signature-flow', [ServiceRequestController::class, 'change_signature_flow'])->name('change_signature_flow');
         Route::post('/delete-signature-flow', [ServiceRequestController::class, 'delete_signature_flow'])->name('delete_signature_flow');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
+        Route::get('/accept_all_requests', [ServiceRequestController::class, 'accept_all_requests'])->name('accept_all_requests');
 
         Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
         Route::get('/pending-requests', [ServiceRequestController::class, 'pending_requests'])->name('pending-requests');
@@ -612,6 +625,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
+            Route::get('/overlapping-contracts', [ReportController::class, 'overlappingContracts'])->name('overlapping-contracts');
+            Route::get('/service-request-continuity', [ReportController::class, 'service_request_continuity'])->name('service-request-continuity');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
@@ -837,11 +852,20 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     Route::prefix('suppliers')->as('suppliers.')->group(function () {
         Route::get('/', 'Parameters\SupplierController@index')->name('index');
-        // Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
-        // Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
-        // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
-        // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+        Route::get('/create', 'Parameters\SupplierController@create')->name('create');
+        Route::post('/store', 'Parameters\SupplierController@store')->name('store');
+        Route::get('/edit/{supplier}', 'Parameters\SupplierController@edit')->name('edit');
+        Route::put('/update/{supplier}', 'Parameters\SupplierController@update')->name('update');
     });
+
+    Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {
+        Route::get('/', [LogController::class, 'index'])->name('index');
+        Route::get('{log}', [LogController::class, 'show'])->name('show')->where('id', '[0-9]+');
+        // Route::get('{log}/edit', [LogController::class, 'edit'])->name('edit');
+        // Route::put('{log}', [LogController::class, 'update'])->name('update');
+        Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -881,8 +905,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
-    //Route::get('/', 'Requirements\RequirementController@inbox')->name('index');
-    Route::get('download/{file}',  'Requirements\EventController@download')->name('download')->middleware('auth');
+    /** Custom routes */
+    Route::get('download/{file}',  'Requirements\EventController@download')->name('download');
     Route::get('inbox', 'Requirements\RequirementController@inbox')->name('inbox');
     Route::get('outbox', 'Requirements\RequirementController@outbox')->name('outbox');
     Route::get('archive_requirement/{requirement}', 'Requirements\RequirementController@archive_requirement')->name('archive_requirement');
@@ -895,8 +919,14 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::resource('events', 'Requirements\EventController');
     Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
+
+    Route::get('/', 'Requirements\RequirementController@outbox')->name('index');
+    Route::get('/create', 'Requirements\RequirementController@show')->name('create');
+    Route::post('/', 'Requirements\RequirementController@store')->name('store');
+    Route::get('/{requirement}', 'Requirements\RequirementController@show')->name('show');
+    Route::delete('/{requirement}', 'Requirements\RequirementController@destroy')->name('destroy');
 });
-Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
+//Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
 
 Route::view('calendars', 'calendars.index')->name('calendars');
 
@@ -1209,35 +1239,35 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 });
 
-Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function () {
-    //fixme convertir a gets, put, delete
-    Route::resource('courts', 'Drugs\CourtController');
-    Route::resource('police_units', 'Drugs\PoliceUnitController');
-    Route::resource('substances', 'Drugs\SubstanceController');
 
-    Route::get('receptions/report', 'Drugs\ReceptionController@report')->name('receptions.report');
-    Route::get('receptions/{reception}/record', 'Drugs\ReceptionController@showRecord')->name('receptions.record');
+/* Middleware 'drugs' hace que no se pueda tener acceso al módulo de drogas fuera de horario de oficina */
+Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','drugs')->group(function(){
+    Route::resource('courts','Drugs\CourtController');
+    Route::resource('police_units','Drugs\PoliceUnitController');
+    Route::resource('substances','Drugs\SubstanceController');
 
-    Route::get('receptions/{receptionitem}/edit_item', 'Drugs\ReceptionController@editItem')->name('receptions.edit_item');
-    Route::put('receptions/{receptionitem}/update_item', 'Drugs\ReceptionController@updateItem')->name('receptions.update_item');
-    Route::delete('receptions/{receptionitem}/destroy_item', 'Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
-    Route::put('receptions/{receptionitem}/store_protocol', 'Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+    Route::get('users','Rrhh\UserController@drugs')->name('users');
 
-    Route::get('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
-    Route::get('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+    Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+    Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
+    Route::get('receptions/{receptionitem}/edit_item','Drugs\ReceptionController@editItem')->name('receptions.edit_item');
+    Route::put('receptions/{receptionitem}/update_item','Drugs\ReceptionController@updateItem')->name('receptions.update_item');
+    Route::delete('receptions/{receptionitem}/destroy_item','Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
+    Route::put('receptions/{receptionitem}/store_result','Drugs\ReceptionController@storeResult')->name('receptions.store_result');
+    Route::put('receptions/{receptionitem}/store_protocol','Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+    Route::get('receptions/protocols/{protocol}','Drugs\ReceptionController@showProtocol')->name('receptions.protocols.show');
+    Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
+    Route::get('receptions/{reception}/doc_fiscal','Drugs\ReceptionController@showDocFiscal')->name('receptions.doc_fiscal');
+    Route::get('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
+    Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
+    Route::get('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+    Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
+    Route::resource('receptions','Drugs\ReceptionController');
 
+    Route::resource('destructions','Drugs\DestructionController')->except(['create']);
 
-    Route::post('receptions/{reception}/item', 'Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
-    Route::post('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
-    Route::post('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
-
-    Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
-    Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
-    Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
-    Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
-    Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
-    Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
-    //    Route::resource('receptions','Drugs\ReceptionController');
+    Route::get('rosters/analisis_to_admin','Drugs\RosterAnalisisToAdminController@index')->name('roster.analisis_to_admin.index');
+    Route::get('rosters/analisis_to_admin/{id}','Drugs\RosterAnalisisToAdminController@show')->name('roster.analisis_to_admin.show');
 });
 
 Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->middleware('auth')->name('health_plan.index');
@@ -1326,11 +1356,19 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
+    Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+    Route::get('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
-    Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
+    Route::get('/callback-sign-new-budget/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSignNewBudget'])->name('callbackSignNewBudget');
+    Route::get('/signed-request-form-pdf/{requestForm}/{original}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
+    Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
+
+    Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
+        Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
+    });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
@@ -1342,17 +1380,25 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('supply')->as('supply.')->middleware('auth')->group(function () {
         Route::get('/', [PurchasingProcessController::class, 'index'])->name('index');
+        Route::get('/{requestForm}', [PurchasingProcessController::class, 'show'])->name('show');
         Route::get('/{requestForm}/purchase', [PurchasingProcessController::class, 'purchase'])->name('purchase');
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');
         Route::post('/{requestForm}/create_petty_cash', [PurchasingProcessController::class, 'create_petty_cash'])->name('create_petty_cash');
         Route::post('/{requestForm}/create_fund_to_be_settled', [PurchasingProcessController::class, 'create_fund_to_be_settled'])->name('create_fund_to_be_settled');
+        Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
+        Route::post('/{requestForm}/create_oc', [PurchasingProcessController::class, 'create_oc'])->name('create_oc');
+        Route::post('/{requestForm}/create_convenio_marco', [PurchasingProcessController::class, 'create_convenio_marco'])->name('create_convenio_marco');
+        Route::post('/{requestForm}/create_direct_deal', [PurchasingProcessController::class, 'create_direct_deal'])->name('create_direct_deal');
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
         Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
+        Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
+        Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
     });
 
     /* DOCUMENTS */
-    Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+    Route::get('/create_form_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+    Route::get('/create_view_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
     Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
@@ -1415,7 +1461,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
-Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
+Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
@@ -1555,8 +1601,12 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 });
 
 
+
+
+
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
-
+Route::get('/log',[TestController::class,'log']);
+Route::get('/ous',[TestController::class,'ous']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);

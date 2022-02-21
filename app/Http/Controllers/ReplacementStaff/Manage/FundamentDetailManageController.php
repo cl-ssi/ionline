@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ReplacementStaff\Manage;
 
 use App\Models\FundamentDetailManage;
 use Illuminate\Http\Request;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Drugs\PoliceUnit;
+use App\Models\Drugs\PoliceUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -45,7 +45,7 @@ class PoliceUnitController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
      * @return \Illuminate\Http\Response
      */
     public function show(PoliceUnit $policeUnit)
@@ -56,7 +56,7 @@ class PoliceUnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
      * @return \Illuminate\Http\Response
      */
     public function edit(PoliceUnit $policeUnit)
@@ -68,7 +68,7 @@ class PoliceUnitController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, PoliceUnit $policeUnit)
@@ -81,7 +81,7 @@ class PoliceUnitController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
      * @return \Illuminate\Http\Response
      */
     public function destroy(PoliceUnit $policeUnit)

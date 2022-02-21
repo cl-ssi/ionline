@@ -5,9 +5,11 @@ namespace App\Models\ReplacementStaff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Applicant extends Model
+class Applicant extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     use softDeletes;
 
@@ -17,7 +19,7 @@ class Applicant extends Model
         'replacement_reason', 'ou_of_performance_id'
     ];
 
-    public function replacement_staff() {
+    public function replacementStaff() {
         return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
     }
 

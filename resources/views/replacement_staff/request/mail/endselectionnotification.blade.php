@@ -30,7 +30,9 @@
 
       <ul>
         @foreach($technicalEvaluation->applicants->where('selected', 1) as $applicant)
-          <li><strong>Seleccionado</strong>: {{ $applicant->replacement_staff->FullName }}</li>
+          <li><strong>Seleccionado</strong>: {{ $applicant->replacementStaff->FullName }}</li>
+          <li><strong>Fecha Efectiva de Ingreso</strong>: {{ $applicant->start_date->format('d-m-Y') }}</li>
+          <li><strong>Fin</strong>: {{ $applicant->end_date->format('d-m-Y') }}</li>
         @endforeach
       </ul>
 
@@ -50,11 +52,11 @@
       <li><strong>Unidad Organizacional</strong>: {{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</li>
   </ul>
 
-  <p>Para mayor infromación favor ingresar a su Bandeja de Solicitudes en iOnline.</p>
+  <p>Para mayor información favor ingresar a su Bandeja de Solicitudes en iOnline.</p>
 
   <br>
 
-  <p>Esto es un mensaje automatico de: {{ env('APP_NAME') }} -  {{ env('APP_SS') }}.</p>
+  <p>Esto es un mensaje automático de: {{ env('APP_NAME') }} -  {{ env('APP_SS') }}.</p>
 
 
 

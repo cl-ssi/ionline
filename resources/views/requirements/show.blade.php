@@ -68,13 +68,13 @@ bottom: 5px;
             @csrf
             @method('GET')
             <input type="hidden" value="{{ $requirement->id }}" name="requirement_id">
-            <div class="form-group mb-2">
-                <label for="asignarCategoria" class="sr-only">Asignar categoría:</label>
+            <!-- <div class="form-group mb-2">
+                <label for="asignarCategoria" class="sr-only"></label>
                 <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-            </div>
+            </div> -->
             <div class="form-group mx-sm-3 mb-2">
-                <label for="category_id" class="sr-only">Categorias</label>
-                <select name="category_id[]" id="category_id" class="selectpicker input-sm"
+                <label for="category_id">Asignar categoría:</label>
+                <select name="category_id[]" id="category_id" class="selectpicker input-md"
                     multiple title="Elige tus categorías" >
                     @foreach($categories as $key => $category)
                         {{$flag = 0}}
@@ -224,9 +224,9 @@ bottom: 5px;
 
   	 $(document).ready(function(){
        var array = new Array;
-      //  $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}}); //select que se actualiza automáticamente
+      //  $("#ou").val( $lastEvent->from_user->organizationalUnit->id ); //select que se actualiza automáticamente
       //  $("#ou").trigger("change", [true]);
-      //  $("#user").val({{$lastEvent->from_user->id}}); //select que se actualiza automáticamente
+      //  $("#user").val( $lastEvent->from_user->id ); //select que se actualiza automáticamente
       //  $("#user").trigger("change");
        $("#status").trigger("change", [true]);
 
@@ -324,9 +324,9 @@ bottom: 5px;
          $("#tabla_funcionarios").append(markup);
 
          // if($("#status").val() == "respondido"){
-         //   $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}});
+         //   $("#ou").val( $lastEvent->from_user->organizationalUnit->id );
          //   $("#ou").trigger("change");
-         //   $("#user").val({{$lastEvent->from_user->id}});
+         //   $("#user").val( $lastEvent->from_user->id );
          // }
 
        });
@@ -361,8 +361,8 @@ bottom: 5px;
                 });
           }else{
             if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
-              $("#user").val({{$lastEvent->from_user->id}});
-              $('#to').val({{$lastEvent->from_user->id}});
+              $("#user").val({{ optional(optional($lastEvent)->from_user)->id}});
+              $('#to').val({{ optional(optional($lastEvent)->from_user)->id}});
             }else if(document.getElementById("status").value == "cerrado"){
               @if($firstEvent <> null)
                 $("#user").val({{$firstEvent->from_user_id}});

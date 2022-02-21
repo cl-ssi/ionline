@@ -14,7 +14,7 @@
 <script src="{{ asset('js/create_doc.js') }}"></script>
 
 
-<form method="POST" action="{{ route('documents.update', $document) }}">
+<form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">
     @csrf
     @method('PUT')
 
@@ -111,8 +111,23 @@
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary mr-4">Guardar</button>
+        </form>
+        @can('Documents: delete document')
+            @if(!$document->file OR $document->file_to_sign_id === null)
+            <form method="POST" class="form-horizontal" action="{{ route('documents.destroy', $document) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger ml-4 float-right">Eliminar</button>
+                <br>
+            </form>
+            @else
+            <button class="btn btn-outline-danger" disable>No se puede eliminar, tiene un archivo o ha sido firmado</button>
+            @endif
+        @endcan
     </div>
-</form>
+
+
+
 @endif
 
 @endsection

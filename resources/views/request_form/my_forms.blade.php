@@ -9,7 +9,7 @@
 
 @if(count($my_requests) > 0 || count($my_pending_requests) > 0)
 
-    <fieldset class="form-group">
+    <!-- <fieldset class="form-group">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
@@ -19,7 +19,7 @@
                 <a class="btn btn-primary" href="{{ route('request_forms.create') }}"><i class="fas fa-plus"></i> Nuevo Formulario</a>
             </div>
         </div>
-    </fieldset>
+    </fieldset> -->
 
     @if(count($my_pending_requests) > 0)
     </div>
@@ -30,11 +30,11 @@
                   <thead>
                     <tr class="text-center">
                       <th>ID</th>
+                      <th>Folio</th>
                       <th style="width: 7%">Fecha Creación</th>
-                      <th>Tipo</th>
+                      <th>Tipo / Mecanismo de Compra</th>
                       <th>Descripción</th>
                       <th>Usuario Gestor</th>
-                      <th>Mecanismo de Compra</th>
                       <th>Items</th>
                       <th>Espera</th>
                       <th>Estado</th>
@@ -58,13 +58,20 @@
 
                                     @endswitch
                                 </td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
-                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                    {{ $requestForm->userOrganizationalUnit->name ?? '' }}
                                 </td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
@@ -122,11 +129,12 @@
               <thead>
                 <tr class="text-center">
                   <th>ID</th>
+                  <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
-                  <th>Tipo</th>
+                  <th>Tipo / Mecanismo de Compra</th>
                   <th>Descripción</th>
                   <th>Usuario Gestor</th>
-                  <th>Mecanismo de Compra</th>
+                  <th>Comprador</th>
                   <th>Items</th>
                   <th>Espera</th>
                   <th>Estado</th>
@@ -158,15 +166,22 @@
 
                                 @endswitch
                             </th>
+                            <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                            </td>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}</td>
+                            <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                {{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
-                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
                             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                            <td align="center">{{ $requestForm->getElapsedTime() }}</td>
+                            <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)
@@ -185,24 +200,45 @@
                                   @endforeach
                               </td>
                             <td>
+                              <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                  class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+                              </a>
                               @if($requestForm->signatures_file_id)
-                                  <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
-                                  </a>
+                                  @if($requestForm->signatures_file_id == 11)
                                   <a class="btn btn-info btn-sm"
                                       title="Ver Formulario de Requerimiento firmado"
-                                      href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                      href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}"
                                       target="_blank" title="Certificado">
                                         <i class="fas fa-file-contract"></i>
                                   </a>
-                              @else
-                                  <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+                                  @else
+                                  <a class="btn btn-info btn-sm"
+                                      title="Ver Formulario de Requerimiento firmado"
+                                      href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}"
+                                      target="_blank" title="Certificado">
+                                        <i class="fas fa-file-contract"></i>
                                   </a>
-                                  <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
-                                      <i class="fas fa-file-alt"></i>
+                                  @endif
+                                  @if($requestForm->old_signatures_file_id)
+                                  <a class="btn btn-secondary btn-sm"
+                                      title="Ver Formulario de Requerimiento Anterior firmado"
+                                      href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}"
+                                      target="_blank" title="Certificado">
+                                        <i class="fas fa-file-contract"></i>
                                   </a>
+                                  @endif
 
+                                  @if(Str::contains($requestForm->subtype, 'tiempo'))
+                                  <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}"
+                                      class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+                                  </a>
+                                  @endif
+                              @endif
+                              @if($requestForm->PurchasingProcess)
+                              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
+                                <a href="{{ route('request_forms.supply.show', $requestForm) }}"
+                                  class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
+                              </span>
                               @endif
                             </td>
                         </tr>

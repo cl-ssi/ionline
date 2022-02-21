@@ -24,36 +24,20 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- <div class="row">
 <div class="col-12">
 
-                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
-                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-                <label for="category_id" class="sr-only">Categorias</label>
-                <select name="category_id" id="category_id" class="selectpicker input-sm"
-                    multiple title="Elige tus categorías" >
-                    @foreach($categories as $key => $category)
-                    <option value="{{$category->id}}"
-                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
-
-
-
-                    </option>
-                    @endforeach
-                    </select>
-
+    <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+    <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
+    <label for="category_id" class="sr-only">Categorias</label>
+    <select name="category_id" id="category_id" class="selectpicker input-sm"
+        multiple title="Elige tus categorías" >
+        @foreach($categories as $key => $category)
+            <option value="{{$category->id}}"
+            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+            </option>
+        @endforeach
+    </select>
 
 </div>
 
@@ -61,7 +45,7 @@
 
 <hr> -->
 
-<div class="row">
+<div class="form-row">
     @if($parte->id <> 0)
         <div class="col-8">
             @if($parte->files->first() != null)
@@ -82,32 +66,25 @@
 
             <input type="hidden" class="form-control" id="for_parte_id" name="parte_id" value="{{$parte->id}}" >
 
-            <div class="row">
+            <div class="form-row">
 
+                <fieldset class="form-group col-12">
 
+                    <!-- <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+                    <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:"> -->
 
-<div class="col-12">
-
-                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
-                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-                <label for="category_id" class="sr-only">Categorias</label>
-                <select name="category_id[]" id="category_id" class="selectpicker input-sm"
-                    multiple title="Elige tus categorías" >
-                    @foreach($categories as $key => $category)
-                    <option value="{{$category->id}}"
-                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
-
-
-                    </option>
-                    @endforeach
+                    <label for="category_id">Asignar categoría</label>
+                    <select name="category_id[]" id="category_id" class="form-control selectpicker"
+                        multiple title="Elige tus categorías" >
+                        @foreach($categories as $key => $category)
+                            <option value="{{$category->id}}"
+                            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                            </option>
+                        @endforeach
                     </select>
 
+                </fieldset>
 
-</div>
-
-<br><br>
-
-<br>
 
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="ou">Unidad Organizacional</label>
@@ -170,17 +147,15 @@
                     </div>
                 </fieldset>
 
-
-
             </div>
 
             <table id="tabla_funcionarios" class="table table-striped table-sm" style="display: none">
                 <thead>
-                <tr>
-                    <th>Unidad Organizacional</th>
-                    <th>Destinatario</th>
-                    <th>En copia</th>
-                </tr>
+                    <tr>
+                        <th>Unidad Organizacional</th>
+                        <th>Destinatario</th>
+                        <th>En copia</th>
+                    </tr>
                 </thead>
                 <tbody>
 
@@ -188,7 +163,7 @@
             </table>
 
 
-            <div class="row">
+            <div class="form-row">
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="for_date">Asunto</label>
                     <input type="text" class="form-control" id="for_subject"
@@ -248,7 +223,6 @@
         </form>
     </div>
 </div>
-
 
 
 

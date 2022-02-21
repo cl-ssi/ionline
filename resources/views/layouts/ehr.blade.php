@@ -61,7 +61,7 @@
 
     <main role="main" class="container">
         <div class="d-none d-print-block">
-            <strong>{{ config('app.ss') }}</strong><br>
+            <strong>{{ env('APP_SS') }}</strong><br>
             Ministerio de Salud
         </div>
         @include('layouts/partials/errors')
@@ -71,7 +71,7 @@
 
     <footer class="footer">
         <div class="col-8 col-md-6 d-inline-block text-white"
-            style="background-color: rgb(0,108,183);">{{ config('app.ss') }}</div>
+            style="background-color: rgb(0,108,183);">{{ env('APP_SS') }}</div>
         <div class="col-4 col-md-6 float-right text-white"
             style="background-color: rgb(239,65,68);"> © 2018</div>
     </footer>

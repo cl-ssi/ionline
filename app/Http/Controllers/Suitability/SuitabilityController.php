@@ -36,26 +36,31 @@ class SuitabilityController extends Controller
         $dataArray = array();
         $schools = School::orderBy('name', 'asc')->get();
         $result = Result::has('signedCertificate')->with('psirequest');
-        //$schools = School::orderBy('name', 'asc')->get();
-        $sumaprobado = 0;
+        //$schools = School::orderBy('name', 'asc')->get();        
         $sumesperando = 0;
+        $sumfinalizado = 0;
+        $sumaprobado = 0;
 
 
         //dd($result);
         foreach ($schools as $school) {
             $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status','Aprobado')->get()->count();
             $counteresperando = PsiRequest::where('school_id', $school->id)->where('status','Esperando Test')->get()->count();
+            $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status','Test Finalizado')->get()->count();
             $sumaprobado += $counteraprobado;
             $sumesperando += $counteresperando;
-            if ($counteraprobado or $counteresperando) {
+            $sumfinalizado += $counterfinalizado;
+            if ($counteraprobado >= 1 or $counteresperando >=1 or $counterfinalizado >=1) {
                 array_push(
                     $dataArray,
                     array(
                         'name_school' => $school->name,
                         'counteraprobado' => $counteraprobado,
                         'counteresperando' => $counteresperando,
+                        'counterfinalizado' => $counterfinalizado,
                         'sumaprobado' => $sumaprobado,
                         'sumesperando' => $sumesperando,
+                        'sumfinalizado' => $sumfinalizado,
                     )
                 );
             }

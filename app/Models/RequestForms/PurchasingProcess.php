@@ -46,7 +46,7 @@ class PurchasingProcess extends Model
         // 'id_offer', 'id_quotation', 'item_request_form_id',
 
         'purchase_mechanism_id', 'purchase_type_id', 'start_date', 'end_date',
-        'status', 'user_id'
+        'status', 'observation', 'user_id'
     ];
 
     public function internalPurchaseOrder(){
@@ -58,11 +58,11 @@ class PurchasingProcess extends Model
     }
 
     public function details(){
-        return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'user_id', 'quantity', 'unit_value', 'expense', 'status')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
+        return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'expense', 'status')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
     }
 
     public function getExpense(){
-        return $this->details->sum('expense');
+        return $this->details->sum('pivot.expense');
     }
 
     public function requestForm(){

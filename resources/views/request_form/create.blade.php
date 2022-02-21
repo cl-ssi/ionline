@@ -6,7 +6,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-<h4 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h4>
+<h4 class="mb-3">Formulario de Requerimiento {{$requestForm ? 'ID '.$requestForm->id : ''}} - {{ request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios') ? 'Bienes y/o Servicios' : 'Pasajes Aéreos' }}</h4>
 
 @include('request_form.partials.nav')
 
@@ -49,11 +49,46 @@
 @section('custom_js')
 
 <script>
-   $(document).ready(function(){
-      anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
-      anElement = new AutoNumeric('#price_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
-      anElement.clear();
+  $(document).ready(function(){
+    anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+    anElement = new AutoNumeric('#price_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+    anElement.clear();
   })
+
+  // function disableButton(form) {
+  //   form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Guardando...';
+  //   form.submitBtn.disabled = true;
+  //   return true;
+  // }
+
+  $('input[type="file"]').bind('change', function(e) {
+    //Validación de tamaño
+    for (let i = 0; i < this.files.length; i++) {
+      if((this.files[i].size / 1024 / 1024) > 3){
+          alert('No puede cargar archivos de más de 3 MB.');
+          $(this).val('');
+          break;
+      }
+    }
+    //Validación de pdf
+    // const allowedExtension = ".pdf";
+    // let hasInvalidFiles = false;
+
+    // for (let i = 0; i < this.files.length; i++) {
+    //     let file = this.files[i];
+
+    //     if (!file.name.endsWith(allowedExtension)) {
+    //         hasInvalidFiles = true;
+    //     }
+    // }
+
+    // if(hasInvalidFiles) {
+    //     $('#for_document').val('');
+    //     alert("Debe seleccionar un archivo pdf.");
+    // }
+  });
+
+  
 </script>
 
 @endsection

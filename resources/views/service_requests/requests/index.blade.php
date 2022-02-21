@@ -29,6 +29,12 @@
 				<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 					Disponibles para visar <b>({{count($serviceRequestsMyPendings)}})</b>
 				</button>
+
+				@can('Service Request: accept all requests')
+					<a class="btn btn-info" href="{{ route('rrhh.service-request.accept_all_requests') }}">
+						<i class="fas fa-angle-right"></i> Aceptar todo
+					</a>
+				@endcan
 			</h5>
 		</div>
 

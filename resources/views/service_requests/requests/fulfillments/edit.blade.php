@@ -8,10 +8,21 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-12 col-md-8 mt-4">
+  <fieldset class="form-group col-12 col-md-5 mt-4">
     <h3>Cumplimiento de solicitud:
       <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
     </h3>
+  </fieldset>
+
+  <fieldset class="col-md-3">
+    <label>Programa :</label>
+    <input type="text" class="form-control" value="{{$serviceRequest->programm_name}}"
+      @if($serviceRequest->type=='Covid 2022')
+        style='background-color:#F5A7A7;'
+      @else
+        style='background-color:#8fbc8f;'
+      @endif
+    disabled>
   </fieldset>
 
   <fieldset class="col-md-4">
@@ -40,15 +51,23 @@
       <label for="for_request_date">C.Responsabilidad</label>
       <input type="text" class="form-control" value="{{$serviceRequest->responsabilityCenter->name}}" disabled style="background-color:#F5A7A7;">
   </fieldset>
-  
+
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_request_date">Responsable</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
+      @if($serviceRequest->SignatureFlows->isNotEmpty())
+      <input type="text" class="form-control" value="{{ optional(optional($serviceRequest->SignatureFlows->where('sign_position',1)->first())->user)->getFullNameAttribute() }}" disabled>
+      @else
+			<span class="form-control is-invalid">Error, contacte a informática</span>
+			@endif
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_start_date">Supervisor</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
+      @if($serviceRequest->SignatureFlows->isNotEmpty())
+      <input type="text" class="form-control" value="{{ optional(optional($serviceRequest->SignatureFlows->where('sign_position',2)->first())->user)->getFullNameAttribute() }}" disabled>
+      @else
+			<span class="form-control is-invalid">Error, contacte a informática</span>
+			@endif
   </fieldset>
 
 </div>
@@ -80,18 +99,23 @@
 <div class="form-row">
 
   <fieldset class="form-group col-6 col-md-3">
-      <label for="for_request_date">Rut</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->employee->runNotFormat()}}" disabled>
+      <label for="for_rut">Run</label>
+      <input type="text" class="form-control" value="{{ $serviceRequest->employee->runNotFormat() }}" disabled>
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-6">
-      <label for="for_start_date">Funcionario</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->employee->getFullNameAttribute()}}" disabled>
+      <label for="for_name">Funcionario</label>
+      <input type="text" class="form-control" value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-3">
-      <label for="for_end_date">Estamento</label>
+  <!-- <fieldset class="form-group col-12 col-md-3">
+      <label for="for_estate">Estamento</label>
       <input type="text" class="form-control" value="{{$serviceRequest->estate}}" disabled>
+  </fieldset> -->
+
+  <fieldset class="form-group col-12 col-md-3">
+      <label for="for_estamento">Estamento</label>
+      <input type="text" class="form-control" value="{{ ($serviceRequest->profession) ? $serviceRequest->profession->estamento : $serviceRequest->estate }}" disabled>
   </fieldset>
 
 </div>

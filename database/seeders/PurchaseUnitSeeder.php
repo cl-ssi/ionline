@@ -22,6 +22,6 @@ class PurchaseUnitSeeder extends Seeder
         PurchaseUnit::Create(['name'=>'Hospital Dr Hector Reyno G.']);
         PurchaseUnit::Create(['name'=>'Obras Civiles']);
         PurchaseUnit::Create(['name'=>'Servicio Bienestar']);
-        PurchaseUnit::Create(['name'=>'Servicio de Salud Iquique.']);
+        PurchaseUnit::Create(['name'=>'Servicio de Salud Iquique']);
     }
 }

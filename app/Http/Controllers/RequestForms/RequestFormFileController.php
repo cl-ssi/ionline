@@ -104,11 +104,11 @@ class RequestFormFileController extends Controller
 
     public function show_file(RequestFormFile $requestFormFile)
     {
-        return Storage::disk('gcs')->response($requestFormFile->file);
+        return Storage::disk('gcs')->response($requestFormFile->file, $requestFormFile->name);
     }
 
     public function download(RequestFormFile $requestFormFile)
     {
-        return Storage::disk('gcs')->download($requestFormFile->file);
+        return Storage::disk('gcs')->download($requestFormFile->file,  $requestFormFile->name);
     }
 }

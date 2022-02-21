@@ -12,7 +12,7 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col">
             <label for="for_name">Nombre</label>
@@ -20,14 +20,20 @@
                 value="{{ $role->name }}" required>
         </fieldset>
 
+        <fieldset class="form-group col">
+            <label for="for_description">Descripción</label>
+            <input type="text" class="form-control" id="for_description" name="description"
+                value="{{ $role->description }}">
+        </fieldset>
+
     </div>
 
-    @foreach($permissions as $permission)
+    @foreach($permissions as $name => $id)
     	<div class="form-check">
-      		<input class="form-check-input" type="checkbox" id="{{$permission->name}}"
-                name="permissions[]" value="{{ $permission->name }}"
-                {{ $role->hasPermissionTo($permission->name) ? 'checked':'' }} >
-      		<label class="form-check-label" for="{{$permission->name}}">{{$permission->name}}</label>
+      		<input class="form-check-input" type="checkbox" id="{{ $name }}"
+                name="permissions[]" value="{{ $name }}"
+                {{ $role->hasPermissionTo($name) ? 'checked':'' }} >
+      		<label class="form-check-label" for="{{ $name }}">{{ $name }}</label>
     	</div>
     @endforeach
 

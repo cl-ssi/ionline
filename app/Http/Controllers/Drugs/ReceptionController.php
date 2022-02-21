@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Drugs\Reception;
-use App\Drugs\ReceptionItem;
+use App\Models\Drugs\Reception;
+use App\Models\Drugs\ReceptionItem;
 use App\User;
 use App\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Drugs\Court;
-use App\Drugs\PoliceUnit;
-use App\Drugs\Substance;
-use App\Drugs\Destruction;
-use App\Drugs\Protocol;
+use App\Models\Drugs\Court;
+use App\Models\Drugs\PoliceUnit;
+use App\Models\Drugs\Substance;
+use App\Models\Drugs\Destruction;
+use App\Models\Drugs\Protocol;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -70,7 +70,7 @@ class ReceptionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Drugs\Reception  $reception
+     * @param  \App\Models\Drugs\Reception  $reception
      * @return \Illuminate\Http\Response
      */
     public function show(Reception $reception)
@@ -88,7 +88,7 @@ class ReceptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Drugs\Reception  $reception
+     * @param  \App\Models\Drugs\Reception  $reception
      * @return \Illuminate\Http\Response
      */
     public function edit(Reception $reception)
@@ -104,7 +104,7 @@ class ReceptionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Drugs\Reception  $reception
+     * @param  \App\Models\Drugs\Reception  $reception
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Reception $reception)
@@ -271,7 +271,7 @@ class ReceptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Drugs\Reception  $reception
+     * @param  \App\Models\Drugs\Reception  $reception
      * @return \Illuminate\Http\Response
      */
     public function destroy(Reception $reception)

@@ -14,6 +14,7 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Categoría</th>            
+            <th>Estamento</th>            
             <th>Editar</th>
         </tr>
     </thead>
@@ -22,7 +23,8 @@
         <tr>
             <td>{{ $profession->id }}</td>
             <td>{{ $profession->name }}</td>
-            <td>{{ $profession->category }}</td>            
+            <td>{{ $profession->category }}</td>
+            <td>{{ $profession->estamento }}</td>
             <td>
                 <a href="{{ route('parameters.professions.edit', $profession )}}">
                 <i class="fas fa-edit"></i>

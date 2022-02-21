@@ -30,8 +30,6 @@ class AuthorityController extends Controller
         $calendar = array();
         if($request->ou) {
             $ou = OrganizationalUnit::Find($request->ou);
-            $authorities = Authority::with('user', 'creator')->where('organizational_unit_id',$request->ou)->latest('id')->get();
-            //return $authorities;
 
             $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
             //print_r($begin);
@@ -39,8 +37,21 @@ class AuthorityController extends Controller
             $end   = (clone $today)->modify('+13 days')->modify('+'.(8-$today->format('w')).' days');
             //print_r($end);
 
+            $authorities = Authority::with('user', 'creator')
+                            ->where('from', '<=', $end)
+                            ->where('to','>=', $begin)
+                            ->where('organizational_unit_id',$request->ou)
+                            ->latest('id')
+                            ->get();
+            //return $authorities;
+
             for($i = $begin; $i <= $end; $i->modify('+1 day')){
-                $calendar[] = ['date' => $i->format("Y-m-d"), 'manager' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager'), 'delegate' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'delegate'), 'secretary' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'secretary')]; 
+                $calendar[] = [
+                    'date' => $i->format("Y-m-d"), 
+                    'manager' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager'), 
+                    'delegate' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'delegate'), 
+                    'secretary' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'secretary')
+                ]; 
                 // $calendar[$i->format("Y-m-d")] = Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager');
                 // echo $i->format("Y-m-d"). '
                 // ';
@@ -93,7 +104,12 @@ class AuthorityController extends Controller
             //$ouTopLevel = OrganizationalUnit::Find(1);
             $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
             //dd($ouTopLevel);
-            return view('rrhh.authorities.create', compact('ous','ouTopLevel'));
+            return view('rrhh.authorities.create', compact('ous','ouTopLevel'))->withOu($request->ou_id);
+        }
+        else
+        {
+            session()->flash('warning', 'Debe seleccionar primero una unidad organizacional');
+            return redirect()->route('rrhh.authorities.index');
         }
 
     }

@@ -221,7 +221,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
@@ -330,7 +330,13 @@
 
 
       <p class="justify">
-        <strong>OCTAVO:</strong> El valor por día será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. La entidad retendrá y pagará el impuesto correspondiente por los honorarios pactados.<br><br>
+        <strong>OCTAVO:</strong> El valor por día será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. La entidad retendrá y pagará el impuesto correspondiente por los honorarios pactados.<br><br>
         <b>Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           Hospital Dr. Ernesto Torres Galdames de Iquique,
@@ -348,7 +354,10 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia, que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R
+        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia,
+        que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia,
+        se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio,
+        en virtud del Dictamen N°26.092/2017 de la C.G.R. Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
       </p>
 
 
@@ -358,7 +367,7 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que la {{$ServiceRequest->estate}}, se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
+        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
       </p>
 
       Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
@@ -379,7 +388,7 @@
         11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1,
         @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
         11450602
-        @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
+        @elseif($ServiceRequest->programm_name == "LEY DE ALCOHOL" || $ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
         114050601
         @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
         11450602
