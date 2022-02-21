@@ -114,8 +114,7 @@
         </div>
     @endif
 
-    @if(in_array($event_type, ['finance_event', 'supply_event']))
-
+    @if(array_intersect($events_type, ['finance_event', 'supply_event']))
     @if(count($new_budget_pending_to_sign) > 0)
     </div>
         <div class="col">
@@ -176,7 +175,7 @@
                                   @endforeach
                               </td>
                               <td>
-                                <a href="{{ route('request_forms.sign', [$requestForm, $event_type == 'finance_event' ? 'budget_event' : 'pre_budget_event']) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                <a href="{{ route('request_forms.sign', [$requestForm, $requestForm->firstPendingEvent()->event_type]) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
                                   <i class="fas fa-signature"></i>
                                 </a>
                               </td>
@@ -197,10 +196,8 @@
             </div>
         </div>
     @endif
-
-
     @endif
-
+    
     @if(count($my_forms_signed) > 0)
     </div>
         <div class="col">
@@ -331,7 +328,7 @@
         </div>
     @endif
 
-    @if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']))
+    @if(array_intersect($events_type, ['pre_finance_event', 'finance_event', 'supply_event']))
         @if(count($not_pending_forms) > 0)
         </div>
             <div class="col">
