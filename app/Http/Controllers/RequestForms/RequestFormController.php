@@ -147,7 +147,7 @@ class RequestFormController extends Controller {
                 return $q->where('signer_user_id', Auth::user()->id);
             })->latest('id')->paginate(15, ['*'], 'p2');
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'events_type'));
     }
 
 
