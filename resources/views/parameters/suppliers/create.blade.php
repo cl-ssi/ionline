@@ -14,31 +14,31 @@
     <div class="row">
         <fieldset class="form-group col-sm-3">
             <label for="for_run">Run</label>
-            <input type="run" class="form-control" id="for_run" name="run" required>
+            <input type="number" class="form-control" id="for_run" name="run" required>
         </fieldset>
 
         <fieldset class="form-group col-sm-1">
             <label for="for_dv">DV</label>
-            <input type="dv" class="form-control" id="for_dv" name="dv" required>
+            <input type="text" class="form-control" id="for_dv" name="dv" required>
         </fieldset>
 
         <fieldset class="form-group col-sm-8">
             <label for="for_name">Nombre Proveedor</label>
-            <input type="name" class="form-control" id="for_name" name="name" required>
+            <input type="text" class="form-control" id="for_name" name="name" required>
         </fieldset>
     </div>
 
     <div class="row">
         <fieldset class="form-group col-sm-4">
             <label for="for_address">Dirección</label>
-            <input type="address" class="form-control" id="for_address" name="address" required>
+            <input type="text" class="form-control" id="for_address" name="address" required>
         </fieldset>
 
         @livewire('request-form.commune-region-select')
 
         <fieldset class="form-group col-sm-4">
             <label for="for_telephone">Teléfono</label>
-            <input type="telephone" placeholder="+569xxxxxxxx" class="form-control" id="for_telephone" name="telephone">
+            <input type="text" placeholder="+569xxxxxxxx" class="form-control" id="for_telephone" name="telephone">
         </fieldset>
     </div>
 
