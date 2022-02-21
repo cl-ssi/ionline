@@ -121,7 +121,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12">
                 <label for="forFile">Adjuntar archivo Res. Toma de Razón</label>
-                <input type="file" class="form-control-file" id="forFile" name="taking_of_reason_file" required>
+                <input type="file" class="form-control-file" id="forFile" name="taking_of_reason_file" disabled>
             </fieldset>
         </div>
         @endif
