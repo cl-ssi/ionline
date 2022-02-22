@@ -226,16 +226,12 @@ class RequestForm extends Model implements Auditable
                 return 'Peso';
                 break;
 
-            case "bienes ejecución tiempo":
-                return 'Bienes Ejecución En Tiempo';
+            case "dolar":
+                return 'Dólar';
                 break;
 
-            case "servicios ejecución inmediata":
-                return 'Servicios Ejecución Inmediata';
-                break;
-
-            case "servicios ejecución tiempo":
-                return 'Servicios Ejecución En Tiempo';
+            case "uf":
+                return 'U.F.';
                 break;
         }
     }
