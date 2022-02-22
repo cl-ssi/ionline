@@ -38,8 +38,7 @@
     </li>
   @endif
 
-  @if(App\Rrhh\Authority::getAuthorityFromDate(37, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id ||
-    Auth::user()->hasPermissionTo('Request Forms: config'))
+  @if(Auth()->user()->organizational_unit_id == 37 || Auth::user()->hasPermissionTo('Request Forms: config'))
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-file-alt"></i> Parámetros
