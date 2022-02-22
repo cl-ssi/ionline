@@ -1,4 +1,10 @@
 <span>
+    @if($msg)
+      <div class="alert alert-info" role="alert">
+        {{$msg}}
+      </div>
+    @endif
+
     @if($parametroMes != null)
       {{$array_valores_mensualizados[$parametroMes]}}
     @else
