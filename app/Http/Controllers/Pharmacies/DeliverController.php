@@ -116,12 +116,18 @@ class DeliverController extends Controller
         $filterEstablishment = function($query) use ($establishment_id) {
             $query->where('establishment_id', $establishment_id);
         };
+
         $products_by_establishment = Product::whereHas('establishments', $filterEstablishment)
                             ->with(['establishments' => $filterEstablishment])
                             ->where('pharmacy_id',session('pharmacy_id'))
                             ->where('program_id', 46) //APS ORTESIS
                             ->whereNotIn('id', [1185, 1186, 1231])
                             ->orderBy('name','ASC')->get();
+        
+        if($products_by_establishment->count() == 0){
+            session()->flash('warning', 'Ud. no tiene permiso para registrar y hacer entrega de ayuda técnica porque el establecimiento no presenta stock alguno de productos. Contacte con secretaría de informática.');
+            return redirect()->route('pharmacies.products.deliver.index');
+        }
 
         return view('pharmacies.products.deliver.create',compact('products_by_establishment'));
     }
