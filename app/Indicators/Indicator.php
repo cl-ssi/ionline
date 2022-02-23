@@ -124,4 +124,10 @@ class Indicator extends Model
     {
         return $factor == 'numerador' ? $this->numerator_source == 'REM' : $this->denominator_source == 'REM';
     }
+
+    public function getSourceAbbreviated($value)
+    {
+        $factor = $value == 'numerador' ? $this->numerator_source : $this->denominator_source;
+        return Str::contains(mb_strtoupper($factor), 'REM') ? substr($factor, 0, 5) : $factor;
+    }
 }
