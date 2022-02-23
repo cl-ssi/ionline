@@ -114,12 +114,13 @@
                     </a>
                     </div>
                 </li>
-
+                @if(Auth()->user()->organizationalUnit->establishment_id == 38)
                 <li class="nav-item {{ active('request_forms') }}">
                     <a class="nav-link" href="{{ route('request_forms.my_forms') }}">
                         <i class="fas fa-shopping-cart"></i> Abastecimiento
                     </a>
                 </li>
+                @endif
                 @endauth
 
                 @can('Requirements: create')
@@ -272,7 +273,7 @@
                             @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
                             <a class="dropdown-item"
                                 href="{{ route('pharmacies.index') }}">
-                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> Droguería 
+                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> Droguería
                             </a>
                             @endcanany
 
