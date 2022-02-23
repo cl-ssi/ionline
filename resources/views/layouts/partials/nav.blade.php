@@ -114,7 +114,7 @@
                     </a>
                     </div>
                 </li>
-                @if(Auth()->user()->organizationalUnit->establishment_id == 38)
+                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
                 <li class="nav-item {{ active('request_forms') }}">
                     <a class="nav-link" href="{{ route('request_forms.my_forms') }}">
                         <i class="fas fa-shopping-cart"></i> Abastecimiento
