@@ -229,7 +229,7 @@
                                   ''
                             @endswitch
                           </td>
-                          <td>${{ number_format($item['unitValue'],0,",",".") }}</td>
+                          <td>{{ number_format($item['unitValue'],$precision_currency,",",".") }}</td>
                           <td align="center">
                             <a class="btn btn-outline-secondary btn-sm" title="Editar"
                               wire:click="editPassenger({{ $key }})">
@@ -249,7 +249,7 @@
               <tr>
                   <td colspan="10" rowspan="2"></td>
                   <th colspan="2" class="text-right">Total</th>
-                  <td colspan="2">${{ number_format($totalValue,0,",",".") }}</td>
+                  <td colspan="2">{{ number_format($totalValue,$precision_currency,",",".") }}</td>
               </tr>
           </tfoot>
     </table>

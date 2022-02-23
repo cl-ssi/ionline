@@ -32,7 +32,7 @@
                     </tr>
                     <tr>
                         <th class="table-active" style="width: 33%">Gasto Estimado</th>
-                        <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                        <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Nombre del Solicitante</th>
@@ -273,9 +273,9 @@
                             @endif
                         </td>
                         <td align="right">{{ $detail->pivot->quantity }}</td>
-                        <td align="right">${{ number_format($detail->pivot->unit_value,0,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
                         <td>{{ $detail->tax }}</td>
-                        <td align="right">${{ number_format($detail->pivot->expense,0,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
                         <td>
                         <button type="button" id="btn_items_{{$key}}" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                             <i class="fas fa-receipt"></i>
@@ -289,11 +289,11 @@
                 <tfoot>
                     <tr>
                       <th colspan="11" class="text-right">Valor Total</td>
-                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                     <tr>
                       <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
-                      <th class="text-right">${{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -364,9 +364,9 @@
                         {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
                         <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
                         <td align="center">{{ $child->quantityOfItems() }}</td>
-                        <td align="right">${{ number_format($child->estimated_expense,0,",",".") }}</td>
-                        <td align="right">{{ $child->purchasingProcess ? '$ '.number_format($child->purchasingProcess->getExpense(),0,",",".") : '-' }}</td>
-                        {{--<td align="right">{{ $child->purchasingProcess ? '$ '.number_format($child->estimated_expense - $child->purchasingProcess->getExpense(),0,",",".") : '-' }}</td>--}}
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($child->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{ $child->purchasingProcess ? $requestForm->symbol_currency.number_format($child->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") : '-' }}</td>
+                        {{--<td align="right">{{ $child->purchasingProcess ? $requestForm->symbol_currency.number_format($child->estimated_expense - $child->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") : '-' }}</td>--}}
                     </tr>
                   @empty
                     <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
@@ -376,12 +376,12 @@
                 <tfoot>
                     <tr>
                       <th colspan="9" class="text-right">Totales</td>
-                      <th class="text-right">${{ number_format($requestForm->getTotalEstimatedExpense(),0,",",".") }}</td>
-                      <th class="text-right">${{ number_format($requestForm->getTotalExpense(),0,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                     <tr>
                       <th colspan="10" class="text-right">Saldo disponible Compras</td>
-                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),0,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                 </tfoot>
                 @endif

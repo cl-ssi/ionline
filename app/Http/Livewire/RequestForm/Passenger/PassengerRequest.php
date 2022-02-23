@@ -30,9 +30,9 @@ class PassengerRequest extends Component
 
     public $passengers, $key, $editRF, $savedPassengers, $deletedPassengers;
 
-    public $totalValue = 0;
+    public $totalValue = 0 , $precision_currency;
 
-    protected $listeners = ['searchedUser'];
+    protected $listeners = ['searchedUser', 'savedTypeOfCurrency'];
 
     //Para Validar
 
@@ -184,7 +184,7 @@ class PassengerRequest extends Component
         }
     }
 
-    public function mount($savedPassengers){
+    public function mount($savedPassengers, $savedTypeOfCurrency){
       // $this->run = $this->searchedUser->run;
 
       $this->passengers             = array();
@@ -194,6 +194,9 @@ class PassengerRequest extends Component
         $this->editRF = true;
         $this->savedPassengers = $savedPassengers;
         $this->setSavedPassengers();
+      }
+      if(!is_null($savedTypeOfCurrency)){
+        $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
       }
     }
 
@@ -244,5 +247,10 @@ class PassengerRequest extends Component
         $users = User::orderBy('name', 'ASC')->get();
 
         return view('livewire.request-form.passenger.passenger-request', compact('users'));
+    }
+
+    public function savedTypeOfCurrency($typeOfCurrency)
+    {
+      $this->precision_currency = $typeOfCurrency == 'peso' ? 0 : 2;
     }
 }

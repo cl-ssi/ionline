@@ -42,7 +42,7 @@
                                 {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
                             </td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
-                            <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                            <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                             <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td>
                             @foreach($requestForm->eventRequestForms as $sign)
@@ -119,7 +119,7 @@
                             </td>
                             <td>@foreach($requestForm->purchasers as $purchaser) {{ $purchaser->FullName }} <br> @endforeach</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
-                            <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                            <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                             <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td>
                             @foreach($requestForm->eventRequestForms as $sign)
