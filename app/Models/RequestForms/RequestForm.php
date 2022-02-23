@@ -231,9 +231,28 @@ class RequestForm extends Model implements Auditable
                 break;
 
             case "uf":
-                return 'U.F.';
+                return 'Uf';
                 break;
         }
+    }
+    public function getSymbolCurrencyAttribute(){
+        switch ($this->type_of_currency) {
+          case "peso":
+              return '$';
+              break;
+
+          case "dolar":
+              return 'USD ';
+              break;
+
+          case "uf":
+              return 'Uf ';
+              break;
+      }
+    }
+
+    public function getPrecisionCurrencyAttribute(){
+      return $this->type_of_currency == 'peso' ? 0 : 2;
     }
 
     /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/

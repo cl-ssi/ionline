@@ -11,8 +11,10 @@ class RequestFormItems extends Component
     use WithFileUploads;
 
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $editRF, $savedItems, $deletedItems,
-            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax;
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency;
 
+    protected $listeners = ['savedTypeOfCurrency'];
+    
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
         'quantity'            =>  'required|numeric|min:0.1',
@@ -127,7 +129,7 @@ class RequestFormItems extends Component
         $this->articleFile = null;
     }
 
-    public function mount($savedItems)
+    public function mount($savedItems, $savedTypeOfCurrency)
     {
         $this->totalDocument          = 0;
         $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
@@ -141,7 +143,10 @@ class RequestFormItems extends Component
             $this->editRF = true;
             $this->savedItems = $savedItems;
             $this->setSavedItems();
-          }
+        }
+        if(!is_null($savedTypeOfCurrency)){
+            $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
+        }
     }
 
     private function setSavedItems()
@@ -166,5 +171,10 @@ class RequestFormItems extends Component
     public function render()
     {
         return view('livewire.request-form.item.request-form-items');
+    }
+
+    public function savedTypeOfCurrency($typeOfCurrency)
+    {
+      $this->precision_currency = $typeOfCurrency == 'peso' ? 0 : 2;
     }
 }

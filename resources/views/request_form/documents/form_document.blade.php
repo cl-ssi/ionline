@@ -167,12 +167,12 @@
       <table class="siete">
           <tr>
               <th align="left" style="width: 50%">Gasto Estimado</th>
-              <td colspan="2">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+              <td colspan="2">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           </tr>
           @if($requestForm->has_increased_expense)
           <tr>
               <th align="left" style="width: 50%">Nuevo presupuesto</th>
-              <td colspan="2">${{ number_format($requestForm->new_estimated_expense,0,",",".") }}</td>
+              <td colspan="2">{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           </tr>
           @endif
           <tr>
@@ -275,40 +275,16 @@
                   <td>{{ $item->budgetItem->code }}</td>
                   <td>{{ $item->article }}</td>
                   <td>{{ $item->specification }}</td>
-                  <td align="right">{{ number_format($item->quantity,0,",",".") }}</td>
-                  <td align="right">
-                    @if($requestForm->type_of_currency == 'peso')
-                      ${{ number_format($item->unit_value,0,",",".") }}
-                    @elseif($requestForm->type_of_currency == 'dolar')
-                      USD ${{ number_format($item->unit_value,2,",",".") }}
-                    @else
-                      UF ${{ number_format($item->unit_value,2,",",".") }}
-                    @endif
-                  </td>
-                  <td align="right">
-                    @if($requestForm->type_of_currency == 'peso')
-                      ${{ number_format($item->expense,0,",",".") }}
-                    @elseif($requestForm->type_of_currency == 'dolar')
-                      USD ${{ number_format($item->expense,2,",",".") }}
-                    @else
-                      UF ${{ number_format($item->expense,2,",",".") }}
-                    @endif
-                  </td>
+                  <td align="right">{{ $item->quantity }}</td>
+                  <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                  <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
               @endforeach
           </tbody>
           <tfoot>
               <tr align="right">
                   <th colspan="6">Total</th>
-                  <th>
-                    @if($requestForm->type_of_currency == 'peso')
-                      ${{ number_format($requestForm->estimated_expense,0,",",".") }}
-                    @elseif($requestForm->type_of_currency == 'dolar')
-                      USD ${{ number_format($requestForm->estimated_expense,2,",",".") }}
-                    @else
-                      UF ${{ number_format($requestForm->estimated_expense,2,",",".") }}
-                    @endif
-                  </th>
+                  <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</th>
               </tr>
           </tfoot>
       </table>
@@ -369,7 +345,7 @@
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Monto $</th>
-                  <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                  <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>

@@ -61,7 +61,7 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Monto total</th>
-                                <td>${{ number_format($detail->pivot->pettyCash->amount,0,",",".") }}</td>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->pettyCash->amount,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
@@ -86,7 +86,7 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Monto total</th>
-                                <td>${{ number_format($detail->pivot->fundToBeSettled->amount,0,",",".") }}</td>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->fundToBeSettled->amount,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
@@ -276,7 +276,7 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Monto total</th>
-                                <td>${{ number_format($detail->pivot->immediatePurchase->po_amount,0,",",".") }}</td>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_amount,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>

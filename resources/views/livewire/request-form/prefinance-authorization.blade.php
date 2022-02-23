@@ -44,9 +44,9 @@
                     @endif
                   </td>
                   <td align="right">{{$item->quantity}}</td>
-                  <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>
+                  <td align="right">{{ number_format($item->unit_value,$requestForm->precision_currency,",",".") }}</td>
                   <td>{{$item->tax}}</td>
-                  <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
+                  <td align="right">{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
             @endforeach
           </tbody>
@@ -54,7 +54,7 @@
               <tr>
                   <td colspan="5" rowspan="2"></td>
                   <td colspan="3">Valor Total</td>
-                  <td colspan="3" align="right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                  <td colspan="3" align="right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
           </tfoot>
       </table>
@@ -93,14 +93,14 @@
                         <td>{{ $passenger->departure_date }}</td>
                         <td>{{ $passenger->return_date }}</td>
                         <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
-                        <td align="right">${{ number_format($passenger->unit_value, $requestForm->type_of_currency == 'peso' ? 0 : 2, ",", ".") }}</td>
+                        <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
                     </tr>
             @endforeach
         </tbody>
         <tfoot class="text-right small">
             <tr>
             <td colspan="11">Valor Total</td>
-            <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
+            <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</td>
             </tr>
         </tfoot>
         </table>

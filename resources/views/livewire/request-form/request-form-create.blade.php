@@ -105,7 +105,7 @@
             @if($savedFiles && !$savedFiles->isEmpty())
             <div class="form-row">
                 <fieldset class="form-group col-sm">
-                      <label>Documentos adjuntados:</label>
+                      <label>Documentos adjuntos:</label>
 
                         <ul class="list-group">
                           @foreach ($savedFiles as $file)
@@ -127,9 +127,9 @@
 
     <br>
     @if($isRFItems)
-        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null])
+        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
     @else
-        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null])
+        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
     @endif
 
     <div class="row justify-content-md-end mt-0">

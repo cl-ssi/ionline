@@ -436,4 +436,8 @@ class RequestFormCreate extends Component
     {
       $this->fileRequests = $value;
     }
+
+    public function updatedTypeOfCurrency($value){
+      $this->emit('savedTypeOfCurrency', $value);
+    }
 }

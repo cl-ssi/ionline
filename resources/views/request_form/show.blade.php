@@ -33,7 +33,7 @@
                   </tr>
                   <tr>
                       <th class="table-active" colspan="2" style="width: 33%">Gasto Estimado</th>
-                      <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                      <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                   </tr>
                   <tr>
                       <th class="table-active" colspan="2" scope="row">Tipo de moneda</th>
@@ -199,16 +199,16 @@
                       @endif
                     </td>
                     <td align="right">{{ $itemRequestForm->quantity }}</td>
-                    <td align="right">${{ number_format($itemRequestForm->unit_value,0,",",".") }}</td>
+                    <td align="right">{{ number_format($itemRequestForm->unit_value,$requestForm->precision_currency,",",".") }}</td>
                     <td align="center">{{ $itemRequestForm->tax }}</td>
-                    <td align="right">${{ number_format($itemRequestForm->expense,0,",",".") }}</td>
+                    <td align="right">{{ number_format($itemRequestForm->expense,$requestForm->precision_currency,",",".") }}</td>
                 </tr>
         @endforeach
       </tbody>
       <tfoot class="text-right small">
         <tr>
           <td colspan="10">Valor Total</td>
-          <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+          <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
         </tr>
         <tr>
           <td colspan="10">Cantidad de Items</td>
@@ -252,14 +252,14 @@
                     <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
                     <td>{{ $passenger->return_date->format('d-m-Y H:i') }}</td>
                     <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
-                    <td align="right">${{ number_format($passenger->unit_value, $requestForm->type_of_currency == 'peso' ? 0 : 2, ",", ".") }}</td>
+                    <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
                 </tr>
         @endforeach
       </tbody>
       <tfoot class="text-right small">
         <tr>
           <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'budget_event']) ? 11 : 10 }}">Valor Total</td>
-          <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
+          <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</td>
         </tr>
       </tfoot>
     </table>

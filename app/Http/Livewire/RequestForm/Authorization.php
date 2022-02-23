@@ -56,8 +56,8 @@ class Authorization extends Component
           $this->title = 'Autorización Dirección';
       }elseif(in_array($eventType, ['pre_budget_event', 'budget_event'])){
           $this->title = 'Autorización nuevo presupuesto';
-          $this->estimated_expense = number_format($requestForm->estimated_expense, 0, ',', '.');
-          $this->new_estimated_expense = number_format($requestForm->new_estimated_expense, 0, ',', '.');
+          $this->estimated_expense = $requestForm->symbol_currency.number_format($requestForm->estimated_expense, $requestForm->precision_currency, ',', '.');
+          $this->new_estimated_expense = $requestForm->symbol_currency.number_format($requestForm->new_estimated_expense, $requestForm->precision_currency, ',', '.');
       }
     }
 

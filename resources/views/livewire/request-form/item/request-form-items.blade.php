@@ -117,9 +117,9 @@
                     <td>{{$item['technicalSpecifications']}}</td>
                     <!-- <td>{{-- $item['articleFile'] --}}</td> -->
                     <td style="text-align:right">{{ $item['quantity'] }}</td>
-                    <td style="text-align:right">{{ number_format($item['unitValue'],0,",",".") }}</td>
+                    <td style="text-align:right">{{ number_format($item['unitValue'],$precision_currency,",",".") }}</td>
                     <td>{{$item['taxes']}}</td>
-                    <td align="right">{{ number_format($item['totalValue'],0,",",".") }}</td>
+                    <td align="right">{{ number_format($item['totalValue'],$precision_currency,",",".") }}</td>
                     <td align="center" class="brd-l brd-b">
                         <a href="#items" class="text-info" title="Editar" wire:click="editItem({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                     </td>
@@ -133,7 +133,7 @@
                 <tr>
                     <td colspan="6" rowspan="2"></td>
                     <td colspan="2">Valor Total</td>
-                    <td colspan="1" style="text-align:right">{{ number_format($totalDocument,0,",",".") }}</td>
+                    <td colspan="1" style="text-align:right">{{ number_format($totalDocument,$precision_currency,",",".") }}</td>
                     <td colspan="2"></td>
                 </tr>
                 <!-- <tr>
