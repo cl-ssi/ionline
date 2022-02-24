@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Parameters\PurchaseMechanism;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseType extends Model
 {
@@ -35,6 +36,7 @@ class PurchaseType extends Model
   }
 
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'cfg_purchase_types';
 
 }
