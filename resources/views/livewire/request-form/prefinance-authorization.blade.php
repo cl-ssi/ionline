@@ -146,7 +146,7 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-12">
                         <label for="for_comment">Observación:</label>
-                        <textarea wire:model="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                        <textarea wire:model.lazy="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
                         @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
                         </fieldset>
                 </div>
