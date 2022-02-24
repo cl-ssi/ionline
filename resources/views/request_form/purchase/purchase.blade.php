@@ -222,10 +222,10 @@
                         <th>UM</th>
                         <th>Especificaciones Técnicas</th>
                         <th>Archivo</th>
-                        <th>Cantidad</th>
-                        <th>Valor U.</th>
-                        <th>Impuestos</th>
-                        <th>Total Item</th>
+                        <th width="100">Cantidad</th>
+                        <th width="150">Valor U.</th>
+                        <th width="50">Impto.</th>
+                        <th width="150">Total Item</th>
                         <th colspan="2"></th>
                         <!-- <th></th> -->
                     </tr>
@@ -284,7 +284,14 @@
                       <td colspan="9"></td>
                       <td class="text-right">Valor Total</td>
                       <td align="right">
-                          <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" name="total_amount" readonly>
+                          <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                      <td colspan="9"></td>
+                      <td class="text-right">Total seleccionado</td>
+                      <td align="right">
+                          <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
                         </td>
                     </tr>
                 </tfoot>
@@ -548,17 +555,19 @@ $('#for_quantity,#for_unit_value').on('change keyup',function(){
     var total = tr.find('input[name="item_total[]"]')
     var grand_total = $('#total_amount')
 
-    total.val(Math.round(qty.val() * totalValueWithTaxes(price.val(), tax.val())));
+    total.val((qty.val() * totalValueWithTaxes(price.val(), tax.val())).toFixed(2))
 
     var grandTotal=0;
     $('table').find('input[name="item_total[]"]').each(function(){
         if(!isNaN($(this).val()))
-            grandTotal += parseInt($(this).val());
+            grandTotal += parseFloat($(this).val())
     });
+
+    
 
     if(isNaN(grandTotal))
         grandTotal = 0;
-    grand_total.val(grandTotal)
+    grand_total.val(grandTotal.toFixed(2))
 
     calculateAmount(true)
 });
@@ -581,12 +590,12 @@ function disabledSaveBtn() {
 function calculateAmount(checked = false) {
     var total = 0;
     $('input[type="checkbox"]' + (checked ? ':checked' : '')).each(function(){
-        var val = Math.round($(this).parents("tr").find('input[name="item_total[]"]').val());
+        var val = Math.round($(this).parents("tr").find('input[name="item_total[]"]').val() * 100) / 100;
         if(!isNaN(val))
             total += val;
     });
 
-    $(checked ? '#for_amount' : '#total_amount').val(total);
+    $(checked ? '#for_amount,#total_amount_selected' : '#total_amount').val(total.toFixed(2));
 }
 
 // Calcular fecha de entrega a partir de la suma de dias habiles o corridos con la fecha de la OC aceptada

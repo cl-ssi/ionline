@@ -77,7 +77,7 @@
             </fieldset>
             <fieldset class="form-group col-3">
                 <label for="for_amount">Monto total</label>
-                <input type="number" class="form-control form-control-sm amount" id="for_amount" name="po_amount"
+                <input type="number" step="0.01" min="1" class="form-control form-control-sm amount" id="for_amount" name="po_amount"
                     value="{{ old('po_amount') }}" required>
             </fieldset>
             <fieldset class="form-group col-sm-4">
