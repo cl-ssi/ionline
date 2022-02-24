@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\Parameters\PurchaseType;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseMechanism extends Model
 {
   use HasFactory;
+  use SoftDeletes;
 
   protected $fillable = ['id', 'name'];
 /*

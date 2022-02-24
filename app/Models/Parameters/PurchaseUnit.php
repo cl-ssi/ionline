@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchasingProcess;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseUnit extends Model
 {
@@ -25,5 +26,6 @@ class PurchaseUnit extends Model
   }
 
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'cfg_purchase_units';
 }
