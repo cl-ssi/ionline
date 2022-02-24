@@ -57,7 +57,7 @@
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
-        @if($agreement->total_amount) <!-- convenio retiro voluntario -->
+        @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->period >= 2022)
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
@@ -95,7 +95,7 @@
         <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
     </li>
 
-        @if(!$agreement->total_amount) <!-- no está lista aun la planilla borrador resolucion -->
+        @if($agreement->program_id != 3) <!-- no está lista aun la planilla borrador resolucion -->
             @if($agreement->file)
             <li class="nav-item">
                 <a href="#" class="nav-link text-secondary" data-toggle="modal"
@@ -133,7 +133,7 @@
       </h5>
     </div>
 
-    <div id="collapseOne" class="collapse {{$agreement->total_amount ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordion">
+    <div id="collapseOne" class="collapse {{$agreement->program_id == 3 ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordion">
       <div class="card-body">
         <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('agreements.update',$agreement->id) }}" >
             @csrf
@@ -146,19 +146,12 @@
                         <option>{{ $agreement->commune->name }}</option>
                     </select>
                 </div>
-                @if($agreement->total_amount)
-                <div class="form-group col-md-6">
-                    <label for="foragreement">Convenio</label>
-                    <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="Retiro voluntario">
-                </div>
-                @else
                 <div class="form-group col-md-6">
                     <label for="foragreement">Programa</label>
                     <select name="agreement" id="formagreement" class="form-control" disabled>
                         <option>{{ $agreement->program->name }}</option>
                     </select>
                 </div>
-                @endif
                 <fieldset class="form-group col-3">
                     <label for="for">Archivo DOCX
                         @if($agreement->file != null)  
@@ -190,7 +183,7 @@
                     </select>
                 </fieldset>
 
-                @if($agreement->total_amount)
+                @if($agreement->program_id == 3)
                 <fieldset class="form-group col-2">
                     <label for="forquotas">N° de cuotas</label>
                     <input type="integer" class="form-control" id="forquotas" name="quotas" min="1" value="{{$agreement->quotas}}" required>
@@ -270,7 +263,7 @@
                     <input type="date" name="resolution_date" class="form-control" id="fordate" value="{{ $agreement->resolution_date }}" >
                 </fieldset>
 
-                @if(!$agreement->total_amount)
+                @if($agreement->program_id != 3)
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Distribuye Recursos</label>
                     <input type="integer" name="res_resource_number" class="form-control" id="fornumber" value="{{ $agreement->res_resource_number }}" >
@@ -316,7 +309,7 @@
     </div>
   </div>
 </div>
-@if(!$agreement->total_amount)
+@if($agreement->program_id != 3)
     <div class="card mt-3 mb-3 small">
         <div class="card-body">
             <h5>Montos</h5>

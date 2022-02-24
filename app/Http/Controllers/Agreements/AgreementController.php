@@ -87,6 +87,7 @@ class AgreementController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $agreement = new Agreement($request->All());
         $agreement->period = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
 
@@ -98,7 +99,7 @@ class AgreementController extends Controller
         $agreement->municipality_adress = $municipality->adress_municipality;
         $agreement->municipality_rut = $municipality->rut_municipality;
 
-        if($request->has('total_amount')){ // Convenio con retiro voluntario
+        if($request->program_id == 3){ // Convenio con retiro voluntario
             $agreement->total_amount = $request->total_amount;
             $agreement->quotas = $request->quotas;
             $agreement->save();
@@ -335,7 +336,7 @@ class AgreementController extends Controller
 
         $agreement->load('program','commune.municipality','referrer');
         $municipio = (!Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$agreement->commune->name;
-        if(!$agreement->total_amount){ // Convenios de ejecución
+        if(!$agreement->program_id == 3){ // Convenios de ejecución
             $first_word = explode(' ',trim($agreement->program->name))[0];
             $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
         }
@@ -345,7 +346,7 @@ class AgreementController extends Controller
         $signature->document_type = 'Convenios';
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
-        if(!$agreement->total_amount){ // Convenio de ejecución
+        if(!$agreement->program_id == 3){ // Convenio de ejecución
             $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
             $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
         }else{ // Convenio retiro voluntario
