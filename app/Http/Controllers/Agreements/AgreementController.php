@@ -336,23 +336,16 @@ class AgreementController extends Controller
 
         $agreement->load('program','commune.municipality','referrer');
         $municipio = (!Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$agreement->commune->name;
-        if(!$agreement->program_id == 3){ // Convenios de ejecución
-            $first_word = explode(' ',trim($agreement->program->name))[0];
-            $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
-        }
+        $first_word = explode(' ',trim($agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
 
         $signature = new Signature();
         $signature->request_date = $agreement->date;
         $signature->document_type = 'Convenios';
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
-        if(!$agreement->program_id == 3){ // Convenio de ejecución
-            $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
-            $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
-        }else{ // Convenio retiro voluntario
-            $signature->subject = 'Convenio retiro voluntario comuna de '.$agreement->commune->name;
-            $signature->description = 'Documento convenio retiro voluntario año '.$agreement->period.' comuna de '.$agreement->commune->name;
-        }
+        $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+        $signature->description = 'Documento convenio '.($agreement->program_id == 3 ? 'de retiro voluntario por ' : 'de ejecución del programa ').$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
