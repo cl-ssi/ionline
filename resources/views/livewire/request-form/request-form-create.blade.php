@@ -114,7 +114,7 @@
                                 <a onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->name}}?') || event.stopImmediatePropagation()" wire:click="destroyFile({{$file->id}})"
                                     class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></a>
                                 <a href="{{ route('request_forms.show_file', $file->id) }}"
-                                    class="btn btn-link btn-sm float-right" title="Ver"><i class="far fa-eye"></i></a>
+                                    class="btn btn-link btn-sm float-right" title="Ver" target="_blank"><i class="far fa-eye"></i></a>
                             </li>
                           @endforeach
                         </ul>

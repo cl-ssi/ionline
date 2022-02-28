@@ -236,7 +236,7 @@ class MonthlyQuotes extends Component
                 if ($this->items_verification($serviceRequest->start_date->month)) {
                   $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->net_amount));
                 }else{
-                  $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                  $valores_mensualizados[$serviceRequest->start_date->month] = "Revise los datos ingresados en el cuadro de responsable.";
                 }
 
             } else {
