@@ -56,6 +56,7 @@ class ShowTotalHours extends Component
 
         switch ($this->fulfillment->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
+            case 'TURNO DE REEMPLAZO':
 
                 if (!$this->fulfillment) {
                     return view('livewire.service-request.show-total-hours');
