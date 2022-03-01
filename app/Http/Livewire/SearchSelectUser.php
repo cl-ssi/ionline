@@ -15,6 +15,9 @@ class SearchSelectUser extends Component
      *
      * Si necesitas que aparezca precargado el usuario
      * @livewire('search-select-user', ['user' => $user])
+     *
+     *  Si necesitas sea requerido
+     * @livewire('search-select-user', ['required' => 'required'])
      */
     public $query;
     public $users;
@@ -23,6 +26,7 @@ class SearchSelectUser extends Component
     public $selectedName;
     public $selected_id = 'user_id';
     public $msg_too_many;
+    public $required = '';
 
     public function resetx()
     {
