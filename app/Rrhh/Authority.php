@@ -15,7 +15,8 @@ class Authority extends Model
      */
     protected $fillable = [
         'user_id', 'from', 'to', 'position', 'type',
-        'decree', 'organizational_unit_id', 'creator_id'
+        'decree', 'organizational_unit_id', 'creator_id',
+        'representation_id'
     ];
 
     public function organizationalUnit() {
@@ -28,6 +29,10 @@ class Authority extends Model
 
     public function creator() {
         return $this->belongsTo('App\User','creator_id')->withTrashed();
+    }
+    
+    public function represents() {
+        return $this->belongsTo('App\User','representation_id')->withTrashed();
     }
 
     public function agreement() {
