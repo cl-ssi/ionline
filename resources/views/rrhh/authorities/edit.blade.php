@@ -29,8 +29,16 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_id">Funcionario*</label>
-            @livewire('search-select-user', ['user' => $authority->user])
+            @livewire('search-select-user', ['user' => $authority->user, 'required' => 'required'])
         </fieldset>
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_user_id">En representación de (opcional)</label>
+            @livewire('search-select-user', ['selected_id' => 'representation_id', 'user' => $authority->represents])
+        </fieldset>
+
+    </div>
+    <div class="form-row">
 
         <fieldset class="form-group col-6 col-md-3">
             <label for="for_from">Desde*</label>
@@ -41,7 +49,7 @@
             <label for="for_to">Hasta*</label>
             <input required type="date" class="form-control" id="for_to" name="to" required value="{{ $authority->to->format('Y-m-d') }}">
         </fieldset>
-    
+        
         <fieldset class="form-group col-6 col-md-3">
             <label for="for_position">Cargo*</label>
             <select name="position" id="for_position" class="form-control" required>
@@ -78,7 +86,11 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-6">
+
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-12">
             <label for="for_decree">Decreto autorizar ejercer cargo</label>
             <input type="text" class="form-control" id="for_decree" name="decree" value="{{$authority->decree}}">
         </fieldset>
