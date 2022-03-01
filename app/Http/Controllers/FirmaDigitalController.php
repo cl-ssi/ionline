@@ -524,10 +524,14 @@ class FirmaDigitalController extends Controller
         $font_bold      = public_path('fonts/verdana-bold-2.ttf');
         $font_regular   = public_path('fonts/Verdana.ttf');
 
+        //Verificar si esta firmando en representacion de alguien (Si esta subrogando)
+        $isRepresentative = true;
+
+        $isRepresentative ? $yPading = 14 : $yPading = 16;
+        $isRepresentative ? $fontSize = 8 : $fontSize = 10;
+
         $marginTop  = 1;
         $xAxis      = 5;
-        $yPading    = 16;
-        $fontSize   = 10;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
             $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
@@ -541,8 +545,12 @@ class FirmaDigitalController extends Controller
             imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
                 $text_color, $font_bold, $fullName);
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-                $text_color, $font_regular, env('APP_SS'));
+                $text_color, $font_regular, 'En representación de');
+            imagettftext($im, $fontSize, 0, $xAxis + 117, $yPading * 3 + $marginTop + 3,
+                $text_color, $font_bold, 'Nombre de Prueba');
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
+                $text_color, $font_regular, env('APP_SS'));
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 5,
                 $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
         } else {
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
