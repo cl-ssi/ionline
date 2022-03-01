@@ -8,7 +8,7 @@
             wire:keydown.escape="resetx"
         @if(!$user)
             wire:model.debounce.1000ms="query"
-            required
+            {{ $required }}
         @else
             wire:model.debounce.1000ms="selectedName"
             disabled readonly
@@ -21,7 +21,7 @@
         </div>
     </div>
     
-    <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" required>
+    <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" {{ $required }}>
     
     @if(!empty($query))
         <ul class="list-group col-12" style="z-index: 3; position: absolute;">
