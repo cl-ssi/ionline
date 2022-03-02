@@ -14,7 +14,7 @@
                         <!-- <label for="for_name">Nombre</label> -->
                         <select name="signer_id" class="form-control selectpicker" title="Seleccione..." required>
                             @foreach($signers as $signer)
-                            <option value="{{$signer->id}}">{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
+                            <option value="{{$signer->id}}">{{ Str::limit($signer->appellative.' '.$signer->user->fullName.', '.$signer->decree, 155) }}</option>
                             @endforeach
                         </select>
                     </div>
