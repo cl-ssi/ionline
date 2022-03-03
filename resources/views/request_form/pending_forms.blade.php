@@ -37,7 +37,7 @@
                       <th>Usuario Gestor</th>
                       <th>Items</th>
                       <th>Espera</th>
-                      <th>Estado</th>
+                      <th>Etapas de aprobación</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -132,7 +132,7 @@
                       <th>Comprador</th>
                       <th>Items</th>
                       <th>Espera</th>
-                      <th>Estado</th>
+                      <th>Etapas de aprobación</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -205,7 +205,7 @@
             <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
               <thead class="small">
-                <tr>
+                <tr class="text-center">
                   <th>ID</th>
                   <th>Folio</th>
                   <th style="width: 7%">Fecha Creación</th>
@@ -215,7 +215,7 @@
                   <th>Comprador</th>
                   <th>Items</th>
                   <th>Espera</th>
-                  <th>Estado</th>
+                  <th>Etapas de aprobación</th>
                   <th></th>
                 </tr>
               </thead>
@@ -336,7 +336,7 @@
                 <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered">
                 <thead class="small">
-                    <tr>
+                    <tr class="text-center">
                     <th>ID</th>
                     <th>Folio</th>
                     <th style="width: 7%">Fecha Creación</th>
@@ -346,7 +346,7 @@
                     <th>Comprador</th>
                     <th>Items</th>
                     <th>Espera</th>
-                    <th>Estado</th>
+                    <th>Etapas de aprobación</th>
                     <th></th>
                     </tr>
                 </thead>
