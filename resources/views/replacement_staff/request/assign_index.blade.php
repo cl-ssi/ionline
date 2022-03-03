@@ -49,6 +49,7 @@
                 <th>Calidad Jurídica</th>
                 <th>Periodo</th>
                 <th>Fundamento</th>
+                <th>Jornada</th>
                 <th>Solicitante</th>
                 <th>Estado</th>
                 <th style="width: 2%"></th>
@@ -91,6 +92,9 @@
                 <td>
                     {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
                     {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->WorkDayValue }}
                 </td>
                 <td>{{ $requestReplacementStaff->user->FullName }}<br>
                     {{ $requestReplacementStaff->organizationalUnit->name }}
@@ -154,6 +158,7 @@
                 <th>Calidad Jurídica</th>
                 <th>Periodo</th>
                 <th>Fundamento</th>
+                <th>Jornada</th>
                 <th>Solicitante</th>
                 <th>Estado</th>
                 <th style="width: 2%"></th>
@@ -192,7 +197,12 @@
                 <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
-                <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                <td>{{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->WorkDayValue }}
+                </td>
                 <td>{{ $requestReplacementStaff->user->FullName }}<br>
                     {{ $requestReplacementStaff->organizationalUnit->name }}
                 </td>
