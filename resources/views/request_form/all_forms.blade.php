@@ -24,7 +24,7 @@
           <th>Comprador</th>
           <th>Items</th>
           <th>Espera</th>
-          <th>Estado</th>
+          <th>Etapas de aprobación</th>
           <th></th>
         </tr>
       </thead>
