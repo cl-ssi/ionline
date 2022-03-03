@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\RequestForm\Item;
 
 use App\Models\Parameters\UnitOfMeasurement;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -10,7 +12,7 @@ class RequestFormItems extends Component
 {
     use WithFileUploads;
 
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $editRF, $savedItems, $deletedItems,
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $savedArticleFile, $editRF, $savedItems, $deletedItems, $iteration,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency;
 
     protected $listeners = ['savedTypeOfCurrency'];
@@ -45,6 +47,8 @@ class RequestFormItems extends Component
 
     public function addItem(){
       $this->validate();
+      $now = Carbon::now()->format('Y_m_d_H_i_s');
+      $filename = $this->articleFile ? $this->articleFile->storeAs('/ionline/request_forms/item_files', $now.'_item_file.'.$this->articleFile->extension(), 'gcs') : null;
       $this->items[]=[
             'id'                       => null,
             'article'                  => $this->article,
@@ -54,7 +58,7 @@ class RequestFormItems extends Component
             'unitValue'                => $this->unitValue,
             'taxes'                    => $this->taxes,
             'totalValue'               => $this->quantity * $this->totalValueWithTaxes($this->unitValue),
-            'articleFile'              => $this->articleFile ? $this->articleFile->getRealPath() : null,
+            'articleFile'              => $filename
       ];
     //   dd($this->items);
       $this->estimateExpense();
@@ -80,6 +84,7 @@ class RequestFormItems extends Component
         $this->quantity                 = $this->items[$key]['quantity'];
         $this->unitValue                = $this->items[$key]['unitValue'];
         $this->taxes                    = $this->items[$key]['taxes'];
+        $this->savedArticleFile         = $this->items[$key]['articleFile'];
         $this->key                      = $key;
     }
 
@@ -94,7 +99,11 @@ class RequestFormItems extends Component
         $this->items[$this->key]['unitValue']               = $this->unitValue;
         $this->items[$this->key]['taxes']                   = $this->taxes;
         $this->items[$this->key]['totalValue']              = $this->quantity * $this->totalValueWithTaxes($this->unitValue);
-        if($this->articleFile) $this->items[$this->key]['articleFile'] = $this->articleFile->getRealPath();
+        if($this->articleFile){
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $filename = $this->articleFile ? $this->articleFile->storeAs('/ionline/request_forms/item_files', $now.'_item_file.'.$this->articleFile->extension(), 'gcs') : null;
+            $this->items[$this->key]['articleFile']         = $filename;
+        }
         $this->estimateExpense();
         $this->cleanItem();
         $this->emitUp('savedItems', $this->items);
@@ -106,6 +115,7 @@ class RequestFormItems extends Component
           $this->deletedItems[]=$this->items[$key]['id'];
           $this->emitUp('deletedItems', $this->deletedItems);
         }
+        if($this->items[$key]['articleFile']) $this->deleteFile($key);
         unset($this->items[$key]);
         $this->estimateExpense();
         $this->cleanItem();
@@ -127,10 +137,12 @@ class RequestFormItems extends Component
         $this->article = $this->technicalSpecifications = $this->quantity = $this->unitValue = "";
         $this->taxes = $this->budget_item_id = $this->unitOfMeasurement = "";
         $this->articleFile = null;
+        $this->iteration++;
     }
 
     public function mount($savedItems, $savedTypeOfCurrency)
     {
+        $this->iteration = 0;
         $this->totalDocument          = 0;
         $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
         $this->items                  = array();
@@ -161,7 +173,7 @@ class RequestFormItems extends Component
                 'unitValue'                => $item->unit_value,
                 'taxes'                    => $item->tax,
                 'totalValue'               => $item->expense,
-                // 'articleFile'              => $item->articleFile ? $item->articleFile->getRealPath() : null,
+                'articleFile'              => $item->article_file
           ];
         //   dd($this->items);
           $this->estimateExpense();
@@ -176,5 +188,18 @@ class RequestFormItems extends Component
     public function savedTypeOfCurrency($typeOfCurrency)
     {
       $this->precision_currency = $typeOfCurrency == 'peso' ? 0 : 2;
+    }
+
+    public function showFile($key)
+    {
+        return Storage::disk('gcs')->response($this->items[$key]['articleFile']);
+    }
+
+    public function deleteFile($key)
+    {
+        Storage::disk('gcs')->delete($this->items[$key]['articleFile']);
+        $this->items[$key]['articleFile'] = null;
+        $this->articleFile = $this->savedArticleFile = null;
+        $this->iteration++;
     }
 }
