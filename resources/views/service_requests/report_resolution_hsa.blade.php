@@ -184,11 +184,13 @@
         En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del
         Ministerio de Hacienda, Circular Nº 2C/45 de 1998 todos del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que
         fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo,
-        Ley Nº 21.289/2020 de Presupuesto del Sector Público para el año 2021; D.F.L. Nº01/05 que fija texto refundido,
+        Ley Nº 21.395/2021 de Presupuesto del Sector Público para el año 2022
+        D.F.L. Nº01/05 que fija texto refundido,
         coordinado y sistematizado, Dto. Ley Nº 2763/79 y de las leyes 18.933 y 18469 del Ministerio de Salud;
         Art. 8° III letra d) del Dto. Nº 140/04 del Ministerio de Salud que aprobó el Reglamento Orgánico de
         los Servicios de Salud, {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->decree}},
-        Resolución Nº6/2019, Resolución N° 18/2017 y Dictamen Nº 21.900/98 todos de la Contraloría General de la República.<br>
+        Resolución Nº6/2019, Resolución N° 18/2017, Resol N° 2/2022; Dictamen Nº 21.900/98 y Dictamen N°E173171/2022
+        todos de la Contraloría General de la República.<br>
       </p>
 
       @endif
@@ -332,7 +334,7 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         10
         @else
