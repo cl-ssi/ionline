@@ -338,6 +338,8 @@
     @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
+</form>
+
 <br>
 
 <!--Observaciones al proceso de compra -->
@@ -529,6 +531,51 @@
 </div>
 @endif
 
+<br>
+
+<hr>
+
+@if($requestForm->messages->count() > 0)
+    <!-- <div class="row bg-light"> -->
+    <div class="col bg-light">
+        <br>
+        <h6><i class="fas fa-comment"></i> Foro de comunicación</h6>
+        @foreach($requestForm->messages->sortByDesc('created_at') as $requestFormMessage)
+            <div class="card" id="message">
+                <div class="card-header col-sm">
+                    <i class="fas fa-user"></i> {{ $requestFormMessage->user->FullName }}
+
+                </div>
+                <div class="card-body">
+                    <i class="fas fa-calendar"></i> {{ $requestFormMessage->created_at->format('d-m-Y H:i:s') }}
+                    <p class="font-italic"><i class="fas fa-comment"></i> "{{ $requestFormMessage->message }}"</p>
+                </div>
+                @if($requestFormMessage->file)
+                <div class="card-footer">
+                    <a href="{{ route('request_forms.message.show_file', $requestFormMessage) }}" target="_blank">
+                      <i class="fas fa-paperclip"></i> {{ $requestFormMessage->file_name }}
+                    </a>
+                </div>
+                @endif
+            </div>
+            <br>
+        @endforeach
+    </div>
+    <!-- </div> -->
+@endif
+<br>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}">
+    <i class="fas fa-comment"></i> Agregar Mensaje
+</button>
+
+@include('request_form.partials.modals.create_message', [
+  'from' => 'purchase',
+  'eventType' => 'no'
+])
+
+<br /><br />
 
 @endsection
 
@@ -563,7 +610,7 @@ $('#for_quantity,#for_unit_value').on('change keyup',function(){
             grandTotal += parseFloat($(this).val())
     });
 
-    
+
 
     if(isNaN(grandTotal))
         grandTotal = 0;
@@ -663,6 +710,33 @@ $('input[type="file"]').bind('change', function(e) {
     $('input[name=taking_of_reason_file]').prop('required',this.checked);
     $('input[name=taking_of_reason_file]').prop('disabled',!this.checked);
 });
+
+  //FILE IN MESSAGE MODAL
+  $('#for_file').bind('change', function() {
+      //Validación de tamaño
+      if((this.files[0].size / 1024 / 1024) > 3){
+          alert('No puede cargar un pdf de mas de 3 MB.');
+          $('#for_file').val('');
+      }
+
+      //Validación de pdf
+      const allowedExtension = ".pdf";
+      let hasInvalidFiles = false;
+
+      for (let i = 0; i < this.files.length; i++) {
+          let file = this.files[i];
+
+          if (!file.name.endsWith(allowedExtension)) {
+              hasInvalidFiles = true;
+          }
+      }
+
+      if(hasInvalidFiles) {
+          $('#for_file').val('');
+          alert("Debe seleccionar un archivo pdf.");
+      }
+
+  });
 
 </script>
 
