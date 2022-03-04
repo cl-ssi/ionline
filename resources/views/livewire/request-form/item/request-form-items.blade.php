@@ -55,8 +55,13 @@
                       </select>
                   </fieldset>
                   <fieldset class="form-group col-sm-4">
-                      <label class="form-label">Documento Informativo (optativo):</label>
-                      <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile">
+                      <label class="form-label">Documento Informativo (optativo): 
+                          @if($savedArticleFile)
+                          <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
+                          @endif
+                      </label>
+                      <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
+                      <div wire:loading wire:target="articleFile">Cargando archivo...</div>
                   </fieldset>
             </div>
         </div>
@@ -67,9 +72,9 @@
     <div class="row justify-content-md-end mt-0"><!-- FILA 5 -->
         <div class="col-2">
           @if($edit)
-            <button type="button" wire:click="updateItem" class="btn btn-primary btn-sm float-right">Editar Item</button>
+            <button type="button" wire:click="updateItem" class="btn btn-primary btn-sm float-right" wire:target="articleFile" wire:loading.attr="disabled">Editar Item</button>
           @else
-            <button type="button" wire:click="addItem" class="btn btn-primary btn-sm float-right"><i class="fas fa-cart-plus"></i> Agregar</button>
+            <button type="button" wire:click="addItem" class="btn btn-primary btn-sm float-right" wire:target="articleFile" wire:loading.attr="disabled"><i class="fas fa-cart-plus"></i> Agregar</button>
           @endif
         </div>
         <div class="col-1">
@@ -100,7 +105,7 @@
                     <th>Artículo</th>
                     <th>UM</th>
                     <th>Especificaciones Técnicas</th>
-                    <!-- <th>Archivo</th> -->
+                    <th style="text-align:center">Archivo</th>
                     <th style="text-align:right">Cantidad</th>
                     <th style="text-align:right">Valor U.</th>
                     <th>Impuestos</th>
@@ -115,7 +120,11 @@
                     <td>{{$item['article']}}</td>
                     <td>{{$item['unitOfMeasurement']}}</td>
                     <td>{{$item['technicalSpecifications']}}</td>
-                    <!-- <td>{{-- $item['articleFile'] --}}</td> -->
+                    <td style="text-align:center">
+                    @if($item['articleFile'])
+                    <a href="#items" wire:click="showFile({{$key}})" class="text-link"><i class="fas fa-file"></i></a>
+                    @endif
+                    </td>
                     <td style="text-align:right">{{ $item['quantity'] }}</td>
                     <td style="text-align:right">{{ number_format($item['unitValue'],$precision_currency,",",".") }}</td>
                     <td>{{$item['taxes']}}</td>
@@ -124,7 +133,7 @@
                         <a href="#items" class="text-info" title="Editar" wire:click="editItem({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                     <td class="brd-r brd-b" align="center">
-                        <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteItem({{ $key }})"><i class="far fa-trash-alt"></i></a>
+                        <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteItem({{ $key }})"><i class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
               @endforeach

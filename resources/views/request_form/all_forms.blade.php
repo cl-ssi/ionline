@@ -24,7 +24,7 @@
           <th>Comprador</th>
           <th>Items</th>
           <th>Espera</th>
-          <th>Estado</th>
+          <th>Etapas de aprobación</th>
           <th></th>
         </tr>
       </thead>
@@ -90,8 +90,10 @@
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
             </a>
+            @if(Auth()->user()->hasPermissionTo('Request Forms: all'))
             <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
             </a>
+            @endif
             @if($requestForm->signatures_file_id)
               @if($requestForm->signatures_file_id == 11)
               <a class="btn btn-info btn-sm"
@@ -111,12 +113,12 @@
               </a>
               @endif
 
-              @if(Str::contains($requestForm->subtype, 'tiempo'))
+              @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo'))
               <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
               </a>
               @endif
             @endif
-            @if($requestForm->PurchasingProcess)
+            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->PurchasingProcess)
             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
               <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
             </span>

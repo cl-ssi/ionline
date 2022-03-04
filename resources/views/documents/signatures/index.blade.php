@@ -231,7 +231,7 @@
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a> -->
 
-                <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signedSignaturesFlow->signaturesFile->signed_file}}"
+                <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signedSignaturesFlow->signaturesFile->signed_file ?? $signedSignaturesFlow->signaturesFile->file}}"
                     class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                     <span class="fas fa-file" aria-hidden="true"></span>
                 </a>

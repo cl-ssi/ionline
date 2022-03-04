@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
-                    <label for="forRut">Nombre:</label>
+                    <label for="forRut">Nombre de Formulario:</label>
                     <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" value="">
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
@@ -79,6 +79,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento(s) de Respaldo:</label>
                     <input class="form-control form-control-sm" wire:model.defer="fileRequests" id="for_fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
+                    <div wire:loading wire:target="fileRequests">Cargando archivo(s)...</div>
                 </fieldset>
             </div>
 

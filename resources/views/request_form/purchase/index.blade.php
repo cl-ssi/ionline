@@ -24,7 +24,7 @@
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
-                    <th>Estado</th>
+                    <th>Etapas de aprobación</th>
                     <th></th>
                 </tr>
             </thead>
@@ -119,7 +119,7 @@
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
-                    <th>Estado</th>
+                    <th>Etapas de aprobación</th>
                     <th></th>
                 </tr>
             </thead>
