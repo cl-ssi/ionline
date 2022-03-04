@@ -347,23 +347,50 @@
         	</select>
 		</fieldset>
 
+    <!-- 04/04/2022: solicitado por nataly (agregar grado) -->
+    <fieldset class="form-group col-6 col-md">
+			<label for="for_profession_id">Grado*</label>
+			<select name="grade" class="form-control" id="grade" disabled>
+				<option value=""></option>
+				<option value="GRADO 5" @if($serviceRequest->grade == 'GRADO 5') selected @endif>GRADO 5</option>
+				<option value="GRADO 6" @if($serviceRequest->grade == 'GRADO 6') selected @endif>GRADO 6</option>
+				<option value="GRADO 7" @if($serviceRequest->grade == 'GRADO 7') selected @endif>GRADO 7</option>
+				<option value="GRADO 8" @if($serviceRequest->grade == 'GRADO 8') selected @endif>GRADO 8</option>
+				<option value="GRADO 9" @if($serviceRequest->grade == 'GRADO 9') selected @endif>GRADO 9</option>
+				<option value="GRADO 10" @if($serviceRequest->grade == 'GRADO 10') selected @endif>GRADO 10</option>
+				<option value="GRADO 11" @if($serviceRequest->grade == 'GRADO 11') selected @endif>GRADO 11</option>
+				<option value="GRADO 12" @if($serviceRequest->grade == 'GRADO 12') selected @endif>GRADO 12</option>
+				<option value="GRADO 13" @if($serviceRequest->grade == 'GRADO 13') selected @endif>GRADO 13</option>
+				<option value="GRADO 14" @if($serviceRequest->grade == 'GRADO 14') selected @endif>GRADO 14</option>
+				<option value="GRADO 15" @if($serviceRequest->grade == 'GRADO 15') selected @endif>GRADO 15</option>
+				<option value="GRADO 16" @if($serviceRequest->grade == 'GRADO 16') selected @endif>GRADO 16</option>
+				<option value="GRADO 17" @if($serviceRequest->grade == 'GRADO 17') selected @endif>GRADO 17</option>
+				<option value="GRADO 18" @if($serviceRequest->grade == 'GRADO 18') selected @endif>GRADO 18</option>
+				<option value="GRADO 19" @if($serviceRequest->grade == 'GRADO 19') selected @endif>GRADO 19</option>
+				<option value="GRADO 20" @if($serviceRequest->grade == 'GRADO 20') selected @endif>GRADO 20</option>
+				<option value="GRADO 21" @if($serviceRequest->grade == 'GRADO 21') selected @endif>GRADO 21</option>
+				<option value="GRADO 22" @if($serviceRequest->grade == 'GRADO 22') selected @endif>GRADO 22</option>
+				<option value="GRADO 23" @if($serviceRequest->grade == 'GRADO 23') selected @endif>GRADO 23</option>
+				<option value="GRADO 24" @if($serviceRequest->grade == 'GRADO 24') selected @endif>GRADO 24</option>
+			</select>
+    </fieldset>
 
-		<fieldset class="form-group col-12 col-md-3">
+		<fieldset class="form-group col-6 col-md">
 			<label for="for_digera_strategy">Estrategia Digera Covid</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy">
-			<option value=""></option>
-			<option value="Camas MEDIAS Aperturadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Aperturadas") selected @endif>Camas MEDIAS Aperturadas</option>
-			<option value="Camas MEDIAS Complejizadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Complejizadas") selected @endif>Camas MEDIAS Complejizadas</option>
-			<option value="Camas UCI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UCI Aperturadas") selected @endif>Camas UCI Aperturadas</option>
-			<option value="Camas UCI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UCI Complejizadas") selected @endif>Camas UCI Complejizadas</option>
-			<option value="Camas UTI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UTI Aperturadas") selected @endif>Camas UTI Aperturadas</option>
-			<option value="Camas UTI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UTI Complejizadas") selected @endif>Camas UTI Complejizadas</option>
-			<option value="Cupos Hosp. Domiciliaria" @if($serviceRequest->digera_strategy == "Cupos Hosp. Domiciliaria") selected @endif>Cupos Hosp. Domiciliaria</option>
-			<option value="Refuerzo Anatomía Patologica" @if($serviceRequest->digera_strategy == "Refuerzo Anatomía Patologica") selected @endif>Refuerzo Anatomía Patologica</option>
-			<option value="Refuerzo Laboratorio" @if($serviceRequest->digera_strategy == "Refuerzo Laboratorio") selected @endif>Refuerzo Laboratorio</option>
-			<option value="Refuerzo SAMU" @if($serviceRequest->digera_strategy == "Refuerzo SAMU") selected @endif>Refuerzo SAMU</option>
-			<option value="Refuerzo UEH" @if($serviceRequest->digera_strategy == "Refuerzo UEH") selected @endif>Refuerzo UEH</option>
-			<option value="Migración Colchane" @if($serviceRequest->digera_strategy == "Migración Colchane") selected @endif>Migración Colchane</option>
+  			<option value=""></option>
+  			<option value="Camas MEDIAS Aperturadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Aperturadas") selected @endif>Camas MEDIAS Aperturadas</option>
+  			<option value="Camas MEDIAS Complejizadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Complejizadas") selected @endif>Camas MEDIAS Complejizadas</option>
+  			<option value="Camas UCI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UCI Aperturadas") selected @endif>Camas UCI Aperturadas</option>
+  			<option value="Camas UCI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UCI Complejizadas") selected @endif>Camas UCI Complejizadas</option>
+  			<option value="Camas UTI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UTI Aperturadas") selected @endif>Camas UTI Aperturadas</option>
+  			<option value="Camas UTI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UTI Complejizadas") selected @endif>Camas UTI Complejizadas</option>
+  			<option value="Cupos Hosp. Domiciliaria" @if($serviceRequest->digera_strategy == "Cupos Hosp. Domiciliaria") selected @endif>Cupos Hosp. Domiciliaria</option>
+  			<option value="Refuerzo Anatomía Patologica" @if($serviceRequest->digera_strategy == "Refuerzo Anatomía Patologica") selected @endif>Refuerzo Anatomía Patologica</option>
+  			<option value="Refuerzo Laboratorio" @if($serviceRequest->digera_strategy == "Refuerzo Laboratorio") selected @endif>Refuerzo Laboratorio</option>
+  			<option value="Refuerzo SAMU" @if($serviceRequest->digera_strategy == "Refuerzo SAMU") selected @endif>Refuerzo SAMU</option>
+  			<option value="Refuerzo UEH" @if($serviceRequest->digera_strategy == "Refuerzo UEH") selected @endif>Refuerzo UEH</option>
+  			<option value="Migración Colchane" @if($serviceRequest->digera_strategy == "Migración Colchane") selected @endif>Migración Colchane</option>
 			</select>
 		</fieldset>
 
@@ -386,7 +413,7 @@
     or
     $serviceRequest->schedule_detail == 'FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)'
     )
-		<fieldset class="form-group col-3" id="div_covid_schedule">
+		<fieldset class="form-group col-md" id="div_covid_schedule">
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
@@ -398,7 +425,7 @@
 		</fieldset>
 
     @else
-    	<fieldset class="form-group col-12 col-md-3" id="div_hsa_schedule">
+    	<fieldset class="form-group col col-md" id="div_hsa_schedule">
 			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" value="{{$serviceRequest->schedule_detail}}" name="hsa_schedule_detail">
 		</fieldset>
@@ -1282,6 +1309,15 @@
   			$('#additional_benefits').attr('disabled', 'disabled');
   		}else{
   			$('#additional_benefits').removeAttr('disabled');
+  		}
+
+      // 04/04/2022: solicitado por nataly (agregar grado)
+      if (value == "OTROS PROGRAMAS HETG") {
+  			$('#grade').removeAttr('disabled');
+  			$("#grade").prop('required',true);
+  		} else {
+  			$('#grade').attr('required', 'disabled');
+  			$("#grade").prop('required',false);
   		}
   	});
 
