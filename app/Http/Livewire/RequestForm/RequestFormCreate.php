@@ -41,28 +41,6 @@ class RequestFormCreate extends Component
 
     protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers'];
 
-    // protected $rules = [
-    //     'unitValue'           =>  'required|numeric|min:1',
-    //     'quantity'            =>  'required|numeric|min:0.1',
-    //     'article'             =>  'required',
-    //     'unitOfMeasurement'   =>  'required',
-    //     'taxes'               =>  'required',
-    //     'typeOfCurrency'      =>  'required'
-    // ];
-
-    // protected $messages = [
-    //     'unitValue.required'          => 'Valor Unitario no puede estar vacio.',
-    //     'unitValue.numeric'           => 'Valor Unitario debe ser numérico.',
-    //     'unitValue.min'               => 'Valor Unitario debe ser mayor o igual a 1.',
-    //     'quantity.required'           => 'Cantidad no puede estar vacio.',
-    //     'quantity.numeric'            => 'Cantidad debe ser numérico.',
-    //     'quantity.min'                => 'Cantidad debe ser mayor o igual a 0.1.',
-    //     'article.required'            => 'Debe ingresar un Artículo.',
-    //     'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
-    //     'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-    //     'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
-    // ];
-
     protected function rules(){
       return [
         'name'                         =>  'required',
@@ -161,6 +139,7 @@ class RequestFormCreate extends Component
             'unitValue'                => $item->unit_value,
             'taxes'                    => $item->tax,
             'totalValue'               => $item->expense,
+            'articleFile'              => $item->article_file
       ];
     }
 
@@ -300,7 +279,7 @@ class RequestFormCreate extends Component
                 'unit_value'            =>      $item['unitValue'],
                 'tax'                   =>      $item['taxes'],
                 'expense'               =>      $item['totalValue'],
-                // 'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms/item_files/', $file_name.'.'.pathinfo($item['articleFile'], PATHINFO_EXTENSION), 'gcs') : null
+                'article_file'          =>      $item['articleFile']
             ]);
           }
         } else {

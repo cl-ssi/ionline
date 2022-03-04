@@ -12,7 +12,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
-      @if(Auth::user()->hasPermissionTo('Request Forms: all'))
+      @if(Auth::user()->hasPermissionTo('Request Forms: all') || Auth()->user()->organizational_unit_id == 40)
       <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
       @endif
       <a class="dropdown-item" href="{{ route('request_forms.pending_forms') }}"><i class="fas fa-inbox"></i>
@@ -38,7 +38,7 @@
     </li>
   @endif
 
-  @if(Auth()->user()->organizational_unit_id == 37 || Auth::user()->hasPermissionTo('Request Forms: config'))
+  @if(in_array(Auth()->user()->organizational_unit_id, [37, 40]) || Auth::user()->hasPermissionTo('Request Forms: config'))
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-file-alt"></i> Parámetros

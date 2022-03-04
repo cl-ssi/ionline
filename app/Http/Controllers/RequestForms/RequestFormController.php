@@ -58,7 +58,7 @@ class RequestFormController extends Controller {
 
     public function all_forms()
     {
-        if(!Auth()->user()->hasPermissionTo('Request Forms: all')){
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && Auth()->user()->organizational_unit_id != 40){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
             return redirect()->route('request_forms.my_forms');
         }

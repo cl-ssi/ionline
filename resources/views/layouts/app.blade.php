@@ -44,8 +44,8 @@
     @yield('custom_css')
 
     <!-- Place your kit's code here -->
-    <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
-        crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" data-mutate-approach="sync"></script>
+
     @livewireStyles
 </head>
 <body>
