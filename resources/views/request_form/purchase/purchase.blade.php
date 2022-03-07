@@ -86,7 +86,7 @@
         @if($requestForm->isPurchaseInProcess())
         <div class="float-right">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" @if($requestForm->purchasingProcess == null || ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0)) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
                 Terminar <i class="fas fa-shopping-cart"></i>
             </button>
             <!-- Button trigger modal -->
