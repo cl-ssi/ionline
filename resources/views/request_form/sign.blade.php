@@ -297,17 +297,24 @@
     <!-- <div class="row bg-light"> -->
     <div class="col bg-light">
         <br>
-        <h6><i class="fas fa-comment"></i> Mensajes</h6>
-        @foreach($requestForm->messages->sortByDesc('created_at') as $message)
+        <h6><i class="fas fa-comment"></i> Foro de comunicación</h6>
+        @foreach($requestForm->messages->sortByDesc('created_at') as $requestFormMessage)
             <div class="card" id="message">
                 <div class="card-header col-sm">
-                    <i class="fas fa-user"></i> {{ $message->user->FullName }}
+                    <i class="fas fa-user"></i> {{ $requestFormMessage->user->FullName }}
 
                 </div>
                 <div class="card-body">
-                    <i class="fas fa-calendar"></i> {{ $message->created_at->format('d-m-Y H:i:s') }}
-                    <p class="font-italic"><i class="fas fa-comment"></i> "{{ $message->message }}"</p>
+                    <i class="fas fa-calendar"></i> {{ $requestFormMessage->created_at->format('d-m-Y H:i:s') }}
+                    <p class="font-italic"><i class="fas fa-comment"></i> "{{ $requestFormMessage->message }}"</p>
                 </div>
+                @if($requestFormMessage->file)
+                <div class="card-footer">
+                    <a href="{{ route('request_forms.message.show_file', $requestFormMessage) }}" target="_blank">
+                      <i class="fas fa-paperclip"></i> {{ $requestFormMessage->file_name }}
+                    </a>
+                </div>
+                @endif
             </div>
             <br>
         @endforeach
