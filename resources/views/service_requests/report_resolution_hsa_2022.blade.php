@@ -151,7 +151,7 @@
 
         <div class="right" style="float: right; width: 280px;">
             <div class="left" style="padding-bottom: 6px;">
-                <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
+                <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
             </div>
             <div class="left" style="padding-bottom: 2px;">
                 <strong>IQUIQUE,</strong>
@@ -508,7 +508,7 @@
         <br>
         <p class="center">
             <strong>
-                ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
+                TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE.
             </strong>
         </p>
 
