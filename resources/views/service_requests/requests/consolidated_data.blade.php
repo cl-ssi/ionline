@@ -53,6 +53,7 @@
             <th>ESTABLECIMIENTO</th>
             <th>RUT</th>
             <th>APELLIDOS Y NOMBRES</th>
+			<th>FEC NAC.</th>
             <th>NACIONALIDAD</th>
             <th>NOMBRE DEL PROGRAMA SIRH</th>
             <th>ESTRATEGIA DIGERA COVID</th>
@@ -94,6 +95,7 @@
 								<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
 								<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
 								<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+								<td nowrap>{{$serviceRequest->employee->birthday?? ''}}</td>
 								<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 								<td nowrap>{{$serviceRequest->programm_name}}</td>
 								<td nowrap>{{$serviceRequest->digera_strategy}}</td>
