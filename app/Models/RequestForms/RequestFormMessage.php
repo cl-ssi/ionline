@@ -15,7 +15,7 @@ class RequestFormMessage extends Model implements Auditable
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'message'
+        'user_id', 'message', 'file'
     ];
 
     public function user() {

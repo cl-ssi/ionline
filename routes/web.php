@@ -1368,6 +1368,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
+        Route::get('/show_file/{requestFormMessage}', [RequestFormMessageController::class, 'show_file'])->name('show_file');
     });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
