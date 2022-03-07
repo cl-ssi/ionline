@@ -267,6 +267,179 @@
 
 @endif
 
+<!--Observaciones al proceso de compra -->
+@if($requestForm->purchasingProcess)
+<h6><i class="fas fa-eye"></i> Observaciones al proceso de compra</h6>
+<div class="card">
+  <div class="card-body">
+    {{$requestForm->purchasingProcess->observation}}
+  </div>
+</div>
+<br>
+@endif
+
+@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
+<div class="row">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Historial de compras</h6>
+
+
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>Fecha</th>
+                        <th>Tipo de compra</th>
+                        <th>Cod.Presup.</th>
+                        <th>Artículo</th>
+                        <th>UM</th>
+                        <th>Especificaciones Técnicas</th>
+                        <th>Archivo</th>
+                        <th>Cantidad</th>
+                        <th>Valor U.</th>
+                        <th>Impuestos</th>
+                        <th>Total Item</th>
+                        <th></th>
+                        <!-- <th></th>  -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $requestForm->purchasingProcess->start_date }}</td>
+                        <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
+                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+                        <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
+                        <td>{{ $detail->article }}</td>
+                        <td>{{ $detail->unit_of_measurement }}</td>
+                        <td>{{ $detail->specification }}</td>
+                        <td align="center">
+                            @if($detail->article_file)
+                            <a href="{{ route('request_forms.show_item_file', $detail) }}" target="_blank">
+                              <i class="fas fa-file"></i></a>
+                            @endif
+                        </td>
+                        <td align="right">{{ $detail->pivot->quantity }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                        <td>{{ $detail->tax }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td>
+                        <button type="button" id="btn_items_{{$key}}" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
+                            <i class="fas fa-receipt"></i>
+                        </button>
+                        @include('request_form.purchase.modals.detail_purchase')
+
+                        </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                      <th colspan="11" class="text-right">Valor Total</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    <tr>
+                      <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
+<br>
+
+@if(Str::contains($requestForm->subtype, 'tiempo'))
+<div class="row">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Historial de bienes y/o servicios ejecución inmediata</h6>
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>ID</th>
+                        <th>Folio</th>
+                        <th style="width: 7%">Fecha Creación</th>
+                        <th>Tipo / Mecanismo de Compra</th>
+                        <th>Descripción</th>
+                        <th>Usuario Gestor</th>
+                        <th>Comprador</th>
+                        <th>Items</th>
+                        <th>Monto total</th>
+                        <th>Monto utilizado</th>
+                        <!-- <th>Saldo disponible</th> -->
+                        <!-- <th>Estado</th> -->
+                        <!-- <th></th>  -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($requestForm->children as $key => $child)
+                    <tr @if($child->status != 'approved') class="text-muted" @endif>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $child->id }}<br>
+                        @switch($child->getStatus())
+                                    @case('Pendiente')
+                                        <i class="fas fa-clock"></i>
+                                        @break
+
+                                    @case('Aprobado')
+                                        <span style="color: green;">
+                                          <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                        </span>
+                                        @break
+
+                                    @case('Rechazado')
+                                        <a href="">
+                                            <span style="color: Tomato;">
+                                                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                            </span>
+                                        </a>
+                                        @break
+
+                                @endswitch
+                        </td>
+                        <td>@if($child->status == 'approved')<a href="{{ route('request_forms.show', $child) }}">{{ $child->folio }}</a> @else {{ $child->folio }} @endif<br>
+                        <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
+                        <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                            {{ $requestForm->SubtypeValue }}
+                        </td>
+                        <td>{{ $child->name }}</td>
+                        <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
+                        {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
+                        <td>{{ $child->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                        <td align="center">{{ $child->quantityOfItems() }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($child->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{ $child->purchasingProcess ? $requestForm->symbol_currency.number_format($child->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") : '-' }}</td>
+                        {{--<td align="right">{{ $child->purchasingProcess ? $requestForm->symbol_currency.number_format($child->estimated_expense - $child->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") : '-' }}</td>--}}
+                    </tr>
+                  @empty
+                    <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
+                  @endforelse
+                </tbody>
+                @if($requestForm->children->count() > 0)
+                <tfoot>
+                    <tr>
+                      <th colspan="9" class="text-right">Totales</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    <tr>
+                      <th colspan="10" class="text-right">Saldo disponible Compras</td>
+                      <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                </tfoot>
+                @endif
+            </table>
+        </div>
+    </div>
+</div>
+@endif
+
 @if($requestForm->messages->count() > 0)
     <!-- <div class="row bg-light"> -->
     <div class="col bg-light">
