@@ -10,7 +10,11 @@
 <div class="row">
     <div class="col-sm-8">
         <div class="table-responsive">
-            <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}}</h6>
+            <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}} @if($requestForm->purchasingProcess)
+                                <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                @else
+                                <span class="badge badge-warning">En proceso</span>
+                                @endif</h6>
             <table class="table table-sm table-striped table-bordered">
                 <!-- <thead>
                     <tr class="table-active">
@@ -79,7 +83,19 @@
             </table>
         </div>
 
+        @if($requestForm->isPurchaseInProcess())
         <div class="float-right">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
+                Terminar <i class="fas fa-shopping-cart"></i>
+            </button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" onclick="return confirm('¿Está seguro/a de anular proceso de compra?') || event.stopImmediatePropagation()" data-target="#processClosure" data-status="canceled">
+                Anular <i class="fas fa-shopping-cart"></i>
+            </button>
+
+            @include('request_form.purchase.modals.purchasing_process_closure')
+
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
                 Editar Mecanismo de Compra
@@ -94,6 +110,7 @@
 
             @include('request_form.purchase.modals.request_new_budget')
         </div>
+        @endif
     </div>
     <div class="col-sm-4">
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
@@ -168,50 +185,51 @@
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
-            @if($requestForm->purchase_mechanism_id == 1)
-                @if($requestForm->purchase_type_id == 1)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            @if($requestForm->isPurchaseInProcess())
+                @if($requestForm->purchase_mechanism_id == 1)
+                    @if($requestForm->purchase_type_id == 1)
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+                    @endif
+                    @if($requestForm->purchase_type_id == 2)
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+                    @endif
+                    @if($requestForm->purchase_type_id == 3)
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+                    @endif
                 @endif
-                @if($requestForm->purchase_type_id == 2)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+
+                @if($requestForm->purchase_mechanism_id == 2)
+                    @if($requestForm->father || $requestForm->purchase_type_id == 4) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                    @else
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
+                    @endif
                 @endif
-                @if($requestForm->purchase_type_id == 3)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+
+                @if($requestForm->purchase_mechanism_id == 3)
+                    @if($requestForm->father) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                    @else
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
+                    @endif
                 @endif
+
+                @if($requestForm->purchase_mechanism_id == 4)
+                    @if($requestForm->father) <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                    @else
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
+                    @endif
+                @endif
+
+                <!-- compra ágil -->
+                @if($requestForm->purchase_mechanism_id == 5)
+                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+                @endif
+
+                @csrf
+                @method('POST')
             @endif
-
-            @if($requestForm->purchase_mechanism_id == 2)
-                @if($requestForm->father || $requestForm->purchase_type_id == 4) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                @else
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
-                @endif
-            @endif
-
-            @if($requestForm->purchase_mechanism_id == 3)
-                @if($requestForm->father) <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                @else
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
-                @endif
-            @endif
-
-            @if($requestForm->purchase_mechanism_id == 4)
-                @if($requestForm->father) <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                @else
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
-                @endif
-            @endif
-
-            <!-- compra ágil -->
-            @if($requestForm->purchase_mechanism_id == 5)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-            @endif
-
-            @csrf
-            @method('POST')
-
             <table class="table table-sm table-striped table-bordered small">
                 <thead class="text-center">
                     <tr>
@@ -265,7 +283,7 @@
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
-                                        id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') ? 'checked' : '' }} @if($isBudgetEventSignPending) disabled @endif>
+                                        id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
@@ -300,6 +318,7 @@
     </div>
 </div>
 
+@if($requestForm->isPurchaseInProcess())
 <br>
 
 <!-- Menores a 3 UTM -->
@@ -339,6 +358,7 @@
 @endif
 
 </form>
+@endif
 
 <br>
 
@@ -347,11 +367,12 @@
 <h6><i class="fas fa-eye"></i> Observaciones al proceso de compra</h6>
 <div class="row">
     <div class="col-sm">
-        <form action="">
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.edit_observation', $requestForm) }}">
+        @csrf
         <div class="form-group">
-            <textarea name="observation" class="form-control form-control-sm" rows="3">{{ old('observation', $requestForm->purchasingProcess->observation ?? '') }}</textarea>
+            <textarea name="observation" class="form-control form-control-sm" rows="3">{!! $requestForm->purchasingProcess->observation !!}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary float-right" id="save_btn" disabled>
+        <button type="submit" class="btn btn-primary float-right">
             <i class="fas fa-save"></i> Guardar
         </button>
         </form>
@@ -738,6 +759,17 @@ $('input[type="file"]').bind('change', function(e) {
 
   });
 
+$('#processClosure').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('status') // Extract info from data-* attributes
+    var modal = $(this)
+    modal.find('.modal-body select').val(recipient)
+})
+
+$('#processClosure').on('shown.bs.modal', function() {
+    $(this).find('select option:not(:selected)').attr('disabled',true);
+    $(this).find('textarea[name="observation"]').focus();
+});
 </script>
 
 @endsection

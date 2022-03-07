@@ -31,7 +31,13 @@
           <tbody>
                 @foreach($my_request_forms as $requestForm)
                         <tr>
-                            <td>{{ $requestForm->id }}</td>
+                            <td>{{ $requestForm->id }} <br>
+                                @if($requestForm->purchasingProcess)
+                                <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                @else
+                                <span class="badge badge-warning">En proceso</span>
+                                @endif
+                            </td>
                             <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
@@ -126,7 +132,13 @@
           <tbody>
                 @foreach($request_forms as $requestForm)
                         <tr>
-                            <td>{{ $requestForm->id }}</td>
+                            <td>{{ $requestForm->id }} <br>
+                                @if($requestForm->purchasingProcess)
+                                <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+                                @else
+                                <span class="badge badge-warning">En proceso</span>
+                                @endif
+                            </td>
                             <td>{{ $requestForm->folio }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                             <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
