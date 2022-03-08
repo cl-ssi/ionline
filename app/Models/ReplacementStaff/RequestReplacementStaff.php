@@ -153,6 +153,18 @@ class RequestReplacementStaff extends Model
             }
             return $request_to_sign;
         }
+        elseif (Auth::user()->hasRole('Replacement Staff: personal sign')) {
+
+            $request_to_sign = RequestReplacementStaff::latest()
+                ->whereHas('requestSign', function($q){
+                    $q->Where('organizational_unit_id', 46)
+                    ->Where('request_status', 'pending');
+                })
+                ->paginate(10)
+                ->count();
+
+            return $request_to_sign;
+        }
         else{
             return $request_to_sign = 0;
         }

@@ -184,6 +184,25 @@ class RequestReplacementStaffController extends Controller
                 ->paginate(10);
             return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
         }
+        else{
+            $pending_requests_to_sign = RequestReplacementStaff::latest()
+                ->whereHas('requestSign', function($q) {
+                    $q->Where('organizational_unit_id', 46)
+                    ->Where('request_status', 'pending');
+                })
+                ->get();
+
+            $requests_to_sign = RequestReplacementStaff::latest()
+                ->whereHas('requestSign', function($q) {
+                    $q->Where('organizational_unit_id', 46)
+                    ->Where(function ($j){
+                        $j->Where('request_status', 'accepted')
+                        ->OrWhere('request_status', 'rejected');
+                    });
+                })
+                ->paginate(10);
+            return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
+        }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
         return redirect()->route('replacement_staff.request.own_index');
@@ -373,7 +392,7 @@ class RequestReplacementStaffController extends Controller
             //UO Nivel 3 Deptos. bajo SUB Direcciones.
             if($uo_request->level == 3){
 
-                for ($i = 1; $i <= 3; $i++) {
+                for ($i = 1; $i <= 4; $i++) {
                     $request_sing = new RequestSign();
 
                     $date = Carbon::now()->format('Y_m_d_H_i_s');
@@ -416,12 +435,17 @@ class RequestReplacementStaffController extends Controller
 
                         if ($i == 3) {
                             $request_sing->position = '3';
+                            $request_sing->ou_alias = 'uni_per';
+                            $request_sing->organizational_unit_id = 46;
+                        }
+
+                        if ($i == 4) {
+                            $request_sing->position = '4';
                             $request_sing->ou_alias = 'sub_rrhh';
                             $request_sing->organizational_unit_id = 44;
                         }
                     }
                     else{
-
                         if($i == 1){
                             $request_sing->position = '1';
                             $request_sing->ou_alias = 'leadership';
@@ -444,14 +468,19 @@ class RequestReplacementStaffController extends Controller
                           $request_sing->ou_alias = 'sub';
                           $request_sing->organizational_unit_id = $uo_request->father->id;
                         }
-
                         if ($i == 3) {
                             $request_sing->position = '3';
+                            $request_sing->ou_alias = 'uni_per';
+                            $request_sing->organizational_unit_id = 46;
+                        }
+                        if ($i == 4) {
+                            $request_sing->position = '4';
                             $request_sing->ou_alias = 'sub_rrhh';
                             $request_sing->organizational_unit_id = 44;
                         }
                     }
                     $request_sing->request_replacement_staff_id = $request_replacement->id;
+                    //dd($request_sing);
                     $request_sing->save();
                 }
             }
