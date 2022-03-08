@@ -113,7 +113,7 @@ class RequestReplacementStaffController extends Controller
               $q->where('request_status', 'complete')
                 ->orWhere('request_status', 'rejected');
             })
-            ->get();
+            ->paginate(15);
 
         //dd($requests);
 
@@ -124,7 +124,7 @@ class RequestReplacementStaffController extends Controller
     {
         $requests = RequestReplacementStaff::latest()
             ->where('request_status', 'pending')
-            ->get();
+            ->paginate(15);
 
         return view('replacement_staff.request.pending_personal_index', compact('requests'));
     }
