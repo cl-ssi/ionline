@@ -10,6 +10,14 @@
 <div class="form-group">
 
 		<div class="form-row">
+    <div class="form-group col-12 col-md-2">
+				<label>Fuente</label>
+        <select class="form-control" name="type">
+					<option value="Preliminar"@if($request->type == "Preliminar") selected @endif>Preliminar</option>
+          <option value="Definitivo" @if($request->type == "Definitivo") selected @endif>Definitivo</option>
+        </select>
+      </div>
+
 			<div class="form-group col-12 col-md-2">
 				<label>Año</label>
         <select class="form-control" name="year">
@@ -129,7 +137,8 @@
           // data.addColumn('number', 'Mujeres');
           data.addRows([
               @foreach($pob_x_establecimientos as $key => $pob_x_establecimiento)
-                ['{{$pob_x_establecimiento->NOMBRE_CENTRO}}',{{ $pob_x_establecimiento->valor }}],
+                ['{{$pob_x_establecimiento->NOMBRE_CENTRO? $pob_x_establecimiento->NOMBRE_CENTRO : $pob_x_establecimiento->Centro_APS}}',
+                {{ $pob_x_establecimiento->valor?? '0'  }}],
               @endforeach
           ]);
 
@@ -163,7 +172,7 @@
           // data.addColumn('number', 'Mujeres');
           data.addRows([
               @foreach($pob_x_comunas as $key => $pob_x_comuna)
-                ['{{$pob_x_comuna->comuna}}',{{ $pob_x_comuna->valor }}],
+                ['{{$pob_x_comuna->Comuna}}',{{ $pob_x_comuna->valor }}],
               @endforeach
           ]);
 
@@ -222,7 +231,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Género', 'Cantidad'],
           @foreach($pob_x_generos as $key => $pob_x_genero)
-            ['{{$pob_x_genero->GENERO}}',    {{$pob_x_genero->valor}}],
+            ['{{$pob_x_genero->GENERO?? $pob_x_genero->Sexo }}',    {{$pob_x_genero->valor}}],
           @endforeach
 
         ]);
