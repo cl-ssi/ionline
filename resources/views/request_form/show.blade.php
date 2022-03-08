@@ -421,7 +421,7 @@
                     <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
                   @endforelse
                 </tbody>
-                @if($requestForm->children->count() > 0)
+                @if($requestForm->children->count() > 0 && $requestForm->purchasingProcess)
                 <tfoot>
                     <tr>
                       <th colspan="9" class="text-right">Totales</td>
