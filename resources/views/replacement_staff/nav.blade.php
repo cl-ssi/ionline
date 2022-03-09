@@ -11,7 +11,8 @@
 
     @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
         Auth::user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
-        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id ))
+        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
+        Auth::user()->hasRole('Replacement Staff: personal sign'))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-inbox"></i> Solicitudes
