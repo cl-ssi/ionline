@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
+use App\Imports\IndicatorValuesImport;
 use App\Indicators\Establecimiento;
 use App\Indicators\HealthGoal;
 use App\Indicators\Indicator;
@@ -11,6 +12,7 @@ use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HealthGoalController extends Controller
 {
@@ -40,7 +42,7 @@ class HealthGoalController extends Controller
     {
         if($law == '19813'){
             $indicator = Indicator::findOrFail($health_goal);
-            $indicator->load('values');
+            $indicator->load('values.attachedFiles');
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else { // ley 18834 o 19664
@@ -185,7 +187,7 @@ class HealthGoalController extends Controller
                                     ->when($isRemP, function($query){
                                         return $query->whereIn('Mes', [6,12]);
                                     })
-                                    ->when($indicator->id == 76 && $factor == 'denominador', function($query){ //N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período enero a septiembre 2021
+                                    ->when(in_array($indicator->id, [76,341]) && $factor == 'denominador', function($query){ //N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período enero a septiembre 2021
                                         return $query->whereIn('Mes', [1,2,3,4,5,6,7,8,9]);
                                     })
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
@@ -197,7 +199,7 @@ class HealthGoalController extends Controller
                             $indicator->values->add($value);
                         }
 
-                        if($indicator->id == 76 && $factor == 'denominador'){
+                        if(in_array($indicator->id, [76,341]) && $factor == 'denominador'){
                             // N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período octubre 2020 a diciembre del 2020
                             $result = Rem::year($year-1)->selectRaw($raws)
                                     ->with(['establecimiento' => function($q) use ($establishment_cods){ 
@@ -304,5 +306,24 @@ class HealthGoalController extends Controller
         
         session()->flash('success', 'Registros actualizados satisfactoriamente.');
         return redirect()->route('indicators.health_goals.show', [$law, $year, $health_goal]);
+    }
+
+    public function importIndValues($law, $year, $health_goal, Indicator $indicator, Request $request)
+    {
+        // return $request;
+        session()->flash('commune', str_replace(" ","_",$request->commune)); //Necesario para ubicar comuna en el conjunto de tabs
+        Excel::import(new IndicatorValuesImport($indicator->id, $request->commune), $request->file);
+        session()->flash('success', 'Actividades para comuna de '.$request->commune.' fueron registradas satisfactoriamente.');
+        return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
+    }
+
+    public function storeIndValue($law, $year, $health_goal, Value $value, Request $request)
+    {
+        return $value;
+    }
+
+    public function updateIndValue($law, $year, $health_goal, Value $value, Request $request)
+    {
+        return $value;
     }
 }
