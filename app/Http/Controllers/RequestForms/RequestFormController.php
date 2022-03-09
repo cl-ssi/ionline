@@ -10,6 +10,7 @@ use App\RequestForms\RequestFormItemCode;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Http\Controllers\Controller;
+use App\Mail\NewRequestFormNotification;
 use App\Models\Documents\SignaturesFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -445,6 +446,33 @@ class RequestFormController extends Controller {
         EventRequestform::createPreFinanceEvent($newRequestForm);
         EventRequestform::createFinanceEvent($newRequestForm);
         EventRequestform::createSupplyEvent($newRequestForm);
+
+        //Envío de notificación a Adm de Contrato y abastecimiento.
+        $mail_contract_manager = User::select('email')
+        ->where('id', $newRequestForm->contract_manager_id)
+        ->first();
+
+        if($mail_contract_manager){
+            $emails = [$mail_contract_manager];
+            Mail::to($emails)
+                ->cc(env('APP_RF_MAIL'))
+                ->send(new NewRequestFormNotification($newRequestForm));
+        }
+        //---------------------------------------------------------
+
+        //Envío de notificación para visación.
+        //manager
+        $type = 'manager';
+        $mail_notification_ou_manager = Authority::getAuthorityFromDate($newRequestForm->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+
+        $emails = [$mail_notification_ou_manager->user->email];
+
+        if($mail_notification_ou_manager){
+            Mail::to($emails)
+                ->cc(env('APP_RF_MAIL'))
+                ->send(new RequestFormSignNotification($newRequestForm, $newRequestForm->eventRequestForms->first()));
+        }
+        //---------------------------------------------------------
 
         session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->folio.' fue creado con éxito. <br>
                                   Recuerde que es un formulario dependiente de ID N° '.$requestForm->folio.'. <br>
