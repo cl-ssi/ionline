@@ -44,39 +44,78 @@ class SignatureController extends Controller
     public function index(string $tab)
     {
         $mySignatures = null;
-        $pendingSignaturesFlows = null;
         $signedSignaturesFlows = null;
-        //dd(Auth::user()->id);
+        $pendingSignaturesFlows = null;
         $users[0] = Auth::user()->id;
 
+        $myAuthorities = collect();
         $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
             $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+            $myAuthorities = $myAuthorities->merge(Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager'));
         }
 
         if ($tab == 'mis_documentos') {
-            $mySignatures = Signature::whereIn('responsable_id', $users)
-                ->orderByDesc('id')
-                ->paginate(20);
+            //Firmas del usuario y del manager actual de ou
+            $mySignatures = Signature::whereIn('responsable_id', $users);
+
+            //Firmas de managers anteriores de la ou
+            foreach ($myAuthorities as $myAuthority){
+                $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
+                ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to]);
+                
+                $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
+            }
+            $mySignatures = $mySignatures->orderByDesc('id')->paginate(20);
         }
 
         if ($tab == 'pendientes') {
+            //Firmas del usuario y del manager actual de ou
             $pendingSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->whereNull('status')
                 ->whereHas('signaturesFile.signature', function ($q) {
                     $q->whereNull('rejected_at');
-                })
-                ->get();
+                });
 
+            //Firmas de managers anteriores de la ou
+            foreach ($myAuthorities as $myAuthority){
+                $authoritiesPendingSignaturesFlows = SignaturesFlow::where('user_id', $myAuthority->user_id)
+                    ->whereNull('status')
+                    ->whereHas('signaturesFile.signature', function ($q) {
+                        $q->whereNull('rejected_at');
+                    })
+                    ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to]);
+
+                    $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
+            }
+            $pendingSignaturesFlows = $pendingSignaturesFlows->get();
+
+
+            //Firmas del usuario y del manager actual de ou
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->where(function ($q) {
                     $q->whereNotNull('status')
                         ->orWhereHas('signaturesFile.signature', function ($q) {
                             $q->whereNotNull('rejected_at');
                         });
+                });
+
+            //Firmas de managers anteriores de la ou
+            foreach ($myAuthorities as $myAuthority){
+                $authoritiesSignedSignaturesFlows = SignaturesFlow::where('user_id', $myAuthority->user_id)
+                ->where(function ($q) {
+                    $q->whereNotNull('status')
+                        ->orWhereHas('signaturesFile.signature', function ($q) {
+                            $q->whereNotNull('rejected_at');
+                        });
                 })
-                ->orderByDesc('id')
-                ->paginate(20);
+                ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to]);
+
+                $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
+            }
+
+            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(20);
+
         }
 
         return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
