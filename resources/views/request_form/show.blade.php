@@ -11,7 +11,7 @@
     <div class="col-sm-8">
         <div class="table-responsive">
             <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}}
-@if($requestForm->eventRequestForms->first()->status == 'pending' && Auth()->user()->organizational_unit_id != 40)
+@if($requestForm->eventRequestForms->first()->status == 'pending' && Auth()->user()->organizational_unit_id != 40 && $requestForm->request_user_id == auth()->user()->id || Auth()->user()->hasPermissionTo('Request Forms: all'))
 <a class="btn btn-link btn-sm float-right font-weight-bold align-top" href="{{route('request_forms.edit', $requestForm)}}">
     <i class="fas fa-edit"></i> Editar formulario
 </a>
