@@ -129,7 +129,7 @@ class SingleParameterController extends Controller
         set_time_limit(3600);
         ini_set('memory_limit', '1024M');
 
-        if ($request->type == "Preliminar" or $request->type == null) {
+        if ($request->type == "Preliminar") {
             if ($request->year == null) {
                 $now = Carbon::now();
                 $year = $now->year;
