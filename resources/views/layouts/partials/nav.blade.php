@@ -270,6 +270,13 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
+                            @canany(['Pharmacy: Administrator'])
+                            <a class="dropdown-item"
+                                href="{{ route('pharmacies.admin_view') }}">
+                                <i class="fas fa-fw fa-user"></i> Administrador
+                            </a>
+                            @endcanany
+
                             @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
                             <a class="dropdown-item"
                                 href="{{ route('pharmacies.index') }}">

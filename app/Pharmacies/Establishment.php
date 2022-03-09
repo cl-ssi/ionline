@@ -3,6 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Establishment extends Model
 {
@@ -14,6 +15,8 @@ class Establishment extends Model
     protected $fillable = [
         'name'
     ];
+
+    use SoftDeletes;
 
     protected $table = 'frm_establishments';
 

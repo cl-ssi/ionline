@@ -64,6 +64,7 @@ use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
@@ -1280,6 +1281,7 @@ Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->mi
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
+    Route::get('admin_view', 'Pharmacies\PharmacyController@admin_view')->name('admin_view');
     Route::resource('establishments', 'Pharmacies\EstablishmentController');
     Route::resource('programs', 'Pharmacies\ProgramController');
     Route::resource('suppliers', 'Pharmacies\SupplierController');

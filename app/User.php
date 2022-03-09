@@ -67,6 +67,10 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo('\App\Models\Country');
     }
 
+    public function pharmacy() {
+        return $this->belongsTo('\App\Models\Pharmacies\Pharmacy');
+    }
+
     public function bankAccount() {
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
