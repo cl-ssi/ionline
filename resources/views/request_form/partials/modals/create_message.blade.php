@@ -13,13 +13,19 @@
           <form method="POST" class="form-horizontal" action="{{ route('request_forms.message.store', [
             'requestForm' => $requestForm,
             'eventType' => $eventType,
-            'from' => $from]) }}">
+            'from' => $from]) }}" enctype="multipart/form-data">
               @csrf
               @method('POST')
               <div class="form-row">
-                  <fieldset class="form-group col">
+                  <fieldset class="form-group col-sm">
                       <label for="for_message" class="form-label"><i class="fas fa-comment"></i>  Observaciones</label>
                       <textarea class="form-control" name="message" id="for_message" rows="3" required></textarea>
+                  </fieldset>
+              </div>
+              <div class="form-row">
+                  <fieldset class="form-group col-sm">
+                      <label for="for_file">Adjuntar archivo</label>
+                      <input type="file" class="form-control-file" id="for_file" name="file" accept="application/pdf">
                   </fieldset>
               </div>
 

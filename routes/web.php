@@ -64,6 +64,7 @@ use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
@@ -957,6 +958,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
         Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', 'Indicators\HealthGoalController@importIndValues')->middleware('auth')->name('ind.import');
     });
 
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
@@ -1279,6 +1281,7 @@ Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->mi
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
+    Route::get('admin_view', 'Pharmacies\PharmacyController@admin_view')->name('admin_view');
     Route::resource('establishments', 'Pharmacies\EstablishmentController');
     Route::resource('programs', 'Pharmacies\ProgramController');
     Route::resource('suppliers', 'Pharmacies\SupplierController');
@@ -1358,6 +1361,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
     Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
+    Route::get('/contract_manager_forms', [RequestFormController::class, 'contract_manager_forms'])->name('contract_manager_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     Route::get('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
@@ -1368,6 +1372,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
+        Route::get('/show_file/{requestFormMessage}', [RequestFormMessageController::class, 'show_file'])->name('show_file');
     });
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
@@ -1390,6 +1395,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::post('/{requestForm}/create_convenio_marco', [PurchasingProcessController::class, 'create_convenio_marco'])->name('create_convenio_marco');
         Route::post('/{requestForm}/create_direct_deal', [PurchasingProcessController::class, 'create_direct_deal'])->name('create_direct_deal');
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
+        Route::post('{requestForm}/close_purchasing_process', [PurchasingProcessController::class, 'close_purchasing_process'])->name('close_purchasing_process');
+        Route::post('{requestForm}/edit_observation', [PurchasingProcessController::class, 'edit_observation'])->name('edit_observation');
         Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');

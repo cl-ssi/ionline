@@ -209,7 +209,7 @@
 
 	<div class="form-row">
 
-		<fieldset class="form-group col-6 col-md-3">
+		<fieldset class="form-group col-6 col-md">
 			<label for="for_programm_name">Nombre Programa*</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
@@ -252,7 +252,35 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-6 col-md-3">
+		<!-- 04/04/2022: solicitado por nataly (agregar grado) -->
+		<fieldset class="form-group col-6 col-md">
+			<label for="for_profession_id">Grado*</label>
+			<select name="grade" class="form-control" id="grade" disabled>
+				<option value=""></option>
+				<option value="GRADO 5">GRADO 5</option>
+				<option value="GRADO 6">GRADO 6</option>
+				<option value="GRADO 7">GRADO 7</option>
+				<option value="GRADO 8">GRADO 8</option>
+				<option value="GRADO 9">GRADO 9</option>
+				<option value="GRADO 10">GRADO 10</option>
+				<option value="GRADO 11">GRADO 11</option>
+				<option value="GRADO 12">GRADO 12</option>
+				<option value="GRADO 13">GRADO 13</option>
+				<option value="GRADO 14">GRADO 14</option>
+				<option value="GRADO 15">GRADO 15</option>
+				<option value="GRADO 16">GRADO 16</option>
+				<option value="GRADO 17">GRADO 17</option>
+				<option value="GRADO 18">GRADO 18</option>
+				<option value="GRADO 19">GRADO 19</option>
+				<option value="GRADO 20">GRADO 20</option>
+				<option value="GRADO 21">GRADO 21</option>
+				<option value="GRADO 22">GRADO 22</option>
+				<option value="GRADO 23">GRADO 23</option>
+				<option value="GRADO 24">GRADO 24</option>
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md">
 			<label for="for_digera_strategy">Estrategia Digera C.</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
@@ -280,7 +308,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-6 col-md-3">
+		<fieldset class="form-group col-6 col-md">
 			<label for="for_contractual_condition">Calidad Contractual</label>
 			<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
 				<option value=""></option>
@@ -294,7 +322,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-6 col-md-3" id="div_covid_schedule">
+		<fieldset class="form-group col-6 col-md" id="div_covid_schedule">
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
@@ -305,7 +333,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3" style="display: none" id="div_hsa_schedule">
+		<fieldset class="form-group col" style="display: none" id="div_hsa_schedule">
 			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" placeholder="" name="hsa_schedule_detail">
 		</fieldset>
@@ -592,7 +620,7 @@
 				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
 				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
 				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
-				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {		
+				// 		$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
 				$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
 				$("#responsability_center_ou_id option:selected").text() == "Programa Control de Infecciones" ||
 				$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
@@ -817,6 +845,15 @@
 			$('#additional_benefits').attr('disabled', 'disabled');
 		} else {
 			$('#additional_benefits').removeAttr('disabled');
+		}
+
+		// 04/04/2022: solicitado por nataly (agregar grado)
+		if (value == "OTROS PROGRAMAS HETG") {
+			$('#grade').removeAttr('disabled');
+			$("#grade").prop('required',true);
+		} else {
+			$('#grade').attr('required', 'disabled');
+			$("#grade").prop('required',false);
 		}
 	});
 

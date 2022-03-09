@@ -21,6 +21,7 @@ use App\Models\RequestForms\PurchasingProcessDetail;
 use App\Models\RequestForms\Tender;
 use App\Models\RequestForms\DirectDeal;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class PurchasingProcessController extends Controller
@@ -81,6 +82,26 @@ class PurchasingProcessController extends Controller
         return $purchasingProcess;
     }
 
+    public function close_purchasing_process(RequestForm $requestForm, Request $request)
+    {
+        $requestForm->load('purchasingProcess');
+        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        $requestForm->purchasingProcess()->update([ 
+            'status' => $request->status == 'finished' ? (Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased') : 'canceled', 
+            'observation' => $request->observation
+        ]);
+
+        session()->flash('success', 'Cierre de proceso de compra registrado exitosamente');
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+    }
+
+    public function edit_observation(RequestForm $requestForm, Request $request)
+    {
+        $requestForm->purchasingProcess()->update(['observation' => $request->observation]);
+        session()->flash('success', 'La observación al proceso de compra ha sido registrado exitosamente');
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+    }
+
     public function estimated_expense_exceeded(RequestForm $requestForm)
     {
         //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
@@ -124,7 +145,12 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        session()->flash('success', 'La Orden de compra interna ha sido creado exitosamente');
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+
+        session()->flash('success', 'La Orden de compra interna ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -163,7 +189,12 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        session()->flash('success', 'El fondo menor (caja chica) ha sido creado exitosamente');
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+
+        session()->flash('success', 'El fondo menor (caja chica) ha registrado creado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -196,7 +227,12 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        session()->flash('success', 'El fondo a rendir ha sido creado exitosamente');
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+
+        session()->flash('success', 'El fondo a rendir ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
@@ -248,7 +284,12 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        session()->flash('success', 'La Licitación ha sido creado exitosamente');
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+
+        session()->flash('success', 'La Licitación ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
 
     }
@@ -291,8 +332,13 @@ class PurchasingProcessController extends Controller
             $attachedFile->save();
         }
         
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+        
+        session()->flash('success', 'La Orden de compra ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
-
     }
 
     public function create_convenio_marco(Request $request, RequestForm $requestForm)
@@ -340,8 +386,13 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
 
+        session()->flash('success', 'Convenio marco ha sido registrado exitosamente');
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
     public function create_direct_deal(Request $request, RequestForm $requestForm)
@@ -389,7 +440,12 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        session()->flash('success', 'El trato directo ha sido creado exitosamentes');
+        $requestForm->load('purchasingProcess.details');
+        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
+            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        }
+
+        session()->flash('success', 'El trato directo ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 }

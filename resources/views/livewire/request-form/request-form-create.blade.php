@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
-                    <label for="forRut">Nombre:</label>
+                    <label for="forRut">Nombre de Formulario:</label>
                     <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" value="">
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>

@@ -137,12 +137,12 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: oficina']);
         Permission::create(['name' => 'Partes: delete']);
 
-
-        Permission::create(['name' => 'Replacement Staff: create request']);
-        Permission::create(['name' => 'Replacement Staff: list rrhh']);
-        Permission::create(['name' => 'Replacement Staff: manage']);
-        Permission::create(['name' => 'Replacement Staff: technical evaluation']);
-        Permission::create(['name' => 'Replacement Staff: assign request']);
+        // Permission::create(['name' => 'Replacement Staff: create request']);
+        // Permission::create(['name' => 'Replacement Staff: list rrhh']);
+        // Permission::create(['name' => 'Replacement Staff: manage']);
+        // Permission::create(['name' => 'Replacement Staff: technical evaluation']);
+        // Permission::create(['name' => 'Replacement Staff: assign request']);
+        // Permission::create(['name' => 'Replacement Staff: personal sign']);
 
         // @role(
         //   'Replacement Staff: admin |
@@ -200,5 +200,38 @@ class RoleAndPermissionSeeder extends Seeder
 
         $role = Role::create(['name' => 'Tickets: admin']);
         $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
+
+        $role = Role::create(['name' => 'Replacement Staff: admin']);
+        $role->givePermissionTo([
+          'Replacement Staff: create request',
+          'Replacement Staff: list rrhh',
+          'Replacement Staff: technical evaluation',
+          'Replacement Staff: manage',
+          'Replacement Staff: assign request'
+        ]);
+
+        $role = Role::create(['name' => 'Replacement Staff: user']);
+        $role->givePermissionTo([
+          'Replacement Staff: create request'
+        ]);
+
+        $role = Role::create(['name' => 'Replacement Staff: user rys']);
+        $role->givePermissionTo([
+          'Replacement Staff: create request',
+          'Replacement Staff: list rrhh',
+          'Replacement Staff: technical evaluation',
+          'Replacement Staff: view requests'
+        ]);
+
+        $role = Role::create(['name' => 'Replacement Staff: personal']);
+        $role->givePermissionTo([
+          'Replacement Staff: view requests'
+        ]);
+
+        $role = Role::create(['name' => 'Replacement Staff: personal sign']);
+        $role->givePermissionTo([
+          'Replacement Staff: view requests',
+          'Replacement Staff: personal sign'
+        ]);
     }
 }

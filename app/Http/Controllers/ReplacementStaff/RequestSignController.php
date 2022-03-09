@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificationSign;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Mail\NotificationEndSigningProcess;
+use App\User;
 
 class RequestSignController extends Controller
 {
@@ -78,7 +79,6 @@ class RequestSignController extends Controller
     public function update(Request $request, RequestSign $requestSign, $status, RequestReplacementStaff $requestReplacementStaff)
     {
         if($status == 'accepted'){
-            //dd($requestSign);
             $requestSign->user_id = Auth::user()->id;
             $requestSign->request_status = $status;
             $requestSign->date_sign = Carbon::now();
@@ -100,7 +100,32 @@ class RequestSignController extends Controller
               $type_adm = 'secretary';
               $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextRequestSign->organizational_unit_id, $requestSign->date_sign, $type_adm);
 
-              $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+              if($mail_notification_ou_secretary){
+                  $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+                  if($nextRequestSign->ou_alias == 'uni_per'){
+                      $personal_users = User::latest()
+                        ->whereHas('roles', function($q){
+                            $q->Where('name', 'Replacement Staff: personal sign');
+                        })
+                        ->get();
+                      foreach ($personal_users as $key => $personal_user) {
+                          array_push($emails, $personal_user->email);
+                      }
+                  }
+              }
+              else{
+                  $emails = [$mail_notification_ou_manager->user->email];
+                  if($nextRequestSign->ou_alias == 'uni_per'){
+                      $personal_users = User::latest()
+                        ->whereHas('roles', function($q){
+                            $q->Where('name', 'Replacement Staff: personal sign');
+                        })
+                        ->get();
+                      foreach ($personal_users as $key => $personal_user) {
+                          array_push($emails, $personal_user->email);
+                      }
+                  }
+              }
 
               Mail::to($emails)
                 ->cc(env('APP_RYS_MAIL'))

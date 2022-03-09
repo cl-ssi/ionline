@@ -144,7 +144,11 @@
     @include('service_requests.requests.fulfillments.edit_monthly',['serviceRequest' => $serviceRequest])
 @else
     @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
+      @if($serviceRequest->programm_name == "OTROS PROGRAMAS HETG")
+        @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
+      @else
         @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
+      @endif
     @else
         @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
     @endif
