@@ -3,6 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ReceivingItem extends Model
 {
@@ -16,6 +17,8 @@ class ReceivingItem extends Model
       //'serial_number',
       'batch', 'created_at'
   ];
+
+  use SoftDeletes;
 
   protected $table = 'frm_receiving_items';
 
