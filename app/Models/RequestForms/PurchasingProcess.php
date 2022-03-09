@@ -85,6 +85,40 @@ class PurchasingProcess extends Model
     //   return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
     // }
 
+    public function getStatus(){
+        switch ($this->status) {
+            case "in_process":
+                return 'En proceso';
+                break;
+            case "purchased":
+                return 'Comprado';
+                break;
+            case "finalized":
+                return 'Finalizado';
+                break;
+            case "canceled":
+                return 'Anulado';
+                break;
+        }
+    }
+
+    public function getColor(){
+        switch ($this->status) {
+            case "in_process":
+                return 'warning';
+                break;
+            case "purchased":
+                return 'success';
+                break;
+            case "finalized":
+                return 'primary';
+                break;
+            case "canceled":
+                return 'danger';
+                break;
+        }
+    }
+
     /**
     * The table associated with the model.
     *

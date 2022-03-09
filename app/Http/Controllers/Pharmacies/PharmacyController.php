@@ -31,6 +31,10 @@ class PharmacyController extends Controller
         return view('pharmacies.index');
     }
 
+    public function admin_view(){
+      return view('pharmacies.admin_view');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

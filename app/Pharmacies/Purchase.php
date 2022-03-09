@@ -3,6 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Purchase extends Model
 {
@@ -32,6 +33,8 @@ class Purchase extends Model
       'user_id',
       'created_at'
   ];
+
+  use SoftDeletes;
 
   protected $table = 'frm_purchases';
 

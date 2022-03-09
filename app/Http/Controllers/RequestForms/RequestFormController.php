@@ -150,6 +150,16 @@ class RequestFormController extends Controller {
         return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'events_type'));
     }
 
+    public function contract_manager_forms() {
+
+        $contract_manager_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+            ->where('contract_manager_id', Auth::user()->id)
+            ->latest('id')
+            ->paginate(30);
+
+        return view('request_form.contract_manager_forms', compact('contract_manager_forms'));
+    }
+
 
     // public function edit(RequestForm $requestForm) {
     //     if($requestForm->request_user_id != auth()->user()->id){
@@ -172,6 +182,10 @@ class RequestFormController extends Controller {
 
     public function edit(RequestForm $requestForm){
         // $requestForm=null;
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && Auth()->user()->organizational_unit_id != 40 && $requestForm->request_user_id != auth()->user()->id){
+            session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para editar formulario N° '.$requestForm->folio);
+            return redirect()->route('request_forms.my_forms');
+        }
         return  view('request_form.create', compact('requestForm'));
     }
 

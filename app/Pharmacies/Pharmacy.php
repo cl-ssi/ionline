@@ -3,6 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pharmacy extends Model
 {
@@ -14,6 +15,8 @@ class Pharmacy extends Model
     protected $fillable = [
         'name', 'address'
     ];
+
+    use SoftDeletes;
 
     protected $table = 'frm_pharmacies';
 
@@ -46,5 +49,10 @@ class Pharmacy extends Model
     public function products()
     {
       return $this->hasMany('App\Pharmacies\Product');
+    }
+
+    public function users()
+    {
+      return $this->hasMany('App\User');
     }
 }

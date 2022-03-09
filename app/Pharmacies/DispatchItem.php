@@ -3,6 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DispatchItem extends Model
 {
@@ -14,6 +15,8 @@ class DispatchItem extends Model
   protected $fillable = [
       'id', 'barcode', 'dispatch_id', 'product_id', 'amount', 'unity', 'due_date','batch', 'created_at'
   ];
+
+  use SoftDeletes;
 
   protected $table = 'frm_dispatch_items';
 

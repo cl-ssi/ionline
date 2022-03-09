@@ -37,7 +37,7 @@
                       <th>Usuario Gestor</th>
                       <th>Items</th>
                       <th>Espera</th>
-                      <th>Estado</th>
+                      <th>Etapas de aprobación</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -137,7 +137,7 @@
                   <th>Comprador</th>
                   <th>Items</th>
                   <th>Espera</th>
-                  <th>Estado</th>
+                  <th>Etapas de aprobación</th>
                   <th></th>
                 </tr>
               </thead>
@@ -233,12 +233,6 @@
                                       class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                                   </a>
                                   @endif
-                              @endif
-                              @if($requestForm->PurchasingProcess)
-                              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
-                                <a href="{{ route('request_forms.supply.show', $requestForm) }}"
-                                  class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
-                              </span>
                               @endif
                             </td>
                         </tr>
