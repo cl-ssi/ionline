@@ -64,7 +64,7 @@
 	</table>
 </div>
 
-{{-- {{ $receivings->links() }} --}}
+{{ $receivings->links() }}
 
 @endsection
 

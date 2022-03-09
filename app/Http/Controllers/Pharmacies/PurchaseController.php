@@ -21,7 +21,7 @@ class PurchaseController extends Controller
     public function index()
     {
       $purchases = Purchase::where('pharmacy_id',session('pharmacy_id'))
-                           ->orderBy('id','DESC')->get();//paginate(15);
+                           ->orderBy('id','DESC')->paginate(200);
       foreach ($purchases as $key => $purchase) {
         $purchase->purchase_order_amount = "$".str_replace (",",".",number_format(round($purchase->purchase_order_amount * 1.19)));
       }
