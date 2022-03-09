@@ -140,7 +140,8 @@
                     'Authorities: create',
                     'Users: service requests',
                     'Service Request',
-                    'Replacement Staff: create request'])
+                    'Replacement Staff: create request',
+                    'Replacement Staff: view requests'])
                 <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -235,7 +236,7 @@
                             </a>
                         @endif
 
-                        @if(Auth::user()->hasRole('Replacement Staff: personal'))
+                        @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item @active('replacement_staff.request.personal_index')"
