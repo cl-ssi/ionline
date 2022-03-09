@@ -54,7 +54,7 @@
                         <td>{{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
                     </tr>
                     <tr>
-                        <th class="table-active" scope="row">Adminitrador de Contrato</th>
+                        <th class="table-active" scope="row">Administrador de Contrato</th>
                         <td>{{ $requestForm->contractManager ? $requestForm->contractManager->FullName : 'Usuario eliminado' }}</td>
                     </tr>
                     <tr>
