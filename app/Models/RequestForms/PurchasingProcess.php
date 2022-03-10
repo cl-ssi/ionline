@@ -10,6 +10,7 @@ use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
 use CreateArqPurchasingProcessDetailTable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /*
  * Diferentes estados del Proceso de Compra
@@ -34,10 +35,11 @@ firma electronica, enlace bodega
  **/
 
 
-class PurchasingProcess extends Model
+class PurchasingProcess extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
 
     protected $fillable = [

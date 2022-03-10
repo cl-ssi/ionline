@@ -6,11 +6,16 @@ use App\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PurchasingProcessDetail extends Pivot
+use OwenIt\Auditing\Contracts\Auditable;
+
+class PurchasingProcessDetail extends Pivot implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
-    
+
     protected $table = 'arq_purchasing_process_detail';
+
+    public $incrementing = true;
 
     protected $fillable = [
         'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
@@ -65,5 +70,15 @@ class PurchasingProcessDetail extends Pivot
         elseif($this->immediatePurchase) return $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
+    }
+
+    public function getPurchasingType(){
+        if($this->internalPurchaseOrder) return $this->internalPurchaseOrder;
+        elseif($this->pettyCash) return $this->pettyCash;
+        elseif($this->fundToBeSettled) return $this->fundToBeSettled;
+        elseif($this->tender) return $this->tender;
+        elseif($this->directDeal) return $this->directDeal;
+        elseif($this->immediatePurchase) return $this->immediatePurchase;
+        else return null;
     }
 }
