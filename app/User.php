@@ -67,8 +67,9 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo('\App\Models\Country');
     }
 
-    public function pharmacy() {
-        return $this->belongsTo('\App\Models\Pharmacies\Pharmacy');
+    public function pharmacies() {
+        // return $this->belongsToMany('\App\Models\Pharmacies\Pharmacy');
+        return$this->belongsToMany('\App\Pharmacies\Pharmacy', 'frm_pharmacy_user')->withTimestamps();
     }
 
     public function bankAccount() {

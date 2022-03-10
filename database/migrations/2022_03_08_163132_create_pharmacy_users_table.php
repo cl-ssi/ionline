@@ -13,7 +13,7 @@ class CreatePharmacyUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('frm_pharmacy_users', function (Blueprint $table) {
+        Schema::create('frm_pharmacy_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pharmacy_id');
             $table->unsignedBigInteger('user_id');
