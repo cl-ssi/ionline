@@ -336,21 +336,15 @@ class SignatureController extends Controller
     public function update(Request $request, Signature $signature): RedirectResponse
     {
         $signature->fill($request->all());
+        $signature->rejected_at = null;
         $signature->save();
-
-//        if ($signature->hasSignedOrRejectedFlow) {
-//            $signature->signaturesFlows->toQuery()->update(['status' => null]);
-//        }
 
         if ($request->hasFile('document')) {
             $signatureFileDocumento = $signature->signaturesFiles->where('file_type', 'documento')->first();
-//            $signatureFileDocumento->file = base64_encode(file_get_contents($request->file('document')->getRealPath()));
 
             Storage::disk('gcs')->delete($signatureFileDocumento->file);
             $documentFile = file_get_contents($request->file('document')->getRealPath());
             $filePath = 'ionline/signatures/original/' . $signatureFileDocumento->id . '.pdf';
-//            $signatureFileDocumento->update(['file' => $filePath,]);
-
             Storage::disk('gcs')->put($filePath, $documentFile);
 
             $signatureFileDocumento->save();
@@ -369,7 +363,6 @@ class SignatureController extends Controller
                 $signaturesFile->signature_id = $signature->id;
                 $documentFile = $annexed;
 
-//                $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
                 $signaturesFile->file_type = 'anexo';
                 $signaturesFile->save();
 
@@ -401,7 +394,6 @@ class SignatureController extends Controller
                 $signaturesFlow->ou_id = $ou_id_visator;
                 $signaturesFlow->user_id = $request->user_visator[$key];
                 $signaturesFlow->sign_position = $key + 1;
-//                    $signaturesFlow->status = false;
                 $signaturesFlow->save();
             }
         }
@@ -482,18 +474,6 @@ class SignatureController extends Controller
         } else {
             return Storage::disk('gcs')->response($signaturesFile->file);
         }
-
-
-//        header('Content-Type: application/pdf');
-//        if ($signaturesFile->file_type == 'documento') {
-//            if ($signaturesFile->signed_file) {
-//                echo base64_decode($signaturesFile->signed_file);
-//            } else {
-//                echo base64_decode($signaturesFile->file);
-//            }
-//        } else {
-//            echo base64_decode($signaturesFile->file);
-//        }
     }
 
     public function showPdfFromFile(Request $request)
@@ -514,8 +494,6 @@ class SignatureController extends Controller
             $signaturesFile = SignaturesFile::find($request->id);
             if ($signaturesFile->verification_code == $request->verification_code) {
                 return Storage::disk('gcs')->response($signaturesFile->signed_file);
-//                header('Content-Type: application/pdf');
-//                echo base64_decode($signaturesFile->signed_file);
             } else {
                 session()->flash('warning', 'El código de verificación no corresponde con el documento.');
                 return view('documents.signatures.verify');
