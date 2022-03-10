@@ -1282,6 +1282,11 @@ Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->mi
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
     Route::get('admin_view', 'Pharmacies\PharmacyController@admin_view')->name('admin_view');
+    Route::get('pharmacy_users', 'Pharmacies\PharmacyController@pharmacy_users')->name('pharmacy_users');
+    Route::post('user_asign_store', [PharmacyController::class, 'user_asign_store'])->name('user_asign_store');
+    Route::delete('/{pharmacy}/{user}/user_asign_destroy', [PharmacyController::class, 'user_asign_destroy'])->name('user_asign_destroy');
+
+
     Route::resource('establishments', 'Pharmacies\EstablishmentController');
     Route::resource('programs', 'Pharmacies\ProgramController');
     Route::resource('suppliers', 'Pharmacies\SupplierController');
