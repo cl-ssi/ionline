@@ -52,6 +52,17 @@ class Authority extends Model
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
     }
 
+    public static function getAuthorityFromAllTime($ou_id, $type) {
+
+        return Authority::with('user','organizationalUnit')
+            ->where('organizational_unit_id', $ou_id)
+            ->when($type, function ($q) use ($type) {
+                is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
+              })
+            ->get();
+    }
+
+
     public static function getBossFromUser($rut, $date) {
         if (!is_string($date)) {
           $date = $date->format('Y-m-d');
