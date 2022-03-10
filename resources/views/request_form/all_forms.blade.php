@@ -32,6 +32,9 @@
         @foreach($request_forms as $requestForm)
         <tr>
           <th>{{ $requestForm->id }} <br>
+
+
+
             @switch($requestForm->getStatus())
             @case('Pendiente')
             <i class="fas fa-clock"></i>
@@ -41,6 +44,11 @@
             <span style="color: green;">
               <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
             </span>
+            @if($requestForm->purchasingProcess)
+            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+            @else
+            <span class="badge badge-warning">En proceso</span>
+            @endif
             @break
 
             @case('Rechazado')
@@ -52,6 +60,7 @@
             @break
 
             @endswitch
+            
           </th>
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
@@ -95,28 +104,25 @@
             </a>
             @endif
             @if($requestForm->signatures_file_id)
-              @if($requestForm->signatures_file_id == 11)
-              <a class="btn btn-info btn-sm"
-                  title="Ver Formulario de Requerimiento firmado"
-                  href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}"
-                  target="_blank" title="Certificado">
-                    <i class="fas fa-file-contract"></i>
-              </a>
-              @else
-              <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
-                <i class="fas fa-file-contract"></i>
-              </a>
-              @endif
-              @if($requestForm->old_signatures_file_id)
-              <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
-                <i class="fas fa-file-contract"></i>
-              </a>
-              @endif
+            @if($requestForm->signatures_file_id == 11)
+            <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @else
+            <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @endif
+            @if($requestForm->old_signatures_file_id)
+            <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @endif
 
-              @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo'))
-              <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
-              </a>
-              @endif
+            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo'))
+            <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+            </a>
+            @endif
             @endif
             @if(Auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->PurchasingProcess)
             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
