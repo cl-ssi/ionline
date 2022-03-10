@@ -11,11 +11,13 @@
   <div class="col-sm-8">
     <div class="table-responsive">
       <h6><i class="fas fa-info-circle"></i> Detalle Formulario ID {{$requestForm->id}}
+      @if ($requestForm->getStatus() == 'Aprobado')
         @if($requestForm->purchasingProcess)
         <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
         @else
         <span class="badge badge-warning">En proceso</span>
         @endif
+      @endif
 
 
 
