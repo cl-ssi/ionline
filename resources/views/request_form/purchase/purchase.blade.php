@@ -612,7 +612,7 @@
 
 <hr />
 
-<h6><i class="fas fa-comment"></i> Auditoría Interna</h6>
+<h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
 
 <div class="accordion" id="accordionExample">
   <div class="card">
