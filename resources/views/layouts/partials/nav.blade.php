@@ -204,14 +204,14 @@
                         </a>
                         @endcan
 
-                        @if(Auth::user()->hasRole('Replacement Staff: admin'))
+                        {{-- @if(Auth::user()->hasRole('Replacement Staff: admin'))
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item @active('replacement_staff.request.index')"
                                href="{{ route('replacement_staff.request.index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
-                        @endif
+                        @endif --}}
 
                         @if(Auth::user()->hasRole('Replacement Staff: user rys'))
                             <div class="dropdown-divider"></div>
@@ -223,7 +223,9 @@
                         @endif
 
                         @if(Auth::user()->hasRole('Replacement Staff: user') ||
-                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
+                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id) ||
+                            Auth::user()->hasRole('Replacement Staff: personal') ||
+                            Auth::user()->hasRole('Replacement Staff: personal sign'))
 
                             <div class="dropdown-divider"></div>
 
@@ -236,14 +238,14 @@
                             </a>
                         @endif
 
-                        @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
+                        {{-- @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item @active('replacement_staff.request.personal_index')"
                                href="{{ route('replacement_staff.request.personal_index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
-                        @endif
+                        @endif --}}
                     </div>
 
                 </li>

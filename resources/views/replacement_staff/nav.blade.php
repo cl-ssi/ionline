@@ -76,7 +76,7 @@
     @endif
 
 
-    @canany(['Replacement Staff: manage'])
+    @canany(['Replacement Staff: manage', 'Replacement Staff: view requests'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-file"></i> Reportes
