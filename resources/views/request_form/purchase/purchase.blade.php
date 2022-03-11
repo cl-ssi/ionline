@@ -443,8 +443,8 @@
                             </fieldset>
                         </td> -->
                         <td>
-                            {{--<a href="{{ route('request_forms.show', $detail->pivot->id) }}"
-                            class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>--}}
+                            {{--<a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}"
+                                class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>--}}
                             <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                                 <i class="fas fa-receipt"></i>
                             </button>
@@ -808,8 +808,6 @@
                 grandTotal += parseFloat($(this).val())
         });
 
-
-
         if (isNaN(grandTotal))
             grandTotal = 0;
         grand_total.val(grandTotal.toFixed(2))
@@ -817,11 +815,7 @@
         calculateAmount(true)
     });
 
-    document.getElementById("save_btn").disabled = {
-        {
-            old('_token') === null ? 'true' : 'false'
-        }
-    }
+    document.getElementById("save_btn").disabled = {{ old('_token') === null ? 'true' : 'false' }}
 
     function disabledSaveBtn() {
         // Get the checkbox
