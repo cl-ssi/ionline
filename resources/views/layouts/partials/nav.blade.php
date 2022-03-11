@@ -225,7 +225,8 @@
                         @if(Auth::user()->hasRole('Replacement Staff: user') ||
                             App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id) ||
                             Auth::user()->hasRole('Replacement Staff: personal') ||
-                            Auth::user()->hasRole('Replacement Staff: personal sign'))
+                            Auth::user()->hasRole('Replacement Staff: personal sign') ||
+                            Auth::user()->hasRole('Replacement Staff: admin'))
 
                             <div class="dropdown-divider"></div>
 
