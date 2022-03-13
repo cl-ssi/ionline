@@ -404,11 +404,16 @@ class RequestFormController extends Controller {
 
     public function create_provision(RequestForm $requestForm)
     {
-        // Validar que la suma de total adjudicado de suministros registrados no sobrepase de lo adjudicado en el form req
         $requestForm->load('purchasingProcess.details', 'children.purchasingProcess.details');
-        if($requestForm->purchasingProcess && ($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense() <= 0)){ // Ya no me queda saldo que gastar
-            session()->flash('info', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' no ha comenzado el proceso de compra aún o ya se ha ocupado el monto total de compra adjudicada.');
-            return redirect()->route('request_forms.my_forms');
+        // Validar que el formulario req padre esté finalizado.
+        if(!$requestForm->purchasingProcess || $requestForm->purchasingProcess->status != 'finalized'){
+            session()->flash('danger', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' no ha finalizado su proceso de compra.');
+            return redirect()->back();
+        }
+        // Validar que la suma de total adjudicado de suministros registrados no sobrepase de lo adjudicado en el form req
+        if($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense() <= 0){ // Ya no me queda saldo que gastar
+            session()->flash('danger', 'No se puede generar un nuevo suministro, el formulario de requerimiento N° '.$requestForm->folio.' ya no le queda saldo disponible del monto total de la compra adjudicada.');
+            return redirect()->back();
         }
 
         $requestForm->load('itemRequestForms');
