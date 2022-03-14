@@ -21,7 +21,7 @@ class Authorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
-    public $estimated_expense, $new_estimated_expense;
+    public $estimated_expense, $new_estimated_expense, $purchaser_observation;
 
     protected $rules = [
         'comment' => 'required|min:6',
@@ -58,6 +58,7 @@ class Authorization extends Component
           $this->title = 'Autorización nuevo presupuesto';
           $this->estimated_expense = $requestForm->symbol_currency.number_format($requestForm->estimated_expense, $requestForm->precision_currency, ',', '.');
           $this->new_estimated_expense = $requestForm->symbol_currency.number_format($requestForm->new_estimated_expense, $requestForm->precision_currency, ',', '.');
+          $this->purchaser_observation = $requestForm->firstPendingEvent()->purchaser_observation;
       }
     }
 
