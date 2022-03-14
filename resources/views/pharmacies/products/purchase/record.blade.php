@@ -20,7 +20,7 @@
     </div>
 </div> -->
 
-@canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
+@if(Auth::user()->pharmacies->first()->id == 1 || Auth::user()->pharmacies->first()->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -34,8 +34,8 @@
             Iquique {{ $purchase->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
-@can('Pharmacy: APS (id:3)')
+@endif
+@if(Auth::user()->pharmacies->first()->id == 3)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -52,8 +52,8 @@
             Iquique {{ $purchase->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
-@can('Pharmacy: Servicios generales (id:4)')
+@endif
+@if(Auth::user()->pharmacies->first()->id == 4)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -70,7 +70,7 @@
             Iquique {{ $purchase->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
+@endif
 
 <div class="titulo">ACTA DE RECEPCIÓN N° {{ $purchase->id }}</div>
 
