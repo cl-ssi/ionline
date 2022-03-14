@@ -60,7 +60,7 @@
             @break
 
             @endswitch
-            
+
           </th>
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
@@ -80,21 +80,25 @@
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
           <td class="text-center">
-            @foreach($requestForm->eventRequestForms as $sign)
-            @if($sign->status == 'pending' || $sign->status == NULL)
-            <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            @if($requestForm->eventRequestForms->count() > 0)
+                @foreach($requestForm->eventRequestForms as $sign)
+                    @if($sign->status == 'pending' || $sign->status == NULL)
+                    <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    @endif
+                    @if($sign->status == 'approved')
+                    <span style="color: green;">
+                      <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    </span>
+                    @endif
+                    @if($sign->status == 'rejected')
+                    <span style="color: Tomato;">
+                      <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    </span>
+                    @endif
+                @endforeach
+            @else
+                <i class="fas fa-save fa-2x"></i>
             @endif
-            @if($sign->status == 'approved')
-            <span style="color: green;">
-              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-            </span>
-            @endif
-            @if($sign->status == 'rejected')
-            <span style="color: Tomato;">
-              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-            </span>
-            @endif
-            @endforeach
           </td>
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>

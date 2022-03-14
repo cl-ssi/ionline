@@ -39,6 +39,8 @@ class RequestFormCreate extends Component
 
     public $searchedUser, $isRFItems;
 
+    public $form_status;
+
     protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers'];
 
     protected function rules(){
@@ -225,8 +227,9 @@ class RequestFormCreate extends Component
         return Carbon::now()->year.'-'.$counter;
     }
 
-    public function saveRequestForm(){
-      // dd($this->fileRequests);
+    public function saveRequestForm($form_status){
+      $this->form_status = $form_status;
+
       $this->withValidator(function (Validator $validator) {
         $validator->after(function ($validator) {
             if ($this->available_balance_purchases_exceeded()) {
@@ -238,30 +241,56 @@ class RequestFormCreate extends Component
       $req = DB::transaction(function () {
 
         //dd("chequear por jefatura");
-
-        $req = RequestForm::updateOrCreate(
-          [
-            'id'                    =>  $this->idRF,
-          ],
-          [
-            'subtype'               =>  $this->subtype,
-            'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
-            //contractManagerId
-            //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
-            //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-            'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
-            'name'                  =>  $this->name,
-            'superior_chief'        =>  $this->superiorChief,
-            'justification'         =>  $this->justify,
-            'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
-            'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
-            'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
-            'estimated_expense'     =>  $this->totalForm(),
-            'type_of_currency'      =>  $this->typeOfCurrency,
-            'purchase_mechanism_id' =>  $this->purchaseMechanism,
-            'program'               =>  $this->program,
-            'status'                =>  $this->editRF ? $this->requestForm->status : 'pending'
-        ]);
+        if($this->form_status == 'sent'){
+            $req = RequestForm::updateOrCreate(
+              [
+                'id'                    =>  $this->idRF,
+              ],
+              [
+                'subtype'               =>  $this->subtype,
+                'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
+                //contractManagerId
+                //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
+                //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+                'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'name'                  =>  $this->name,
+                'superior_chief'        =>  $this->superiorChief,
+                'justification'         =>  $this->justify,
+                'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
+                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
+                'estimated_expense'     =>  $this->totalForm(),
+                'type_of_currency'      =>  $this->typeOfCurrency,
+                'purchase_mechanism_id' =>  $this->purchaseMechanism,
+                'program'               =>  $this->program,
+                'status'                =>  'pending'
+            ]);
+        }
+        else{
+            $req = RequestForm::updateOrCreate(
+              [
+                'id'                    =>  $this->idRF,
+              ],
+              [
+                'subtype'               =>  $this->subtype,
+                'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
+                //contractManagerId
+                //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
+                //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+                'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'name'                  =>  $this->name,
+                'superior_chief'        =>  $this->superiorChief,
+                'justification'         =>  $this->justify,
+                'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
+                'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
+                'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
+                'estimated_expense'     =>  $this->totalForm(),
+                'type_of_currency'      =>  $this->typeOfCurrency,
+                'purchase_mechanism_id' =>  $this->purchaseMechanism,
+                'program'               =>  $this->program,
+                'status'                =>  $this->editRF ? $this->requestForm->status : 'saved'
+            ]);
+        }
 
         if($this->isRFItems){
           // save items
@@ -312,48 +341,90 @@ class RequestFormCreate extends Component
         }
 
         if($this->editRF){
+          if($this->form_status == 'sent'){
+              EventRequestform::createLeadershipEvent($req);
+              EventRequestform::createPreFinanceEvent($req);
+              EventRequestform::createFinanceEvent($req);
+              EventRequestform::createSupplyEvent($req);
+
+              //Envío de notificación a Adm de Contrato y abastecimiento.
+              $mail_contract_manager = User::select('email')
+                ->where('id', $req->contract_manager_id)
+                ->first();
+
+              if($mail_contract_manager){
+                  $emails = [$mail_contract_manager];
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new NewRequestFormNotification($req));
+              }
+              //---------------------------------------------------------
+
+              //Envío de notificación para visación.
+              $now = Carbon::now();
+              //manager
+              $type = 'manager';
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              //secretary
+              // $type_adm = 'secretary';
+              // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+              $emails = [$mail_notification_ou_manager->user->email];
+
+              if($mail_notification_ou_manager){
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+              }
+              //---------------------------------------------------------
+
+              session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue creado con exito.');
+          }
+
           $this->isRFItems ? ItemRequestForm::destroy($this->deletedItems) : Passenger::destroy($this->deletedPassengers);
           session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue editado con exito.');
         }
         else{ // nuevo formulario de requerimiento
           $req->update(['folio' => $this->createFolio()]);
-          EventRequestform::createLeadershipEvent($req);
-          EventRequestform::createPreFinanceEvent($req);
-          EventRequestform::createFinanceEvent($req);
-          EventRequestform::createSupplyEvent($req);
+          if($this->form_status == 'sent'){
+              EventRequestform::createLeadershipEvent($req);
+              EventRequestform::createPreFinanceEvent($req);
+              EventRequestform::createFinanceEvent($req);
+              EventRequestform::createSupplyEvent($req);
 
-          //Envío de notificación a Adm de Contrato y abastecimiento.
-          $mail_contract_manager = User::select('email')
-            ->where('id', $req->contract_manager_id)
-            ->first();
+              //Envío de notificación a Adm de Contrato y abastecimiento.
+              $mail_contract_manager = User::select('email')
+                ->where('id', $req->contract_manager_id)
+                ->first();
 
-          if($mail_contract_manager){
-              $emails = [$mail_contract_manager];
-              Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new NewRequestFormNotification($req));
+              if($mail_contract_manager){
+                  $emails = [$mail_contract_manager];
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new NewRequestFormNotification($req));
+              }
+              //---------------------------------------------------------
+
+              //Envío de notificación para visación.
+              $now = Carbon::now();
+              //manager
+              $type = 'manager';
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+              //secretary
+              // $type_adm = 'secretary';
+              // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+              $emails = [$mail_notification_ou_manager->user->email];
+
+              if($mail_notification_ou_manager){
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+              }
+              //---------------------------------------------------------
+
+              session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue creado con exito.');
           }
-          //---------------------------------------------------------
-
-          //Envío de notificación para visación.
-          $now = Carbon::now();
-          //manager
-          $type = 'manager';
-          $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
-          //secretary
-          // $type_adm = 'secretary';
-          // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
-
-          $emails = [$mail_notification_ou_manager->user->email];
-
-          if($mail_notification_ou_manager){
-              Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
-          }
-          //---------------------------------------------------------
-
-          session()->flash('info', 'Formulario de requerimiento N° '.$req->folio.' fue creado con exito.');
         }
 
         // Se guarda los archivos del form req cuando ya todo lo anteior se guardó exitosamente
