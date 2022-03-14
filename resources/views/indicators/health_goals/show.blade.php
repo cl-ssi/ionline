@@ -56,6 +56,11 @@
                         <th>Meta</th>
                         <th>% Cump.</th>
                         <th>Acum</th>
+                        @if(in_array($indicator->id, [76,341]))
+                        <th>Oct '{{substr($healthGoal->year-1, -2)}}</th>
+                        <th>Nov '{{substr($healthGoal->year-1, -2)}}</th>
+                        <th>Dic '{{substr($healthGoal->year-1, -2)}}</th>
+                        @endif
                         @foreach($months as $month)
                         <th>{{$month}}</th>
                         @endforeach
@@ -68,6 +73,11 @@
                         <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                         <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2($commune, null), 2, ',', '.')}}%</td>
                         <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', $commune, null) : $indicator->getValuesAcum2('numerador', $commune, null), 0, ',', '.')}}</td>
+                        @if(in_array($indicator->id, [76,341]))
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        @endif
                         @foreach($months as $number => $month)
                         <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, $commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, $commune, null), 0, ',', '.') : ''}}</td>
                         @endforeach
@@ -76,8 +86,17 @@
                     <tr class="text-center">
                         <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                         <td class="text-center">{{number_format(isset($indicator->isDenRemP) ? $indicator->getLastValueByFactor2('denominador', $commune, null) : $indicator->getValuesAcum2('denominador', $commune, null), 0, ',', '.')}}</td>
-                        @foreach($months as $number => $month)
+                        @if(in_array($indicator->id, [76,341]))
+                        @foreach([10,11,12] as $number)
                         <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null), 0, ',', '.') : ''}}</td>
+                        @endforeach
+                        @endif
+                        @foreach($months as $number => $month)
+                        @if(in_array($indicator->id, [76,341]) && in_array($number, [10,11,12]))
+                        <td class="text-right"></td>
+                        @else
+                        <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, $commune, null), 0, ',', '.') : ''}}</td>
+                        @endif
                         @endforeach
                     </tr>
                 </tbody>
@@ -93,6 +112,11 @@
                             <th>Meta</th>
                             <th>% Cump.</th>
                             <th>Acum</th>
+                            @if(in_array($indicator->id, [76,341]))
+                            <th>Oct '{{substr($healthGoal->year-1, -2)}}</th>
+                            <th>Nov '{{substr($healthGoal->year-1, -2)}}</th>
+                            <th>Dic '{{substr($healthGoal->year-1, -2)}}</th>
+                            @endif
                             @foreach($months as $month)
                             <th>{{$month}}</th>
                             @endforeach
@@ -105,6 +129,11 @@
                             <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                             <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.')}}%</td>
                             <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
+                            @if(in_array($indicator->id, [76,341]))
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            @endif
                             @foreach($months as $number => $month)
                             <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
                             @endforeach
@@ -113,8 +142,17 @@
                         <tr class="text-center">
                             <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</span></td>
                             <td class="text-center">{{number_format(isset($indicator->isDenRemP) ? $indicator->getLastValueByFactor2('denominador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
-                            @foreach($months as $number => $month)
+                            @if(in_array($indicator->id, [76,341]))
+                            @foreach([10,11,12] as $number)
                             <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                            @endforeach
+                            @endif
+                            @foreach($months as $number => $month)
+                            @if(in_array($indicator->id, [76,341]) && in_array($number, [10,11,12]))
+                            <td class="text-right"></td>
+                            @else
+                            <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                            @endif
                             @endforeach
                         </tr>
                     </tbody>
