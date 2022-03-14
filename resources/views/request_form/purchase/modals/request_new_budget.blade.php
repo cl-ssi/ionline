@@ -13,9 +13,15 @@
                     @csrf
                     <div class="form-row">
                         <fieldset class="form-group col-sm">
-                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese nuevo presupuesto" min="{{$requestForm->estimated_expense + 1}}" required>
+                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese nuevo presupuesto" min="{{number_format($requestForm->estimated_expense+1,$requestForm->precision_currency,',','')}}" required>
                         </fieldset>
                     </div>
+                    <div class="form-row">
+                        <fieldset class="form-group col-sm">
+                            <textarea name="purchaser_observation" class="form-control form-control-sm" rows="3" placeholder="Ingrese observación" required></textarea>
+                        </fieldset>
+                    </div>
+
                     <button type="submit" class="btn btn-primary float-right btn-sm">Enviar solicitud</button>
                 </form>
             </div>

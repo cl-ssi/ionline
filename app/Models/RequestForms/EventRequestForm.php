@@ -16,7 +16,7 @@ class EventRequestForm extends Model
 
     protected $fillable = [
         'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
-        'comment', 'signature_date', 'event_type', 'purchaser_id', 'purchaser_amount'
+        'comment', 'signature_date', 'event_type', 'purchaser_id', 'purchaser_amount','purchaser_observation'
     ];
 
 
@@ -138,6 +138,7 @@ class EventRequestForm extends Model
         $event->status              =   'pending';
         $event->event_type          =   'pre_budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
+        $event->purchaser_observation = request()->purchaser_observation;
         $event->purchaser_id        =   Auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
@@ -148,6 +149,7 @@ class EventRequestForm extends Model
         $event->status              =   'pending';
         $event->event_type          =   'budget_event';
         $event->purchaser_amount    =   $requestForm->newBudget - $requestForm->estimated_expense;
+        $event->purchaser_observation = request()->purchaser_observation;
         $event->purchaser_id        =   Auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
