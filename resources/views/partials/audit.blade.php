@@ -1,4 +1,4 @@
-<h4 class="mt-3 mt-4">Historial de cambios</h4>
+<h6 class="mt-3 mt-4">Historial de cambios</h6>
 <div class="table-responsive-md">
 <table class="table table-sm small text-muted mt-3">
     <thead>
