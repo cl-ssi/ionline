@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
 use App\Imports\IndicatorValuesImport;
+use App\Indicators\AttachedFile;
 use App\Indicators\Establecimiento;
 use App\Indicators\HealthGoal;
 use App\Indicators\Indicator;
@@ -11,6 +12,8 @@ use App\Indicators\Percapita;
 use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -317,13 +320,66 @@ class HealthGoalController extends Controller
         return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
     }
 
-    public function storeIndValue($law, $year, $health_goal, Value $value, Request $request)
+    public function storeIndValue($law, $year, $health_goal, Indicator $indicator, Value $value, Request $request)
     {
-        return $value;
+        $newValue = Value::create([
+            'activity_name' => $value->activity_name,
+            'month' => $request->month,
+            'factor' => 'numerador',
+            'commune' =>  $value->commune,
+            'value' => 1,
+            'valueable_id' => $value->valueable_id,
+            'valueable_type' => $value->valueable_type,
+        ]);
+
+        if($request->hasFile('files')){
+            foreach($request->file('files') as $file) {
+                $filename = $file->getClientOriginalName();
+                $fileModel = new AttachedFile();
+                $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
+                $fileModel->document_name = $filename;
+                $fileModel->value_id = $newValue->id;
+                $fileModel->save();
+            }
+        }
+        
+        session()->flash('commune', str_replace(" ","_",$value->commune)); //Necesario para ubicar comuna en el conjunto de tabs
+        session()->flash('success', 'Actividad ejecutada para comuna de '.$request->commune.' se registra satisfactoriamente.');
+        return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
     }
 
-    public function updateIndValue($law, $year, $health_goal, Value $value, Request $request)
+    public function updateIndValue($law, $year, $health_goal, Indicator $indicator, Value $value, Request $request)
     {
-        return $value;
+        $value->value = $request->has('value') ? 1 : 0;
+        $value->save();
+
+        if($request->hasFile('files')){
+            foreach($request->file('files') as $file) {
+                $filename = $file->getClientOriginalName();
+                $fileModel = new AttachedFile();
+                $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
+                $fileModel->document_name = $filename;
+                $fileModel->value_id = $value->id;
+                $fileModel->save();
+            }
+        }
+        
+        session()->flash('commune', str_replace(" ","_",$value->commune)); //Necesario para ubicar comuna en el conjunto de tabs
+        session()->flash('success', 'Actividad ejecutada para comuna de '.$request->commune.' se modifica satisfactoriamente.');
+        return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
+    }
+
+    public function destroy_file(AttachedFile $attachedFile)
+    {
+        $attachedFile->delete();
+        Storage::disk('gcs')->delete($attachedFile->file);
+
+        session()->flash('success', 'Documento adjunto se eliminó satisfactoriamente.');
+        return redirect()->back();
+    }
+
+    public function show_file(AttachedFile $attachedFile)
+    {
+        return Storage::disk('gcs')->response($attachedFile->file, $attachedFile->document_name);
     }
 }
