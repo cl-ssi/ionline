@@ -6,28 +6,7 @@
 
 <?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
-<!-- <div>
-    <div style="width: 49%; display: inline-block;">
-        <div class="siete" style="padding-top: 3px;">
-            Droguería - {{ env('APP_SS') }}
-        </div>
-        @if( Auth::user()->can('Pharmacy: REYNO (id:2)'))
-          <div class="siete" style="padding-top: 3px;">
-              <i>mjose.castillo@redsalud.gob.cl</i>
-          </div>
-        @else
-          <div class="siete" style="padding-top: 3px;">
-              <i>fernando.molina@redsalud.gob.cl</i>
-          </div>
-        @endif
-
-    </div>
-    <div class="right" style="width: 49%; display: inline-block;">
-        Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
-    </div>
-</div> -->
-
-@canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
+@if(Auth::user()->pharmacies->first()->id == 1 || Auth::user()->pharmacies->first()->id == 2)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -41,8 +20,8 @@
             Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
-@can('Pharmacy: APS (id:3)')
+@endif
+@if(Auth::user()->pharmacies->first()->id == 3)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -59,8 +38,8 @@
             Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
-@can('Pharmacy: Servicios generales (id:4)')
+@endif
+@if(Auth::user()->pharmacies->first()->id == 4)
     <div>
         <div style="width: 49%; display: inline-block;">
             <div class="siete" style="padding-top: 3px;">
@@ -77,7 +56,7 @@
             Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
-@endcan
+@endif
 
 <div class="titulo">ACTA DE INGRESO N° {{ $receiving->id }}</div>
 
@@ -113,7 +92,7 @@
         <span class="uppercase"></span>
     </div>
     <div class="center" style="width: 49%">
-      @if( Auth::user()->can('Pharmacy: REYNO (id:2)'))
+      @if(Auth::user()->pharmacies->first()->id == 2)
         <span class="uppercase">{{Auth::user()->name}}</span><br>
         @if(Auth::user()->id == 18899957 || Auth::user()->id == 16074423)
           <span class="uppercase">QF Botiquín</span>

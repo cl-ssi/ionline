@@ -8,14 +8,14 @@
     </head>
     <body>
         <div class="content">
-          @if( Auth::user()->can('Pharmacy: REYNO (id:2)'))
+          @if( Auth::user()->pharmacies->first()->id == 2)
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_cgu_pluma.jpg') }}"
               width="120" alt="Logo {{ env('APP_SS') }}"><br>
           @else
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
           @endif
-          
+
           @yield('content')
 
           <div class="pie_pagina seis center">

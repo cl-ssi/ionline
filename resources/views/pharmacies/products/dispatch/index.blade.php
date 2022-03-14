@@ -27,7 +27,6 @@
 </div>
 
 
-
 <div class="table-responsive">
 	<table class="table table-striped table-sm" id="tabla_dispatch">
 		<thead>
@@ -37,7 +36,7 @@
 				<th scope="col">Establecimiento</th>
 				<th scope="col">Notas</th>
 				<th nowrap scope="col"></th>
-				@cannot('Pharmacy: APS (id:3)') <th nowrap scope="col">C-19</th> @endcannot
+				@if(Auth::user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif
 			</tr>
 		</thead>
 		<tbody>
@@ -63,7 +62,6 @@
 					<a href="{{ route('pharmacies.products.dispatch.record', $dispatch) }}"
 						class="btn btn-outline-secondary btn-sm" target="_blank">
 					<span class="fas fa-file" aria-hidden="true"></span></a>
-					{{-- @can('Pharmacy: APS (id:3)') --}}
 					@if(!$dispatch->files->isEmpty())
 					<a href="{{ route('pharmacies.products.dispatch.openFile', $dispatch) }}"
 						class="btn btn-outline-secondary btn-sm" target="_blank">
@@ -80,7 +78,7 @@
 					@endif
 					{{-- @endcan --}}
 				</td>
-				@cannot('Pharmacy: APS (id:3)')
+				@if(Auth::user()->pharmacies->first()->id != 3)
 				<td nowrap>
 					@if($dispatch->sendC19 == 0)
 						<form method="POST" action="{{ route('pharmacies.products.dispatch.sendC19', $dispatch) }}" class="d-inline">
@@ -104,7 +102,7 @@
 						</form>
 					@endif
 				</td>
-				@endcannot
+				@endif
 			</tr>
 			@endforeach
 		</tbody>

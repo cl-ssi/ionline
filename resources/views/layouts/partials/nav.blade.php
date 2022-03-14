@@ -263,7 +263,7 @@
                   </li>
                 @endcan
 
-                @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)', 'Pharmacy: Servicios generales (id:4)'])
+                @canany(['Pharmacy'])
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -278,26 +278,16 @@
                             </a>
                             @endcanany
 
-                            @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
-                            <a class="dropdown-item"
-                                href="{{ route('pharmacies.index') }}">
-                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> Droguería
-                            </a>
-                            @endcanany
-
-                            @can('Pharmacy: APS (id:3)')
-                            <a class="dropdown-item"
-                                href="{{ route('pharmacies.index') }}">
-                                <i class="fas fa-fw fa-medkit"></i> APS
-                            </a>
-                            @endcan
-
-                            @can('Pharmacy: Servicios generales (id:4)')
-                            <a class="dropdown-item"
-                                href="{{ route('pharmacies.index') }}">
-                                <i class="fas fa-fw fa-warehouse"></i> Servicios Generales
-                            </a>
-                            @endcan
+                            @if(Auth::user()->pharmacies->count() > 0)
+                              <a class="dropdown-item"
+                                  href="{{ route('pharmacies.index') }}">
+                                  <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
+                              </a>
+                            @else
+                              <a class="dropdown-item">
+                                  <i class="fas fa-fw fa-solid fa-x"></i> Falta asignar bodega
+                              </a>
+                            @endif
 
                         </div>
                     </li>
