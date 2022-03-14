@@ -443,8 +443,8 @@
                             </fieldset>
                         </td> -->
                         <td>
-                            {{--<a href="{{ route('request_forms.show', $detail->pivot->id) }}"
-                            class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>--}}
+                            {{--<a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}"
+                                class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>--}}
                             <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                                 <i class="fas fa-receipt"></i>
                             </button>
@@ -608,6 +608,165 @@
 
 <br /><br />
 
+@if(Auth::user()->hasPermissionTo('Request Forms: audit'))
+
+<hr />
+
+<h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
+
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Formulario
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        @include('partials.audit', ['audits' => $requestForm->audits])
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Bienes y/o servicios (Items)
+        </button>
+      </h2>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+          <h6 class="mt-3 mt-4">Historial de cambios</h6>
+          <div class="table-responsive-md">
+          <table class="table table-sm small text-muted mt-3">
+              <thead>
+                  <tr>
+                      <th>Fecha</th>
+                      <th>Usuario</th>
+                      <th>Modificaciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+                @foreach($requestForm->itemRequestForms as $itemRequestForm)
+                  @if($itemRequestForm->audits->count() > 0)
+                  @foreach($itemRequestForm->audits->sortByDesc('updated_at') as $audit)
+                  <tr>
+                      <td nowrap>{{ $audit->created_at }}</td>
+                      <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                      <td>
+                      @foreach($audit->getModified() as $attribute => $modified)
+                          @if(isset($modified['old']) OR isset($modified['new']))
+                          <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
+                          @endif
+                      @endforeach
+                      </td>
+                  </tr>
+                  @endforeach
+                  @endif
+                @endforeach
+              </tbody>
+          </table>
+          </div>
+      </div>
+    </div>
+  </div>
+  @if($requestForm->purchasingProcess)
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Historial de Compras
+        </button>
+      </h2>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+        <h6 class="mt-3 mt-4">Historial de cambios</h6>
+        <div class="table-responsive-md">
+        <table class="table table-sm small text-muted mt-3">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Modificaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              @foreach($requestForm->purchasingProcess->details as $detail)
+                @if($detail->pivot->audits->count() > 0)
+                @foreach($detail->pivot->audits->sortByDesc('updated_at') as $audit)
+                <tr>
+                    <td nowrap>{{ $audit->created_at }}</td>
+                    <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                    <td>
+                    @foreach($audit->getModified() as $attribute => $modified)
+                        @if(isset($modified['old']) OR isset($modified['new']))
+                        <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
+                        @endif
+                    @endforeach
+                    </td>
+                </tr>
+                @endforeach
+                @endif
+              @endforeach
+            </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingFour">
+      <h2 class="mb-0">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+            Historial de Procesos de Compra
+        </button>
+      </h2>
+    </div>
+    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+      <div class="card-body">
+        <h6 class="mt-3 mt-4">Historial de cambios</h6>
+        <div class="table-responsive-md">
+        <table class="table table-sm small text-muted mt-3">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Modificaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              @foreach($requestForm->purchasingProcess->details as $detail)
+                @if($detail->pivot->audits->count() > 0)
+                @foreach($detail->pivot->getPurchasingType()->audits->sortByDesc('updated_at') as $audit)
+                <tr>
+                    <td nowrap>{{ $audit->created_at }}</td>
+                    <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                    <td>
+                    @foreach($audit->getModified() as $attribute => $modified)
+                        @if(isset($modified['old']) OR isset($modified['new']))
+                        <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
+                        @endif
+                    @endforeach
+                    </td>
+                </tr>
+                @endforeach
+                @endif
+              @endforeach
+            </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  @endif
+</div>
+@endif
+
 @endsection
 
 @section('custom_js')
@@ -649,8 +808,6 @@
                 grandTotal += parseFloat($(this).val())
         });
 
-
-
         if (isNaN(grandTotal))
             grandTotal = 0;
         grand_total.val(grandTotal.toFixed(2))
@@ -658,11 +815,7 @@
         calculateAmount(true)
     });
 
-    document.getElementById("save_btn").disabled = {
-        {
-            old('_token') === null ? 'true' : 'false'
-        }
-    }
+    document.getElementById("save_btn").disabled = {{ old('_token') === null ? 'true' : 'false' }}
 
     function disabledSaveBtn() {
         // Get the checkbox
