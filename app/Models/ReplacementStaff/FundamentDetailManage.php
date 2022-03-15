@@ -42,6 +42,9 @@ class FundamentDetailManage extends Model
             case 'other':
               return 'Otro';
               break;
+            case 'teleworking':
+              return 'Teletrabajo (Funciones no habituales)';
+              break;
             case '':
               return '';
               break;
