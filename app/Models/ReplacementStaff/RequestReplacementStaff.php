@@ -31,7 +31,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function fundamentManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\RstFundamentManage');
+        return $this->belongsTo('App\Models\ReplacementStaff\RstFundamentManage')->withTrashed();
     }
 
     public function fundamentDetailManage() {
