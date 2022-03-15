@@ -27,18 +27,36 @@
                         </thead>
                         <tbody class="small">
                             @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
-                            <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                                <td>{{ $applicant->replacementStaff->FullName }}</td>
+                            <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
+                                <td>
+                                    {{ $applicant->replacementStaff->FullName }}
+                                    <br>
+                                    @if($applicant->selected == 1 && $applicant->desist == NULL)
+                                      <span class="badge bg-success">Seleccionado</span>
+                                    @endif
+                                    @if($applicant->desist == 1)
+                                      <span class="badge bg-danger">
+                                        @if($applicant->reason == 'renuncia a reemplazo')
+                                          Renuncia a reemplazo (Posterior ingreso)
+                                        @endif
+                                        @if($applicant->reason == 'rechazo oferta laboral')
+                                          Rechazo oferta laboral (Previo ingreso)
+                                        @endif
+                                      </span>
+                                    @endif
+                                </td>
                                 <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                                 <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                                 <td>{{ $applicant->observations }}</td>
                                 <td>
+                                  @if($applicant->desist == NULL)
                                   <fieldset class="form-group">
                                       <div class="form-check">
                                           <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
                                             value="{{ $applicant->id }}">
                                       </div>
                                   </fieldset>
+                                  @endif
                                 </td>
                             </tr>
                             @endforeach
