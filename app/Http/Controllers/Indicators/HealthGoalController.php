@@ -9,6 +9,7 @@ use App\Indicators\Establecimiento;
 use App\Indicators\HealthGoal;
 use App\Indicators\Indicator;
 use App\Indicators\Percapita;
+use App\Indicators\PercapitaOficial;
 use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Http\Request;
@@ -119,16 +120,28 @@ class HealthGoalController extends Controller
                     $cols = array_map('trim', explode(',', $cols_array[$i]));
                     $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
-                    if($source == 'FONASA'){
-                        $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
-                                                ->with(['establecimiento' => function($q) use ($establishment_cods){ 
-                                                    return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1); //meta_san es un campo que se empezó a ocupar en el año 2021
-                                                }])
-                                                ->whereHas('establecimiento', function($q) use ($establishment_cods){
-                                                    return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
-                                                })
-                                                ->whereRaw(implode(' AND ', $cods))
-                                                ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
+                    if(Str::contains($source, 'FONASA')){
+                        if($source == 'FONASA'){ // fuente FONASA preliminar
+                            $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                                                    ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1); //meta_san es un campo que se empezó a ocupar en el año 2021
+                                                    }])
+                                                    ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
+                                                    })
+                                                    ->whereRaw(implode(' AND ', $cods))
+                                                    ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
+                        }else{ //fuente FONASA definitivo
+                            $result = PercapitaOficial::year($year)->selectRaw('SUM(Inscritos)*'.reset($cols).' AS valor, Id_Centro_APS')
+                                                    ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1); //meta_san es un campo que se empezó a ocupar en el año 2021
+                                                    }])
+                                                    ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
+                                                    })
+                                                    ->whereRaw(implode(' AND ', $cods))
+                                                    ->groupBy('Id_Centro_APS')->orderBy('Id_Centro_APS')->get();
+                        }
 
                         foreach($result as $item){
                             $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $item->valor]);
