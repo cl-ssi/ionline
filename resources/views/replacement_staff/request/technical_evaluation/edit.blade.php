@@ -218,7 +218,7 @@
               Auth::user()->hasRole('Replacement Staff: admin')) --}}
 
             @if(($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-              Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->applicants->count() == 0)
+              Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->technical_evaluation_status == 'pending')
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal"
                   data-target="#exampleModal-reject-{{ $technicalEvaluation->id }}">
@@ -416,7 +416,14 @@
                             <span class="badge bg-success">Seleccionado</span>
                           @endif
                           @if($applicant->desist == 1)
-                            <span class="badge bg-danger">Desiste Selección</span>
+                            <span class="badge bg-danger">
+                              @if($applicant->reason == 'renuncia a reemplazo')
+                                Renuncia a reemplazo (Posterior ingreso)
+                              @endif
+                              @if($applicant->reason == 'rechazo oferta laboral')
+                                Rechazo oferta laboral (Previo ingreso)
+                              @endif
+                            </span>
                           @endif
                         </td>
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
@@ -438,18 +445,24 @@
                                     </button>
                             </form>
                             @elseif($applicant->selected == 1 && $applicant->desist == NULL)
-                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.decline_selected_applicant', $applicant) }}">
+                            <!-- <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.decline_selected_applicant', $applicant) }}">
                                 @csrf
                                 @method('POST')
                                     <button type="submit" class="btn btn-outline-danger btn-sm"
                                         onclick="return confirm('¿Está seguro que el Postulante Rechazó Oferta Laboral?')">
                                         <i class="fas fa-window-close"></i>
                                     </button>
-                            </form>
+                            </form> -->
+
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                              data-target="#exampleModal-to-change-selected-applicant-{{ $applicant->id }}">
+                                <i class="fas fa-window-close"></i>
+                            </button>
+                            @include('replacement_staff.modals.modal_to_change_selected_applicant')
                             @endif
                         </td>
                         <td style="width: 4%">
-                            @if($technicalEvaluation->date_end == NULL)
+                            @if($technicalEvaluation->date_end == NULL && $applicant->desist == NULL)
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                               data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}">
@@ -502,6 +515,17 @@
 
     </div>
 </div>
+
+<br>
+
+@if(($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+  Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->technical_evaluation_status == 'complete')
+    <div class="row">
+        <div class="col">
+          <!-- Button trigger modal -->
+        </div>
+    </div>
+@endif
 
 <br>
 
@@ -584,8 +608,38 @@
     <br>
 </div>
 
+@if(Auth::user()->hasRole('Replacement Staff: admin'))
+<br/>
+
+<hr/>
+<div style="height: 300px; overflow-y: scroll;">
+    @include('partials.audit', ['audits' => $technicalEvaluation->audits] )
+</div>
+
+@endif
+
 @endsection
 
 @section('custom_js')
+
+<script type="text/javascript">
+
+    function changeSelectReason() {
+        //get the selected value from the dropdown list
+        var mylist = document.getElementById("for_reason");
+        var result = mylist.options[mylist.selectedIndex].text;
+
+        if (result == 'Rechazo oferta laboral (Previo ingreso)') {
+          //disable all the radio button
+          document.getElementById("for_start_date").readOnly = true;
+          document.getElementById("for_end_date").readOnly = true;
+        }
+        else {
+          //enable all the radio button
+          document.getElementById("for_start_date").readOnly = false;
+          document.getElementById("for_end_date").readOnly = false;
+        }
+    }
+</script>
 
 @endsection
