@@ -46,6 +46,8 @@ class HealthGoalController extends Controller
     {
         if($law == '19813'){
             $indicator = Indicator::findOrFail($health_goal);
+            $currentMonth = Rem::year($year)->max('Mes');
+            $indicator->currentMonth = $currentMonth;
             $indicator->load('values.attachedFiles');
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);

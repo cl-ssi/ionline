@@ -4,11 +4,14 @@ namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+
 use App\Users;
 
-class OrganizationalUnit extends Model
+class OrganizationalUnit extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
