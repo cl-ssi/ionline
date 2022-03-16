@@ -123,8 +123,7 @@ Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->m
 @endif
 
 <p>
-    Posterior a esta destrucción química y con fecha ____________________
-    se efectúa <strong>incineración</strong> de restos de muestras ya analizadas
+    Posterior a esta destrucción química, se efectúa <strong>incineración</strong> de restos de muestras ya analizadas 
     y se comprobó que la sustancia fue destruida en su integridad.
 </p>
 
