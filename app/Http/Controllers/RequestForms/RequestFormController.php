@@ -77,20 +77,28 @@ class RequestFormController extends Controller {
     public function get_events_type_user()
     {
         $events_type = [];
-        $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-        // return $manager;
 
-        //superchief?
-        $result = RequestForm::whereHas('eventRequestForms', function($q){
-            return $q->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'superior_leader_ship_event');
-        })->count();
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
 
-        // Permisos
-        if($result > 0 && $manager->user_id == Auth::user()->id) $events_type[] = 'superior_leader_ship_event';
-        if($manager->user_id == Auth::user()->id) $events_type[] = 'leader_ship_event';
-        if(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
-        if(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $events_type[] = 'finance_event';
-        if(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $events_type[] = 'supply_event';
+        if(count($authorities) > 0){
+          foreach ($authorities as $authority){
+              $iam_authorities_in[] = $authority->organizational_unit_id;
+          }
+          //superchief?
+          $result = RequestForm::whereHas('eventRequestForms', function($q) use ($iam_authorities_in){
+              return $q->whereIn('ou_signer_user', $iam_authorities_in)->where('event_type', 'superior_leader_ship_event');
+          })->count();
+
+          if($result > 0 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'superior_leader_ship_event';
+          if(in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'leader_ship_event';
+          if(Auth::user()->organizationalUnit->id == 40 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'finance_event';
+          if(Auth::user()->organizationalUnit->id == 37 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'supply_event';
+
+        }
+        else{
+          $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+          if(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+        }
 
         return $events_type;
     }
@@ -103,20 +111,30 @@ class RequestFormController extends Controller {
 
         // return $events_type;
 
-        foreach($events_type as $event_type){
-            $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
-            // return $prev_event_type;
-            $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
-                ->where('status', 'pending')
-                ->whereHas('eventRequestForms', function($q) use ($event_type){
-                    return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
-                })->when($prev_event_type, function($q) use ($prev_event_type) {
-                    return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
-                        return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
-                    });
-                })->get();
-            $my_pending_forms_to_signs = $my_pending_forms_to_signs->concat($result);
-        }
+        $iam_authorities_in = [];
+
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+
+        // if(count($authorities) > 0){
+          foreach ($authorities as $authority){
+              $iam_authorities_in[] = $authority->organizational_unit_id;
+          }
+
+          foreach($events_type as $event_type){
+              $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
+              // return $prev_event_type;
+              $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                  ->where('status', 'pending')
+                  ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_authorities_in){
+                      return $q->where('status', 'pending')->whereIn('ou_signer_user', count($iam_authorities_in) > 0 ? $iam_authorities_in : [Auth::user()->organizationalUnit->id])->where('event_type', $event_type);
+                  })->when($prev_event_type, function($q) use ($prev_event_type) {
+                      return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                          return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
+                      });
+                  })->get();
+              $my_pending_forms_to_signs = $my_pending_forms_to_signs->concat($result);
+          }
+        // }
 
         // return $my_pending_forms_to_signs;
 
