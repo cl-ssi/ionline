@@ -58,4 +58,11 @@
 		</fieldset>
 	</div>
 
+	@can('be god')
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+        @include('partials.audit', ['audits' => $organizationalUnit->audits] )
+    </div>
+	@endcan
+
 @endsection
