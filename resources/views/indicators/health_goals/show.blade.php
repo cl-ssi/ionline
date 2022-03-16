@@ -84,7 +84,20 @@
                     </tr>
                 <!-- denominador comuna -->
                     <tr class="text-center">
-                        <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</td>
+                        <td class="text-left glosa">{{$indicator->denominator}}.
+                          <span class="badge badge-secondary">
+                            @if(($commune == 'HUARA' || $commune == 'CAMIÑA' || $commune == 'COLCHANE') && Str::contains($indicator->denominator_source,'FONASA'))
+                              Población INE
+                            @else
+                            {{ $indicator->getSourceAbbreviated('denominador') }}
+                            @endif
+                          </span>
+                          @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)
+                            <span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}">
+                              <span class="fa fa-info"></span>
+                            </span>
+                          @endif
+                        </td>
                         <td class="text-center">{{number_format(isset($indicator->isDenRemP) ? $indicator->getLastValueByFactor2('denominador', $commune, null) : $indicator->getValuesAcum2('denominador', $commune, null), 0, ',', '.')}}</td>
                         @if(in_array($indicator->id, [76,341]))
                         @foreach([10,11,12] as $number)
@@ -140,7 +153,14 @@
                         </tr>
                     <!-- denominador establecimiento -->
                         <tr class="text-center">
-                            <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</span></td>
+                            <td class="text-left glosa">{{$indicator->denominator}}.
+                              <span class="badge badge-secondary">
+                                @if(($commune == 'HUARA' || $commune == 'CAMIÑA' || $commune == 'COLCHANE') && Str::contains($indicator->denominator_source,'FONASA'))
+                                  Población INE
+                                @else
+                                {{ $indicator->getSourceAbbreviated('denominador') }}
+                                @endif
+                              </span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</span></td>
                             <td class="text-center">{{number_format(isset($indicator->isDenRemP) ? $indicator->getLastValueByFactor2('denominador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
                             @if(in_array($indicator->id, [76,341]))
                             @foreach([10,11,12] as $number)
@@ -303,7 +323,7 @@
                                                     @can('Indicators: manager meta7')<button type="submit" class="btn btn-primary" form="form-edit{{$value->id}}-{{$number}}">Guardar</button>@endcan
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 </div>
-                                        
+
                                         </div>
                                     </div>
                                 </div>
@@ -424,7 +444,7 @@
 
     // $('#updateModalRect').on('show.bs.modal', function (event) {
     //     console.log("en modal");
-        
+
     //     var button = $(event.relatedTarget) // Button that triggered the modal
     //     var modal  = $(this)
 
