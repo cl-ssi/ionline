@@ -33,13 +33,43 @@ class Indicator extends Model
 
     public function values()
     {
-        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
+        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('activity_name')->orderBy('month');
     }
 
     public function getValuesAcum($factor)
     {
         return $this->values->where('factor', $factor)->sum('value');
     }
+
+    public function getValuesBy($commune)
+    {
+        return $this->values->where('commune', $commune);
+    }
+
+    public function hasValueByActivityNameAndMonth($factor, $activity_name, $month, $commune)
+    {
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->sum('value') > 0;
+    }
+
+    public function getValueByActivityNameAndMonth($factor, $activity_name, $month, $commune)
+    {
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->first();
+    }
+
+    public function getValuesAcumByActivityName($factor, $activity_name, $commune)
+    {
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('commune', $commune)->sum('value');
+    }
+
+    // public function totalByActivityName($col, $nombre_prestacion)
+    // {
+    //     $total = 0;
+    //     $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($nombre_prestacion){
+    //         return Str::contains($prestacion->descripcion, '- '. $nombre_prestacion);
+    //     });
+    //     foreach($prestaciones as $prestacion) $total += $prestacion->rems->sum($col);
+    //     return $total;
+    // }
 
     public function getValuesAcum2($factor, $commune, $establishment)
     {

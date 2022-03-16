@@ -41,7 +41,7 @@ class PercapitaOficial extends Model
         // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
         // $localKey = $this->getKeyName();
     
-        return new BelongsTo($instance->newQuery(), $this, 'Centro_APS', 'Id_Centro_APS', 'establecimiento');
+        return new BelongsTo($instance->newQuery(), $this, 'Id_Centro_APS', 'Codigo', 'establecimiento');
     }
 
     // public function __construct($attributes = [], $year = null) 

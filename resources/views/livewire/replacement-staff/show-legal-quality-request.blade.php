@@ -21,7 +21,7 @@
             @endif
         </select>
 
-        <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail">
+        <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()">
             <option value="">Seleccione...</option>
             @if(!is_null($detailFundaments))
             @foreach($detailFundaments as $detailFundament)

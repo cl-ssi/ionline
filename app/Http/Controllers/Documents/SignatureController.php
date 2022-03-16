@@ -52,7 +52,13 @@ class SignatureController extends Controller
         $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
             $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
-            $myAuthorities = $myAuthorities->merge(Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager'));
+            $allTimeAuthorities = Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager');
+
+            foreach($allTimeAuthorities as $allTimeAuthority){
+                if(!in_array($allTimeAuthority->user_id, $users)){
+                    $myAuthorities->push($allTimeAuthority);
+                }
+            }
         }
 
         if ($tab == 'mis_documentos') {

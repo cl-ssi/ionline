@@ -38,7 +38,7 @@
 
                         <a class="dropdown-item"
                            href="{{ route('indicators.population') }}">
-                            <i class="fas fa-globe-americas"></i> Dashboard de población
+                            <i class="fas fa-globe-americas"></i> Tablero de población
                         </a>
 
                         @can('Programming: view')
