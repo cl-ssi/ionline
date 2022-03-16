@@ -15,6 +15,7 @@ use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
 use App\Mail\RfEndSignNotification;
+use Illuminate\Support\Facades\Auth;
 
 class Authorization extends Component
 {
@@ -37,9 +38,17 @@ class Authorization extends Component
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
       $this->comment    = '';
-      $this->organizationalUnit = auth()->user()->organizationalUnit->name;
+
+      $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+
+      foreach ($authorities as $authority){
+          $iam_authorities_in[] = $authority->organizational_unit_id;
+      }
+
+      $this->organizationalUnit = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->name;
+
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
-      $this->position           = auth()->user()->position;
+      $this->position           = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->authorities->where('type', 'manager')->where('from', '<=',Carbon::now())->where('to', '>=',Carbon::now())->last()->position ?? auth()->user()->position;
       if($eventType=='supply_event'){
           $this->lstSupervisorUser      = User::where('organizational_unit_id', 37)->get();
           //$this->lstPurchaseType        = PurchaseType::all();
@@ -117,8 +126,8 @@ class Authorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           $event->signature_date = Carbon::now();
-          $amIAuthorityFromOu = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->id());
-          $event->position_signer_user = $amIAuthorityFromOu[0]->position;
+          //$amIAuthorityFromOu = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->id());
+          $event->position_signer_user = $this->position;
           $event->status  = 'approved';
           $event->comment = $this->comment;
           $event->signerUser()->associate(auth()->user());
