@@ -125,10 +125,9 @@ class SingleParameterController extends Controller
 
     public function population(Request $request)
     {
-
         set_time_limit(3600);
         ini_set('memory_limit', '1024M');
-      
+
 
         if ($request->type == "Preliminar") {
             if ($request->year == null) {
@@ -145,12 +144,13 @@ class SingleParameterController extends Controller
 
             $total_pob = Percapita::year($year)
                 ->where('ACEPTADO_RECHAZADO', 'ACEPTADO')
-                ->with(['establecimiento' => function ($q) {
-                    return $q->where('meta_san', 1);
-                }])
-                ->whereHas('establecimiento', function ($q) {
-                    return $q->where('meta_san', 1);
-                })
+                // ->with(['establecimiento' => function ($q) {
+                //     return $q->where('meta_san', 1);
+                // }])
+                ->with('establecimiento')
+                // ->whereHas('establecimiento', function ($q) {
+                //     return $q->where('meta_san', 1);
+                // })
                 ->when($request->establishment_id != null, function ($query) use ($request) {
                     $query->where('COD_CENTRO', $request->establishment_id);
                 })
@@ -173,12 +173,10 @@ class SingleParameterController extends Controller
             $pob_x_establecimientos = Percapita::year($year)
                 ->where('ACEPTADO_RECHAZADO', 'ACEPTADO')
                 ->selectRaw('COUNT(*) AS valor, NOMBRE_CENTRO')
-                ->with(['establecimiento' => function ($q) {
-                    return $q->where('meta_san', 1);
-                }])
-                ->whereHas('establecimiento', function ($q) {
-                    return $q->where('meta_san', 1);
-                })
+                ->with('establecimiento')
+                // ->whereHas('establecimiento', function ($q) {
+                //     return $q->where('meta_san', 1);
+                // })
                 ->when($request->establishment_id != null, function ($query) use ($request) {
                     $query->where('COD_CENTRO', $request->establishment_id);
                 })
@@ -202,12 +200,10 @@ class SingleParameterController extends Controller
             $pob_x_generos = Percapita::year($year)
                 ->where('ACEPTADO_RECHAZADO', 'ACEPTADO')
                 ->selectRaw('COUNT(*) AS valor, GENERO')
-                ->with(['establecimiento' => function ($q) {
-                    return $q->where('meta_san', 1);
-                }])
-                ->whereHas('establecimiento', function ($q) {
-                    return $q->where('meta_san', 1);
-                })
+                ->with('establecimiento')
+                // ->whereHas('establecimiento', function ($q) {
+                //     return $q->where('meta_san', 1);
+                // })
                 ->when($request->establishment_id != null, function ($query) use ($request) {
                     $query->where('COD_CENTRO', $request->establishment_id);
                 })
@@ -232,12 +228,7 @@ class SingleParameterController extends Controller
                 ->where('ACEPTADO_RECHAZADO', 'ACEPTADO')
                 ->selectRaw('count(*) AS valor, comuna')
                 ->join('establecimientos', 'COD_CENTRO', '=', 'establecimientos.Codigo')
-                ->with(['establecimiento' => function ($q) {
-                    return $q->where('meta_san', 1);
-                }])
-                ->whereHas('establecimiento', function ($q) {
-                    return $q->where('meta_san', 1);
-                })
+                ->with('establecimiento')
                 ->when($request->establishment_id != null, function ($query) use ($request) {
                     $query->where('COD_CENTRO', $request->establishment_id);
                 })

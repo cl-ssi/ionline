@@ -174,6 +174,23 @@
                 break;
         }
     });
+
+    function remoteWorking() {
+        //get the selected value from the dropdown list
+        var mylist = document.getElementById("for_fundament_detail_manage_id");
+        var result = mylist.options[mylist.selectedIndex].text;
+
+        if (result == 'Teletrabajo (Funciones no habituales)') {
+          //disable all the radio button
+          document.getElementById("for_work_day_diurnal").disabled = true;
+          document.getElementById("for_work_day_other").disabled = true;
+        }
+        else {
+          //enable all the radio button
+          document.getElementById("for_work_day_diurnal").disabled = false;
+          document.getElementById("for_work_day_other").disabled = false;
+        }
+    }
 </script>
 
 <script type="text/javascript">

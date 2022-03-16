@@ -44,7 +44,12 @@ class RequestFormController extends Controller {
 
         $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_id', Auth::user()->id)
-            ->where('status', 'pending')
+            ->where(function ($q){
+                $q->where('status', 'pending')
+                ->OrWhere('status', 'saved');
+            })
+            // ->where('status', 'pending')
+            // ->OrWhere('status', 'saved')
             ->latest('id')
             ->get();
 
@@ -65,7 +70,7 @@ class RequestFormController extends Controller {
         }
 
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
-        
+
         return view('request_form.all_forms', compact('request_forms'));
     }
 

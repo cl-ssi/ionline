@@ -15,8 +15,8 @@ class Applicant extends Model implements Auditable
 
     protected $fillable = [
         'replacement_staff_id', 'psycholabor_evaluation_score', 'technical_evaluation_score',
-        'observations', 'selected', 'start_date', 'end_date', 'name_to_replace',
-        'replacement_reason', 'ou_of_performance_id'
+        'observations', 'selected', 'desist', 'desist_observation', 'start_date',
+        'end_date', 'name_to_replace', 'replacement_reason', 'ou_of_performance_id'
     ];
 
     public function replacementStaff() {
