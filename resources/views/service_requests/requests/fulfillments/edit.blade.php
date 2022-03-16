@@ -143,16 +143,29 @@
 @if($serviceRequest->program_contract_type == "Mensual")
     @include('service_requests.requests.fulfillments.edit_monthly',['serviceRequest' => $serviceRequest])
 @else
-    @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
-      @if($serviceRequest->programm_name == "OTROS PROGRAMAS HETG" && $serviceRequest->profession->category != "A")
-        @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
-      @else
+
+    @if($serviceRequest->programm_name == "Covid 2022")
+      @if($serviceRequest->working_day_type == "HORA MÉDICA")
         @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
+      @else
+        @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
       @endif
     @else
-        @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
+      @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
+        @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
+      @else
+          @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
+      @endif
     @endif
 @endif
+
+
+1.	El contrato por HORA, en el programa OTROS PROGRAMAS HETG, jornada TURNO DE REEMPLAZO, debe funcionar igual que jornada HORA EXTRA O TUNO EXTRA de honorarios covid,
+es decir solo debe requerir de la validación y la firma digital del supervisor y no la de rrhh, además se debe calcular del monto que rrhh ingrese en información adicional cuadro rojo que al multiplicar
+por las horas ingresadas en cumplimiento rrhh pueda rellenar el cuadro rojo del mismo.
+
+2.	Los contratos por HORA, en el programa OTROS PROGRAMAS HETG, jornada TURNO DE REEMPLAZO, personal NO médico, en suma alzada son anual, debe funcionar igual a la hora médica de los honorarios covid.
+
 
 @canany(['Service Request: audit'])
 <br /><hr />
