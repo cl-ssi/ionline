@@ -74,9 +74,9 @@
                         <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2($commune, null), 2, ',', '.')}}%</td>
                         <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', $commune, null) : $indicator->getValuesAcum2('numerador', $commune, null), 0, ',', '.')}}</td>
                         @if(in_array($indicator->id, [76,341]))
-                        <td class="text-right">0</td>
-                        <td class="text-right">0</td>
-                        <td class="text-right">0</td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"></td>
                         @endif
                         @foreach($months as $number => $month)
                         <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, $commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, $commune, null), 0, ',', '.') : ($indicator->currentMonth >= $number ? 0 : '')}}</td>
@@ -85,8 +85,8 @@
                 <!-- denominador comuna -->
                     <tr class="text-center">
                         <td class="text-left glosa">{{$indicator->denominator}}.
-                          <span class="badge badge-secondary">
-                            @if(($commune == 'HUARA' || $commune == 'CAMIÑA' || $commune == 'COLCHANE') && Str::contains($indicator->denominator_source,'FONASA'))
+                          <span class="badge badge-{{ !in_array($commune, ['HUARA', 'CAMIÑA', 'COLCHANE']) && $indicator->denominator_source == 'FONASA.' ? 'light' : 'secondary' }}">
+                            @if(in_array($commune, ['HUARA', 'CAMIÑA', 'COLCHANE']) && Str::contains($indicator->denominator_source,'FONASA'))
                               Población INE
                             @else
                             {{ $indicator->getSourceAbbreviated('denominador') }}
@@ -143,9 +143,9 @@
                             <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.')}}%</td>
                             <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
                             @if(in_array($indicator->id, [76,341]))
-                            <td class="text-right">0</td>
-                            <td class="text-right">0</td>
-                            <td class="text-right">0</td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
+                            <td class="text-right"></td>
                             @endif
                             @foreach($months as $number => $month)
                             <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab), 0, ',', '.') : ($indicator->currentMonth >= $number ? 0 : '')}}</td>
@@ -154,7 +154,7 @@
                     <!-- denominador establecimiento -->
                         <tr class="text-center">
                             <td class="text-left glosa">{{$indicator->denominator}}.
-                              <span class="badge badge-secondary">
+                              <span class="badge badge-{{ !in_array($commune, ['HUARA', 'CAMIÑA', 'COLCHANE']) && $indicator->denominator_source == 'FONASA.' ? 'light' : 'secondary' }}">
                                 @if(($commune == 'HUARA' || $commune == 'CAMIÑA' || $commune == 'COLCHANE') && Str::contains($indicator->denominator_source,'FONASA'))
                                   Población INE
                                 @else
