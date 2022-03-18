@@ -99,7 +99,13 @@ bottom: 5px;
 
 <hr />
 
-<h5 class="mb-3"><span class="text-info">Req {{ $requirement->id}}:</span> {{ $requirement->subject }}</h5>
+
+<h5 class="mb-3"><span class="text-info">Req {{ $requirement->id}}:</span> {{ $requirement->subject }} </h5>
+@if($requirement->limit_at <> NULL)
+<h5 class="mb-3 text-danger"> 
+  Fecha Límite:{{Carbon\Carbon::parse($requirement->limit_at)->format('Y-m-d')}}
+</h5>
+@endif
 
 @if($requirement->parte <> null)
     @if($requirement->parte->files != null)
