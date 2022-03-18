@@ -111,18 +111,39 @@
                     @endif
 
                 </td>
-				<td class="small text-center">{{Carbon\Carbon::parse($created->created_at)->format('Y-m-d H:i')}}</td>
+				<td class="small text-center">{{$created->created_at->format('Y-m-d H:i')}}</td>
 			  <td class="small text-center">{{$created->created_at->diffForHumans() }}</td> <!--Carbon\Carbon::parse($created->created_at)->diffInDays(Carbon\Carbon::now()) -->
         @if($created->limit_at <> NULL)
-          @if(Carbon\Carbon::now() >= $created->limit_at)
-            <td class="small text-danger"><b>{{Carbon\Carbon::parse($created->limit_at)->format('Y-m-d')}}</b>
+          @if(Carbon\Carbon::now() >= $created->limit_at)          
+            <td class="small text-danger" nowrap>
+            <i class="fas fa-chess-king"></i>
+            <b>{{optional($created->limit_at)->format('Y-m-d')}}</b>
+            @foreach($created->events as $event)
+              @if($event->limit_at)
+              <br>
+              <i class="fas fa-chess-pawn"></i>            
+              <b>{{$event->limit_at}}</b>
+              @endif
+            @endforeach
+            </td>
           @else
-            <td class="small">{{Carbon\Carbon::parse($created->limit_at)->format('Y-m-d')}}
+            <td class="small" nowrap>
+            <i class="fa-solid fa-chess-king"></i>
+            {{optional($created->limit_at)->format('Y-m-d')}}
+            @foreach($created->events as $event)
+              @if($event->limit_at)
+              <br>
+              <i class="fas fa-chess-pawn"></i>            
+              <b>{{$event->limit_at}}</b>
+              @endif
+            @endforeach
+            </td>
           @endif
         @else
           <td class="small">
+          </td>
         @endif
-        </td>
+        <!-- </td> -->
 				<!-- <td>{{$created->status}}</td> -->
 				<td nowrap>
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -228,14 +249,36 @@
                         {{$archived->events->last()->to_ou->name}}
                     </td>
 					<td class="small">@if($archived->events->last()->to_user <> null){{$archived->events->last()->to_user->getFullNameAttribute()}}@endif</td>
-					<td class="small text-center">{{Carbon\Carbon::parse($archived->created_at)->format('Y-m-d H:i')}}</td>
+					<td class="small text-center">{{optional($archived->created_at)->format('Y-m-d H:i')}}</td>
 					<td class="small text-center">{{$archived->created_at->diffForHumans() }}</td> <!--Carbon\Carbon::parse($archived->created_at)->diffInDays(Carbon\Carbon::now()) -->
 					<!-- <td class="small" nowrap>@if($archived->limit_at <> NULL){{Carbon\Carbon::parse($archived->limit_at)->format('Y-m-d')}} @endif</td> -->
           @if($archived->limit_at <> NULL)
             @if(Carbon\Carbon::now() >= $archived->limit_at)
-              <td class="small text-danger"><b>{{Carbon\Carbon::parse($archived->limit_at)->format('Y-m-d')}}</b>
+              <td class="small text-danger" nowrap>
+              <i class="fas fa-chess-king"></i>
+                <b>{{optional($archived->limit_at)->format('Y-m-d')}} </b>
+
+            @foreach($archived->events as $event)
+              @if($event->limit_at)
+              <br>
+              <i class="fas fa-chess-pawn"></i>            
+              <b>{{$event->limit_at}}</b>
+              @endif
+            @endforeach
+                
+
+                
             @else
-              <td class="small">{{Carbon\Carbon::parse($archived->limit_at)->format('Y-m-d')}}
+              <td class="small" nowrap>
+              <i class="fas fa-chess-king"></i>
+              {{optional($archived->limit_at)->format('Y-m-d')}}
+              @foreach($archived->events as $event)
+              @if($event->limit_at)
+              <br>
+              <i class="fas fa-chess-pawn"></i>            
+              <b>{{$event->limit_at}}</b>
+              @endif
+            @endforeach
             @endif
           @else
             <td class="small">
