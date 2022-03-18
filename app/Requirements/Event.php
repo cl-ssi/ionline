@@ -14,7 +14,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'body', 'status','from_user_id','from_ou_id','to_user_id','to_ou_id','requirement_id'
+        'body', 'status','from_user_id','from_ou_id','to_user_id','to_ou_id','requirement_id','limit_at'
     ];
 
     public function getCreationDateAttribute()
@@ -65,7 +65,7 @@ class Event extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at, limit_at'];
 
     /**
     * The table associated with the model.
