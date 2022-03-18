@@ -8,102 +8,103 @@
 			<div class="card-header bg-success text-white">Responsable</div>
 			<div class="card-body">
 
-		@if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
-			<h4>Inasistencias</h4>
-			@livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
-		@endif
-
-		@livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
-		<div class="form-row">
-			<fieldset class="form-group col-12 col-md-6">
-				<a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank"> Ver certificado <i class="fas fa-file"></i> </a>
-
-				@if($serviceRequest->Fulfillments->first()->signatures_file_id)
-				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
-					Certificado firmado<i class="fas fa-signature"></i>
-				</a>
-				@can('Service Request: delete signed certificate')
-				<a class="btn btn-outline-danger ml-2" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-					<i class="fas fa-trash"></i> Certificado
-				</a>
-				@endcan
-				@else
-				{{--modal firmador--}}
-				@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
-				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-				$routeCallbackSignModal = 'documents.callbackFirma';
-				@endphp
-
-				@include('documents.signatures.partials.sign_file')
-				<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar certificado <i class="fas fa-signature"></i></button>
+				@if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
+				<h4>Inasistencias</h4>
+				@livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
 				@endif
-			</fieldset>
 
-			<fieldset class="form-group col-6 col-md-6 text-right">
+				@livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
+				<div class="form-row">
+					<fieldset class="form-group col-12 col-md-6">
+						<a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank"> Ver certificado <i class="fas fa-file"></i> </a>
 
-			</fieldset>
-		</div>
-		
-		@php $fulfillment = $serviceRequest->Fulfillments->first();  @endphp
-		<!--archivos adjuntos-->
-		<div class="card">
-			<div class="card-body">
-				<h6 class="card-title">Adjuntar archivos al cumplimiento (opcional)</h6>
+						@if($serviceRequest->Fulfillments->first()->signatures_file_id)
+						<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
+							Certificado firmado<i class="fas fa-signature"></i>
+						</a>
+						@can('Service Request: delete signed certificate')
+						<a class="btn btn-outline-danger ml-2" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+							<i class="fas fa-trash"></i> Certificado
+						</a>
+						@endcan
+						@else
+						{{--modal firmador--}}
+						@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
+						$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
+						$routeCallbackSignModal = 'documents.callbackFirma';
+						@endphp
 
-					@if($fulfillment->attachments->count() > 0)
-					<table class="table table-sm small table-bordered">
-						<thead class="text-center">
+						@include('documents.signatures.partials.sign_file')
+						<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar certificado <i class="fas fa-signature"></i></button>
+						@endif
+					</fieldset>
 
-							<tr class="table-secondary">
-								<th width="160">Fecha de Carga</th>
-								<th>Nombre</th>
-								<th>Archivo</th>
-								<th width="100"></th>
-								<th width="50"></th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($fulfillment->attachments as $attachment)
-							<tr>
-								<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
-								<td>{{ $attachment->name ?? '' }}</td>
-								<td class="text-center">
-									@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
-									<i class="fas fa-file-pdf fa-2x"></i>
-									@endif
-								</td>
-								<td>
-									<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
-									<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
-									</a>
-								</td>
-								<td>
-									<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
-										@csrf
-										@method('DELETE')
-										<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
-											<i class="fas fa-trash"></i>
-										</button>
+					<fieldset class="form-group col-6 col-md-6 text-right">
 
-									</form>
-								</td>
+					</fieldset>
+				</div>
 
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-					@endif
-					<div>
-						@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+				@php $fulfillment = $serviceRequest->Fulfillments->first(); @endphp
+				<!--archivos adjuntos-->
+				<div class="card">
+					<div class="card-body">
+						<h6 class="card-title">Adjuntar archivos al cumplimiento (opcional)</h6>
+
+						@if($fulfillment->attachments->count() > 0)
+						<table class="table table-sm small table-bordered">
+							<thead class="text-center">
+
+								<tr class="table-secondary">
+									<th width="160">Fecha de Carga</th>
+									<th>Nombre</th>
+									<th>Archivo</th>
+									<th width="100"></th>
+									<th width="50"></th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($fulfillment->attachments as $attachment)
+								<tr>
+									<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
+									<td>{{ $attachment->name ?? '' }}</td>
+									<td class="text-center">
+										@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
+										<i class="fas fa-file-pdf fa-2x"></i>
+										@endif
+									</td>
+									<td>
+										<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+										<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
+										</a>
+									</td>
+									<td>
+										<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
+											@csrf
+											@method('DELETE')
+											<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
+												<i class="fas fa-trash"></i>
+											</button>
+
+										</form>
+									</td>
+
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+						@endif
+						<div>
+							@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+						</div>
 					</div>
 				</div>
-			</div>
-			<!--fin archivos adjuntos-->
+				<!--fin archivos adjuntos-->
 
-		</div></div>
+			</div>
+		</div>
 
 		<div class="alert alert-warning border-dark" role="alert">
-		  Para horas extra, se exige solo al jefe de unidad la firma electrónica del certificado de cumplimiento.
+			Para horas extra, se exige solo al jefe de unidad la firma electrónica del certificado de cumplimiento.
 		</div>
 
 		@canany(['Service Request: fulfillments rrhh'])
@@ -157,9 +158,14 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							<a type="button" class="btn btn-outline-success" href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
-								<i class="fas fa-file"></i> Resolución
-							</a>
+
+							@if($serviceRequest->type == "Covid")
+							<a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}" class="btn btn-outline-secondary" target="_blank" title="Resolución">
+								<span class="fas fa-file-pdf" aria-hidden="true"></span>Resolución</a>
+							@else
+							<a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa', $serviceRequest) }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+								<span class="fas fa-file" aria-hidden="true"></span>Resolución</a>
+							@endif
 						</div>
 					</div>
 
@@ -187,7 +193,7 @@
 					<div class="col-12 col-md-4">
 						<strong></strong>
 						<div>
-						
+
 						</div>
 					</div>
 				</div>
