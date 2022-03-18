@@ -84,15 +84,21 @@ class RequestFormController extends Controller {
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
           }
+
           //superchief?
           $result = RequestForm::whereHas('eventRequestForms', function($q) use ($iam_authorities_in){
               return $q->whereIn('ou_signer_user', $iam_authorities_in)->where('event_type', 'superior_leader_ship_event');
           })->count();
 
-          if($result > 0 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'superior_leader_ship_event';
-          if(in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'leader_ship_event';
-          if(Auth::user()->organizationalUnit->id == 40 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'finance_event';
-          if(Auth::user()->organizationalUnit->id == 37 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'supply_event';
+          // if($result > 0 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'superior_leader_ship_event';
+          // if(in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'leader_ship_event';
+          // if(Auth::user()->organizationalUnit->id == 40 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'finance_event';
+          // if(Auth::user()->organizationalUnit->id == 37 && in_array(Auth::user()->organizationalUnit->id, $iam_authorities_in)) $events_type[] = 'supply_event';
+
+          if($result > 0) $events_type[] = 'superior_leader_ship_event';
+          $events_type[] = 'leader_ship_event';
+          if(in_array(40, $iam_authorities_in)) $events_type[] = 'finance_event';
+          if(in_array(37, $iam_authorities_in)) $events_type[] = 'supply_event';
 
         }
         else{
@@ -126,7 +132,7 @@ class RequestFormController extends Controller {
               $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                   ->where('status', 'pending')
                   ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_authorities_in){
-                      return $q->where('status', 'pending')->whereIn('ou_signer_user', count($iam_authorities_in) > 0 ? $iam_authorities_in : [Auth::user()->organizationalUnit->id])->where('event_type', $event_type);
+                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_authorities_in) > 0 ? $iam_authorities_in : [Auth::user()->organizationalUnit->id]))->where('event_type', $event_type);
                   })->when($prev_event_type, function($q) use ($prev_event_type) {
                       return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
                           return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
