@@ -81,4 +81,14 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         elseif($this->immediatePurchase) return $this->immediatePurchase;
         else return null;
     }
+
+    public function getPurchasingTypeColumn(){
+        if($this->internalPurchaseOrder) return 'internal_purchase_order_id';
+        elseif($this->pettyCash) return 'petty_cash_id';
+        elseif($this->fundToBeSettled) return 'fund_to_be_settled_id';
+        elseif($this->tender) return 'tender_id';
+        elseif($this->directDeal) return 'direct_deal_id';
+        elseif($this->immediatePurchase) return 'immediate_purchase_id';
+        else return null;
+    }
 }
