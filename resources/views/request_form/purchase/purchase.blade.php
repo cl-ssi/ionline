@@ -219,7 +219,7 @@
                                 <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
                                 <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
                                     @else
-                                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
+                                    <form method="POST" class="form-horizontal" action="{{ isset($result) ? route('request_forms.supply.update_direct_deal', [$requestForm, $result]) : route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
                                         @endif
                                         @endif
 
@@ -238,7 +238,7 @@
                                                     @endif
 
                                                     @csrf
-                                                    @method('POST')
+                                                    @method(isset($result) ? 'PUT' : 'POST')
                                                     @endif
                                                     <table class="table table-sm table-striped table-bordered small">
                                                         <thead class="text-center">
@@ -260,6 +260,7 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach($requestForm->itemRequestForms as $key => $item)
+                                                            @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
                                                             <tr>
                                                                 <td>{{ $key+1 }}</td>
                                                                 <td>{{ $item->status }}</td>
@@ -274,21 +275,21 @@
                                                                     @endif
                                                                 </td>
                                                                 <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $item->quantity) }}">
+                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
                                                                 </td>
                                                                 <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $item->unit_value) }}">
+                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
                                                                 </td>
                                                                 <td align="right">
                                                                     <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}" readonly>
                                                                 </td>
                                                                 <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $item->expense) }}" readonly>
+                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
                                                                 </td>
                                                                 <td align="center">
                                                                     <fieldset class="form-group">
                                                                         <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
+                                                                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
                                                                         </div>
                                                                     </fieldset>
                                                                 </td>
@@ -443,8 +444,10 @@
                             </fieldset>
                         </td> -->
                         <td>
-                            {{--<a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}"
-                                class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>--}}
+                            @if(env('APP_ENV') == 'local')
+                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}"
+                                class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                            @endif
                             <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                                 <i class="fas fa-receipt"></i>
                             </button>
@@ -785,6 +788,9 @@
     var year = new Date().getFullYear();
 
     calculateAmount();
+    @if(isset($result_details))
+    calculateAmount(true);
+    @endif
 
     function totalValueWithTaxes(value, tax) {
         if (tax == 'iva') return value * 1.19;
@@ -816,6 +822,9 @@
     });
 
     document.getElementById("save_btn").disabled = {{ old('_token') === null ? 'true' : 'false' }}
+    @if(isset($result))
+    document.getElementById("save_btn").disabled = false;
+    @endif
 
     function disabledSaveBtn() {
         // Get the checkbox

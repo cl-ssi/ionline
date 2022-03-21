@@ -1,30 +1,30 @@
 <div class="card">
     <div class="card-header">
         {{ $requestForm->purchaseMechanism->name }} - <strong>{{ $requestForm->purchaseType->name }}</strong>
-        <input type="hidden" name="purchase_type_id" value="{{ $requestForm->purchaseType->id }}">
+        <input type="hidden" name="purchase_type_id" value="{{ $result->purchase_type_id ?? $requestForm->purchaseType->id }}">
     </div>
 
     <div class="card-body">
         <div class="form-row">
             <fieldset class="form-group col-sm-12">
                 <label for="for_description">Descripción de la compra:</label>
-                <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
+                <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description', $result->description ?? '') }}" required>
             </fieldset>
         </div>
 
         <div class="form-row">
             <fieldset class="form-group col-sm-2">
                 <label for="for_resol_direct_deal">Nº Resol. trato directo:</label>
-                <input type="text" class="form-control form-control-sm" id="for_resol_direct_deal" name="resol_direct_deal" value="{{ old('resol_direct_deal') }}" required>
+                <input type="text" class="form-control form-control-sm" id="for_resol_direct_deal" name="resol_direct_deal" value="{{ old('resol_direct_deal', $result->resol_direct_deal ?? '') }}" required>
             </fieldset>
             @if($requestForm->purchase_type_id != 8)
             <fieldset class="form-group col-sm-2">
                 <label for="for_resol_contract">Nº Resol. del contrato:</label>
-                <input type="text" class="form-control form-control-sm" id="for_resol_contract" name="resol_contract" value="{{ old('resol_contract') }}" required>
+                <input type="text" class="form-control form-control-sm" id="for_resol_contract" name="resol_contract" value="{{ old('resol_contract', $result->resol_contract ?? '') }}" required>
             </fieldset>
             <fieldset class="form-group col-sm-2">
                 <label for="for_guarantee_ticket">Nº Boleta de garantía:</label>
-                <input type="text" class="form-control form-control-sm" id="for_guarantee_ticket" name="guarantee_ticket" value="{{ old('guarantee_ticket') }}" required>
+                <input type="text" class="form-control form-control-sm" id="for_guarantee_ticket" name="guarantee_ticket" value="{{ old('guarantee_ticket', $result->guarantee_ticket ?? '') }}" required>
             </fieldset>       
             @endif
             <fieldset class="form-group col">
@@ -32,7 +32,7 @@
                 <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
                     <option value="">Seleccione...</option>
                     @foreach($suppliers as $supplier)
-                    <option value="{{ $supplier->id }}" {{ $supplier->id == old('supplier_id', '') ? 'selected' : '' }}>{{ $supplier->name }}</option>
+                    <option value="{{ $supplier->id }}" {{ $supplier->id == old('supplier_id', '') || (isset($result) && $supplier->id == $result->supplier_id) ? 'selected' : '' }}>{{ $supplier->name }}</option>
                     @endforeach
                 </select>
             </fieldset>
@@ -44,8 +44,13 @@
         
         <div class="form-row">
             <fieldset class="form-group col-sm-6">
-                <label for="forFile">Adjuntar Resol. Trato Directo</label>
-                <input type="file" class="form-control-file" id="forFile" name="resol_direct_deal_file" required>
+                <label for="forFile">Adjuntar Resol. Trato Directo 
+                    @php($selectedFile = isset($result) ? $result->findAttachedFile('resol_direct_deal_file') : null)
+                    @if($selectedFile)
+                    <a href="{{ route('request_forms.supply.attached_file.download', $selectedFile) }}" target="_blank" class="text-link"><i class="fas fa-paperclip"></i> Ver anexo</a>
+                    @endif
+                </label>
+                <input type="file" class="form-control-file" id="forFile" name="resol_direct_deal_file" @if(!$selectedFile) required @endif>
             </fieldset>
 
             <!-- <fieldset class="form-group col-sm-6">
@@ -55,13 +60,23 @@
 
             @if($requestForm->purchase_type_id != 8)
             <fieldset class="form-group col-sm-6">
-                <label for="forFile">Adjuntar archivo Res. de Contrato</label>
-                <input type="file" class="form-control-file" id="forFile" name="resol_contract_file" required>
+                <label for="forFile">Adjuntar archivo Res. de Contrato 
+                    @php($selectedFile = isset($result) ? $result->findAttachedFile('resol_contract_file') : null)
+                    @if($selectedFile)
+                    <a href="{{ route('request_forms.supply.attached_file.download', $selectedFile) }}" target="_blank" class="text-link"><i class="fas fa-paperclip"></i> Ver anexo</a>
+                    @endif
+                </label>
+                <input type="file" class="form-control-file" id="forFile" name="resol_contract_file" @if($selectedFile) required @endif>
             </fieldset>
 
             <fieldset class="form-group col-sm-6">
-                <label for="forFile">Adjuntar archivo Boleta de Garantía</label>
-                <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file" required>
+                <label for="forFile">Adjuntar archivo Boleta de Garantía 
+                    @php($selectedFile = isset($result) ? $result->findAttachedFile('guarantee_ticket_file') : null)
+                    @if($selectedFile)
+                    <a href="{{ route('request_forms.supply.attached_file.download', $selectedFile) }}" target="_blank" class="text-link"><i class="fas fa-paperclip"></i> Ver anexo</a>
+                    @endif
+                </label>
+                <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file" @if($selectedFile) required @endif>
             </fieldset>
             @endif
         </div>
