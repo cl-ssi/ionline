@@ -108,9 +108,11 @@ class ResultsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Result $result)
     {
-        //
+        $result->delete();
+        session()->flash('danger', 'El resultado de test de idoneidad ha sido eliminado');
+        return redirect()->back();
     }
 
 

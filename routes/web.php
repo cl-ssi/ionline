@@ -1601,6 +1601,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
+        Route::delete('{result}/destroy', [ResultsController::class, 'destroy'])->name('destroy');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
