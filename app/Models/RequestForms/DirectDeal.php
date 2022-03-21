@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Str;
 
 class DirectDeal extends Model implements Auditable
 {
@@ -33,6 +34,12 @@ class DirectDeal extends Model implements Auditable
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function findAttachedFile($name){
+        return $this->attachedFiles->first( function($item) use ($name){
+            return Str::contains($item->file, $name);
+        });
     }
 
     protected $table = 'arq_direct_deals';

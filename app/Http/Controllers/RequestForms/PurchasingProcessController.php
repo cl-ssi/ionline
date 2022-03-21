@@ -23,6 +23,7 @@ use App\Models\RequestForms\DirectDeal;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PurchasingProcessController extends Controller
 {
@@ -59,6 +60,25 @@ class PurchasingProcessController extends Controller
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
+    }
+
+    public function edit(RequestForm $requestForm, PurchasingProcessDetail $purchasingProcessDetail)
+    {
+        if(Auth()->user()->organizational_unit_id != 37){
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+            return redirect()->route('request_forms.my_forms');
+        }
+        $result = $purchasingProcessDetail->getPurchasingType();
+        $result->load('attachedFiles');
+        // return $result->attachedFiles;
+        $result_details = PurchasingProcessDetail::where($purchasingProcessDetail->getPurchasingTypeColumn(), $result->id)->get();
+        // return $result_details;
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
+        if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
+        $suppliers = Supplier::orderBy('name','asc')->get();
+
+        return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending', 'result', 'result_details'));
     }
 
     public function show(RequestForm $requestForm)
@@ -448,4 +468,36 @@ class PurchasingProcessController extends Controller
         session()->flash('success', 'El trato directo ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
+
+    public function update_direct_deal(Request $request, RequestForm $requestForm, DirectDeal $directDeal)
+    {
+        $directDeal->update($request->all());
+
+        //Registrar archivos en attached_files
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
+                  'resol_contract_file' => 'Resolución de contrato', 
+                  'guarantee_ticket_file' => 'Boleta de garantía'];
+
+        foreach($files as $key => $file){
+            if($request->hasFile($key)){
+                $previousFile = $directDeal->findAttachedFile($key);
+                if($previousFile){
+                    $previousFile->delete();
+                    Storage::disk('gcs')->delete($previousFile->file);
+                }
+                $archivo = $request->file($key);
+                $file_name = $now.'_'.$key.'_'.$directDeal->id;
+                $attachedFile = new AttachedFile();
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->document_type = $file;
+                $attachedFile->direct_deal_id = $directDeal->id;
+                $attachedFile->save();
+            }
+        }
+
+        session()->flash('success', 'El trato directo ha sido modificado exitosamente');
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+
+    } 
 }

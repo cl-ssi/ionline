@@ -953,12 +953,16 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('health_goals')->as('health_goals.')->group(function () {
+        Route::get('/show_file/{attachedFile}', 'Indicators\HealthGoalController@show_file')->name('ind.value.show_file');
+        Route::delete('/{attachedFile}', 'Indicators\HealthGoalController@destroy_file')->middleware('auth')->name('ind.value.destroy_file');
         Route::get('/{law}', 'Indicators\HealthGoalController@index')->name('index');
         Route::get('/{law}/{year}', 'Indicators\HealthGoalController@list')->name('list');
         Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
         Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
         Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', 'Indicators\HealthGoalController@importIndValues')->middleware('auth')->name('ind.import');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', 'Indicators\HealthGoalController@storeIndValue')->middleware('auth')->name('ind.value.store');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', 'Indicators\HealthGoalController@updateIndValue')->middleware('auth')->name('ind.value.update');
     });
 
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
@@ -1392,6 +1396,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/', [PurchasingProcessController::class, 'index'])->name('index');
         Route::get('/{requestForm}', [PurchasingProcessController::class, 'show'])->name('show');
         Route::get('/{requestForm}/purchase', [PurchasingProcessController::class, 'purchase'])->name('purchase');
+        Route::get('/{requestForm}/purchase/{purchasingProcessDetail}/edit', [PurchasingProcessController::class, 'edit'])->name('edit');
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');
         Route::post('/{requestForm}/create_petty_cash', [PurchasingProcessController::class, 'create_petty_cash'])->name('create_petty_cash');
         Route::post('/{requestForm}/create_fund_to_be_settled', [PurchasingProcessController::class, 'create_fund_to_be_settled'])->name('create_fund_to_be_settled');
@@ -1399,6 +1404,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::post('/{requestForm}/create_oc', [PurchasingProcessController::class, 'create_oc'])->name('create_oc');
         Route::post('/{requestForm}/create_convenio_marco', [PurchasingProcessController::class, 'create_convenio_marco'])->name('create_convenio_marco');
         Route::post('/{requestForm}/create_direct_deal', [PurchasingProcessController::class, 'create_direct_deal'])->name('create_direct_deal');
+        Route::put('/{requestForm}/{directDeal}/update_direct_deal', [PurchasingProcessController::class, 'update_direct_deal'])->name('update_direct_deal');
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
         Route::post('{requestForm}/close_purchasing_process', [PurchasingProcessController::class, 'close_purchasing_process'])->name('close_purchasing_process');
         Route::post('{requestForm}/edit_observation', [PurchasingProcessController::class, 'edit_observation'])->name('edit_observation');
