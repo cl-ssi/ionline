@@ -88,8 +88,8 @@
                 <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
-                <td class="text-center">{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->diffInDays($requestReplacementStaff->end_date) }}
-                    @if(Carbon\Carbon::parse($requestReplacementStaff->start_date)->diffInDays($requestReplacementStaff->end_date) > 1)
+                <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
+                    @if($requestReplacementStaff->getNumberOfDays() > 1)
                         días
                     @else
                         dia
@@ -211,8 +211,8 @@
                 <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
-                <td class="text-center">{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->diffInDays($requestReplacementStaff->end_date) }}
-                    @if(Carbon\Carbon::parse($requestReplacementStaff->start_date)->diffInDays($requestReplacementStaff->end_date) > 1)
+                <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
+                    @if($requestReplacementStaff->getNumberOfDays() > 1)
                         días
                     @else
                         dia
