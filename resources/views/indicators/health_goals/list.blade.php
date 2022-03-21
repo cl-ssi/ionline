@@ -22,7 +22,20 @@
     <p>{{$item->name}}</p>
         <ul style="list-style-type: none;">
         @foreach($item->indicators as $indicator)
-            <li><a href="{{ route('indicators.health_goals.show', [$law, $year, $indicator->id]) }}">{{$indicator->number}}. {{$indicator->name}}</a></li>
+            <li>
+              <a href="{{ route('indicators.health_goals.show', [$law, $year, $indicator->id]) }}">
+                {{$indicator->number}}. {{$indicator->name}}
+              </a>
+              @if($item->status == 'development')
+                  <span class="badge bg-warning" data-toggle="tooltip" data-placement="top" title="Desarrollo"><i class="fas fa-wrench" style="color:#fff;"></i></span>
+              @endif
+              @if($item->status == 'review')
+                  <span class="badge bg-warning" data-toggle="tooltip" data-placement="top" title="Revisión"><i class="fas fa-exclamation" style="color:#fff;"></i></span>
+              @endif
+              @if($item->status == 'verified')
+                  <span class="badge bg-success" data-toggle="tooltip" data-placement="top" title="Verificado"><i class="fa fa-check" style="color:#fff;"></i></span>
+              @endif
+            </li>
         @endforeach
         </ul>
     @endforeach
@@ -50,7 +63,7 @@
 <script src='{{asset('assets/amcharts/js/material.js')}}'></script>
 <script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
 <!-- Chart code -->
-<script>    
+<script>
     am4core.ready(function() {
 
     // Themes begin
