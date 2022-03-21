@@ -390,7 +390,7 @@
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> Historial de compras</h6>
+            <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
 
 
             <table class="table table-sm table-striped table-bordered small">
@@ -679,7 +679,7 @@
     <div class="card-header" id="headingThree">
       <h2 class="mb-0">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-            Historial de Compras
+            Información de la Compra
         </button>
       </h2>
     </div>
