@@ -22,6 +22,10 @@ class RequestReplacementStaff extends Model
         'ou_of_performance_id'
     ];
 
+    public function requestFather() {
+        return $this->belongsTo('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
+    }
+
     public function profile_manage() {
         return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
     }
@@ -168,6 +172,11 @@ class RequestReplacementStaff extends Model
         else{
             return $request_to_sign = 0;
         }
+    }
+
+    public function getNumberOfDays() {
+        $numberDays = 1 + $this->end_date->diff($this->start_date)->format("%a");
+        return $numberDays;
     }
 
     /**
