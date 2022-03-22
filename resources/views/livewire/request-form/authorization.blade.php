@@ -20,6 +20,14 @@
                     <input wire:model="organizationalUnit" name="organizationalUnit" class="form-control form-control-sm" type="text" readonly>
                 </fieldset>
             </div>
+            @if($eventType=='finance_event')
+            <div class="form-row">
+                <fieldset class="form-group col-sm-6">
+                    <label>Programa Asociado:</label><br>
+                    <input wire:model.debounce.50ms="program" name="program" class="form-control form-control-sm" type="text">
+                </fieldset>
+            </div>
+            @endif
 
             @if($eventType=='supply_event')
             <div class="form-row">
@@ -83,10 +91,10 @@
                     @error('new_estimated_expense') <span class="error text-danger">{{ $message }}</span> @enderror
                 </fieldset>
             </div>
-            
+
             <div class="form-row">
                 <fieldset class="form-group col-sm">
-                    <label for="for_comment">Observación Comprador:</label>
+                    <label for="for_purchaser_observation">Observación Comprador:</label>
                     <textarea wire:model.lazy="purchaser_observation" wire:click="resetError" name="purchaser_observation" class="form-control form-control-sm" rows="3" readonly></textarea>
                     @error('purchaser_observation') <span class="error text-danger">{{ $message }}</span> @enderror
                 </fieldset>
