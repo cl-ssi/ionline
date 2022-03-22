@@ -380,7 +380,7 @@
 <div class="row">
   <div class="col-sm">
     <div class="table-responsive">
-      <h6><i class="fas fa-shopping-cart"></i> Historial de bienes y/o servicios ejecución inmediata</h6>
+      <h6><i class="fas fa-shopping-cart"></i> Historial de compras ejecución inmediata</h6>
       <table class="table table-sm table-striped table-bordered small">
         <thead class="text-center">
           <tr>

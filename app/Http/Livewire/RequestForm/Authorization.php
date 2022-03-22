@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Authorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment;
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment, $program;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
     public $estimated_expense, $new_estimated_expense, $purchaser_observation;
@@ -37,7 +37,8 @@ class Authorization extends Component
       $this->route = 'request_forms.pending_forms';
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
-      $this->comment    = '';
+      $this->comment            = '';
+      $this->program            = $requestForm->program;
 
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
 
@@ -93,6 +94,9 @@ class Authorization extends Component
       $this->resetErrorBag();
     }
 
+    public function updatedProgram($value){
+        $this->requestForm->update(['program' => $value]);
+    }
 
     public function acceptRequestForm()
     {
