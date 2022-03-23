@@ -119,7 +119,7 @@
             <i class="fas fa-chess-king"></i>
             <b>{{optional($created->limit_at)->format('Y-m-d')}}</b>
             @foreach($created->events as $event)
-              @if($event->limit_at)
+              @if($event->limit_at and $event->status =='derivado')
               <br>
               <i class="fas fa-chess-pawn"></i>            
               <b>{{$event->limit_at}}</b>
@@ -131,7 +131,7 @@
             <i class="fa-solid fa-chess-king"></i>
             {{optional($created->limit_at)->format('Y-m-d')}}
             @foreach($created->events as $event)
-              @if($event->limit_at)
+              @if($event->limit_at and $event->status =='derivado')
               <br>
               <i class="fas fa-chess-pawn"></i>            
               <b>{{$event->limit_at}}</b>
@@ -259,7 +259,7 @@
                 <b>{{optional($archived->limit_at)->format('Y-m-d')}} </b>
 
             @foreach($archived->events as $event)
-              @if($event->limit_at)
+              @if($event->limit_at and $event->status =='derivado')
               <br>
               <i class="fas fa-chess-pawn"></i>            
               <b>{{$event->limit_at}}</b>
@@ -273,7 +273,7 @@
               <i class="fas fa-chess-king"></i>
               {{optional($archived->limit_at)->format('Y-m-d')}}
               @foreach($archived->events as $event)
-              @if($event->limit_at)
+              @if($event->limit_at and $event->status =='derivado')
               <br>
               <i class="fas fa-chess-pawn"></i>            
               <b>{{$event->limit_at}}</b>
