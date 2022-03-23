@@ -113,7 +113,7 @@
                 </td>
 				<td class="small text-center">{{$created->created_at->format('Y-m-d H:i')}}</td>
 			  <td class="small text-center">{{$created->created_at->diffForHumans() }}</td> <!--Carbon\Carbon::parse($created->created_at)->diffInDays(Carbon\Carbon::now()) -->
-        @if($created->limit_at <> NULL)
+        @if($created->limit_at <> NULL or $created->events->last()->limit_at <> NULL)
           @if(Carbon\Carbon::now() >= $created->limit_at)          
             <td class="small text-danger" nowrap>
             <i class="fas fa-chess-king"></i>
@@ -252,7 +252,7 @@
 					<td class="small text-center">{{optional($archived->created_at)->format('Y-m-d H:i')}}</td>
 					<td class="small text-center">{{$archived->created_at->diffForHumans() }}</td> <!--Carbon\Carbon::parse($archived->created_at)->diffInDays(Carbon\Carbon::now()) -->
 					<!-- <td class="small" nowrap>@if($archived->limit_at <> NULL){{Carbon\Carbon::parse($archived->limit_at)->format('Y-m-d')}} @endif</td> -->
-          @if($archived->limit_at <> NULL)
+          @if($archived->limit_at <> NULL or $archived->events->last()->limit_at <> NULL)
             @if(Carbon\Carbon::now() >= $archived->limit_at)
               <td class="small text-danger" nowrap>
               <i class="fas fa-chess-king"></i>
