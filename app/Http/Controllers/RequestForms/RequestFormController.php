@@ -247,14 +247,16 @@ class RequestFormController extends Controller {
         $requestForm->load('itemRequestForms');
 
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
-        $manager              = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-        $position             = $manager->position;
-        $organizationalUnit   = $manager->organizationalUnit->name;
-        if(is_null($manager))
-            $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
-        else
-            $manager = $manager->user->getFullNameAttribute();
-        return view('request_form.sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType', 'title'));
+
+        //$manager              = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+
+        // $position             = $manager->position;
+        // $organizationalUnit   = $manager->organizationalUnit->name;
+        // if(is_null($manager))
+        //     $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        // else
+        //     $manager = $manager->user->getFullNameAttribute();
+        return view('request_form.sign', compact('requestForm', 'eventType', 'title'));
     }
 
     public function create_new_budget(Request $request, RequestForm $requestForm)
