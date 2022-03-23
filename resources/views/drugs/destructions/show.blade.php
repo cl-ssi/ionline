@@ -133,15 +133,19 @@
     </div>
 
     <div class="center" style="width: 33%">
+        @if($destruction->observer)
         {{ $destruction->observer->FullName }}<br>
         Ministro de Fe<br>
         {{ env('APP_SS') }}
+        @endif
     </div>
 
     <div class="center" style="width: 32%;">
+        @if($destruction->lawyer_observer)
         {{ $destruction->lawyer_observer->FullName }}<br>
         Departamento de Asesoría Jurídica<br>
         {{ env('APP_SS') }}<br>
+        @endif
     </div>
 
 </div>
