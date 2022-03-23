@@ -48,8 +48,9 @@ class DestructionController extends Controller
         $destruction->user()->associate(Auth::user());
         $destruction->manager_id  = Parameter::get('drugs','Jefe')->value;
         $destruction->lawyer_id   = Parameter::get('drugs','Mandatado')->value;
-        $destruction->observer_id = Parameter::get('drugs','MinistroDeFe')->value;
+        $destruction->observer_id = empty(Parameter::get('drugs','MinistroDeFe')->value) ? null : Parameter::get('drugs','MinistroDeFe')->value;
         $destruction->lawyer_observer_id = Parameter::get('drugs','MinistroDeFeJuridico')->value;
+        //dd($destruction);
         $destruction->save();
         return redirect()->route('drugs.receptions.index');
     }

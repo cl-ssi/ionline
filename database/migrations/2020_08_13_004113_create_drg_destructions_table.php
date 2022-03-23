@@ -21,7 +21,7 @@ class CreateDrgDestructionsTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('manager_id')->unsigned();
             $table->bigInteger('lawyer_id')->unsigned();
-            $table->bigInteger('observer_id')->unsigned();
+            $table->bigInteger('observer_id')->nullable()->unsigned();
             $table->bigInteger('lawyer_observer_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
