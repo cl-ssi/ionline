@@ -387,6 +387,74 @@
 <br>
 @endif
 
+{{-- @if($requestForm->purchasingProcess &&
+  $requestForm->purchasingProcess->details->count() > 0 &&
+  ($requestForm->subtype == 'bienes ejecución inmediata' || $requestForm->subtype == 'servicios ejecución inmediata'))
+<div class="row">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Detalle de la Compra</h6>
+
+            <!-- ITEM
+            TIPO DE COMPRA
+            ID OC
+            ESPECIFICACIONES TECNICAS
+            ESPECIFICACIONES DEL PROVEEDOR
+            CANT
+            UM
+            VALOR UNITARIO
+            IMPUESTO
+            TOTAL ITEM
+            DATOS ADQUISICION -->
+
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>Fecha</th>
+                        <!-- <th>Mecanismo de Compra</th> -->
+                        <th>Tipo de compra</th>
+                        <th>ID O.C.</th>
+                        <th>Especificaciones Técnicas</th>
+                        <th>Especificaciones Del Proveedor</th>
+                        <th>Cantidad</th>
+                        <th>UM</th>
+                        <th>Valor U.</th>
+                        <th>Impuestos</th>
+                        <th>Total Item</th>
+                        <th>Datos Adquisición</th>
+                        <!-- <th></th>  -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $requestForm->purchasingProcess->start_date }}</td>
+                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+                        <td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
+                        <td>{{ $detail->specification }}</td>
+                        <td></td>
+
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="11" class="text-right">Valor Total</td>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+@endif --}}
+
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 <div class="row">
     <div class="col-sm">

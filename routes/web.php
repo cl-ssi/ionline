@@ -388,8 +388,9 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('tracking', 'Agreements\AgreementController@indexTracking')->name('tracking.index');
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
-    Route::get('/createWordWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createWordDocx')->name('createWordWithdrawal');
     Route::post('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::get('/createWordWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createWordDocx')->name('createWordWithdrawal');
+    Route::post('/createWordResWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createResWordDocx')->name('createWordResWithdrawal');
     Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
 
