@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Agreements;
 
 use Illuminate\Http\Request;
 use App\Agreements\Agreement;
+use App\Agreements\OpenTemplateProcessor;
+use App\Agreements\Signer;
 use App\Agreements\Stage;
 use App\Municipality;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Support\Str;
 
@@ -100,115 +103,68 @@ class WordWithdrawalAgreeController extends Controller
     	return response()->download(storage_path('app/public/Prev-Conv-Retiro.docx'))->deleteFileAfterSend(true);
     }
 
-    // public function createResWordDocx(Request $request, $id)
-    // {
-    //     // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-    //     $agreement     = Agreement::with('Program','Commune','agreement_amounts', 'referrer')->where('id', $id)->first();
-    //     $municipality   = Municipality::where('commune_id', $agreement->Commune->id)->first();
-    //     $file           = Storage::disk('')->path($agreement->file);
-    //     $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-    //     // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
-    //     $formatter = new NumeroALetras;
-    //     $formatter->apocope = true;
-    //     $totalConvenio = $agreement->agreement_amounts->sum('amount');
-    //     $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio, 0, 'pesos',''));
+    public function createResWordDocx(Request $request, $id)
+    {
+        // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
+        $agreement = Agreement::with('Program','Commune','referrer')->where('id', $id)->first();
+        $file = Storage::disk('')->path($agreement->file);
         
-    //     // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
-    //     $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead'.$agreement->period.'.docx'));
-    //     $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
-    //     $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter'.$agreement->period.'.docx'));
+        // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
+        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionretirohead'.$agreement->period.'.docx'));
+        $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
+        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionretirofooter'.$agreement->period.'.docx'));
 
-    //     // Parametros a imprimir en los archivos abiertos
-    //     $periodoConvenio = $agreement->period;
-    //     $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del '.date('Y', strtotime($agreement->date));
-    // 	$numResolucion = $agreement->number;
-    //     $yearResolucion = $agreement->resolution_date != NULL ? date('Y', strtotime($agreement->resolution_date)) : '';
-    //     $fechaResolucion = $agreement->resolution_date != NULL ? date('j', strtotime($agreement->resolution_date)).' de '.$meses[date('n', strtotime($agreement->resolution_date))-1].' del '.date('Y', strtotime($agreement->resolution_date)) : '';
-    //     $numResourceResolucion = $agreement->res_resource_number;
-    //     $yearResourceResolucion = $agreement->res_resource_date != NULL ? date('Y', strtotime($agreement->res_resource_date)) : '';
-    //     $fechaResourceResolucion = $agreement->res_resource_date != NULL ? date('j', strtotime($agreement->res_resource_date)).' de '.$meses[date('n', strtotime($agreement->res_resource_date))-1].' del '.date('Y', strtotime($agreement->res_resource_date)) : '';
-    // 	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
-    //     $emailMunicipality = $municipality->email_municipality;
-    //     $comuna = $agreement->Commune->name; 
-    //     $first_word = explode(' ',trim($agreement->Program->name))[0];
-    //     $programa = $first_word == 'Programa' ? substr(strstr($agreement->Program->name," "), 1) : $agreement->Program->name;
-    //     if($agreement->period >= 2022) $programa = mb_strtoupper($programa);
+        // Parametros a imprimir en los archivos abiertos
+        $periodoConvenio = $agreement->period;
+        $comuna = $agreement->Commune->name;
+    	$numResolucion = $agreement->number;
+        $yearResolucion = $agreement->resolution_date != NULL ? date('Y', strtotime($agreement->resolution_date)) : '';
+    	$ilustre = !Str::contains($comuna, 'Alto Hospicio') ? 'Ilustre ': null;
         
-    //     //Director ssi quien firma a la fecha de hoy
-    //     $director = Signer::find($request->signer_id);
+        //Director ssi quien firma a la fecha de hoy
+        $director = Signer::find($request->signer_id);
 
-    //     //email referente
-    //     $emailReferrer = $agreement->referrer != null ? $agreement->referrer->email : '';
+        $mainTemplateProcessor->setValue('directorDecreto',$director->decree);
+        $mainTemplateProcessor->setValue('art8', !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '');
+        $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
+        $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
+        $mainTemplateProcessor->setValue('periodoConvenio',$periodoConvenio);
+        $mainTemplateProcessor->setValue('ilustre',$ilustre);
+        $mainTemplateProcessor->setValue('comuna',$comuna);
 
-    //     $mainTemplateProcessor->setValue('directorDecreto',$director->decree);
-    //     $mainTemplateProcessor->setValue('art8', !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '');
-    //     $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
-    //     $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
-    //     $mainTemplateProcessor->setValue('programa',$programa);
-    //     $mainTemplateProcessor->setValue('numResourceResolucion',$numResourceResolucion);
-    //     $mainTemplateProcessor->setValue('yearResourceResolucion',$yearResourceResolucion);
-    //     $mainTemplateProcessor->setValue('fechaResolucion',$fechaResolucion);
-    //     $mainTemplateProcessor->setValue('periodoConvenio',$periodoConvenio);
-    //     $mainTemplateProcessor->setValue('fechaResourceResolucion',$fechaResourceResolucion);
-    //     $mainTemplateProcessor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
-    //     $mainTemplateProcessor->setValue('ilustreTitulo',$ilustre);
-    //     $mainTemplateProcessor->setValue('comuna',$comuna);
-    //     $mainTemplateProcessor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
-    //     $mainTemplateProcessor->setValue('totalConvenioLetras',$totalConvenioLetras);
-
-    //     $mainTemplateProcessorEnd->setValue('programa',$programa);
-    //     $mainTemplateProcessorEnd->setValue('periodoConvenio',$periodoConvenio);
-    //     $mainTemplateProcessorEnd->setValue('ilustreTitulo',$ilustre);
-    //     $mainTemplateProcessorEnd->setValue('comuna',$comuna);
-    //     $mainTemplateProcessorEnd->setValue('emailMunicipality',$emailMunicipality);
-    //     $mainTemplateProcessorEnd->setValue('emailReferrer',$emailReferrer);
+        $mainTemplateProcessorEnd->setValue('ilustre',$ilustre);
+        $mainTemplateProcessorEnd->setValue('comuna',$comuna);
        
-    //     // TEMPLATE MERGE
-    //     // extract internal xml from template that will be merged inside main template
-    //     $innerXml = $midTemplateProcessor->tempDocumentMainPart;
-    //     $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
-    //     // dd($innerXml);
-    //     // remove tag containing header, footer, images
-    //     // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
+        // TEMPLATE MERGE
+        // extract internal xml from template that will be merged inside main template
+        $innerXml = $midTemplateProcessor->tempDocumentMainPart;
+        $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
+        // remove tag containing header, footer, images
+        // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
         
-    //     //remove signature blocks
-    //     if($agreement->period >= 2022){
-    //         $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique año');
-    //         $innerXml .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreement->period.'”.</w:t></w:r></w:p>';
-    //     }else{
-    //         $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
-    //         $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año '.$agreement->period.'”.</w:t></w:r></w:p>';
-    //     }
+        //remove signature blocks
+        $innerXml = Str::beforeLast($innerXml, 'documento original digitalizado');
+        $innerXml .= 'documento original digitalizado.</w:t></w:r></w:p>';
 
-    //     $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
+        $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
-    //     $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
+        $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
 
-    //     // remove tag containing header, footer, images
-    //     // $mainXmlEnd = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $mainXmlEnd);
+        // remove tag containing header, footer, images
+        // $mainXmlEnd = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $mainXmlEnd);
 
-    //     // inject internal xml inside main template 
-    //     $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
- 
-    //     $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
-    //     $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
+        // inject internal xml inside main template 
+        $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
+        
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
+        
+        $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);
 
-    //     $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);
+        // END TEMPLATE MERGE
+        $mainTemplateProcessor->saveAs(storage_path('app/public/Prev-Resolucion.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
 
-    //     // END TEMPLATE MERGE
-    //     $mainTemplateProcessor->saveAs(storage_path('app/public/Prev-Resolucion.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
-
-    //     return response()->download(storage_path('app/public/Prev-Resolucion.docx'))->deleteFileAfterSend(true);
-    // }
-
-    public function ordinal($n){
-        $ordinales = array('primera','segunda','tercera','cuarta','quinta','sexta','septima','octava','novena','decima','onceava','doceava');
-
-        if ($n<=count ($ordinales)){
-            return $ordinales[$n-1];
-        }
-        return $n.'-esimo';
+        return response()->download(storage_path('app/public/Prev-Resolucion.docx'))->deleteFileAfterSend(true);
     }
 
     public function correctAmountText($amount_text)
@@ -218,11 +174,4 @@ class WordWithdrawalAgreeController extends Controller
         $words_amount = explode(' ',trim($amount_text));
         return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
     }
-
-    public function formatDate($date)
-    {
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        return date('j', strtotime($date)).' de '.$meses[date('n', strtotime($date))-1].' del año '.date('Y', strtotime($date));
-    }
-
 }
