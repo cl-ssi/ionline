@@ -305,6 +305,9 @@ class ShowTotalHours extends Component
             case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))):
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))):
 
+              // programas covid: valor unico (solo hora extra)
+              // otros programas hospital/todo el resto: nocturno y diruno
+
               $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
                   ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
                   ->get();
@@ -314,27 +317,49 @@ class ShowTotalHours extends Component
                   array_push($holidaysArray, $holiday->date);
               }
 
+              $total_minutes = 0;
               foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
-                  $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
-                      function ($date) use ($holidaysArray) {
-                          if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
-                              return true;
-                          else return false;
-                      },
-                      $shiftControl->end_date
-                  );
+                  // $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+                  //     function ($date) use ($holidaysArray) {
+                  //         if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
+                  //             return true;
+                  //         else return false;
+                  //     },
+                  //     $shiftControl->end_date
+                  // );
+                  $hoursDay = 0;
+                  if (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) &&
+                      $shiftControl->start_date->isWeekday() &&
+                      !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
+                        if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
+                          $minutesDay = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                          $total_minutes = $total_minutes + $minutesDay;
+                          $hoursDay = round($minutesDay/60,2);
+                        }
+                  }
 
-                  $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
-                      function ($date) use ($holidaysArray) {
-                          if (
-                              in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
-                              (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray)))
-                          )
-                              return true;
-                          else return false;
-                      },
-                      $shiftControl->end_date
-                  );
+                  // $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+                  //     function ($date) use ($holidaysArray) {
+                  //         if (
+                  //             in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                  //             (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray)))
+                  //         )
+                  //             return true;
+                  //         else return false;
+                  //     },
+                  //     $shiftControl->end_date
+                  // );
+                  $hoursNight = 0;
+                  if (in_array($shiftControl->start_date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                     (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray)))) {
+                        if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
+                          $minutesNight = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                          $total_minutes = $total_minutes + $minutesNight;
+                          $hoursNight = round($minutesNight/60,2);
+                        }
+                  }
+
+                  // dd($total_minutes);
 
                   $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
                   $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
@@ -348,12 +373,24 @@ class ShowTotalHours extends Component
                   $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
               }
 
-              $totalAmountDayRefund = $this->totalHoursDay * $value;
-              $totalAmountNight = $this->totalHoursNight * $value;
+              // $totalAmountDayRefund = $this->totalHoursDay * $value;
+              // $totalAmountNight = $this->totalHoursNight * $value;
 
-              $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
-              $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
-              $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
+              // dd($total_minutes);
+
+              // $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
+              if ($this->fulfillment->serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') {
+                $totalAmountDayRefund = floor($this->totalHoursDay) * $value;
+                $totalAmountNight = floor($this->totalHoursNight) * $value * 1.2;
+                $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
+              }else{
+                $this->totalAmount = floor($total_minutes/60) * $value;
+              }
+
+              // $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
+              // $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
+              // $this->totalHoursDay = $this->totalHoursDay;
+              // $this->totalHoursNight = $this->totalHoursNight;
               break;
 
             case 'DIURNO PASADO A TURNO':
