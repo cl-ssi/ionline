@@ -17,12 +17,12 @@ class Tender extends Model implements Auditable
 
     protected $fillable = [
         'purchase_type_id', 'tender_number', 'description', 'resol_administrative_bases', 'resol_adjudication',
-        'resol_deserted', 'resol_contract', 'guarantee_ticket', 'has_taking_of_reason',
-        'status', 'supplier_id', 'start_date', 'duration'
+        'resol_deserted', 'resol_contract', 'guarantee_ticket', 'has_taking_of_reason', 'taking_of_reason_date',
+        'status', 'supplier_id', 'start_date', 'duration', 'justification', 'guarantee_ticket_exp_date', 'memo_number'
     ];
 
     public $dates = [
-        'start_date'
+        'start_date', 'guarantee_ticket_exp_date'
     ];
 
     public function purchaseType()
@@ -35,9 +35,9 @@ class Tender extends Model implements Auditable
         return $this->hasMany(AttachedFile::class);
     }
 
-    public function purchases()
+    public function oc()
     {
-        return $this->hasMany(ImmediatePurchase::class);
+        return $this->hasOne(ImmediatePurchase::class, 'tender_id');
     }
 
     public function supplier()

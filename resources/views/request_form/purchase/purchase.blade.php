@@ -919,6 +919,26 @@
         $('input[name=taking_of_reason_file]').prop('disabled', !this.checked);
     });
 
+    $('#for_status').change(function(){
+        if($(this).val() == 'adjudicada'){
+            $('#adjudicada').show().prop('required',true);
+            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').prop('required',true);
+            $('input[name=resol_administrative_bases_file], input[name=resol_adjudication_deserted_file], input[name=resol_contract_file], input[name=guarantee_ticket_file], input[name=oc_file]').val('').prop('required', true);
+            $('#for_resol_deserted,#for_justification').val('').prop('required',false);
+            $('#desierta').hide().prop('required',false);
+        }else if($(this).val() == 'desierta'){
+            $('#desierta').show();
+            $('#for_resol_deserted,#for_justification').prop('required',true);
+            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').val('').prop('required',false).selectpicker('refresh');
+            $('#for_start_date,#for_duration,#for_po_id,#for_po_description,#for_po_accepted_date,#for_days_type_delivery,#for_days_delivery,#for_estimated_delivery_date,#for_po_with_confirmed_receipt_date,#for_po_sent_date,#for_amount,#for_destination_warehouse,#for_supplier_specifications,#for_taking_of_reason_date,#for_memo_number').val('');
+            $('#for_has_taking_of_reason').prop( "checked",false);
+            $('input[name=resol_administrative_bases_file], input[name=resol_adjudication_deserted_file], input[name=resol_contract_file], input[name=guarantee_ticket_file], input[name=taking_of_reason_file], input[name=memo_file], input[name=oc_file]').val('').prop('required', false);
+            $('#adjudicada').hide().prop('required',false);
+        }else{
+            $('#adjudicada, #desierta').hide();
+        }
+    });
+
     //FILE IN MESSAGE MODAL
     $('#for_file').bind('change', function() {
         //Validación de tamaño

@@ -113,11 +113,11 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">RUT proveedor</th>
-                                <td>{{ number_format($detail->pivot->tender->supplier->run,0,",",".") }}-{{ $detail->pivot->tender->supplier->dv }}</td>
+                                <td>{{ $detail->pivot->tender->supplier ? number_format($detail->pivot->tender->supplier->run,0,",",".").'-'.$detail->pivot->tender->supplier->dv : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Nombre proveedor</th>
-                                <td>{{ $detail->pivot->tender->supplier->name }}</td>
+                                <td>{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Fecha inicio</th>
@@ -139,6 +139,10 @@
                                 <th class="table-active" style="width: 33%">Nº Resol. Desierta</th>
                                 <td>{{ $detail->pivot->tender->resol_deserted }}</td>
                             </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Justificación</th>
+                                <td>{{ $detail->pivot->tender->justification }}</td>
+                            </tr>
                             <!-- Licitacion LP/LQ -->
                             @if(in_array($detail->pivot->tender->purchase_type_id, [14,15,16,17,18]))
                             <tr>
@@ -151,12 +155,12 @@
                             </tr>
                             @endif
                             <!-- Licitacion LR MAYOR-->
-                            @if(in_array($detail->pivot->tender->purchase_type_id, [16,17,18]))
+                            {{--@if(in_array($detail->pivot->tender->purchase_type_id, [16,17,18]))
                             <tr>
                                 <th class="table-active" style="width: 33%">Cuenta con Toma de razón</th>
                                 <td>{{ $detail->pivot->tender->has_taking_of_reason ? 'SÍ' : 'NO' }}</td>
                             </tr>
-                            @endif
+                            @endif--}}
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
                                 <td>{{ $detail->pivot->user->fullName ?? '' }}</td>
@@ -277,6 +281,14 @@
                             <tr>
                                 <th class="table-active" style="width: 33%">Monto total</th>
                                 <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Bodega destino</th>
+                                <td>{{ $detail->pivot->immediatePurchase->destination_warehouse }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Especificaciones del proveedor</th>
+                                <td>{{ $detail->pivot->immediatePurchase->supplier_specifications }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
