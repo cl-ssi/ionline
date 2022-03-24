@@ -17,7 +17,7 @@
         <tr class="text-center">
           <th>ID</th>
           <th>Folio</th>
-          <th style="width: 7%">Fecha Creación</th>
+          <th style="width: 7%">Fecha Creación</th>          
           <th>Tipo / Mecanismo de Compra</th>
           <th>Descripción</th>
           <th>Usuario Gestor</th>
@@ -25,6 +25,7 @@
           <th>Items</th>
           <th>Espera</th>
           <th>Etapas de aprobación</th>
+          <th style="width: 7%">Fecha de Aprobación</th>
           <th></th>
         </tr>
       </thead>
@@ -68,7 +69,7 @@
             <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
             @endif
           </td>
-          <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+          <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>          
           <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
             {{ $requestForm->SubtypeValue }}
           </td>
@@ -100,6 +101,8 @@
                 <i class="fas fa-save fa-2x"></i>
             @endif
           </td>
+          <td>{{ $requestForm->eventRequestForms->where('signer_user_id', Auth::user()->id)->last()->signature_date??'No se ha firmado Documento' }}</td>
+
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
             </a>
