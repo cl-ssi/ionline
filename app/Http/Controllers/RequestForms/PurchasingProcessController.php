@@ -282,15 +282,22 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        //Aqui falta registrar suministro o compra inmediata
+        //Registrar oc de la licitacion como compra inmediata
+        if(!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata') && $request->status == 'adjudicada'){
+            $oc = new ImmediatePurchase($request->all());
+            $oc->description = $request->po_description;
+            $tender->oc()->save($oc);
+        }
+
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $files = ['resol_administrative_bases_file' => 'Resolución bases administrativas', 
                   'resol_adjudication_deserted_file' => 'Resolución de adjudicación/desierta',
                   'resol_contract_file' => 'Resolución de contrato', 
-                  'guarantee_ticket_file' => 'Boleta de garantía', 
-                  'taking_of_reason_file' => 'Resolución toma de razón'];
+                  'guarantee_ticket_file' => 'Boleta de garantía',
+                  'memo_file' => 'Oficio',
+                  'oc_file' => 'Orden de compra'];
 
         foreach($files as $key => $file){
             if($request->hasFile($key)){
@@ -340,16 +347,20 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        $file = 'oc_file';
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        if($request->hasFile($file)){
-            $archivo = $request->file($file);
-            $file_name = $now.'_'.$file.'_'.$oc->id;
-            $attachedFile = new AttachedFile();
-            $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
-            $attachedFile->document_type = 'Orden de compra';
-            $attachedFile->immediate_purchase_id = $oc->id;
-            $attachedFile->save();
+        $files = ['oc_file' => 'Orden de compra',
+                  'mail_file' => 'Correo de respaldo'];
+
+        foreach($files as $key => $file){
+            if($request->hasFile($key)){
+                $archivo = $request->file($key);
+                $file_name = $now.'_'.$key.'_'.$oc->id;
+                $attachedFile = new AttachedFile();
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->document_type = $file;
+                $attachedFile->immediate_purchase_id = $oc->id;
+                $attachedFile->save();
+            }
         }
         
         $requestForm->load('purchasingProcess.details');
@@ -440,13 +451,19 @@ class PurchasingProcessController extends Controller
             $detail->save();
         }
 
-        //Aqui falta registrar suministro o compra inmediata
+        //Registrar oc del trato directo como compra inmediata
+        if(!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata')){
+            $oc = new ImmediatePurchase($request->all());
+            $oc->description = $request->po_description;
+            $directdeal->oc()->save($oc);
+        }
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
                   'resol_contract_file' => 'Resolución de contrato', 
-                  'guarantee_ticket_file' => 'Boleta de garantía'];
+                  'guarantee_ticket_file' => 'Boleta de garantía',
+                  'oc_file' => 'Orden de compra'];
 
         foreach($files as $key => $file){
             if($request->hasFile($key)){

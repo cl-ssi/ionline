@@ -18,7 +18,11 @@ class DirectDeal extends Model implements Auditable
 
 
     protected $fillable = [
-        'purchase_type_id' ,'description', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'supplier_id'
+        'purchase_type_id' ,'description', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'guarantee_ticket_exp_date', 'supplier_id'
+    ];
+
+    public $dates = [
+        'guarantee_ticket_exp_date'
     ];
 
     public function purchaseType()
@@ -34,6 +38,11 @@ class DirectDeal extends Model implements Auditable
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function oc()
+    {
+        return $this->hasOne(ImmediatePurchase::class, 'direct_deal_id');
     }
 
     public function findAttachedFile($name){
