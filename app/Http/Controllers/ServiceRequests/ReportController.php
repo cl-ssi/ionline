@@ -1378,6 +1378,7 @@ class ReportController extends Controller
       // dd($results);
 
     }
+    $request->flash();
     return view('service_requests.reports.service_request_continuity', compact('request', 'results'));
   }
 }
