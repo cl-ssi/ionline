@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\DB;
         <tr>
             <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="{{$seccion->supergroups ? 3 : 2 }}" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
-            <td align='right'><b>{{number_format($seccion->total($col),$seccion->precision,",",".")}}</b></td>
+            <td align='right' data-t="n" data-v="{{$seccion->total($col)}}"><b>{{number_format($seccion->total($col),$seccion->precision,",",".")}}</b></td>
             @endforeach
         </tr>
         @endif
@@ -59,7 +59,7 @@ use Illuminate\Support\Facades\DB;
             @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
                 <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
                 @foreach($seccion->cols as $col)
-                <td align='right'><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),$seccion->precision,",",".")}}</b></td>
+                <td align='right' data-t="n" data-v="{{$seccion->subtotal($col, $prestacion->nombre_grupo_prestacion)}}" data-t="n"><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),$seccion->precision,",",".")}}</b></td>
                 @endforeach
                 @php($pass = $prestacion->nombre_grupo_prestacion)
                 @php($subtotal_first_pass = true)
@@ -67,14 +67,14 @@ use Illuminate\Support\Facades\DB;
             @if($subtotal_first_pass) <tr> @endif
                 <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' nowrap="nowrap" class="text-uppercase">{{$prestacion->nombre_prestacion}}</td>
                 @foreach($seccion->cols as $col)
-                <td align='right'>{{number_format($prestacion->rems->sum($col),$seccion->precision,",",".")}}</td>
+                <td align='right' data-t="n" data-v="{{$prestacion->rems->sum($col)}}">{{number_format($prestacion->rems->sum($col),$seccion->precision,",",".")}}</td>
                 @endforeach
             @if($subtotal_first_pass) </tr> {{$subtotal_first_pass = false}} @endif
             @if($seccion->subtotals != null AND !$seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion) AND $seccion->isLastPrestacionByGroup($prestacion))
             <tr>
                 <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
                 @foreach($seccion->cols as $col)
-                <td align='right'><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),$seccion->precision,",",".")}}</b></td>
+                <td align='right' data-t="n" data-v="{{$seccion->subtotal($col, $prestacion->nombre_grupo_prestacion)}}"><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),$seccion->precision,",",".")}}</b></td>
                 @endforeach
                 @php($pass = $prestacion->nombre_grupo_prestacion)
             </tr>
@@ -83,7 +83,7 @@ use Illuminate\Support\Facades\DB;
             <tr>
                 <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
                 @foreach($seccion->cols as $col)
-                <td align='right'><b>{{number_format($seccion->totalByGroup($col, trim($prestacion->nombre_grupo_prestacion)),$seccion->precision,",",".")}}</b></td>
+                <td align='right' data-t="n" data-v="{{$seccion->totalByGroup($col, trim($prestacion->nombre_grupo_prestacion))}}"><b>{{number_format($seccion->totalByGroup($col, trim($prestacion->nombre_grupo_prestacion)),$seccion->precision,",",".")}}</b></td>
                 @endforeach  
             </tr>
             @endif
@@ -95,7 +95,7 @@ use Illuminate\Support\Facades\DB;
             @foreach($seccion->getTotalsByPrestacion() as $nombre_prestacion)
                 <td align='left' colspan="1" nowrap="nowrap"><b>{{$nombre_prestacion}}</b></td>
                 @foreach($seccion->cols as $col)
-                <td align='right'><b>{{number_format($seccion->totalByPrestacion($col, $nombre_prestacion),$seccion->precision,",",".")}}</b></td>
+                <td align='right' data-t="n" data-v="{{$seccion->totalByPrestacion($col, $nombre_prestacion)}}"><b>{{number_format($seccion->totalByPrestacion($col, $nombre_prestacion),$seccion->precision,",",".")}}</b></td>
                 @endforeach
             </tr>
             @endforeach
@@ -105,7 +105,7 @@ use Illuminate\Support\Facades\DB;
         <tr>
             <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="{{$seccion->supergroups ? 3 : 2 }}" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
-            <td align='right'><b>{{number_format($seccion->total($col),$seccion->precision,",",".")}}</b></td>
+            <td align='right' data-t="n" data-v="{{$seccion->total($col)}}"><b>{{number_format($seccion->total($col),$seccion->precision,",",".")}}</b></td>
             @endforeach
         </tr>
         @endif
