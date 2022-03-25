@@ -62,16 +62,20 @@ class RequestFormController extends Controller {
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
     }
 
-    public function all_forms()
+    public function all_forms(Request $request)
     {
         if(!Auth()->user()->hasPermissionTo('Request Forms: all') && Auth()->user()->organizational_unit_id != 40){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
             return redirect()->route('request_forms.my_forms');
         }
 
-        $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
+        // $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
+        $request_forms = RequestForm::Search($request)->latest('id')->paginate(30);
+        $users = User::all();
 
-        return view('request_form.all_forms', compact('request_forms'));
+        $request->flash();
+
+        return view('request_form.all_forms', compact('request_forms','users'));
     }
 
     public function get_events_type_user()
