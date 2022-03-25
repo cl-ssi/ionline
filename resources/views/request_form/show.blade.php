@@ -44,7 +44,11 @@
         <tbody class="small">
           <tr>
             <th class="table-active" colspan="2" scope="row">Folio</th>
-            <td>{{ $requestForm->folio }}</td>
+            <td>{{ $requestForm->folio }}
+            @if($requestForm->father)            
+            <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}" target="_blank">{{ $requestForm->father->folio }}</a>)
+            @endif
+            </td>            
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Fecha de Creación</th>
