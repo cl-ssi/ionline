@@ -85,13 +85,13 @@
 @section('custom_js')
 
 <script src="{{ asset('js/show_hide_tab.js') }}"></script>
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.18.0/dist/xlsx.full.min.js"></script>
 
 <script>
     function tableExcel(filename, type, fn, dl) {
           var elt = document.getElementById('contenedor');
         //   const filename = 'REM'
-          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS", raw: true});
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS", raw: false });
           return dl ?
             XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
             XLSX.writeFile(wb, `${filename}.xlsx`)
