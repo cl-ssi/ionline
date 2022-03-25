@@ -26,6 +26,9 @@
                     <tr>
                         <th class="table-active" scope="row">Folio</th>
                         <td>{{ $requestForm->folio }}</td>
+                        @if($requestForm->father)
+                        <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}" target="_blank">{{ $requestForm->father->folio }}</a>)
+                        @endif
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Fecha de Creación</th>
@@ -430,28 +433,28 @@
                     @foreach($requestForm->purchasingProcess->details as $key => $detail)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td>{{ $requestForm->purchasingProcess->start_date }}</td>
-                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
-                        <td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
-                        <td>{{ $detail->specification }}</td>
-                        <td></td>
+<td>{{ $requestForm->purchasingProcess->start_date }}</td>
+<td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+<td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
+<td>{{ $detail->specification }}</td>
+<td></td>
 
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="11" class="text-right">Valor Total</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+</tr>
+@endforeach
+</tbody>
+<tfoot>
+    <tr>
+        <th colspan="11" class="text-right">Valor Total</td>
+        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+    </tr>
+    <tr>
+        <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
+        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+    </tr>
+</tfoot>
+</table>
+</div>
+</div>
 </div>
 @endif --}}
 
@@ -513,8 +516,7 @@
                         </td> -->
                         <td>
                             @if(env('APP_ENV') == 'local')
-                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}"
-                                class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}" class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
                             @endif
                             <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                                 <i class="fas fa-receipt"></i>
@@ -686,155 +688,155 @@
 <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
 
 <div class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Formulario
-        </button>
-      </h2>
-    </div>
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Formulario
+                </button>
+            </h2>
+        </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        @include('partials.audit', ['audits' => $requestForm->audits])
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            Bienes y/o servicios (Items)
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-          <h6 class="mt-3 mt-4">Historial de cambios</h6>
-          <div class="table-responsive-md">
-          <table class="table table-sm small text-muted mt-3">
-              <thead>
-                  <tr>
-                      <th>Fecha</th>
-                      <th>Usuario</th>
-                      <th>Modificaciones</th>
-                  </tr>
-              </thead>
-              <tbody>
-                @foreach($requestForm->itemRequestForms as $itemRequestForm)
-                  @if($itemRequestForm->audits->count() > 0)
-                  @foreach($itemRequestForm->audits->sortByDesc('updated_at') as $audit)
-                  <tr>
-                      <td nowrap>{{ $audit->created_at }}</td>
-                      <td nowrap>{{ optional($audit->user)->fullName }}</td>
-                      <td>
-                      @foreach($audit->getModified() as $attribute => $modified)
-                          @if(isset($modified['old']) OR isset($modified['new']))
-                          <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
-                          @endif
-                      @endforeach
-                      </td>
-                  </tr>
-                  @endforeach
-                  @endif
-                @endforeach
-              </tbody>
-          </table>
-          </div>
-      </div>
-    </div>
-  </div>
-  @if($requestForm->purchasingProcess)
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-            Información de la Compra
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-        <h6 class="mt-3 mt-4">Historial de cambios</h6>
-        <div class="table-responsive-md">
-        <table class="table table-sm small text-muted mt-3">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                    <th>Modificaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-              @foreach($requestForm->purchasingProcess->details as $detail)
-                @if($detail->pivot->audits->count() > 0)
-                @foreach($detail->pivot->audits->sortByDesc('updated_at') as $audit)
-                <tr>
-                    <td nowrap>{{ $audit->created_at }}</td>
-                    <td nowrap>{{ optional($audit->user)->fullName }}</td>
-                    <td>
-                    @foreach($audit->getModified() as $attribute => $modified)
-                        @if(isset($modified['old']) OR isset($modified['new']))
-                        <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
-                        @endif
-                    @endforeach
-                    </td>
-                </tr>
-                @endforeach
-                @endif
-              @endforeach
-            </tbody>
-        </table>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                @include('partials.audit', ['audits' => $requestForm->audits])
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingFour">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
-            Historial de Procesos de Compra
-        </button>
-      </h2>
-    </div>
-    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-      <div class="card-body">
-        <h6 class="mt-3 mt-4">Historial de cambios</h6>
-        <div class="table-responsive-md">
-        <table class="table table-sm small text-muted mt-3">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                    <th>Modificaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-              @foreach($requestForm->purchasingProcess->details as $detail)
-                @if($detail->pivot->audits->count() > 0)
-                @foreach($detail->pivot->getPurchasingType()->audits->sortByDesc('updated_at') as $audit)
-                <tr>
-                    <td nowrap>{{ $audit->created_at }}</td>
-                    <td nowrap>{{ optional($audit->user)->fullName }}</td>
-                    <td>
-                    @foreach($audit->getModified() as $attribute => $modified)
-                        @if(isset($modified['old']) OR isset($modified['new']))
-                        <strong>{{ $attribute }}</strong> :  {{ isset($modified['old']) ? $modified['old'] : '' }}  => {{ $modified['new'] }};
-                        @endif
-                    @endforeach
-                    </td>
-                </tr>
-                @endforeach
-                @endif
-              @endforeach
-            </tbody>
-        </table>
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Bienes y/o servicios (Items)
+                </button>
+            </h2>
         </div>
-      </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+                <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                <div class="table-responsive-md">
+                    <table class="table table-sm small text-muted mt-3">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Modificaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($requestForm->itemRequestForms as $itemRequestForm)
+                            @if($itemRequestForm->audits->count() > 0)
+                            @foreach($itemRequestForm->audits->sortByDesc('updated_at') as $audit)
+                            <tr>
+                                <td nowrap>{{ $audit->created_at }}</td>
+                                <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                <td>
+                                    @foreach($audit->getModified() as $attribute => $modified)
+                                    @if(isset($modified['old']) OR isset($modified['new']))
+                                    <strong>{{ $attribute }}</strong> : {{ isset($modified['old']) ? $modified['old'] : '' }} => {{ $modified['new'] }};
+                                    @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  @endif
+    @if($requestForm->purchasingProcess)
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Información de la Compra
+                </button>
+            </h2>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+                <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                <div class="table-responsive-md">
+                    <table class="table table-sm small text-muted mt-3">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Modificaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($requestForm->purchasingProcess->details as $detail)
+                            @if($detail->pivot->audits->count() > 0)
+                            @foreach($detail->pivot->audits->sortByDesc('updated_at') as $audit)
+                            <tr>
+                                <td nowrap>{{ $audit->created_at }}</td>
+                                <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                <td>
+                                    @foreach($audit->getModified() as $attribute => $modified)
+                                    @if(isset($modified['old']) OR isset($modified['new']))
+                                    <strong>{{ $attribute }}</strong> : {{ isset($modified['old']) ? $modified['old'] : '' }} => {{ $modified['new'] }};
+                                    @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingFour">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                    Historial de Procesos de Compra
+                </button>
+            </h2>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+            <div class="card-body">
+                <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                <div class="table-responsive-md">
+                    <table class="table table-sm small text-muted mt-3">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Modificaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($requestForm->purchasingProcess->details as $detail)
+                            @if($detail->pivot->audits->count() > 0)
+                            @foreach($detail->pivot->getPurchasingType()->audits->sortByDesc('updated_at') as $audit)
+                            <tr>
+                                <td nowrap>{{ $audit->created_at }}</td>
+                                <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                <td>
+                                    @foreach($audit->getModified() as $attribute => $modified)
+                                    @if(isset($modified['old']) OR isset($modified['new']))
+                                    <strong>{{ $attribute }}</strong> : {{ isset($modified['old']) ? $modified['old'] : '' }} => {{ $modified['new'] }};
+                                    @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 @endif
 
@@ -889,7 +891,11 @@
         calculateAmount(true)
     });
 
-    document.getElementById("save_btn").disabled = {{ old('_token') === null ? 'true' : 'false' }}
+    document.getElementById("save_btn").disabled = {
+        {
+            old('_token') === null ? 'true' : 'false'
+        }
+    }
     @if(isset($result))
     document.getElementById("save_btn").disabled = false;
     @endif
@@ -987,22 +993,22 @@
         $('input[name=taking_of_reason_file]').prop('disabled', !this.checked);
     });
 
-    $('#for_status').change(function(){
-        if($(this).val() == 'adjudicada'){
-            $('#adjudicada').show().prop('required',true);
-            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').prop('required',true);
+    $('#for_status').change(function() {
+        if ($(this).val() == 'adjudicada') {
+            $('#adjudicada').show().prop('required', true);
+            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').prop('required', true);
             $('input[name=resol_administrative_bases_file], input[name=resol_adjudication_deserted_file], input[name=resol_contract_file], input[name=guarantee_ticket_file], input[name=oc_file]').val('').prop('required', true);
-            $('#for_resol_deserted,#for_justification').val('').prop('required',false);
-            $('#desierta').hide().prop('required',false);
-        }else if($(this).val() == 'desierta'){
+            $('#for_resol_deserted,#for_justification').val('').prop('required', false);
+            $('#desierta').hide().prop('required', false);
+        } else if ($(this).val() == 'desierta') {
             $('#desierta').show();
-            $('#for_resol_deserted,#for_justification').prop('required',true);
-            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').val('').prop('required',false).selectpicker('refresh');
+            $('#for_resol_deserted,#for_justification').prop('required', true);
+            $('#for_supplier_id,#for_resol_administrative_bases,#for_resol_adjudication,#for_resol_contract,#for_guarantee_ticket,#for_guarantee_ticket_exp_date').val('').prop('required', false).selectpicker('refresh');
             $('#for_start_date,#for_duration,#for_po_id,#for_po_description,#for_po_accepted_date,#for_days_type_delivery,#for_days_delivery,#for_estimated_delivery_date,#for_po_with_confirmed_receipt_date,#for_po_sent_date,#for_amount,#for_destination_warehouse,#for_supplier_specifications,#for_taking_of_reason_date,#for_memo_number').val('');
-            $('#for_has_taking_of_reason').prop( "checked",false);
+            $('#for_has_taking_of_reason').prop("checked", false);
             $('input[name=resol_administrative_bases_file], input[name=resol_adjudication_deserted_file], input[name=resol_contract_file], input[name=guarantee_ticket_file], input[name=taking_of_reason_file], input[name=memo_file], input[name=oc_file]').val('').prop('required', false);
-            $('#adjudicada').hide().prop('required',false);
-        }else{
+            $('#adjudicada').hide().prop('required', false);
+        } else {
             $('#adjudicada, #desierta').hide();
         }
     });
