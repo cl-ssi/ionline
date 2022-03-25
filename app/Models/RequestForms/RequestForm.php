@@ -17,15 +17,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Http\Request;
 
 class RequestForm extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;
-    use SoftDeletes;
+  use \OwenIt\Auditing\Auditable;
+  use SoftDeletes;
 
-    /* NORMALIZACIÓN JORGE MIRANDA - ALVARO LUPA NOV 2021 */
+  /* NORMALIZACIÓN JORGE MIRANDA - ALVARO LUPA NOV 2021 */
 
-    /*
+  /*
 
     protected $fillable = [
         'type_form', 'status', 'name', 'user_request_id', 'ou_user_request_id', 'user_request_position',
@@ -46,376 +47,436 @@ class RequestForm extends Model implements Auditable
 
     */
 
-    protected $fillable = [
-        'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
-        'name', 'subtype', 'justification', 'superior_chief',
-        'type_form', 'bidding_number', 'request_user_id',
-        'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
-        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
-        'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id'
-    ];
+  protected $fillable = [
+    'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
+    'name', 'subtype', 'justification', 'superior_chief',
+    'type_form', 'bidding_number', 'request_user_id',
+    'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
+    'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
+    'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id'
+  ];
 
-    public function getFolioAttribute($value){
-      return $value . ($this->has_increased_expense ? '-M' : '');
+  public function getFolioAttribute($value)
+  {
+    return $value . ($this->has_increased_expense ? '-M' : '');
+  }
+
+  public function father()
+  {
+    return $this->belongsTo(RequestForm::class, 'request_form_id');
+  }
+
+  public function children()
+  {
+    return $this->hasMany(RequestForm::class);
+  }
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'request_user_id');
+  }
+
+  public function messages()
+  {
+    return $this->hasMany(RequestFormMessage::class);
+  }
+
+  public function requestFormFiles()
+  {
+    return $this->hasMany(RequestFormFile::class);
+  }
+
+  public function contractManager()
+  {
+    return $this->belongsTo(User::class, 'contract_manager_id');
+  }
+
+  public function purchasers()
+  {
+    return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
+      ->withTimestamps();
+  }
+
+  public function supervisor()
+  {
+    return $this->belongsTo(User::class, 'supervisor_user_id');
+  }
+
+  public function purchaseUnit()
+  {
+    return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
+  }
+
+  public function purchaseType()
+  {
+    return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
+  }
+
+  public function purchaseMechanism()
+  {
+    return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
+  }
+
+  public function signer()
+  {
+    return $this->belongsTo(User::class, 'signer_user_id');
+  }
+
+  public function userOrganizationalUnit()
+  {
+    return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
+  }
+
+  public function contractOrganizationalUnit()
+  {
+    return $this->belongsTo(OrganizationalUnit::class, 'contract_manager_ou_id');
+  }
+
+  public function itemRequestForms()
+  {
+    return $this->hasMany(ItemRequestForm::class);
+  }
+
+  public function passengers()
+  {
+    return $this->hasMany(Passenger::class);
+  }
+
+  public function eventRequestForms()
+  {
+    return $this->hasMany(EventRequestForm::class);
+  }
+
+  public function purchasingProcesses()
+  {
+    return $this->hasMany(PurchasingProcess::class);
+  }
+
+  public function purchasingProcess()
+  {
+    return $this->HasOne(PurchasingProcess::class);
+  }
+
+  public function signedRequestForm()
+  {
+    return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+  }
+
+  public function signedOldRequestForm()
+  {
+    return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
+  }
+
+  public function getTotalEstimatedExpense()
+  {
+    $total = 0;
+    foreach ($this->children as $child) {
+      if ($child->status == 'approved')
+        $total += $child->estimated_expense;
     }
+    return $total;
+  }
 
-    public function father(){
-      return $this->belongsTo(RequestForm::class, 'request_form_id');
+  public function getTotalExpense()
+  {
+    $total = 0;
+    foreach ($this->children as $child) {
+      if ($child->purchasingProcess)
+        $total += $child->purchasingProcess->getExpense();
     }
+    return $total;
+  }
 
-    public function children(){
-      return $this->hasMany(RequestForm::class);
+  /*****Elimina RequestForm y tablas relacionadas en cadena*****/
+  public static function boot()
+  {
+    parent::boot();
+    static::deleting(function ($requestForm) { // before delete() method call this
+      $requestForm->eventRequestForms()->delete();
+      $requestForm->itemRequestForms()->delete();
+      $requestForm->requestFormFiles()->delete();
+      // do the rest of the cleanup...
+    });
+  }
+
+
+  public function getPurchaseMechanism()
+  {
+    return PurchaseMechanism::find($this->purchase_mechanism_id)->name;
+  }
+
+  public function getStatus()
+  {
+    switch ($this->status) {
+      case "pending":
+        return 'Pendiente';
+        break;
+      case "rejected":
+        return 'Rechazado';
+        break;
+      case "approved":
+        return 'Aprobado';
+        break;
+      case "closed":
+        return 'Cerado';
+        break;
     }
+  }
 
-    public function user() {
-      return $this->belongsTo(User::class, 'request_user_id');
+  public function isPurchaseInProcess()
+  {
+    return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status == 'in_process');
+  }
+
+  public function getSubtypeValueAttribute()
+  {
+    switch ($this->subtype) {
+      case "bienes ejecución inmediata":
+        return 'Bienes Ejecución Inmediata';
+        break;
+
+      case "bienes ejecución tiempo":
+        return 'Bienes Ejecución En Tiempo';
+        break;
+
+      case "servicios ejecución inmediata":
+        return 'Servicios Ejecución Inmediata';
+        break;
+
+      case "servicios ejecución tiempo":
+        return 'Servicios Ejecución En Tiempo';
+        break;
     }
+  }
 
-    public function messages() {
-        return $this->hasMany(RequestFormMessage::class);
+  public function getTypeOfCurrencyValueAttribute()
+  {
+    switch ($this->type_of_currency) {
+      case "peso":
+        return 'Peso';
+        break;
+
+      case "dolar":
+        return 'Dólar';
+        break;
+
+      case "uf":
+        return 'Uf';
+        break;
     }
+  }
+  public function getSymbolCurrencyAttribute()
+  {
+    switch ($this->type_of_currency) {
+      case "peso":
+        return '$';
+        break;
 
-    public function requestFormFiles() {
-        return $this->hasMany(RequestFormFile::class);
+      case "dolar":
+        return 'USD ';
+        break;
+
+      case "uf":
+        return 'Uf ';
+        break;
     }
+  }
 
-    public function contractManager() {
-        return $this->belongsTo(User::class, 'contract_manager_id');
+  public function getPrecisionCurrencyAttribute()
+  {
+    return $this->type_of_currency == 'peso' ? 0 : 2;
+  }
+
+  /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
+  public function eventSign($event_type)
+  {
+    if (!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type', $event_type)->first()))
+      return '<i class="text-success fas fa-check"></i>'; //aprovado
+    elseif (!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type', $event_type)->first()))
+      return '<i class="text-danger fas fa-ban"></i>'; //rechazado
+    else
+      return '<i class="text-info far fa-hourglass"></i>'; //en espera
+  }
+
+  public function eventSingStatus($event_type)
+  {
+    if (!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type', $event_type)->first()))
+      return 'approved'; //aprovado
+    elseif (!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type', $event_type)->first()))
+      return 'rejected'; //rechazado
+    else
+      return 'pending'; //en espera
+  }
+
+  public function rejectedTime()
+  {
+    $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
+    if (!is_null($event)) {
+      $date = new Carbon($event->signature_date);
+      return $date->format('d-m-Y');
     }
+  }
 
-    public function purchasers(){
-        return$this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
-        ->withTimestamps();
-    }
+  public function createdDate()
+  {
+    $date = new Carbon($this->created_at);
+    return $date->format('d-m-Y H:i:s');
+  }
 
-    public function supervisor(){
-      return $this->belongsTo(User::class, 'supervisor_user_id');
-    }
+  public function updatedDate()
+  {
+    $date = new Carbon($this->updated_at);
+    return $date->format('d-m-Y H:i:s');
+  }
 
-    public function purchaseUnit(){
-      return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
-    }
+  public function rejectedName()
+  {
+    $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
+    if (!is_null($event))
+      return $event->signerUser->tinnyName();
+  }
 
-    public function purchaseType(){
-      return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
-    }
+  public function rejectedComment()
+  {
+    $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
+    if (!is_null($event))
+      return $event->comment;
+  }
 
-    public function purchaseMechanism(){
-      return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
-    }
-
-    public function signer(){
-      return $this->belongsTo(User::class, 'signer_user_id');
-    }
-
-    public function userOrganizationalUnit(){
-      return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
-    }
-
-    public function contractOrganizationalUnit(){
-      return $this->belongsTo(OrganizationalUnit::class, 'contract_manager_ou_id');
-    }
-
-    public function itemRequestForms() {
-      return $this->hasMany(ItemRequestForm::class);
-    }
-
-    public function passengers()
-    {
-      return $this->hasMany(Passenger::class);
-    }
-
-    public function eventRequestForms() {
-        return $this->hasMany(EventRequestForm::class);
-    }
-
-    public function purchasingProcesses() {
-        return $this->hasMany(PurchasingProcess::class);
-    }
-
-    public function purchasingProcess(){
-      return $this->HasOne(PurchasingProcess::class);
-    }
-
-    public function signedRequestForm()
-    {
-        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
-    }
-
-    public function signedOldRequestForm()
-    {
-        return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
-    }
-
-    public function getTotalEstimatedExpense()
-    {
-      $total = 0;
-      foreach($this->children as $child){
-        if($child->status == 'approved')
-          $total += $child->estimated_expense;
-      }
-      return $total;
-    }
-
-    public function getTotalExpense()
-    {
-      $total = 0;
-      foreach($this->children as $child){
-        if($child->purchasingProcess)
-          $total += $child->purchasingProcess->getExpense();
-      }
-      return $total;
-    }
-
-    /*****Elimina RequestForm y tablas relacionadas en cadena*****/
-    public static function boot() {
-        parent::boot();
-        static::deleting(function($requestForm) { // before delete() method call this
-             $requestForm->eventRequestForms()->delete();
-             $requestForm->itemRequestForms()->delete();
-             $requestForm->requestFormFiles()->delete();
-             // do the rest of the cleanup...
-        });
-    }
-
-
-    public function getPurchaseMechanism(){
-      return PurchaseMechanism::find($this->purchase_mechanism_id)->name;
-    }
-
-    public function getStatus(){
-        switch ($this->status) {
-            case "pending":
-                return 'Pendiente';
-                break;
-            case "rejected":
-                return 'Rechazado';
-                break;
-            case "approved":
-                return 'Aprobado';
-                break;
-            case "closed":
-                return 'Cerado';
-                break;
-        }
-    }
-
-    public function isPurchaseInProcess(){
-      return $this->purchasingProcess == null || ($this->purchasingProcess && $this->purchasingProcess->status == 'in_process');
-    }
-
-    public function getSubtypeValueAttribute(){
-        switch ($this->subtype) {
-            case "bienes ejecución inmediata":
-                return 'Bienes Ejecución Inmediata';
-                break;
-
-            case "bienes ejecución tiempo":
-                return 'Bienes Ejecución En Tiempo';
-                break;
-
-            case "servicios ejecución inmediata":
-                return 'Servicios Ejecución Inmediata';
-                break;
-
-            case "servicios ejecución tiempo":
-                return 'Servicios Ejecución En Tiempo';
-                break;
-        }
-    }
-
-    public function getTypeOfCurrencyValueAttribute(){
-        switch ($this->type_of_currency) {
-            case "peso":
-                return 'Peso';
-                break;
-
-            case "dolar":
-                return 'Dólar';
-                break;
-
-            case "uf":
-                return 'Uf';
-                break;
-        }
-    }
-    public function getSymbolCurrencyAttribute(){
-        switch ($this->type_of_currency) {
-          case "peso":
-              return '$';
-              break;
-
-          case "dolar":
-              return 'USD ';
-              break;
-
-          case "uf":
-              return 'Uf ';
-              break;
-      }
-    }
-
-    public function getPrecisionCurrencyAttribute(){
-      return $this->type_of_currency == 'peso' ? 0 : 2;
-    }
-
-    /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
-    public function eventSign($event_type) {
-      if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
-        return '<i class="text-success fas fa-check"></i>';//aprovado
-      elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
-        return '<i class="text-danger fas fa-ban"></i>';//rechazado
-      else
-        return '<i class="text-info far fa-hourglass"></i>';//en espera
-    }
-
-    public function eventSingStatus($event_type) {
-      if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
-        return 'approved';//aprovado
-      elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
-        return 'rejected';//rechazado
-      else
-        return 'pending';//en espera
-    }
-
-    public function rejectedTime() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
-      if(!is_null($event)){
-        $date = new Carbon($event->signature_date);
-        return $date->format('d-m-Y');
-      }
-    }
-
-    public function createdDate() {
-      $date = new Carbon($this->created_at);
+  public function eventSignatureDate($event_type, $status)
+  {
+    $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
+    if (!is_null($event)) {
+      $date = new Carbon($event->signature_date);
       return $date->format('d-m-Y H:i:s');
     }
+  }
 
-    public function updatedDate() {
-      $date = new Carbon($this->updated_at);
-      return $date->format('d-m-Y H:i:s');
+  public function eventPurchaserNewBudget()
+  {
+    $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type', 'budget_event')->first();
+    if (!is_null($event)) {
+      return $event->purchaser;
     }
+  }
 
-    public function rejectedName() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
-      if(!is_null($event))
-        return $event->signerUser->tinnyName();
+  public function eventSignerName($event_type, $status)
+  {
+    $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
+    if (!is_null($event)) {
+      return $event->signerUser->tinnyName();
     }
+  }
 
-    public function rejectedComment() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
-      if(!is_null($event))
-        return $event->comment;
+  /* Utilizar esta Función para obtener todos los datos de las visaciones */
+  public function eventSigner($event_type, $status)
+  {
+    $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
+    if (!is_null($event)) {
+      return $event;
     }
+  }
 
-    public function eventSignatureDate($event_type, $status){
-      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
-      if(!is_null($event)){
-        $date = new Carbon($event->signature_date);
-        return $date->format('d-m-Y H:i:s');
-      }
+  public function firstPendingEvent()
+  {
+    return $this->eventRequestForms->where('status', 'pending')->first();
+  }
+
+
+  /* TIEMPO TRANSCURRIDO DEL TICKET */
+  public function getElapsedTime()
+  {
+    $day = Carbon::now()->diffInDays($this->created_at);
+    if ($day <= 1)
+      return $day . ' día.';
+    else
+      return $day . ' días.';
+  }
+
+  public function quantityOfItems()
+  {
+    return $this->type_form == 'bienes y/o servicios' ? $this->itemRequestForms()->count() : $this->passengers()->count();
+  }
+
+  public function iAmPurchaser()
+  {
+    return $this->purchasers->where('id', Auth::id())->count() > 0;
+  }
+
+  public function scopeSearch($query, Request $request)
+  {
+    if ($request->input('id') != "") {
+      $query->where('id', $request->input('id'));
     }
-
-    public function eventPurchaserNewBudget(){
-      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type', 'budget_event')->first();
-      if(!is_null($event)){
-        return $event->purchaser;
-      }
+    if ($request->input('name') != "") {
+      $query->where('name', 'LIKE', '%' . $request->input('name') . '%');
     }
-
-    public function eventSignerName($event_type, $status){
-      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
-      if(!is_null($event)){
-        return $event->signerUser->tinnyName();
-      }
+    if ($request->input('folio') != "") {
+      $query->where('folio', $request->input('folio'));
     }
-
-    /* Utilizar esta Función para obtener todos los datos de las visaciones */
-    public function eventSigner($event_type, $status){
-      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
-      if(!is_null($event)){
-        return $event;
-      }
+    if ($request->input('request_user_id') != "") {
+      $query->where('request_user_id', $request->input('request_user_id'));
     }
-
-    public function firstPendingEvent()
-    {
-      return $this->eventRequestForms->where('status', 'pending')->first();
+    if ($request->input('contract_manager_id') != "") {
+      $query->where('contract_manager_id', $request->input('contract_manager_id'));
     }
+    return $query;
+  }
 
 
-    /* TIEMPO TRANSCURRIDO DEL TICKET */
-    public function getElapsedTime()
-    {
-      $day = Carbon::now()->diffInDays($this->created_at);
-      if($day<=1)
-        return $day.' día.';
-      else
-        return $day.' días.';
-    }
+  /******************************************************/
+  /*********** CODIGO  PACHA  **************************/
+  /*****************************************************/
 
-    public function quantityOfItems(){
-      return $this->type_form == 'bienes y/o servicios' ? $this->itemRequestForms()->count() : $this->passengers()->count();
-    }
+  public function estimatedExpense()
+  {
+    return number_format($this->estimated_expense, 0, ",", ".");
+  }
 
-    public function iAmPurchaser(){
-      return $this->purchasers->where('id', Auth::id())->count() > 0;
-    }
+  public function getCreationDateAttribute()
+  {
+    //return $this->created_at->format('d-m-Y H:i:s');
+  }
 
-
-/******************************************************/
-/*********** CODIGO  PACHA  **************************/
-/*****************************************************/
-
-    public function estimatedExpense()
-    {
-      return number_format($this->estimated_expense,0,",",".");
-    }
-
-    public function getCreationDateAttribute()
-    {
-      //return $this->created_at->format('d-m-Y H:i:s');
-    }
-
-    /*  DETERMINAR FECHA DE VENCIMIENTO */
-    public function getEndDateAttribute()
-    {
-/*      if($this->status == "closed"){
+  /*  DETERMINAR FECHA DE VENCIMIENTO */
+  public function getEndDateAttribute()
+  {
+    /*      if($this->status == "closed"){
         return $this->updated_at->format('d-m-Y H:i:s');
       }
       else{
         return null;
       }*/
-    }
+  }
 
 
 
-    public function getFormRequestNumberAttribute()
-    {
-      //return $this->id;
-    }
+  public function getFormRequestNumberAttribute()
+  {
+    //return $this->id;
+  }
 
-    public function getEstimatedExpenseFormatAttribute()
-    {
-      //return number_format($this->estimated_expense, 0, ',', '.');
-    }
+  public function getEstimatedExpenseFormatAttribute()
+  {
+    //return number_format($this->estimated_expense, 0, ',', '.');
+  }
 
-    public function getEstimatedFinanceExpenseFormatAttribute()
-    {
-      //return number_format($this->finance_expense, 0, ',', '.');
-    }
+  public function getEstimatedFinanceExpenseFormatAttribute()
+  {
+    //return number_format($this->finance_expense, 0, ',', '.');
+  }
 
-    public function getProgramBalanceFormatAttribute()
-    {
-      //return number_format($this->program_balance, 0, ',', '.');
-    }
+  public function getProgramBalanceFormatAttribute()
+  {
+    //return number_format($this->program_balance, 0, ',', '.');
+  }
 
-    public function getAvailableBalanceFormatAttribute()
-    {
-      //return number_format($this->available_balance, 0, ',', '.');
-    }
+  public function getAvailableBalanceFormatAttribute()
+  {
+    //return number_format($this->available_balance, 0, ',', '.');
+  }
 
-/*
+  /*
     public function requestformfiles() {
         return $this->hasMany('\App\RequestForms\RequestFormFile');
     }
@@ -445,10 +506,10 @@ class RequestForm extends Model implements Auditable
     }
 */
 
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'arq_request_forms';
+  /**
+   * The table associated with the model.
+   *
+   * @var string
+   */
+  protected $table = 'arq_request_forms';
 }
