@@ -31,8 +31,8 @@
             <label for="for_to">Origen de Financiamiento</label>
             <select name="type" class="form-control" value="{{ $request->type }}">
             <option value=""></option>
-            <option value="Suma alzada" @if($request->type == 'Covid') selected @endif>Covid (Sólo 2021)</option>
-            <option value="Covid" @if($request->type == 'Suma alzada') selected @endif>Suma alzada</option>
+            <option value="Covid" @if($request->type == 'Covid') selected @endif>Covid (Sólo 2021)</option>
+            <option value="Suma Alzada" @if($request->type == 'Suma alzada') selected @endif>Suma alzada</option>
         </select>
 
         </fieldset>
