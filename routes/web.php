@@ -1408,6 +1408,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::put('/{requestForm}/{directDeal}/update_direct_deal', [PurchasingProcessController::class, 'update_direct_deal'])->name('update_direct_deal');
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
         Route::post('{requestForm}/close_purchasing_process', [PurchasingProcessController::class, 'close_purchasing_process'])->name('close_purchasing_process');
+        Route::post('{requestForm}/reasign_purchaser', [PurchasingProcessController::class, 'reasign_purchaser'])->name('reasign_purchaser');
         Route::post('{requestForm}/edit_observation', [PurchasingProcessController::class, 'edit_observation'])->name('edit_observation');
         Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');

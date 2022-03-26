@@ -80,7 +80,7 @@
           <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
             {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
           </td>
-          <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+          <td>{{ $requestForm->purchasers->first()->FullName?? 'No asignado' }}</td>
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
           <td class="text-center">
@@ -112,6 +112,17 @@
             @if(Auth()->user()->hasPermissionTo('Request Forms: all'))
             <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Edición"><i class="fas fa-edit"></i>
             </a>
+            @endif
+            @if(Auth()->user()->hasPermissionTo('Request Forms: all') and $requestForm->status == 'approved')
+            <!-- Button trigger modal -->            
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
+            <i class="fas fa-redo"></i>
+            </button>
+            {{$requestForm->id}}
+            @include('request_form.purchase.modals.reasign_purchaser')
+            
+            
+            
             @endif
             @if($requestForm->signatures_file_id)
             @if($requestForm->signatures_file_id == 11)
