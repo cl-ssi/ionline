@@ -29,34 +29,33 @@ class PurchasingProcessController extends Controller
 {
     public function index()
     {
-        if(Auth()->user()->organizational_unit_id != 37){
+        if (Auth()->user()->organizational_unit_id != 37) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
 
         $my_request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')
-            ->whereHas('purchasers', function ($q){
+            ->whereHas('purchasers', function ($q) {
                 return $q->where('users.id', Auth()->user()->id);
             })->latest('id')->get();
 
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15);
-        
+
         return view('request_form.purchase.index', compact('my_request_forms', 'request_forms'));
     }
 
     public function purchase(RequestForm $requestForm)
     {
-        if(Auth()->user()->organizational_unit_id == 37){
+        if (Auth()->user()->organizational_unit_id == 37) {
             $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
-            if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
-            $suppliers = Supplier::orderBy('name','asc')->get();
+            if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
+            $suppliers = Supplier::orderBy('name', 'asc')->get();
             return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending'));
-        }
-        else{
+        } else {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -64,7 +63,7 @@ class PurchasingProcessController extends Controller
 
     public function edit(RequestForm $requestForm, PurchasingProcessDetail $purchasingProcessDetail)
     {
-        if(Auth()->user()->organizational_unit_id != 37){
+        if (Auth()->user()->organizational_unit_id != 37) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -75,8 +74,8 @@ class PurchasingProcessController extends Controller
         // return $result_details;
         $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
         $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
-        if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
-        $suppliers = Supplier::orderBy('name','asc')->get();
+        if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
+        $suppliers = Supplier::orderBy('name', 'asc')->get();
 
         return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending', 'result', 'result_details'));
     }
@@ -105,14 +104,25 @@ class PurchasingProcessController extends Controller
     public function close_purchasing_process(RequestForm $requestForm, Request $request)
     {
         $requestForm->load('purchasingProcess');
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
-        $requestForm->purchasingProcess()->update([ 
-            'status' => $request->status == 'finished' ? (Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased') : 'canceled', 
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        $requestForm->purchasingProcess()->update([
+            'status' => $request->status == 'finished' ? (Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased') : 'canceled',
             'observation' => $request->observation
         ]);
 
         session()->flash('success', 'Cierre de proceso de compra registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+    }
+
+    public function reasign_purchaser(RequestForm $requestForm, Request $request)
+    {
+        
+        $requestForm->purchasers()->detach();
+        $requestForm->purchasers()->attach($request->new_purchaser_user_id);
+        //$requestForm->purchasers()->delete();
+        session()->flash('success', 'Nuevo Comprador asignado exitosamente');        
+        return redirect()->route('request_forms.all_forms');
+        
     }
 
     public function edit_observation(RequestForm $requestForm, Request $request)
@@ -126,10 +136,10 @@ class PurchasingProcessController extends Controller
     {
         //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
         $totalItemPurchased = 0;
-        if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+        if ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
 
         $totalItemSelected = 0;
-        foreach(request()->item_id as $key => $item)
+        foreach (request()->item_id as $key => $item)
             $totalItemSelected += request()->item_total[$key];
 
         return $totalItemPurchased + $totalItemSelected > $requestForm->estimated_expense;
@@ -138,12 +148,12 @@ class PurchasingProcessController extends Controller
     public function create_internal_oc(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $internalPurchaseOrder                          = new InternalPurchaseOrder();
         $internalPurchaseOrder->date                    = Carbon::now();
@@ -152,7 +162,7 @@ class PurchasingProcessController extends Controller
         $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
         $internalPurchaseOrder->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -166,8 +176,8 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'La Orden de compra interna ha sido registrado exitosamente');
@@ -177,12 +187,12 @@ class PurchasingProcessController extends Controller
     public function create_petty_cash(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $pettyCash                          = new PettyCash();
         $pettyCash->date                    = $request->date;
@@ -192,11 +202,11 @@ class PurchasingProcessController extends Controller
         $pettyCash->save();
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file_name = $now.'_petty_cash_file_'.$pettyCash->id;
-        $pettyCash->file = $request->file ? $request->file->storeAs('/ionline/request_forms/purchase_item_files', $file_name.'.'.$request->file->extension(), 'gcs') : null;
+        $file_name = $now . '_petty_cash_file_' . $pettyCash->id;
+        $pettyCash->file = $request->file ? $request->file->storeAs('/ionline/request_forms/purchase_item_files', $file_name . '.' . $request->file->extension(), 'gcs') : null;
         $pettyCash->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -210,8 +220,8 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'El fondo menor (caja chica) ha registrado creado exitosamente');
@@ -221,12 +231,12 @@ class PurchasingProcessController extends Controller
     public function create_fund_to_be_settled(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $fundToBeSettled                          = new FundToBeSettled();
         $fundToBeSettled->date                    = Carbon::now();
@@ -234,7 +244,7 @@ class PurchasingProcessController extends Controller
         $fundToBeSettled->document_id             = Document::where('number', $request->memo_number)->where('type', 'Memo')->first()->id;
         $fundToBeSettled->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -248,8 +258,8 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'El fondo a rendir ha sido registrado exitosamente');
@@ -259,17 +269,17 @@ class PurchasingProcessController extends Controller
     public function create_tender(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $tender = new Tender($request->all());
         $tender->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -283,7 +293,7 @@ class PurchasingProcessController extends Controller
         }
 
         //Registrar oc de la licitacion como compra inmediata
-        if(!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata') && $request->status == 'adjudicada'){
+        if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata') && $request->status == 'adjudicada') {
             $oc = new ImmediatePurchase($request->all());
             $oc->description = $request->po_description;
             $tender->oc()->save($oc);
@@ -292,19 +302,21 @@ class PurchasingProcessController extends Controller
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $files = ['resol_administrative_bases_file' => 'Resolución bases administrativas', 
-                  'resol_adjudication_deserted_file' => 'Resolución de adjudicación/desierta',
-                  'resol_contract_file' => 'Resolución de contrato', 
-                  'guarantee_ticket_file' => 'Boleta de garantía',
-                  'memo_file' => 'Oficio',
-                  'oc_file' => 'Orden de compra'];
+        $files = [
+            'resol_administrative_bases_file' => 'Resolución bases administrativas',
+            'resol_adjudication_deserted_file' => 'Resolución de adjudicación/desierta',
+            'resol_contract_file' => 'Resolución de contrato',
+            'guarantee_ticket_file' => 'Boleta de garantía',
+            'memo_file' => 'Oficio',
+            'oc_file' => 'Orden de compra'
+        ];
 
-        foreach($files as $key => $file){
-            if($request->hasFile($key)){
+        foreach ($files as $key => $file) {
+            if ($request->hasFile($key)) {
                 $archivo = $request->file($key);
-                $file_name = $now.'_'.$key.'_'.$tender->id;
+                $file_name = $now . '_' . $key . '_' . $tender->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name . '.' . $archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->tender_id = $tender->id;
                 $attachedFile->save();
@@ -312,29 +324,28 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'La Licitación ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
-
     }
 
     public function create_oc(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $oc = new ImmediatePurchase($request->all());
         $oc->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -348,26 +359,28 @@ class PurchasingProcessController extends Controller
         }
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $files = ['oc_file' => 'Orden de compra',
-                  'mail_file' => 'Correo de respaldo'];
+        $files = [
+            'oc_file' => 'Orden de compra',
+            'mail_file' => 'Correo de respaldo'
+        ];
 
-        foreach($files as $key => $file){
-            if($request->hasFile($key)){
+        foreach ($files as $key => $file) {
+            if ($request->hasFile($key)) {
                 $archivo = $request->file($key);
-                $file_name = $now.'_'.$key.'_'.$oc->id;
+                $file_name = $now . '_' . $key . '_' . $oc->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name . '.' . $archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->immediate_purchase_id = $oc->id;
                 $attachedFile->save();
             }
         }
-        
+
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
-        
+
         session()->flash('success', 'La Orden de compra ha sido registrado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
@@ -375,17 +388,17 @@ class PurchasingProcessController extends Controller
     public function create_convenio_marco(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
 
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $cm = new ImmediatePurchase($request->all());
         $cm->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -400,17 +413,19 @@ class PurchasingProcessController extends Controller
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $files = ['oc_file' => 'Orden de compra',
-                  'resol_supplementary_agree_file' => 'Resolución de acuerdo complementario', 
-                  'resol_awarding_file' => 'Resolución de adjudicación',
-                  'resol_purchase_intention' => 'Resolución de intención de compra'];
+        $files = [
+            'oc_file' => 'Orden de compra',
+            'resol_supplementary_agree_file' => 'Resolución de acuerdo complementario',
+            'resol_awarding_file' => 'Resolución de adjudicación',
+            'resol_purchase_intention' => 'Resolución de intención de compra'
+        ];
 
-        foreach($files as $key => $file){
-            if($request->hasFile($key)){
+        foreach ($files as $key => $file) {
+            if ($request->hasFile($key)) {
                 $archivo = $request->file($key);
-                $file_name = $now.'_'.$key.'_'.$cm->id;
+                $file_name = $now . '_' . $key . '_' . $cm->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name . '.' . $archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->immediate_purchase_id = $cm->id;
                 $attachedFile->save();
@@ -418,8 +433,8 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'Convenio marco ha sido registrado exitosamente');
@@ -429,16 +444,16 @@ class PurchasingProcessController extends Controller
     public function create_direct_deal(Request $request, RequestForm $requestForm)
     {
         $requestForm->load('purchasingProcess.details');
-        if($this->estimated_expense_exceeded($requestForm)){
+        if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
         }
-        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+        if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $directdeal = new DirectDeal($request->all());
         $directdeal->save();
 
-        foreach($request->item_id as $key => $item){
+        foreach ($request->item_id as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
             $detail->item_request_form_id       = $item;
@@ -452,7 +467,7 @@ class PurchasingProcessController extends Controller
         }
 
         //Registrar oc del trato directo como compra inmediata
-        if(!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata')){
+        if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata')) {
             $oc = new ImmediatePurchase($request->all());
             $oc->description = $request->po_description;
             $directdeal->oc()->save($oc);
@@ -460,17 +475,19 @@ class PurchasingProcessController extends Controller
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
-                  'resol_contract_file' => 'Resolución de contrato', 
-                  'guarantee_ticket_file' => 'Boleta de garantía',
-                  'oc_file' => 'Orden de compra'];
+        $files = [
+            'resol_direct_deal_file' => 'Resolución de trato directo',
+            'resol_contract_file' => 'Resolución de contrato',
+            'guarantee_ticket_file' => 'Boleta de garantía',
+            'oc_file' => 'Orden de compra'
+        ];
 
-        foreach($files as $key => $file){
-            if($request->hasFile($key)){
+        foreach ($files as $key => $file) {
+            if ($request->hasFile($key)) {
                 $archivo = $request->file($key);
-                $file_name = $now.'_'.$key.'_'.$directdeal->id;
+                $file_name = $now . '_' . $key . '_' . $directdeal->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name . '.' . $archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->direct_deal_id = $directdeal->id;
                 $attachedFile->save();
@@ -478,8 +495,8 @@ class PurchasingProcessController extends Controller
         }
 
         $requestForm->load('purchasingProcess.details');
-        if(round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0){ //Saldo total utilizado
-            $requestForm->purchasingProcess()->update([ 'status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
+        if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
+            $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
 
         session()->flash('success', 'El trato directo ha sido registrado exitosamente');
@@ -492,21 +509,23 @@ class PurchasingProcessController extends Controller
 
         //Registrar archivos en attached_files
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $files = ['resol_direct_deal_file' => 'Resolución de trato directo',
-                  'resol_contract_file' => 'Resolución de contrato', 
-                  'guarantee_ticket_file' => 'Boleta de garantía'];
+        $files = [
+            'resol_direct_deal_file' => 'Resolución de trato directo',
+            'resol_contract_file' => 'Resolución de contrato',
+            'guarantee_ticket_file' => 'Boleta de garantía'
+        ];
 
-        foreach($files as $key => $file){
-            if($request->hasFile($key)){
+        foreach ($files as $key => $file) {
+            if ($request->hasFile($key)) {
                 $previousFile = $directDeal->findAttachedFile($key);
-                if($previousFile){
+                if ($previousFile) {
                     $previousFile->delete();
                     Storage::disk('gcs')->delete($previousFile->file);
                 }
                 $archivo = $request->file($key);
-                $file_name = $now.'_'.$key.'_'.$directDeal->id;
+                $file_name = $now . '_' . $key . '_' . $directDeal->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name . '.' . $archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->direct_deal_id = $directDeal->id;
                 $attachedFile->save();
@@ -515,6 +534,5 @@ class PurchasingProcessController extends Controller
 
         session()->flash('success', 'El trato directo ha sido modificado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
-
-    } 
+    }
 }
