@@ -117,8 +117,7 @@
             <!-- Button trigger modal -->            
             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
             <i class="fas fa-redo"></i>
-            </button>
-            {{$requestForm->id}}
+            </button>            
             @include('request_form.purchase.modals.reasign_purchaser')
             
             
