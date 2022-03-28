@@ -60,8 +60,6 @@ class Visators extends Component
         $this->i = $i;
         array_push($this->inputs, $i);
         array_push($this->visatorType, $visatorType);
-        // \Debugbar::info($this->inputs);
-        // \Debugbar::info($this->visatorType);
     }
 
     public function remove($i)
@@ -79,7 +77,7 @@ class Visators extends Component
         //Agrega los usuarios según unidad organizacional
         foreach ($this->inputs as $key => $value) {
             if (!empty($this->organizationalUnit[$value])) {
-                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users;
+                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users->sortBy('name')->values();
             }
             else{
                 $this->users[$value] = [];
