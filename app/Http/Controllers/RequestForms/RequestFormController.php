@@ -58,8 +58,13 @@ class RequestFormController extends Controller {
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
+        
+        $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+            ->where('request_user_ou_id', Auth::user()->OrganizationalUnit->id)
+            ->latest('id')
+            ->get();        
 
-        return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
+        return view('request_form.my_forms', compact('my_requests', 'my_pending_requests','my_ou'));
     }
 
     public function all_forms(Request $request)
