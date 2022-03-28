@@ -106,6 +106,10 @@
             <th class="table-active" colspan="2" scope="row">Justificación de Adquisición</th>
             <td>{{ $requestForm->justification }}</td>
           </tr>
+          <tr>
+            <th class="table-active" colspan="2" scope="row">Comprador</th>
+            <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+          </tr>
         </tbody>
       </table>
     </div>
