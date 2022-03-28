@@ -11,47 +11,14 @@ class Visators extends Component
     public $organizationalUnit;
     public $users = [];
     public $inputs = [];
+    public $visatorType = [];
     public $i = 0;
     public $user;
     public $signature;
     public $requiredVisator = '';
-//    public $endorseType;
-//    public $disabledAddButton = 'disabled';
+    public $selectedDocumentType;
 
-    public function add($i)
-    {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs, $i);
-    }
-
-    public function remove($i)
-    {
-        unset($this->inputs[$i]);
-//        $this->i--;
-//        if ($this->i === 0) {
-//            $this->endorseType = '';
-//        }
-    }
-
-//    public function changeEndorseType()
-//    {
-//        if ($this->endorseType === 'No requiere visación' || $this->endorseType == '') {
-//            $this->disabledAddButton = 'disabled';
-//            $this->requiredVisator = '';
-//            for ($i = 0; $i <= $this->i; $i++) {
-//                $this->remove($i);
-//            }
-//            $this->i = 0;
-//
-//        } elseif($this->endorseType === 'Visación opcional' || $this->endorseType === 'Visación en cadena de responsabilidad'){
-//            $this->disabledAddButton = '';
-//            if ($this->i == 0) {
-//                $this->add($this->i);
-//            }
-//            $this->requiredVisator = 'required';
-//        }
-//    }
+    protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
 
     public function mount()
     {
@@ -82,6 +49,27 @@ class Visators extends Component
         }
     }
 
+    public function configureDocumentType($documentType)
+    {
+        $this->selectedDocumentType = $documentType;
+    }
+
+    public function add($i, $visatorType = 'visador')
+    {
+        $i = $i + 1;
+        $this->i = $i;
+        array_push($this->inputs, $i);
+        array_push($this->visatorType, $visatorType);
+        // \Debugbar::info($this->inputs);
+        // \Debugbar::info($this->visatorType);
+    }
+
+    public function remove($i)
+    {
+        unset($this->inputs[$i]);
+        unset($this->visatorType[$i]);
+    }
+
     public function render()
     {
         if($this->inputs){
@@ -98,7 +86,6 @@ class Visators extends Component
                 $this->user[$value] = null;
             }
         }
-
 
         return view('livewire.signatures.visators')
             ->withOuRoots(OrganizationalUnit::where('level', 1)->whereIn('establishment_id', [38, 1])->get());

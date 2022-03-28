@@ -27,7 +27,7 @@ class AddLimitAtToReqEventsTable extends Migration
     public function down()
     {
         Schema::table('req_events', function (Blueprint $table) {
-            //
+            $table->dropColumn('limit_at');
         });
     }
 }

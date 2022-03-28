@@ -114,14 +114,14 @@
 				<td class="small text-center">{{$created->created_at->format('Y-m-d H:i')}}</td>
 			  <td class="small text-center">{{$created->created_at->diffForHumans() }}</td> <!--Carbon\Carbon::parse($created->created_at)->diffInDays(Carbon\Carbon::now()) -->
         @if($created->limit_at <> NULL or $created->events->last()->limit_at <> NULL)
-          @if(Carbon\Carbon::now() >= $created->limit_at)          
+          @if(Carbon\Carbon::now() >= $created->limit_at)
             <td class="small text-danger" nowrap>
             <i class="fas fa-chess-king"></i>
             <b>{{optional($created->limit_at)->format('Y-m-d')}}</b>
             @foreach($created->events as $event)
               @if($event->limit_at and $event->status =='derivado')
               <br>
-              <i class="fas fa-chess-pawn"></i>            
+              <i class="fas fa-chess-pawn"></i>
               <b>{{$event->limit_at}}</b>
               @endif
             @endforeach
@@ -133,7 +133,7 @@
             @foreach($created->events as $event)
               @if($event->limit_at and $event->status =='derivado')
               <br>
-              <i class="fas fa-chess-pawn"></i>            
+              <i class="fas fa-chess-pawn"></i>
               <b>{{$event->limit_at}}</b>
               @endif
             @endforeach
@@ -261,13 +261,13 @@
             @foreach($archived->events as $event)
               @if($event->limit_at and $event->status =='derivado')
               <br>
-              <i class="fas fa-chess-pawn"></i>            
+              <i class="fas fa-chess-pawn"></i>
               <b>{{$event->limit_at}}</b>
               @endif
             @endforeach
-                
 
-                
+
+
             @else
               <td class="small" nowrap>
               <i class="fas fa-chess-king"></i>
@@ -275,7 +275,7 @@
               @foreach($archived->events as $event)
               @if($event->limit_at and $event->status =='derivado')
               <br>
-              <i class="fas fa-chess-pawn"></i>            
+              <i class="fas fa-chess-pawn"></i>
               <b>{{$event->limit_at}}</b>
               @endif
             @endforeach

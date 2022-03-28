@@ -6,7 +6,7 @@
 
     <h3>Nueva solicitud de firmas y distribución</h3>
 
-    <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data" onsubmit="disableButton(this)">
+        <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data" onsubmit="disableButton(this)">
         @csrf
 
         @if(isset($documentId))
@@ -28,116 +28,133 @@
             <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
         @endif
 
-        <div class="form-row">
+        <div class="card">
+            <h5 class="card-header">
+                Solicitud
+            </h5>
+            <div class="card-body">
+                <div class="form-row">
+                    <fieldset class="form-group col-3">
+                        <label for="for_request_date">Fecha Documento</label>
+                        <input type="date" class="form-control" id="for_request_date" name="request_date"
+                            value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : ''}}" required>
+                    </fieldset>
+                </div>
 
-            <fieldset class="form-group col-3">
-                <label for="for_request_date">Fecha Documento</label>
-                <input type="date" class="form-control" id="for_request_date" name="request_date"
-                       value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : ''}}" required>
-            </fieldset>
-        </div>
+                <div class="form-row">
+                    @livewire('signatures.document-types') 
+                    <fieldset class="form-group col">
+                        <label for="for_subject">Materia o tema del documento</label>
+                        <input type="text" class="form-control" id="for_subject" name="subject"
+                            value="{{isset($signature) ? $signature->subject : ''}}" required>
+                    </fieldset>
+                </div>
 
-        <div class="form-row">
+                <div class="form-row">
+                    <fieldset class="form-group col">
+                        <label for="for_description">Descripción del documento</label>
+                        <input type="text" class="form-control" id="for_description" name="description"
+                            value="{{isset($signature) ? $signature->description : ''}}" required>
+                    </fieldset>
+                </div>
 
-            <fieldset class="form-group col-3">
-                <label for="for_document_type">Tipo de Documento</label>
-                <select class="form-control" name="document_type" required>
-                    @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones', 'Acta'))
-                    <option value="">Seleccione tipo</option>
-                    @foreach($docTypes as $docType)
-                        <option value="{{$docType}}"
-                                @if(isset($signature) && $docType == $signature->document_type) selected @endif>{{$docType}}</option>
-                    @endforeach
-                </select>
-            </fieldset>
+                <div class="form-row">
+                    <fieldset class="form-group col">
+                        @if(isset($signature) && $signature->signaturesFileDocument->file != null)
+                            <button name="id" class="btn btn-link" form="showPdf" formtarget="_blank">
+                                <i class="fas fa-paperclip"></i> Documento
+                            </button>
+                            <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file }}">
+                            <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file}}"
+                                form="showPdf">
+                            <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
+                        @else
+                            <label for="for_document">Documento a distribuir (pdf)</label>
+                            <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
+                        @endif
+                    </fieldset>
 
-            <fieldset class="form-group col">
-                <label for="for_subject">Materia o tema del documento</label>
-                <input type="text" class="form-control" id="for_subject" name="subject"
-                       value="{{isset($signature) ? $signature->subject : ''}}" required>
-            </fieldset>
+                    <fieldset class="form-group col">
+                        <label for="for_annexed">Anexos</label>
+                        <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
+                    </fieldset>
+                </div>
 
-        </div>
-
-        <div class="form-row">
-            <fieldset class="form-group col">
-                <label for="for_description">Descripción del documento</label>
-                <input type="text" class="form-control" id="for_description" name="description"
-                       value="{{isset($signature) ? $signature->description : ''}}" required>
-            </fieldset>
-        </div>
-
-        <div class="form-row">
-            <fieldset class="form-group col">
-
-
-                @if(isset($signature) && $signature->signaturesFileDocument->file != null)
-                    <button name="id" class="btn btn-link" form="showPdf" formtarget="_blank">
-                        <i class="fas fa-paperclip"></i> Documento
-                    </button>
-
-                    <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file }}">
-                    <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file}}"
-                           form="showPdf">
-                    <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
-                @else
-                    <label for="for_document">Documento a distribuir (pdf)</label>
-                    <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
-                @endif
-
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_annexed">Anexos</label>
-                <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
-            </fieldset>
-        </div>
-
-        <div class="form-row">
-            <fieldset class="form-group col">
-                <label for="for_url">Link o Url asociado</label>
-                <input type="url" class="form-control" id="for_url" name="url"
-                       value="{{isset($signature) ? $signature->url : ''}}" >
-            </fieldset>
+                <div class="form-row">
+                    <fieldset class="form-group col">
+                        <label for="for_url">Link o Url asociado</label>
+                        <input type="url" class="form-control" id="for_url" name="url"
+                            value="{{isset($signature) ? $signature->url : ''}}" >
+                    </fieldset>
+                </div>
+            </div>
         </div>
 
         @if(isset($signature) && isset($signature->type))
-            <hr>
             @if($signature->type == 'visators')
-                @livewire('signatures.visators', ['signature' => $signature])
+                <div class="card mt-4">
+                    <h5 class="card-header">
+                        Visadores
+                    </h5>
+                    <div class="card-body">
+                        @livewire('signatures.visators', ['signature' => $signature])
+                    </div>
+                </div>
             @else
-                @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+                <div class="card mt-4">
+                    <h5 class="card-header">
+                        Firmante
+                    </h5>
+                    <div class="card-body">
+                        @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+                    </div>
+                </div>
             @endif
-            <hr>
         @else
-            <hr>
-            @livewire('signatures.visators')
-            <hr>
-            @livewire('signatures.signer')
-            <hr>
+
+            <div class="card mt-4">
+                <h5 class="card-header">
+                    Visadores
+                </h5>
+                <div class="card-body">
+                    @livewire('signatures.visators')
+                </div>
+            </div>
+
+
+            <div class="card mt-4">
+                <h5 class="card-header">
+                    Firmante
+                </h5>
+                <div class="card-body mt-4">
+                    @livewire('signatures.signer')
+                </div>
+            </div>
         @endif
 
-        <div class="form-row">
+        <div class="card mt-4">
+            <h5 class="card-header">
+                Distribución
+            </h5>
+            <div class="card-body">
+        
+                <div class="form-row mt-4">
+                    <fieldset class="form-group col">
+                        <label for="for_distribution">Distribución del documento (separados por coma)</label>
+                        <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
+                                rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
+                    </fieldset>
 
-
-
-            <fieldset class="form-group col">
-                <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
-                          rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
-
-                ></textarea>
-            </fieldset>
-
+                    <fieldset class="form-group col">
+                        <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
+                        ></textarea>
+                    </fieldset>
+                </div>
+            </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)"> <i class="fa fa-file"></i> Crear Solicitud</button>
-
+        <button type="submit" id="submitBtn" class="btn btn-primary mt-2" onclick="disableButton(this)"> <i class="fa fa-file"></i> Crear Solicitud</button>
     </form>
 
     <form method="POST" id="showPdf" name="showPdf" action="{{ route('documents.signatures.showPdfFromFile')}}">
@@ -163,7 +180,7 @@
                 $('#for_document').val('');
             }
 
-            //Validación de pdf
+            //Validación de extensión pdf
             const allowedExtension = ".pdf";
             let hasInvalidFiles = false;
 
