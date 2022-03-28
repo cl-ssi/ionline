@@ -7,7 +7,7 @@
 
 @include('request_form.partials.nav')
 
-@if(count($my_requests) > 0 || count($my_pending_requests) > 0)
+@if(count($my_requests) > 0 || count($my_pending_requests) > 0 || count($my_ou) > 0)
 
 <!-- <fieldset class="form-group">
         <div class="input-group mb-3">
@@ -258,6 +258,129 @@
 </div>
 @endif
 
+@if(count($my_ou) > 0)
+</div>
+<div class="col">
+  <h6><i class="fa fa-sitemap"></i> Formularios de mi unidad organizacional</h6>
+  <div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered small">
+      <thead>
+        <tr class="text-center">
+          <th>ID</th>
+          <th>Folio</th>
+          <th style="width: 7%">Fecha Creación</th>
+          <th>Tipo / Mecanismo de Compra</th>
+          <th>Descripción</th>
+          <th>Usuario Gestor</th>
+          <th>Comprador</th>
+          <th>Items</th>
+          <th>Espera</th>
+          <th>Etapas de aprobación</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($my_ou as $requestForm)
+        <tr>
+          <th>{{ $requestForm->id }} <br>
+            @switch($requestForm->getStatus())
+            @case('Pendiente')
+            <i class="fas fa-clock"></i>
+            @break
+
+            @case('Aprobado')
+            <span style="color: green;">
+              <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+            </span>
+            @if($requestForm->purchasingProcess)
+            <span class="badge badge-{{$requestForm->purchasingProcess->getColor()}}">{{$requestForm->purchasingProcess->getStatus()}}</span>
+            @else
+            <span class="badge badge-warning">En proceso</span>
+            @endif
+            @break
+
+            @case('Rechazado')
+            <a href="">
+              <span style="color: Tomato;">
+                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+              </span>
+            </a>
+            @break
+
+            @endswitch
+          </th>
+          <td>
+            <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+            @if($requestForm->father)
+            <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+            @endif
+          </td>
+          <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+          <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+            {{ $requestForm->SubtypeValue }}
+          </td>
+          <td>{{ $requestForm->name }}</td>
+          <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+            {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
+          </td>
+          <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+          <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+          <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
+          <td class="text-center">
+            @foreach($requestForm->eventRequestForms as $sign)
+            @if($sign->status == 'pending' || $sign->status == NULL)
+            <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            @endif
+            @if($sign->status == 'approved')
+            <span style="color: green;">
+              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            </span>
+            @endif
+            @if($sign->status == 'rejected')
+            <span style="color: Tomato;">
+              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            </span>
+            @endif
+            @endforeach
+          </td>
+          <td>
+            <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+            </a>
+            @if($requestForm->signatures_file_id)
+            @if($requestForm->signatures_file_id == 11)
+            <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @else
+            <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @endif
+            @if($requestForm->old_signatures_file_id)
+            <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
+              <i class="fas fa-file-contract"></i>
+            </a>
+            @endif
+
+            @if(Str::contains($requestForm->subtype, 'tiempo'))
+            <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+            </a>
+            @endif
+            @endif
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+@endif
+
+
+
 @else
 <div class="card">
   <div class="card-body">
@@ -265,6 +388,8 @@
   </div>
 </div>
 @endif
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
