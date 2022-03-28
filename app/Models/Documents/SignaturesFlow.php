@@ -21,7 +21,7 @@ class SignaturesFlow extends Model Implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation',
+        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation', 'visator_type',
     ];
 
     public function signaturesFile(){
