@@ -13,9 +13,9 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Requirement extends Model implements Auditable
 {
-    
+
     use \OwenIt\Auditing\Auditable;
-  
+
     /**
      * The attributes that are mass assignable.
      *
@@ -89,7 +89,7 @@ class Requirement extends Model implements Auditable
                                                      ->orWhereIn('to_user_id',$users);
                                           })
                                           ->when($archivados, function ($query, $archivados) {
-                                            return $query->WhereNotIn('id',$archivados); //<--- esta clausula permite traer todos los requerimientos que no esten archivados
+                                            return $query->whereIntegerNotInRaw('id',$archivados); //<--- esta clausula permite traer todos los requerimientos que no esten archivados
                                           })
                                           ->count();
 
