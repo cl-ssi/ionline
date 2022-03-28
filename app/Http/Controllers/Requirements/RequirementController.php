@@ -161,7 +161,7 @@ class RequirementController extends Controller
             $query->Search2($request);
           });
         })
-        ->WhereNotIn('id', $archivados) //<--- esta clausula permite traer todos los requerimientos que no esten archivados
+        ->whereIntegerNotInRaw('id', $archivados) //<--- esta clausula permite traer todos los requerimientos que no esten archivados
         ->orderBy('created_at', 'DESC');
     }
 
@@ -600,7 +600,7 @@ class RequirementController extends Controller
         ->get();
     }
 
-    
+
     return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 
