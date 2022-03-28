@@ -146,6 +146,8 @@ class SignatureController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // \Debugbar::info(unserialize($request->visator_type));
+
         DB::beginTransaction();
 
         try {
@@ -201,7 +203,16 @@ class SignatureController extends Controller
                 $signaturesFlow->save();
             }
 
-            if ($request->has('ou_id_visator')) {
+            if ($request->has('ou_id_visator'))
+            {
+                if($request->has('visator_types')){
+                    $visatorTypes = unserialize($request->visator_types);
+                    $elaboradorCount = 0;
+                    $revisadorCount = 0;
+                }else{
+                    $visatorTypes = null;
+                }
+
                 foreach ($request->ou_id_visator as $key => $ou_id_visator) {
                     $signaturesFlow = new SignaturesFlow();
                     $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
@@ -209,6 +220,17 @@ class SignatureController extends Controller
                     $signaturesFlow->ou_id = $ou_id_visator;
                     $signaturesFlow->user_id = $request->user_visator[$key];
                     $signaturesFlow->sign_position = $key + 1;
+                    if($visatorTypes != null) {
+                        $signaturesFlow->visator_type = $visatorTypes[$key];
+                        if($visatorTypes[$key] === 'elaborador') {
+                            $elaboradorCount = $elaboradorCount +1;
+                            $signaturesFlow->position_visator_type = $elaboradorCount;
+                        }  
+                        else{
+                            $revisadorCount = $revisadorCount +1;
+                            $signaturesFlow->position_visator_type = $revisadorCount;
+                        }
+                    }
                     $signaturesFlow->save();
                 }
             }

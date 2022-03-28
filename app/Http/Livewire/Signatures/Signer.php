@@ -12,6 +12,9 @@ class Signer extends Component
     public $user;
     public $signaturesFlowSigner;
     public $userRequired;
+    public $selectedDocumentType;
+
+    protected $listeners = ['documentTypeChanged' => 'configureDocumentType'];
 
     public function mount()
     {
@@ -25,6 +28,11 @@ class Signer extends Component
                 $this->user = $this->signaturesFlowSigner->user_id;
             }
         }
+    }
+
+    public function configureDocumentType($documentType)
+    {
+        $this->selectedDocumentType = $documentType;
     }
 
     public function render()

@@ -35,7 +35,7 @@ class FirmaDigitalController extends Controller
     const modoDesatendidoProduccion = 3;
 
     /**
-     * Se utiliza para firmar docs que no se crean en el modulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo, 
+     * Se utiliza para firmar docs que no se crean en el modulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo,
      * lo firma llamando a signPdfApi y guarda NUEVO registro SignaturesFile.
      * @param Request $request
      * @return string
@@ -135,6 +135,8 @@ class FirmaDigitalController extends Controller
             $docId = $signaturesFlow->signaturesFile->id;
             $custom_x_axis = $signaturesFlow->custom_x_axis;
             $custom_y_axis = $signaturesFlow->custom_y_axis;
+            $visatorType = $signaturesFlow->visator_type;
+            $positionVisatorType = $signaturesFlow->position_visator_type;
 
             $ct_firmas_visator = null;
             $ct_posicion_firmas = null;
@@ -148,7 +150,8 @@ class FirmaDigitalController extends Controller
             // }
 
             $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-                $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis);
+                $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis,
+                $visatorType, $positionVisatorType);
 
             if (!$responseArray['statusOk']) {
                 session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -205,13 +208,13 @@ class FirmaDigitalController extends Controller
 
 
                 foreach ($dest_vec as $dest) {
-                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0)
                     {
                         $cont=$cont+1;
                         $tipo = null;
                         $generador = $signaturesFlow->signature->responsable->fullname;
                         $unidad = $signaturesFlow->signature->organizationalUnit->name;
-        
+
                         switch ($signaturesFlow->signature->document_type) {
                             case 'Memorando':
                                 $this->tipo = 'Memo';
@@ -223,7 +226,7 @@ class FirmaDigitalController extends Controller
                                 $this->tipo = $signaturesFlow->signature->document_type;
                                 break;
                         }
-        
+
                         $parte = Parte::create([
                             'entered_at' => Carbon::now(),
                             'type' => $this->tipo,
@@ -231,7 +234,7 @@ class FirmaDigitalController extends Controller
                             'subject' => $signaturesFlow->signature->subject,
                             'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
                         ]);
-        
+
                         $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'documento')->get();
                         ParteFile::create([
                             'parte_id' => $parte->id,
@@ -239,7 +242,7 @@ class FirmaDigitalController extends Controller
                             'name' => $distribucion->first()->id . '.pdf',
                             'signature_file_id' => $distribucion->first()->id,
                         ]);
-        
+
                         $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'anexo')->get();
                         foreach ($signaturesFiles as $key => $sf) {
                             ParteFile::create([
@@ -253,7 +256,7 @@ class FirmaDigitalController extends Controller
                 }
             }
 
-            //Si es visación en cadena, se envía notificación por correo al siguiente firmador
+            // Si es visación en cadena, se envía notificación por correo al siguiente firmador
             if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
                 if ($signaturesFlow->type === 'visador') {
                     $nextSignaturesFlowVisation = SignaturesFlow::query()
@@ -295,7 +298,8 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                               bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null): array
+                               bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null,
+                               string $visatorType = null, int $positionVisatorType = null): array
     {
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
         /* Confección del cuadro imagen de la firma */
@@ -303,7 +307,7 @@ class FirmaDigitalController extends Controller
         $font_bold = public_path('fonts/verdana-bold-2.ttf');
         $font_regular = public_path('fonts/Verdana.ttf');
 
-        $marginTop = 1;
+        $marginTop = 0.1;
         $xAxis = 5;
         $yPading = 16;
         $fontSize = 10;
@@ -311,22 +315,28 @@ class FirmaDigitalController extends Controller
         $actualDate = now()->format('d-m-Y H:i:s');
         $fullName = Auth::user()->full_name;
 
+
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
-            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 84) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
-            imagefilledrectangle($im, 1, 1, 398, 78, $white);
+            imagefilledrectangle($im, 1, 1, 398, 82, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
 
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
                 $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
+            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
                 $text_color, $font_bold, $fullName);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 0.3,
                 $text_color, $font_regular, env('APP_SS'));
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
-                $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
+                $text_color, $font_regular, 'Verificar autenticidad https://i.saludiquique.cl/validador');
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
+                $text_color, $font_regular,  ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : ''));
+            imagettftext($im, $fontSize, 0, 235, $yPading * 5 + $marginTop + 0.5,
+                $text_color, $font_regular,  ($signatureType === 'firmante' ? $actualDate : ''));
         } else {
+
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
 //            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -401,10 +411,9 @@ class FirmaDigitalController extends Controller
         $jwt = JWT::encode($payload, $secret);
         // die($jwt);
 
-        if ($signatureType == 'visador') {
-//            $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
-//            $pocision_firma = $signaturesFlow->sign_position;
-
+        $page = 'LAST';
+        if ($signatureType == 'visador')
+        {
             if ($visatorAsSignature === true) {
                 $padding = 50;
                 $alto = 55;
@@ -412,14 +421,27 @@ class FirmaDigitalController extends Controller
                 $padding = 25;
                 $alto = 26;
             }
-            $coordenada_x = 65;
+
+            if($visatorType === 'elaborador'){
+                $page = '1';
+                $alto = 110;
+                $coordenada_x = 65;
+                $posicion_firma = $positionVisatorType;
+
+            }elseif($visatorType === 'revisador'){
+                $page = '1';
+                $alto = 110;
+                $coordenada_x = 330;
+                $posicion_firma = $positionVisatorType;
+            }else{
+                $coordenada_x = 65;
+            }
+
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
             ($custom_x_axis) ? $coordenada_x = $custom_x_axis : $coordenada_x = 310;
             ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
-            // $coordenada_x = 310;
-            // $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
         }
@@ -443,7 +465,7 @@ class FirmaDigitalController extends Controller
                                         <lly>" . $coordenada_y . "</lly>
                                         <urx>" . ($coordenada_x + $ancho) . "</urx>
                                         <ury>" . ($coordenada_y + $alto) . "</ury>
-                                        <page>LAST</page>
+                                        <page>" . $page . "</page>
                                         <image>BASE64</image>
                                         <BASE64VALUE>$firma</BASE64VALUE>
                                     </Visible>
@@ -504,57 +526,55 @@ class FirmaDigitalController extends Controller
     }
 
     public function test($otp) {
-        $pdf            = 'samples/samp.pdf';
+        $pdf            = 'samples/protocolo_small.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
         $signatureType  = 'firmante';
-        $docId          = 1;
+        $docId          = 55555;
         $verificationCode = 'asaasf';
         $visatorAsSignature = false;
         $ct_firmas_visator  = 3;
-        $posicion_firma     = 1;
-
-
-        $actualDate = now()->format('d-m-Y H:i:s');
-        $fullName = Auth::user()->full_name;
-
+        $posicion_firma     = 3;
+        $custom_x_axis = null;
+        $custom_y_axis = null;
+        $visatorType = 'revisador';
+        $positionVisatorType = 3;
 
         /* Confección del cuadro imagen de la firma */
         $font_light     = public_path('fonts/verdana-italic.ttf');
         $font_bold      = public_path('fonts/verdana-bold-2.ttf');
         $font_regular   = public_path('fonts/Verdana.ttf');
 
-        //Verificar si esta firmando en representacion de alguien (Si esta subrogando)
-        $isRepresentative = true;
-
-        $isRepresentative ? $yPading = 14 : $yPading = 16;
-        $isRepresentative ? $fontSize = 8 : $fontSize = 10;
-
-        $marginTop  = 1;
+        $marginTop  = 0.1;
         $xAxis      = 5;
+        $yPading = 16;
+        $fontSize = 10;
+
+        $actualDate = now()->format('d-m-Y H:i:s');
+        $fullName = Auth::user()->full_name;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
-            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 84) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
-            imagefilledrectangle($im, 1, 1, 398, 78, $white);
+            imagefilledrectangle($im, 1, 1, 398, 82, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
 
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
                 $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
+            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
                 $text_color, $font_bold, $fullName);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-                $text_color, $font_regular, 'En representación de');
-            imagettftext($im, $fontSize, 0, $xAxis + 117, $yPading * 3 + $marginTop + 3,
-                $text_color, $font_bold, 'Nombre de Prueba');
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 0.3,
                 $text_color, $font_regular, env('APP_SS'));
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 5,
-                $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
+                $text_color, $font_regular, 'Verificar autenticidad https://i.saludiquique.cl/validador');
+            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
+                $text_color, $font_regular,  ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : ''));
+            imagettftext($im, $fontSize, 0, 235, $yPading * 5 + $marginTop + 0.5,
+                $text_color, $font_regular,  ($signatureType === 'firmante' ? $actualDate : ''));
         } else {
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
-            // $background_color = imagecolorallocate($im, 204, 204, 204);
+//            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 0, 0, 400, 40, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
@@ -594,9 +614,8 @@ class FirmaDigitalController extends Controller
         $jwt = JWT::encode($payload, $secret);
         //die($jwt);
 
+        $page = 'LAST';
         if ($signatureType == 'visador') {
-            // $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
-            // $pocision_firma = $signaturesFlow->sign_position;
 
             if ($visatorAsSignature === true) {
                 $padding = 50;
@@ -605,18 +624,26 @@ class FirmaDigitalController extends Controller
                 $padding = 25;
                 $alto = 26;
             }
-            $coordenada_x = 35;
+
+            if($visatorType === 'elaborador'){
+                $page = '1';
+                $alto = 110;
+                $coordenada_x = 65;
+                $posicion_firma = $positionVisatorType;
+            }elseif($visatorType === 'revisador'){
+                $page = '1';
+                $alto = 110;
+                $coordenada_x = 330;
+                $posicion_firma = $positionVisatorType;
+            }else{
+                $coordenada_x = 65;
+            }
+
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $milimetros_y_desde_abajo = 107;
-            $milimetros_x_desde_la_izquierda = 22;
-            $factor_y = 2.8248;
-            $factor_x = 2.8248;
-            $coordenada_x = $milimetros_x_desde_la_izquierda * $factor_x;
-            $coordenada_y = $milimetros_y_desde_abajo * $factor_y;
-            // $coordenada_x = 62;
-            // $coordenada_y = 302;
+            ($custom_x_axis) ? $coordenada_x = $custom_x_axis : $coordenada_x = 310;
+            ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
         }
@@ -645,7 +672,7 @@ class FirmaDigitalController extends Controller
                                         <lly>" . $coordenada_y . "</lly>
                                         <urx>" . ($coordenada_x + $ancho) . "</urx>
                                         <ury>" . ($coordenada_y + $alto) . "</ury>
-                                        <page>LAST</page>
+                                        <page>" . $page . "</page>
                                         <image>BASE64</image>
                                         <BASE64VALUE>$firma</BASE64VALUE>
                                     </Visible>
