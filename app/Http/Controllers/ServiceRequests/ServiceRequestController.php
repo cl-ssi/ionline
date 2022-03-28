@@ -267,7 +267,7 @@ class ServiceRequestController extends Controller
    */
   public function create()
   {
-    $users = User::orderBy('name', 'ASC')->get();
+    $users = User::where('organizational_unit_id',Auth::user()->organizationalUnit->id)->orderBy('name', 'ASC')->get();    
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
