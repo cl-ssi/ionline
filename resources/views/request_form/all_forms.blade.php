@@ -28,7 +28,7 @@
           <th>Items</th>
           <th>Espera</th>
           <th>Etapas de aprobación</th>
-          <th style="width: 7%">Fecha de Aprobación</th>
+          <th style="width: 7%">Fecha de Aprobación Depto de Gestión de Abastecimiento</th>
           <th></th>
         </tr>
       </thead>
