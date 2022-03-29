@@ -130,13 +130,13 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-6">
                         <label for="forRut">Folio Requerimiento SIGFE:</label>
-                        <input wire:model="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
+                        <input wire:model.defer="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
                         @error('sigfe') <span class="error text-danger">{{ $message }}</span> @enderror
                     </fieldset>
 
                     <fieldset class="form-group col-sm-6">
                       <label>Programa Asociado:</label><br>
-                      <input wire:model="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
+                      <input wire:model.defer="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
                       @error('program') <span class="error text-danger">{{ $message }}</span> @enderror
                     </fieldset>
                 </div>
@@ -146,7 +146,7 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-12">
                         <label for="for_comment">Observación:</label>
-                        <textarea wire:model.lazy="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                        <textarea wire:model.defer="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
                         @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
                         </fieldset>
                 </div>
