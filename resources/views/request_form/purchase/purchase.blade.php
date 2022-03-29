@@ -895,12 +895,8 @@
         calculateAmount(true)
     });
 
-    document.getElementById("save_btn").disabled = {
-        {
-            old('_token') === null ? 'true' : 'false'
-        }
-    } // favor de no modificar esta línea
-
+    document.getElementById("save_btn").disabled = {{old('_token') === null ? 'true' : 'false'}} // favor de no modificar esta línea
+    
     @if(isset($result))
     document.getElementById("save_btn").disabled = false;
     @endif
