@@ -136,7 +136,7 @@
                 @foreach($applicants as $key => $applicant)
                   <tr>
                       <td>{{ $key + 1 }}</td>
-                      <td>{{ $applicant->technicalEvaluation->requestReplacementStaff->name }}</td>
+                      <td><a href="{{ route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation) }}">{{ $applicant->technicalEvaluation->requestReplacementStaff->name }}</a></td>
                       <td>{{ $applicant->psycholabor_evaluation_score }}</td>
                       <td>{{ $applicant->technical_evaluation_score }}</td>
                       <td>{{ $applicant->observations }}</td>
