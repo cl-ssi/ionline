@@ -39,11 +39,25 @@
                 @endforeach
             </select>
         </fieldset>
-
-
-        <fieldset class="form-group col-5 col-md-2">
-            <label for="">&nbsp;</label>
-            <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="form-row">
+        <fieldset class="form-group col-6 col-md-4">
+            <label for="for_rut">Comprador</label>
+            <select name="purchaser_user_id" data-container="#for-bootstrap-select" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5">
+                <option value="">Seleccione...</option>
+                @foreach($users as $user)
+                <option value="{{ $user->id }}" {{ (old('purchaser_user_id')==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
+                @endforeach
+            </select>
         </fieldset>
+        <fieldset class="form-group col-5 col-md-2">
+        <label for="">&nbsp;</label>
+        <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+    </fieldset>
+
+    </div>
+
+
+    
     </div>
 </form>
