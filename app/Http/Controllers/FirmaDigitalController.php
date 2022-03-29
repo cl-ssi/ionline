@@ -424,14 +424,13 @@ class FirmaDigitalController extends Controller
 
             if($visatorType === 'elaborador'){
                 $page = '1';
-                $alto = 110;
                 $coordenada_x = 65;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
-
             }elseif($visatorType === 'revisador'){
                 $page = '1';
-                $alto = 110;
                 $coordenada_x = 330;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
             }else{
                 $coordenada_x = 65;
@@ -448,6 +447,7 @@ class FirmaDigitalController extends Controller
             if($visatorType === 'aprobador'){
                 $page = '1';
                 $coordenada_x = 330;
+                $coordenada_y = 83;
             }
         }
 
@@ -535,16 +535,16 @@ class FirmaDigitalController extends Controller
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
 //        $signatureType  = 'firmante';
-        $signatureType  = 'firmante';
+        $signatureType  = 'visador';
         $docId          = 55555;
         $verificationCode = 'asaasf';
         $visatorAsSignature = true;
-        $ct_firmas_visator  = 3;
-        $posicion_firma     = 3;
+        $ct_firmas_visator  = 4;
+        $posicion_firma     = 4;
         $custom_x_axis = null;
         $custom_y_axis = null;
-        $visatorType = 'aprobador';
-        $positionVisatorType = 3;
+        $visatorType = 'revisador';
+        $positionVisatorType = 1;
 
         /* Confección del cuadro imagen de la firma */
         $font_light     = public_path('fonts/verdana-italic.ttf');
@@ -633,15 +633,13 @@ class FirmaDigitalController extends Controller
 
             if($visatorType === 'elaborador'){
                 $page = '1';
-                $alto = 110;
                 $coordenada_x = 65;
-                $alto = 280;
+                $alto = 320;
                 $posicion_firma = $positionVisatorType;
             }elseif($visatorType === 'revisador'){
                 $page = '1';
-                $alto = 110;
                 $coordenada_x = 330;
-                $alto = 280;
+                $alto = 320;
                 $posicion_firma = $positionVisatorType;
             }else{
                 $coordenada_x = 65;
