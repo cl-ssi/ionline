@@ -22,6 +22,9 @@ class ShowLegalQualityRequest extends Component
 
     public $requestReplacementStaff;
 
+    /* Para editar y precargar los select */
+    public $legalQualitySelected = null;
+
     public function render()
     {
         return view('livewire.replacement-staff.show-legal-quality-request',[
