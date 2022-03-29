@@ -1,5 +1,5 @@
 <div>
-  <div class="row">
+  <div class="form-row">
       <fieldset class="form-group col-2">
           <label for="for_barcode">Código de Barra</label>
           <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode" wire:keydown.enter="foo" wire:model="barcode" >
@@ -26,7 +26,7 @@
 
   </div>
 
-  <div class="row">
+  <div class="form-row">
 
 
      <fieldset class="form-group col-10">

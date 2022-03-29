@@ -14,7 +14,7 @@
   @method('PUT')
 	@csrf
 
-<div class="row">
+<div class="form-row">
       <fieldset class="form-group col-3">
           <label for="for_date">Fecha</label>
           <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$dispatch->date->format('Y-m-d')}}">
@@ -32,7 +32,7 @@
       </fieldset>
 </div>
 
-<div class="row">
+<div class="form-row">
     <fieldset class="form-group col">
         <label for="for_note">Nota</label>
         <input type="text" class="form-control" id="for_note" placeholder="" name="notes" value="{{$dispatch->notes}}">
