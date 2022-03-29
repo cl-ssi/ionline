@@ -268,9 +268,9 @@ class ServiceRequestController extends Controller
   public function create()
   {
     // $users = User::where('organizational_unit_id',Auth::user()->organizationalUnit->id)->orderBy('name', 'ASC')->get();
-    $users = User::whereHas('organizationalUnit', function ($q) {
-      $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
-    })->get();
+    // $users = User::whereHas('organizationalUnit', function ($q) {
+    //   $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+    // })->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
@@ -292,7 +292,7 @@ class ServiceRequestController extends Controller
       return redirect()->back();
     }
 
-    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'users', 'establishments', 'professions'));
+    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'establishments', 'professions'));
   }
 
   /**
