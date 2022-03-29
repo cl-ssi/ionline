@@ -444,6 +444,11 @@ class FirmaDigitalController extends Controller
             ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
+
+            if($visatorType === 'aprobador'){
+                $page = '1';
+                $coordenada_x = 330;
+            }
         }
 
         $data = [
@@ -529,15 +534,16 @@ class FirmaDigitalController extends Controller
         $pdf            = 'samples/protocolo_small.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
+//        $signatureType  = 'firmante';
         $signatureType  = 'firmante';
         $docId          = 55555;
         $verificationCode = 'asaasf';
-        $visatorAsSignature = false;
+        $visatorAsSignature = true;
         $ct_firmas_visator  = 3;
         $posicion_firma     = 3;
         $custom_x_axis = null;
         $custom_y_axis = null;
-        $visatorType = 'revisador';
+        $visatorType = 'aprobador';
         $positionVisatorType = 3;
 
         /* Confección del cuadro imagen de la firma */
@@ -629,11 +635,13 @@ class FirmaDigitalController extends Controller
                 $page = '1';
                 $alto = 110;
                 $coordenada_x = 65;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
             }elseif($visatorType === 'revisador'){
                 $page = '1';
                 $alto = 110;
                 $coordenada_x = 330;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
             }else{
                 $coordenada_x = 65;
@@ -646,6 +654,12 @@ class FirmaDigitalController extends Controller
             ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
+
+            if($visatorType === 'aprobador'){
+                $page = '1';
+                $coordenada_x = 330;
+                $coordenada_y = 83;
+            }
         }
 
         //dd($coordenada_x, $coordenada_y);
