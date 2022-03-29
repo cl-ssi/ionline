@@ -69,7 +69,7 @@ class SignatureController extends Controller
             foreach ($myAuthorities as $myAuthority){
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
                 ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to]);
-                
+
                 $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
             }
             $mySignatures = $mySignatures->orderByDesc('id')->paginate(20);
@@ -146,8 +146,6 @@ class SignatureController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // \Debugbar::info(unserialize($request->visator_type));
-
         DB::beginTransaction();
 
         try {
@@ -192,6 +190,13 @@ class SignatureController extends Controller
                 }
             }
 
+            $visatorTypes = null;
+            if($request->has('visator_types')){
+                $visatorTypes = unserialize($request->visator_types);
+                $elaboradorCount = 0;
+                $revisadorCount = 0;
+            }
+
             if ($request->ou_id_signer != null) {
                 $signaturesFlow = new SignaturesFlow();
                 $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
@@ -200,19 +205,14 @@ class SignatureController extends Controller
                 $signaturesFlow->user_id = $request->user_signer;
                 $signaturesFlow->custom_x_axis = $request->custom_x_axis;
                 $signaturesFlow->custom_y_axis = $request->custom_y_axis;
+                if ($visatorTypes != null) {
+                    $signaturesFlow->visator_type = 'aprobador';
+                }
                 $signaturesFlow->save();
             }
 
             if ($request->has('ou_id_visator'))
             {
-                if($request->has('visator_types')){
-                    $visatorTypes = unserialize($request->visator_types);
-                    $elaboradorCount = 0;
-                    $revisadorCount = 0;
-                }else{
-                    $visatorTypes = null;
-                }
-
                 foreach ($request->ou_id_visator as $key => $ou_id_visator) {
                     $signaturesFlow = new SignaturesFlow();
                     $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
@@ -225,7 +225,7 @@ class SignatureController extends Controller
                         if($visatorTypes[$key] === 'elaborador') {
                             $elaboradorCount = $elaboradorCount +1;
                             $signaturesFlow->position_visator_type = $elaboradorCount;
-                        }  
+                        }
                         else{
                             $revisadorCount = $revisadorCount +1;
                             $signaturesFlow->position_visator_type = $revisadorCount;
@@ -280,7 +280,7 @@ class SignatureController extends Controller
         // $cont=0;
 
         // foreach ($dest_vec as $dest) {
-        //     if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+        //     if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0)
         //     {
         //         $cont=$cont+1;
         //         $tipo = null;
