@@ -89,7 +89,7 @@
                         <td>{{ $requestForm->justification }}</td>
                     </tr>
                     <tr>
-                        <th class="table-active" colspan="2" scope="row">Comprador</th>
+                        <th class="table-active" scope="row">Comprador</th>
                         <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
                     </tr>
 
@@ -895,11 +895,7 @@
         calculateAmount(true)
     });
 
-    document.getElementById("save_btn").disabled = {
-        {
-            old('_token') === null ? 'true' : 'false'
-        }
-    } // favor de no modificar esta línea
+    document.getElementById("save_btn").disabled = {{old('_token') === null ? 'true' : 'false'}} // favor de no modificar esta línea
 
     @if(isset($result))
     document.getElementById("save_btn").disabled = false;

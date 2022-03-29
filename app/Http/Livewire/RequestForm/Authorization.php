@@ -172,6 +172,7 @@ class Authorization extends Component
           }
           else{
               if($event->event_type == 'supply_event'){
+                  $this->requestForm->load('purchasers');
                   $emails = [$this->requestForm->user->email,
                       $this->requestForm->contractManager->email,
                       $this->requestForm->purchasers->first()->email
