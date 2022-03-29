@@ -18,14 +18,15 @@ class CreateTypes extends Component
   public $responsabilityCenters;
   public $users;
   public $a;
+  public $signatures;
 
   public $signatureFlows = [];
 
   public function mount()
   {    
-    $this->users = User::whereHas('organizationalUnit', function ($q) {
-      $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
-    })->get();
+    // $this->users = User::whereHas('organizationalUnit', function ($q) {
+    //   $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+    // })->get();
   }
 
   public function render()
@@ -143,6 +144,17 @@ class CreateTypes extends Component
 
     if ($this->subdirection_ou_id == 85) {
       $this->signatureFlows['Subdirector'] = 13835321;
+    }
+
+    /*
+    [Planificación CG RRHH] => 15685508 
+    [S.G.D.P SSI] => 15685508 
+    [S.D.A SSI] => 17432199 
+    */
+    $this->signatures = [];
+    foreach($this->signatureFlows as $ou_name => $user_id)
+    {
+      $this->signatures[$ou_name] = User::find($user_id);
     }
 
     // $this->emit('listener',$this->program_contract_type, $this->type);
