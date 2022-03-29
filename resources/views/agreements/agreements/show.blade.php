@@ -59,6 +59,8 @@
     <li class="nav-item">
         @if($agreement->program_id == 3) <!-- convenio retiro voluntario -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+        @elseif($agreement->program_id == 50) <!-- convenio de colaboración -->
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWordCollaboration', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->period >= 2022)
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectEvalOption"
@@ -98,7 +100,7 @@
         <li class="nav-item">
             <a href="#" class="nav-link text-secondary" data-toggle="modal"
                             data-target="#selectSignerRes"
-                            data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ''), $agreement )}}">
+                            data-formaction="{{ route('agreements.createWordRes'. ($agreement->program_id == 3 ? 'Withdrawal' : ($agreement->program_id == 50 ? 'Collaboration' : '')), $agreement )}}">
                             <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
         </li>
         @else
@@ -130,7 +132,7 @@
       </h5>
     </div>
 
-    <div id="collapseOne" class="collapse {{$agreement->program_id == 3 ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordion">
+    <div id="collapseOne" class="collapse {{in_array($agreement->program_id, [3, 50]) ? 'show' : '' }}" aria-labelledby="headingOne" data-parent="#accordion">
       <div class="card-body">
         <form method="POST" class="form-horizontal" enctype="multipart/form-data" action="{{ route('agreements.update',$agreement->id) }}" >
             @csrf
@@ -246,7 +248,7 @@
                     <input type="integer" name="municipality_adress" class="form-control" id="municipality_adress" value="{{ $agreement->municipality_adress }}" readonly>
                 </fieldset>
             </div>
-
+            @if($agreement->program_id != 50)
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
                 <fieldset class="form-group col-3">
@@ -273,6 +275,7 @@
                 </fieldset>
                 @endif
             </div>
+            @endif
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
                 <fieldset class="form-group col-3">
@@ -306,7 +309,7 @@
     </div>
   </div>
 </div>
-@if($agreement->program_id != 3)
+@if(!in_array($agreement->program_id, [3, 50]))
     <div class="card mt-3 mb-3 small">
         <div class="card-body">
             <h5>Montos</h5>
