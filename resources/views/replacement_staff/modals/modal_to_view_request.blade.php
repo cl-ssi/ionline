@@ -3,7 +3,7 @@
   <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Gestión de Solicitudes para aprobación</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">Resumen de la Solicitud de Contratación</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -156,17 +156,17 @@
               </table>
           </div>
 
-          <div class="row">
+          <!-- <div class="row">
               <div class="col">
                   @if($requestReplacementStaff->technicalEvaluation &&
                     $requestReplacementStaff->end_date < now()->toDateString() &&
                       $requestReplacementStaff->technicalEvaluation->date_end != null &&
                         $requestReplacementStaff->user_id == Auth::user()->id)
-                      <a class="btn btn-success float-right" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
+                      <a class="btn btn-success float-right btn-sm" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
                           <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
                   @endif
               </div>
-          </div>
+          </div> -->
 
           <br>
 
@@ -248,7 +248,7 @@
                           </thead>
                           <tbody>
                               @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
-                              <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
+                              <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
                                   <td>
                                     <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
                                       target="_blank">{{ $applicant->replacementStaff->FullName }}
@@ -258,7 +258,14 @@
                                       <span class="badge bg-success">Seleccionado</span>
                                     @endif
                                     @if($applicant->desist == 1)
-                                      <span class="badge bg-danger">Desiste Selección</span>
+                                      <span class="badge bg-danger">
+                                          @if($applicant->reason == 'renuncia a reemplazo')
+                                            Renuncia a reemplazo (Posterior ingreso)
+                                          @endif
+                                          @if($applicant->reason == 'rechazo oferta laboral')
+                                            Rechazo oferta laboral (Previo ingreso)
+                                          @endif
+                                      </span>
                                     @endif
                                   </td>
                                   <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>

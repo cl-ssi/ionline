@@ -420,6 +420,13 @@ class RequestForm extends Model implements Auditable
     if ($request->input('contract_manager_id') != "") {
       $query->where('contract_manager_id', $request->input('contract_manager_id'));
     }
+
+    if ($request->input('purchaser_user_id') != "") {
+      $query->whereHas('purchasers', function ($q) use ($request) {
+        $q->Where('purchaser_user_id', $request->input('purchaser_user_id'));
+      });
+    }
+
     return $query;
   }
 

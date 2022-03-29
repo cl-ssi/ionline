@@ -221,7 +221,8 @@ class RequestReplacementStaffController extends Controller
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
-        return view('replacement_staff.request.create_extension', compact('requestReplacementStaff'));
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
     }
 
     /**

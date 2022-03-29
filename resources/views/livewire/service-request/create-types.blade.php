@@ -21,28 +21,14 @@
   <fieldset class="form-group col-12 col-md-4">
     <label for="for_users">Responsable</label>
     <div id="div_responsable_id" wire:ignore>
-      <select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_responsable_id">
-        <option value=""></option>
-        @if($users)
-          @foreach($users as $key => $user)
-            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-          @endforeach
-        @endif
-      </select>
+    @livewire('search-select-user', ['selected_id' => 'responsable_id', 'required' => 'required'])
     </div>
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-4">
     <label for="for_users">Supervisor</label>
     <div id="div_users" wire:ignore>
-      <select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_users">
-        <option value=""></option>
-        @if($users)
-          @foreach($users as $key => $user)
-            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-          @endforeach
-        @endif
-      </select>
+    @livewire('search-select-user', ['selected_id' => 'users[]', 'required' => 'required'])
     </div>
   </fieldset>
 
@@ -75,18 +61,12 @@
   </fieldset>
 
 </div>
-
 <div class="row" wire:loading.remove>
-  @foreach($signatureFlows as $key => $signatureFlow)
+  @foreach($signatures as $ou_name => $user)
     <fieldset class="form-group col-sm-4">
-        <label for="for_users">{{$key}}</label>
-        <select name="users[]" class="form-control" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
-          @if($users)
-            @foreach($users as $key => $user)
-              <option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-            @endforeach
-          @endif
-        </select>
+        <label for="for_users">{{ $ou_name }}</label>
+        <input class="form-control" value="{{ $user->fullName }}" readonly>
+        <input type="hidden" name="users[]" value="{{ $user->id }}" readonly>
     </fieldset>
   @endforeach
 </div>

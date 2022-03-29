@@ -98,16 +98,33 @@
     $('#forquotas2,#fortotal_amount').prop('required', false);
 
     $('select[name=program_id]').change(function() {
-        if (this.value != 3) {
-            $('#agreement').show();
-            $('#forquotas').prop('required', true);
-            $('#agreement2,#agreement2_1').hide();
-            $('#forquotas2,#fortotal_amount').prop('required', false);
-        } else { //retiro voluntario
+        // if (this.value != 3) {
+        //     $('#agreement').show();
+        //     $('#forquotas').prop('required', true);
+        //     $('#agreement2,#agreement2_1').hide();
+        //     $('#forquotas2,#fortotal_amount').prop('required', false);
+        // } else { //retiro voluntario
+        //     $('#agreement').hide();
+        //     $('#forquotas').prop('required', false);
+        //     $('#agreement2,#agreement2_1').show();
+        //     $('#forquotas2,#fortotal_amount').prop('required', true);
+        // }
+
+        if (this.value == 3) { // retiro voluntario
             $('#agreement').hide();
             $('#forquotas').prop('required', false);
             $('#agreement2,#agreement2_1').show();
             $('#forquotas2,#fortotal_amount').prop('required', true);
+        } else if(this.value == 50) { // de colaboración
+            $('#agreement').show();
+            $('#forquotas').prop('required', false).prop('disabled', true);
+            $('#agreement2,#agreement2_1').hide();
+            $('#forquotas2,#fortotal_amount').prop('required', false);
+        } else {
+            $('#agreement').show();
+            $('#forquotas').prop('required', true).prop('disabled', false);
+            $('#agreement2,#agreement2_1').hide();
+            $('#forquotas2,#fortotal_amount').prop('required', false);
         }
     });
 </script>

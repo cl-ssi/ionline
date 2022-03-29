@@ -103,7 +103,11 @@ class AgreementController extends Controller
             $agreement->total_amount = $request->total_amount;
             $agreement->quotas = $request->quotas;
             $agreement->save();
-        }else { // Convenio de ejecución
+        } elseif($request->program_id == 50) { // Convenio de colaboración
+            $agreement->total_amount = null;
+            $agreement->quotas = 0;
+            $agreement->save();
+        } else { // Convenio de ejecución
             $quota_options = $this->getQuotaOptions();
             $quota_option_selected = $quota_options->firstWhere('id', $request->quota_id);
             $agreement->quotas = $quota_option_selected['quotas'];
@@ -345,7 +349,7 @@ class AgreementController extends Controller
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
         $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
-        $signature->description = 'Documento convenio '.($agreement->program_id == 3 ? 'de retiro voluntario por ' : 'de ejecución del programa ').$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
+        $signature->description = 'Documento convenio '.($agreement->program_id == 3 ? 'de retiro voluntario por ' : ($agreement->program_id == 50 ? '' : 'de ejecución del programa ')).$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;

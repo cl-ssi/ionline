@@ -6,6 +6,19 @@
 
 @include('replacement_staff.nav')
 
+@if($technicalEvaluation->requestReplacementStaff->requestFather)
+<div class="row">
+    <div class="col">
+      <div class="alert alert-primary" role="alert">
+          Este formulario corresponde a una extensión del formulario Nº
+          <a target="_blank" href="{{ route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff->requestFather->technicalEvaluation) }}">
+              {{ $technicalEvaluation->requestReplacementStaff->requestFather->id }} - {{ $technicalEvaluation->requestReplacementStaff->requestFather->name }}
+          </a>
+      </div>
+    <div>
+</div>
+@endif
+
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
         <thead class="small">

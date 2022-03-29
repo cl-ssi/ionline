@@ -95,7 +95,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="for_purchaser_observation">Observación Comprador:</label>
-                    <textarea wire:model.lazy="purchaser_observation" wire:click="resetError" name="purchaser_observation" class="form-control form-control-sm" rows="3" readonly></textarea>
+                    <textarea wire:model.defer="purchaser_observation" wire:click="resetError" name="purchaser_observation" class="form-control form-control-sm" rows="3" readonly></textarea>
                     @error('purchaser_observation') <span class="error text-danger">{{ $message }}</span> @enderror
                 </fieldset>
             </div>
@@ -104,7 +104,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="for_comment">Observación:</label>
-                    <textarea wire:model.lazy="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
+                    <textarea wire:model.defer="comment" wire:click="resetError" name="comment" class="form-control form-control-sm" rows="3"></textarea>
                     @error('comment') <span class="error text-danger">{{ $message }}</span> @enderror
                 </fieldset>
             </div>
