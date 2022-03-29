@@ -12,8 +12,7 @@
 	@csrf
 
 	@livewire('service-request.create-types',['subdirections' => $subdirections,
-	'responsabilityCenters' => $responsabilityCenters,
-	'users' => $users
+	'responsabilityCenters' => $responsabilityCenters	
 	])
 
 	<br>
