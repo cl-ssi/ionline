@@ -15,6 +15,13 @@ class ProductDuedateBatchStock extends Component
     public $count;
     public $barcode;
     public $unity;
+    
+    public function mount()
+    {
+      	$this->products = Product::where('pharmacy_id',session('pharmacy_id'))
+			->where('stock','>',0)
+            ->orderBy('name', 'ASC')->get();
+    }
 
     public function foo(){
       $product = Product::where('barcode',$this->barcode)->first();
@@ -24,7 +31,7 @@ class ProductDuedateBatchStock extends Component
     public function render()
     {
         // dd($this->barcode);
-        $product = Product::find($this->product_id);
+        $product = Product::with(['purchaseItems','receivingItems'])->find($this->product_id);
         // foreach ($products as $key1 => $product) {
         $this->array = [];
         if ($product) {

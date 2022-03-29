@@ -95,8 +95,10 @@ class DispatchController extends Controller
     public function show(Dispatch $dispatch)
     {
       //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
-      $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->orderBy('name', 'ASC')->get();
+      $products = Product::with(['purchaseItems','receivingItems'])
+          ->where('pharmacy_id',session('pharmacy_id'))
+          ->orderBy('name', 'ASC')->get();
+          
       $matrix_due_date = null;
       $cont = 0;
       foreach ($products as $key1 => $product) {
@@ -210,9 +212,11 @@ class DispatchController extends Controller
      */
     public function edit(Dispatch $dispatch)
     {
-      //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
-      $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->orderBy('name', 'ASC')->get();
+		//obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
+		$products = Product::with(['purchaseItems','receivingItems'])
+			->where('pharmacy_id',session('pharmacy_id'))
+			->orderBy('name', 'ASC')->get();
+
       $matrix_due_date = null;
       $cont = 0;
       foreach ($products as $key1 => $product) {
