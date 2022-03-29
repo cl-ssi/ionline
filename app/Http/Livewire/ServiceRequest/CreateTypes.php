@@ -23,9 +23,9 @@ class CreateTypes extends Component
 
   public function mount()
   {    
-    $this->users = User::whereHas('organizationalUnit', function ($q) {
-      $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
-    })->get();
+    // $this->users = User::whereHas('organizationalUnit', function ($q) {
+    //   $q->where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+    // })->get('id');
   }
 
   public function render()
