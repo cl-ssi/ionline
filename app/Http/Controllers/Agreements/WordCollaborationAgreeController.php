@@ -7,6 +7,7 @@ use App\Agreements\Agreement;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\Signer;
 use App\Agreements\Stage;
+use App\Establishment;
 use App\Municipality;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Support\Str;
 
-class WordWithdrawalAgreeController extends Controller
+class WordCollaborationAgreeController extends Controller
 {
     public function createWordDocx($id)
     {
@@ -29,25 +30,31 @@ class WordWithdrawalAgreeController extends Controller
             $agreement->stages()->create(['agreement_id' => $id,'group' => 'CON','type' => 'RTP', 'date' => Carbon::now()->toDateTimeString()]);
         }
 
-        // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
-        $formatter = new NumeroALetras;
-        $formatter->apocope = true;
-        $totalConvenio = $agreement->total_amount;
-        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
-        $totalQuotas = $agreement->quotas;
-        
-        $amountPerQuota = round($totalConvenio/$totalQuotas);
-        $diff = $totalConvenio - $amountPerQuota * $totalQuotas; //residuo
-        $totalQuotasText = $diff ? ($totalQuotas - 1). ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota,0, 'pesos','')).') y una cuota de $'.number_format($amountPerQuota + $diff,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($amountPerQuota + $diff,0, 'pesos','')).')'
-                                 : $totalQuotas. ' cuotas de $'.number_format($amountPerQuota,0,",",".").' ('.$this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos','')).')';
+        // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
+        $establishment_list = unserialize($agreement->establishment_list) == null ? [] : unserialize($agreement->establishment_list);
+        $establishments = Establishment::where('commune_id', $agreement->Commune->id)
+                                       ->whereIn('id', $establishment_list)->get();
 
-    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenioretiro'.$agreement->period.'.docx'));
+        // ARRAY PARA OBTNER LAS INSTITUCIONES ASOCIADAS AL CONVENIO
+        // SI EL ARRAY DE INSTITUCIONES VIENE VACIO
+        if($establishments->isEmpty()){
+            $arrayEstablishmentConcat = '';
+        }
+        else { 
+            foreach ($establishments as $key => $establishment) {
+                $arrayEstablishment[] = array('index' => $key+1
+                                             ,'establecimientoTipo' => $establishment->type
+                                             ,'establecimientoNombre' => $establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
+                                         );
+            }
+            $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
+        }
+
+    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/conveniocolaboracion'.$agreement->period.'.docx'));
 
     	$periodoConvenio = $agreement->period;
         $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del año '.date('Y', strtotime($agreement->date));
-    	$numResolucion = $agreement->number;
-        $fechaResolucion = $agreement->resolution_date;
-        $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
         
         // Alcalde y su municipalidad
         $alcaldeApelativo = $agreement->representative_appelative;
@@ -73,13 +80,7 @@ class WordWithdrawalAgreeController extends Controller
         $directorNationality = Str::contains($agreement->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
 
 		$templateProcesor->setValue('periodoConvenio',$periodoConvenio);
-		$templateProcesor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
-		$templateProcesor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
-		$templateProcesor->setValue('totalConvenioLetras',$totalConvenioLetras);
-		$templateProcesor->setValue('totalQuotas',$totalQuotas);
-        $templateProcesor->setValue('totalQuotasText', $totalQuotasText);
-		$templateProcesor->setValue('numResolucion',$numResolucion);
-		$templateProcesor->setValue('fechaResolucion',$fechaResolucion);
+		$templateProcesor->setValue('fechaConvenio',$fechaConvenio);
 		$templateProcesor->setValue('comuna',$comuna);
         $templateProcesor->setValue('comunaRut',$comunaRut);
         $templateProcesor->setValue('ilustre',ucfirst(mb_strtolower($ilustre)));
@@ -97,9 +98,11 @@ class WordWithdrawalAgreeController extends Controller
         $templateProcesor->setValue('directorDecreto',$directorDecreto);
         $templateProcesor->setValue('directorNationality',$directorNationality);
 
-    	$templateProcesor->saveAs(storage_path('app/public/Prev-Conv-Retiro.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
+        $templateProcesor->setValue('establecimientosListado',$arrayEstablishmentConcat);
 
-    	return response()->download(storage_path('app/public/Prev-Conv-Retiro.docx'))->deleteFileAfterSend(true);
+    	$templateProcesor->saveAs(storage_path('app/public/Prev-Conv-Colaboracion.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
+
+    	return response()->download(storage_path('app/public/Prev-Conv-Colaboracion.docx'))->deleteFileAfterSend(true);
     }
 
     public function createResWordDocx(Request $request, $id)
