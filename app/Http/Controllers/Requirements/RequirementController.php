@@ -346,176 +346,178 @@ class RequirementController extends Controller
    */
   public function store(Request $request)
   {
-    //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
-    if ($request->users == null) {
-      $req = $request->All();
-      if ($request->limit_at <> null) {
-        $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
-      }
-
-      $requirement = new Requirement($req);
-      $requirement->user()->associate(Auth::user());
-
-      $requirement->save();
-      $requirement->categories()->attach($request->input('category_id'));
+      //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
+      if ($request->users == null) {
+          $req = $request->All();
+          if ($request->limit_at <> null) {
+              $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
+          }
 
 
+          $requirement = new Requirement($req);
+          $requirement->user()->associate(Auth::user());
 
-      //se guarda evento
-      $firstEvent = new Event($request->All());
-      $firstEvent->from_user()->associate(Auth::user());
-      $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
-      $firstEvent->requirement()->associate($requirement);
-      $firstEvent->save();
+          //Si el usuario destino es autoridad, se marca el requerimiento
+          $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
+          $requirement->to_authority = ($request->to_user_id == $managerUserId);
 
-      //asocia evento con documentos
-      if ($request->documents <> null) {
-        foreach ($request->documents as $key => $document_aux) {
-          $document = Document::find($document_aux);
-          $firstEvent->documents()->attach($document);
-        }
-      }
-
-      //guarda archivos
-      if ($request->hasFile('forfile')) {
-        foreach ($request->file('forfile') as $file) {
-          $filename = $file->getClientOriginalName();
-          $fileModel = new File;
-          $fileModel->file = $file->store('requirements');
-          $fileModel->name = $filename;
-          $fileModel->event_id = $firstEvent->id;
-          $fileModel->save();
-        }
-      }
-
-      $requirement->events()->save($firstEvent);
-
-      preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $firstEvent->to_user->email, $emails);
-      if (env('APP_ENV') == 'production') {
-        Mail::to($emails[0])
-          ->send(new RequirementNotification($requirement));
-      }
+          $requirement->save();
+          $requirement->categories()->attach($request->input('category_id'));
 
 
+          //se guarda evento
+          $firstEvent = new Event($request->All());
+          $firstEvent->from_user()->associate(Auth::user());
+          $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+          $firstEvent->requirement()->associate($requirement);
+          $firstEvent->save();
 
-      session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
-    } else {
+          //asocia evento con documentos
+          if ($request->documents <> null) {
+              foreach ($request->documents as $key => $document_aux) {
+                  $document = Document::find($document_aux);
+                  $firstEvent->documents()->attach($document);
+              }
+          }
 
-      //encuentra cuales son usuarios para requerimientos, y cuales son en copia
-      $users_req = null;
-      $users_enCopia = null;
-      foreach ($request->enCopia as $key => $enCopia) {
-        if ($enCopia == 0) {
-          $users_req[] = $request->users[$key];
-        }
-        if ($enCopia == 1) {
-          $users_enCopia[] = $request->users[$key];
-        }
-      }
+          //guarda archivos
+          if ($request->hasFile('forfile')) {
+              foreach ($request->file('forfile') as $file) {
+                  $filename = $file->getClientOriginalName();
+                  $fileModel = new File;
+                  $fileModel->file = $file->store('requirements');
+                  $fileModel->name = $filename;
+                  $fileModel->event_id = $firstEvent->id;
+                  $fileModel->save();
+              }
+          }
 
-      //se crearán requerimientos según usuarios agregados en tabla dinámica.
-      $users = array_unique($users_req); //distinct
-      $flag = 0;
+          $requirement->events()->save($firstEvent);
 
-      //obtiene nro para agrupar requerimientos
-      if (Requirement::whereNotNull('group_number')->count() === 0) {
-        $group_number = 1;
+          preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $firstEvent->to_user->email, $emails);
+          if (env('APP_ENV') == 'production') {
+              Mail::to($emails[0])
+                  ->send(new RequirementNotification($requirement));
+          }
+
+
+          session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
       } else {
-        $group_number = Requirement::whereNotNull('group_number')
-          ->latest()
-          ->first()
-          ->group_number + 1;
-      }
 
-      //$requerimientos = '';
-      $usersEmail = '';
-      foreach ($users as $key => $user) {
+          //encuentra cuales son usuarios para requerimientos, y cuales son en copia
+          $users_req = null;
+          $users_enCopia = null;
+          foreach ($request->enCopia as $key => $enCopia) {
+              if ($enCopia == 0) {
+                  $users_req[] = $request->users[$key];
+              }
+              if ($enCopia == 1) {
+                  $users_enCopia[] = $request->users[$key];
+              }
+          }
 
-        $req = $request->All();
-        if ($request->limit_at <> null) {
-          $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
-        }
+          //se crearán requerimientos según usuarios agregados en tabla dinámica.
+          $users = array_unique($users_req); //distinct
+          $flag = 0;
 
-        //se crea requerimiento
-        $requirement = new Requirement($req);
-        $requirement->user()->associate(Auth::user());
-        $requirement->group_number = $group_number;
-        $requirement->save();
+          //obtiene nro para agrupar requerimientos
+          if (Requirement::whereNotNull('group_number')->count() === 0) {
+              $group_number = 1;
+          } else {
+              $group_number = Requirement::whereNotNull('group_number')
+                      ->latest()
+                      ->first()
+                      ->group_number + 1;
+          }
 
-        //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
-        if ($users_enCopia <> null) {
-          if ($flag == 0) {
-            foreach ($users_enCopia as $key => $user_) {
-              $user_aux = User::where('id', $user_)->get();
+          //$requerimientos = '';
+          $usersEmail = '';
+          foreach ($users as $key => $user) {
+
+              $req = $request->All();
+              if ($request->limit_at <> null) {
+                  $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
+              }
+
+              //se crea requerimiento
+              $requirement = new Requirement($req);
+              $requirement->user()->associate(Auth::user());
+              $requirement->group_number = $group_number;
+              $requirement->save();
+
+              //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
+              if ($users_enCopia <> null) {
+                  if ($flag == 0) {
+                      foreach ($users_enCopia as $key => $user_) {
+                          $user_aux = User::where('id', $user_)->get();
+                          $firstEvent = new Event($request->All());
+                          $firstEvent->to_user_id = $user_;
+                          $firstEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
+                          $firstEvent->status = "en copia";
+                          $firstEvent->from_user()->associate(Auth::user());
+                          $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+                          $firstEvent->requirement()->associate($requirement);
+                          $firstEvent->save();
+
+                          $requirement->events()->save($firstEvent);
+                      }
+                      $flag = 1;
+                  }
+              }
+
+              //se ingresan los otros tipos de eventos (que no sean "en copia")
               $firstEvent = new Event($request->All());
-              $firstEvent->to_user_id = $user_;
-              $firstEvent->to_ou_id = $user_aux->first()->organizational_unit_id;
-              $firstEvent->status = "en copia";
+              //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
+              $user_aux = User::find($user);
+              if ($user_aux) {
+                  $firstEvent->to_user_id = $user_aux->id;
+                  $firstEvent->to_ou_id = $user_aux->organizational_unit_id;
+              }
               $firstEvent->from_user()->associate(Auth::user());
               $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
               $firstEvent->requirement()->associate($requirement);
               $firstEvent->save();
 
+              //Obtiene emails
+              $usersEmail .= $user_aux->first()->email . ',';
+
+              //asocia evento con documentos
+              if ($request->documents <> null) {
+                  foreach ($request->documents as $key => $document_aux) {
+                      $document = Document::find($document_aux);
+                      $firstEvent->documents()->attach($document);
+                  }
+              }
+
+              //guarda archivos
+              if ($request->hasFile('forfile')) {
+                  foreach ($request->file('forfile') as $file) {
+                      $filename = $file->getClientOriginalName();
+                      $fileModel = new File;
+                      $fileModel->file = $file->store('requirements');
+                      $fileModel->name = $filename;
+                      $fileModel->event_id = $firstEvent->id;
+                      $fileModel->save();
+                  }
+              }
+
               $requirement->events()->save($firstEvent);
-            }
-            $flag = 1;
+              //$requerimientos = $requerimientos + $firstEvent->id + ",";
           }
-        }
 
-        //se ingresan los otros tipos de eventos (que no sean "en copia")
-        $firstEvent = new Event($request->All());
-        //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
-        $user_aux = User::find($user);
-        if($user_aux){
-          $firstEvent->to_user_id = $user_aux->id;
-          $firstEvent->to_ou_id = $user_aux->organizational_unit_id;
-        }
-        $firstEvent->from_user()->associate(Auth::user());
-        $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
-        $firstEvent->requirement()->associate($requirement);
-        $firstEvent->save();
+          preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $usersEmail, $emails);
+          Mail::to($emails[0])
+              ->send(new RequirementNotification($requirement));
 
-        //Obtiene emails
-        $usersEmail .= $user_aux->first()->email . ',';
-
-        //asocia evento con documentos
-        if ($request->documents <> null) {
-          foreach ($request->documents as $key => $document_aux) {
-            $document = Document::find($document_aux);
-            $firstEvent->documents()->attach($document);
-          }
-        }
-
-        //guarda archivos
-        if ($request->hasFile('forfile')) {
-          foreach ($request->file('forfile') as $file) {
-            $filename = $file->getClientOriginalName();
-            $fileModel = new File;
-            $fileModel->file = $file->store('requirements');
-            $fileModel->name = $filename;
-            $fileModel->event_id = $firstEvent->id;
-            $fileModel->save();
-          }
-        }
-
-        $requirement->events()->save($firstEvent);
-        //$requerimientos = $requerimientos + $firstEvent->id + ",";
+          session()->flash('info', 'Los requerimientos han sido creados.');
       }
 
-      preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $usersEmail, $emails);
-      Mail::to($emails[0])
-        ->send(new RequirementNotification($requirement));
-
-      session()->flash('info', 'Los requerimientos han sido creados.');
-    }
-
-    /* Si es un requerimiento creado desde un parte envía a inbox de parte */
-    if ($requirement->parte_id) $return = 'documents.partes.index';
-    else $return = 'requirements.outbox';
+      /* Si es un requerimiento creado desde un parte envía a inbox de parte */
+      if ($requirement->parte_id) $return = 'documents.partes.index';
+      else $return = 'requirements.outbox';
 
 
-
-    return redirect()->route($return);
+      return redirect()->route($return);
   }
 
   public function asocia_categorias(Request $request)
