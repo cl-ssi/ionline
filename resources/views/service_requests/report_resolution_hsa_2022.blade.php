@@ -151,7 +151,7 @@
 
         <div class="right" style="float: right; width: 280px;">
             <div class="left" style="padding-bottom: 6px;">
-                <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+                <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
             </div>
             <div class="left" style="padding-bottom: 2px;">
                 <strong>IQUIQUE,</strong>
@@ -394,11 +394,11 @@
 
             @switch($ServiceRequest->working_day_type)
             @case('DIURNO')
-              <!-- DIURNA de lunes a viernes de 08:00 a 16:48 hrs. -->
-              {{$ServiceRequest->schedule_detail}}.
+            <!-- DIURNA de lunes a viernes de 08:00 a 16:48 hrs. -->
+            {{$ServiceRequest->schedule_detail}}.
             @break
             @case('VESPERTINO')
-              {{$ServiceRequest->schedule_detail}}.
+            {{$ServiceRequest->schedule_detail}}.
             @break
             @case('TERCER TURNO')
             de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
@@ -508,7 +508,7 @@
         <br>
         <p class="center">
             <strong>
-                TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE.
+                ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
             </strong>
         </p>
 
