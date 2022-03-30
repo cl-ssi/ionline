@@ -194,9 +194,13 @@ class Authorization extends Component
       $this->validate();
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-          if($this->eventType != 'budget_event'){
+          if(!in_array($this->eventType, ['pre_budget_event', 'budget_event'])){
             $this->requestForm->status = 'rejected';
             $this->requestForm->save();
+          } else {
+            $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+            // dd($nextEvent);
+            if(!$nextEvent->isEmpty()) $nextEvent->last()->update(['status' => 'does_not_apply']);
           }
            $event->signature_date = Carbon::now();
            $event->comment = $this->comment;

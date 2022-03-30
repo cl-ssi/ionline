@@ -294,6 +294,10 @@ class FirmaDigitalController extends Controller
      * @param int|null $ct_firmas_visator Cantidad de firmas visador
      * @param int|null $posicion_firma
      * @param bool|null $visatorAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
+     * @param int|null $custom_x_axis
+     * @param int|null $custom_y_axis
+     * @param string|null $visatorType
+     * @param int|null $positionVisatorType
      * @return array
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
@@ -412,8 +416,8 @@ class FirmaDigitalController extends Controller
         // die($jwt);
 
         $page = 'LAST';
-        if ($signatureType == 'visador')
-        {
+        if ($signatureType == 'visador') {
+
             if ($visatorAsSignature === true) {
                 $padding = 50;
                 $alto = 55;
@@ -425,18 +429,18 @@ class FirmaDigitalController extends Controller
             if($visatorType === 'elaborador'){
                 $page = '1';
                 $coordenada_x = 65;
-                $alto = 280;
                 $posicion_firma = $positionVisatorType;
+                $coordenada_y = -10 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             }elseif($visatorType === 'revisador'){
                 $page = '1';
                 $coordenada_x = 330;
-                $alto = 280;
                 $posicion_firma = $positionVisatorType;
+                $coordenada_y = -10 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             }else{
                 $coordenada_x = 65;
+                $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             }
 
-            $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
             ($custom_x_axis) ? $coordenada_x = $custom_x_axis : $coordenada_x = 310;
@@ -524,6 +528,12 @@ class FirmaDigitalController extends Controller
 
         }
 
+        //TEST
+//        header('Content-Type: application/pdf');
+//        echo base64_decode($json['files'][0]['content']);
+//        die();
+
+
         return ['statusOk' => true,
             'content' => $json['files'][0]['content'],
             'errorMsg' => '',
@@ -544,7 +554,7 @@ class FirmaDigitalController extends Controller
         $custom_x_axis = null;
         $custom_y_axis = null;
         $visatorType = 'revisador';
-        $positionVisatorType = 1;
+        $positionVisatorType = 4;
 
         /* Confección del cuadro imagen de la firma */
         $font_light     = public_path('fonts/verdana-italic.ttf');
@@ -634,12 +644,12 @@ class FirmaDigitalController extends Controller
             if($visatorType === 'elaborador'){
                 $page = '1';
                 $coordenada_x = 65;
-                $alto = 320;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
             }elseif($visatorType === 'revisador'){
                 $page = '1';
                 $coordenada_x = 330;
-                $alto = 320;
+                $alto = 280;
                 $posicion_firma = $positionVisatorType;
             }else{
                 $coordenada_x = 65;
