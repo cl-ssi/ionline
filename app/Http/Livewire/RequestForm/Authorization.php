@@ -194,7 +194,7 @@ class Authorization extends Component
       $this->validate();
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-          if($this->eventType != 'budget_event'){
+          if(!in_array($this->eventType, ['pre_budget_event', 'budget_event'])){
             $this->requestForm->status = 'rejected';
             $this->requestForm->save();
           }
