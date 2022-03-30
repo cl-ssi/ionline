@@ -47,6 +47,9 @@ class EventRequestForm extends Model
           case "approved":
               return 'Aprobado';
               break;
+          case "does_not_apply":
+              return 'No aplica';
+              break;
       }
     }
 
