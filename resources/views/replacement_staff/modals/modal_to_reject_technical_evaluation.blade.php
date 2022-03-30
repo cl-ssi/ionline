@@ -23,6 +23,7 @@
                       @if($technicalEvaluation->applicants->count() > 0)
                       <option value="rechazo oferta laboral">Rechazo de oferta laboral</option>
                       @endif
+                      <option value="other">Otra</option>
                   </select>
               </fieldset>
 
