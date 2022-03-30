@@ -69,10 +69,11 @@ class PurchasingProcessController extends Controller
         }
         $result = $purchasingProcessDetail->getPurchasingType();
         $result->load('attachedFiles');
-        // return $result->attachedFiles;
+        // return $result;
         $result_details = PurchasingProcessDetail::where($purchasingProcessDetail->getPurchasingTypeColumn(), $result->id)->get();
         // return $result_details;
         $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        $requestForm->purchase_type_id = $result->purchase_type_id;
         $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
         if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
         $suppliers = Supplier::orderBy('name', 'asc')->get();
