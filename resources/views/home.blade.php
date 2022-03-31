@@ -52,7 +52,7 @@
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
 
-    <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP)</h6>
+    <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
             Solicitar a Yeannett Valdivia (yeannett.valdivia@redsalud.gob.cl) o 
