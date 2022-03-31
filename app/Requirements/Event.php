@@ -14,7 +14,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'body', 'status','from_user_id','from_ou_id','to_user_id','to_ou_id','requirement_id','limit_at'
+        'body', 'status','from_user_id','from_ou_id','to_user_id','to_ou_id','requirement_id','limit_at', 'to_authority'
     ];
 
     public function getCreationDateAttribute()
