@@ -477,6 +477,7 @@
                         <!-- <th>Mecanismo de Compra</th> -->
                         <th>Tipo de compra</th>
                         <th>Cod.Presup.</th>
+                        <th>Datos Adicionales</th>                       
                         <th>Artículo</th>
                         <th>UM</th>
                         <th>Especificaciones Técnicas</th>
@@ -497,6 +498,29 @@
                         <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
                         <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                         <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
+
+                        @if($detail->pivot->internalPurchaseOrder)
+                        <td>Prov:{{ $detail->pivot->internalPurchaseOrder->supplier->name}}</td>
+                        @endif
+
+                        @if($detail->pivot->tender)
+                        <td>
+                        Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
+                        Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}
+                        </td>
+                        @endif
+
+                        @if($detail->pivot->directDeal)
+                        <td>Nº Resol:{{ $detail->pivot->directDeal->resol_direct_deal}} <br><br>
+                        Prov:{{ $detail->pivot->directDeal->supplier->name }}</td>
+                        @endif
+
+                        @if($detail->pivot->immediatePurchase)
+                        <td>ID OC:{{ $detail->pivot->immediatePurchase->po_id }} <br><br>
+                        Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}</td>
+                        @endif
+
+                        
                         <td>{{ $detail->article }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
                         <td>{{ $detail->specification }}</td>
