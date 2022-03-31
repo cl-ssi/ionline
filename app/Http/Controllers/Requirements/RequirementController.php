@@ -38,23 +38,14 @@ class RequirementController extends Controller
   public function outbox(Request $request)
   {
     //         set_time_limit(3600);
-
-    //$parametro_busqueda = $request['text'];
-    //      dd($request);
-
     $users[0] = Auth::user()->id;
-    //$users[0] = array();
     $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
-    //$ous_secretary = Authority::getAmIAuthorityFromOu(Carbon::today(), 'secretary', Auth::user()->id);
-    //ssdd($ous_secretary);
     foreach ($ous_secretary as $secretary) {
       $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
-      //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, Carbon::today(), 'manager')->user_id;
     }
 
-    // when($parametro_busqueda, function ($query, $parametro_busqueda) {
-    //     return $query->where('type', 'LIKE', '%'.$parametro_busqueda.'%' );
-    // })
+    //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
+//    $userIsSecretary = (count($ous_secretary) > 0);
 
     $request_usu = $request['request_usu'];
     $archived_requirements = Requirement::whereHas('events', function ($query) use ($users) {
@@ -87,6 +78,10 @@ class RequirementController extends Controller
           $query->Search2($request);
         });
       })
+//        ->when($userIsSecretary, function($query){
+//            return $query->where('to_authority', true)
+//                         ->where()
+//        })
       ->orderBy('created_at', 'DESC');
     //->count();dd($archived_requirements);
 
@@ -100,7 +95,6 @@ class RequirementController extends Controller
     //   $archivados[$key] =$req->id;
     // }
 
-    //dd($archivados);
 
     //si objeto es nulo, esporque no existen id's archivados, y no se debe agregar la clausula whereNotIn
     if (empty($archivados)) {
@@ -359,7 +353,8 @@ class RequirementController extends Controller
 
           //Si el usuario destino es autoridad, se marca el requerimiento
           $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
-          $requirement->to_authority = ($request->to_user_id == $managerUserId);
+          $isManager = ($request->to_user_id == $managerUserId);
+          $requirement->to_authority = $isManager;
 
           $requirement->save();
           $requirement->categories()->attach($request->input('category_id'));
@@ -370,6 +365,7 @@ class RequirementController extends Controller
           $firstEvent->from_user()->associate(Auth::user());
           $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
           $firstEvent->requirement()->associate($requirement);
+          $firstEvent->to_authority = $isManager;
           $firstEvent->save();
 
           //asocia evento con documentos
@@ -403,7 +399,6 @@ class RequirementController extends Controller
 
           session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
       } else {
-
           //encuentra cuales son usuarios para requerimientos, y cuales son en copia
           $users_req = null;
           $users_enCopia = null;
@@ -432,6 +427,7 @@ class RequirementController extends Controller
 
           //$requerimientos = '';
           $usersEmail = '';
+          $isAnyManager = false;
           foreach ($users as $key => $user) {
 
               $req = $request->All();
@@ -439,16 +435,33 @@ class RequirementController extends Controller
                   $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
               }
 
+              //Si algún usuario destino es autoridad, se marca el requerimiento
+              $userModel = User::find($user);
+              $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+              $isManager = ($user == $managerUserId);
+              if($isManager) $isAnyManager = true;
+
+//              dump($user, $isManager);
+
               //se crea requerimiento
               $requirement = new Requirement($req);
               $requirement->user()->associate(Auth::user());
               $requirement->group_number = $group_number;
+              $requirement->to_authority = $isAnyManager;
               $requirement->save();
 
               //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
               if ($users_enCopia <> null) {
                   if ($flag == 0) {
+                      $isAnyManager = false;
                       foreach ($users_enCopia as $key => $user_) {
+                          //Si algún usuario en copia es autoridad, se marca el requerimiento y evento
+                          $userModel = User::find($user_);
+                          $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+                          $isManager = ($user_ == $managerUserId);
+                          if($isManager) $isAnyManager = true;
+//                          dump($user_, $isManager);
+
                           $user_aux = User::where('id', $user_)->get();
                           $firstEvent = new Event($request->All());
                           $firstEvent->to_user_id = $user_;
@@ -457,11 +470,13 @@ class RequirementController extends Controller
                           $firstEvent->from_user()->associate(Auth::user());
                           $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
                           $firstEvent->requirement()->associate($requirement);
+                          $firstEvent->to_authority = $isManager;
                           $firstEvent->save();
 
                           $requirement->events()->save($firstEvent);
                       }
                       $flag = 1;
+                      $requirement->update(['to_authority' => $isAnyManager]);
                   }
               }
 
@@ -472,6 +487,12 @@ class RequirementController extends Controller
               if ($user_aux) {
                   $firstEvent->to_user_id = $user_aux->id;
                   $firstEvent->to_ou_id = $user_aux->organizational_unit_id;
+
+                  //Si usuario es autoridad, se marca el requerimiento y evento
+                  $managerUserId = Authority::getAuthorityFromDate($user_aux->organizational_unit_id, now(), 'manager')->user_id;
+                  $isManager = ($user_aux->id == $managerUserId);
+                  $firstEvent->to_authority = $isManager;
+                  if(!$isAnyManager) $requirement->update(['to_authority' => $isManager]);
               }
               $firstEvent->from_user()->associate(Auth::user());
               $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
