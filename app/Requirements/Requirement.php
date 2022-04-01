@@ -57,6 +57,32 @@ class Requirement extends Model implements Auditable
         return $query;
     }
 
+    /**
+     * Obtiene los requirements marcados "como enviados al manager (to_authority)" de sus UO
+     * @param $query
+     * @param $secretaryOuIds
+     * @param $users
+     * @param $getArchived
+     * @return mixed
+     */
+    public function scopeGetSentToAuthority($query, $secretaryOuIds, $users, $getArchived)
+    {
+        $query->orWhere('to_authority', true)
+            ->where(function ($query) use ($secretaryOuIds) {
+                $query->whereHas('events', function ($query) use ($secretaryOuIds) {
+                    $query->where('to_authority', true)
+                        ->whereIn('to_ou_id', $secretaryOuIds);
+                });
+            })->when($getArchived, function ($query) use ($users) {
+                $query->whereHas('RequirementStatus', function ($query) use ($users) {
+                    $query->where('status', 'viewed')
+                        ->whereIn('user_id', $users);
+                });
+            });
+
+        return $query;
+    }
+
     public static function getPendingRequirements()
     {
       $users[0] = Auth::user()->id;

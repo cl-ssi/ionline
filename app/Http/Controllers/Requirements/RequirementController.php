@@ -45,7 +45,13 @@ class RequirementController extends Controller
     }
 
     //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
-//    $userIsSecretary = (count($ous_secretary) > 0);
+    $userIsSecretary = (count($ous_secretary) > 0);
+
+    //Se obtienen unidades organizacionales donde usuario es secretary
+    $secretaryOuIds = [];
+    foreach ($ous_secretary as $ou_secretary) {
+      $secretaryOuIds[] = $ou_secretary['organizational_unit_id'];
+    }
 
     $request_usu = $request['request_usu'];
     $archived_requirements = Requirement::whereHas('events', function ($query) use ($users) {
@@ -78,23 +84,16 @@ class RequirementController extends Controller
           $query->Search2($request);
         });
       })
-//        ->when($userIsSecretary, function($query){
-//            return $query->where('to_authority', true)
-//                         ->where()
-//        })
+      ->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+        $query->getSentToAuthority($secretaryOuIds, $users, true);
+      })
       ->orderBy('created_at', 'DESC');
-    //->count();dd($archived_requirements);
 
-    //dd($archived_requirements);
     $archived_requirements_count = $archived_requirements;
     $archived_requirements_paginate = $archived_requirements;
 
     //se obtienen los id de requerimientos archivados
     $archivados = $archived_requirements_count->pluck('id');
-    // foreach ($archived_requirements_count->get() as $key => $req) {
-    //   $archivados[$key] =$req->id;
-    // }
-
 
     //si objeto es nulo, esporque no existen id's archivados, y no se debe agregar la clausula whereNotIn
     if (empty($archivados)) {
@@ -126,37 +125,46 @@ class RequirementController extends Controller
             $query->Search2($request);
           });
         })
+        ->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+          $query->getSentToAuthority($secretaryOuIds, $users, false);
+        })
         ->orderBy('created_at', 'DESC');
     } else {
-      $created_requirements = Requirement::with('events')->whereHas('events', function ($query) use ($users) {
-        $query->whereIn('from_user_id', $users)
-          ->orWhereIn('to_user_id', $users);
-      })
-        ->when($request['request_req'], function ($query, $request) {
-          return $query->Search($request);
-        })
-        ->when($request['request_cat'], function ($query, $request) {
-          return $query->whereHas('categories', function ($query) use ($request) {
-            $query->Search($request);
-          });
-        })
-        ->when($request_usu, function ($query, $request_usu) {
-          return $query->whereHas('events', function ($query) use ($request_usu) {
-            $query->whereHas('from_user', function ($query) use ($request_usu) {
-              $query->Search($request_usu);
+        $created_requirements = Requirement::with('events')
+            ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $request_usu, $request, $users) {
+                $query->whereHas('events', function ($query) use ($users) {
+                    $query->whereIn('from_user_id', $users)
+                        ->orWhereIn('to_user_id', $users);
+                })
+                    ->when($request['request_req'], function ($query, $request) {
+                        return $query->Search($request);
+                    })
+                    ->when($request['request_cat'], function ($query, $request) {
+                        return $query->whereHas('categories', function ($query) use ($request) {
+                            $query->Search($request);
+                        });
+                    })
+                    ->when($request_usu, function ($query, $request_usu) {
+                        return $query->whereHas('events', function ($query) use ($request_usu) {
+                            $query->whereHas('from_user', function ($query) use ($request_usu) {
+                                $query->Search($request_usu);
+                            })
+                                ->OrWhereHas('to_user', function ($query) use ($request_usu) {
+                                    $query->Search($request_usu);
+                                });
+                        });
+                    })
+                    ->when($request['request_parte'], function ($query, $request) {
+                        return $query->whereHas('parte', function ($query) use ($request) {
+                            $query->Search2($request);
+                        });
+                    })
+                    ->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+                        $query->getSentToAuthority($secretaryOuIds, $users, false);
+                    });
             })
-              ->OrWhereHas('to_user', function ($query) use ($request_usu) {
-                $query->Search($request_usu);
-              });
-          });
-        })
-        ->when($request['request_parte'], function ($query, $request) {
-          return $query->whereHas('parte', function ($query) use ($request) {
-            $query->Search2($request);
-          });
-        })
-        ->whereIntegerNotInRaw('id', $archivados) //<--- esta clausula permite traer todos los requerimientos que no esten archivados
-        ->orderBy('created_at', 'DESC');
+            ->whereIntegerNotInRaw('id', $archivados) //<--- esta clausula permite traer todos los requerimientos que no esten archivados
+            ->orderBy('created_at', 'DESC');
     }
 
     $created_requirements_paginate = $created_requirements;
