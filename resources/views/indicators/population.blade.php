@@ -24,9 +24,9 @@
 						<fieldset class="form-group col-sm-2">
 			        <label>Género</label>
 			        <select class="form-control selectpicker" name="gender_id[]" data-actions-box="true" multiple required>
-			          <option value="M" @if (isset($request) && in_array('M', $request->gender_id)) selected @endif>Masculino</option>
-			          <option value="F" @if (isset($request) && in_array('F', $request->gender_id)) selected @endif>Femenino</option>
-								<option value="I" @if (isset($request) && in_array('I', $request->gender_id)) selected @endif>Otro</option>
+			          <option value="M" @if($request->type!= NULL && in_array('M', $request->gender_id)) selected @endif>Masculino</option>
+			          <option value="F" @if($request->type!= NULL && in_array('F', $request->gender_id)) selected @endif>Femenino</option>
+								<option value="I" @if($request->type!= NULL && in_array('I', $request->gender_id)) selected @endif>Otro</option>
 			        </select>
 			      </fieldset>
 
@@ -34,9 +34,9 @@
 				        <label>Grupos etários</label>
 				        <select class="form-control selectpicker" name="etario_id[]" data-actions-box="true" title="Seleccione..." multiple required>
 										@foreach(range(0, 99) as $edad) {
-										    <option value="{{ $edad }}" @if (isset($request) && in_array($edad, $request->etario_id)) selected @endif>{{$edad}}</option>
+										    <option value="{{ $edad }}" @if($request->type!= NULL && in_array($edad, $request->etario_id)) selected @endif>{{$edad}}</option>
 										@endforeach
-										<option value=">=100" {{-- @if($request->etario_id == '0') selected @endif --}}>100 y más</option>
+										<option value=">=100" @if($request->type!= NULL && in_array('>=100', $request->etario_id)) selected @endif>100 y más</option>
 				        </select>
 			      </fieldset>
 				</div>
