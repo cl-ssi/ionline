@@ -423,7 +423,7 @@
                         <th>Tipo de compra</th>
                         <th>ID O.C.</th>
                         <th>Especificaciones Técnicas</th>
-                        <th>Especificaciones Del Proveedor</th>
+                        <!-- <th>Especificaciones Del Proveedor</th> -->
                         <th>Cantidad</th>
                         <th>UM</th>
                         <th>Valor U.</th>
