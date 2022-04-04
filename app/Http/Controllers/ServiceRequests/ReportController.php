@@ -1110,6 +1110,7 @@ class ReportController extends Controller
           break;
       }
 
+      /* Reemplazar por categorías */
       switch ($fila->estate) {
         case "Profesional Médico":
           $planta = 0;
@@ -1138,14 +1139,15 @@ class ReportController extends Controller
         default:
           $planta = '';
           break;
-          // - 0 = Médicos
-          // - 1 = Odontologos
-          // - 2 = Bioquimicos
-          // - 3 = Quimicos Farmaceuticos
-          // - 4 = Profesional
-          // - 5 = Técnicos
-          // - 6 = Administrativos
-          // - 7 = Auxiliares
+          /**  Profesiones y sus Categorías  */
+          // - 0 = Médicos = A
+          // - 1 = Odontologos = A 
+          // - 2 = Bioquimicos = A
+          // - 3 = Quimicos Farmaceuticos = A 
+          // - 4 = Profesional = B
+          // - 5 = Técnicos = C
+          // - 6 = Administrativos = E
+          // - 7 = Auxiliares = F
       }
 
       switch ($fila->rrhh_team) {
