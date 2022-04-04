@@ -69,23 +69,15 @@
                             </td>
                             <td>
                                 @if($requestForm->signatures_file_id)
-                                  @if($requestForm->signatures_file_id == 11)
-                                  <a class="btn btn-info btn-sm"
-                                      title="Ver Formulario de Requerimiento firmado"
-                                      href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}"
-                                      target="_blank" title="Certificado">
-                                        <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @else
-                                  <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @endif
-                                  @if($requestForm->old_signatures_file_id)
-                                  <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @endif
+                                <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
+                                <i class="fas fa-file-contract"></i>
+                                </a>
+                                @endif
+
+                                @if($requestForm->old_signatures_file_id)
+                                <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ $requestForm->old_signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
+                                <i class="fas fa-file-contract"></i>
+                                </a>
                                 @endif
                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                                 <a href="{{ route('request_forms.supply.purchase', $requestForm) }}"
@@ -172,23 +164,15 @@
                             <td>
                                 @if($requestForm->iAmPurchaser())
                                 @if($requestForm->signatures_file_id)
-                                  @if($requestForm->signatures_file_id == 11)
-                                  <a class="btn btn-info btn-sm"
-                                      title="Ver Formulario de Requerimiento firmado"
-                                      href="{{ route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) }}"
-                                      target="_blank" title="Certificado">
-                                        <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @else
-                                  <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @endif
-                                  @if($requestForm->old_signatures_file_id)
-                                  <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
-                                    <i class="fas fa-file-contract"></i>
-                                  </a>
-                                  @endif
+                                <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
+                                <i class="fas fa-file-contract"></i>
+                                </a>
+                                @endif
+
+                                @if($requestForm->old_signatures_file_id)
+                                <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ $requestForm->old_signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
+                                <i class="fas fa-file-contract"></i>
+                                </a>
                                 @endif
                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                                 <a href="{{ route('request_forms.supply.purchase', $requestForm) }}"

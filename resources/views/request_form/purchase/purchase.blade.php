@@ -166,6 +166,11 @@
                         <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
                     </span>
                     @endif
+                    @if($event->StatusValue == 'No aplica')
+                    <span>
+                        <i class="fas fa-ban"></i> N/A <br>
+                    </span>
+                    @endif
                     @if($event->StatusValue == 'Aprobado')
                     <span style="color: green;">
                         <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
