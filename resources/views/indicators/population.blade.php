@@ -49,7 +49,9 @@
 
 <br>
 
-@if($request->type != NULL)
+
+
+@if($total_pob->count() > 0)
 		<h4>Total población: <b>{{ number_format($total_pob->sum('valor'),0,",",".") }}</b></h4>
 
 		<div class="row">
@@ -78,6 +80,17 @@
 						<div id="chart_div"></div>
 				</div>
 		</div>
+
+@else
+
+	<div class="row">
+			<div class="col-sm-12">
+					<div class="alert alert-secondary" role="alert">
+						  Estimado Usuario: se informa que no se encuentró población en nuestros registros, favor cambiar criterios de busqueda.
+					</div>
+			</div>
+	</div>
+
 @endif
 
 @endsection
