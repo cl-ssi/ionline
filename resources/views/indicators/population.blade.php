@@ -49,9 +49,7 @@
 
 <br>
 
-
-
-@if($total_pob->count() > 0)
+@if($request->has('type') && $total_pob->count() > 0)
 		<h4>Total población: <b>{{ number_format($total_pob->sum('valor'),0,",",".") }}</b></h4>
 
 		<div class="row">
@@ -80,8 +78,8 @@
 						<div id="chart_div"></div>
 				</div>
 		</div>
-
-@else
+		
+@elseif($request->has('type') && $total_pob->count() == 0)
 
 	<div class="row">
 			<div class="col-sm-12">
@@ -91,7 +89,10 @@
 			</div>
 	</div>
 
+@else
+
 @endif
+
 
 @endsection
 
