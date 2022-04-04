@@ -428,95 +428,100 @@ class ReportController extends Controller
     /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
   }
 
-	public function resolutionPDF(ServiceRequest $ServiceRequest)
-	{
-		$formatter = new NumeroALetras();
-		$ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+  public function resolutionPDF(ServiceRequest $ServiceRequest)
+  {
+    $formatter = new NumeroALetras();
+    $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
-		if ($ServiceRequest->fulfillments) {
-			foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
-				$fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-			}
-		}
+    if ($ServiceRequest->fulfillments) {
+      foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+        $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+      }
+    }
 
-		$pdf = app('dompdf.wrapper');
-		if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-			$ServiceRequest->programm_name = "Covid 2022") {
-			$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
-		}
-		else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-			$ServiceRequest->programm_name = "Covid 2022") {
-			$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-		}
-		else {
-			$pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
-		}
+    $pdf = app('dompdf.wrapper');
+    if (
+      $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+      $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+      $ServiceRequest->programm_name = "Covid 2022"
+    ) {
+      $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+    } else if (
+      $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+      $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+      $ServiceRequest->programm_name = "Covid 2022"
+    ) {
+      $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+    } else {
+      $pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
+    }
 
 
-		return $pdf->stream('mi-archivo.pdf');
-		// return view('service_requests.report_resolution', compact('serviceRequest'));
-		// $pdf = \PDF::loadView('service_requests.report_resolution');
-		// return $pdf->stream();
-	}
+    return $pdf->stream('mi-archivo.pdf');
+    // return view('service_requests.report_resolution', compact('serviceRequest'));
+    // $pdf = \PDF::loadView('service_requests.report_resolution');
+    // return $pdf->stream();
+  }
 
-	public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
-	{
-		$formatter = new NumeroALetras();
-		$ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+  public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
+  {
+    $formatter = new NumeroALetras();
+    $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
-		if ($ServiceRequest->fulfillments) {
-			foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
-				$fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-			}
-		}
+    if ($ServiceRequest->fulfillments) {
+      foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+        $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+      }
+    }
     //dd($ServiceRequest);
 
-		$pdf = app('dompdf.wrapper');
+    $pdf = app('dompdf.wrapper');
 
-		if ($ServiceRequest->working_day_type == "DIARIO") {
-			$pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
-		}
-		else {
-			//$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name != "Covid 2022") {
-				if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
-					$pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
-				}else {
-					$pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
-				}
-			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name == "Covid 2022") {
-				$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
-			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name == "Covid 2022") {
+    if ($ServiceRequest->working_day_type == "DIARIO") {
+      $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
+    } else {
+      //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name != "Covid 2022"
+      ) {
+        if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
+          $pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
+        } else {
+          $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
+        }
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name == "Covid 2022"
+      ) {
+        $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name == "Covid 2022"
+      ) {
         //dd($ServiceRequest->programm_name);
-				$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-			}
-      else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name != "Covid 2022") {
+        $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name != "Covid 2022"
+      ) {
         //dd('No es Covid');
-				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			}
-			else {
-				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			}
-		}
+        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      } else {
+        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      }
+    }
 
 
-		return $pdf->stream('mi-archivo.pdf');
-		// return view('service_requests.report_resolution', compact('serviceRequest'));
-		// $pdf = \PDF::loadView('service_requests.report_resolution');
-		// return $pdf->stream();
-	}
+    return $pdf->stream('mi-archivo.pdf');
+    // return view('service_requests.report_resolution', compact('serviceRequest'));
+    // $pdf = \PDF::loadView('service_requests.report_resolution');
+    // return $pdf->stream();
+  }
 
   public function payRejected(Request $request)
   {
@@ -1110,149 +1115,304 @@ class ReportController extends Controller
           break;
       }
 
-      switch ($fila->estate) {
-        case "Profesional Médico":
+      /* Reemplazar por categorías */
+      //switch ($fila->estate) {
+      switch ($fila->profession->name) {
+        case "Médico":
           $planta = 0;
-          break;
-        case "Profesional":
-          $planta = 4;
-          break;
-        case "Técnico":
-          $planta = 5;
-          break;
-        case "Administrativo":
-          $planta = 6;
-          break;
-        case "Farmaceutico":
-          $planta = 3;
+          $sirh_profession_id = 1000;
+          $sirh_function_id = 9082; // Antención clínica
           break;
         case "Odontólogo":
           $planta = 1;
           break;
-        case "Bioquímico":
+        case "Bioquímico/a":
           $planta = 2;
           break;
-        case "Auxiliar":
+        case "Químico farmacéutico":
+          $planta = 3;
+          $sirh_profession_id = 320;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Enfermero/a":
+          $planta = 4;
+          $sirh_profession_id = 1058;
+          $sirh_function_id = 9082; // Atención clínica
+          break;
+        case "Matron/a":
+          $planta = 4;
+          $sirh_profession_id = 1060;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Psicólogo/a":
+          $planta = 4;
+          $sirh_profession_id = 1160;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Kinesiólogo/a":
+          $planta = 4;
+          $sirh_profession_id = 1057;
+          $sirh_function_id = 9082; // Atención clínica
+          break;
+        case "Nutricionista":
+          $planta = 4;
+          break;
+        case "Trabajador/a Social":
+          $planta = 4;
+          $sirh_profession_id = 1020;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Terapeuta Ocupacional":
+          $planta = 4;
+          $sirh_profession_id = 1055;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Fonoaudiólogo/a":
+          $planta = 4;
+          $sirh_profession_id = 1319;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Prevencionista de Riesgo":
+          $planta = 4;
+          break;
+        case "Tecnólogo/a Médico Laboratorio":
+          $planta = 4;
+          $sirh_profession_id = 1316;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Tecnólogo/a Médico Imagenología":
+          $planta = 4;
+          $sirh_profession_id = 1316;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Bioquímico/a":
+          $planta = 4;
+          $sirh_profession_id = 1003;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Biotecnólogo/a":
+          $planta = 4;
+          $sirh_profession_id = 513;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Ingeniero/a Biomédico":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Informático":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Comercial":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Industrial":
+          $planta = 4;
+          break;
+        case "Ingeniero/a":
+          $planta = 4;
+          break;
+        case "Otros Profesionales":
+          $planta = 4;
+          break;
+        case "Constructor civil":
+          $planta = 4;
+          break;
+        case "Arquitecto":
+          $planta = 4;
+          break;
+        case "Abogado/a":
+          $planta = 4;
+          break;
+        case "Psiquiatra":
+          $planta = 4;
+          break;
+        case "Técnico Nivel Superior Enfermería":
+          $planta = 5;
+          $sirh_profession_id = 1027;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Técnico Nivel Superior Odontología":
+          $planta = 5;          
+          break;
+        case "Técnico Nivel Superior":
+          $planta = 5;
+          $sirh_profession_id = 1027;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;        
+        case "Técnico Paramédico":
+          $planta = 5;
+          break;
+        case "Otros Técnicos":
+          $planta = 5;
+          $sirh_profession_id = 530;
+          $sirh_function_id = 9082; // Atención Clínica
+          break;
+        case "Dibujante técnico proyectista":
+          $planta = 5;
+          break;
+        case "Técnico en rehabilitación":
+          $planta = 5;
+          break;
+        case "Monitor/a":
+          $planta = 5;
+          break;
+        case "Preparador físico":
+          $planta = 5;
+          break;
+        case "Administrativo/a":
+          $planta = 6;
+          $sirh_profession_id = 119;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Auxiliar de Servicio":
+          $planta = 7;
+          $sirh_profession_id = 111;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Chofer":
+          $planta = 7;
+          $sirh_profession_id = 111;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Experto/a Médico Andino":
+          $planta = 7;
+          $sirh_profession_id = 111;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Experta Partera":
+          $planta = 7;
+          $sirh_profession_id = 111;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Facilitador/a Intercultural":
+          $planta = 7;
+          $sirh_profession_id = 111;
+          $sirh_function_id = 9083; // Apoyo Administrativo
+          break;
+        case "Monitora de Arte":
           $planta = 7;
           break;
         default:
           $planta = '';
-          break;
-          // - 0 = Médicos
-          // - 1 = Odontologos
-          // - 2 = Bioquimicos
-          // - 3 = Quimicos Farmaceuticos
-          // - 4 = Profesional
-          // - 5 = Técnicos
-          // - 6 = Administrativos
-          // - 7 = Auxiliares
-      }
-
-      switch ($fila->rrhh_team) {
-        case "Residencia Médica":
-          $sirh_profession_id = 1000;
-          $sirh_function_id = 9082; // Antención clínica
-          break;
-        case "Médico Diurno":
-          $sirh_profession_id = 1000;
-          $sirh_function_id = 9082; // Atención clínica
-          break;
-        case "Enfermera Supervisora":
-          $sirh_profession_id = 1058;
-          $sirh_function_id = 9082; // Atención clínica
-          break;
-        case "Enfermera Diurna":
-          $sirh_profession_id = 1058;
-          $sirh_function_id = 9082; // Atención clínica
-          break;
-        case "Enfermera Turno":
-          $sirh_profession_id = 1058;
-          $sirh_function_id = 9082; // Atención clínica
-          break;
-        case "Kinesiólogo Diurno":
-          $sirh_profession_id = 1057;
-          $sirh_function_id = 9082; // Atención clínica
-          break;
-        case "Kinesiólogo Turno":
-          $sirh_profession_id = 1057;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Téc.Paramédicos Diurno":
-          $sirh_profession_id = 1027;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Téc.Paramédicos Turno":
-          $sirh_profession_id = 1027;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Auxiliar Diurno":
-          $sirh_profession_id = 111;
-          $sirh_function_id = 9083; // Apoyo Administrativo
-          break;
-        case "Auxiliar Turno":
-          $sirh_profession_id = 111;
-          $sirh_function_id = 9083; // Apoyo Administrativo
-          break;
-        case "Terapeuta Ocupacional":
-          $sirh_profession_id = 1055;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Químico Farmacéutico":
-          $sirh_profession_id = 320;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Bioquímico":
-          $sirh_profession_id = 1003;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Fonoaudiologo":
-          $sirh_profession_id = 1319;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Administrativo Diurno":
-          $sirh_profession_id = 119;
-          $sirh_function_id = 9083; // Apoyo Administrativo
-          break;
-        case "Administrativo Turno":
-          $sirh_profession_id = 119;
-          $sirh_function_id = 9083; // Apoyo Administrativo
-          break;
-        case "Biotecnólogo Turno":
-          $sirh_profession_id = 513;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Matrona Turno":
-          $sirh_profession_id = 1060;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Matrona Diurno":
-          $sirh_profession_id = 1060;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Otros técnicos":
-          $sirh_profession_id = 530;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Psicólogo":
-          $sirh_profession_id = 1160;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Tecn. Médico Diurno":
-          $sirh_profession_id = 1316;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Tecn. Médico Turno":
-          $sirh_profession_id = 1316;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        case "Trabajador Social":
-          $sirh_profession_id = 1020;
-          $sirh_function_id = 9082; // Atención Clínica
-          break;
-        default:
           $sirh_profession_id = '';
           $sirh_function_id = ''; // Atención Clínica
           break;
+          /**  Profesiones y sus Categorías  */
+          // - 0 = Médicos = A
+          // - 1 = Odontologos = A
+          // - 2 = Bioquimicos = A
+          // - 3 = Quimicos Farmaceuticos = A
+          // - 4 = Profesional = B
+          // - 5 = Técnicos = C
+          // - 6 = Administrativos = E
+          // - 7 = Auxiliares = F
+      }
+
+      // switch ($fila->rrhh_team) {
+        switch ($fila->profession->name) {
+        // case "Residencia Médica":
+        //   $sirh_profession_id = 1000;
+        //   $sirh_function_id = 9082; // Antención clínica
+        //   break;
+        // case "Médico Diurno":
+        //   $sirh_profession_id = 1000;
+        //   $sirh_function_id = 9082; // Atención clínica
+        //   break;
+        // case "Enfermera Supervisora":
+        //   $sirh_profession_id = 1058;
+        //   $sirh_function_id = 9082; // Atención clínica
+        //   break;
+        // case "Enfermera Diurna":
+        //   $sirh_profession_id = 1058;
+        //   $sirh_function_id = 9082; // Atención clínica
+        //   break;
+        // case "Enfermera Turno":
+        //   $sirh_profession_id = 1058;
+        //   $sirh_function_id = 9082; // Atención clínica
+        //   break;
+        // case "Kinesiólogo Diurno":
+        //   $sirh_profession_id = 1057;
+        //   $sirh_function_id = 9082; // Atención clínica
+        //   break;
+        // case "Kinesiólogo Turno":
+        //   $sirh_profession_id = 1057;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Téc.Paramédicos Diurno":
+        //   $sirh_profession_id = 1027;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Téc.Paramédicos Turno":
+        //   $sirh_profession_id = 1027;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Auxiliar Diurno":
+        //   $sirh_profession_id = 111;
+        //   $sirh_function_id = 9083; // Apoyo Administrativo
+        //   break;
+        // case "Auxiliar Turno":
+        //   $sirh_profession_id = 111;
+        //   $sirh_function_id = 9083; // Apoyo Administrativo
+        //   break;
+        // case "Terapeuta Ocupacional":
+        //   $sirh_profession_id = 1055;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Químico Farmacéutico":
+        //   $sirh_profession_id = 320;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Bioquímico":
+        //   $sirh_profession_id = 1003;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Fonoaudiologo":
+        //   $sirh_profession_id = 1319;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Administrativo Diurno":
+        //   $sirh_profession_id = 119;
+        //   $sirh_function_id = 9083; // Apoyo Administrativo
+        //   break;
+        // case "Administrativo Turno":
+        //   $sirh_profession_id = 119;
+        //   $sirh_function_id = 9083; // Apoyo Administrativo
+        //   break;
+        // case "Biotecnólogo Turno":
+        //   $sirh_profession_id = 513;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Matrona Turno":
+        //   $sirh_profession_id = 1060;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Matrona Diurno":
+        //   $sirh_profession_id = 1060;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Otros técnicos":
+        //   $sirh_profession_id = 530;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Psicólogo":
+        //   $sirh_profession_id = 1160;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Tecn. Médico Diurno":
+        //   $sirh_profession_id = 1316;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Tecn. Médico Turno":
+        //   $sirh_profession_id = 1316;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // case "Trabajador Social":
+        //   $sirh_profession_id = 1020;
+        //   $sirh_function_id = 9082; // Atención Clínica
+        //   break;
+        // default:
+        //   $sirh_profession_id = '';
+        //   $sirh_function_id = ''; // Atención Clínica
+        //   break;
       }
 
       $txt .=
@@ -1315,22 +1475,20 @@ class ReportController extends Controller
   {
 
     $results = array();
-    //dd($request->type);
     if ($request->from != null && $request->to != null) {
       $serviceRequests = ServiceRequest::where('program_contract_type', 'Mensual')
-        //->where('type', 'Covid')
         ->where('start_date', '<=', $request->from)
         ->where('end_date', '>', $request->from)
         ->where('end_date', '>', $request->from)
 
-        ->when($request->type != null, function ($q) use ($request) {
-          return $q->where('type',  $request->type);
+        ->when($request->programm_name != null, function ($q) use ($request) {
+          return $q->where('programm_name',  $request->programm_name);
         })
         ->orderBy('start_date', 'asc')
-        ->get(['user_id', 'id', 'start_date', 'end_date','type'])
+        ->get(['user_id', 'id', 'start_date', 'end_date', 'programm_name'])
         ->unique('user_id');
 
-      // dd($serviceRequests[0]);
+      // dd($serviceRequests);
 
 
       // dd($serviceRequests->count());
@@ -1346,7 +1504,7 @@ class ReportController extends Controller
           $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d')] = $serviceRequest;
           do {
             $serviceRequest_aux = ServiceRequest::where('program_contract_type', 'Mensual')
-              ->where('type', 'Covid')
+              ->where('programm_name', $request->programm_name)
               ->where('start_date', '>=', $request->from)
               ->where('id', '!=', $id)
               ->where('user_id', $user_id)
@@ -1361,9 +1519,9 @@ class ReportController extends Controller
               $user_id = $serviceRequest_aux->user_id;
               $start_date = $serviceRequest_aux->start_date;
               $end_date = $serviceRequest_aux->end_date;
-              $type = $serviceRequest_aux->type;
+              $programm_name = $serviceRequest_aux->programm_name;
 
-              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')."(".($type).")"] = $serviceRequest_aux;
+              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d') . "(" . ($programm_name) . ")"] = $serviceRequest_aux;
 
               // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
             } else {

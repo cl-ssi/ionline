@@ -129,9 +129,7 @@ class SingleParameterController extends Controller
         set_time_limit(3600);
         ini_set('memory_limit', '1024M');
 
-
         if ($request->type == "Preliminar") {
-
             $new_etario = $request->etario_id;
 
             if(in_array('>=100', $new_etario)){
@@ -164,7 +162,6 @@ class SingleParameterController extends Controller
         //PERCAPITA DEFINITIVO
         else {
             if ($request->year >= 2022) {
-
                 $sexo = [];
                 foreach ($request->gender_id as $key => $gender) {
                     switch ($gender) {
@@ -208,9 +205,11 @@ class SingleParameterController extends Controller
                   ->orderBy('Edad')
                   ->get();
             }
+            else{
+                $total_pob = collect(new PercapitaOficial);
+            }
         }
 
-        //dd($total_pob);
         return view('indicators.population', compact(
             'total_pob',
             'request'
