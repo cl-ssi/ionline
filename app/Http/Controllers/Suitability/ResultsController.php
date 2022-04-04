@@ -111,7 +111,8 @@ class ResultsController extends Controller
     public function destroy(Result $result)
     {
         $result->delete();
-        session()->flash('danger', 'El resultado de test de idoneidad ha sido eliminado');
+        $result->psirequest->delete();
+        session()->flash('danger', 'El resultado de test de idoneidad y su solicitud ha sido eliminado');
         return redirect()->back();
     }
 
