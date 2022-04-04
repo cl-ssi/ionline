@@ -86,7 +86,7 @@
 	<div class="row">
 			<div class="col-sm-12">
 					<div class="alert alert-secondary" role="alert">
-						  Estimado Usuario: se informa que no se encuentró población en nuestros registros, favor cambiar criterios de busqueda.
+						  Estimado Usuario: se informa que no se encontró población en nuestros registros, favor cambiar criterios de busqueda.
 					</div>
 			</div>
 	</div>
