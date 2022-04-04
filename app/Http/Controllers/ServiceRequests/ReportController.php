@@ -428,95 +428,100 @@ class ReportController extends Controller
     /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
   }
 
-	public function resolutionPDF(ServiceRequest $ServiceRequest)
-	{
-		$formatter = new NumeroALetras();
-		$ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+  public function resolutionPDF(ServiceRequest $ServiceRequest)
+  {
+    $formatter = new NumeroALetras();
+    $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
-		if ($ServiceRequest->fulfillments) {
-			foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
-				$fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-			}
-		}
+    if ($ServiceRequest->fulfillments) {
+      foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+        $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+      }
+    }
 
-		$pdf = app('dompdf.wrapper');
-		if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-			$ServiceRequest->programm_name = "Covid 2022") {
-			$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
-		}
-		else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-			$ServiceRequest->programm_name = "Covid 2022") {
-			$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-		}
-		else {
-			$pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
-		}
+    $pdf = app('dompdf.wrapper');
+    if (
+      $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+      $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+      $ServiceRequest->programm_name = "Covid 2022"
+    ) {
+      $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+    } else if (
+      $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+      $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+      $ServiceRequest->programm_name = "Covid 2022"
+    ) {
+      $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+    } else {
+      $pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
+    }
 
 
-		return $pdf->stream('mi-archivo.pdf');
-		// return view('service_requests.report_resolution', compact('serviceRequest'));
-		// $pdf = \PDF::loadView('service_requests.report_resolution');
-		// return $pdf->stream();
-	}
+    return $pdf->stream('mi-archivo.pdf');
+    // return view('service_requests.report_resolution', compact('serviceRequest'));
+    // $pdf = \PDF::loadView('service_requests.report_resolution');
+    // return $pdf->stream();
+  }
 
-	public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
-	{
-		$formatter = new NumeroALetras();
-		$ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+  public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
+  {
+    $formatter = new NumeroALetras();
+    $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
-		if ($ServiceRequest->fulfillments) {
-			foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
-				$fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-			}
-		}
+    if ($ServiceRequest->fulfillments) {
+      foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+        $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+      }
+    }
     //dd($ServiceRequest);
 
-		$pdf = app('dompdf.wrapper');
+    $pdf = app('dompdf.wrapper');
 
-		if ($ServiceRequest->working_day_type == "DIARIO") {
-			$pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
-		}
-		else {
-			//$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name != "Covid 2022") {
-				if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
-					$pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
-				}else {
-					$pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
-				}
-			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name == "Covid 2022") {
-				$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
-			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name == "Covid 2022") {
+    if ($ServiceRequest->working_day_type == "DIARIO") {
+      $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
+    } else {
+      //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name != "Covid 2022"
+      ) {
+        if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
+          $pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
+        } else {
+          $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
+        }
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 1 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name == "Covid 2022"
+      ) {
+        $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name == "Covid 2022"
+      ) {
         //dd($ServiceRequest->programm_name);
-				$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-			}
-      else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-				$ServiceRequest->programm_name != "Covid 2022") {
+        $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+      } else if (
+        $ServiceRequest->responsabilityCenter->establishment_id == 38 and
+        $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
+        $ServiceRequest->programm_name != "Covid 2022"
+      ) {
         //dd('No es Covid');
-				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			}
-			else {
-				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			}
-		}
+        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      } else {
+        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      }
+    }
 
 
-		return $pdf->stream('mi-archivo.pdf');
-		// return view('service_requests.report_resolution', compact('serviceRequest'));
-		// $pdf = \PDF::loadView('service_requests.report_resolution');
-		// return $pdf->stream();
-	}
+    return $pdf->stream('mi-archivo.pdf');
+    // return view('service_requests.report_resolution', compact('serviceRequest'));
+    // $pdf = \PDF::loadView('service_requests.report_resolution');
+    // return $pdf->stream();
+  }
 
   public function payRejected(Request $request)
   {
@@ -1111,29 +1116,138 @@ class ReportController extends Controller
       }
 
       /* Reemplazar por categorías */
-      switch ($fila->estate) {
-        case "Profesional Médico":
+      //switch ($fila->estate) {
+      switch ($fila->profession->name) {
+        case "Médico":
           $planta = 0;
-          break;
-        case "Profesional":
-          $planta = 4;
-          break;
-        case "Técnico":
-          $planta = 5;
-          break;
-        case "Administrativo":
-          $planta = 6;
-          break;
-        case "Farmaceutico":
-          $planta = 3;
           break;
         case "Odontólogo":
           $planta = 1;
           break;
-        case "Bioquímico":
+        case "Bioquímico/a":
           $planta = 2;
           break;
-        case "Auxiliar":
+        case "Químico farmacéutico":
+          $planta = 3;
+          break;
+        case "Enfermero/a":
+          $planta = 4;
+          break;
+        case "Matron/a":
+          $planta = 4;
+          break;
+        case "Psicólogo/a":
+          $planta = 4;
+          break;
+        case "Kinesiólogo/a":
+          $planta = 4;
+          break;
+        case "Nutricionista":
+          $planta = 4;
+          break;
+        case "Trabajador/a Social":
+          $planta = 4;
+          break;
+        case "Terapeuta Ocupacional":
+          $planta = 4;
+          break;
+        case "Fonoaudiólogo/a":
+          $planta = 4;
+          break;
+        case "Prevencionista de Riesgo":
+          $planta = 4;
+          break;
+        case "Tecnólogo/a Médico Laboratorio":
+          $planta = 4;
+          break;
+        case "Tecnólogo/a Médico Imagenología":
+          $planta = 4;
+          break;
+        case "Bioquímico/a":
+          $planta = 4;
+          break;
+        case "Biotecnólogo/a":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Biomédico":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Informático":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Comercial":
+          $planta = 4;
+          break;
+        case "Ingeniero/a Industrial":
+          $planta = 4;
+          break;
+        case "Ingeniero/a":
+          $planta = 4;
+          break;
+        case "Otros Profesionales":
+          $planta = 4;
+          break;
+        case "Constructor civil":
+          $planta = 4;
+          break;
+        case "Arquitecto":
+          $planta = 4;
+          break;
+        case "Abogado/a":
+          $planta = 4;
+          break;
+        case "Psiquiatra":
+          $planta = 4;
+          break;
+        case "Técnico Nivel Superior Enfermería":
+          $planta = 5;
+          break;
+        case "Técnico Nivel Superior Odontología":
+          $planta = 5;
+          break;
+        case "Técnico Nivel Superior":
+          $planta = 5;
+          break;
+        case "Técnico Nivel Superior":
+          $planta = 5;
+          break;
+        case "Técnico Paramédico":
+          $planta = 5;
+          break;
+        case "Otros Técnicos":
+          $planta = 5;
+          break;
+        case "Dibujante técnico proyectista":
+          $planta = 5;
+          break;
+        case "Técnico en rehabilitación":
+          $planta = 5;
+          break;
+        case "Monitor/a":
+          $planta = 5;
+          break;
+        case "Preparador físico":
+          $planta = 5;
+          break;
+        case "Administrativo/a":
+          $planta = 6;
+          break;
+        case "Auxiliar de Servicio":
+          $planta = 7;
+          break;
+        case "Chofer":
+          $planta = 7;
+          break;
+        case "Experto/a Médico Andino":
+          $planta = 7;
+          break;
+        case "Experta Partera":
+          $planta = 7;
+          break;
+        case "Facilitador/a Intercultural":
+          $planta = 7;
+          break;
+        case "Monitora de Arte":
           $planta = 7;
           break;
         default:
@@ -1329,7 +1443,7 @@ class ReportController extends Controller
           return $q->where('type',  $request->type);
         })
         ->orderBy('start_date', 'asc')
-        ->get(['user_id', 'id', 'start_date', 'end_date','type'])
+        ->get(['user_id', 'id', 'start_date', 'end_date', 'type'])
         ->unique('user_id');
 
       // dd($serviceRequests[0]);
@@ -1365,7 +1479,7 @@ class ReportController extends Controller
               $end_date = $serviceRequest_aux->end_date;
               $type = $serviceRequest_aux->type;
 
-              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')."(".($type).")"] = $serviceRequest_aux;
+              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d') . "(" . ($type) . ")"] = $serviceRequest_aux;
 
               // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
             } else {
