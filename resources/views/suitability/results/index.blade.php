@@ -80,7 +80,7 @@
                     <form method="POST" action="{{ route('suitability.results.destroy', $result->id) }}" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este resultado, recuerde que solo debe de eliminar si el resultado se encuentra duplicado?')">
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar este resultado, recuerde que solo debe de eliminar si el resultado se encuentra duplicado o funcionario desvinculado. Se procederá a eliminar igual la solicitud?')">
                             <span class="fas fa-trash-alt" aria-hidden="true"></span>
                         </button>
                     </form>
