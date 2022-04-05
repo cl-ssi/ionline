@@ -2,12 +2,15 @@
 
 namespace App\Requirements;
 
+use App\Rrhh\Authority;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Event extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -57,8 +60,23 @@ class Event extends Model
         return $this->belongsToMany('App\Documents\Document','req_documents_events');
     }
 
+    /**
+     * Revisa si el evento fue enviado a una autoridad tipo manager de la ou de destino
+     * @return bool
+     */
+    public function isSentToAuthority() :bool
+    {
+        $authorities = Authority::getAmIAuthorityFromOu($this->created_at, 'manager', $this->to_user_id);
+//        dump($this->created_at, 'manager', $this->to_user_id);
 
-    use SoftDeletes;
+        foreach ($authorities as $authority) {
+            if ($authority->organizational_unit_id == $this->to_ou_id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * The attributes that should be mutated to dates.
