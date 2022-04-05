@@ -85,7 +85,7 @@
                 <td>{{ $requestReplacementStaff->name }}</td>
                 <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
                 <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
+                <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
                 <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
@@ -175,7 +175,7 @@
                 <th>Jornada</th>
                 <th>Solicitante</th>
                 <th>Estado</th>
-                <th style="width: 2%"></th>
+                <th style="width: 2%" colspan="2"></th>
             </tr>
         </thead>
         <tbody class="small">
@@ -208,7 +208,7 @@
                 <td>{{ $requestReplacementStaff->name }}</td>
                 <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
                 <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
+                <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
                 <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
@@ -255,6 +255,12 @@
                       <i class="fas fa-eye"></i>
                     </button>
                     @include('replacement_staff.modals.modal_to_view_request')
+                  @endif
+                </td>
+                <td>
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff->technicalEvaluation) }}"
+                                class="btn btn-outline-info btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a>
                   @endif
                 </td>
             </tr>

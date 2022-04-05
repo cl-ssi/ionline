@@ -235,6 +235,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::get('/show_file/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'show_file'])->name('show_file');
                 Route::get('/download/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'download'])->name('download');
             });
+            Route::get('/create_document/{technicalEvaluation}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
         });
 
     });

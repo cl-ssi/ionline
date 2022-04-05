@@ -316,12 +316,12 @@ class WordTestController extends Controller
         $municipality   = Municipality::where('commune_id', $addendum->agreement->commune->id)->first();
 
         if($type == 'addendum'){
-    	    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/addendum2021.docx'));
+    	    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/addendum'.$addendum->agreement->period.'.docx'));
         } else { // Resolucion Addedum
             // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
-            $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead.docx'));
+            $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead'.$addendum->agreement->period.'.docx'));
             $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
-            $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter.docx'));
+            $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter'.$addendum->agreement->period.'.docx'));
             // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
             $addendum->director_signer = Signer::with('user')->find($request->signer_id);
             // No se guarda los cambios en el addendum ya que es solo para efectos de generar el documento
@@ -348,7 +348,13 @@ class WordTestController extends Controller
         $directorNationality = Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
 
         $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
-        $alcaldeApelativoCorto = Str::beforeLast($addendum->representative_appellative, ' ');
+        $alcaldeApelativo = $addendum->representative_appellative;
+        $alcaldeApelativoCorto = Str::beforeLast($alcaldeApelativo, ' ');
+        if(Str::contains($alcaldeApelativo, 'Subrogante')){
+            $alcaldeApelativoFirma = Str::before($alcaldeApelativo, 'Subrogante') . '(S)';
+        }else{
+            $alcaldeApelativoFirma = explode(' ',trim($alcaldeApelativo))[0]; // Alcalde(sa)
+        }
 		$templateProcessor->setValue('programaTitulo', mb_strtoupper($programa));
 		$templateProcessor->setValue('programa', $programa);
 		$templateProcessor->setValue('periodoConvenio', $addendum->agreement->period);
@@ -368,8 +374,9 @@ class WordTestController extends Controller
         $templateProcessor->setValue('comuna', $addendum->agreement->commune->name);
         $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
         $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
-        $templateProcessor->setValue('alcaldeApelativo', $addendum->representative_appellative);
+        $templateProcessor->setValue('alcaldeApelativo', $alcaldeApelativo);
         $templateProcessor->setValue('alcaldeApelativoCorto', $alcaldeApelativoCorto);
+        $templateProcessor->setValue('alcaldeApelativoFirma', $alcaldeApelativoFirma);
         $templateProcessor->setValue('alcalde', mb_strtoupper($addendum->representative));
         $templateProcessor->setValue('alcaldeNationality', $alcaldeNationality);
         $templateProcessor->setValue('alcaldeRut', $addendum->representative_rut);
