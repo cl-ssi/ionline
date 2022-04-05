@@ -31,7 +31,7 @@ class SuitabilityController extends Controller
         //return view('replacement_staff.index', compact('request'));
     }
 
-    public function report()
+    public function report(Request $request)
     {
         $dataArray = array();
         $schools = School::orderBy('name', 'asc')->get();
@@ -43,29 +43,32 @@ class SuitabilityController extends Controller
 
 
         //dd($result);
-        foreach ($schools as $school) {
-            $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status','Aprobado')->get()->count();
-            $counteresperando = PsiRequest::where('school_id', $school->id)->where('status','Esperando Test')->get()->count();
-            $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status','Test Finalizado')->get()->count();
-            $sumaprobado += $counteraprobado;
-            $sumesperando += $counteresperando;
-            $sumfinalizado += $counterfinalizado;
-            if ($counteraprobado >= 1 or $counteresperando >=1 or $counterfinalizado >=1) {
-                array_push(
-                    $dataArray,
-                    array(
-                        'name_school' => $school->name,
-                        'counteraprobado' => $counteraprobado,
-                        'counteresperando' => $counteresperando,
-                        'counterfinalizado' => $counterfinalizado,
-                        'sumaprobado' => $sumaprobado,
-                        'sumesperando' => $sumesperando,
-                        'sumfinalizado' => $sumfinalizado,
-                    )
-                );
+        if ($request->year != null) {
+
+            foreach ($schools as $school) {
+                $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status', 'Aprobado')->where('created_at','like',$request->year.'%')->get()->count();
+                $counteresperando = PsiRequest::where('school_id', $school->id)->where('status', 'Esperando Test')->whereDate('created_at','like',$request->year.'%')->get()->count();
+                $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status', 'Test Finalizado')->whereDate('created_at','like',$request->year.'%')->get()->count();
+                $sumaprobado += $counteraprobado;
+                $sumesperando += $counteresperando;
+                $sumfinalizado += $counterfinalizado;
+                if ($counteraprobado >= 1 or $counteresperando >= 1 or $counterfinalizado >= 1) {
+                    array_push(
+                        $dataArray,
+                        array(
+                            'name_school' => $school->name,
+                            'counteraprobado' => $counteraprobado,
+                            'counteresperando' => $counteresperando,
+                            'counterfinalizado' => $counterfinalizado,
+                            'sumaprobado' => $sumaprobado,
+                            'sumesperando' => $sumesperando,
+                            'sumfinalizado' => $sumfinalizado,
+                        )
+                    );
+                }
             }
         }
-        return view('suitability.report', compact('dataArray'));
+        return view('suitability.report', compact('dataArray', 'request'));
     }
 
     public function createExternal(School $school)
