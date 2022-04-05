@@ -1032,31 +1032,70 @@ class ReportController extends Controller
       }
 
       switch ($fila->responsabilityCenter->id) {
-        case   12:
+        case   2:
           $sirh_ou_id = 1253000;
           break;
-        case   55:
-          $sirh_ou_id = 1305102;
+        case   12:
+          $sirh_ou_id = 1253000;
           break;
         case   18:
           $sirh_ou_id = 1301400;
           break;
-        case   224:
-          $sirh_ou_id = 1253000;
-          break;
-        case   225:
-          $sirh_ou_id = 1252000;
+        case  24:
+          $sirh_ou_id = 1301400;
           break;
         case   43:
           $sirh_ou_id = 1304407;
           break;
+        case   55:
+          $sirh_ou_id = 1305102;
+          break;
+        case   96:
+          $sirh_ou_id = 1305300;
+          break;
+        case   99:
+          $sirh_ou_id = 1305102;
+          break;
+        case   104:
+          $sirh_ou_id = 1301800;
+          break;
+        case   109:
+          $sirh_ou_id = 1304100;
+          break;
+        case   114:
+          $sirh_ou_id = 1301640;
+          break;
+        case   115:
+          $sirh_ou_id = 1304102;
+          break;
         case   116:
           $sirh_ou_id = 1301620;
+          break;
+        case   122:
+          $sirh_ou_id = 1304105;
+          break;
+        case   124:
+          $sirh_ou_id = 1301610;
+          break;
+        case   125:
+          $sirh_ou_id = 1301509;
+          break;
+        case   126:
+          $sirh_ou_id = 1302108;
+          break;
+        case   130:
+          $sirh_ou_id = 1301650;
+          break;
+        case   133:
+          $sirh_ou_id = 1301410;
+          break;
+        case   136:
+          $sirh_ou_id = 1301420;
           break;
         case   138:
           $sirh_ou_id = '3510-1';
           break;
-        case   130:
+        case   140:
           $sirh_ou_id = 1301650;
           break;
         case   141:
@@ -1065,51 +1104,44 @@ class ReportController extends Controller
         case   142:
           $sirh_ou_id = 1301320;
           break;
-        case   136:
-          $sirh_ou_id = 1301420;
-          break;
-        case   133:
-          $sirh_ou_id = 1301410;
-          break;
-        case   140:
-          $sirh_ou_id = 1301650;
-          break;
-        case   2:
-          $sirh_ou_id = 1253000;
-          break;
-        case   125:
-          $sirh_ou_id = 1301509;
-          break;
-        case   194:
-          $sirh_ou_id = 1301905;
-          break;
-        case   177:
-          $sirh_ou_id = 1301650;
-          break;
-        case   192:
-          $sirh_ou_id = 1301904;
-          break;
-        case   162:
-          $sirh_ou_id = 1301523;
-          break;
-        case   122:
-          $sirh_ou_id = 1304105;
-          break;
-        case   99:
-          $sirh_ou_id = 1305102;
+        case   144:
+          $sirh_ou_id = 1301702;
           break;
         case   147:
           $sirh_ou_id = 1301203;
           break;
-        case   126:
-          $sirh_ou_id = 1302108;
-          break;
         case   149:
           $sirh_ou_id = 1301202;
           break;
-        case  24:
-          $sirh_ou_id = 1301400;
+        case   162:
+          $sirh_ou_id = 1301523;
           break;
+        case   177:
+          $sirh_ou_id = 1301650;
+          break;
+        case   190:
+          $sirh_ou_id = 1301902;
+          break;
+        case   192:
+          $sirh_ou_id = 1301904;
+          break;
+        case   194:
+          $sirh_ou_id = 1301905;
+          break;
+        case   224:
+          $sirh_ou_id = 1253000;
+          break;
+        case   225:
+          $sirh_ou_id = 1252000;
+          break;
+        case   237:
+          $sirh_ou_id = 1300203;
+          break;
+
+
+
+
+
         default:
           $sirh_ou_id = 'NO EXISTE';
           break;
@@ -1316,111 +1348,111 @@ class ReportController extends Controller
       }
 
       // switch ($fila->rrhh_team) {
-        switch ($fila->profession->name) {
-        // case "Residencia Médica":
-        //   $sirh_profession_id = 1000;
-        //   $sirh_function_id = 9082; // Antención clínica
-        //   break;
-        // case "Médico Diurno":
-        //   $sirh_profession_id = 1000;
-        //   $sirh_function_id = 9082; // Atención clínica
-        //   break;
-        // case "Enfermera Supervisora":
-        //   $sirh_profession_id = 1058;
-        //   $sirh_function_id = 9082; // Atención clínica
-        //   break;
-        // case "Enfermera Diurna":
-        //   $sirh_profession_id = 1058;
-        //   $sirh_function_id = 9082; // Atención clínica
-        //   break;
-        // case "Enfermera Turno":
-        //   $sirh_profession_id = 1058;
-        //   $sirh_function_id = 9082; // Atención clínica
-        //   break;
-        // case "Kinesiólogo Diurno":
-        //   $sirh_profession_id = 1057;
-        //   $sirh_function_id = 9082; // Atención clínica
-        //   break;
-        // case "Kinesiólogo Turno":
-        //   $sirh_profession_id = 1057;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Téc.Paramédicos Diurno":
-        //   $sirh_profession_id = 1027;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Téc.Paramédicos Turno":
-        //   $sirh_profession_id = 1027;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Auxiliar Diurno":
-        //   $sirh_profession_id = 111;
-        //   $sirh_function_id = 9083; // Apoyo Administrativo
-        //   break;
-        // case "Auxiliar Turno":
-        //   $sirh_profession_id = 111;
-        //   $sirh_function_id = 9083; // Apoyo Administrativo
-        //   break;
-        // case "Terapeuta Ocupacional":
-        //   $sirh_profession_id = 1055;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Químico Farmacéutico":
-        //   $sirh_profession_id = 320;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Bioquímico":
-        //   $sirh_profession_id = 1003;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Fonoaudiologo":
-        //   $sirh_profession_id = 1319;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Administrativo Diurno":
-        //   $sirh_profession_id = 119;
-        //   $sirh_function_id = 9083; // Apoyo Administrativo
-        //   break;
-        // case "Administrativo Turno":
-        //   $sirh_profession_id = 119;
-        //   $sirh_function_id = 9083; // Apoyo Administrativo
-        //   break;
-        // case "Biotecnólogo Turno":
-        //   $sirh_profession_id = 513;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Matrona Turno":
-        //   $sirh_profession_id = 1060;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Matrona Diurno":
-        //   $sirh_profession_id = 1060;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Otros técnicos":
-        //   $sirh_profession_id = 530;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Psicólogo":
-        //   $sirh_profession_id = 1160;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Tecn. Médico Diurno":
-        //   $sirh_profession_id = 1316;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Tecn. Médico Turno":
-        //   $sirh_profession_id = 1316;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // case "Trabajador Social":
-        //   $sirh_profession_id = 1020;
-        //   $sirh_function_id = 9082; // Atención Clínica
-        //   break;
-        // default:
-        //   $sirh_profession_id = '';
-        //   $sirh_function_id = ''; // Atención Clínica
-        //   break;
+      switch ($fila->profession->name) {
+          // case "Residencia Médica":
+          //   $sirh_profession_id = 1000;
+          //   $sirh_function_id = 9082; // Antención clínica
+          //   break;
+          // case "Médico Diurno":
+          //   $sirh_profession_id = 1000;
+          //   $sirh_function_id = 9082; // Atención clínica
+          //   break;
+          // case "Enfermera Supervisora":
+          //   $sirh_profession_id = 1058;
+          //   $sirh_function_id = 9082; // Atención clínica
+          //   break;
+          // case "Enfermera Diurna":
+          //   $sirh_profession_id = 1058;
+          //   $sirh_function_id = 9082; // Atención clínica
+          //   break;
+          // case "Enfermera Turno":
+          //   $sirh_profession_id = 1058;
+          //   $sirh_function_id = 9082; // Atención clínica
+          //   break;
+          // case "Kinesiólogo Diurno":
+          //   $sirh_profession_id = 1057;
+          //   $sirh_function_id = 9082; // Atención clínica
+          //   break;
+          // case "Kinesiólogo Turno":
+          //   $sirh_profession_id = 1057;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Téc.Paramédicos Diurno":
+          //   $sirh_profession_id = 1027;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Téc.Paramédicos Turno":
+          //   $sirh_profession_id = 1027;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Auxiliar Diurno":
+          //   $sirh_profession_id = 111;
+          //   $sirh_function_id = 9083; // Apoyo Administrativo
+          //   break;
+          // case "Auxiliar Turno":
+          //   $sirh_profession_id = 111;
+          //   $sirh_function_id = 9083; // Apoyo Administrativo
+          //   break;
+          // case "Terapeuta Ocupacional":
+          //   $sirh_profession_id = 1055;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Químico Farmacéutico":
+          //   $sirh_profession_id = 320;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Bioquímico":
+          //   $sirh_profession_id = 1003;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Fonoaudiologo":
+          //   $sirh_profession_id = 1319;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Administrativo Diurno":
+          //   $sirh_profession_id = 119;
+          //   $sirh_function_id = 9083; // Apoyo Administrativo
+          //   break;
+          // case "Administrativo Turno":
+          //   $sirh_profession_id = 119;
+          //   $sirh_function_id = 9083; // Apoyo Administrativo
+          //   break;
+          // case "Biotecnólogo Turno":
+          //   $sirh_profession_id = 513;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Matrona Turno":
+          //   $sirh_profession_id = 1060;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Matrona Diurno":
+          //   $sirh_profession_id = 1060;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Otros técnicos":
+          //   $sirh_profession_id = 530;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Psicólogo":
+          //   $sirh_profession_id = 1160;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Tecn. Médico Diurno":
+          //   $sirh_profession_id = 1316;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Tecn. Médico Turno":
+          //   $sirh_profession_id = 1316;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // case "Trabajador Social":
+          //   $sirh_profession_id = 1020;
+          //   $sirh_function_id = 9082; // Atención Clínica
+          //   break;
+          // default:
+          //   $sirh_profession_id = '';
+          //   $sirh_function_id = ''; // Atención Clínica
+          //   break;
       }
 
       $txt .=
@@ -1519,7 +1551,7 @@ class ReportController extends Controller
               ->when($request->programm_name != null, function ($q) use ($request) {
                 return $q->where('programm_name',  $request->programm_name);
               })
-              
+
               // ->where('start_date', '>=', $request->from)
               ->where('start_date', '>=', $request->from)
               ->where('end_date', '<=', $request->to)
@@ -1532,7 +1564,7 @@ class ReportController extends Controller
               })
               ->first();
 
-              // dd($serviceRequest_aux);
+            // dd($serviceRequest_aux);
 
             if ($serviceRequest_aux) {
               $id = $serviceRequest_aux->id;
