@@ -5,28 +5,51 @@
 @section('content')
 @include('suitability.nav')
 
-<h3 class="mb-3">Listado de Solicitudes de Idoneidad Aprobada</h3>
+<h3 class="mb-3">Reporte de Solicitudes de Idoneidad</h3>
+<form method="GET" class="form-horizontal" action="{{ route('suitability.report') }}">
+    <div class="form-row">
+        <fieldset class="form-group col-sm-2">
+            <label>Año</label>
+            <select class="form-control selectpicker show-tick" name="year" required>
+                <option value="">Selección...</option>
+                <option value="2021" @if($request->year == "2021") selected @endif>2021</option>
+                <option value="2022" @if($request->year == "2022") selected @endif>2022</option>
+            </select>
+        </fieldset>
 
-<a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel</a>
+        <fieldset class="form-group col-1">
+            <label for="for_submit">&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary">Consultar</button>
+        </fieldset>
+
+<!-- 
+        <fieldset class="form-group col-sm-2">
+            <label>Año</label>
+            <button type="submit" class="btn btn-primary float-right"> Consultar</button>
+        </fieldset> -->
+    </div>
+</form>
+@if(!empty($dataArray))
+<a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel resultados</a>
 <div class="table-responsive">
     <table class="table table-sm table-bordered table-responsive text-center align-middle" id="tabla_estado_residencias">
         <thead>
             <th nowrap>N°</th>
-            <th nowrap>Colegio</th>            
+            <th nowrap>Colegio</th>
             <th nowrap>Total Solicitudes Esperando Test</th>
             <th nowrap>Total Solicitudes Finalizadas</th>
             <th nowrap>Total Solicitudes Aprobadas</th>
 
         </thead>
         <tbody>
-            @foreach($dataArray as $data)            
+            @foreach($dataArray as $data)
             <tr>
                 <td nowrap>{{$loop->iteration}}</td>
                 <td nowrap>{{$data['name_school'] }}</td>
                 <td nowrap>{{$data['counteresperando'] }}</td>
                 <td nowrap>{{$data['counterfinalizado'] }}</td>
                 <td nowrap>{{$data['counteraprobado'] }}</td>
-            </tr>            
+            </tr>
             @endforeach
             <th colspan="2">Totales</th>
             <th nowrap>{{$data['sumesperando'] }}</th>
@@ -36,6 +59,7 @@
         </tbody>
     </table>
 </div>
+@endif
 
 
 @endsection

@@ -60,7 +60,7 @@
                           </td>
                       </tr>
                       <tr>
-                          <th class="table-active">La Persona cumplirá labores en Jornada</th>
+                          <th class="table-active">La Persona cumplirá labores en / Jornada</th>
                           <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
                           <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
                       </tr>

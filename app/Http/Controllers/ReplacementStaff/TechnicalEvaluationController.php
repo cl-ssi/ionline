@@ -180,4 +180,16 @@ class TechnicalEvaluationController extends Controller
 
         return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]);
     }
+
+    public function create_document(TechnicalEvaluation $technicalEvaluation){
+        //dd($requestForm);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('replacement_staff.request.documents.technical_evaluation_document', compact('technicalEvaluation'));
+
+        return $pdf->stream('mi-archivo.pdf');
+
+        // $formDocumentFile = PDF::loadView('request_form.documents.form_document', compact('requestForm'));
+        // return $formDocumentFile->download('pdf_file.pdf');
+    }
 }
