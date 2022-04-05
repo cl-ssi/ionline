@@ -1059,6 +1059,9 @@ class ReportController extends Controller
         case   104:
           $sirh_ou_id = 1301800;
           break;
+        case   108:
+          $sirh_ou_id = 1301500;
+          break;
         case   109:
           $sirh_ou_id = 1304100;
           break;
@@ -1113,6 +1116,9 @@ class ReportController extends Controller
         case   149:
           $sirh_ou_id = 1301202;
           break;
+        case   150:
+          $sirh_ou_id = 1301201;
+          break;
         case   162:
           $sirh_ou_id = 1301523;
           break;
@@ -1133,6 +1139,9 @@ class ReportController extends Controller
           break;
         case   225:
           $sirh_ou_id = 1252000;
+          break;
+        case   226:
+          $sirh_ou_id = 1301703;
           break;
         case   237:
           $sirh_ou_id = 1300203;
