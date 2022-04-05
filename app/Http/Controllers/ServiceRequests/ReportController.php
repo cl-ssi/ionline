@@ -1125,9 +1125,13 @@ class ReportController extends Controller
           break;
         case "Odontólogo":
           $planta = 1;
+          $sirh_profession_id = 310;
+          $sirh_function_id = 9113; // 9113	Atencion Odontologica
           break;
-        case "Bioquímico/a":
+        case "Bioquímico/a":          
           $planta = 2;
+          $sirh_profession_id = 330;
+          $sirh_function_id = 9115; // 9115	Bioquimico
           break;
         case "Químico farmacéutico":
           $planta = 3;
@@ -1156,6 +1160,8 @@ class ReportController extends Controller
           break;
         case "Nutricionista":
           $planta = 4;
+          $sirh_profession_id = 7;
+          $sirh_function_id = 1161; // Atención clínica
           break;
         case "Trabajador/a Social":
           $planta = 4;
@@ -1174,6 +1180,8 @@ class ReportController extends Controller
           break;
         case "Prevencionista de Riesgo":
           $planta = 4;
+          $sirh_profession_id = 1108;
+          $sirh_function_id = 525; // Atención Clínica
           break;
         case "Tecnólogo/a Médico Laboratorio":
           $planta = 4;
