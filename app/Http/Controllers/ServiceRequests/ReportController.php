@@ -1485,9 +1485,11 @@ class ReportController extends Controller
     $results = array();
     if ($request->from != null && $request->to != null) {
       $serviceRequests = ServiceRequest::where('program_contract_type', 'Mensual')
-        ->where('start_date', '<=', $request->from)
-        ->where('end_date', '>', $request->from)
+        // ->where('start_date', '<=', $request->from)
         // ->where('end_date', '>', $request->from)
+
+        ->where('start_date', '>=', $request->from)
+        ->where('end_date', '<=', $request->to)
 
         ->when($request->programm_name != null, function ($q) use ($request) {
           return $q->where('programm_name',  $request->programm_name);
@@ -1510,12 +1512,19 @@ class ReportController extends Controller
           $start_date = $serviceRequest->start_date;
           $end_date = $serviceRequest->end_date;
 
-          $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d')] = $serviceRequest;
+          $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d') . "(" . ($serviceRequest->programm_name) . ")"] = $serviceRequest;
           do {
             $serviceRequest_aux = ServiceRequest::where('program_contract_type', 'Mensual')
               // ->where('programm_name', $request->programm_name)
+              ->when($request->programm_name != null, function ($q) use ($request) {
+                return $q->where('programm_name',  $request->programm_name);
+              })
+              
+              // ->where('start_date', '>=', $request->from)
               ->where('start_date', '>=', $request->from)
-              ->where('id', '!=', $id)
+              ->where('end_date', '<=', $request->to)
+
+              // ->where('id', '!=', $id)
               ->where('user_id', $user_id)
               ->where('start_date', $end_date->addDay(1))
               ->whereHas('SignatureFlows', function ($q) {
