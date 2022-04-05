@@ -1128,7 +1128,7 @@ class ReportController extends Controller
           $sirh_profession_id = 310;
           $sirh_function_id = 9113; // 9113	Atencion Odontologica
           break;
-        case "Bioquímico/a":          
+        case "Bioquímico/a":
           $planta = 2;
           $sirh_profession_id = 330;
           $sirh_function_id = 9115; // 9115	Bioquimico
@@ -1239,13 +1239,13 @@ class ReportController extends Controller
           $sirh_function_id = 9082; // Atención Clínica
           break;
         case "Técnico Nivel Superior Odontología":
-          $planta = 5;          
+          $planta = 5;
           break;
         case "Técnico Nivel Superior":
           $planta = 5;
           $sirh_profession_id = 1027;
           $sirh_function_id = 9082; // Atención Clínica
-          break;        
+          break;
         case "Técnico Paramédico":
           $planta = 5;
           break;
@@ -1487,7 +1487,7 @@ class ReportController extends Controller
       $serviceRequests = ServiceRequest::where('program_contract_type', 'Mensual')
         ->where('start_date', '<=', $request->from)
         ->where('end_date', '>', $request->from)
-        ->where('end_date', '>', $request->from)
+        // ->where('end_date', '>', $request->from)
 
         ->when($request->programm_name != null, function ($q) use ($request) {
           return $q->where('programm_name',  $request->programm_name);
@@ -1504,6 +1504,7 @@ class ReportController extends Controller
 
 
         foreach ($serviceRequests as $key => $serviceRequest) {
+          // dd($serviceRequest);
           $id = $serviceRequest->id;
           $user_id = $serviceRequest->user_id;
           $start_date = $serviceRequest->start_date;
@@ -1512,7 +1513,7 @@ class ReportController extends Controller
           $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d')] = $serviceRequest;
           do {
             $serviceRequest_aux = ServiceRequest::where('program_contract_type', 'Mensual')
-              ->where('programm_name', $request->programm_name)
+              // ->where('programm_name', $request->programm_name)
               ->where('start_date', '>=', $request->from)
               ->where('id', '!=', $id)
               ->where('user_id', $user_id)
@@ -1522,6 +1523,8 @@ class ReportController extends Controller
               })
               ->first();
 
+              // dd($serviceRequest_aux);
+
             if ($serviceRequest_aux) {
               $id = $serviceRequest_aux->id;
               $user_id = $serviceRequest_aux->user_id;
@@ -1530,7 +1533,7 @@ class ReportController extends Controller
               $programm_name = $serviceRequest_aux->programm_name;
 
               $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d') . "(" . ($programm_name) . ")"] = $serviceRequest_aux;
-
+              // dd($results);
               // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
             } else {
               // $results[$serviceRequest->employee->getFullNameAttribute()][$end_date->format('Y-m-d') . " - xx"] = 0; //muestra los contratos que debiesen estar pero no existen
