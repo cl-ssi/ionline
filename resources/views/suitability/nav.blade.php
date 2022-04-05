@@ -6,25 +6,7 @@
                       href="{{ route('suitability.own') }}">
             <i class="fas fa-clone"></i> Todas las Solicitudes
         </a>
-    </li>
-
-    <!-- <li class="nav-item">
-        <a class="nav-link"
-                      href="{{ route('suitability.validaterequest') }}">
-            <i class="fas fa-file"></i> Nueva Solicitud de Idoneidad
-        </a>
-    </li>
-
-
-    
-    
-    <li class="nav-item">
-        <a class="nav-link"
-                      href="#">
-            <i class="fas fa-clone"></i> Solicitudes
-        </a>
-    </li> -->
-    
+    </li>    
 
     <div class="dropdown show">
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
