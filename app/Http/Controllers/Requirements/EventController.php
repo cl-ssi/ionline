@@ -42,30 +42,11 @@ class EventController extends Controller
         //
     }
 
-    // public function create_event($req_id)
-    // {
-    //   $ous = OrganizationalUnit::all()->sortBy('name');
-    //   $organizationalUnit = OrganizationalUnit::Find(1);
-    //   $requirement = Requirement::find($req_id);
-    //   $requirementCategories = RequirementCategory::where('requirement_id',$req_id)->get();
-    //   $categories = Category::where('user_id',Auth::user()->id)->get();
-    //   $lastEvent = Event::where('requirement_id',$req_id)
-    //                     ->where('to_user_id','<>',Auth::user()->id)->get()->last();
-    //   //si no existen respuestas de otras personas, se devuelve la ultima cualquiera.
-    //   if($lastEvent == null){
-    //     $lastEvent = Event::where('requirement_id',$req_id)->get()->last();
-    //   }
-    //   $firstEvent = Event::where('requirement_id',$req_id)
-    //                      ->First();
-    //
-    //   return view('requirements.events.create', compact('ous','organizationalUnit','requirement','categories','requirementCategories','lastEvent','firstEvent'));
-    // }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -89,14 +70,17 @@ class EventController extends Controller
             }
         }
 
-        //dd($request->users);
         //cuando no se agregó derivación a tabla temporal
         if ($request->users == null) {
+            //Si el usuario destino es autoridad, se marca el requerimiento
+            $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
+            $isManager = ($request->to_user_id == $managerUserId);
 
             //guarda evento.
             $requirementEvent = new Event($request->All());
             $requirementEvent->from_user()->associate(Auth::user());
             $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+            $requirementEvent->to_authority = $isManager;
             $requirementEvent->save();
 
             //asocia evento con documentos
@@ -111,6 +95,7 @@ class EventController extends Controller
             $requirement = Requirement::find($request->requirement_id);
             //$requirement->user_id = Auth::user()->id;
             $requirement->status = $request->status;
+            if(!$requirement->to_authority) $requirement->to_authority = $isManager;
             $requirement->save();
 
             //guarda archivos
@@ -142,8 +127,15 @@ class EventController extends Controller
             //dd($users_req, $users_enCopia);
 
             //guarda eventos en copia
+            $isAnyManager = false;
             if ($users_enCopia <> null) {
                 foreach ($users_enCopia as $key => $user_) {
+                    //Si algún usuario destino es autoridad, se marca el requerimiento
+                    $userModel = User::find($user_);
+                    $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+                    $isManager = ($user_ == $managerUserId);
+                    if ($isManager) $isAnyManager = true;
+
                     //guarda evento.
                     $user_aux = User::where('id', $user_)->get();
                     $requirementEvent = new Event($request->All());
@@ -152,13 +144,21 @@ class EventController extends Controller
                     $requirementEvent->status = "en copia";
                     $requirementEvent->from_user()->associate(Auth::user());
                     $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+                    $requirementEvent->to_authority = $isManager;
                     $requirementEvent->save();
+                    $requirementEvent->requirement()->update(['to_authority' => $isAnyManager]);
                 }
             }
 
             //guarda otros eventos
             if ($users_req != null) {
                 foreach ($users_req as $key => $user_) {
+                    //Si algún usuario destino es autoridad, se marca el requerimiento
+                    $userModel = User::find($user_);
+                    $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+                    $isManager = ($user_ == $managerUserId);
+                    if ($isManager) $isAnyManager = true;
+
                     //guarda evento.
                     $user_aux = User::where('id', $user_)->get();
                     $requirementEvent = new Event($request->All());
@@ -166,7 +166,9 @@ class EventController extends Controller
                     $requirementEvent->to_user_id = $user_;
                     $requirementEvent->from_user()->associate(Auth::user());
                     $requirementEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+                    $requirementEvent->to_authority = $isManager;
                     $requirementEvent->save();
+                    $requirementEvent->requirement()->update(['to_authority' => $isAnyManager]);
 
                     //asocia evento con documentos
                     if ($request->documents <> null) {
@@ -206,16 +208,6 @@ class EventController extends Controller
         }
 
         session()->flash('info', 'El evento ' . $requirementEvent->id . ' ha sido ingresado.');
-
-        /*$requirementEvent->requirement->status = $requirementEvent->status;
-        $requirementEvent->requirement->save();
-
-        if($requirementEvent->status == 'abierto') {
-            return redirect()->route('requirements.show', $requirementEvent->requirement);
-        }
-        else {
-            return redirect()->route('requirements.index');
-        }*/
         return redirect()->route('requirements.show', $requirementEvent->requirement);
     }
 
