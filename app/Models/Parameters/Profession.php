@@ -9,14 +9,14 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Profession extends Model implements Auditable
 {
-    use \OwenIt\Auditing\Auditable;    
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     use SoftDeletes;
 
     public $table = 'cfg_professions';
 
     protected $fillable = [
-        'name', 'category', 'estamento'
+        'name', 'category', 'estamento','sirh_plant', 'sirh_function', 'sirh_profession'
     ];
 
 }

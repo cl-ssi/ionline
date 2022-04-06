@@ -13,7 +13,12 @@ class AddSirhColumnsProfessionTable extends Migration
      */
     public function up()
     {
-        //
+      Schema::table('cfg_professions', function (Blueprint $table) {
+          $table->string('sirh_plant')->after('estamento')->nullable();
+          $table->string('sirh_function')->after('sirh_plant')->nullable();
+          $table->string('sirh_profession')->after('sirh_function')->nullable();
+      });
+
     }
 
     /**
@@ -23,6 +28,8 @@ class AddSirhColumnsProfessionTable extends Migration
      */
     public function down()
     {
-        //
+      Schema::table('cfg_professions', function (Blueprint $table) {
+          $table->dropColumn(['sirh_plant', 'sirh_function', 'sirh_profession']);
+      });
     }
 }
