@@ -124,7 +124,10 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Suitability: test']);
         Permission::create(['name' => 'Suitability: ssi']);
 
-        Permission::create(['name' => 'Request Forms: Finance add item code']);
+        Permission::create(['name' => 'Request Forms: all']);
+        Permission::create(['name' => 'Request Forms: audit']);
+        Permission::create(['name' => 'Request Forms: boss']);
+        Permission::create(['name' => 'Request Forms: config']);
 
         Permission::create(['name' => 'Health Plan']);
 
