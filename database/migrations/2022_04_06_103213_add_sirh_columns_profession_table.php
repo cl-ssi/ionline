@@ -15,7 +15,7 @@ class AddSirhColumnsProfessionTable extends Migration
     {
       Schema::table('cfg_professions', function (Blueprint $table) {
           $table->string('sirh_plant')->after('estamento')->nullable();
-          $table->string('sirh_profession')->after('sirh_function')->nullable();
+          $table->string('sirh_profession')->after('sirh_plant')->nullable();
       });
 
     }
