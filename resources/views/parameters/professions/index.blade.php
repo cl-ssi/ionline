@@ -20,7 +20,7 @@
             <th>Categoría</th>
             <th>Estamento</th>
             <th>Planta (SIRH)</th>
-            <th>Función (SIRH)</th>
+            <!-- <th>Función (SIRH)</th> -->
             <th>Profesión (SIRH)</th>
             <th>Editar</th>
         </tr>
