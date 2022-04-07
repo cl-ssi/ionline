@@ -73,6 +73,20 @@
 	</div>
 
 	<div class="row">
+		<fieldset class="form-group col-6">
+			<label for="forName">Id Función (SIRH)</label>
+			<input type="text" class="form-control" id="forsirh_function"
+				placeholder="Código SIRH de la función" name="sirh_function" required="required">
+		</fieldset>
+
+		<fieldset class="form-group col-6">
+			<label for="forName">Id Unid.Org. (SIRH)</label>
+			<input type="text" class="form-control" id="forsirh_ou_id"
+				placeholder="Código SIRH de la unidad organizacional" name="sirh_ou_id" required="required">
+		</fieldset>
+	</div>
+
+	<div class="row">
 
 	</div>
 
