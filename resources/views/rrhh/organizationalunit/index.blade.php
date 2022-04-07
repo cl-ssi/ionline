@@ -13,9 +13,11 @@
         	<span class="input-group-text" id="basic-addon"><i class="fas fa-search"></i></span>
         </div>
         <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Ingrese Nombre" name="search" required="">
+        @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
         <div class="input-group-append">
             <a class="btn btn-primary" href="{{ route('rrhh.organizational-units.create') }}"><i class="fas fa-plus"></i> Agregar nuevo</a>
         </div>
+        @endcan
     </div>
 </fieldset>
 
