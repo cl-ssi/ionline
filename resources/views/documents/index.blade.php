@@ -6,7 +6,7 @@
 
 @include('documents.partials.nav')
 
-<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
 <h3>Historial</h3>
 
@@ -109,38 +109,37 @@
             <td>{!! $doc->forHtml !!}</td>
             <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
             <td nowrap>
-                @if(!$doc->file)
-                    <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
-                @endif
+                @can(['Documents: edit'])
+                <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+                @endcan
+
             </td>
             <td nowrap>
                 <a href="{{ route('documents.show', $doc->id) }}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-file fa-lg"></i></a>
             </td>
             <td nowrap>
                 @if($doc->file)
-                    <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                        <i class="fas fa-file-pdf fa-lg"></i>
-                    </a>
+                <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                    <i class="fas fa-file-pdf fa-lg"></i>
+                </a>
                 @else
-                    <form method="POST" action="{{ route('documents.find')}}">
-                        @csrf
-                        <button name="id" value="{{ $doc->id }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-upload"></i>
-                        </button>
-                    </form>
+                <form method="POST" action="{{ route('documents.find')}}">
+                    @csrf
+                    <button name="id" value="{{ $doc->id }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                </form>
                 @endif
             </td>
             <td nowrap>
                 @if($doc->file_to_sign_id === null)
-                    <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
-                        <span class="fas fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
+                <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
+                    <span class="fas fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
                 @endif
 
                 @if($doc->fileToSign && $doc->fileToSign->hasSignedFlow)
-                    <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}"
-                       class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif"
-                       target="_blank">
-                        <span class="fas fa-file-contract" aria-hidden="true"></span></a>
+                <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}" class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
+                    <span class="fas fa-file-contract" aria-hidden="true"></span></a>
                 @endif
             </td>
         </tr>
@@ -190,29 +189,27 @@
             </td>
             <td nowrap>
                 @if($doc->file)
-                    <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                        <i class="fas fa-file-pdf fa-lg"></i>
-                    </a>
+                <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                    <i class="fas fa-file-pdf fa-lg"></i>
+                </a>
                 @else
-                    <form method="POST" action="{{ route('documents.find')}}">
-                        @csrf
-                        <button name="id" value="{{ $doc->id }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-upload"></i>
-                        </button>
-                    </form>
+                <form method="POST" action="{{ route('documents.find')}}">
+                    @csrf
+                    <button name="id" value="{{ $doc->id }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                </form>
                 @endif
             </td>
             <td nowrap>
                 @if($doc->file_to_sign_id === null)
-                    <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
-                        <span class="fas fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
+                <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
+                    <span class="fas fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
                 @endif
 
                 @if($doc->fileToSign && $doc->fileToSign->hasSignedFlow)
-                    <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}"
-                       class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif"
-                       target="_blank">
-                        <span class="fas fa-file-contract" aria-hidden="true"></span></a>
+                <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}" class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
+                    <span class="fas fa-file-contract" aria-hidden="true"></span></a>
                 @endif
             </td>
         </tr>
