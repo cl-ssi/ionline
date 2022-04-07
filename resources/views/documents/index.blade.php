@@ -109,9 +109,9 @@
             <td>{!! $doc->forHtml !!}</td>
             <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
             <td nowrap>
-                @can(['Documents: edit'])
-                <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
-                @endcan
+                @if(!$doc->file)
+                    <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+                @endif
 
             </td>
             <td nowrap>
