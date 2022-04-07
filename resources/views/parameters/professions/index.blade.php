@@ -4,7 +4,11 @@
 
 @section('content')
 
-@include('parameters/nav')
+<!-- temporalmente para que ingresen usuarios y poner codigos sirh -->
+@cannot(['Service Request', 'Service Request: export sirh'])
+  @include('parameters/nav')
+@endcan
+
 <h3 class="mb-3">Profesiones</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('parameters.professions.create') }}">Crear</a>
