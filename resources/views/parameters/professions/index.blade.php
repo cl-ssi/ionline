@@ -33,7 +33,7 @@
             <td>{{ $profession->category }}</td>
             <td>{{ $profession->estamento }}</td>
             <td>{{ $profession->sirh_plant }}</td>
-            <td>{{ $profession->sirh_function }}</td>
+            <!-- <td>{{ $profession->sirh_function }}</td> -->
             <td>{{ $profession->sirh_profession }}</td>
             <td>
                 <a href="{{ route('parameters.professions.edit', $profession )}}">
