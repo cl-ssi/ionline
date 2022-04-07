@@ -42,6 +42,20 @@
 	</div>
 
 	<div class="row">
+		<fieldset class="form-group col-6">
+			<label for="forName">Id Función (SIRH)</label>
+			<input type="text" class="form-control" id="forsirh_function"
+				name="sirh_function" required="required" value="{{$organizationalUnit->sirh_function}}">
+		</fieldset>
+
+		<fieldset class="form-group col-6">
+			<label for="forName">Id Unid.Org. (SIRH)</label>
+			<input type="text" class="form-control" id="forsirh_ou_id"
+				name="sirh_ou_id" required="required" value="{{$organizationalUnit->sirh_ou_id}}">
+		</fieldset>
+	</div>
+
+	<div class="row">
 		<fieldset class="form-group col-12">
 			<button type="submit" class="btn btn-primary">
 				<span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
