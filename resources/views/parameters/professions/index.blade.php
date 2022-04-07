@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- temporalmente para que ingresen usuarios y poner codigos sirh -->
-@cannot(['Service Request', 'Service Request: export sirh'])
+@cannot(['Service Request', 'Service Request: export sirh mantenedores'])
   @include('parameters/nav')
 @endcan
 
