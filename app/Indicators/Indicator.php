@@ -41,24 +41,39 @@ class Indicator extends Model
         return $this->values->where('factor', $factor)->sum('value');
     }
 
-    public function getValuesBy($commune)
+    public function getValuesBy($commune, $establishment)
     {
-        return $this->values->where('commune', $commune);
+        return $this->values->where('factor', 'denominador')->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+            return $q->where('establishment', $establishment);
+        });
     }
 
-    public function hasValueByActivityNameAndMonth($factor, $activity_name, $month, $commune)
+    public function hasValuesBy($commune, $establishment)
     {
-        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->sum('value') > 0;
+        return $this->values->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+            return $q->where('establishment', $establishment);
+        })->count() > 0;
     }
 
-    public function getValueByActivityNameAndMonth($factor, $activity_name, $month, $commune)
+    public function hasValueByActivityNameAndMonth($factor, $activity_name, $month, $commune, $establishment)
     {
-        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->first();
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+                                   return $q->where('establishment', $establishment);
+                               })->sum('value') > 0;
     }
 
-    public function getValuesAcumByActivityName($factor, $activity_name, $commune)
+    public function getValueByActivityNameAndMonth($factor, $activity_name, $month, $commune, $establishment)
     {
-        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('commune', $commune)->sum('value');
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('month', $month)->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+                                   return $q->where('establishment', $establishment);
+                               })->first();
+    }
+
+    public function getValuesAcumByActivityName($factor, $activity_name, $commune, $establishment)
+    {
+        return $this->values->where('factor', $factor)->where('activity_name', $activity_name)->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+            return $q->where('establishment', $establishment);
+        })->sum('value');
     }
 
     // public function totalByActivityName($col, $nombre_prestacion)
