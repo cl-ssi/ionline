@@ -185,6 +185,7 @@
 </div>
 @else
 <!-- Meta 7 -->
+@php($isManager = Auth::user()->can('Indicators: manager meta7'))
 <!-- Tab panes -->
 <div class="tab-content mt-3">
     @foreach($communes as $index => $commune)
@@ -217,7 +218,7 @@
                 </tbody>
             </table>
             <hr class="mt-5 mb-4">
-            @can('Indicators: manager meta7')
+            @if($isManager)
             <form method="POST" class="form-inline" action="{{ route('indicators.health_goals.ind.import', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator]) }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="commune" value="{{$commune}}">
@@ -239,7 +240,7 @@
             </div>
             <button type="submit" class="btn btn-primary mb-2 btn-sm"><i class="fas fa-save" aria-hidden="true"></i> Importar</button>
             </form>
-            @endcan
+            @endif
             <br>
             @if(!in_array($commune, ['IQUIQUE', 'ALTO HOSPICIO']))
                 @if(!$indicator->hasValuesBy($commune, null))
@@ -276,9 +277,9 @@
                                         @if($indicator->hasValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
                                             <i class="fas fa-circle text-success"></i>
                                         @else
-                                            @can('Indicators: manager meta7')
+                                            @if($isManager)
                                             <i class="fas fa-circle text-secondary"></i>
-                                            @endcan
+                                            @endif
                                         @endif
                                     </button>
                                     <!-- modal -->
@@ -298,18 +299,18 @@
 
                                                         <div class="form-row">
                                                             <fieldset class="form-group custom-switch">
-                                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{$value->id}}-{{$number}}" name="value" form="form-edit{{$value->id}}-{{$number}}" @if($result && $result->value == 1) checked @endif @cannot('Indicators: manager meta7') disabled @endcannot>
+                                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{$value->id}}-{{$number}}" name="value" form="form-edit{{$value->id}}-{{$number}}" @if($result && $result->value == 1) checked @endif @if(!$isManager) disabled @endif>
                                                             <label class="custom-control-label" for="customSwitch{{$value->id}}-{{$number}}">Actividad ejecutada</label>
                                                             </fieldset>
                                                         </div>
-                                                        @can('Indicators: manager meta7')
+                                                        @if($isManager)
                                                         <div class="form-row">
                                                             <fieldset class="form-group">
                                                                 <label for="for_attachedFile" style="float: left">Cargar documento(s):</label>
                                                                 <input class="form-control-file form-control-sm" id="for_attachedFile" type="file" style="padding:2px 0px 0px 2px;" name="files[]" form="form-edit{{$value->id}}-{{$number}}" multiple>
                                                             </fieldset>
                                                         </div>
-                                                        @endcan
+                                                        @endif
                                                         @if($result)
                                                         <hr>
                                                         <div class="form-row">
@@ -321,13 +322,13 @@
                                                                             <div style="float: left">{{ $file->document_name }}</div>
                                                                             <a href="{{ route('indicators.health_goals.ind.value.show_file', $file) }}"
                                                                                 class="btn btn-link btn-sm float-right" title="Ver" target="_blank"><i class="far fa-eye"></i></a>
-                                                                            @can('Indicators: manager meta7')
+                                                                            @if($isManager)
                                                                             <form method="POST" id="form-delete{{$file}}" class="form-horizontal" action="{{ route('indicators.health_goals.ind.value.destroy_file', $file) }}">
                                                                                 @csrf
                                                                                 @method('DELETE')
                                                                                 <button type="submit" form="form-delete{{$file}}" onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->document_name}}?')" class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></button>
                                                                             </form>
-                                                                            @endcan
+                                                                            @endif
                                                                         </li>
                                                                     @endforeach
                                                                     </ul>
@@ -336,7 +337,7 @@
                                                         @endif
                                                     </div>
                                                     <div class="modal-footer">
-                                                        @can('Indicators: manager meta7')<button type="submit" class="btn btn-primary" form="form-edit{{$value->id}}-{{$number}}">Guardar</button>@endcan
+                                                        @if($isManager)<button type="submit" class="btn btn-primary" form="form-edit{{$value->id}}-{{$number}}">Guardar</button>@endif
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                     </div>
 
@@ -394,9 +395,9 @@
                                             @if($indicator->hasValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
                                                 <i class="fas fa-circle text-success"></i>
                                             @else
-                                                @can('Indicators: manager meta7')
+                                                @if($isManager)
                                                 <i class="fas fa-circle text-secondary"></i>
-                                                @endcan
+                                                @endif
                                             @endif
                                         </button>
                                         <!-- modal -->
@@ -416,18 +417,18 @@
 
                                                             <div class="form-row">
                                                                 <fieldset class="form-group custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="customSwitch{{$value->id}}-{{$number}}" name="value" form="form-edit{{$value->id}}-{{$number}}" @if($result && $result->value == 1) checked @endif @cannot('Indicators: manager meta7') disabled @endcannot>
+                                                                <input type="checkbox" class="custom-control-input" id="customSwitch{{$value->id}}-{{$number}}" name="value" form="form-edit{{$value->id}}-{{$number}}" @if($result && $result->value == 1) checked @endif @if(!$isManager) disabled @endif>
                                                                 <label class="custom-control-label" for="customSwitch{{$value->id}}-{{$number}}">Actividad ejecutada</label>
                                                                 </fieldset>
                                                             </div>
-                                                            @can('Indicators: manager meta7')
+                                                            @if($isManager)
                                                             <div class="form-row">
                                                                 <fieldset class="form-group">
                                                                     <label for="for_attachedFile" style="float: left">Cargar documento(s):</label>
                                                                     <input class="form-control-file form-control-sm" id="for_attachedFile" type="file" style="padding:2px 0px 0px 2px;" name="files[]" form="form-edit{{$value->id}}-{{$number}}" multiple>
                                                                 </fieldset>
                                                             </div>
-                                                            @endcan
+                                                            @endif
                                                             @if($result)
                                                             <hr>
                                                             <div class="form-row">
@@ -439,13 +440,13 @@
                                                                                 <div style="float: left">{{ $file->document_name }}</div>
                                                                                 <a href="{{ route('indicators.health_goals.ind.value.show_file', $file) }}"
                                                                                     class="btn btn-link btn-sm float-right" title="Ver" target="_blank"><i class="far fa-eye"></i></a>
-                                                                                @can('Indicators: manager meta7')
+                                                                                @if($isManager)
                                                                                 <form method="POST" id="form-delete{{$file}}" class="form-horizontal" action="{{ route('indicators.health_goals.ind.value.destroy_file', $file) }}">
                                                                                     @csrf
                                                                                     @method('DELETE')
                                                                                     <button type="submit" form="form-delete{{$file}}" onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->document_name}}?')" class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></button>
                                                                                 </form>
-                                                                                @endcan
+                                                                                @endif
                                                                             </li>
                                                                         @endforeach
                                                                         </ul>
@@ -454,7 +455,7 @@
                                                             @endif
                                                         </div>
                                                         <div class="modal-footer">
-                                                            @can('Indicators: manager meta7')<button type="submit" class="btn btn-primary" form="form-edit{{$value->id}}-{{$number}}">Guardar</button>@endcan
+                                                            @if($isManager)<button type="submit" class="btn btn-primary" form="form-edit{{$value->id}}-{{$number}}">Guardar</button>@endif
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                         </div>
 
