@@ -330,7 +330,7 @@ class RequirementController extends Controller
         $requirementStatus->save();
 
         //return redirect()->route('requirements.outbox');
-        return redirect()->back()->with('success', 'Se han Archivado correctamente');;
+        return redirect()->back()->with('success', 'Se han Archivado correctamente');
     }
 
     public function archive_requirement_delete(Requirement $requirement)
@@ -352,6 +352,11 @@ class RequirementController extends Controller
      */
     public function store(Request $request)
     {
+        // validación existencia autoridad en ou
+        if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
+          return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
+        }
+
         //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
         if ($request->users == null) {
             $req = $request->All();
