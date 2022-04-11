@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
-use App\Programmings\ActivityItem;
 use App\Programmings\Programming;
 use App\Programmings\ProgrammingActivityItem;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProgrammingActivityItemController extends Controller
@@ -26,10 +24,9 @@ class ProgrammingActivityItemController extends Controller
         return redirect()->back();
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(ProgrammingActivityItem $pendingitem)
     {
-        $programming = Programming::findOrFail($request->programming_id);
-        $programming->pendingItems()->updateExistingPivot($id, ['deleted_at' => Carbon::now()]);
+        $pendingitem->delete();
         session()->flash('info', 'Se elimina actividad pendiente satisfactoriamente.');
         return redirect()->back();
     }

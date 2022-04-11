@@ -135,10 +135,9 @@
                                 <td class="text-center align-middle">{{ $item->pivot->requestedBy->fullName ?? '' }}</td>
                                 @can('ProgrammingItem: evaluate')
                                 <td class="text-center align-middle">
-                                <form action="{{ route('pendingitems.destroy', $item) }}" method="POST">
+                                <form action="{{ route('pendingitems.destroy', $item->pivot->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
                                     <button type="submit" title="Eliminar actividad pendiente" style="border: none; background-color:transparent;">
                                         <i class="fas fa-trash fa-lg text-danger"></i>
                                     </button>
