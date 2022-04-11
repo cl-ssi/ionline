@@ -70,6 +70,11 @@ class EventController extends Controller
             }
         }
 
+        // validación existencia autoridad en ou
+        if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
+          return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
+        }
+
         //cuando no se agregó derivación a tabla temporal
         if ($request->users == null) {
             //Si el usuario destino es autoridad, se marca el requerimiento
