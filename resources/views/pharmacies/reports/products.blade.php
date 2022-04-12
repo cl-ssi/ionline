@@ -58,7 +58,7 @@
 
 
 
-      @foreach ($products as $key => $product)
+      @foreach ($products_data as $key => $product)
         @foreach ($product->batchs as $key => $batch)
           <tr>
             <td>{{$product->name}}</td>
