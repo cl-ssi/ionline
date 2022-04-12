@@ -11,8 +11,15 @@ class Batch extends Model
 
     //
     protected $fillable = [
-        'due_date','batch','count'
+        'id','product_id','due_date','batch','count'
     ];
 
     protected $table = 'frm_batchs';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['due_date'];
 }

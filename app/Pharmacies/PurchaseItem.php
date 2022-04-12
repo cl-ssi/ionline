@@ -16,7 +16,7 @@ class PurchaseItem extends Model
       'id', 'barcode', 'purchase_id', 'product_id', 'amount', 'unity', 'unit_cost', 'due_date',
       'establishments_id',
       //'serial_number' ,
-      'batch', 'created_at'
+      'batch','batch_id','created_at'
   ];
 
   use SoftDeletes;

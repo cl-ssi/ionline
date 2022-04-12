@@ -15,10 +15,15 @@ class CreatePharmacyBatchTable extends Migration
     {
         Schema::create('frm_batchs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_id');
             $table->dateTime('due_date'); //fecha vencimiento
             $table->string('batch');
             $table->integer('count');
+
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('product_id')->references('id')->on('frm_products');
         });
 
         Schema::table('frm_purchases_items', function (Blueprint $table) {

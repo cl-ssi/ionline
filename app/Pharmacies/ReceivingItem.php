@@ -15,7 +15,7 @@ class ReceivingItem extends Model
   protected $fillable = [
       'id', 'barcode', 'receiving_id', 'product_id', 'amount', 'unity', 'due_date',
       //'serial_number',
-      'batch', 'created_at'
+      'batch','batch_id','created_at'
   ];
 
   use SoftDeletes;
