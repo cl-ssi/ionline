@@ -296,14 +296,23 @@ class ProductController extends Controller
       // dd($request);
 
       // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
-      set_time_limit(3600);
-      ini_set('memory_limit', '1024M');
+      // set_time_limit(3600);
+      // ini_set('memory_limit', '1024M');
 
       // $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
+
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->orderBy('name','ASC')
                          ->get();
-      return view('pharmacies.reports.products', compact('request','products'));
+
+      $product_id = $request->product_id;
+      $products_data = Product::where('pharmacy_id',session('pharmacy_id'))
+                         ->when($product_id, function ($q, $product_id) {
+                            return $q->where('id', $product_id);
+                         })
+                         ->orderBy('name','ASC')
+                         ->get();
+      return view('pharmacies.reports.products', compact('request','products','products_data'));
       // ,'matrix'));
     }
 }
