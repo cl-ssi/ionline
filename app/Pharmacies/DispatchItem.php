@@ -13,7 +13,7 @@ class DispatchItem extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'barcode', 'dispatch_id', 'product_id', 'amount', 'unity', 'due_date','batch', 'created_at'
+      'id', 'barcode', 'dispatch_id', 'product_id', 'amount', 'unity', 'due_date','batch','batch_id','created_at'
   ];
 
   use SoftDeletes;

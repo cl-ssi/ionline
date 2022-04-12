@@ -299,9 +299,11 @@ class ProductController extends Controller
       set_time_limit(3600);
       ini_set('memory_limit', '1024M');
 
-      $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
+      // $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->orderBy('name','ASC')->get();
-      return view('pharmacies.reports.products', compact('request','products','matrix'));
+                         ->orderBy('name','ASC')
+                         ->get();
+      return view('pharmacies.reports.products', compact('request','products'));
+      // ,'matrix'));
     }
 }
