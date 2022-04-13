@@ -3,11 +3,52 @@
         <div class="card-body">
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
             <div class="form-row">
-                <fieldset class="form-group col-sm-5">
+                <fieldset class="form-group col-sm-3">
+                    <label for="product-search">Buscar Producto o Servicio</label>
+                    <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
+                </fieldset>
+                <fieldset class="form-group col-sm-6">
+                    <label for="product-id">Productos y Servicios</label>
+
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01" wire:loading.remove>
+                                @if($results->count() == 0)
+                                <i class="fas fa-times text-danger"></i>
+                                @else
+                                <i class="fas fa-check text-success"></i>
+                                @endif
+                            </span>
+                            <span class="input-group-text" wire:loading>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="sr-only">...</span>
+                            </span>
+                        </div>
+                        <select id="product-id"
+                            class="custom-select form-control form-control-sm "
+                            wire:loading.attr="disabled"
+                            wire:target="updatedSearchProduct"
+                            required>
+                            @forelse($results as $item)
+                                <option value="" disabled>--{{ $item['title'] }}</option>
+                                @foreach($item['products'] as $product)
+                                    <option value="{{ $product['id'] }}">{{ $product['code']}} - {{ $product['name'] }}</option>
+                                @endforeach
+                            @empty
+                                <option value="">Sin resultados</option>
+                            @endforelse
+                        </select>
+                    </div>
+                    <small id="emailHelp" class="form-text text-muted">{{ $results->count() }} resultados</small>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-3">
                     <label for="forRut">Artículo:</label>
                     <input wire:model.defer="article" name="article" class="form-control form-control-sm" type="text" value="{{$article}}">
                 </fieldset>
+            </div>
 
+            <div class="form-row">
                 <fieldset class="form-group col-sm-3">
                   <label>Unidad de Medida:</label><br>
                   <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-control form-control-sm" required>
@@ -55,7 +96,7 @@
                       </select>
                   </fieldset>
                   <fieldset class="form-group col-sm-4">
-                      <label class="form-label">Documento Informativo (optativo): 
+                      <label class="form-label">Documento Informativo (optativo):
                           @if($savedArticleFile)
                           <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
                           @endif
