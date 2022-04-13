@@ -23,6 +23,7 @@ class ShowTotalHours extends Component
     public $refundHours;
     public $hoursDetailArray = array();
     public $forCertificate = false;
+    public $forResolution = false;
     //public $flag = null;
 
     //    protected $listeners = ['listener_shift_control'];
@@ -232,7 +233,7 @@ class ShowTotalHours extends Component
 
             // solicitado por nataly el 06/04/2022: independiente que sea del 2021, necesita que se obtenga el valor con el fomato 2022
             case $this->fulfillment->serviceRequest->id == 11872:
-            
+
                 $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
                     ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
                     ->get();
