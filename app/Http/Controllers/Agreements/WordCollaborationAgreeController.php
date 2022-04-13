@@ -108,16 +108,18 @@ class WordCollaborationAgreeController extends Controller
     public function createResWordDocx(Request $request, $id)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-        $agreement = Agreement::with('Program','Commune','referrer')->where('id', $id)->first();
+        $agreement = Agreement::with('Program','Commune')->where('id', $id)->first();
         $file = Storage::disk('')->path($agreement->file);
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         
         // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
-        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionretirohead'.$agreement->period.'.docx'));
+        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucioncolaboracionhead'.$agreement->period.'.docx'));
         $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
-        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionretirofooter'.$agreement->period.'.docx'));
+        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucioncolaboracionfooter'.$agreement->period.'.docx'));
 
         // Parametros a imprimir en los archivos abiertos
         $periodoConvenio = $agreement->period;
+        $fechaConvenio = date('j', strtotime($agreement->date)).' de '.$meses[date('n', strtotime($agreement->date))-1].' del año '.date('Y', strtotime($agreement->date));
         $comuna = $agreement->Commune->name;
     	$numResolucion = $agreement->number;
         $yearResolucion = $agreement->resolution_date != NULL ? date('Y', strtotime($agreement->resolution_date)) : '';
@@ -130,11 +132,11 @@ class WordCollaborationAgreeController extends Controller
         $mainTemplateProcessor->setValue('art8', !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '');
         $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
         $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
+        $mainTemplateProcessor->setValue('fechaConvenio',$fechaConvenio);
         $mainTemplateProcessor->setValue('periodoConvenio',$periodoConvenio);
         $mainTemplateProcessor->setValue('ilustre',$ilustre);
         $mainTemplateProcessor->setValue('comuna',$comuna);
 
-        $mainTemplateProcessorEnd->setValue('ilustre',$ilustre);
         $mainTemplateProcessorEnd->setValue('comuna',$comuna);
        
         // TEMPLATE MERGE
