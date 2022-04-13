@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\RequestForm\Item;
 
 use App\Models\Parameters\UnitOfMeasurement;
+use App\Services\UnspscService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -13,10 +14,11 @@ class RequestFormItems extends Component
     use WithFileUploads;
 
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $articleFile, $savedArticleFile, $editRF, $savedItems, $deletedItems, $iteration,
-            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency;
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $items, $totalDocument, $withholding_tax, $precision_currency,
+                $product_id, $search_product, $results;
 
     protected $listeners = ['savedTypeOfCurrency'];
-    
+
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
         'quantity'            =>  'required|numeric|min:0.1',
@@ -159,6 +161,7 @@ class RequestFormItems extends Component
         if(!is_null($savedTypeOfCurrency)){
             $this->precision_currency = $savedTypeOfCurrency == 'peso' ? 0 : 2;
         }
+        $this->results = collect([]);
     }
 
     private function setSavedItems()
@@ -175,7 +178,7 @@ class RequestFormItems extends Component
                 'totalValue'               => $item->expense,
                 'articleFile'              => $item->article_file
           ];
-        //   dd($this->items);
+
           $this->estimateExpense();
         }
     }
@@ -202,4 +205,17 @@ class RequestFormItems extends Component
         $this->articleFile = $this->savedArticleFile = null;
         $this->iteration++;
     }
+
+    public function updatedSearchProduct()
+    {
+        $results = collect([]);
+
+        if($this->search_product != '')
+        {
+            $results = (new UnspscService())->search($this->search_product);
+        }
+
+        $this->results = $results;
+    }
+
 }
