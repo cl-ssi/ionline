@@ -12,11 +12,13 @@ class IndicatorValuesImport implements ToCollection
 {
     private $valueable_id;
     private $commune;
+    private $establishment;
 
-    public function __construct($valueable_id, $commune)
+    public function __construct($valueable_id, $commune, $establishment)
     {
         $this->valueable_id = $valueable_id;
         $this->commune = $commune;
+        $this->establishment = $establishment;
     }
 
     /**
@@ -44,19 +46,27 @@ class IndicatorValuesImport implements ToCollection
         ])->validate();
 
         foreach($rows as $key => $row){
+            $count = 0;
             if(!in_array($key, [0,1])){
-                for($i = 1; $i <= 12; $i++){ //de 1 (enero) a 12 (diciembre)
-                    if(mb_strtoupper($row[$i]) == 'X'){
+                for($i = 1; $i <= 12; $i++) //de 1 (enero) a 12 (diciembre)
+                    if(mb_strtoupper($row[$i]) == 'X') $count++;
+            
+                if($count){
+                    $result = Value::where('activity_name', 'like', $row[0])->where('factor', 'denominador')
+                                ->where('commune', $this->commune)->where('establishment', $this->establishment)
+                                ->where('valueable_id', $this->valueable_id)->where('valueable_type', 'App\Indicators\Indicator')->first();
+                    if($result){
+                        $result->increment('value', $count);
+                    }else{
                         Value::create([
                             'activity_name' => $row[0],
-                            'month' => $i,
+                            'month' => 12,
                             'factor' => 'denominador',
                             'commune' => $this->commune,
-                            'value' => 1,
+                            'establishment' => $this->establishment,
+                            'value' => $count,
                             'valueable_id' => $this->valueable_id,
                             'valueable_type' => 'App\Indicators\Indicator',
-                            'created_by' => Auth::id(),
-                            'updated_by' => Auth::id(),
                         ]);
                     }
                 }

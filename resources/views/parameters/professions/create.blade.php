@@ -19,7 +19,7 @@
             <input type="text" class="form-control" id="for_name" name="name"required>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_category">Categoría*</label>
             <select class="form-control" name="category" id="for_category" required>
                 <option value=""></option>
@@ -43,6 +43,25 @@
                 <option value="Administrativo">Administrativo</option>
                 <option value="Auxiliar">Auxiliar</option>
             </select>
+        </fieldset>
+
+    </div>
+
+    <div class="form-row">
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_name">Planta (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_plant" name="sirh_plant"required>
+        </fieldset>
+
+        <!-- <fieldset class="form-group col-12 col-md-4">
+            <label for="for_name">Función (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_function" name="sirh_function"required>
+        </fieldset> -->
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_name">Profesión (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_profession" name="sirh_profession"required>
         </fieldset>
 
     </div>

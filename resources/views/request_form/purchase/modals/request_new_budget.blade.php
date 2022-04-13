@@ -13,7 +13,7 @@
                     @csrf
                     <div class="form-row">
                         <fieldset class="form-group col-sm">
-                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese nuevo presupuesto" min="{{number_format($requestForm->estimated_expense+1,$requestForm->precision_currency,',','')}}" required>
+                            <input type="number" class="form-control form-control-sm" id="newBudget" name="newBudget" placeholder="Ingrese nuevo presupuesto" min="1" required>
                         </fieldset>
                     </div>
                     <div class="form-row">

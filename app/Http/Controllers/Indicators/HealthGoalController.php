@@ -50,6 +50,7 @@ class HealthGoalController extends Controller
             $indicator->currentMonth = $currentMonth;
             $indicator->load('values.attachedFiles');
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+            // return $indicator;
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else { // ley 18834 o 19664
             $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
@@ -330,7 +331,7 @@ class HealthGoalController extends Controller
     {
         // return $request;
         session()->flash('commune', str_replace(" ","_",$request->commune)); //Necesario para ubicar comuna en el conjunto de tabs
-        Excel::import(new IndicatorValuesImport($indicator->id, $request->commune), $request->file);
+        Excel::import(new IndicatorValuesImport($indicator->id, $request->commune, $request->establishment), $request->file);
         session()->flash('success', 'Actividades para comuna de '.$request->commune.' fueron registradas satisfactoriamente.');
         return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
     }
@@ -342,6 +343,7 @@ class HealthGoalController extends Controller
             'month' => $request->month,
             'factor' => 'numerador',
             'commune' =>  $value->commune,
+            'establishment' => $value->establishment,
             'value' => 1,
             'valueable_id' => $value->valueable_id,
             'valueable_type' => $value->valueable_type,

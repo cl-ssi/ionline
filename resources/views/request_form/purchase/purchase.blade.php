@@ -482,7 +482,7 @@
                         <!-- <th>Mecanismo de Compra</th> -->
                         <th>Tipo de compra</th>
                         <th>Cod.Presup.</th>
-                        <th>Datos Adicionales</th>                       
+                        <th>Datos Adicionales</th>
                         <th>Artículo</th>
                         <th>UM</th>
                         <th>Especificaciones Técnicas</th>
@@ -511,7 +511,9 @@
                         @if($detail->pivot->tender)
                         <td>
                         Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
-                        Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}
+                        Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>s
+                        Plazo vig en días:{{ $detail->pivot->tender->duration??'' }}
+
                         </td>
                         @endif
 

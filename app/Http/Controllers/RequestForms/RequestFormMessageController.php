@@ -9,6 +9,8 @@ use App\Models\RequestForms\RequestForm;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewRequestFormMessage;
 
 class RequestFormMessageController extends Controller
 {
@@ -29,7 +31,6 @@ class RequestFormMessageController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -44,10 +45,10 @@ class RequestFormMessageController extends Controller
         $message->user()->associate(Auth::user());
         $message->requestForm()->associate($requestForm);
 
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $now = Carbon::now()->format('Y_m_d_H_i_s');
-            $file_name = $now.'_message_file_'.$requestForm->id;
-            $message->file = $request->file->storeAs('ionline/request_forms/messages', $file_name.'.'.$request->file->extension(), 'gcs');
+            $file_name = $now . '_message_file_' . $requestForm->id;
+            $message->file = $request->file->storeAs('ionline/request_forms/messages', $file_name . '.' . $request->file->extension(), 'gcs');
             //$reqFile->file = $fileRequest->storeAs('/ionline/request_forms/request_files', $file_name.'.'.$fileRequest->extension(), 'gcs');
             $filename = $request->file->getClientOriginalName();
             $message->file_name = $filename;
@@ -55,24 +56,30 @@ class RequestFormMessageController extends Controller
 
         $message->save();
 
-        if($from == 'signature'){
-            return redirect()
-               ->to(route('request_forms.sign',[
-                 'requestForm' => $requestForm,
-                 'eventType' => $eventType
-                 ]).'#message');
-        }
-        if($from == 'show'){
-            return redirect()
-               ->to(route('request_forms.show',[
-                 'requestForm' => $requestForm]).'#message');
-        }
-        if($from == 'purchase'){
-            return redirect()
-               ->to(route('request_forms.supply.purchase',[
-                 'requestForm' => $requestForm]).'#message');
-        }
+        Mail::to($message)
+            ->cc(env('APP_RF_MAIL'))
+            ->send(new NewRequestFormMessage($message->requestForm->user->email));
 
+
+        if ($from == 'signature') {
+            return redirect()
+                ->to(route('request_forms.sign', [
+                    'requestForm' => $requestForm,
+                    'eventType' => $eventType
+                ]) . '#message');
+        }
+        if ($from == 'show') {
+            return redirect()
+                ->to(route('request_forms.show', [
+                    'requestForm' => $requestForm
+                ]) . '#message');
+        }
+        if ($from == 'purchase') {
+            return redirect()
+                ->to(route('request_forms.supply.purchase', [
+                    'requestForm' => $requestForm
+                ]) . '#message');
+        }
     }
 
     /**
