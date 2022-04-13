@@ -55,6 +55,11 @@ class Product extends Model
       return $this->hasMany('App\Pharmacies\DispatchItem');
     }
 
+    public function batchs()
+    {
+      return $this->hasMany('App\Pharmacies\Batch');
+    }
+
     public function establishments()
     {
       return $this->belongsToMany('App\Pharmacies\Establishment', 'frm_establishments_products')

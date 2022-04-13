@@ -373,6 +373,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 
     Route::resource('addendums', 'Agreements\AddendumController');
     Route::post('/addendum/createWord/{addendum}/type/{type}', 'Agreements\WordTestController@createWordDocxAddendum')->name('addendum.createWord');
+    Route::post('/addendum/createWordWithdrawal/{addendum}/type/{type}', 'Agreements\WordWithdrawalAgreeController@createWordDocxAddendum')->name('addendum.createWordWithdrawal');
     Route::get('/addendum/downloadRes/{addendum}', 'Agreements\AddendumController@downloadRes')->name('addendum.downloadRes');
     Route::get('/addendum/sign/{addendum}/type/{type}', 'Agreements\AddendumController@sign')->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', 'Agreements\AddendumController@preview')->name('addendum.preview');

@@ -405,9 +405,12 @@
         </div>
     </div>
 
+    @include('agreements/agreements/modal_edit_amount')
+    @include('agreements/agreements/modal_edit_quota')
 
+@endif
 
-    @if($agreement->fileResEnd != null)
+@if($agreement->fileResEnd != null && $agreement->program_id != 50)
     <div class="card mt-3 small">
         <div class="card-body">
             <h5>Addendums
@@ -458,7 +461,7 @@
                             <i class="fas fa-edit"></i></button>
                             <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
                                 onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a>
-                            <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord', [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
+                            <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
                             @if($addendum->file != null)
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.preview', $addendum) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Addendum"><i class="fas fa-eye"></i></a>
                             @endif
@@ -470,7 +473,7 @@
                             @endif
                             @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
                             <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
-                            <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord', [$addendum, 'res'] )}}">
+                            <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
                                 <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
                             </span>
                             @endif
@@ -480,23 +483,16 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-
-        
+        </div>    
     </div>
-    
-    @endif
 
-    @include('agreements/agreements/modal_edit_amount')
-    @include('agreements/agreements/modal_edit_quota')
     @include('agreements/agreements/modal_add_addendum')
     @include('agreements/agreements/modal_edit_addendum')
+@endif
+    
     @include('agreements/agreements/modal_select_signer_res')
     @include('agreements/agreements/modal_select_evaluation_option')
-
-@else
     @include('agreements/agreements/modal_select_signer_res')
-@endif
 
 @endsection
 

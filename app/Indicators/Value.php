@@ -10,7 +10,7 @@ class Value extends Model
 {
     use SoftDeletes;
     protected $table = 'ind_values';
-    protected $fillable = ['activity_name', 'commune', 'month', 'factor', 'value', 'valueable_id', 'valueable_type', 'created_by', 'updated_by'];
+    protected $fillable = ['activity_name', 'commune', 'establishment', 'month', 'factor', 'value', 'valueable_id', 'valueable_type', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

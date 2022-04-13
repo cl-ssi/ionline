@@ -17,9 +17,9 @@
         <fieldset class="form-group col-6 col-md-4">
             <label for="for_name">Nombre*</label>
             <input type="text" class="form-control" id="for_name" name="name" value="{{$profession->name}}" autocomplete="off" required>
-        </fieldset>        
+        </fieldset>
 
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_category">Categoría*</label>
             <select name="category" class="form-control" id="for_category" required>
                 <option value=""></option>
@@ -45,7 +45,26 @@
         </fieldset>
 
     </div>
-    
+
+    <div class="form-row">
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_name">Planta (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_plant" value="{{$profession->sirh_plant}}" name="sirh_plant" required>
+        </fieldset>
+
+        <!-- <fieldset class="form-group col-12 col-md-4">
+            <label for="for_name">Función (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_function" value="{{$profession->sirh_function}}" name="sirh_function" required>
+        </fieldset> -->
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_name">Profesión (SIRH)*</label>
+            <input type="text" class="form-control" id="for_sirh_profession" value="{{$profession->sirh_profession}}" name="sirh_profession" required>
+        </fieldset>
+
+    </div>
+
     <button type="submit" class="btn btn-primary">Actualizar</button>
 
 </form>

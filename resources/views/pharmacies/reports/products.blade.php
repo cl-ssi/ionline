@@ -56,17 +56,19 @@
 		</thead>
 		<tbody>
 
-      @if($matrix[0] <> null)
-      @foreach ($matrix as $key => $data)
-        <tr>
-          <td>{{$data['name']}}</td>
-          <td>{{$data['program']}}</td>
-          <td>{{ Carbon\Carbon::parse($data['due_date'])->format('d/m/Y')}}</td>
-          <td>{{$data['batch']}}</td>
-          <td>{{$data['cantidad']}}</td>
-        </tr>
+
+
+      @foreach ($products_data as $key => $product)
+        @foreach ($product->batchs as $key => $batch)
+          <tr>
+            <td>{{$product->name}}</td>
+            <td>{{$product->program->name}}</td>
+            <td>{{$batch->due_date->format('d/m/Y')}}</td>
+            <td>{{$batch->batch}}</td>
+            <td>{{$batch->count}}</td>
+          </tr>
+        @endforeach
       @endforeach
-      @endif
 
 		</tbody>
 	</table>

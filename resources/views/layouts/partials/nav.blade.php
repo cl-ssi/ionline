@@ -190,6 +190,18 @@
                         </a>
                         @endcan
 
+                        @canany(['Service Request', 'Service Request: export sirh mantenedores'])
+                        <a class="dropdown-item"
+                            href="{{ route('parameters.professions.index') }}">
+                            <i class="fas fa-child fa-chevron-right"></i> Mantenedor de profesiones
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('rrhh.organizational-units.index') }}">
+                            <i class="fas fa-sitemap fa-chevron-right"></i> Unidades organizacionales
+                        </a>
+                        @endcan
+
                         @canany(['Shift Management: view'])
                         <a class="dropdown-item @active('rrhh.users.index')"
                             href="{{ route('rrhh.shiftManag.index') }}">

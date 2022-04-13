@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Pharmacies\PurchaseItem;
+use App\Pharmacies\ReceivingItem;
+use App\Pharmacies\DispatchItem;
+use App\Observers\PurchaseItemObserver;
+use App\Observers\ReceivingItemObserver;
+use App\Observers\DispatchItemObserver;
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        //observers
+        PurchaseItem::observe(PurchaseItemObserver::class);
+        ReceivingItem::observe(ReceivingItemObserver::class);
+        DispatchItem::observe(DispatchItemObserver::class);
     }
 }

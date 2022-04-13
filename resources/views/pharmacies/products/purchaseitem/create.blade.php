@@ -30,7 +30,7 @@
     <div class="row">
         <fieldset class="form-group col-4">
             <label for="for_unit_cost">Precio</label>
-            <input type="number" class="form-control" id="for_unit_cost" placeholder="Precio" name="unit_cost" required="">
+            <input step="any" type="number" class="form-control" id="for_unit_cost" placeholder="Precio" name="unit_cost" required="">
         </fieldset>
 
         <fieldset class="form-group col-4">
