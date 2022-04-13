@@ -70,16 +70,22 @@
 	@endcan
 
 	<div class="row">
-		<fieldset class="form-group col-6">
+		<fieldset class="form-group col-4">
 			<label for="forName">Id Función (SIRH)</label>
 			<input type="text" class="form-control" id="forsirh_function"
 				name="sirh_function" required="required" value="{{$organizationalUnit->sirh_function}}">
 		</fieldset>
 
-		<fieldset class="form-group col-6">
+		<fieldset class="form-group col-4">
 			<label for="forName">Id Unid.Org. (SIRH)</label>
 			<input type="text" class="form-control" id="forsirh_ou_id"
 				name="sirh_ou_id" required="required" value="{{$organizationalUnit->sirh_ou_id}}">
+		</fieldset>
+
+		<fieldset class="form-group col-4">
+			<label for="forName">C.Costos (SIRH)</label>
+			<input type="text" class="form-control" id="forsirh_cost_center"
+				name="sirh_cost_center" required="required" value="{{$organizationalUnit->sirh_cost_center}}">
 		</fieldset>
 	</div>
 

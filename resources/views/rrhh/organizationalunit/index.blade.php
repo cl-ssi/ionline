@@ -33,6 +33,7 @@
                 <th scope="col">Id Establecimiento</th>
                 <th scope="col">Id Función (SIRH)</th>
                 <th scope="col">Id Unid.Org. (SIRH)</th>
+                <th scope="col">C.Costos (SIRH)</th>
 				<th scope="col">Accion</th>
 			</tr>
 		</thead>
@@ -44,6 +45,7 @@
                 <td>{{ $root->establishment_id }}</td>
                 <td>{{ $root->sirh_function }}</td>
                 <td>{{ $root->sirh_ou_id }}</td>
+                <td>{{ $root->sirh_cost_center }}</td>
                 <td>
                     <a href="{{ route('rrhh.organizational-units.edit', $root->id) }}" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-edit" aria-hidden="true"></span></a>
@@ -58,6 +60,7 @@
                     <td>{{ $child_level_1->establishment_id }}</td>
                     <td>{{ $child_level_1->sirh_function }}</td>
                     <td>{{ $child_level_1->sirh_ou_id }}</td>
+                    <td>{{ $child_level_1->sirh_cost_center }}</td>
                     <td>
                         <a href="{{ route('rrhh.organizational-units.edit', $child_level_1->id) }}" class="btn btn-outline-secondary btn-sm">
                         <span class="fas fa-edit" aria-hidden="true"></span></a>
@@ -71,6 +74,7 @@
                         <td>{{ $child_level_2->establishment_id }}</td>
                         <td>{{ $child_level_2->sirh_function }}</td>
                         <td>{{ $child_level_2->sirh_ou_id }}</td>
+                        <td>{{ $child_level_2->sirh_cost_center }}</td>
                         <td>
                             <a href="{{ route('rrhh.organizational-units.edit', $child_level_2->id) }}" class="btn btn-outline-secondary btn-sm">
                             <span class="fas fa-edit" aria-hidden="true"></span></a>
@@ -85,6 +89,7 @@
                             <td>{{ $child_level_3->establishment_id }}</td>
                             <td>{{ $child_level_3->sirh_function }}</td>
                             <td>{{ $child_level_3->sirh_ou_id }}</td>
+                            <td>{{ $child_level_3->sirh_cost_center }}</td>
                             <td>
                                 <a href="{{ route('rrhh.organizational-units.edit', $child_level_3->id) }}" class="btn btn-outline-secondary btn-sm">
                                 <span class="fas fa-edit" aria-hidden="true"></span></a>
@@ -100,6 +105,7 @@
                                 <td>{{ $child_level_4->establishment_id }}</td>
                                 <td>{{ $child_level_4->sirh_function }}</td>
                                 <td>{{ $child_level_4->sirh_ou_id }}</td>
+                                <td>{{ $child_level_4->sirh_cost_center }}</td>
                                 <td>
                                     <a href="{{ route('rrhh.organizational-units.edit', $child_level_4->id) }}" class="btn btn-outline-secondary btn-sm">
                                     <span class="fas fa-edit" aria-hidden="true"></span></a>
@@ -114,6 +120,7 @@
                                     <td>{{ $child_level_5->establishment_id }}</td>
                                     <td>{{ $child_level_5->sirh_function }}</td>
                                     <td>{{ $child_level_5->sirh_ou_id }}</td>
+                                    <td>{{ $child_level_5->sirh_cost_center }}</td>
                                     <td>
                                         <a href="{{ route('rrhh.organizational-units.edit', $child_level_5->id) }}" class="btn btn-outline-secondary btn-sm">
                                         <span class="fas fa-edit" aria-hidden="true"></span></a>
