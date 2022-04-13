@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 
 use App\Http\Controllers\Suitability\TestsController;
@@ -70,6 +71,12 @@ use App\User;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
+use App\Http\Controllers\warehouse\ClassController;
+use App\Http\Controllers\warehouse\FamilyController;
+use App\Http\Controllers\warehouse\ProductController;
+use App\Http\Controllers\warehouse\SegmentController;
+use App\Http\Livewire\Warehouse\Segment\SegmentEdit;
+use App\Http\Livewire\Warehouse\Segment\SegmentIndex;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -103,7 +110,6 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class,'externalLogin']);
-
 
 Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
@@ -1285,6 +1291,31 @@ Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@down
 
 Route::get('quality_aps', 'QualityAps\QualityApsController@index')->middleware('auth')->name('quality_aps.index');
 Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->middleware('auth')->name('quality_aps.download');
+
+
+Route::prefix('warehouse')->middleware('auth')->group(function () {
+
+    Route::get('/products/all', [ProductController::class, 'all'])->name('products.all');
+
+    Route::get('/segments', [SegmentController::class, 'index'])->name('segments.index');
+
+    Route::prefix('segment/{segment:code}')->middleware('auth')->group(function () {
+        Route::get('/edit', [SegmentController::class, 'edit'])->name('segments.edit');
+        Route::get('/families', [FamilyController::class, 'index'])->name('families.index');
+
+        Route::prefix('family/{family:code}')->group(function () {
+            Route::get('/edit', [FamilyController::class, 'edit'])->name('families.edit');
+            Route::get('/classes', [ClassController::class, 'index'])->name('class.index');
+
+            Route::prefix('class/{class:code}')->group(function () {
+                Route::get('/edit', [ClassController::class, 'edit'])->name('class.edit');
+                Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+                Route::get('/product/{product:code}/edit', [ProductController::class, 'edit'])->name('products.edit');
+            });
+        });
+    });
+});
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
