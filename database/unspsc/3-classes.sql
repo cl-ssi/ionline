@@ -12,9 +12,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Volcando datos para la tabla unspsc.wre_classes: ~2.051 rows (aproximadamente)
-/*!40000 ALTER TABLE `wre_classes` DISABLE KEYS */;
-INSERT INTO `wre_classes` (`id`, `code`, `name`, `experies_at`, `family_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+-- Volcando datos para la tabla unspsc.unspsc_classes: ~2.051 rows (aproximadamente)
+/*!40000 ALTER TABLE `unspsc_classes` DISABLE KEYS */;
+INSERT INTO `unspsc_classes` (`id`, `code`, `name`, `experies_at`, `family_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 101015, 'Animales domésticos', NULL, 1, '2022-04-12 19:39:29', '2022-04-12 19:39:30', NULL),
 	(2, 101016, 'Aves de corral', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
 	(3, 101017, 'Peces', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
@@ -2066,7 +2066,7 @@ INSERT INTO `wre_classes` (`id`, `code`, `name`, `experies_at`, `family_id`, `cr
 	(2049, 1021080, 'Estudios varios', NULL, 356, '2022-04-12 19:43:42', '2022-04-12 19:43:42', NULL),
 	(2050, 1021090, 'Medio Ambiente', NULL, 356, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL),
 	(2051, 1031010, 'eCommerce', NULL, 357, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL);
-/*!40000 ALTER TABLE `wre_classes` ENABLE KEYS */;
+/*!40000 ALTER TABLE `unspsc_classes` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

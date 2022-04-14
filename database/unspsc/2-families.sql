@@ -12,9 +12,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Volcando datos para la tabla unspsc.wre_families: ~357 rows (aproximadamente)
-/*!40000 ALTER TABLE `wre_families` DISABLE KEYS */;
-INSERT INTO `wre_families` (`id`, `code`, `name`, `experies_at`, `segment_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+-- Volcando datos para la tabla unspsc.unspsc_families: ~357 rows (aproximadamente)
+/*!40000 ALTER TABLE `unspsc_families` DISABLE KEYS */;
+INSERT INTO `unspsc_families` (`id`, `code`, `name`, `experies_at`, `segment_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 1010, 'Animales vivos', NULL, 1, '2022-04-12 19:39:29', '2022-04-12 19:39:30', NULL),
 	(2, 1011, 'Artículos para mascotas', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
 	(3, 1012, 'Alimento para animales', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
@@ -372,7 +372,7 @@ INSERT INTO `wre_families` (`id`, `code`, `name`, `experies_at`, `segment_id`, `
 	(355, 10111, 'Obras Menores', NULL, 57, '2022-04-12 19:43:36', '2022-04-12 19:43:36', NULL),
 	(356, 10210, 'Consultoria', NULL, 58, '2022-04-12 19:43:38', '2022-04-12 19:43:38', NULL),
 	(357, 10310, 'eCommerce', NULL, 59, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL);
-/*!40000 ALTER TABLE `wre_families` ENABLE KEYS */;
+/*!40000 ALTER TABLE `unspsc_families` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

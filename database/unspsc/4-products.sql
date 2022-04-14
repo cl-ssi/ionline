@@ -12,9 +12,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Volcando datos para la tabla unspsc.wre_products: ~18.218 rows (aproximadamente)
-/*!40000 ALTER TABLE `wre_products` DISABLE KEYS */;
-INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+-- Volcando datos para la tabla unspsc.unspsc_products: ~18.218 rows (aproximadamente)
+/*!40000 ALTER TABLE `unspsc_products` DISABLE KEYS */;
+INSERT INTO `unspsc_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 10101501, 'Gatos', NULL, 1, '2022-04-12 19:39:29', '2022-04-12 19:39:30', NULL),
 	(2, 10101502, 'Perros', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
 	(3, 10101504, 'Visones', NULL, 1, '2022-04-12 19:39:30', '2022-04-12 19:39:30', NULL),
@@ -8108,7 +8108,7 @@ INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `cr
 	(8091, 42121515, 'Recortadores o cortadores de uñas veterinarios', NULL, 835, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL),
 	(8092, 42121601, 'Productos veterinarios gastrointestinales', NULL, 836, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL),
 	(8093, 42121602, 'Productos veterinarios sanguíneos o de formación de sangre', NULL, 836, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL);
-INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `unspsc_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(8094, 42121603, 'Productos veterinarios del sistema respiratorio', NULL, 836, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL),
 	(8095, 42121604, 'Productos veterinarios músculo-esquelético o del sistema nervioso', NULL, 836, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL),
 	(8096, 42121605, 'Productos veterinarios para el sistema cardiovascular', NULL, 836, '2022-04-12 19:40:57', '2022-04-12 19:40:57', NULL),
@@ -15998,7 +15998,7 @@ INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `cr
 	(15980, 71112011, 'Servicios de medición mientras perfora', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL),
 	(15981, 71112012, 'Servicios de porosidad de neutrón', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL),
 	(15982, 71112013, 'Servicios de espectroscopio nuclear', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL);
-INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `unspsc_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(15983, 71112014, 'Servicios de tapado de pozo', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL),
 	(15984, 71112015, 'Servicios de recuperación de tubería de imán permanente', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL),
 	(15985, 71112017, 'Servicios de medición de presión del pozo', NULL, 1627, '2022-04-12 19:42:54', '2022-04-12 19:42:54', NULL),
@@ -18851,7 +18851,7 @@ INSERT INTO `wre_products` (`id`, `code`, `name`, `experies_at`, `class_id`, `cr
 	(18832, 102109083, '2da', NULL, 2050, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL),
 	(18833, 102109084, '3era', NULL, 2050, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL),
 	(18834, 103101001, 'eCommerce', NULL, 2051, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL);
-/*!40000 ALTER TABLE `wre_products` ENABLE KEYS */;
+/*!40000 ALTER TABLE `unspsc_products` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
