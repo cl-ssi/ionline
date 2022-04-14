@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Product;
+namespace App\Http\Livewire\Unspsc\Product;
 
 use App\Services\UnspscService;
 use Livewire\Component;
@@ -21,7 +21,7 @@ class ProductAll extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.product.product-all');
+        return view('livewire.unspsc.product.product-all');
     }
 
     public function updatedSearch()

@@ -1,31 +1,28 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Product;
+namespace App\Http\Livewire\Unspsc\Segment;
 
-use App\Models\Warehouse\Product;
+use App\Models\Unspsc\Segment;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ProductIndex extends Component
+class SegmentIndex extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $segment;
-    public $family;
-    public $class;
     public $search;
+    public $experiesAt;
 
     public function render()
     {
-        return view('livewire.warehouse.product.product-index', ['products' => $this->getProducts()]);
+        return view('livewire.unspsc.segment.segment-index', ['segments' => $this->getSegments()]);
     }
 
-    public function getProducts()
+    public function getSegments()
     {
         $search = "%$this->search%";
-        return Product::query()
-            ->whereClassId($this->class->id)
+        return Segment::query()
             ->when($this->search, function ($query) use ($search) {
                 $query->where('name', 'like', $search);
             })
