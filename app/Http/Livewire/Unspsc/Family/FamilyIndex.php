@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Family;
+namespace App\Http\Livewire\Unspsc\Family;
 
-use App\Models\Warehouse\Family;
+use App\Models\Unspsc\Family;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +16,7 @@ class FamilyIndex extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.family.family-index', ['families' => $this->getFamilies()]);
+        return view('livewire.unspsc.family.family-index', ['families' => $this->getFamilies()]);
     }
 
     public function getFamilies()

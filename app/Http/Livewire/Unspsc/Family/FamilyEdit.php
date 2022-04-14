@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Family;
+namespace App\Http\Livewire\Unspsc\Family;
 
 use Livewire\Component;
 
@@ -21,7 +21,7 @@ class FamilyEdit extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.family.family-edit');
+        return view('livewire.unspsc.family.family-edit');
     }
 
     public function update()
@@ -29,5 +29,15 @@ class FamilyEdit extends Component
         $dataValidated = $this->validate();
         $this->family->update($dataValidated);
         $this->family->refresh();
+        return redirect()->route('families.index', $this->segment);
+    }
+
+    public function changeExperiesAt()
+    {
+        $this->family->update([
+            'experies_at' => ($this->family->experies_at == null) ? now() : null
+        ]);
+        $this->family->refresh();
+        $this->render();
     }
 }

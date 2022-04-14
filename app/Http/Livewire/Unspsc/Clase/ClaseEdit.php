@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Clase;
+namespace App\Http\Livewire\Unspsc\Clase;
 
 use Livewire\Component;
 
@@ -22,7 +22,7 @@ class ClaseEdit extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.class.class-edit');
+        return view('livewire.unspsc.class.class-edit');
     }
 
     public function update()
@@ -30,5 +30,15 @@ class ClaseEdit extends Component
         $dataValidated = $this->validate();
         $this->class->update($dataValidated);
         $this->class->refresh();
+        return redirect()->route('class.index', ['segment' => $this->segment, 'family' => $this->family]);
+    }
+
+    public function changeExperiesAt()
+    {
+        $this->class->update([
+            'experies_at' => ($this->class->experies_at == null) ? now() : null
+        ]);
+        $this->class->refresh();
+        $this->render();
     }
 }

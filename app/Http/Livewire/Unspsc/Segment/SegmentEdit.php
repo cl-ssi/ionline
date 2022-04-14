@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Livewire\Warehouse\Segment;
+namespace App\Http\Livewire\Unspsc\Segment;
 
-use App\Models\Warehouse\Segment;
 use Livewire\Component;
 
 class SegmentEdit extends Component
@@ -21,7 +20,7 @@ class SegmentEdit extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.segment.segment-edit');
+        return view('livewire.unspsc.segment.segment-edit');
     }
 
     public function update()
@@ -29,10 +28,7 @@ class SegmentEdit extends Component
         $dataValidated = $this->validate();
         $this->segment->update($dataValidated);
         $this->segment->refresh();
-
-        // session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-
-        redirect()->route('segments.index');
+        return redirect()->route('segments.index');
     }
 
     public function changeExperiesAt()
