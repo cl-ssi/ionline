@@ -907,7 +907,8 @@ class ReportController extends Controller
         $q->whereNotNull('resolution_number')
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
-      })->get();
+      })
+      ->get();
 
 
 
@@ -953,6 +954,7 @@ class ReportController extends Controller
     // ' Afecto  a  sistema  de  turno' . "\r\n";
 
     foreach ($filas as $fila) {
+
       $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
       switch ($fila->program_contract_type) {
         case 'Horas':
@@ -1506,20 +1508,25 @@ class ReportController extends Controller
         '5' . '|' .
         'S' . '|' .
         'S' . '|' .
-        '18' . '|' .
-        $sirh_ou_id . '|' .
+        // '18' . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_cost_center . '|' .
+        // $sirh_ou_id . '|' .  <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_ou_id . '|' .
         '1' . '|' . // cheque
         '0' . '|' . // tipo de banco 0 o 1
         '0' . '|' . // cuenta 0
         $sirh_program_code . '|' . // 3903 (no medico) 3904 (medico)
         '24' . '|' . // Glosa todos son 24
-        $sirh_profession_id . '|' .
-        $planta . '|' .
+        // $sirh_profession_id . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->profession->sirh_profession . '|' .
+        // $planta . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->profession->sirh_plant . '|' .
         '0' . '|' . // Todas son excentas = 0
         (($fila->resolution_number) ? $fila->resolution_number : '1') . '|' .
         (($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021') . '|' .
         substr($fila->digera_strategy, 0, 99) . '|' . // maximo 100
-        $sirh_function_id . '|' .
+        // $sirh_function_id . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_function . '|' .
         preg_replace("/\r|\n/", " ", substr($fila->service_description, 0, 254)) . '|' . // max 255
         'A' . '|' .
         $type_of_day . '|' . // calcular en base a las horas semanales y tipo de contratacion
