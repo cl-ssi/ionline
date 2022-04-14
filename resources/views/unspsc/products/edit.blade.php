@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Product')
+@section('title', 'Editar Producto')
 
 @section('content')
 
 @include('pharmacies.nav')
 
-@livewire('warehouse.product.product-edit', [
+@livewire('unspsc.product.product-edit', [
     'segment' => $segment,
     'family' => $family,
     'class' => $class,

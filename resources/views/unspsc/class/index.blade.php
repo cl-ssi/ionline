@@ -6,6 +6,9 @@
 
 @include('pharmacies.nav')
 
-@livewire('warehouse.clase.clase-index', ['segment' => $segment, 'family' => $family])
+@livewire('unspsc.clase.clase-index', [
+    'segment' => $segment,
+    'family' => $family
+])
 
 @endsection

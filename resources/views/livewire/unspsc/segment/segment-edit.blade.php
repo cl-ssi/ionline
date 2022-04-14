@@ -1,5 +1,12 @@
 <div>
-    <div class="form-row">
+    <h5>Editar Segmento</h5>
+
+    @include('unspsc.bread-crumbs', [
+        'type' => 'segments.edit',
+        'segment' => $segment
+    ])
+
+    <div class="form-row mt-3">
         <fieldset class="form-group col-md-2">
             <label for="codigo">Código</label>
             <input type="text" class="form-control" id="codigo" value="{{ $segment->code }}" readonly>
@@ -17,7 +24,9 @@
                   <input type="checkbox" wire:click="changeExperiesAt()"> {{ $segment->status }}
                 </label>
             </div>
-        </div>
+        </fieldset>
     </div>
-    <button type="submit" class="btn btn-primary" wire:click="update">Actualizar</button>
+
+    <button class="btn btn-primary" wire:click="update">Actualizar</button>
+
 </div>

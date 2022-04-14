@@ -6,7 +6,7 @@
 
 @include('pharmacies.nav')
 
-@livewire('warehouse.clase.clase-edit', [
+@livewire('unspsc.clase.clase-edit', [
     'segment' => $segment,
     'family' => $family,
     'class' => $class

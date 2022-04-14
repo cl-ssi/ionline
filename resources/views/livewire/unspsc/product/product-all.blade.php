@@ -44,7 +44,7 @@
                 @endforelse
             </tbody>
             <caption>
-                Total resultados : {{ $products->count() }}
+                Total de rubros: {{ $products->count() }}
             </caption>
         </table>
     </div>

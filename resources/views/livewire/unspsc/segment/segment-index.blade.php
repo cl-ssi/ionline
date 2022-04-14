@@ -1,8 +1,9 @@
 <div>
-    <h5>Familias</h5>
-    <p><small>{{ $segment->name }}</small></p>
+    <h5>Segmentos</h5>
 
-    <div class="input-group mb-2">
+    @include('unspsc.bread-crumbs', ['type' => 'segments.index'])
+
+    <div class="input-group my-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Buscar</span>
         </div>
@@ -20,24 +21,23 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($families as $family)
+                @forelse($segments as $segment)
                 <tr>
                     <td class="text-center">
-                        <a title="Ver clases"
-                            href="{{ route('class.index', ['segment' => $segment, 'family' => $family]) }}">
-                            {{ $family->code }}
+                        <a title="Ver familias"
+                            href="{{ route('families.index', $segment) }}">
+                            {{ $segment->code }}
                         </a>
                     </td>
-                    <td>{{ $family->name }}</td>
+                    <td>{{ $segment->name }}</td>
                     <td class="text-center">
-                        <span class="badge badge-{{ $family->status_color }}">
-                            {{ $family->status }}
+                        <span class="badge badge-{{ $segment->status_color }}">
+                            {{ $segment->status }}
                         </span>
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-sm btn-outline-secondary"
-                            title="Editar familia"
-                            href="{{ route('families.edit', ['segment' => $segment, 'family' => $family]) }}">
+                        <a class="btn btn-sm btn-outline-secondary" title="Editar segmento"
+                            href="{{ route('segments.edit', $segment) }}">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
@@ -49,10 +49,10 @@
                 @endforelse
             </tbody>
             <caption>
-                Total resultados : {{ $families->total() }}
+                Total resultados : {{ $segments->total() }}
             </caption>
         </table>
 
-        {{ $families->links() }}
+        {{ $segments->links() }}
     </div>
 </div>

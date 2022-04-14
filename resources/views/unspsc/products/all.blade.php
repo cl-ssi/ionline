@@ -6,6 +6,6 @@
 
 @include('pharmacies.nav')
 
-@livewire('warehouse.product.product-all')
+@livewire('unspsc.product.product-all')
 
 @endsection
