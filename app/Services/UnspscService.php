@@ -43,6 +43,7 @@ class UnspscService
                     $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
                 });
             })
+            // ->limit(100) // Se pudiera limitar para mejorar la respuesta
             ->orderBy('class_id');
 
         return $products;
