@@ -12,9 +12,9 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Volcando datos para la tabla unspsc.wre_segments: ~59 rows (aproximadamente)
-/*!40000 ALTER TABLE `wre_segments` DISABLE KEYS */;
-INSERT INTO `wre_segments` (`id`, `code`, `name`, `experies_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
+-- Volcando datos para la tabla unspsc.unspsc_segments: ~59 rows (aproximadamente)
+/*!40000 ALTER TABLE `unspsc_segments` DISABLE KEYS */;
+INSERT INTO `unspsc_segments` (`id`, `code`, `name`, `experies_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 10, 'Artículos para plantas y animales', NULL, '2022-04-12 19:39:29', '2022-04-12 19:39:29', NULL),
 	(2, 11, 'Productos derivados de minerales, plantas y animales', NULL, '2022-04-12 19:39:32', '2022-04-12 19:39:32', NULL),
 	(3, 12, 'Productos químicos industriales', NULL, '2022-04-12 19:39:34', '2022-04-12 19:39:34', NULL),
@@ -74,7 +74,7 @@ INSERT INTO `wre_segments` (`id`, `code`, `name`, `experies_at`, `created_at`, `
 	(57, 101, 'Obras', NULL, '2022-04-12 19:43:34', '2022-04-12 19:43:34', NULL),
 	(58, 102, 'Consultoria', NULL, '2022-04-12 19:43:38', '2022-04-12 19:43:38', NULL),
 	(59, 103, 'eCommerce', NULL, '2022-04-12 19:43:43', '2022-04-12 19:43:43', NULL);
-/*!40000 ALTER TABLE `wre_segments` ENABLE KEYS */;
+/*!40000 ALTER TABLE `unspsc_segments` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
