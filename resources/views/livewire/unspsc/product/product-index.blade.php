@@ -1,8 +1,14 @@
 <div>
-    <h5>Clases</h5>
-    <p><small>{{ $segment->name }} / {{ $family->name }}</small></p>
+    <h5>Productos</h5>
 
-    <div class="input-group mb-2">
+    @include('unspsc.bread-crumbs',[
+        'type' => 'products.index',
+        'segment' => $segment,
+        'family' => $family,
+        'class' => $class
+    ])
+
+    <div class="input-group my-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Buscar</span>
         </div>
@@ -20,24 +26,24 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($classes as $class)
+                @forelse($products as $product)
                 <tr>
+                    <td class="text-center">{{ $product->code }}</td>
+                    <td>{{ $product->name }}</td>
                     <td class="text-center">
-                        <a title="Ver productos"
-                            href="{{ route('products.index', ['segment' => $segment, 'family' => $family, 'class' => $class]) }}">
-                            {{ $class->code }}
-                        </a>
-                    </td>
-                    <td>{{ $class->name }}</td>
-                    <td class="text-center">
-                        <span class="badge badge-{{ $class->status_color }}">
-                            {{ $class->status }}
+                        <span class="badge badge-{{ $product->status_color }}">
+                            {{ $product->status }}
                         </span>
                     </td>
                     <td class="text-center">
                         <a class="btn btn-sm btn-outline-secondary"
-                            title="Editar clase"
-                            href="{{ route('class.edit', ['segment' => $segment, 'family' => $family, 'class' => $class]) }}">
+                            title="Editar producto"
+                            href="{{ route('products.edit',  [
+                                'segment' => $segment,
+                                'family' => $family,
+                                'class' => $class,
+                                'product' => $product
+                            ]) }}">
                             <i class="fas fa-edit"></i>
                         </a>
                     </td>
@@ -49,11 +55,10 @@
                 @endforelse
             </tbody>
             <caption>
-                Total resultados : {{ $classes->total() }}
+                Total resultados : {{ $products->total() }}
             </caption>
         </table>
 
-        {{ $classes->links() }}
-
+        {{ $products->links() }}
     </div>
 </div>
