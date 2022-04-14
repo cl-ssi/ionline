@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Warehouse\Product;
+use App\Models\Unspsc\Product;
 use Illuminate\Support\Str;
 
 class UnspscService
