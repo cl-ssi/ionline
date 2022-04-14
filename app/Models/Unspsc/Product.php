@@ -1,36 +1,37 @@
 <?php
 
-namespace App\Models\Warehouse;
+namespace App\Models\Unspsc;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
-class Family extends Model
+class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'wre_families';
+    protected $table = 'unspsc_products';
 
     protected $fillable = [
         'name',
         'code',
         'experies_at',
-        'segment_id',
+        'class_id',
     ];
 
     protected $dates = [
         'experies_at'
     ];
 
-    public function classes()
-    {
-        return $this->hasMany(Clase::class, 'family_id')->select('id', 'name', 'code');
-    }
+    protected $appends = [
+        'short_name'
+    ];
 
-    public function segment()
+
+    public function class()
     {
-        return $this->belongsTo(Segment::class);
+        return $this->belongsTo(Clase::class);
     }
 
     public function getStatusAttribute()
@@ -41,5 +42,10 @@ class Family extends Model
     public function getStatusColorAttribute()
     {
         return ($this->experies_at == null) ? 'success' : 'danger' ;
+    }
+
+    public function getShortNameAttribute()
+    {
+        return Str::limit($this->name, 80);
     }
 }
