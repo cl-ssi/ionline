@@ -12,7 +12,16 @@
 <ul>
     @foreach($Nseries as $nserie)
         @if($nserie->active)
+            @if($nserie->otherSections)
+            <li>REM-{{$nserie->Nserie}} - {{$nserie->nombre_serie}}
+                <ul>
+                    <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie, 'A']) }}">SECCION A</a></li>
+                    <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie]) }}">SECCION {{implode(', ', $nserie->otherSections)}}</a></li>
+                </ul>
+            </li>
+            @else
             <li><a href="{{ route('indicators.rem.show', [$year, $serie, $nserie->Nserie]) }}">REM-{{$nserie->Nserie}} - {{$nserie->nombre_serie}}</a></li>
+            @endif
         @else
             <li>REM-{{$nserie->Nserie}} - {{$nserie->nombre_serie}} <span class="badge badge-secondary">No Disponible</span></li>
         @endif
