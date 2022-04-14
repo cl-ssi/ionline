@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Warehouse\Family;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFamiliesTable extends Migration
+class CreateUnspscProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +13,13 @@ class CreateFamiliesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wre_families', function (Blueprint $table) {
+        Schema::create('unspsc_products', function (Blueprint $table) {
             $table->id();
 
             $table->integer('code')->nullable();
             $table->string('name')->nullable();
             $table->timestamp('experies_at')->nullable();
-            $table->foreignId('segment_id')->nullable()->constrained('wre_segments');
+            $table->foreignId('class_id')->nullable()->constrained('unspsc_classes');
 
             $table->timestamps();
             $table->softDeletes();
@@ -34,6 +33,6 @@ class CreateFamiliesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wre_families');
+        Schema::dropIfExists('unspsc_products');
     }
 }
