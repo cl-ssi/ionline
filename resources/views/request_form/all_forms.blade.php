@@ -149,7 +149,7 @@
       </tbody>
     </table>
   </div>
-  {{$request_forms->links()}}
+  {{ $request_forms->appends(request()->query())->links() }}
 </div>
 @else
 </div>
