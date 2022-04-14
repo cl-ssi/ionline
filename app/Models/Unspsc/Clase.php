@@ -1,30 +1,36 @@
 <?php
 
-namespace App\Models\Warehouse;
+namespace App\Models\Unspsc;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Segment extends Model
+class Clase extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'wre_segments';
+    protected $table = 'unspsc_classes';
 
     protected $fillable = [
         'name',
         'code',
         'experies_at',
+        'family_id',
     ];
 
     protected $dates = [
         'experies_at'
     ];
 
-    public function families()
+    public function products()
     {
-        return $this->hasMany(Family::class)->select('id', 'name', 'code');
+        return $this->hasMany(Product::class, 'class_id')->select('id', 'name', 'code');
+    }
+
+    public function family()
+    {
+        return $this->belongsTo(Family::class);
     }
 
     public function getStatusAttribute()
