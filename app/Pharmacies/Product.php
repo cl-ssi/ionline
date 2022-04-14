@@ -17,7 +17,8 @@ class Product extends Model
         'barcode', 'name', 'unit', 'expiration',
         //'batch',
         'price', 'stock',
-        'critic_stock', 'storage_conditions', 'category_id', 'program_id', 'id'
+        'critic_stock','min_stock','max_stock',
+        'storage_conditions', 'category_id', 'program_id', 'id'
     ];
 
     protected $table = 'frm_products';

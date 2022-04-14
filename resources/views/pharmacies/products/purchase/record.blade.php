@@ -99,16 +99,16 @@
                 <td>{{ $item->product->name }}</td>
                 <td>{{ Carbon\Carbon::parse($item->due_date)->format('d/m/Y')}}</td>
                 <td>{{ $item->batch }}</td>
-                <td class="right">@numero( $item->unit_cost )</td>
+                <td class="right">@numero_decimal( $item->unit_cost )</td>
             </tr>
         @endforeach
     </tbody>
 </table>
 
 <div class="right">
-    <strong>Monto neto:</strong> @numero( $purchase->purchase_order_amount )<br>
-    <strong>IVA:</strong> @numero( $purchase->purchase_order_amount * 0.19 )<br>
-    <strong>Monto total:</strong> @numero( $purchase->purchase_order_amount * 1.19 )<br>
+    <strong>Monto neto:</strong> @numero_decimal( $purchase->purchase_order_amount )<br>
+    <strong>IVA:</strong> @numero_decimal( $purchase->purchase_order_amount * 0.19 )<br>
+    <strong>Monto total:</strong> @numero_decimal( $purchase->purchase_order_amount * 1.19 )<br>
 </div>
 
 

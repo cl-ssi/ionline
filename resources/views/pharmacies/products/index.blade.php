@@ -43,6 +43,8 @@
 			<th scope="col">Precio</th>-->
 			<th scope="col">Stock</th>
 			<th scope="col">Stock Crítico</th>
+			<th scope="col">Stock Min.</th>
+			<th scope="col">Stock Max.</th>
 			<th scope="col">Categoría</th>
 			<th scope="col">Programa</th>
 			<th scope="col"></th>
@@ -61,6 +63,8 @@
 			<td class="text-right">@numero( $product->price )</td>-->
 			<td class="text-right">@numero( $product->stock )</td>
 			<td class="text-right">@numero( $product->critic_stock )</td>
+			<td class="text-right">{{$product->min_stock}}</td>
+			<td class="text-right">{{$product->max_stock}}</td>
 			<td>{{ $product->category->name }}</td>
 			<td>{{ $product->program->name }}</td>
 			<td>
