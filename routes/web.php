@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 
 use App\Http\Controllers\Suitability\TestsController;
@@ -71,12 +70,10 @@ use App\User;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
-use App\Http\Controllers\warehouse\ClassController;
-use App\Http\Controllers\warehouse\FamilyController;
-use App\Http\Controllers\warehouse\ProductController;
-use App\Http\Controllers\warehouse\SegmentController;
-use App\Http\Livewire\Warehouse\Segment\SegmentEdit;
-use App\Http\Livewire\Warehouse\Segment\SegmentIndex;
+use App\Http\Controllers\Unspsc\ClassController;
+use App\Http\Controllers\Unspsc\FamilyController;
+use App\Http\Controllers\Unspsc\ProductController;
+use App\Http\Controllers\Unspsc\SegmentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -1294,7 +1291,7 @@ Route::get('quality_aps', 'QualityAps\QualityApsController@index')->middleware('
 Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->middleware('auth')->name('quality_aps.download');
 
 
-Route::prefix('warehouse')->middleware('auth')->group(function () {
+Route::prefix('unspsc')->middleware('auth')->group(function () {
 
     Route::get('/products/all', [ProductController::class, 'all'])->name('products.all');
 
