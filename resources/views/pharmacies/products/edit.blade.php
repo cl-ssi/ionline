@@ -75,11 +75,27 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-4">
-            <label for="for_critic_stock">Stock Crítico</label>
-            <input type="text" class="form-control" id="for_critic_stock"
-            value = '{{ $product->critic_stock }}' name="critic_stock" required>
-        </fieldset>
+    </div>
+
+    <div class="row">
+
+      <fieldset class="form-group col-4">
+          <label for="for_critic_stock">Stock Crítico</label>
+          <input type="text" class="form-control" id="for_critic_stock"
+          value = '{{ $product->critic_stock }}' name="critic_stock" required>
+      </fieldset>
+
+      <fieldset class="form-group col-4">
+          <label for="for_min_stock">Stock Min.</label>
+          <input type="text" class="form-control" id="for_min_stock"
+          value = '{{ $product->min_stock }}' name="min_stock" required>
+      </fieldset>
+
+      <fieldset class="form-group col-4">
+          <label for="for_max_stock">Stock Max.</label>
+          <input type="text" class="form-control" id="for_max_stock"
+          value = '{{ $product->max_stock }}' name="max_stock" required>
+      </fieldset>
 
     </div>
 
