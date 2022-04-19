@@ -16,6 +16,7 @@ class SearchSelectReplacementStaff extends Component
     public $selectedProfile = null;
     public $selectedSearch = null;
     public $selectedProfession = null;
+    public $selectedStaff = null;
 
     public function render()
     {
@@ -23,7 +24,7 @@ class SearchSelectReplacementStaff extends Component
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
             //'professionManage' => ProfessionManage::orderBy('name', 'ASC')->get(),
             'replacementStaff' => ReplacementStaff::latest()
-                ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession)
+                ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession, $this->selectedStaff)
                 ->whereNotIn('status', ['selected'])
                 ->take(10)
                 ->get()
