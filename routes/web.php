@@ -1239,7 +1239,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('rem')->as('rem.')->group(function () {
         Route::get('/{year}', 'Indicators\RemController@list')->name('list');
         Route::get('/{year}/{serie}', 'Indicators\RemController@index')->name('index');
-        Route::get('/{year}/{serie}/{nserie}', 'Indicators\RemController@show')->name('show');
+        Route::get('/{year}/{serie}/{nserie}/{unique?}', 'Indicators\RemController@show')->name('show');
     });
 
     Route::prefix('rems')->as('rems.')->group(function () {
