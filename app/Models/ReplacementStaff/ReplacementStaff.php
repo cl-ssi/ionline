@@ -63,6 +63,10 @@ class ReplacementStaff extends Model
         return $this->hasMany('\App\Models\ReplacementStaff\Applicant');
     }
 
+    public function staffManages() {
+        return $this->hasMany('\App\Models\ReplacementStaff\StaffManage');
+    }
+
     public function getStatusValueAttribute(){
         switch ($this->status) {
             case 'immediate_availability':
@@ -101,9 +105,9 @@ class ReplacementStaff extends Model
         }
       }
 
-    public function scopeSearch($query, $search, $profile_search, $profession_search)
+    public function scopeSearch($query, $search, $profile_search, $profession_search, $staff_search)
     {
-          if ($search OR $profile_search OR $profession_search) {
+          if ($search OR $profile_search OR $profession_search OR $staff_search) {
               $array_name_search = explode(' ', $search);
               foreach($array_name_search as $word){
                   $query->where(function($query) use($word){
@@ -125,6 +129,13 @@ class ReplacementStaff extends Model
                       $q->Where('profession_manage_id', $profession_search);
                   });
               }
+
+              if($staff_search != 0){
+                  $query->whereHas('staffManages', function($q) use ($staff_search){
+                      $q->Where('organizational_unit_id', $staff_search);
+                  });
+              }
+
           }
     }
 

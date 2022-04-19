@@ -1,7 +1,7 @@
 <div>
     <div class="card card-body">
         <div class="form-row">
-            <fieldset class="form-group col-3">
+            <fieldset class="form-group col-5">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;"
                   placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model="selectedSearch">
@@ -17,7 +17,7 @@
                 </select>
             </fieldset>
 
-            <fieldset class="form-group col-4">
+            <fieldset class="form-group col-5">
                 <label for="for_profession_search">Profesión</label>
                 <select name="profession_search" class="form-control" wire:model="selectedProfession">
                     <option value="0">Seleccione...</option>
@@ -26,16 +26,6 @@
                         <option value="{{ $profession->id }}">{{ $profession->name }}</option>
                     @endforeach
                     @endif
-                </select>
-            </fieldset>
-
-            <fieldset class="form-group col-3">
-                <label for="for_staff_search">Staff de Unidad Organizacional</label>
-                <select name="staff_search" class="form-control" wire:model="selectedStaff">
-                    <option value="0">Seleccione...</option>
-                    @foreach(App\Models\ReplacementStaff\StaffManage::getStaffByOu() as $staff)
-                        <option value="{{ $staff->organizationalUnit->id }}">{{ $staff->organizationalUnit->name }}</option>
-                    @endforeach
                 </select>
             </fieldset>
         </div>
@@ -57,10 +47,6 @@
                 </tr>
             </thead>
             <tbody class="small">
-                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.store', $technicalEvaluation) }}">
-                @csrf
-                @method('POST')
-
                 @foreach($replacementStaff as $staff)
                 <tr>
                     <td>{{ $staff->FullName }}</td>
@@ -100,7 +86,7 @@
                         <fieldset class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="replacement_staff_id[]"
-                                    value="{{ $staff->id }}">
+                                    value="{{ $staff->id }}" onclick="myFunction()" id="for_applicant_id">
                             </div>
                         </fieldset>
                     </td>
@@ -109,11 +95,5 @@
 
             </tbody>
         </table>
-        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-            Auth::user()->hasRole('Replacement Staff: admin'))
-          <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
-        @endif
-        </form>
-        {{-- $replacementStaff->links(pagination::bootstrap-4) --}}
     </div>
 </div>
