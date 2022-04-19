@@ -30,6 +30,7 @@ use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\StaffManageController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestSignController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
@@ -184,6 +185,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::prefix('staff_manage')->name('staff_manage.')->group(function(){
+        Route::get('/', [StaffManageController::class, 'index'])->name('index');
+        Route::get('/create', [StaffManageController::class, 'create'])->name('create');
+        Route::post('/store', [StaffManageController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [StaffManageController::class, 'edit'])->name('edit');
+        Route::get('{organizational_unit_id}/destroy/{replacement_staff_id}', [StaffManageController::class, 'destroy'])->name('destroy');
+    });
     Route::prefix('view_profile')->name('view_profile.')->group(function(){
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
         Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');

@@ -105,7 +105,8 @@ class TechnicalEvaluationController extends Controller
         $replacementStaff = ReplacementStaff::latest()
             ->search($request->input('search'),
                     $request->input('profile_search'),
-                    $request->input('profession_search'))
+                    $request->input('profession_search'),
+                    $request->input('staff_search'))
             ->paginate(5);
 
         if($request->search != NULL || $request->profile_search != 0 || $request->profession_search != 0){
