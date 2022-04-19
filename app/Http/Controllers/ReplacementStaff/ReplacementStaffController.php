@@ -29,7 +29,8 @@ class ReplacementStaffController extends Controller
         $replacementStaff = ReplacementStaff::latest()
             ->search($request->input('search'),
                       $request->input('profile_search'),
-                      $request->input('profession_search'))
+                      $request->input('profession_search'),
+                      null)
             ->paginate(15);
 
         $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
