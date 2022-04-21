@@ -110,7 +110,17 @@ class StaffManageController extends Controller
 
         $staffManage->each->delete();
 
-        session()->flash('danger', 'Estimado Usuario: el postulante ha sido eliminado del Staff.');
-        return redirect()->back();
+        $countStaffManage = StaffManage::where('organizational_unit_id', $organizational_unit_id)
+            ->count();
+
+        if($countStaffManage > 0){
+            session()->flash('danger', 'Estimado Usuario: el postulante ha sido eliminado del Staff.');
+            return redirect()->back();
+        }
+        else{
+            session()->flash('danger', 'Estimado Usuario: el postulante ha sido eliminado del Staff.');
+            return redirect()->route('replacement_staff.staff_manage.index');
+        }
+
     }
 }

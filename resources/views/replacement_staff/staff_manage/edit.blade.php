@@ -63,7 +63,7 @@
                               class="btn btn-outline-secondary btn-sm"
                               title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
                             <a href="{{ route('replacement_staff.staff_manage.destroy',
-                                ['organizational_unit_id' => $staffManage->first()->organizationalUnit->id,
+                                ['organizational_unit_id' => $staffManageByOu->first()->organizationalUnit->id,
                                  'replacement_staff_id' => $staffManage->replacementStaff->id ]) }}"
                               class="btn btn-outline-danger btn-sm"
                               onclick="return confirm('¿Está seguro que desea eliminar el Integrante del Staff?')"> <i class="fas fa-trash"></i></a>
