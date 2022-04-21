@@ -50,12 +50,16 @@
         </button>
         {{ $comuna }}
         @if(count($program_aps->establishments) > 0)
-        <select name="establishment" id="establishment" class="form-control col-3 float-right">
-                    <option value="{{ str_replace(" ","_",$comuna) }}">Todas</option>
-                @foreach($program_aps->establishments as $establishment)
-                    <option value="{{ preg_replace("/[\s.,-]+/","_",$establishment) }}">{{ $establishment }}</option>
-                @endforeach
-        </select>
+        <form class="form-inline mb-2 float-right">
+            <input type="hidden" name="establishments_list" value="{{serialize($program_aps->establishments)}}">
+            <select name="establishments_filter[]" class="form-control selectpicker mr-2" title="Todas" data-width="380px" multiple>
+                        <!-- <option value="">Todas</option> -->
+                    @foreach($program_aps->establishments as $key => $establishment)
+                        <option value="{{$key}}" {{ $establishments_filter && in_array($key, $establishments_filter) ? 'selected' : ''}}>{{ $establishment }}</option>
+                    @endforeach
+            </select>
+            <button type="submit" type="button" class="btn btn-primary">Aplicar</button>
+        </form>
         @endif
     </h4>
     <div class="table-responsive targetDiv" id="{{ str_replace(" ","_",$comuna) }}">
@@ -97,7 +101,7 @@
     </table>
     </div>
     <!-- Por establecimiento -->
-    @foreach($program_aps->establishments as $establishment)
+    {{--@foreach($program_aps->establishments as $establishment)
     <div class="table-responsive targetDiv" style="display:none" id="{{ preg_replace("/[\s.,-]+/","_",$establishment) }}">
     <table class="table table-bordered table-hover table-sm small" id="tabla_{{ preg_replace("/[\s.,-]+/","_",$establishment) }}" >
         <thead>
@@ -136,7 +140,7 @@
         </tbody>
     </table>
     </div>
-    @endforeach
+    @endforeach--}}
 </div>
 @else
 <div class="tab-content m-3">
