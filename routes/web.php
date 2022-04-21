@@ -1557,6 +1557,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
+    Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
