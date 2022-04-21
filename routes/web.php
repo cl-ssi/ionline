@@ -31,6 +31,7 @@ use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\StaffManageController;
+use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestSignController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
@@ -246,6 +247,14 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::get('/create_document/{technicalEvaluation}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
         });
 
+    });
+
+    Route::prefix('contact_record')->name('contact_record.')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys'])->group(function(){
+        Route::get('/{staff}', [ContactRecordController::class, 'index'])->name('index');
+        Route::get('/{staff}/create/', [ContactRecordController::class, 'create'])->name('create');
+        Route::post('/{staff}/store', [ContactRecordController::class, 'store'])->name('store');
+        // Route::get('/{id}/edit', [StaffManageController::class, 'edit'])->name('edit');
+        // Route::get('{organizational_unit_id}/destroy/{replacement_staff_id}', [StaffManageController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('reports')->name('reports.')->group(function(){
