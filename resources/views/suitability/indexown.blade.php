@@ -41,6 +41,7 @@
                 <th>Telefono</th>
                 <th>Estado</th>
                 <th>Eliminar</th>
+                <th>Volver a "Esperando Test"</th>
             </tr>
         </thead>
         <tbody>
@@ -65,6 +66,17 @@
                     </form>
                     @endif
 
+                </td>
+                <td>
+                @if($psirequest->status == 'Realizando Test' )
+                <form method="POST" action="{{ route('suitability.update', $psirequest) }}" class="d-inline">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Volverá el Test a Esperando Test, esto debe realizar solo cuando el asistente a la educación, no pudo terminar el test')">
+                            <span class="fa fa-spinner" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                @endif
                 </td>
             </tr>
             @endforeach
