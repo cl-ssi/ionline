@@ -26,7 +26,6 @@ class StaffManage extends Model implements Auditable
     }
 
     public static function getStaffByOu(){
-
         return $staffManages = StaffManage::selectRaw('organizational_unit_id')
             ->groupBy('organizational_unit_id')
             ->get();
