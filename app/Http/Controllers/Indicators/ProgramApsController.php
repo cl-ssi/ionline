@@ -21,24 +21,37 @@ class ProgramApsController extends Controller
         return view('indicators.programming_aps.index');
     }
 
-    public function show($year, $commune_id)
+    public function show(Request $request, $year, $commune_id)
     {
         if(!in_array($commune_id, range(0,8)) OR !preg_match('/^\d+$/', $commune_id)) abort(404);
+        $establishments_filter = $request->has('establishments_filter') ? $request->establishments_filter : null;
+        $establishments_list = $request->has('establishments_list') ? unserialize($request->establishments_list) : null;
         $program_aps = ProgramAps::where('year', $year)->firstOrFail();
-        $program_aps->load('tracers.values');
-        $this->loadValuesWithRemSource($year, $commune_id, $program_aps);
+        
+        if($establishments_filter){
+            $establishments = array();
+            foreach($establishments_filter as $establishment_code) 
+                $establishments[] = $establishments_list[$establishment_code];
+            $program_aps->load(['tracers' => function ($query) use ($establishments) {
+                $query->with(['values' => function($query2) use ($establishments){
+                    return $query2->whereIn('establishment', $establishments);
+                }]);
+             }]);
+        }else{
+            $program_aps->load('tracers.values');
+        }
+        $this->loadValuesWithRemSource($year, $commune_id, $program_aps, $establishments_filter);
         // return $program_aps;
-        return view('indicators.programming_aps.show', compact('program_aps', 'commune_id'));
+        return view('indicators.programming_aps.show', compact('program_aps', 'commune_id', 'establishments_filter'));
     }
 
-    private function loadValuesWithRemSource($year, $commune_id, $program_aps)
+    private function loadValuesWithRemSource($year, $commune_id, $program_aps, $establishments_filter)
     {
         $communes = array(1 => 'COLCHANE', 2 => 'HUARA', 3 => 'CAMIÑA', 4 => 'POZO ALMONTE', 5 => 'PICA', 6 => 'IQUIQUE', 7 => 'ALTO HOSPICIO', 8 => 'HECTOR REYNO');
-        $establishments_filter = collect();
+        $establishments = array();
 
         // Procesamos los numerador por rem
         foreach($program_aps->tracers as $tracer){
-            // $establishments = collect();
             //Comsultas REM numerador
             if($tracer->numerator_cods != null && $tracer->numerator_cols != null){
                 //procesamos los datos necesarios para todas consultas rem que se necesiten para la trazadora
@@ -69,14 +82,17 @@ class ProgramApsController extends Controller
                     ->whereIn('CodigoPrestacion', $cods)
                     // ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
                     ->whereNotIn('IdEstablecimiento', ['102100','102600','102601','102602','102011'])
-                    ->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                    ->when($establishments_filter, function($q3) use ($establishments_filter){
+                        return $q3->whereIn('IdEstablecimiento', $establishments_filter);
+                    })
+                    ->groupBy('Mes')->orderBy('Mes')->get();
 
                     foreach($result as $item){
                         $value = new Value(['month' => $item->Mes, 'factor' => 'numerador', 'value' => $item->valor]);
                         if($commune_id != 0){ // No es resumen por lo que procedo a guardar comuna y establecimiento del valor
                             $value->commune = $commune_id != 8 ? $item->establecimiento->comuna : $communes[$commune_id];
                             $value->establishment = $commune_id != 8 ? $item->establecimiento->alias_estab : null;
-                            if($commune_id != 8) $establishments_filter[] = $value->establishment; //No es necesario ejecutar si el valor viene del Hector Reyno
+                            if($commune_id != 8 && !request()->has('establishments_list')) $establishments[$item->IdEstablecimiento] = $value->establishment; //No es necesario ejecutar si el valor viene del Hector Reyno
                         }
                         $tracer->values->add($value);
                     }
@@ -97,25 +113,17 @@ class ProgramApsController extends Controller
                         }
                     }
                 } else {
-                    // seteo valor denominador para comuna
+                    // seteo valor denominador para comuna o establecimientos seleccionados
                     if(!empty($values[$commune_id-1])){ //valor distinto a 0 lo procesamos
                         $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$values[$commune_id-1]]);
                         $value->commune = $communes[$commune_id];
                         $tracer->values->add($value);
-
-                        // seteo mismo valor comuna denominador para sus establecimientos
-                        foreach($establishments_filter->unique() as $establishment){
-                            $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$values[$commune_id-1]]);
-                            $value->establishment = $establishment;
-                            $tracer->values->add($value);
-                            // $establishments_filter[] = $establishment; // Necesario para luego filtrar por establecimiento en la vista
-                        }
                     }
                 }
             }
         }
 
-        $program_aps->establishments = $establishments_filter->unique();
+        $program_aps->establishments = request()->has('establishments_list') ? unserialize(request()->establishments_list) : $establishments;
         $program_aps->communes = $communes;
     }
 }
