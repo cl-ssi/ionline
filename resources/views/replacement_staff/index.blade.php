@@ -72,7 +72,7 @@
                 <th>Años Exp.</th>
                 <th>Estado</th>
                 <!-- <th>Periodo Efectivo</th> -->
-                <th style="width: 8%"></th>
+                <th style="width: 8%">Más...</th>
             </tr>
         </thead>
         <tbody class="small">
@@ -113,11 +113,14 @@
                 <td>
                     <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
                       class="btn btn-outline-secondary btn-sm"
-                      title="Ir"> <i class="far fa-eye"></i></a>
+                      title="Ver Detalle"> <i class="far fa-eye"></i></a>
                     <a href="{{ route('replacement_staff.view_file', $staff) }}"
                       class="btn btn-outline-secondary btn-sm"
-                      title="Ir"
+                      title="Curriculum Vitae"
                       target="_blank"> <i class="far fa-file-pdf"></i></a>
+                    <a href="{{ route('replacement_staff.contact_record.index', $staff) }}"
+                      class="btn btn-outline-secondary btn-sm"
+                      title="Registro de Contacto"> <i class="fas fa-address-book"></i></a>
                 </td>
             </tr>
             @endforeach
