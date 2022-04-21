@@ -373,4 +373,12 @@ class SuitabilityController extends Controller
 
         return redirect()->route('suitability.configSignature');
     }
+
+    public function update(PsiRequest $psirequest)
+    {
+        $psirequest->status = "Esperando Test";
+        $psirequest->save();        
+        session()->flash('success', 'Se ha vuelto el test a estado "Esperando Test"');
+        return redirect()->back();
+    }
 }
