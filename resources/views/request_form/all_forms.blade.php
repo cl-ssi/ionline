@@ -26,6 +26,7 @@
           <th>Usuario Gestor</th>
           <th>Comprador</th>
           <th>Items</th>
+          <th>Presupuesto</th>
           <th>Espera</th>
           <th>Etapas de aprobación</th>
           <th style="width: 7%">Fecha de Aprobación Depto de Gestión de Abastecimiento</th>
@@ -82,6 +83,7 @@
           </td>
           <td>{{ $requestForm->purchasers->first()->FullName?? 'No asignado' }}</td>
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+          <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
           <td class="text-center">
             @if($requestForm->eventRequestForms->count() > 0)
