@@ -1,7 +1,7 @@
 <span>
 @if(!$errorMsg)
   @if($forResolution)
-    {{number_format($totalHoursDay,0)}} Horas diurnas y {{number_format($totalHoursNight,0)}} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
+    {{floor($totalHoursDay)}} Horas diurnas y {{floor($totalHoursNight)}} horas nocturnas en turno extras en el mes de {{$fulfillment->serviceRequest->start_date->monthName}},
     cuya suma alzada total es de ${{number_format($fulfillment->total_to_pay)}}.- ({{$fulfillment->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art.
     2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($fulfillment->total_to_pay)}} el mes de {{$fulfillment->serviceRequest->start_date->monthName}}
   @else
