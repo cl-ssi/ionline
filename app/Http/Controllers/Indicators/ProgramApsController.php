@@ -11,6 +11,7 @@ use App\Indicators\ProgramAps;
 use App\Indicators\Rem;
 use App\Indicators\Value;
 use App\Models\Commune;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -49,7 +50,7 @@ class ProgramApsController extends Controller
     {
         $communes = array(1 => 'COLCHANE', 2 => 'HUARA', 3 => 'CAMIÑA', 4 => 'POZO ALMONTE', 5 => 'PICA', 6 => 'IQUIQUE', 7 => 'ALTO HOSPICIO', 8 => 'HECTOR REYNO');
         $establishments = array();
-
+        $innerHR = $year == 2022; // Se indica que CGU Dr. Héctor Reyno no programó para este año, su producción debe ser sumada a la comuna de Alto Hospicio
         // Procesamos los numerador por rem
         foreach($program_aps->tracers as $tracer){
             //Comsultas REM numerador
@@ -69,9 +70,12 @@ class ProgramApsController extends Controller
 
                     $result = Rem::year($year)->selectRaw($raws)
                     ->when($commune_id != 0, function($query){ return $query->with('establecimiento'); })
-                    ->when(isset($communes[$commune_id]) && $commune_id != 8, function($q) use ($communes, $commune_id){
-                        return $q->whereHas('establecimiento', function($q2) use ($communes, $commune_id){
-                            return $q2->where('comuna', $communes[$commune_id])->where('Codigo', '!=', 102307);
+                    ->when(isset($communes[$commune_id]) && $commune_id != 8, function($q) use ($communes, $commune_id, $innerHR){
+                        return $q->whereHas('establecimiento', function($q2) use ($communes, $commune_id, $innerHR){
+                            return $q2->where('comuna', $communes[$commune_id])
+                                      ->when(!$innerHR, function($q3){
+                                          return $q3->where('Codigo', '!=', 102307);
+                                      });
                             });
                     })
                     ->when(isset($communes[$commune_id]) && $commune_id == 8, function($q){
@@ -124,6 +128,8 @@ class ProgramApsController extends Controller
         }
 
         $program_aps->establishments = request()->has('establishments_list') ? unserialize(request()->establishments_list) : $establishments;
+        $program_aps->innerHR = $innerHR;
+        if($innerHR) unset($communes[8]); //se quita Hector Reyno del listado
         $program_aps->communes = $communes;
     }
 }

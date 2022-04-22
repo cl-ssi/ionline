@@ -22,7 +22,7 @@
 </style>
 
 
-<h3 class="mb-3">Programación APS</h3>
+<h3 class="mb-3">Programación APS {{$program_aps->year}}</h3>
 
 <!-- Nav tabs commune -->
 <ul class="nav nav-tabs d-print-none">
