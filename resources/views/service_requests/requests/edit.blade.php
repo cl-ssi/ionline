@@ -509,7 +509,7 @@
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-			<label for="for_objectives">Objetivos</label>
+			<label for="for_objectives">Objetivos/Considerando</label>
 			<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
