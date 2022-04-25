@@ -97,6 +97,14 @@
                           <th class="table-active">Lugar de Desempeño</th>
                           <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
                       </tr>
+                      <tr>
+                          <th class="table-active">Staff Sugerido</th>
+                          <td colspan="2">
+                            @if($requestReplacementStaff->replacementStaff)
+                                {{ $requestReplacementStaff->replacementStaff->FullName }}
+                            @endif
+                          </td>
+                      </tr>
                   </tbody>
               </table>
           </div>
@@ -139,24 +147,31 @@
                             </td>
                           @endforeach
                       </tr>
-                      @if($requestReplacementStaff->technicalEvaluation)
-                        @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
-                          $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
-                          <tr>
-                              <th class="table-active">Estado de Solicitud</th>
-                              <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
-                          </tr>
-                          <tr>
-                              <th class="table-active">Fecha de Cierre</th>
-                              <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
-                          </tr>
-                        @endif
-                      @endif
                   </tbody>
               </table>
           </div>
 
-          <!-- <div class="row">
+          <br>
+
+          @if($requestReplacementStaff->technicalEvaluation)
+            @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
+              $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+              <div class="table-responsive">
+                  <table class="table table-sm table-bordered">
+                      <tr>
+                          <th class="table-active" style="width: 33%">Estado de Solicitud</th>
+                          <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Fecha de Cierre</th>
+                          <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                      </tr>
+                  </table>
+              </div>
+            @endif
+          @endif
+
+          <div class="row">
               <div class="col">
                   @if($requestReplacementStaff->technicalEvaluation &&
                     $requestReplacementStaff->end_date < now()->toDateString() &&
@@ -166,7 +181,7 @@
                           <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
                   @endif
               </div>
-          </div> -->
+          </div>
 
           <br>
 

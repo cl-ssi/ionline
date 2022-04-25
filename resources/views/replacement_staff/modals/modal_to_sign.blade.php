@@ -90,6 +90,14 @@
                               <th class="table-active">Lugar de Desempeño</th>
                               <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
                           </tr>
+                          <tr>
+                              <th class="table-active">Staff Sugerido</th>
+                              <td colspan="2">
+                                @if($requestReplacementStaff->replacementStaff)
+                                    {{ $requestReplacementStaff->replacementStaff->FullName }}
+                                @endif
+                              </td>
+                          </tr>
                       </tbody>
                   </table>
               </div>
