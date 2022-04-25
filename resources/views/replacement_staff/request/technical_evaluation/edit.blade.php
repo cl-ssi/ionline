@@ -108,7 +108,24 @@
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->ouPerformance->name }}</td>
             </tr>
             <tr>
-                <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                <th class="table-active">Staff Sugerido</th>
+                <td colspan="2">
+                  @if($technicalEvaluation->requestReplacementStaff->replacementStaff)
+                      {{ $technicalEvaluation->requestReplacementStaff->replacementStaff->FullName }}
+                  @endif
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br />
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <tbody>
+            <tr>
+                <td colspan="{{ $technicalEvaluation->requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)

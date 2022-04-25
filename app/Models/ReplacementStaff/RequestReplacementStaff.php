@@ -19,7 +19,7 @@ class RequestReplacementStaff extends Model
         'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
         'name_to_replace', 'other_fundament', 'work_day', 'other_work_day',
         'charges_number','job_profile_file', 'request_verification_file',
-        'ou_of_performance_id'
+        'ou_of_performance_id', 'replacement_staff_id'
     ];
 
     public function requestFather() {
@@ -52,6 +52,10 @@ class RequestReplacementStaff extends Model
 
     public function ouPerformance() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
+    }
+
+    public function replacementStaff() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
     }
 
     public function requestSign() {
