@@ -15,19 +15,16 @@ use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
 use App\Documents\Parte;
 use App\Documents\ParteFile;
-use App\Indicators\Rem;
-use App\Models\ServiceRequests\SignatureFlow;
 use Carbon\Carbon;
 
 /* No se si son necesarias, las puse para el try catch */
-
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
 use Storage;
 use Str;
 
-class FirmaDigitalController extends Controller
+class DigitalSignatureController extends Controller
 {
     const modoDesatendidoTest = 0;
     const modoAtendidoTest = 1;
