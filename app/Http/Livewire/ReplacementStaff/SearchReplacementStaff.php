@@ -16,7 +16,7 @@ class SearchReplacementStaff extends Component
     public $selectedSearch = null;
     public $selectedProfession = null;
     public $selectedStaff = null;
-    public $selectedStatus = null;
+    public $selectedStatus = 0;
 
     public function render()
     {

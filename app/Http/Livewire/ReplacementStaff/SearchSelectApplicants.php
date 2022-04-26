@@ -26,7 +26,7 @@ class SearchSelectApplicants extends Component
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
             //'professionManage' => ProfessionManage::orderBy('name', 'ASC')->get(),
             'replacementStaff' => ReplacementStaff::latest()
-                ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession,$this->selectedStaff, NULL)
+                ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession,$this->selectedStaff, 0)
                 ->whereNotIn('status', ['selected'])
                 ->take(10)
                 ->get()
