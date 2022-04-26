@@ -165,10 +165,10 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'
 
 
 
-Route::post('/{signaturesFlowId}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
-Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFlowId}/firma', 'DigitalSignatureController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firma', 'DigitalSignatureController@signPdf')->name('signPdf');
 Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
-Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
+Route::get('/test-firma/{otp}', 'DigitalSignatureController@test');
 
 
 

@@ -42,7 +42,6 @@ class RequirementsSentToAuthorities extends Command
     public function handle(): int
     {
         $requirements = Requirement::whereYear('created_at', $this->option('year'))->get();
-//        $requirements = Requirement::where('id', 12446)->get();
         $affectedRequirementsCount = 0;
         $affectedEventsCount = 0;
 
