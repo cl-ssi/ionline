@@ -107,7 +107,6 @@ class ReplacementStaff extends Model
 
     public function scopeSearch($query, $search, $profile_search, $profession_search, $staff_search, $status_search)
     {
-
           if ($search OR $profile_search OR $profession_search OR $staff_search OR $status_search) {
               $array_name_search = explode(' ', $search);
               foreach($array_name_search as $word){
@@ -138,7 +137,9 @@ class ReplacementStaff extends Model
               }
 
               if($status_search != "0"){
-                  $query->where('status', $status_search);
+                  $query->where(function($q) use($status_search){
+                      $q->where('status', $status_search);
+                  });
               }
           }
     }
