@@ -17,7 +17,7 @@ use App\Documents\Parte;
 use App\Documents\ParteFile;
 use Carbon\Carbon;
 
-/* No se si son necesarias, las puse para el try catch */
+/* No sé si son necesarias, las puse para el try catch */
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
@@ -26,13 +26,13 @@ use Str;
 
 class DigitalSignatureController extends Controller
 {
-    const modoDesatendidoTest = 0;
-    const modoAtendidoTest = 1;
-    const modoAtendidoProduccion = 2;
-    const modoDesatendidoProduccion = 3;
+    const MODO_DESATENDIDO_TEST = 0;
+    const MODO_ATENDIDO_TEST = 1;
+    const MODO_ATENDIDO_PRODUCCION = 2;
+    const MODO_DESATENDIDO_PRODUCCION = 3;
 
     /**
-     * Se utiliza para firmar docs que no se crean en el modulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo,
+     * Se utiliza para firmar docs que no se crean en el módulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo,
      * lo firma llamando a signPdfApi y guarda NUEVO registro SignaturesFile.
      * @param Request $request
      * @return string
@@ -65,7 +65,7 @@ class DigitalSignatureController extends Controller
             $checksum_pdf = md5($responseBody);
         }
 
-        $modo = self::modoAtendidoProduccion;
+        $modo = self::MODO_ATENDIDO_PRODUCCION;
         $otp = $request->otp;
         $modelId = $request->model_id;
         $signatureType = 'firmante';
@@ -100,7 +100,7 @@ class DigitalSignatureController extends Controller
     }
 
     /**
-     * Función para firmar en modulo de solicitud de firmas, llamando a signPdfApi
+     * Función para firmar en módulo de solicitud de firmas, llamando a signPdfApi
      * @param Request $request
      * @param SignaturesFlow $signaturesFlow
      * @return \Illuminate\Http\RedirectResponse
@@ -127,7 +127,7 @@ class DigitalSignatureController extends Controller
             $type = $signaturesFlow->type;
             $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
             $otp = $request->otp;
-            $modo = self::modoAtendidoProduccion;
+            $modo = self::MODO_ATENDIDO_PRODUCCION;
             $verificationCode = Str::random(6);
             $docId = $signaturesFlow->signaturesFile->id;
             $custom_x_axis = $signaturesFlow->custom_x_axis;
@@ -253,7 +253,7 @@ class DigitalSignatureController extends Controller
                 }
             }
 
-            // Si es visación en cadena, se envía notificación por correo al siguiente firmador
+            // Si es visación en cadena, se envía notificación por correo al siguiente firmante
             if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
                 if ($signaturesFlow->type === 'visador') {
                     $nextSignaturesFlowVisation = SignaturesFlow::query()
@@ -357,7 +357,7 @@ class DigitalSignatureController extends Controller
 
         /* Fin cuadro de firma */
 
-        if ($modo == self::modoDesatendidoTest) {
+        if ($modo == self::MODO_DESATENDIDO_TEST) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
             $secret = 'abcd';
@@ -369,7 +369,7 @@ class DigitalSignatureController extends Controller
             $entity = 'Subsecretaría General de La Presidencia';
 
             /* $pdfbase64 = base64_encode(file_get_contents(public_path('samples/sample3.pdf'))); */
-        } elseif ($modo == self::modoAtendidoTest) {
+        } elseif ($modo == self::MODO_ATENDIDO_TEST) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
             $secret = 'abcd';
@@ -378,7 +378,7 @@ class DigitalSignatureController extends Controller
 
             $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
-        } elseif ($modo == self::modoAtendidoProduccion) {
+        } elseif ($modo == self::MODO_ATENDIDO_PRODUCCION) {
             $url = env('FIRMA_URL');
             $api_token = env('FIRMA_API_TOKEN');
             $secret = env('FIRMA_SECRET');
@@ -387,7 +387,7 @@ class DigitalSignatureController extends Controller
 //            $run = 16351236;
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
-        } elseif ($modo == self::modoDesatendidoProduccion) {
+        } elseif ($modo == self::MODO_DESATENDIDO_PRODUCCION) {
             $url = env('FIRMA_URL');
             $api_token = env('FIRMA_API_TOKEN');
             $secret = env('FIRMA_SECRET');
@@ -490,7 +490,7 @@ class DigitalSignatureController extends Controller
         // <ury> Coordenada y de la esquina superior derecha de la imagen.
 
         try {
-            if ($modo = self::modoAtendidoTest or $modo = self::modoAtendidoProduccion) {
+            if ($modo = self::MODO_ATENDIDO_TEST or $modo = self::MODO_ATENDIDO_PRODUCCION) {
                 $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
             } else {
                 $response = Http::post($url, $data);
