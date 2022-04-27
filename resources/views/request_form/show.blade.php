@@ -94,7 +94,17 @@
               {{ $requestForm->purchaseType->finance_business_day??'Falta en el mantenedor poner la cantidad de Días Habiles' }}
               -
               {{ $requestForm->purchaseType->supply_continuous_day??'Falta en el mantenedor poner la cantidad de Días Corrido' }}
+            </td>            
+          </tr>
+          <tr>
+            <th class="table-active" colspan="2" scope="row">Vencimiento </th>            
+            <td @if($requestForm->purchaseType->supply_continuous_day <= $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now())) class="text-danger" @endif>
+              {{ 
+              $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now());
+              }}
+              ({{$requestForm->purchaseType->supply_continuous_day}})
             </td>
+
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Tipo de Formulario</th>
