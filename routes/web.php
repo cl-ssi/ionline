@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Documents\DocumentController;
+use App\Http\Controllers\RequestForms\EventRequestFormFileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -1473,6 +1474,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
+
+    Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
 
     //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
     //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
