@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <strong>Indicadores APS.<br></strong>
+        <strong>Indicadores (APS - Hospital)<br></strong>
     </div>
 
     <ul class="list-group list-group-flush">
