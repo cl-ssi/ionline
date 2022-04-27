@@ -89,6 +89,14 @@
             <td>{{ $requestForm->purchaseMechanism->PurchaseMechanismValue }}</td>
           </tr>
           <tr>
+            <th class="table-active" colspan="2" scope="row">Días Hábiles - Días Corrido</th>
+            <td>
+              {{ $requestForm->purchaseType->finance_business_day??'Falta en el mantenedor poner la cantidad de Días Habiles' }}
+              -
+              {{ $requestForm->purchaseType->supply_continuous_day??'Falta en el mantenedor poner la cantidad de Días Corrido' }}
+            </td>
+          </tr>
+          <tr>
             <th class="table-active" colspan="2" scope="row">Tipo de Formulario</th>
             <td>{{ $requestForm->SubtypeValue }}</td>
           </tr>
