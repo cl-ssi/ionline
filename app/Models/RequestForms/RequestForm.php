@@ -287,6 +287,18 @@ class RequestForm extends Model implements Auditable
     return $this->type_of_currency == 'peso' ? 0 : 2;
   }
 
+    public function getApprovedAtAttribute()
+    {
+        if ($this->eventRequestForms()->count() === 0) {
+            return null;
+        }
+
+        return $this->eventRequestForms()
+            ->orderBy('cardinal_number', 'desc')
+            ->first('signature_date')
+            ->signature_date;
+    }
+
   /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
   public function eventSign($event_type)
   {

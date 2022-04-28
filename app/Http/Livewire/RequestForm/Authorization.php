@@ -120,6 +120,7 @@ class Authorization extends Component
         $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
         $this->requestForm->purchasers()->attach($this->supervisorUser);
         $this->requestForm->status = 'approved';
+        $this->requestForm->approved_at = now();
         $this->requestForm->save();
         // $this->createPurchasingProcesses();
       }
