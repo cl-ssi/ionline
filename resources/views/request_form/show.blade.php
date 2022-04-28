@@ -407,7 +407,7 @@
                         <tfoot>
                         <tr>
                             <th colspan="11" class="text-right">Valor Total
-                            </td>
+                            </th>
                             <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</th>
                         </tr>
                         <tr>
@@ -505,13 +505,13 @@
                             <tfoot>
                             <tr>
                                 <th colspan="9" class="text-right">Totales
-                                </td>
+                                </th>
                                 <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</th>
                                 <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                             </tr>
                             <tr>
                                 <th colspan="10" class="text-right">Saldo disponible Compras
-                                </td>
+                                </th>
                                 <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                             </tr>
                             </tfoot>
