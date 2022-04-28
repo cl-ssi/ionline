@@ -45,10 +45,10 @@
           <tr>
             <th class="table-active" colspan="2" scope="row">Folio</th>
             <td>{{ $requestForm->folio }}
-            @if($requestForm->father)            
+            @if($requestForm->father)
             <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}" target="_blank">{{ $requestForm->father->folio }}</a>)
             @endif
-            </td>            
+            </td>
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Fecha de Creación</th>
@@ -94,13 +94,13 @@
               {{ $requestForm->purchaseType->finance_business_day??'Falta en el mantenedor poner la cantidad de Días Habiles' }}
               -
               {{ $requestForm->purchaseType->supply_continuous_day??'Falta en el mantenedor poner la cantidad de Días Corrido' }}
-            </td>            
+            </td>
           </tr>
           @if($requestForm->eventRequestForms->last()->signature_date and $requestForm->eventRequestForms->last()->StatusValue == 'Aprobado')
           <tr>
-            <th class="table-active" colspan="2" scope="row">Vencimiento </th>            
+            <th class="table-active" colspan="2" scope="row">Vencimiento </th>
             <td @if($requestForm->purchaseType->supply_continuous_day <= $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now())) class="text-danger" @endif>
-              {{ 
+              {{
               $requestForm->eventRequestForms->last()->signature_date->diffInDays(Carbon\Carbon::now());
               }}
               ({{$requestForm->purchaseType->supply_continuous_day}})
@@ -393,11 +393,11 @@
         <tfoot>
           <tr>
             <th colspan="11" class="text-right">Valor Total</td>
-            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</th>
           </tr>
           <tr>
-            <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
-            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+            <th colspan="11" class="text-right">Saldo disponible Requerimiento</th>
+            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</th>
           </tr>
         </tfoot>
       </table>
@@ -483,12 +483,12 @@
         <tfoot>
           <tr>
             <th colspan="9" class="text-right">Totales</td>
-            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</td>
-            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</th>
+            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
           </tr>
           <tr>
             <th colspan="10" class="text-right">Saldo disponible Compras</td>
-            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
           </tr>
         </tfoot>
         @endif
