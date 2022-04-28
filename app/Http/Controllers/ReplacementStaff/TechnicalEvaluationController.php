@@ -102,8 +102,12 @@ class TechnicalEvaluationController extends Controller
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
+        $requestChilds = RequestReplacementStaff::
+            where('request_id', $technicalEvaluation->requestReplacementStaff->id)
+            ->get();
+
         return view('replacement_staff.request.technical_evaluation.edit',
-            compact('technicalEvaluation', 'users', 'request', 'users_rys', 'ouRoots'));
+            compact('technicalEvaluation', 'users', 'request', 'users_rys', 'ouRoots', 'requestChilds'));
     }
 
     /**
