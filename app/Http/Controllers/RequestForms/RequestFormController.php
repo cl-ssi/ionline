@@ -77,7 +77,12 @@ class RequestFormController extends Controller {
         // $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
         $request_forms = RequestForm::Search($request)->latest('id')->paginate(30);
         //$users = User::where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
-        $users = User::all();
+        //$users = User::all();
+        $users = User::whereHas('organizationalUnit',function($q){
+            $q->where('establishment_id', 38);
+        })
+        ->orderBy('name','asc')->get();
+        //dd($users);
 
         $request->flash();
 
