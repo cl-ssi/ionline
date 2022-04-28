@@ -112,11 +112,13 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="">Adjuntos</label>
-                    @foreach($files as $file)
-                        <a href="{{ route('request_forms.event.show_file', $file) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
-                            <i class="fas fa-file"></i> {{ $file->name }} -
-                            <i class="fas fa-calendar-day"></i> {{ $file->created_at->format('d-m-Y H:i') }}</a>
-                    @endforeach
+                    @if($files)
+                        @foreach($files as $file)
+                            <a href="{{ route('request_forms.event.show_file', $file) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                                <i class="fas fa-file"></i> {{ $file->name }} -
+                                <i class="fas fa-calendar-day"></i> {{ $file->created_at->format('d-m-Y H:i') }}</a>
+                        @endforeach
+                    @endif
 
                 </fieldset>
             </div>
