@@ -1,4 +1,5 @@
-<form method="GET" class="form-horizontal" action="{{ route('request_forms.all_forms') }}">
+<!-- <form method="GET" class="form-horizontal" action="{{ route('request_forms.all_forms') }}"> -->
+<form method="GET" class="form-horizontal" action="#">
     <div class="form-row">
         <fieldset class="form-group col-3 col-md-2">
             <label for="for_rut">ID</label>
