@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class PurchasingProcessController extends Controller
 {
@@ -54,7 +55,22 @@ class PurchasingProcessController extends Controller
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
             if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
             $suppliers = Supplier::orderBy('name', 'asc')->get();
-            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending'));
+            
+            
+            //$response = //Http::withHeaders(['otp' => $otp])->post($url, $data);
+            //dd($requestForm.purchasingProcess.details);
+            
+            //dd($requestForm->purchasingProcess->details->first()->immediatePurchase);
+            $ticket = env('TICKET_MERCADO_PUBLICO');
+            $responseoc = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo=1058052-14-AG22&ticket='.$ticket.'');
+            $jsonoc = $responseoc->json();
+
+            $objoc = json_decode($responseoc);
+            //dd($objoc);
+            // dd($objoc->Listado[0]);
+
+            //dd($json);
+            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending','objoc'));
         } else {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
