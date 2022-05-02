@@ -57,7 +57,7 @@ use Illuminate\Support\Facades\DB;
                 @php($group_temp = $prestacion->nombre_grupo_prestacion)
             @endif
             @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
-                <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
+                <td align='left' colspan="{{$seccion->nserie == 'A05' && in_array($seccion->name, ['C', 'C1']) ? 2 : 1 }}" nowrap="nowrap"><b>TOTAL</b></td>
                 @foreach($seccion->cols as $col)
                 <td align='right' data-t="n" data-v="{{$seccion->subtotal($col, $prestacion->nombre_grupo_prestacion)}}" data-t="n"><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),$seccion->precision,",",".")}}</b></td>
                 @endforeach
