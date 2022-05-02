@@ -58,11 +58,11 @@ class RequestFormController extends Controller {
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
-        
+
         $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
             ->where('request_user_ou_id', Auth::user()->OrganizationalUnit->id)
             ->latest('id')
-            ->get();        
+            ->get();
 
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests','my_ou'));
     }
@@ -76,7 +76,13 @@ class RequestFormController extends Controller {
 
         // $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
         $request_forms = RequestForm::Search($request)->latest('id')->paginate(30);
-        $users = User::all();
+        //$users = User::where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
+        //$users = User::all();
+        $users = User::whereHas('organizationalUnit',function($q){
+            $q->where('establishment_id', 38);
+        })
+        ->orderBy('name','asc')->get();
+        //dd($users);
 
         $request->flash();
 

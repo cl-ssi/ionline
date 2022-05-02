@@ -9,6 +9,17 @@
         </button>
       </div>
       <div class="modal-body">
+          @if($requestReplacementStaff->requestFather)
+          <div class="row">
+              <div class="col">
+                <div class="alert alert-primary" role="alert">
+                    Este formulario corresponde a una extensión del formulario Nº {{ $requestReplacementStaff->requestFather->id }} - {{ $requestReplacementStaff->requestFather->name }}
+                </div>
+              </div>
+          </div>
+          @endif
+
+          <br />
           <div class="table-responsive">
               <table class="table table-sm table-bordered">
                   <thead>

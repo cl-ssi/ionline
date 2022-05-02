@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Documents\DocumentController;
+use App\Http\Controllers\RequestForms\EventRequestFormFileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -165,10 +166,10 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'
 
 
 
-Route::post('/{signaturesFlowId}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
-Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFlowId}/firma', 'DigitalSignatureController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firma', 'DigitalSignatureController@signPdf')->name('signPdf');
 Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
-Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
+Route::get('/test-firma/{otp}', 'DigitalSignatureController@test');
 
 
 
@@ -1408,6 +1409,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+        Route::get('/edit/{itemRequestForm}', [ItemRequestFormController::class, 'edit'])->name('edit');
+        Route::post('/update/{itemRequestForm}', [ItemRequestFormController::class, 'update'])->name('update');
     });
 
     Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
@@ -1473,6 +1476,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
+
+    Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
 
     //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
     //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
