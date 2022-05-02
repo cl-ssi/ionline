@@ -1409,6 +1409,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+        Route::get('/edit/{itemRequestForm}', [ItemRequestFormController::class, 'edit'])->name('edit');
+        Route::post('/update/{itemRequestForm}', [ItemRequestFormController::class, 'update'])->name('update');
     });
 
     Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {

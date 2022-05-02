@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\RequestForms;
 
+use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class ItemRequestFormController extends Controller
@@ -12,7 +18,7 @@ class ItemRequestFormController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,7 +28,7 @@ class ItemRequestFormController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -32,8 +38,8 @@ class ItemRequestFormController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request, RequestForm $requestForm)
     {
@@ -50,7 +56,7 @@ class ItemRequestFormController extends Controller
      * Display the specified resource.
      *
      * @param  \App\ItemRequestForm  $itemRequestForm
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(ItemRequestForm $itemRequestForm)
     {
@@ -60,31 +66,33 @@ class ItemRequestFormController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ItemRequestForm  $itemRequestForm
-     * @return \Illuminate\Http\Response
+     * @param ItemRequestForm $itemRequestForm
+     * @return Application|Factory|View
      */
     public function edit(ItemRequestForm $itemRequestForm)
     {
-        //
+        $unitsOfMeasurement = UnitOfMeasurement::all();
+        return view('request_form.item.edit', compact('itemRequestForm','unitsOfMeasurement'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ItemRequestForm  $itemRequestForm
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param  ItemRequestForm  $itemRequestForm
+     * @return RedirectResponse
      */
     public function update(Request $request, ItemRequestForm $itemRequestForm)
     {
-        //
+        $itemRequestForm->update($request->all());
+        return redirect()->route('request_forms.supply.purchase', $itemRequestForm->requestForm()->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\ItemRequestForm  $itemRequestForm
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(ItemRequestForm $itemRequestForm)
     {
