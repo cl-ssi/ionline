@@ -614,7 +614,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
             Route::post('/update-paid-values', [FulfillmentController::class, 'updatePaidValues'])->name('update-paid-values');
-
+            Route::get('/add_fulfillment/{serviceRequest}', [FulfillmentController::class, 'add_fulfillment'])->name('add_fulfillment');
 
             Route::prefix('item')->name('item.')->group(function () {
                 // descomposición del resource
