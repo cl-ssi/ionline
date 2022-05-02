@@ -12,11 +12,14 @@
         <li class="list-group-item">
             <a href="{{ route('indicators.18834.2020.index') }}">2020</a>
         </li>
-        <li class="list-group-item">
+        <!-- <li class="list-group-item">
             <a href="{{ route('indicators.18834.2019.index') }}">2019</a>
         </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.18834.2018.index') }}">2018</a>
+        </li> -->
+        <li class="list-group-item">
+            <a href="{{ route('indicators.18834.index') }}">Años anteriores</a>
         </li>
     </ul>
 </div>
