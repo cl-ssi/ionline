@@ -94,122 +94,17 @@
                 <th class="table-active">Lugar de Desempeño</th>
                 <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
             </tr>
+            <tr>
+                <th class="table-active">Staff Sugerido</th>
+                <td colspan="2">
+                  @if($requestReplacementStaff->replacementStaff)
+                      {{ $requestReplacementStaff->replacementStaff->FullName }}
+                  @endif
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
-
-<!-- <div class="card">
-    <div class="card-header">
-        Formulario de Extensión para Solicitud Contratación de Personal
-    </div>
-    <div class="card-body">
-
-        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store_extension', $requestReplacementStaff) }}">
-            @csrf
-            @method('POST')
-
-            <div class="form-row">
-
-
-                <fieldset class="form-group col-2">
-                    <label for="degree">Grado</label>
-                    <input type="number" class="form-control" name="degree"
-                        id="for_degree" min="1" max="26" value="{{ $requestReplacementStaff->degree }}" required>
-                </fieldset>
-
-                <fieldset class="form-group col-4">
-                    <label for="for_legal_quality" >Calidad Jurídica</label>
-                    <select name="legal_quality" id="for_legal_quality" class="form-control" required>
-                        <option value="">Seleccione...</option>
-                        <option value="to hire" {{ ($requestReplacementStaff->legal_quality == 'to hire')?'selected':'' }}>Contrata</option>
-                        <option value="fee" {{ ($requestReplacementStaff->legal_quality == 'fee')?'selected':'' }}>Honorarios</option>
-                    </select>
-                </fieldset>
-            </div>
-
-            <div class="form-row">
-                <fieldset class="form-group col-6">
-                    <label for="for_calidad_juridica">Jornada</label>
-                    <div class="mt-1">
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_diurnal" value="diurnal"
-                              {{ ($requestReplacementStaff->work_day == "diurnal")? "checked" : "" }} required>
-                          <label class="form-check-label" for="for_work_day_diurnal">Diurno</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_third_shift" value="third shift"
-                              {{ ($requestReplacementStaff->work_day == "third_shift")? "checked" : "" }} required>
-                          <label class="form-check-label" for="for_work_day_third_shift">Tercer Turno</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_fourth_shift" value="fourth shift"
-                              {{ ($requestReplacementStaff->work_day == "fourth_shift")? "checked" : "" }} required>
-                          <label class="form-check-label" for="for_work_day_fourth_shift">Cuarto Turno</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_other" value="other"
-                              {{ ($requestReplacementStaff->work_day == "other")? "checked" : "" }} required>
-                          <label class="form-check-label" for="for_work_day_other">Otro</label>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset class="form-group col-6">
-                    <label for="for_name">&nbsp;</label>
-                    <input type="text" class="form-control" name="other_work_day"
-                        id="for_other_work_day" placeholder="Otro" value="{{ $requestReplacementStaff->other_work_day }}">
-                </fieldset>
-            </div>
-
-            <div class="form-row">
-                <fieldset class="form-group col-3">
-                    <label for="for_start_date">Desde</label>
-                    <input type="date" class="form-control" name="start_date"
-                        id="for_start_date" value="{{ $requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="for_end_date">Hasta</label>
-                    <input type="date" class="form-control" name="end_date"
-                        id="for_end_date" value="" required>
-                </fieldset>
-            </div>
-
-            <div class="form-row">
-                <fieldset class="form-group col-3">
-                    <label for="for_fundament">Fundamento</label>
-                    <select name="fundament" id="for_fundament" class="form-control">
-                        <option value="">Seleccione...</option>
-                        <option value="replacement" {{ ($requestReplacementStaff->fundament == 'replacement')?'selected':'' }}>Reemplazo o suplencia</option>
-                        <option value="quit" {{ ($requestReplacementStaff->fundament == 'quit')?'selected':'' }}>Renuncia</option>
-                        <option value="allowance without payment" {{ ($requestReplacementStaff->fundament == 'allowance without payment')?'selected':'' }}>Permiso sin goce de sueldo</option>
-                        <option value="regularization work position" {{ ($requestReplacementStaff->fundament == 'regularization work position')?'selected':'' }}>Regulación de cargos</option>
-                        <option value="expand work position" {{ ($requestReplacementStaff->fundament == 'expand work position')?'selected':'' }}>Cargo expansión</option>
-                        <option value="vacations" {{ ($requestReplacementStaff->fundament == 'vacations')?'selected':'' }}>Feriado legal</option>
-                        <option value="other" {{ ($requestReplacementStaff->fundament == 'other')?'selected':'' }}>Otro</option>
-                    </select>
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="for_name_to_replace">&nbsp;</label>
-                    <input type="text" class="form-control" name="name_to_replace"
-                        id="for_name_to_replace" placeholder="Nombre de Reemplazo"
-                        value="{{ $requestReplacementStaff->name_to_replace }}">
-                </fieldset>
-
-                <fieldset class="form-group col-6">
-                    <label for="for_other_fundament">&nbsp;</label>
-                    <input type="text" class="form-control" name="other_fundament"
-                        id="for_other_fundament" placeholder="Otro fundamento..."
-                        value="{{ $requestReplacementStaff->other_fundament }}">
-                </fieldset>
-            </div>
-
-            <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
-
-        </form>
-    </div>
-</div> -->
 
 <div class="card">
     <div class="card-header">
@@ -279,7 +174,7 @@
                 <fieldset class="form-group col-2">
                     <label for="for_charges_number">Nº Cargos</label>
                     <input type="number" class="form-control" name="charges_number" value="{{ $requestReplacementStaff->charges_number }}"
-                        id="for_charges_number" required>
+                        id="for_charges_number" value="1" readonly required>
                 </fieldset>
             </div>
 
@@ -302,41 +197,7 @@
             </div>
 
             <div class="form-row">
-                <fieldset class="form-group col-md-6">
-            			<label for="for_ou_of_performance_id">Unidad Organizacional</label>
-            			<select class="form-control selectpicker" data-live-search="true" id="for_ou_of_performance_id" name="ou_of_performance_id" data-size="5" required>
-            			@foreach($ouRoots as $ouRoot)
-            				<option value="{{ $ouRoot->id }}" {{ ($requestReplacementStaff->organizationalUnit == $ouRoot)?'selected':'' }}>
-            				{{ $ouRoot->name }} ({{$ouRoot->establishment->name}})
-            				</option>
-            				@foreach($ouRoot->childs as $child_level_1)
-            					<option value="{{ $child_level_1->id }}" {{ ($requestReplacementStaff->organizationalUnit == $child_level_1)?'selected':'' }}>
-            					&nbsp;&nbsp;&nbsp;
-            					{{ $child_level_1->name }} ({{ $child_level_1->establishment->name }})
-            					</option>
-            					@foreach($child_level_1->childs as $child_level_2)
-            						<option value="{{ $child_level_2->id }}" {{ ($requestReplacementStaff->organizationalUnit == $child_level_2)?'selected':'' }}>
-            						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            						{{ $child_level_2->name }} ({{ $child_level_2->establishment->name }})
-            						</option>
-            						@foreach($child_level_2->childs as $child_level_3)
-            							<option value="{{ $child_level_3->id }}" {{ ($requestReplacementStaff->organizationalUnit == $child_level_3)?'selected':'' }}>
-            								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            								{{ $child_level_3->name }} ({{ $child_level_3->establishment->name }})
-            							</option>
-            							@foreach($child_level_3->childs as $child_level_4)
-            							<option value="{{ $child_level_4->id }}" {{ ($requestReplacementStaff->organizationalUnit == $child_level_4)?'selected':'' }}>
-            	                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            	                            {{ $child_level_4->name }} ({{ $child_level_4->establishment->name }})
-            	                        </option>
-            							@endforeach
-            						@endforeach
-            					@endforeach
-            				@endforeach
-            			@endforeach
-
-            			</select>
-            		</fieldset>
+                @livewire('replacement-staff.ou-staff-select')
             </div>
 
             <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>

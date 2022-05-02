@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="new-budget-form" action="{{ route('request_forms.supply.create_new_budget', $requestForm->id )}}">
+                <form method="post" id="new-budget-form" action="{{ route('request_forms.supply.create_new_budget', $requestForm->id )}}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-row">
                         <fieldset class="form-group col-sm">
@@ -21,7 +21,12 @@
                             <textarea name="purchaser_observation" class="form-control form-control-sm" rows="3" placeholder="Ingrese observación" required></textarea>
                         </fieldset>
                     </div>
-
+                    <div class="form-row">
+                        <fieldset class="form-group col-sm">
+                            <label for="for_files">Adjuntar archivos</label>
+                            <input type="file" class="form-control" id="for_files" name="files[]" accept="application/pdf" multiple>
+                        </fieldset>
+                    </div>
                     <button type="submit" class="btn btn-primary float-right btn-sm">Enviar solicitud</button>
                 </form>
             </div>

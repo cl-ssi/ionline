@@ -30,7 +30,13 @@
             </fieldset>
         </div>
     </div>
+
     <br>
+
+    NOMBRE {{ $selectedSearch }} <br>
+    ESTAMENTO {{ $selectedProfile }} <br>
+    PROFESION {{ $selectedProfession }} <br>
+
     <div class="table-responsive">
         <table class="table table-sm table-striped table-bordered">
             <thead class="text-center small">
