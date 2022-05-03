@@ -1151,8 +1151,6 @@ class ReportController extends Controller
           break;
       }
 
-      dd($sirh_program_code);
-
       switch ($fila->weekly_hours) {
         case 44:
           $type_of_day = 'C';
