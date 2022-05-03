@@ -336,6 +336,7 @@
     </div>
 </div>
 
+
 @if($requestForm->isPurchaseInProcess())
 <br>
 
@@ -660,13 +661,13 @@
                 @if($requestForm->children->count() > 0 && $requestForm->purchasingProcess)
                 <tfoot>
                     <tr>
-                        <th colspan="9" class="text-right">Totales</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                        <th colspan="9" class="text-right">Totales</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                     </tr>
                     <tr>
-                        <th colspan="10" class="text-right">Saldo disponible Compras</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                        <th colspan="10" class="text-right">Saldo disponible Compras</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                     </tr>
                 </tfoot>
                 @endif
@@ -682,60 +683,60 @@
 <hr>
 @if(Str::contains($requestForm->subtype, 'tiempo'))
     @if(env('APP_ENV') == 'local')
-<div class="row">
-    <div class="col-sm">
-        <div class="table-responsive">
-        <h6><i class="fas fa-shopping-cart"></i>MERCADO PÚBLICO ORDEN DE COMPRA {{$objoc->Listado[0]->Codigo }}</h6>
-        <table class="table table-sm table-striped table-bordered small">
-                <thead class="text-center">
-                    <tr>
-                        <th>Item</th>
-                        <th>Orden de Compra</th>
-                        <th>Proveedor (Código Proveedor)</th>
-                        <th>Producto (Código Producto)</th>
-                        <th>Especificaciones Técnicas (Comprador/Proveedor)</th>
-                        <th>Cantidad</th>
-                        <th>Unidad de medida</th>
-                        <th>Moneda</th>
-                        <th>Precio Neto</th>
-                        <th>Total Cargos</th>
-                        <th>Total Descuentos</th>
-                        <th>Total Impuestos</th>
-                        <th>Total</th>
-                        <th>Más Información</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($objoc->Listado as $oc)
-                @foreach($oc->Items->Listado as $item)
-                <tr>
-                <td>{{ $item->Correlativo }}</td>
-                <td>{{$oc->Codigo}}</td>
-                <td>{{$oc->Proveedor->Nombre}} ({{$oc->Proveedor->Codigo}})</td>
-                <td>{{$item->Producto}} ({{ $item->CodigoProducto }})</td>
-                <td>{{$item->EspecificacionComprador}}/{{$item->EspecificacionProveedor}}</td>
-                <td>{{$item->Cantidad}}</td>
-                <td>{{$item->Unidad}}</td>
-                <td>{{$item->Moneda}}</td>
-                <td>{{$item->PrecioNeto}}</td>
-                <td>{{$item->TotalCargos}}</td>
-                <td>{{$item->TotalDescuentos}}</td>
-                <td>{{$item->TotalImpuestos}}</td>
-                <td>{{$item->Total}}</td>
-                <td><button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#mp-{{ $item->Correlativo }}" title="Ver Más Detalle">
-            <i class="fa fa-info"></i>
-            </button>
-            @include('request_form.purchase.modals.detail_oc_mp')        
-        </td>
-                </tr>    
-                @endforeach
-                    
-                @endforeach
-                </tbody>
-        </table>
-        </div>
-    </div>
-</div>
+{{--<div class="row">--}}
+{{--    <div class="col-sm">--}}
+{{--        <div class="table-responsive">--}}
+{{--        <h6><i class="fas fa-shopping-cart"></i>MERCADO PÚBLICO ORDEN DE COMPRA {{$objoc->Listado[0]->Codigo }}</h6>--}}
+{{--        <table class="table table-sm table-striped table-bordered small">--}}
+{{--                <thead class="text-center">--}}
+{{--                    <tr>--}}
+{{--                        <th>Item</th>--}}
+{{--                        <th>Orden de Compra</th>--}}
+{{--                        <th>Proveedor (Código Proveedor)</th>--}}
+{{--                        <th>Producto (Código Producto)</th>--}}
+{{--                        <th>Especificaciones Técnicas (Comprador/Proveedor)</th>--}}
+{{--                        <th>Cantidad</th>--}}
+{{--                        <th>Unidad de medida</th>--}}
+{{--                        <th>Moneda</th>--}}
+{{--                        <th>Precio Neto</th>--}}
+{{--                        <th>Total Cargos</th>--}}
+{{--                        <th>Total Descuentos</th>--}}
+{{--                        <th>Total Impuestos</th>--}}
+{{--                        <th>Total</th>--}}
+{{--                        <th>Más Información</th>--}}
+{{--                    </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
+{{--                @foreach($objoc->Listado as $oc)--}}
+{{--                @foreach($oc->Items->Listado as $item)--}}
+{{--                <tr>--}}
+{{--                <td>{{ $item->Correlativo }}</td>--}}
+{{--                <td>{{$oc->Codigo}}</td>--}}
+{{--                <td>{{$oc->Proveedor->Nombre}} ({{$oc->Proveedor->Codigo}})</td>--}}
+{{--                <td>{{$item->Producto}} ({{ $item->CodigoProducto }})</td>--}}
+{{--                <td>{{$item->EspecificacionComprador}}/{{$item->EspecificacionProveedor}}</td>--}}
+{{--                <td>{{$item->Cantidad}}</td>--}}
+{{--                <td>{{$item->Unidad}}</td>--}}
+{{--                <td>{{$item->Moneda}}</td>--}}
+{{--                <td>{{$item->PrecioNeto}}</td>--}}
+{{--                <td>{{$item->TotalCargos}}</td>--}}
+{{--                <td>{{$item->TotalDescuentos}}</td>--}}
+{{--                <td>{{$item->TotalImpuestos}}</td>--}}
+{{--                <td>{{$item->Total}}</td>--}}
+{{--                <td><button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#mp-{{ $item->Correlativo }}" title="Ver Más Detalle">--}}
+{{--            <i class="fa fa-info"></i>--}}
+{{--            </button>--}}
+{{--            @include('request_form.purchase.modals.detail_oc_mp')--}}
+{{--        </td>--}}
+{{--                </tr>--}}
+{{--                @endforeach--}}
+
+{{--                @endforeach--}}
+{{--                </tbody>--}}
+{{--        </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
     @endif
 @endif
 
@@ -1150,16 +1151,16 @@
     $('#processClosure').on('shown.bs.modal', function() {
         $(this).find('select option:not(:selected)').attr('disabled', true);
         $(this).find('textarea[name="observation"]').focus();
-    });   
+    });
 
 
 
     $('#btn_licitacion').click(function() {
         if(document.getElementById("for_tender_number").value != '')
-        {            
+        {
             axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
             .then(function(response) {
-                // handle success                
+                // handle success
                 //console.log(response);
                 console.log(response.data.Listado[0].Nombre);
                 document.getElementById("for_description").value = response.data.Listado[0].Nombre;
@@ -1180,24 +1181,24 @@
             alert('Debe llenar un valor en el campo antes de consultar en la API');
         }
 
-        
+
 
     });
 
     $('#btn_oc').click(function() {
         if(document.getElementById("for_po_id").value != '')
-        {            
+        {
             axios.get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
             .then(function(response) {
-                // handle success                
-                console.log(response);                
+                // handle success
+                console.log(response);
                 var fecha_envio = new Date(response.data.Listado[0].Fechas.FechaEnvio).toISOString().slice(0, 10);
                 var fecha_aceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion).toISOString().slice(0, 10);
                 document.getElementById("for_description").value = response.data.Listado[0].Nombre;
                 document.getElementById("for_po_accepted_date").value = fecha_aceptacion;
                 document.getElementById("for_po_sent_date").value = fecha_envio;
                 document.getElementById("for_supplier_specifications").value = response.data.Listado[0].Items.Listado[0].EspecificacionProveedor;
-                
+
 
 
                 //document.getElementById("for_po_accepted_date").value = response.data.Listado[0].Fechas.FechaAceptacion;
@@ -1218,7 +1219,7 @@
             alert('Debe llenar un valor en el campo antes de consultar en la API');
         }
 
-        
+
 
     });
 </script>
