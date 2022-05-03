@@ -983,6 +983,7 @@ class ReportController extends Controller
           break;
       }
 
+      $sirh_program_code = '';
       switch ($fila->programm_name) {  
         case 'Covid 2022':
           switch ($fila->profession->category) {
@@ -1019,6 +1020,8 @@ class ReportController extends Controller
                   $sirh_program_code = 2024;
                   break;
               }
+              break;
+
             default:
               switch ($fila->responsabilityCenter->name) {
                 case "Servicio de Anestesia y Pabellones":
@@ -1073,7 +1076,9 @@ class ReportController extends Controller
                   $sirh_program_code = 2023;
                   break;
               }
+              break;
           }
+          break;
 
         default:
           switch ($fila->profession->name) {
@@ -1144,6 +1149,7 @@ class ReportController extends Controller
               $sirh_program_code = '';
               break;
           }	
+          break;
       }
 
       switch ($fila->weekly_hours) {
