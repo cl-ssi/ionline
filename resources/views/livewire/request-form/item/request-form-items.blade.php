@@ -55,7 +55,7 @@
                       </select>
                   </fieldset>
                   <fieldset class="form-group col-sm-4">
-                      <label class="form-label">Documento Informativo (optativo): 
+                      <label class="form-label">Documento Informativo (optativo):
                           @if($savedArticleFile)
                           <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
                           @endif

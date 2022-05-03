@@ -252,86 +252,92 @@
                                                     @csrf
                                                     @method(isset($result) ? 'PUT' : 'POST')
                                                     @endif
-                                                    <table class="table table-sm table-striped table-bordered small">
-                                                        <thead class="text-center">
-                                                            <tr>
-                                                                <th>Item</th>
-                                                                <th>Estado</th>
-                                                                <th>Cod.Presup.</th>
-                                                                <th>Artículo</th>
-                                                                <th>UM</th>
-                                                                <th>Especificaciones Técnicas</th>
-                                                                <th>Archivo</th>
-                                                                <th width="100">Cantidad</th>
-                                                                <th width="150">Valor U.</th>
-                                                                <th width="50">Impto.</th>
-                                                                <th width="150">Total Item</th>
-                                                                <th colspan="2"></th>
-                                                                <!-- <th></th> -->
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($requestForm->itemRequestForms as $key => $item)
-                                                            @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
-                                                            <tr>
-                                                                <td>{{ $key+1 }}</td>
-                                                                <td>{{ $item->status }}</td>
-                                                                <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                                                                <td>{{ $item->article }}</td>
-                                                                <td>{{ $item->unit_of_measurement }}</td>
-                                                                <td>{{ $item->specification }}</td>
-                                                                <td align="center">
-                                                                    @if($item->article_file)
-                                                                    <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
-                                                                        <i class="fas fa-file"></i></a>
-                                                                    @endif
-                                                                </td>
-                                                                <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
-                                                                </td>
-                                                                <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
-                                                                </td>
-                                                                <td align="right">
-                                                                    <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}">
-                                                                </td>
-                                                                <td align="right">
-                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
-                                                                </td>
-                                                                <td align="center">
-                                                                    <fieldset class="form-group">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
-                                                                        </div>
-                                                                    </fieldset>
-                                                                </td>
-                                                                <!-- <td align="center">
-                            <a href="">
-                              <span style="color: Tomato;">
-                                <i class="fas fa-times-circle"></i>
-                              </span>
-                            </a>
-                        </td> -->
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <td colspan="9"></td>
-                                                                <td class="text-right">Valor Total</td>
-                                                                <td align="right">
-                                                                    <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="9"></td>
-                                                                <td class="text-right">Total seleccionado</td>
-                                                                <td align="right">
-                                                                    <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
-                                                                </td>
-                                                            </tr>
-                                                        </tfoot>
-                                                    </table>
+
+                                                    @if($requestForm->type_form === 'bienes y/o servicios')
+                                                        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
+                                                    @else
+                                                        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])
+                                                    @endif
+{{--                                                    <table class="table table-sm table-striped table-bordered small">--}}
+{{--                                                        <thead class="text-center">--}}
+{{--                                                            <tr>--}}
+{{--                                                                <th>Item</th>--}}
+{{--                                                                <th>Estado</th>--}}
+{{--                                                                <th>Cod.Presup.</th>--}}
+{{--                                                                <th>Artículo</th>--}}
+{{--                                                                <th>UM</th>--}}
+{{--                                                                <th>Especificaciones Técnicas</th>--}}
+{{--                                                                <th>Archivo</th>--}}
+{{--                                                                <th width="100">Cantidad</th>--}}
+{{--                                                                <th width="150">Valor U.</th>--}}
+{{--                                                                <th width="50">Impto.</th>--}}
+{{--                                                                <th width="150">Total Item</th>--}}
+{{--                                                                <th colspan="2"></th>--}}
+{{--                                                                <!-- <th></th> -->--}}
+{{--                                                            </tr>--}}
+{{--                                                        </thead>--}}
+{{--                                                        <tbody>--}}
+{{--                                                            @foreach($requestForm->itemRequestForms as $key => $item)--}}
+{{--                                                            @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)--}}
+{{--                                                            <tr>--}}
+{{--                                                                <td>{{ $key+1 }}</td>--}}
+{{--                                                                <td>{{ $item->status }}</td>--}}
+{{--                                                                <td>{{ $item->budgetItem()->first()->fullName() }}</td>--}}
+{{--                                                                <td>{{ $item->article }}</td>--}}
+{{--                                                                <td>{{ $item->unit_of_measurement }}</td>--}}
+{{--                                                                <td>{{ $item->specification }}</td>--}}
+{{--                                                                <td align="center">--}}
+{{--                                                                    @if($item->article_file)--}}
+{{--                                                                    <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">--}}
+{{--                                                                        <i class="fas fa-file"></i></a>--}}
+{{--                                                                    @endif--}}
+{{--                                                                </td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">--}}
+{{--                                                                </td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">--}}
+{{--                                                                </td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}">--}}
+{{--                                                                </td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>--}}
+{{--                                                                </td>--}}
+{{--                                                                <td align="center">--}}
+{{--                                                                    <fieldset class="form-group">--}}
+{{--                                                                        <div class="form-check">--}}
+{{--                                                                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </fieldset>--}}
+{{--                                                                </td>--}}
+{{--                                                                <!-- <td align="center">--}}
+{{--                            <a href="">--}}
+{{--                              <span style="color: Tomato;">--}}
+{{--                                <i class="fas fa-times-circle"></i>--}}
+{{--                              </span>--}}
+{{--                            </a>--}}
+{{--                        </td> -->--}}
+{{--                                                            </tr>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </tbody>--}}
+{{--                                                        <tfoot>--}}
+{{--                                                            <tr>--}}
+{{--                                                                <td colspan="9"></td>--}}
+{{--                                                                <td class="text-right">Valor Total</td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>--}}
+{{--                                                                </td>--}}
+{{--                                                            </tr>--}}
+{{--                                                            <tr>--}}
+{{--                                                                <td colspan="9"></td>--}}
+{{--                                                                <td class="text-right">Total seleccionado</td>--}}
+{{--                                                                <td align="right">--}}
+{{--                                                                    <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>--}}
+{{--                                                                </td>--}}
+{{--                                                            </tr>--}}
+{{--                                                        </tfoot>--}}
+{{--                                                    </table>--}}
         </div>
     </div>
 </div>
