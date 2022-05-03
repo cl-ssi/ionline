@@ -1019,6 +1019,8 @@ class ReportController extends Controller
                   $sirh_program_code = 2024;
                   break;
               }
+              break;
+
             default:
               switch ($fila->responsabilityCenter->name) {
                 case "Servicio de Anestesia y Pabellones":
@@ -1073,7 +1075,9 @@ class ReportController extends Controller
                   $sirh_program_code = 2023;
                   break;
               }
+              break;
           }
+          break;
 
         default:
           switch ($fila->profession->name) {
@@ -1144,7 +1148,10 @@ class ReportController extends Controller
               $sirh_program_code = '';
               break;
           }	
+          break;
       }
+
+      dd($sirh_program_code);
 
       switch ($fila->weekly_hours) {
         case 44:
