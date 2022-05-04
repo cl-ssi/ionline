@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\DB;
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1 AND trim($prestacion->nombre_grupo_prestacion) != $group_temp)
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion) + ($seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) ? 1 : 0)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado text-uppercase">{{$prestacion->nombre_grupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion) + ($seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) ? 1 : 0)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado text-uppercase">{{!$seccion->tfoot ? Str::before($prestacion->nombre_grupo_prestacion, '*') : $prestacion->nombre_grupo_prestacion}}</td>
                 @php($group_temp = $prestacion->nombre_grupo_prestacion)
             @endif
             @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
