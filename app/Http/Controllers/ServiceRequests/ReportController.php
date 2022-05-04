@@ -983,6 +983,7 @@ class ReportController extends Controller
           break;
       }
 
+      $sirh_program_code = '';
       switch ($fila->programm_name) {  
         case 'Covid 2022':
           switch ($fila->profession->category) {
