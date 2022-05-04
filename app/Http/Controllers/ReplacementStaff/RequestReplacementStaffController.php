@@ -215,13 +215,20 @@ class RequestReplacementStaffController extends Controller
      */
     public function create()
     {
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        return view('replacement_staff.request.create', compact('ouRoots'));
+        // $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        //
+        // $organizationalUnits = OrganizationalUnit::where('id', Auth::user()->organizational_unit_id)
+        //   ->get();
+
+        return view('replacement_staff.request.create');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+
+
+
         return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
     }
 
@@ -508,6 +515,14 @@ class RequestReplacementStaffController extends Controller
         $request_sing->request_status = 'pending';
         $request_sing->request_replacement_staff_id = $newRequestReplacementStaff->id;
         $request_sing->save();
+
+        $request_sing_uni_per = new RequestSign();
+
+        $request_sing_uni_per->position = '2';
+        $request_sing_uni_per->ou_alias = 'uni_per';
+        $request_sing_uni_per->organizational_unit_id = 46;
+        $request_sing_uni_per->request_replacement_staff_id = $newRequestReplacementStaff->id;
+        $request_sing_uni_per->save();
 
         //COPIA MAIL PARA FIRMAS
         $date = Carbon::now()->format('Y_m_d_H_i_s');

@@ -15,7 +15,7 @@
               {{ $technicalEvaluation->requestReplacementStaff->requestFather->id }} - {{ $technicalEvaluation->requestReplacementStaff->requestFather->name }}
           </a>
       </div>
-    <div>
+    </div>
 </div>
 @endif
 
@@ -108,7 +108,24 @@
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->ouPerformance->name }}</td>
             </tr>
             <tr>
-                <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                <th class="table-active">Staff Sugerido</th>
+                <td colspan="2">
+                  @if($technicalEvaluation->requestReplacementStaff->replacementStaff)
+                      {{ $technicalEvaluation->requestReplacementStaff->replacementStaff->FullName }}
+                  @endif
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br />
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <tbody>
+            <tr>
+                <td colspan="{{ $technicalEvaluation->requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
@@ -620,6 +637,94 @@
     </div>
     <br>
 </div>
+
+<br>
+
+@if($requestChilds->count() > 0)
+<div class="row">
+    <div class="col-sm">
+        <h5><i class="fas fa-inbox"></i> Formularios de Continuidad</h5>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="text-center small">
+            <tr>
+                <th>#</th>
+                <th style="width: 8%">Fecha</th>
+                <th>Solicitud</th>
+                <th>Grado</th>
+                <th>Calidad Jurídica</th>
+                <th colspan="2">Periodo</th>
+                <th>Fundamento</th>
+                <th>Jornada</th>
+                <th>Solicitante</th>
+                <th style="width: 2%"></th>
+            </tr>
+        </thead>
+        <tbody class="small">
+            @foreach($requestChilds as $requestReplacementStaff)
+            <tr>
+                <td>
+                    {{ $requestReplacementStaff->id }} <br>
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
+                </td>
+                <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
+                <td>{{ $requestReplacementStaff->name }}</td>
+                <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
+                <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
+                <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
+                    {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
+                </td>
+                <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
+                    @if($requestReplacementStaff->getNumberOfDays() > 1)
+                        días
+                    @else
+                        dia
+                    @endif
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->WorkDayValue }}
+                </td>
+                <td>{{ $requestReplacementStaff->user->FullName }}<br>
+                    {{ $requestReplacementStaff->organizationalUnit->name }}
+                </td>
+                <td>
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                  @endif
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endif
 
 @if(Auth::user()->hasRole('Replacement Staff: admin'))
 <br/>

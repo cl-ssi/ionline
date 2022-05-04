@@ -51,7 +51,7 @@
 
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_name">Planta (SIRH)*</label>
-            <input type="text" class="form-control" id="for_sirh_plant" name="sirh_plant"required>
+            <input type="number" class="form-control" id="for_sirh_plant" name="sirh_plant"required>
         </fieldset>
 
         <!-- <fieldset class="form-group col-12 col-md-4">
@@ -61,7 +61,7 @@
 
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_name">Profesión (SIRH)*</label>
-            <input type="text" class="form-control" id="for_sirh_profession" name="sirh_profession"required>
+            <input type="number" class="form-control" id="for_sirh_profession" name="sirh_profession"required>
         </fieldset>
 
     </div>

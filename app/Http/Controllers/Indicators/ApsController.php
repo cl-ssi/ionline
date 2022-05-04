@@ -19,17 +19,18 @@ class ApsController extends Controller
     public function list($year)
     {
         $iaps = Aps::with('indicators')->where('year', $year)->orderBy('number')->get();
-        $withoutAPS = ['102307', '102100', '102307,102100', '102100,102307'];
+        $withoutAPS = $year <= 2021 ? ['102307', '102100', '102307,102100', '102100,102307'] : ['102100'];
         foreach($iaps as $item){
             $item->aps_active = $item->indicators()->count() > 0 && $item->indicators()->whereIn('establishment_cods', $withoutAPS)->count() == 0 || $item->indicators()->whereIn('establishment_cods', $withoutAPS)->count() != $item->indicators()->count();
-            $item->reyno_active = $item->indicators()->where('establishment_cods','LIKE', '%102307%')->count() > 0;
+            $item->reyno_active = $year <= 2021 && $item->indicators()->where('establishment_cods','LIKE', '%102307%')->count() > 0;
             $item->hospital_active = $item->indicators()->where('establishment_cods','LIKE', '%102100%')->count() > 0;
             $item->ssi_active = $item->indicators()->where('establishment_cods','LIKE', '%102010%')->count() > 0;
         }
+
         // return $iaps;
         return view('indicators.iaps.list', compact('iaps', 'year'));
     }
-    
+
     public function show($year, $slug, $establishment_type)
     {
         $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
@@ -41,12 +42,12 @@ class ApsController extends Controller
         } else {
             $iaps->load('indicators.values');
         }
- 
+
         $this->loadValuesWithRemSource($year, $iaps, $establishment_type);
         // return $iaps;
         return view('indicators.iaps.show', compact('iaps'));
     }
-    
+
     private function loadValuesWithRemSource($year, $iaps, $establishment_type)
     {
         $establishment_type_names = ['aps' => 'APS', 'reyno' => 'CGU Dr. Hector Reyno', 'hospital' => 'Hospital Dr. Ernesto Torres G.', 'ssi' => 'Dirección Servicio de Salud'];
@@ -73,9 +74,10 @@ class ApsController extends Controller
 
                 if($establishment_type == 'aps'){
                     $establishment_cods = array_map('trim', explode(',',$indicator->establishment_cods));
-                    $establishment_cods = array_diff($establishment_cods, array("102307", "102100", "102010")); //descartar reyno, hospital y ssi
-                    $establishments = Establecimiento::year($last_year ?? $year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna']);
-                    foreach($establishments as $item) $iaps->establishments->add($item);
+                    $establishment_cods = array_diff($establishment_cods, $year <= 2021 ? array("102307", "102100", "102010") : array("102100", "102010")); //si es año 2021 descartar reyno, hospital y ssi caso contrario solo hospital y ssi
+                    $establishments = Establecimiento::year($last_year ?? $year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna', 'Codigo']);
+                    foreach($establishments as $item)
+                        if(!$iaps->establishments->where('Codigo', $item->Codigo)->count()) $iaps->establishments->add($item);
                 }
 
                 if($factor_cods != null && $factor_cols != null){
@@ -91,10 +93,11 @@ class ApsController extends Controller
                         foreach($cols as $col)
                             $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
                         $raws .= ' AS valor, IdEstablecimiento, Mes';
-        
+
                         $result = Rem::year($last_year ?? $year)->selectRaw($raws)
-                                    ->when($establishment_type == 'aps', function($query) use ($establishment_cods){ 
-                                        return $query->with('establecimiento')->whereIn('IdEstablecimiento', $establishment_cods); 
+                                    ->when($establishment_type == 'aps', function($query) use ($establishment_cods){
+                                        // return $query->with('establecimiento')->whereIn('IdEstablecimiento', $establishment_cods);
+                                        return $query->whereIn('IdEstablecimiento', $establishment_cods);
                                     })
                                     ->when($establishment_type == 'reyno', function($query){
                                         return $query->where('IdEstablecimiento', 102307);
@@ -115,22 +118,25 @@ class ApsController extends Controller
                                         return $query->where('Mes', '<=', $last_month_rem);
                                     })
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
-        
+
                         foreach($result as $item){
                             $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
-                            $value->commune = $item->establecimiento['comuna'];
-                            $value->establishment = $item->establecimiento['alias_estab'];
+                            if($establishment_type == 'aps') {
+                                $value->commune = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->comuna;
+                                $value->establishment = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->alias_estab;
+                            }
                             $indicator->values->add($value);
                         }
                     }
                 }
             }
         }
-        
+
         if($establishment_type == 'aps'){
-            $iaps->establishments = $iaps->establishments->unique('alias_estab');
+            // $iaps->establishments = $iaps->establishments->unique('alias_estab');
             $iaps->communes = $iaps->establishments->unique('comuna')->pluck('comuna')->sort();
         }
+        // dd($indicator->values);
     }
 
 }
