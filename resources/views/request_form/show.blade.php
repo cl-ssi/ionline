@@ -45,10 +45,10 @@
           <tr>
             <th class="table-active" colspan="2" scope="row">Folio</th>
             <td>{{ $requestForm->folio }}
-            @if($requestForm->father)            
+            @if($requestForm->father)
             <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}" target="_blank">{{ $requestForm->father->folio }}</a>)
             @endif
-            </td>            
+            </td>
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Fecha de Creación</th>
@@ -225,7 +225,13 @@
         <td>{{ $key+1 }}</td>
         <td>{{ $itemRequestForm->id }}</td>
         <td>{{ $itemRequestForm->budgetItem ? $itemRequestForm->budgetItem->fullName() : '' }}</td>
-        <td>{{ $itemRequestForm->article }}</td>
+        <td>
+          @if($itemRequestForm->product_id)
+            {{ optional($itemRequestForm->product)->name }}
+          @else
+            {{ $itemRequestForm->article }}
+          @endif
+        </td>
         <td>{{ $itemRequestForm->unit_of_measurement }}</td>
         <td>{{ $itemRequestForm->specification }}</td>
         <td align="center">
