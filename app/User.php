@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
 use App\Models\RequestForms\RequestForm;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Warehouse\Store;
+use App\Models\Warehouse\StoreUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements Auditable
 {
@@ -117,6 +120,10 @@ class User extends Authenticatable implements Auditable
         return $this->id . '-' . $this->dv;
     }
 
+    public function getRunFormatAttribute() {
+      return number_format($this->id, 0, '.', '.') . '-' . $this->dv;
+    }
+
     public function getFullNameAttribute()
     {
         return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, "UTF-8");
@@ -207,6 +214,23 @@ class User extends Authenticatable implements Auditable
 
     public function requests() {
         return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff');
+    }
+
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class, 'wre_store_user')
+          ->using(StoreUser::class)
+          ->withPivot(['role_id', 'status'])
+          ->withTimestamps();
+    }
+
+    public function getActiveStoreAttribute()
+    {
+      $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
+      if($storeActive)
+        return $storeActive;
+      else
+        return null;
     }
 
     public function userResults()
@@ -380,6 +404,20 @@ class User extends Authenticatable implements Auditable
         return $this->email_personal;
     }
 
+    public function scopeFindByUser($query, $searchText)
+    {
+      $array_search = explode(' ', $searchText);
+      foreach($array_search as $word)
+      {
+        $query->where(function($q) use($word){
+            $q->where('name', 'LIKE', '%'.$word.'%')
+            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+            ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+            ->orwhere('id','LIKE', '%'.$word.'%');
+          });
+      }
+      return $query;
+    }
     /**computers
      * The attributes that should be cast to native types.
      *
