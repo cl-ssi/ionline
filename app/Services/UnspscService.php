@@ -14,9 +14,9 @@ class UnspscService
      *
      * @param  $sizeTile
      */
-    public function __construct($sizeTile = 90)
+    public function __construct($sizeTitle = 90)
     {
-        $this->sizeTitle = $sizeTile;
+        $this->sizeTitle = $sizeTitle;
     }
 
     /**
@@ -43,7 +43,7 @@ class UnspscService
                     $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
                 });
             })
-            // ->limit(100) // Se pudiera limitar para mejorar la respuesta
+            ->limit(500) // Limite para optimizar respuesta
             ->orderBy('class_id');
 
         return $products;
@@ -74,12 +74,12 @@ class UnspscService
         $classes = $products->groupBy('class_id')->pluck('class_id')->toArray();
         $results = collect([]);
 
-        foreach($classes as $class)
+        foreach($classes as $classId)
         {
-            $product = $myProducts->first();
             $productsOfClass = collect([]);
-            foreach($myProducts->where('class_id', $class) as $prod)
+            foreach($myProducts->where('class_id', $classId) as $prod)
             {
+                $product = $myProducts->where('class_id', $classId)->first();
                 $productsOfClass->push([
                     'id' => $prod->id,
                     'code' => $prod->code,
@@ -88,10 +88,15 @@ class UnspscService
             }
 
             $title = $this->getTitle($product);
-            $results->push([
-                'title' => Str::limit($title, $this->sizeTitle),
-                'products' => $productsOfClass,
-            ]);
+
+            if($productsOfClass->count() > 0)
+            {
+                $results->push([
+                    'title' => Str::limit($title, $this->sizeTitle),
+                    'products' => $productsOfClass,
+                ]);
+            }
+
         }
 
         return $results;
