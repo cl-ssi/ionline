@@ -4,7 +4,7 @@
         Segmentos
         @break
     @case('segments.edit')
-        / {{ $segment->name }}
+        {{ $segment->name }}
         / Editar
         @break
     @case('families.index')
