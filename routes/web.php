@@ -74,6 +74,8 @@ use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\SegmentController;
+use App\Http\Controllers\Warehouse\ControlController;
+use App\Http\Controllers\Warehouse\StoreController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -1313,6 +1315,32 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
             });
         });
     });
+});
+
+Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
+
+    Route::resource('stores', 'Warehouse\StoreController')->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
+
+    Route::prefix('/store')->group(function () {
+        Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
+
+        Route::prefix('{store}')->group(function () {
+            Route::get('active', [StoreController::class, 'activateStore'])->name('store.active')->middleware('ensure.store');
+            Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
+            Route::resource('controls', 'Warehouse\ControlController');
+            Route::resource('categories', 'Warehouse\CategoryController')->only(['index', 'create', 'edit']);
+            Route::resource('products', 'Warehouse\ProductController')->only(['index', 'create', 'edit']);
+            Route::resource('origins', 'Warehouse\OriginController')->only(['index', 'create', 'edit']);
+            Route::resource('destinations', 'Warehouse\DestinationController')->only(['index', 'create', 'edit']);
+            Route::get('/report', [ControlController::class, 'report'])->name('control.report'); // pasar a store controller
+
+            Route::prefix('control/{control}')->group(function () {
+                Route::get('/pdf', [ControlController::class, 'pdf'])->name('control.pdf');
+                Route::get('/add-products', [ControlController::class, 'addProduct'])->name('control.add-product');
+            });
+        });
+    });
+
 });
 
 /* Bodega de Farmacia */
