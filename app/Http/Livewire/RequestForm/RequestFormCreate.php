@@ -134,7 +134,7 @@ class RequestFormCreate extends Component
     private function setItems($item){
       $this->items[]=[
             'id'                       => $item->id,
-            'article'                  => $item->article,
+            'product_id'               => $item->product_id,
             'unitOfMeasurement'        => $item->unit_of_measurement,
             'technicalSpecifications'  => $item->specification,
             'quantity'                 => $item->quantity,
@@ -301,11 +301,11 @@ class RequestFormCreate extends Component
               ],
               [
                 'request_form_id'       =>      $req->id,
-                'article'               =>      $item['article'],
                 'unit_of_measurement'   =>      $item['unitOfMeasurement'],
                 'specification'         =>      $item['technicalSpecifications'],
                 'quantity'              =>      $item['quantity'],
                 'unit_value'            =>      $item['unitValue'],
+                'product_id'            =>      $item['product_id'],
                 'tax'                   =>      $item['taxes'],
                 'expense'               =>      $item['totalValue'],
                 'article_file'          =>      $item['articleFile']
