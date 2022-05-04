@@ -28,7 +28,7 @@
 @endif
 
 <div class="form-group">
-    <form method="GET" action="{{ route('indicators.rem.show', [$year, $prestacion->serie, $prestacion->Nserie]) }}">
+    <form method="GET" action="{{ route('indicators.rem.show', [$year, $prestacion->serie, $prestacion->Nserie, $unique]) }}">
         {{ csrf_field() }}
         <div class="row">
             <div class="col-sm-2">
@@ -52,7 +52,7 @@
                 <label>* Periodo: </label>
             </div>
             <div class="col-sm-10">
-              <select class="form-control selectpicker" name="periodo[]" title="Seleccione..." @if($prestacion->serie != 'P') multiple @endif data-actions-box="true" id="periodo" required>
+              <select class="form-control selectpicker" name="periodo[]" title="Seleccione..." @if($prestacion->serie != 'P' && !$unique) multiple @endif data-actions-box="true" id="periodo" required>
                   <optgroup label="{{$year}}">
                       @php($months = array (1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'))
                       @foreach($months as $index => $month)

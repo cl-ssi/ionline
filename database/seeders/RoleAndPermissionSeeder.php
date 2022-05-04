@@ -207,6 +207,7 @@ class RoleAndPermissionSeeder extends Seeder
           'Replacement Staff: technical evaluation',
           'Replacement Staff: manage',
           'Replacement Staff: assign request'
+          'Replacement Staff: staff manage'
         ]);
 
         $role = Role::create(['name' => 'Replacement Staff: user']);

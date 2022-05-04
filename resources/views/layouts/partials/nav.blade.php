@@ -183,14 +183,14 @@
                         @endcan
 
 
-                        @canany(['Service Request', 'Service Request: report excel'])
+                        @canany(['Service Request'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
                         </a>
                         @endcan
 
-                        @canany(['Service Request', 'Service Request: export sirh mantenedores'])
+                        @canany(['Service Request: export sirh mantenedores'])
                         <a class="dropdown-item"
                             href="{{ route('parameters.professions.index') }}">
                             <i class="fas fa-child fa-chevron-right"></i> Mantenedor de profesiones
