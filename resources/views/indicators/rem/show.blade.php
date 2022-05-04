@@ -93,7 +93,7 @@ use Illuminate\Support\Facades\DB;
         <tr>
             <td align='left' rowspan="{{count($seccion->getTotalsByPrestacion())}}" class="centrado"><b>TOTAL</b></td>
             @foreach($seccion->getTotalsByPrestacion() as $nombre_prestacion)
-                <td align='left' colspan="1" nowrap="nowrap"><b>{{$nombre_prestacion}}</b></td>
+                <td align='left' colspan="1" nowrap="nowrap"><b>{{!$seccion->tfoot ? Str::before($nombre_prestacion, '*') : $nombre_prestacion}}</b></td>
                 @foreach($seccion->cols as $col)
                 <td align='right' data-t="n" data-v="{{$seccion->totalByPrestacion($col, $nombre_prestacion)}}"><b>{{number_format($seccion->totalByPrestacion($col, $nombre_prestacion),$seccion->precision,",",".")}}</b></td>
                 @endforeach
