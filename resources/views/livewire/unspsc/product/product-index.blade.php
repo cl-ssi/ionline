@@ -55,7 +55,7 @@
                 @endforelse
             </tbody>
             <caption>
-                Total resultados : {{ $products->total() }}
+                Total resultados: {{ $products->total() }}
             </caption>
         </table>
 
