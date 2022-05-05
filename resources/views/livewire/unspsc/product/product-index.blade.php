@@ -26,8 +26,13 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                    <td class="text-center" colspan="4">
+                        <em>Cargando...</em>
+                    </td>
+                </tr>
                 @forelse($products as $product)
-                <tr>
+                <tr wire:loading.remove>
                     <td class="text-center">{{ $product->code }}</td>
                     <td>{{ $product->name }}</td>
                     <td class="text-center">
@@ -49,7 +54,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr class="text-center">
+                <tr class="text-center" wire:loading.remove>
                     <td colspan="4"><em>No hay resultados</em></td>
                 </tr>
                 @endforelse
