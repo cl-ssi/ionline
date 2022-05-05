@@ -24,8 +24,13 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                    <td class="text-center" colspan="4">
+                        <em>Cargando...</em>
+                    </td>
+                </tr>
                 @forelse($families as $family)
-                <tr>
+                <tr wire:loading.remove>
                     <td class="text-center">
                         <a title="Ver clases"
                             href="{{ route('class.index', ['segment' => $segment, 'family' => $family]) }}">
@@ -47,7 +52,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr class="text-center">
+                <tr class="text-center" wire:loading.remove>
                     <td colspan="4"><em>No hay resultados</em></td>
                 </tr>
                 @endforelse

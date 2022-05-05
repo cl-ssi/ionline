@@ -17,6 +17,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                    <td class="text-center" colspan="4">
+                        <em>Cargando...</em>
+                    </td>
+                </tr>
                 @forelse($products as $index => $item)
                     <tr wire:loading.remove>
                         <td class="table-secondary" colspan="2">
