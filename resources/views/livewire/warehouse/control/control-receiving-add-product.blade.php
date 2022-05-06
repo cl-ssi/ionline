@@ -12,8 +12,9 @@
             </div>
         </div>
     </div>
-    <div class="form-row">
-        @if($type)
+
+    @if($type)
+        <div class="form-row">
             <fieldset class="form-group col-md-3">
                 <label for="product-search">Buscar Producto o Servicio</label>
                 <input
@@ -29,7 +30,7 @@
                 @enderror
             </fieldset>
 
-            <fieldset class="form-group col-md-3">
+            <fieldset class="form-group col-md-6">
                 <label for="product-search">Producto o Servicio</label>
                 @livewire('unspsc.product-search')
                 @error('unspsc_product_id')
@@ -38,24 +39,12 @@
                     </span>
                 @enderror
             </fieldset>
+        </div>
+    @endif
 
-            <fieldset class="form-group col-md-3">
-                <label for="description">Descripción</label>
-                <input
-                    type="text"
-                    class="form-control @error('description') is-invalid @enderror"
-                    min="0"
-                    wire:model="description"
-                    id="description"
-                >
-                @error('description')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </fieldset>
-        @else
-            <fieldset class="form-group col-md-5">
+    <div class="form-row">
+        @if($type == 0)
+            <fieldset class="form-group col-md-6">
                 <label for="wre-product-id">Producto</label>
                 <select
                     class="form-control @error('wre_product_id') is-invalid @enderror"
@@ -75,26 +64,23 @@
                     </span>
                 @enderror
             </fieldset>
+        @else
+            <fieldset class="form-group col-md-6">
+                <label for="description">Descripción</label>
+                <input
+                    type="text"
+                    class="form-control @error('description') is-invalid @enderror"
+                    min="0"
+                    wire:model="description"
+                    id="description"
+                >
+                @error('description')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
         @endif
-
-        <fieldset class="form-group col-md-3">
-            <label for="program-id">Programa</label>
-            <select
-                class="form-control @error('program_id') is-invalid @enderror"
-                wire:model="program_id"
-                id="program-id"
-            >
-                <option value="">Selecciona un programa</option>
-                @foreach($programs as $program)
-                    <option value="{{ $program->id }}">{{ $program->name }}</option>
-                @endforeach
-            </select>
-            @error('program_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
 
         <fieldset class="form-group col-md-3">
             <label for="barcode">Código de Barra</label>
@@ -132,7 +118,14 @@
 
     <div class="form-row">
         <fieldset class="form-group col-md-12">
-            <button class="btn btn-primary" wire:click="addProduct">
+            <button class="btn btn-primary" wire:click="addProduct" wire:loading.attr="disabled">
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    wire:loading
+                    wire:target="addProduct"
+                ></span>
                 Agregar producto
             </button>
         </fieldset>

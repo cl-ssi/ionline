@@ -8,10 +8,11 @@
 
 <h4>
     @if($control->type)
-        Nuevo Ingreso
+        Ingreso
     @else
-        Nuevo Egreso
+        Egreso
     @endif
+    {{ $control->id }}
 </h4>
 
 @livewire('warehouse.control.control-details', [

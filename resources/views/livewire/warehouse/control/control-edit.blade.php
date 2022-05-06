@@ -1,12 +1,13 @@
 <div>
     <h4>
-        Editar {{ $control->type_format }}
+        Editar {{ $control->type_format }} {{ $control->id }}
     </h4>
 
     @include('warehouse.controls.partials.form', [
         'store' => $store,
         'control' => $control,
-        'type'  => $type
+        'type'  => $type,
+        'disableProgram' => true,
     ])
 
     <button class="btn btn-primary" wire:click="controlUpdate">
@@ -17,6 +18,5 @@
         href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type]) }}">
         Cancelar
     </a>
-
 
 </div>

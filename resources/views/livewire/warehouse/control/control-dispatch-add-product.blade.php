@@ -2,17 +2,27 @@
     <div class="form-row">
         <fieldset class="form-group col-md-3">
             <label for="program-id">Programa</label>
-            <select
-                class="form-control @error('program_id') is-invalid @enderror"
-                wire:model="program_id"
-                id="program-id"
+            <input
+                type="text"
+                class="form-control"
+                value="{{ optional($control->program)->name }}"
+                readonly
             >
-                <option value="">Selecciona un programa</option>
-                @foreach($programs as $program)
-                    <option value="{{ $program->id }}">{{ $program->name }}</option>
-                @endforeach
-            </select>
-            @error('program_id')
+        </fieldset>
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-md-3">
+            <label for="barcode">Código de Barra</label>
+            <input
+                type="text"
+                class="form-control @error('barcode') is-invalid @enderror"
+                min="0"
+                wire:model="barcode"
+                id="barcode"
+                readonly
+            >
+            @error('barcode')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -42,37 +52,6 @@
         </fieldset>
 
         <fieldset class="form-group col-md-3">
-            <label for="balance">Disponibilidad</label>
-            <input
-                type="text"
-                id="balance"
-                class="form-control"
-                value="{{ $max }}"
-                disabled
-                readonly
-            >
-        </fieldset>
-    </div>
-
-    <div class="form-row">
-        <fieldset class="form-group col-md-3">
-            <label for="barcode">Código de Barra</label>
-            <input
-                type="text"
-                class="form-control @error('barcode') is-invalid @enderror"
-                min="0"
-                wire:model="barcode"
-                id="barcode"
-                readonly
-            >
-            @error('barcode')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-md-3">
             <label for="quantity">Cantidad</label>
             <input
                 type="number"
@@ -82,6 +61,9 @@
                 wire:model="quantity"
                 id="quantity"
             >
+            <small id="quantity" class="form-text text-muted">
+                {{ $max }} disponible(s)
+            </small>
             @error('quantity')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -93,6 +75,13 @@
     <div class="form-row">
         <fieldset class="form-group col-md-12">
             <button class="btn btn-primary" wire:click="addProduct">
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                    wire:loading
+                    wire:target="addProduct"
+                ></span>
                 Agregar producto
             </button>
         </fieldset>

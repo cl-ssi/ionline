@@ -11,6 +11,7 @@
         'control' => null,
         'store' => $store,
         'type' => $type,
+        'disableProgram' => false,
     ])
 
     <button class="btn btn-primary" wire:click="createControl">
