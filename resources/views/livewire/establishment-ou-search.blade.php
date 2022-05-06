@@ -1,27 +1,18 @@
-<div>
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_establishment_id">Establecimiento</label>
+<div class="form-row">
+    <fieldset class="form-group col-12 col-md-4">
+        <label for="for_establishment_id">Establecimiento</label>
 
-            <div id="for-picker" wire:ignore>
-                <select wire:model="establishment_id" wire:change="change" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
-                    <option value=""></option>
-                    @foreach($establishments as $establishment)
-                        <option value="{{$establishment->id}}">{{$establishment->name}}</option>
-                    @endforeach
-                </select>
-            </div>
-        </fieldset>
-    </div>
+        <div id="for-picker" wire:ignore>
+            <select wire:model="establishment_id" wire:change="change" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#for-picker">
+                <option value=""></option>
+                @foreach($establishments as $establishment)
+                    <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </fieldset>
 
-    <div class="form-row" >
-
-        <fieldset class="form-group col-md-4">
-            <label for="forPosition">Cargo/Funcion</label>
-            <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">
-        </fieldset>
-
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-8">
         <label for="for_ou_id">Unidad organizacional</label>
         <div class="input-group">
             <input
@@ -67,7 +58,6 @@
 
     </fieldset>
 
-    </div>
 
     <div wire:loading>
         Cargando...
