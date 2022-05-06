@@ -189,6 +189,16 @@ class EventRequestForm extends Model
         }
     }
 
+    /**
+     * Verifica si el evento actual es el último
+     * @return bool
+     */
+    public function isLast()
+    {
+        $eventQuantity = $this->requestForm->eventRequestForms()->count();
+        return ($eventQuantity === $this->cardinal_number);
+    }
+
     protected $dates = [
         'signature_date',
     ];
