@@ -6,10 +6,10 @@
 
 <div style="width: 49%; display: inline-block;">
     <div class="siete" style="padding-top: 3px;">
-        Droguería - {{ env('APP_SS') }}
+        {{ env('APP_SS') }}
     </div>
     <div class="siete" style="padding-top: 3px;">
-        <i>fernando.molina@redsalud.gob.cl</i>
+        <i>correo@redsalud.gob.cl</i>
     </div>
 </div>
 <div class="right" style="width: 49%; display: inline-block;">
@@ -19,8 +19,9 @@
 <div class="titulo">ACTA DE EGRESO N° {{ $control->id }}</div>
 
 <div style="padding-bottom: 8px;">
-    <strong>Bodega:</strong> {{ $control->store->name }}<br>
-    <strong>Destino:</strong> {{ $control->destination->name }}<br>
+    <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
+    <strong>Programa:</strong> {{ optional($control->program)->name }}<br>
+    <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
@@ -30,7 +31,6 @@
             <th>Cantidad</th>
             <th>Código de Barra</th>
             <th>Descripción</th>
-            <th>Programa</th>
             <th>Fecha</th>
         </tr>
     </thead>
@@ -41,14 +41,11 @@
                     {{ $item->quantity }}
                 </td>
                 <td class="center" style="vertical-align: top;">
-                    {{ $item->barcode }}
+                    {{ optional($item->product)->barcode }}
                 </td>
                 <td style="vertical-align: top;">
                     {{ optional($item->product->product)->name }}
-                    - {{ $item->product->name }}
-                </td>
-                <td class="center" style="vertical-align: top;">
-                    {{ $item->program->name }}
+                    - {{ optional($item->product)->name }}
                 </td>
                 <td class="center" style="vertical-align: top;">
                     {{ $control->date->format('d/m/Y')}}
