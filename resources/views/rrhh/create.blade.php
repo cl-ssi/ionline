@@ -72,6 +72,9 @@
 			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Funcion" name="position">
 		</fieldset>
 
+
+
+
 		<fieldset class="form-group col-md-8">
 			<label for="forOrganizationalUnit">Unidad Organizacional</label>
 				<select class="form-control selectpicker" data-live-search="true" id="forOrganizationalUnit" name="organizationalunit" required data-size="5">
@@ -110,6 +113,13 @@
 	</div> -->
 
 	@livewire('establishment-ou-search') 
+	
+	<div class="form-row" >
+		<fieldset class="form-group col-md-4">
+			<label for="forPosition">Cargo/Funcion</label>
+            <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">
+		</fieldset>
+	</div>
 
 	<button type="submit" class="btn btn-primary">Crear</button>
 
