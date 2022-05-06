@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
-use App\Models\Warehouse\Product;
 use App\Pharmacies\Program;
 use Livewire\Component;
 
@@ -12,10 +11,7 @@ class ControlDispatchAddProduct extends Component
 {
     public $store;
     public $control;
-    public $programs;
-    public $controlItems;
     public $control_item_id;
-    public $program_id;
     public $barcode;
     public $quantity = 0;
     public $max = 0;
@@ -23,21 +19,16 @@ class ControlDispatchAddProduct extends Component
     public function rules()
     {
         return [
-            'program_id'        => 'required|exists:frm_programs,id',
             'control_item_id'   => 'required|exists:wre_control_items,id',
             'quantity'          => 'required|integer|min:1|max:' . $this->max,
         ];
     }
 
-    public function mount()
-    {
-        $this->controlItems = collect([]);
-        $this->programs = $this->getPrograms();
-    }
-
     public function render()
     {
-        return view('livewire.warehouse.control.control-dispatch-add-product');
+        return view('livewire.warehouse.control.control-dispatch-add-product', [
+            'controlItems' => $this->getControlItems()
+        ]);
     }
 
     public function getPrograms()
@@ -56,27 +47,18 @@ class ControlDispatchAddProduct extends Component
         return $programs;
     }
 
-    public function getProducts()
+    public function getControlItems()
     {
-        $controlItems = collect([]);
+        $productsOutStock = productsOutStock($this->control->program);
 
-        if($this->program_id)
-        {
-            $controlItems = ControlItem::query()
-                ->whereHas('control', function($query) {
-                    $query->whereStoreId($this->store->id);
-                })
-                ->whereProgramId($this->program_id)
-                ->groupby('program_id', 'product_id');
-
-            // ignore products do not have stock
-            $productWithStock = clone $controlItems;
-            $idIgnores = $productWithStock->whereBalance(0)
-                ->pluck('product_id');
-
-            $controlItems = $controlItems->whereNotIn('product_id', $idIgnores)
-                ->get();
-        }
+        $controlItems = ControlItem::query()
+            ->whereHas('control', function($query) {
+                $query->whereStoreId($this->store->id);
+            })
+            ->whereProgramId($this->control->program_id)
+            ->groupby('program_id', 'product_id')
+            ->whereNotIn('product_id', $productsOutStock)
+            ->get();
 
         return $controlItems;
     }
@@ -91,24 +73,16 @@ class ControlDispatchAddProduct extends Component
             $this->max = lastBalance($controlItem->product, $controlItem->program);
     }
 
-    public function updatedProgramId()
-    {
-        $this->barcode = '';
-        $this->quantity = 0;
-        $this->max = 0;
-
-        $this->controlItems = $this->getProducts();
-    }
-
     public function addProduct()
     {
         $dataValidated = $this->validate();
+
         $controlItem = ControlItem::find($this->control_item_id);
         $lastBalance = lastBalance($controlItem->product, $controlItem->program);
         $dataValidated['balance'] = $lastBalance - $dataValidated['quantity'];
-        $dataValidated['product_id'] = $controlItem->product_id;
         $dataValidated['control_id'] = $this->control->id;
-        $dataValidated['barcode'] = $controlItem->barcode;
+        $dataValidated['program_id'] = $this->control->program_id;
+        $dataValidated['product_id'] = $controlItem->product_id;
 
         $controlItem = ControlItem::query()
             ->whereControlId($this->control->id)
@@ -128,15 +102,13 @@ class ControlDispatchAddProduct extends Component
             $controlItem = ControlItem::create($dataValidated);
         }
 
-        $this->emit('refreshControlProductList');
         $this->resetInput();
+        $this->emit('refreshControlProductList');
     }
 
     public function resetInput()
     {
         $this->control_item_id = null;
-        $this->program_id = null;
-        $this->controlItems = collect([]);
         $this->max = 0;
         $this->quantity = 0;
         $this->barcode = '';
