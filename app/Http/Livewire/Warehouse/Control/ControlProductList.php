@@ -19,10 +19,37 @@ class ControlProductList extends Component
         $this->controlItems = $this->control->items->sortByDesc('created_at');
     }
 
-    public function deleteItem(ControlItem $item)
+    public function deleteItem(ControlItem $controlItem)
     {
-        $item->delete();
+        $currentBalance = lastBalance($controlItem->product, $controlItem->program);
+        $amountToRemove = $controlItem->quantity;
+
+        if(($controlItem->control->isReceiving() && ($currentBalance >= $controlItem->balance))
+            OR $controlItem->control->isDispatch())
+        {
+            $controlItems = ControlItem::query()
+                ->whereProgramId($controlItem->program_id)
+                ->whereProductId($controlItem->product_id)
+                ->where('id', '>', $controlItem->id)
+                ->get();
+
+            foreach($controlItems as $ci)
+            {
+                if($controlItem->control->isReceiving())
+                    $newBalance = $ci->balance - $amountToRemove;
+                else
+                    $newBalance = $ci->balance + $amountToRemove;
+
+                $ci->update([
+                    'balance' => $newBalance
+                ]);
+            }
+
+            $controlItem->delete();
+        }
+
         $this->control->refresh();
+        $this->mount();
     }
 
     public function render()
