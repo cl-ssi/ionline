@@ -73,7 +73,6 @@
                 href="{{ route('pharmacies.reports.consume_history') }}">
                 <i class="fas fa-file-alt"></i> Consumos históricos</a>
 
-
         </div>
     </li>
     @endcan
@@ -86,6 +85,13 @@
             <i class="fas fa-wrench"></i> Mantenedores</a>
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item"
+                href="{{ route('segments.index') }}">
+                <i class="fas fa-list"></i> Rubros por UNSPSC</a>
+
+            <a class="dropdown-item"
+                href="{{ route('products.all') }}">
+                <i class="fas fa-list"></i> Buscar Productos del UNSPSC</a>
 
             <a class="dropdown-item"
                 href="{{ route('pharmacies.products.index') }}">
@@ -99,9 +105,9 @@
                 href="{{ route('pharmacies.suppliers.index') }}">
                 <i class="fas fa-industry"></i> Proveedores</a>
 
-                <a class="dropdown-item"
-                    href="{{ route('pharmacies.programs.index') }}">
-                    <i class="fas fa-industry"></i> Programas</a>
+            <a class="dropdown-item"
+                href="{{ route('pharmacies.programs.index') }}">
+                <i class="fas fa-industry"></i> Programas</a>
 
         </div>
     </li>
