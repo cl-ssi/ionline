@@ -34,7 +34,13 @@
                       </select>
                     </div>
                   </td>
-                  <td>{{$item->article}}</td>
+                  <td>
+                    @if($item->product_id)
+                        {{ optional($item->product)->name }}
+                    @else
+                        {{ $item->article }}
+                    @endif
+                  </td>
                   <td>{{$item->unit_of_measurement}}</td>
                   <td>{{$item->specification}}</td>
                   <td align="center">
