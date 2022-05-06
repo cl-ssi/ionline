@@ -26,7 +26,7 @@ class CreateWreDestinations extends Migration
 
         // TODO: Eliminar
         Destination::create([
-            'name' => 'Destino X',
+            'name' => 'Hospital 3000',
             'store_id' => 1
         ]);
     }
