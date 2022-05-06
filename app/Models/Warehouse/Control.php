@@ -2,10 +2,11 @@
 
 namespace App\Models\Warehouse;
 
+use App\Pharmacies\Program;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Str;
 class Control extends Model
 {
     use HasFactory, SoftDeletes;
@@ -16,9 +17,10 @@ class Control extends Model
         'type',
         'date',
         'note',
+        'store_id',
+        'program_id',
         'origin_id',
         'destination_id',
-        'store_id',
     ];
 
     protected $dates = [
@@ -28,6 +30,11 @@ class Control extends Model
     public function store()
     {
         return $this->belongsTo(Store::class);
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 
     public function origin()
@@ -63,5 +70,10 @@ class Control extends Model
     public function getDateFormatAttribute()
     {
         return $this->date->format('Y-m-d');
+    }
+
+    public function getShortNoteAttribute()
+    {
+        return Str::limit($this->note, 20);
     }
 }
