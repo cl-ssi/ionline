@@ -119,7 +119,6 @@ class Authorization extends Component
         $this->requestForm->purchase_type_id        =  $this->purchaseType;
         $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
         $this->requestForm->purchasers()->attach($this->supervisorUser);
-        $this->requestForm->status = 'approved';
         $this->requestForm->approved_at = now();
         $this->requestForm->save();
         // $this->createPurchasingProcesses();
@@ -138,6 +137,8 @@ class Authorization extends Component
           $event->comment = $this->comment;
           $event->signerUser()->associate(auth()->user());
           $event->save();
+
+          if($event->isLast()) $this->requestForm->update(['approved_at', now()]);
 
           $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
 
