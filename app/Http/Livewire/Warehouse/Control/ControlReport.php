@@ -48,7 +48,6 @@ class ControlReport extends Component
 
     public function getControlItems()
     {
-        // TODO: Agregar solo los valores que se van a usar para optimizar respuestas
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
                 $query->where('store_id', $this->store->id);
