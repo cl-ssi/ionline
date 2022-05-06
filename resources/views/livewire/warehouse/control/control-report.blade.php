@@ -51,13 +51,20 @@
             </thead>
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none">
-                    <td class="text-center" colspan="7">
+                    <td class="text-center" colspan="8">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controlItems as $controlItem)
                 <tr wire:loading.remove>
-                    <td>{{ $controlItem->control->type_format }}</td>
+                    <td>
+                        {{ $controlItem->control->type_format }}
+                        @if($controlItem->control->type)
+                            {{ $controlItem->control_id }}
+                        @else
+                            {{ $controlItem->control_id }}
+                        @endif
+                    </td>
                     <td>{{ $controlItem->control->date_format }}</td>
                     <td>
                         @if($controlItem->control->isReceiving())

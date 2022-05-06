@@ -52,11 +52,18 @@
                             Destino
                         @endif
                     </th>
+                    <th>Programa</th>
+                    <th class="text-center"># Productos</th>
                     <th>Nota</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                    <td class="text-center" colspan="8">
+                        @include('layouts.partials.spinner')
+                    </td>
+                </tr>
                 @forelse($controls as $control)
                 <tr>
                     <td>
@@ -70,13 +77,15 @@
                             <i class="fas fa-edit"></i> {{ $control->id }}
                         </a>
                     </td>
-                    <td>{{ $control->date }}</td>
+                    <td>{{ $control->date_format }}</td>
                     <td>
                         {{ ($control->type)
                         ? optional($control->origin)->name
                         : optional($control->destination)->name  }}
                     </td>
-                    <td>{{ $control->note }}</td>
+                    <td>{{ optional($control->program)->name }}</td>
+                    <td class="text-center">{{ $control->items->count() }}</td>
+                    <td>{{ $control->short_note }}</td>
                     <td class="text-center">
                         @if($control->isDispatch())
                         <a
@@ -93,7 +102,7 @@
                 </tr>
                 @empty
                 <tr class="text-center">
-                    <td colspan="5">
+                    <td colspan="8">
                         <em>No hay resultados</em>
                     </td>
                 </tr>
