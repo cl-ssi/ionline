@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Warehouse\Control;
 
-use App\Models\Warehouse\Control;
 use Livewire\Component;
 
 class ControlEdit extends Component
@@ -29,7 +28,7 @@ class ControlEdit extends Component
 
     public function mount()
     {
-        $this->date = $this->control->date;
+        $this->date = $this->control->date_format;
         $this->note = $this->control->note;
         $this->origin_id = $this->control->origin_id;
         $this->destination_id = $this->control->destination_id;
