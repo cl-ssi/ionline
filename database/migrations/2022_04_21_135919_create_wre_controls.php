@@ -21,6 +21,7 @@ class CreateWreControls extends Migration
             $table->text('note')->nullable();
 
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
+            $table->foreignId('program_id')->nullable()->constrained('frm_programs');
             $table->foreignId('origin_id')->nullable()->constrained('wre_origins');
             $table->foreignId('destination_id')->nullable()->constrained('wre_destinations');
 
