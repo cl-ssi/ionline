@@ -11,12 +11,10 @@ class ControlReceivingAddProduct extends Component
 {
     public $store;
     public $control;
-    public $programs;
     public $type;
     public $unspsc_product_id;
     public $description;
     public $wre_product_id;
-    public $program_id;
     public $quantity;
     public $barcode;
     public $search_product;
@@ -28,19 +26,17 @@ class ControlReceivingAddProduct extends Component
     public function rules()
     {
         return [
-            'wre_product_id'    => 'nullable|required_if:type,0|exists:wre_products,id',
             'unspsc_product_id' => 'nullable|required_if:type,1|exists:unspsc_products,id',
             'description'       => 'nullable|required_if:type,1|string|min:1|max:255',
-            'program_id'        => 'required|exists:frm_programs,id',
+            'barcode'           => 'nullable|required_if:type,1|string|min:1|max:255',
+            'wre_product_id'    => 'nullable|required_if:type,0|exists:wre_products,id',
             'quantity'          => 'required|integer|min:1',
-            'barcode'           => 'required|string|min:1|max:255',
         ];
     }
 
     public function mount()
     {
         $this->type = 1;
-        $this->programs = Program::all();
         $this->products = collect([]);
     }
 
@@ -67,18 +63,18 @@ class ControlReceivingAddProduct extends Component
             $product = Product::find($dataValidated['wre_product_id']);
         }
 
-        $program = Program::find($dataValidated['program_id']);
-        $lastBalance = lastBalance($product, $program);
+        $lastBalance = lastBalance($product, $this->control->program);
 
         $balance = $dataValidated['quantity'] + $lastBalance;
 
         $dataValidated['balance'] = $balance;
         $dataValidated['control_id'] = $this->control->id;
+        $dataValidated['program_id'] = $this->control->program_id;
         $dataValidated['product_id'] = $product->id;
 
         $controlItem = ControlItem::query()
             ->whereControlId($this->control->id)
-            ->whereProgramId($dataValidated['program_id'])
+            ->whereProgramId($this->control->program_id)
             ->whereProductId($product->id);
 
         if($controlItem->exists())
@@ -104,7 +100,6 @@ class ControlReceivingAddProduct extends Component
         $this->search_product = null;
         $this->unspsc_product_id = null;
         $this->wre_product_id = null;
-        $this->program_id = null;
         $this->quantity = null;
         $this->barcode = null;
         $this->description = null;
