@@ -413,6 +413,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::post('/createWordResWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createResWordDocx')->name('createWordResWithdrawal');
     Route::get('/createWordCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createWordDocx')->name('createWordCollaboration');
     Route::post('/createWordResCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createResWordDocx')->name('createWordResCollaboration');
+    Route::get('/createWordMandate/{agreement}', 'Agreements\WordMandateAgreeController@createWordDocx')->name('createWordMandate');
     Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
 
