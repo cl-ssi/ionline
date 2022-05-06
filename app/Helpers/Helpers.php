@@ -20,16 +20,34 @@ function trashed($user) {
 }
 
 function lastBalance(Product $product, Program $program) {
-    $control = ControlItem::query()
+    $controlItem = ControlItem::query()
         ->whereProductId($product->id)
         ->whereProgramId($program->id)
         ->latest()
         ->first();
 
-    if($control)
+    if($controlItem)
     {
-        return $control->balance;
+        return $controlItem->balance;
     }
 
     return 0;
+}
+
+function productsOutStock(Program $program) {
+    $productIds = collect([]);
+
+    $controlItems = ControlItem::query()
+        ->whereProgramId($program->id)
+        ->groupBy('product_id')
+        ->get();
+
+    foreach($controlItems as $controlItem)
+    {
+        $lastBalance = lastBalance($controlItem->product, $controlItem->program);
+        if($lastBalance == 0)
+            $productIds->push($controlItem->product_id);
+    }
+
+    return $productIds;
 }
