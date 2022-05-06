@@ -22,7 +22,6 @@
     </fieldset>--}}
 
     @if(count($my_pending_forms_to_signs) > 0)
-    </div>
         <div class="col">
             <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
             <div class="table-responsive">
@@ -203,7 +202,7 @@
         </div>
     @endif
     @endif
-    
+
     @if(count($my_forms_signed) > 0)
     </div>
         <div class="col">
@@ -341,7 +340,7 @@
                     <th>Usuario Gestor</th>
                     <th>Comprador</th>
                     <th>Items</th>
-                    <th>Presupuesto</th>                    
+                    <th>Presupuesto</th>
                     <th>Espera</th>
                     <th>Etapas de aprobación</th>
                     <th style="width: 7%">Fecha de Aprobación</th>
