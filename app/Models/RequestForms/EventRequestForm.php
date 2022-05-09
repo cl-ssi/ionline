@@ -8,6 +8,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Str;
 
 class EventRequestForm extends Model
 {
@@ -34,6 +35,11 @@ class EventRequestForm extends Model
 
     public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(EventRequestFormFile::class);
     }
 
     public function getStatusValueAttribute(){
@@ -134,7 +140,8 @@ class EventRequestForm extends Model
         return true;
     }
 
-    public static function createNewBudgetEvent(RequestForm $requestForm){
+    public static function createNewBudgetEvent(RequestForm $requestForm)
+    {
         $event = new EventRequestForm();
         $event->ou_signer_user      =   37; // Abastecimiento
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
@@ -145,6 +152,8 @@ class EventRequestForm extends Model
         $event->purchaser_id        =   Auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
+
+        self::createFile($event);
 
         $event = new EventRequestForm();
         $event->ou_signer_user      =   40; //Finanzas
@@ -157,7 +166,37 @@ class EventRequestForm extends Model
         $event->requestForm()->associate($requestForm);
         $event->save();
 
+        self::createFile($event);
+
         return true;
+    }
+
+    /**
+     * @param EventRequestForm $event
+     * @return void
+     */
+    public static function createFile(EventRequestForm $event)
+    {
+        if (request()->hasFile('files')) {
+            foreach (request()->file('files') as $file) {
+                $eventRequestFormFile = new EventRequestFormFile();
+                $eventRequestFormFile->extension = '.' . $file->extension();
+                $eventRequestFormFile->name = $file->getClientOriginalName();
+                $eventRequestFormFile->event_request_form_id = $event->id;
+                $eventRequestFormFile->file = $file->storeAs('ionline/event_request_forms', Str::uuid() . $eventRequestFormFile->extension, ['disk' => 'gcs']);
+                $eventRequestFormFile->save();
+            }
+        }
+    }
+
+    /**
+     * Verifica si el evento actual es el último
+     * @return bool
+     */
+    public function isLast()
+    {
+        $eventQuantity = $this->requestForm->eventRequestForms()->count();
+        return ($eventQuantity === $this->cardinal_number);
     }
 
     protected $dates = [

@@ -53,7 +53,7 @@ class RequestForm extends Model implements Auditable
     'type_form', 'bidding_number', 'request_user_id',
     'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
     'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
-    'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id'
+    'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
   ];
 
   public function getFolioAttribute($value)
@@ -286,6 +286,18 @@ class RequestForm extends Model implements Auditable
   {
     return $this->type_of_currency == 'peso' ? 0 : 2;
   }
+
+    public function getApprovedAtAttribute()
+    {
+        if ($this->eventRequestForms()->count() === 0) {
+            return null;
+        }
+
+        return $this->eventRequestForms()
+            ->orderBy('cardinal_number', 'desc')
+            ->first('signature_date')
+            ->signature_date;
+    }
 
   /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
   public function eventSign($event_type)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Documents\DocumentController;
+use App\Http\Controllers\RequestForms\EventRequestFormFileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -30,6 +31,8 @@ use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\StaffManageController;
+use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestSignController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
@@ -168,10 +171,10 @@ Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'
 
 
 
-Route::post('/{signaturesFlowId}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
-Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFlowId}/firma', 'DigitalSignatureController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firma', 'DigitalSignatureController@signPdf')->name('signPdf');
 Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
-Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
+Route::get('/test-firma/{otp}', 'DigitalSignatureController@test');
 
 
 
@@ -189,6 +192,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::prefix('staff_manage')->name('staff_manage.')->group(function(){
+        Route::get('/', [StaffManageController::class, 'index'])->name('index');
+        Route::get('/create', [StaffManageController::class, 'create'])->name('create');
+        Route::post('/store', [StaffManageController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [StaffManageController::class, 'edit'])->name('edit');
+        Route::get('{organizational_unit_id}/destroy/{replacement_staff_id}', [StaffManageController::class, 'destroy'])->name('destroy');
+    });
     Route::prefix('view_profile')->name('view_profile.')->group(function(){
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
         Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
@@ -243,6 +253,14 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::get('/create_document/{technicalEvaluation}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
         });
 
+    });
+
+    Route::prefix('contact_record')->name('contact_record.')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys'])->group(function(){
+        Route::get('/{staff}', [ContactRecordController::class, 'index'])->name('index');
+        Route::get('/{staff}/create/', [ContactRecordController::class, 'create'])->name('create');
+        Route::post('/{staff}/store', [ContactRecordController::class, 'store'])->name('store');
+        // Route::get('/{id}/edit', [StaffManageController::class, 'edit'])->name('edit');
+        // Route::get('{organizational_unit_id}/destroy/{replacement_staff_id}', [StaffManageController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('reports')->name('reports.')->group(function(){
@@ -400,6 +418,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::post('/createWordResWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createResWordDocx')->name('createWordResWithdrawal');
     Route::get('/createWordCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createWordDocx')->name('createWordCollaboration');
     Route::post('/createWordResCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createResWordDocx')->name('createWordResCollaboration');
+    Route::get('/createWordMandate/{agreement}', 'Agreements\WordMandateAgreeController@createWordDocx')->name('createWordMandate');
     Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
 
@@ -601,7 +620,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
             Route::post('/update-paid-values', [FulfillmentController::class, 'updatePaidValues'])->name('update-paid-values');
-
+            Route::get('/add_fulfillment/{serviceRequest}', [FulfillmentController::class, 'add_fulfillment'])->name('add_fulfillment');
 
             Route::prefix('item')->name('item.')->group(function () {
                 // descomposición del resource
@@ -1236,7 +1255,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('rem')->as('rem.')->group(function () {
         Route::get('/{year}', 'Indicators\RemController@list')->name('list');
         Route::get('/{year}/{serie}', 'Indicators\RemController@index')->name('index');
-        Route::get('/{year}/{serie}/{nserie}', 'Indicators\RemController@show')->name('show');
+        Route::get('/{year}/{serie}/{nserie}/{unique?}', 'Indicators\RemController@show')->name('show');
     });
 
     Route::prefix('rems')->as('rems.')->group(function () {
@@ -1447,6 +1466,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+        Route::get('/edit/{itemRequestForm}', [ItemRequestFormController::class, 'edit'])->name('edit');
+        Route::post('/update/{itemRequestForm}', [ItemRequestFormController::class, 'update'])->name('update');
     });
 
     Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
@@ -1512,6 +1533,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
+
+    Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
 
     //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
     //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
@@ -1596,6 +1619,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
+    Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');

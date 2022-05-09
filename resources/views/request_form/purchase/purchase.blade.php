@@ -118,7 +118,7 @@
             @include('request_form.purchase.modals.select_purchase_mechanism')
 
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending || $requestForm->father || $requestForm->has_increased_expense) disabled @endif >
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending  || $requestForm->has_increased_expense) disabled @endif >
                 Solicitar presupuesto
             </button>
 
@@ -252,6 +252,12 @@
                                                     @csrf
                                                     @method(isset($result) ? 'PUT' : 'POST')
                                                     @endif
+
+{{--                                                    @if($requestForm->type_form === 'bienes y/o servicios')--}}
+{{--                                                        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
+{{--                                                    @else--}}
+{{--                                                        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
+{{--                                                    @endif--}}
                                                     <table class="table table-sm table-striped table-bordered small">
                                                         <thead class="text-center">
                                                             <tr>
@@ -336,6 +342,7 @@
     </div>
 </div>
 
+
 @if($requestForm->isPurchaseInProcess())
 <br>
 
@@ -357,7 +364,7 @@
 
 <!-- Convenio Marco menos CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
 @if($requestForm->purchase_mechanism_id == 2 && !$requestForm->father && $requestForm->purchase_type_id != 4)
-@include('request_form.purchase.partials.convenio_marco_form')
+@include('request_form.purchase.partials.convenio_marco_form_mp')
 @endif
 
 <!-- Trato Directo -->
@@ -373,6 +380,10 @@
 <!-- COMPRA INMEDIATA A PARTIR DE OTRO RF o COMPRA ÁGIL (cod 7) o CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
 @if( $requestForm->father || in_array($requestForm->purchase_type_id, [4, 7]))
 @include('request_form.purchase.partials.immediate_purchase_form')
+@endif
+
+@if(env('APP_ENV') == 'local')
+@include('request_form.purchase.partials.immediate_purchase_form_mp')
 @endif
 
 </form>
@@ -467,6 +478,7 @@
 </div>
 @endif --}}
 
+{{--
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 <div class="row">
     <div class="col-sm">
@@ -510,24 +522,24 @@
 
                         @if($detail->pivot->tender)
                         <td>
-                        Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
-                        Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>s
-                        Plazo vig en días:{{ $detail->pivot->tender->duration??'' }}
+                            Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
+                            Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>s
+                            Plazo vig en días:{{ $detail->pivot->tender->duration??'' }}
 
                         </td>
                         @endif
 
                         @if($detail->pivot->directDeal)
                         <td>Nº Resol:{{ $detail->pivot->directDeal->resol_direct_deal}} <br><br>
-                        Prov:{{ $detail->pivot->directDeal->supplier->name }}</td>
+                            Prov:{{ $detail->pivot->directDeal->supplier->name }}</td>
                         @endif
 
                         @if($detail->pivot->immediatePurchase)
                         <td>ID OC:{{ $detail->pivot->immediatePurchase->po_id }} <br><br>
-                        Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}</td>
+                            Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}</td>
                         @endif
 
-                        
+
                         <td>{{ $detail->article }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
                         <td>{{ $detail->specification }}</td>
@@ -577,6 +589,7 @@
     </div>
 </div>
 @endif
+--}}
 
 <br>
 
@@ -654,13 +667,13 @@
                 @if($requestForm->children->count() > 0 && $requestForm->purchasingProcess)
                 <tfoot>
                     <tr>
-                        <th colspan="9" class="text-right">Totales</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                        <th colspan="9" class="text-right">Totales</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalEstimatedExpense(),$requestForm->precision_currency,",",".") }}</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                     </tr>
                     <tr>
-                        <th colspan="10" class="text-right">Saldo disponible Compras</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</td>
+                        <th colspan="10" class="text-right">Saldo disponible Compras</th>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),$requestForm->precision_currency,",",".") }}</th>
                     </tr>
                 </tfoot>
                 @endif
@@ -669,8 +682,69 @@
     </div>
 </div>
 @endif
-
 <br>
+<br>
+<br>
+<br>
+<hr>
+@if(Str::contains($requestForm->subtype, 'tiempo'))
+    @if(env('APP_ENV') == 'local')
+{{--<div class="row">--}}
+{{--    <div class="col-sm">--}}
+{{--        <div class="table-responsive">--}}
+{{--        <h6><i class="fas fa-shopping-cart"></i>MERCADO PÚBLICO ORDEN DE COMPRA {{$objoc->Listado[0]->Codigo }}</h6>--}}
+{{--        <table class="table table-sm table-striped table-bordered small">--}}
+{{--                <thead class="text-center">--}}
+{{--                    <tr>--}}
+{{--                        <th>Item</th>--}}
+{{--                        <th>Orden de Compra</th>--}}
+{{--                        <th>Proveedor (Código Proveedor)</th>--}}
+{{--                        <th>Producto (Código Producto)</th>--}}
+{{--                        <th>Especificaciones Técnicas (Comprador/Proveedor)</th>--}}
+{{--                        <th>Cantidad</th>--}}
+{{--                        <th>Unidad de medida</th>--}}
+{{--                        <th>Moneda</th>--}}
+{{--                        <th>Precio Neto</th>--}}
+{{--                        <th>Total Cargos</th>--}}
+{{--                        <th>Total Descuentos</th>--}}
+{{--                        <th>Total Impuestos</th>--}}
+{{--                        <th>Total</th>--}}
+{{--                        <th>Más Información</th>--}}
+{{--                    </tr>--}}
+{{--                </thead>--}}
+{{--                <tbody>--}}
+{{--                @foreach($objoc->Listado as $oc)--}}
+{{--                @foreach($oc->Items->Listado as $item)--}}
+{{--                <tr>--}}
+{{--                <td>{{ $item->Correlativo }}</td>--}}
+{{--                <td>{{$oc->Codigo}}</td>--}}
+{{--                <td>{{$oc->Proveedor->Nombre}} ({{$oc->Proveedor->Codigo}})</td>--}}
+{{--                <td>{{$item->Producto}} ({{ $item->CodigoProducto }})</td>--}}
+{{--                <td>{{$item->EspecificacionComprador}}/{{$item->EspecificacionProveedor}}</td>--}}
+{{--                <td>{{$item->Cantidad}}</td>--}}
+{{--                <td>{{$item->Unidad}}</td>--}}
+{{--                <td>{{$item->Moneda}}</td>--}}
+{{--                <td>{{$item->PrecioNeto}}</td>--}}
+{{--                <td>{{$item->TotalCargos}}</td>--}}
+{{--                <td>{{$item->TotalDescuentos}}</td>--}}
+{{--                <td>{{$item->TotalImpuestos}}</td>--}}
+{{--                <td>{{$item->Total}}</td>--}}
+{{--                <td><button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#mp-{{ $item->Correlativo }}" title="Ver Más Detalle">--}}
+{{--            <i class="fa fa-info"></i>--}}
+{{--            </button>--}}
+{{--            @include('request_form.purchase.modals.detail_oc_mp')--}}
+{{--        </td>--}}
+{{--                </tr>--}}
+{{--                @endforeach--}}
+
+{{--                @endforeach--}}
+{{--                </tbody>--}}
+{{--        </table>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
+    @endif
+@endif
 
 <hr>
 
@@ -878,6 +952,7 @@
 @endsection
 
 @section('custom_js')
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script type="text/javascript">
     var withholding_tax = {
@@ -1083,10 +1158,81 @@
         $(this).find('select option:not(:selected)').attr('disabled', true);
         $(this).find('textarea[name="observation"]').focus();
     });
+
+
+
+    $('#btn_licitacion').click(function() {
+        if(document.getElementById("for_tender_number").value != '')
+        {
+            axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            .then(function(response) {
+                // handle success
+                //console.log(response);
+                console.log(response.data.Listado[0].Nombre);
+                document.getElementById("for_description").value = response.data.Listado[0].Nombre;
+                //alert(response.data.Listado.Nombre);
+            })
+            .catch(function(error) {
+                // handle error
+                //alert(response.data.Cantidad);
+                alert('valor digitado no se encuentra en Mercado Público o error en la Comunicación');
+                console.log(error);
+            })
+            .then(function() {
+                // always executed
+            });
+        }
+        else
+        {
+            alert('Debe llenar un valor en el campo antes de consultar en la API');
+        }
+
+
+
+    });
+
+    $('#btn_oc').click(function() {
+        if(document.getElementById("for_po_id").value != '')
+        {
+            axios.get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            .then(function(response) {
+                // handle success
+                console.log(response);
+                var fecha_envio = new Date(response.data.Listado[0].Fechas.FechaEnvio).toISOString().slice(0, 10);
+                var fecha_aceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion).toISOString().slice(0, 10);
+                document.getElementById("for_description").value = response.data.Listado[0].Nombre;
+                document.getElementById("for_po_accepted_date").value = fecha_aceptacion;
+                document.getElementById("for_po_sent_date").value = fecha_envio;
+                document.getElementById("for_supplier_specifications").value = response.data.Listado[0].Items.Listado[0].EspecificacionProveedor;
+
+
+
+                //document.getElementById("for_po_accepted_date").value = response.data.Listado[0].Fechas.FechaAceptacion;
+                //alert(response.data.Listado.Nombre);
+            })
+            .catch(function(error) {
+                // handle error
+                //alert(response.data.Cantidad);
+                alert('valor digitado no se encuentra en Mercado Público o error en la Comunicación');
+                console.log(error);
+            })
+            .then(function() {
+                // always executed
+            });
+        }
+        else
+        {
+            alert('Debe llenar un valor en el campo antes de consultar en la API');
+        }
+
+
+
+    });
 </script>
 
 @endsection
 
 @section('custom_js_head')
+
 
 @endsection

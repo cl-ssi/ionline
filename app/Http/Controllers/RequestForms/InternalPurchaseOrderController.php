@@ -87,7 +87,7 @@ class InternalPurchaseOrderController extends Controller
 
     public function create_internal_purchase_order_document(PurchasingProcessDetail $purchasingProcessDetail)
     {
-        $purchasingProcessDetail->load('user', 'internalPurchaseOrder.supplier', 'purchasingProcess');
+        $purchasingProcessDetail->load('user', 'internalPurchaseOrder.supplier', 'purchasingProcess.requestForm');
         $details = PurchasingProcessDetail::where('internal_purchase_order_id', $purchasingProcessDetail->internal_purchase_order_id)->get();
         // return $details;
         $pdf = app('dompdf.wrapper');

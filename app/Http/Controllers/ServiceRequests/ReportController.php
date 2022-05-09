@@ -907,7 +907,8 @@ class ReportController extends Controller
         $q->whereNotNull('resolution_number')
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
-      })->get();
+      })
+      ->get();
 
 
 
@@ -953,6 +954,7 @@ class ReportController extends Controller
     // ' Afecto  a  sistema  de  turno' . "\r\n";
 
     foreach ($filas as $fila) {
+
       $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
       switch ($fila->program_contract_type) {
         case 'Horas':
@@ -981,21 +983,172 @@ class ReportController extends Controller
           break;
       }
 
-      switch ($fila->programm_name) {
-        case 'Covid19 Médicos':
-          $sirh_program_code = 3904;
+      $sirh_program_code = '';
+      switch ($fila->programm_name) {  
+        case 'Covid 2022':
+          switch ($fila->profession->category) {
+            case "A":
+              switch ($fila->responsabilityCenter->name) {
+                case "Servicio de Anestesia y Pabellones":
+                  $sirh_program_code = 2004;
+                  break;
+                case "Unidad de Hospitalización Domiciliaria":
+                  $sirh_program_code = 2008;
+                  break;
+                case "Servicio de Emergencia Hospitalaria":
+                  $sirh_program_code = 2010;
+                  break;
+                case "Extensión Hospital -Estadio":
+                  $sirh_program_code = 2010;
+                  break;
+                case "Servicio de Traumatología":
+                  $sirh_program_code = 2018;
+                  break;
+                case "Servicio Unidad Paciente Crítico Adulto":
+                  $sirh_program_code = 2024;
+                  break;
+                case "Servicio de Medicina":
+                  $sirh_program_code = 2024;
+                  break;
+                case "Servicio de Cirugía	Médico":
+                  $sirh_program_code = 2024;
+                  break;
+                case "Servicio de Ginecología y Obstetricia":
+                  $sirh_program_code = 2024;
+                  break;
+                case "Servicio de Neurocirugía":
+                  $sirh_program_code = 2024;
+                  break;
+              }
+              break;
+
+            default:
+              switch ($fila->responsabilityCenter->name) {
+                case "Servicio de Anestesia y Pabellones":
+                  $sirh_program_code = 2003;
+                  break;
+                case "Unidad Laboratorio Clínico":
+                  $sirh_program_code = 2005;
+                  break;
+                case "Unidad Imagenología":
+                  $sirh_program_code = 2005;
+                  break;
+                case "Unidad de Hospitalización Domiciliaria":
+                  $sirh_program_code = 2007;
+                  break;
+                case "Servicio de Emergencia Hospitalaria":
+                  $sirh_program_code = 2009;
+                  break;
+                case "Extensión Hospital -Estadio":
+                  $sirh_program_code = 2009;
+                  break;
+                case "Unidad de Salud Ocupacional":
+                  $sirh_program_code = 2017;
+                  break;
+                case "Servicio de Traumatología":
+                  $sirh_program_code = 2017;
+                  break;
+                case "Unidad de Medicina Física y Rehabilitación":
+                  $sirh_program_code = 2017;
+                  break;
+                case "Unidad de Alimentación y Nutrición":
+                  $sirh_program_code = 2019;
+                  break;
+                case "Unidad de Movilización":
+                  $sirh_program_code = 2019;
+                  break;
+                case "Servicio Unidad Paciente Crítico Adulto":
+                  $sirh_program_code = 2023;
+                  break;
+                case "Servicio de Medicina":
+                  $sirh_program_code = 2023;
+                  break;
+                case "Servicio de Neurocirugía":
+                  $sirh_program_code = 2023;
+                  break;
+                case "Servicio de Cirugía":
+                  $sirh_program_code = 2023;
+                  break;
+                case "Servicio de Ginecología y Obstetricia":
+                  $sirh_program_code = 2023;
+                  break;
+                case "Unidad Medicina Transfusional":
+                  $sirh_program_code = 2023;
+                  break;
+              }
+              break;
+          }
           break;
-        case 'Covid19 No Médicos':
-          $sirh_program_code = 3903;
-          break;
-        case 'Covid19-APS Médicos':
-          $sirh_program_code = 3904;
-          break;
-        case 'Covid19-APS No Médicos':
-          $sirh_program_code = 3903;
-          break;
+
         default:
-          $sirh_program_code = '';
+          switch ($fila->profession->name) {
+            case "Médico":
+              $sirh_program_code = 1494;
+              break;
+            case "Odontólogo":
+              $sirh_program_code = 1494;
+              break;
+            case "Químico farmacéutico":
+              $sirh_program_code = 1494;
+              break;
+            case "Enfermero":
+              $sirh_program_code = 1491;
+              break;
+            case "Matron/a":
+              $sirh_program_code = 1491;
+              break;
+            case "Kinesiólogo/a":
+              $sirh_program_code = 1491;
+              break;
+            case "Nutricionista":
+              $sirh_program_code = 1491;
+              break;
+            case "Trabajador/a Social":
+              $sirh_program_code = 1492;
+              break;
+            case "Terapeuta Ocupacional":
+              $sirh_program_code = 1491;
+              break;
+            case "Fonoaudiólogo/a":
+              $sirh_program_code = 1491;
+              break;
+            case "Prevencionista de Riesgo":
+              $sirh_program_code = 1492;
+              break;
+            case "Tecnólogo/a Médico Laboratorio":
+              $sirh_program_code = 1491;
+              break;
+            case "Tecnólogo/a Médico Imagenología":
+              $sirh_program_code = 1491;
+              break;
+            case "Bioquímico/a":
+              $sirh_program_code = 1491;
+              break;
+            case "Biotecnólogo/a":
+              $sirh_program_code = 1491;
+              break;
+            case "Ingeniero/a":
+              $sirh_program_code = 1492;
+              break;
+            case "Técnico Paramédico":
+              $sirh_program_code = 1491;
+              break;
+            case "Administrativo/a":
+              $sirh_program_code = 1492;
+              break;
+            case "Auxiliar de Servicio":
+              $sirh_program_code = 1492;
+              break;
+            case "Otros Profesionales":
+              $sirh_program_code = 1492;
+              break;
+            case "Otros Técnicos":
+              $sirh_program_code = 1492;
+              break;
+            default:
+              $sirh_program_code = '';
+              break;
+          }	
           break;
       }
 
@@ -1506,20 +1659,25 @@ class ReportController extends Controller
         '5' . '|' .
         'S' . '|' .
         'S' . '|' .
-        '18' . '|' .
-        $sirh_ou_id . '|' .
+        // '18' . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_cost_center . '|' .
+        // $sirh_ou_id . '|' .  <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_ou_id . '|' .
         '1' . '|' . // cheque
         '0' . '|' . // tipo de banco 0 o 1
         '0' . '|' . // cuenta 0
         $sirh_program_code . '|' . // 3903 (no medico) 3904 (medico)
         '24' . '|' . // Glosa todos son 24
-        $sirh_profession_id . '|' .
-        $planta . '|' .
+        // $sirh_profession_id . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->profession->sirh_profession . '|' .
+        // $planta . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->profession->sirh_plant . '|' .
         '0' . '|' . // Todas son excentas = 0
         (($fila->resolution_number) ? $fila->resolution_number : '1') . '|' .
         (($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021') . '|' .
         substr($fila->digera_strategy, 0, 99) . '|' . // maximo 100
-        $sirh_function_id . '|' .
+        // $sirh_function_id . '|' . <---- 14/04/2022: se deja comentado, se obtiene dinámicamente de modelo
+        $fila->responsabilityCenter->sirh_function . '|' .
         preg_replace("/\r|\n/", " ", substr($fila->service_description, 0, 254)) . '|' . // max 255
         'A' . '|' .
         $type_of_day . '|' . // calcular en base a las horas semanales y tipo de contratacion

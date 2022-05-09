@@ -773,4 +773,43 @@ class FulfillmentController extends Controller
         return redirect()->back();
     }
 
+  public function add_fulfillment(ServiceRequest $serviceRequest)
+  {
+    $new = $serviceRequest->fulfillments->last()->replicate([
+        //se omiten
+        'observation',
+        'responsable_approbation',
+        'responsable_approbation_date',
+        'responsable_approver_id',
+        'rrhh_approbation',
+        'rrhh_approbation_date',
+        'rrhh_approver_id',
+        'finances_approbation',
+        'finances_approbation_date',
+        'finances_approver_id',
+        'payment_ready',
+        'payment_rejection_detail',
+        'has_invoice_file',
+        'signatures_file_id',
+        'contable_month',
+        'total_to_pay',
+        'total_hours_to_pay',
+        'total_paid',
+        'total_hours_paid',
+        'payment_date',
+        'bill_number',
+        'illness_leave',
+        'leave_of_absence',
+        'assistance',
+        'backup_assistance'
+    ]);
+    $new->start_date = $new->start_date->addMonth()->toDateString();
+    $new->end_date = $new->start_date->endOfMonth()->toDateString();
+    $new->year = $new->start_date->format('Y');
+    $new->month = $new->start_date->format('m');
+    $new->save();
+    session()->flash('success', 'Se ha creado nuevo período.');
+    return redirect()->back();
+  }
+
 }

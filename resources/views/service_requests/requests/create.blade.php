@@ -12,7 +12,7 @@
 	@csrf
 
 	@livewire('service-request.create-types',['subdirections' => $subdirections,
-	'responsabilityCenters' => $responsabilityCenters	
+	'responsabilityCenters' => $responsabilityCenters
 	])
 
 	<br>
@@ -427,7 +427,7 @@
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-			<label for="for_objectives">Objetivos*</label>
+			<label for="for_objectives">Objetivos/Considerando*</label>
 			<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
