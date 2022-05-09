@@ -420,6 +420,28 @@ class RequestForm extends Model implements Auditable
         return $query;
     }
 
+    /**
+     * @return mixed
+     */
+    function getDaysToExpireAttribute()
+    {
+        if($this->getExpireAtAttribute() >= now()){
+            return $this->getExpireAtAttribute()->diffInDays(now());
+        }else
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    function getExpireAtAttribute()
+    {
+        $daysToExpire = $this->purchaseType->supply_continuous_day;
+        return $this->approvedAt->addDays($daysToExpire);
+    }
+
     /******************************************************/
     /*********** CODIGO  PACHA  **************************/
     /*****************************************************/
