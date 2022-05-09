@@ -41,13 +41,9 @@
                             {{ $product->id }}
                         </a>
                     </td>
-                    <td>{{ $product->name }}</td>
+                    <td>{{ optional($product->product)->name }}</td>
                     <td>
-                        @if($product->category)
-                            {{ optional($product->category)->name }}
-                        @else
-                            Sin Categoría
-                        @endif
+                        {{ $product->category_name }}
                     </td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-outline-danger" wire:click="deleteProduct({{ $product }})">
