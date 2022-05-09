@@ -39,6 +39,27 @@
                     </span>
                 @enderror
             </fieldset>
+
+            <fieldset class="form-group col-md-3">
+                <label for="category-id">Categoría</label>
+                <select
+                    class="form-control @error('category_id') is-invalid @enderror"
+                    wire:model="category_id"
+                    id="wre-category-id"
+                >
+                    <option value="">Sin categoría</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
         </div>
     @endif
 

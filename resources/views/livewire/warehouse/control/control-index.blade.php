@@ -79,11 +79,17 @@
                     </td>
                     <td>{{ $control->date_format }}</td>
                     <td>
-                        {{ ($control->type)
-                        ? optional($control->origin)->name
-                        : optional($control->destination)->name  }}
+                        @if($control->isReceiving())
+                            {{ optional($control->origin)->name }}
+                        @else
+                            @if($control->isAdjustInventory())
+                                {{ $control->type_dispatch }}
+                            @else
+                                {{ optional($control->destination)->name }}
+                            @endif
+                        @endif
                     </td>
-                    <td>{{ optional($control->program)->name }}</td>
+                    <td>{{ $control->program_name }}</td>
                     <td class="text-center">{{ $control->items->count() }}</td>
                     <td>{{ $control->short_note }}</td>
                     <td class="text-center">

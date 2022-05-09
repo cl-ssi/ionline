@@ -67,10 +67,16 @@
                     </td>
                     <td>{{ $controlItem->control->date_format }}</td>
                     <td>
-                        @if($controlItem->control->isReceiving())
-                            {{ $controlItem->control->origin->name }}
-                        @else
-                            {{ $controlItem->control->destination->name }}
+                        @if($controlItem->control)
+                            @if($controlItem->control->isReceiving())
+                                {{ optional($controlItem->control->origin)->name }}
+                            @else
+                                @if($controlItem->control->isAdjustInventory())
+                                    {{ $controlItem->control->adjust_inventory_format }}
+                                @else
+                                    {{ optional($controlItem->control->destination)->name }}
+                                @endif
+                            @endif
                         @endif
                     </td>
                     <td>
@@ -80,7 +86,7 @@
                             {{ $controlItem->product->name }}
                         </small>
                     </td>
-                    <td>{{ $controlItem->program->name }}</td>
+                    <td>{{ $controlItem->program_name }}</td>
                     <td>
                         @if($controlItem->control->type)
                             <p class="text-success">
