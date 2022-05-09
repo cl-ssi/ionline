@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\ControlItem;
+use App\Models\Warehouse\Product;
 use Livewire\Component;
 
 class ControlProductList extends Component
@@ -21,7 +22,7 @@ class ControlProductList extends Component
 
     public function deleteItem(ControlItem $controlItem)
     {
-        $currentBalance = lastBalance($controlItem->product, $controlItem->program);
+        $currentBalance = Product::lastBalance($controlItem->product, $controlItem->program);
         $amountToRemove = $controlItem->quantity;
 
         if(($controlItem->control->isReceiving() && ($currentBalance >= $controlItem->balance))

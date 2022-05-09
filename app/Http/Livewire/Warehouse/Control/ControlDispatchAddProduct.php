@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Warehouse\Control;
 
+use App\Models\Cfg\Program;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
-use App\Pharmacies\Program;
+use App\Models\Warehouse\Product;
 use Livewire\Component;
 
 class ControlDispatchAddProduct extends Component
@@ -49,7 +50,7 @@ class ControlDispatchAddProduct extends Component
 
     public function getControlItems()
     {
-        $productsOutStock = productsOutStock($this->control->program);
+        $productsOutStock = Product::outStock($this->control->program);
 
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
@@ -70,7 +71,7 @@ class ControlDispatchAddProduct extends Component
         $this->max = 0;
         $this->quantity = 0;
         if($this->control_item_id)
-            $this->max = lastBalance($controlItem->product, $controlItem->program);
+            $this->max = Product::lastBalance($controlItem->product, $controlItem->program);
     }
 
     public function addProduct()
@@ -78,7 +79,7 @@ class ControlDispatchAddProduct extends Component
         $dataValidated = $this->validate();
 
         $controlItem = ControlItem::find($this->control_item_id);
-        $lastBalance = lastBalance($controlItem->product, $controlItem->program);
+        $lastBalance = Product::lastBalance($controlItem->product, $controlItem->program);
         $dataValidated['balance'] = $lastBalance - $dataValidated['quantity'];
         $dataValidated['control_id'] = $this->control->id;
         $dataValidated['program_id'] = $this->control->program_id;

@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Warehouse\Control;
 
+use App\Models\Warehouse\Category;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
-use App\Pharmacies\Program;
 use Livewire\Component;
 
 class ControlReceivingAddProduct extends Component
@@ -13,11 +13,13 @@ class ControlReceivingAddProduct extends Component
     public $control;
     public $type;
     public $unspsc_product_id;
+    public $search_product;
     public $description;
     public $wre_product_id;
+    public $category_id;
     public $quantity;
     public $barcode;
-    public $search_product;
+    public $categories;
 
     protected $listeners = [
         'myProductId'
@@ -30,6 +32,7 @@ class ControlReceivingAddProduct extends Component
             'description'       => 'nullable|required_if:type,1|string|min:1|max:255',
             'barcode'           => 'nullable|required_if:type,1|string|min:1|max:255',
             'wre_product_id'    => 'nullable|required_if:type,0|exists:wre_products,id',
+            'category_id'       => 'nullable|exists:wre_categories,id',
             'quantity'          => 'required|integer|min:1',
         ];
     }
@@ -38,6 +41,7 @@ class ControlReceivingAddProduct extends Component
     {
         $this->type = 1;
         $this->products = collect([]);
+        $this->categories = $this->store->categories->sortBy('name');
     }
 
     public function render()
@@ -55,7 +59,8 @@ class ControlReceivingAddProduct extends Component
                 'name' => $dataValidated['description'],
                 'barcode' => $dataValidated['barcode'],
                 'store_id' => $this->store->id,
-                'unspsc_product_id' => $dataValidated['unspsc_product_id']
+                'unspsc_product_id' => $dataValidated['unspsc_product_id'],
+                'category_id' => $dataValidated['category_id'] ? $dataValidated['category_id'] : null,
             ]);
         }
         else
@@ -63,7 +68,7 @@ class ControlReceivingAddProduct extends Component
             $product = Product::find($dataValidated['wre_product_id']);
         }
 
-        $lastBalance = lastBalance($product, $this->control->program);
+        $lastBalance = Product::lastBalance($product, $this->control->program);
 
         $balance = $dataValidated['quantity'] + $lastBalance;
 
