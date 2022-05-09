@@ -6,7 +6,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Pharmacies\Program;
 use Livewire\Component;
-
+ 
 class ControlReport extends Component
 {
     public $store;

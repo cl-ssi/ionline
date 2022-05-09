@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\Control;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -24,6 +25,7 @@ class ControlIndex extends Component
     public function getControls()
     {
         $controls = Control::query()
+            ->whereStoreId($this->store->id)
             ->whereType($this->type == 'receiving' ? 1 : 0)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
