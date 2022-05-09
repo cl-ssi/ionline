@@ -390,10 +390,12 @@ class RequestFormController extends Controller {
 
                 $emails = [$mail_notification_ou_manager->user->email];
 
-                if($mail_notification_ou_manager){
-                    Mail::to($emails)
-                      ->cc(env('APP_RF_MAIL'))
-                      ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+                if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+                    if($mail_notification_ou_manager){
+                        Mail::to($emails)
+                        ->cc(env('APP_RF_MAIL'))
+                        ->send(new RequestFormSignNotification($requestForm, $nextEvent->first()));
+                    }
                 }
             }
 
@@ -504,11 +506,14 @@ class RequestFormController extends Controller {
         ->where('id', $newRequestForm->contract_manager_id)
         ->first();
 
-        if($mail_contract_manager){
-            $emails = [$mail_contract_manager];
-            Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new NewRequestFormNotification($newRequestForm));
+
+        if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+            if($mail_contract_manager){
+                $emails = [$mail_contract_manager];
+                Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new NewRequestFormNotification($newRequestForm));
+            }
         }
         //---------------------------------------------------------
 
@@ -519,10 +524,12 @@ class RequestFormController extends Controller {
 
         $emails = [$mail_notification_ou_manager->user->email];
 
-        if($mail_notification_ou_manager){
-            Mail::to($emails)
-                ->cc(env('APP_RF_MAIL'))
-                ->send(new RequestFormSignNotification($newRequestForm, $newRequestForm->eventRequestForms->first()));
+        if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+            if($mail_notification_ou_manager){
+                Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($newRequestForm, $newRequestForm->eventRequestForms->first()));
+            }
         }
         //---------------------------------------------------------
 

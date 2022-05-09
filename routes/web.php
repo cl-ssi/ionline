@@ -73,6 +73,10 @@ use App\User;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
+use App\Http\Controllers\Unspsc\ClassController;
+use App\Http\Controllers\Unspsc\FamilyController;
+use App\Http\Controllers\Unspsc\ProductController;
+use App\Http\Controllers\Unspsc\SegmentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -106,7 +110,6 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class,'externalLogin']);
-
 
 Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
@@ -413,6 +416,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::post('/createWordResWithdrawal/{agreement}', 'Agreements\WordWithdrawalAgreeController@createResWordDocx')->name('createWordResWithdrawal');
     Route::get('/createWordCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createWordDocx')->name('createWordCollaboration');
     Route::post('/createWordResCollaboration/{agreement}', 'Agreements\WordCollaborationAgreeController@createResWordDocx')->name('createWordResCollaboration');
+    Route::get('/createWordMandate/{agreement}', 'Agreements\WordMandateAgreeController@createWordDocx')->name('createWordMandate');
     Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
 
@@ -1304,6 +1308,31 @@ Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@down
 
 Route::get('quality_aps', 'QualityAps\QualityApsController@index')->middleware('auth')->name('quality_aps.index');
 Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->middleware('auth')->name('quality_aps.download');
+
+
+Route::prefix('unspsc')->middleware('auth')->group(function () {
+
+    Route::get('/products/all', [ProductController::class, 'all'])->name('products.all');
+
+    Route::get('/segments', [SegmentController::class, 'index'])->name('segments.index');
+
+    Route::prefix('segment/{segment:code}')->middleware('auth')->group(function () {
+        Route::get('/edit', [SegmentController::class, 'edit'])->name('segments.edit');
+        Route::get('/families', [FamilyController::class, 'index'])->name('families.index');
+
+        Route::prefix('family/{family:code}')->group(function () {
+            Route::get('/edit', [FamilyController::class, 'edit'])->name('families.edit');
+            Route::get('/classes', [ClassController::class, 'index'])->name('class.index');
+
+            Route::prefix('class/{class:code}')->group(function () {
+                Route::get('/edit', [ClassController::class, 'edit'])->name('class.edit');
+                Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+                Route::get('/product/{product:code}/edit', [ProductController::class, 'edit'])->name('products.edit');
+            });
+        });
+    });
+});
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
