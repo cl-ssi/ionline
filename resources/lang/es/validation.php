@@ -206,6 +206,7 @@ return [
         'time'                  => 'hora',
         'title'                 => 'título',
         'type'                  => 'tipo',
+        'adjust_inventory'      => 'ajuste de inventario',
         'telephone'             => 'teléfono',
         'username'              => 'usuario',
         'user_id'               => 'usuario',
