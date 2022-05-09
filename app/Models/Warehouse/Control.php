@@ -2,7 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\Pharmacies\Program;
+use App\Models\Cfg\Program;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +15,7 @@ class Control extends Model
 
     protected $fillable = [
         'type',
+        'adjust_inventory',
         'date',
         'note',
         'store_id',
@@ -75,5 +76,41 @@ class Control extends Model
     public function getShortNoteAttribute()
     {
         return Str::limit($this->note, 20);
+    }
+
+    public function getProgramNameAttribute()
+    {
+        $programName = 'Sin Programa';
+        if($this->program)
+            $programName = $this->program->name;
+        return $programName;
+    }
+
+    public function getTypeDispatchAttribute()
+    {
+        $name = null;
+        if($this->isDispatch() && $this->isAdjustInventory())
+        {
+            $name = 'Ajuste de Inventario';
+        }
+        return $name;
+    }
+
+    public function getAdjustInventoryFormatAttribute()
+    {
+        $name = null;
+        if($this->isDispatch())
+        {
+            if($this->isAdjustInventory())
+                $name = 'Si';
+            else
+                $name = 'No';
+        }
+        return $name;
+    }
+
+    public function isAdjustInventory()
+    {
+        return $this->adjust_inventory == 1;
     }
 }
