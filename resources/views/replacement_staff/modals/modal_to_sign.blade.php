@@ -9,14 +9,18 @@
         </button>
       </div>
       <div class="modal-body">
-          {{-- @if($requestReplacementStaff->request_id != NULL) --}}
-              <!-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-              </div> -->
-          {{-- @endif --}}
+          @if($requestReplacementStaff->requestFather)
+          <div class="row">
+              <div class="col">
+                <div class="alert alert-primary" role="alert">
+                    Este formulario corresponde a una extensión del formulario Nº {{ $requestReplacementStaff->requestFather->id }} - {{ $requestReplacementStaff->requestFather->name }}
+                </div>
+              </div>
+          </div>
+          @endif
+
+          <br>
+
           @if(!$pending_requests_to_sign->Where('id', $requestReplacementStaff->id)->isEmpty())
           @foreach($pending_requests_to_sign->Where('id', $requestReplacementStaff->id) as $requestReplacementStaff)
               <div class="table-responsive">
@@ -89,6 +93,14 @@
                           <tr>
                               <th class="table-active">Lugar de Desempeño</th>
                               <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
+                          </tr>
+                          <tr>
+                              <th class="table-active">Staff Sugerido</th>
+                              <td colspan="2">
+                                @if($requestReplacementStaff->replacementStaff)
+                                    {{ $requestReplacementStaff->replacementStaff->FullName }}
+                                @endif
+                              </td>
                           </tr>
                       </tbody>
                   </table>

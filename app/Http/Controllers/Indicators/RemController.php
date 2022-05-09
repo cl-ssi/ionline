@@ -23,7 +23,10 @@ class RemController extends Controller
         $Nseries = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie', 'ASC')->orderBy('id_prestacion', 'ASC')->get();
         if($Nseries->isEmpty()) abort(404);
         $Nseries = $Nseries->unique('Nserie');
-        foreach($Nseries as $nserie) $nserie->active = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->exists();
+        foreach($Nseries as $nserie){
+            $nserie->active = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->exists();
+            if($nserie->Nserie == 'A21') $nserie->otherSections = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->where('name', '!=', 'A')->select('name')->distinct()->pluck('name')->toArray();
+        }
         return view('indicators.rem.list', compact('Nseries', 'year', 'serie'));
     }
 
@@ -61,7 +64,7 @@ class RemController extends Controller
      * @param  \App\Indicators\Rem  $rem
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $year, $serie, $nserie)
+    public function show(Request $request, $year, $serie, $nserie, $unique = null)
     {
         if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $establecimientos = Establecimiento::year($year)->orderBy('comuna')->get();
@@ -71,7 +74,10 @@ class RemController extends Controller
         $periodo = $request->get('periodo');
         $secciones = null;
         if ($request->has('submit')) {
-            $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderBy('name')->get();
+            $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)
+                                ->when($nserie == 'A21', function($q) use ($unique){
+                                    return $q->where('name', $unique ? '=' : '!=', 'A');
+                                })->orderBy('name')->get();
             foreach($secciones as $seccion){
                 $seccion->cods = array_map('trim', explode(',', $seccion->cods));
                 $seccion->cols = array_map('trim', explode(',', $seccion->cols));
@@ -82,7 +88,7 @@ class RemController extends Controller
             }
         }
         
-        return view('indicators.rem.show', compact('year', 'establecimientos', 'prestacion', 'establecimiento', 'periodo', 'secciones'));
+        return view('indicators.rem.show', compact('year', 'establecimientos', 'prestacion', 'establecimiento', 'periodo', 'secciones', 'unique'));
     }
 
     /**

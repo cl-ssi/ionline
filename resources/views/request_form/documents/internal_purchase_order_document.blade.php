@@ -221,25 +221,25 @@
               <td>{{ $detail->itemRequestForm->article }}</td>
               <td></td>
               <td align="right">{{ $detail->quantity }}</td>
-              <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->unit_value,$requestForm->precision_currency,",",".") }}</td>
-              <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->expense,$requestForm->precision_currency,",",".") }}</td>
+              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->unit_value,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
+              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->expense,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>
           @php( $total += $detail->expense)
           @endforeach
           <tr align="right">
               <td colspan="4"></td>
               <th>TOTAL NETO</th>
-              <td>{{$requestForm->symbol_currency}}{{ number_format($total * 0.81,$requestForm->precision_currency,",",".") }}</td>
+              <td>{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($total * 0.81,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>
           <tr align="right">
               <td colspan="4"></td>
               <th>IVA</th>
-              <td>{{$requestForm->symbol_currency}}{{ number_format($total * 0.19,$requestForm->precision_currency,",",".") }}</td>
+              <td>{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($total * 0.19,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>
           <tr align="right">
               <td colspan="4"></td>
               <th>TOTAL</th>
-              <td>{{$requestForm->symbol_currency}}{{ number_format($total,$requestForm->precision_currency,",",".") }}</td>
+              <td>{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($total,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>
         </tbody>
       </table>

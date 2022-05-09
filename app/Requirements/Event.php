@@ -67,7 +67,6 @@ class Event extends Model
     public function isSentToAuthority() :bool
     {
         $authorities = Authority::getAmIAuthorityFromOu($this->created_at, 'manager', $this->to_user_id);
-//        dump($this->created_at, 'manager', $this->to_user_id);
 
         foreach ($authorities as $authority) {
             if ($authority->organizational_unit_id == $this->to_ou_id) {

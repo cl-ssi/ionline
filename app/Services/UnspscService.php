@@ -26,25 +26,30 @@ class UnspscService
      */
     public function getProducts($search)
     {
-        $search = Str::lower("%$search%");
+        $products = collect([]);
 
-        $products = Product::query()
-            ->whereRaw('lower(`name`) LIKE ? ', $search)
-            ->orWhere(function ($query) use($search) {
-                $query->whereRaw('lower(`name`) LIKE ? ', $search)
-                ->whereHas('class', function ($subquery) use ($search) {
-                    $subquery->whereHas('family', function ($q) use($search) {
-                        $q->whereRaw('lower(`name`) LIKE ? ', $search);
+        if(!empty($search))
+        {
+            $search = Str::lower("%$search%");
+
+            $products = Product::query()
+                ->whereRaw('lower(`name`) LIKE ? ', $search)
+                ->orWhere(function ($query) use($search) {
+                    $query->whereRaw('lower(`name`) LIKE ? ', $search)
+                    ->whereHas('class', function ($subquery) use ($search) {
+                        $subquery->whereHas('family', function ($q) use($search) {
+                            $q->whereRaw('lower(`name`) LIKE ? ', $search);
+                        });
                     });
-                });
-            })
-            ->orWhere(function ($query) use ($search) {
-                $query->whereHas('class', function ($subquery) use($search) {
-                    $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
-                });
-            })
-            ->limit(500) // Limite para optimizar respuesta
-            ->orderBy('class_id');
+                })
+                ->orWhere(function ($query) use ($search) {
+                    $query->whereHas('class', function ($subquery) use($search) {
+                        $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
+                    });
+                })
+                ->limit(500) // Limite para optimizar respuesta
+                ->orderBy('class_id');
+        }
 
         return $products;
     }

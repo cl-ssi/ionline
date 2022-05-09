@@ -1,7 +1,7 @@
 <div>
     <div class="card card-body">
         <div class="form-row">
-            <fieldset class="form-group col-5">
+            <fieldset class="form-group col-3">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;"
                   placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model="selectedSearch">
@@ -17,7 +17,7 @@
                 </select>
             </fieldset>
 
-            <fieldset class="form-group col-5">
+            <fieldset class="form-group col-4">
                 <label for="for_profession_search">Profesión</label>
                 <select name="profession_search" class="form-control" wire:model="selectedProfession">
                     <option value="0">Seleccione...</option>
@@ -26,6 +26,16 @@
                         <option value="{{ $profession->id }}">{{ $profession->name }}</option>
                     @endforeach
                     @endif
+                </select>
+            </fieldset>
+
+            <fieldset class="form-group col-3">
+                <label for="for_staff_search">Staff de Unidad Organizacional</label>
+                <select name="staff_search" class="form-control" wire:model="selectedStaff">
+                    <option value="0">Seleccione...</option>
+                    @foreach(App\Models\ReplacementStaff\StaffManage::getStaffByOu() as $staff)
+                        <option value="{{ $staff->organizationalUnit->id }}">{{ $staff->organizationalUnit->name }}</option>
+                    @endforeach
                 </select>
             </fieldset>
         </div>

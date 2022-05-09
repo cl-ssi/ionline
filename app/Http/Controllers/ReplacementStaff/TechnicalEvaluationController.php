@@ -102,30 +102,12 @@ class TechnicalEvaluationController extends Controller
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
-        $replacementStaff = ReplacementStaff::latest()
-            ->search($request->input('search'),
-                    $request->input('profile_search'),
-                    $request->input('profession_search'))
-            ->paginate(5);
+        $requestChilds = RequestReplacementStaff::
+            where('request_id', $technicalEvaluation->requestReplacementStaff->id)
+            ->get();
 
-        if($request->search != NULL || $request->profile_search != 0 || $request->profession_search != 0){
-            // return view('replacement_staff.request.technical_evaluation.edit',
-            //     compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-            //             'professionManage', 'profileManage', 'users_rys'));
-
-            //return \Redirect::route('regions', ['id'=>$id,'OTHER_PARAM'=>'XXX',...])->with('message', 'State saved correctly!!!');
-
-            return redirect()
-               ->to(route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]).'#applicant');
-
-
-            // return redirect('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation)->withInput();
-        }
-        else{
-            return view('replacement_staff.request.technical_evaluation.edit',
-                compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'users_rys', 'ouRoots'));
-        }
+        return view('replacement_staff.request.technical_evaluation.edit',
+            compact('technicalEvaluation', 'users', 'request', 'users_rys', 'ouRoots', 'requestChilds'));
     }
 
     /**

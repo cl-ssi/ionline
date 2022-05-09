@@ -195,7 +195,7 @@ class RequestFormItems extends Component
                 'id'                       => $item->id,
                 'article'                  => $item->article,
                 'product_id'               => $item->product_id,
-                'product_name'             => $item->product->name,
+                'product_name'             => optional($item->product)->name,
                 'unitOfMeasurement'        => $item->unit_of_measurement,
                 'technicalSpecifications'  => $item->specification,
                 'quantity'                 => $item->quantity,
