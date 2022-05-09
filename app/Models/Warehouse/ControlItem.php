@@ -2,7 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\Pharmacies\Program;
+use App\Models\Cfg\Program;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,5 +35,13 @@ class ControlItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function getProgramNameAttribute()
+    {
+        $programName = 'Sin Programa';
+        if($this->program)
+            $programName = $this->program->name;
+        return $programName;
     }
 }
