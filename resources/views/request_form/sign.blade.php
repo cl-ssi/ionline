@@ -218,7 +218,13 @@
           @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
           <td>{{ $itemRequestForm->budgetItem->fullName() ?? '' }}</td>
           @endif
-          <td>{{ $itemRequestForm->article }}</td>
+          <td>
+            @if($itemRequestForm->product_id)
+              {{ optional($itemRequestForm->product)->name }}
+            @else
+              {{ $itemRequestForm->article }}
+            @endif
+          </td>
           <td>{{ $itemRequestForm->unit_of_measurement }}</td>
           <td>{{ $itemRequestForm->specification }}</td>
           <td align="center">
