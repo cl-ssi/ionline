@@ -29,6 +29,7 @@ class OriginIndex extends Component
             ->when($this->search, function($query) use($search) {
                 $query->where('name', 'like', $search);
             })
+            ->whereStoreId($this->store->id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
