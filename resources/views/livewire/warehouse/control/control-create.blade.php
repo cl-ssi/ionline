@@ -12,6 +12,8 @@
         'store' => $store,
         'type' => $type,
         'disableProgram' => false,
+        'showInputAdjustInventory' => true,
+        'disabledAdjustInventory' => false,
     ])
 
     <button class="btn btn-primary" wire:click="createControl">

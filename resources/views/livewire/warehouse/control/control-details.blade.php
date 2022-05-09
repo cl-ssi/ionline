@@ -7,7 +7,7 @@
 
         <div class="col-4">
             <label for="program-id">Programa</label>
-            <input type="text" class="form-control" value="{{ optional($control->program)->name }}" id="program-id" readonly>
+            <input type="text" class="form-control" value="{{ $control->program_name }}" id="program-id" readonly>
         </div>
 
         @if($control->type)
@@ -16,10 +16,17 @@
                 <input type="text" class="form-control" value="{{ optional($control->origin)->name }}" id="origin-id" readonly>
             </div>
         @else
-            <div class="col-4">
-                <label for="destination-id">Destino</label>
-                <input type="text" class="form-control" value="{{ optional($control->destination)->name }}" id="destination-id" readonly>
-            </div>
+            @if(!$control->isAdjustInventory())
+                <div class="col-4">
+                    <label for="destination-id">Destino</label>
+                    <input type="text" class="form-control" value="{{ optional($control->destination)->name }}" id="destination-id" readonly>
+                </div>
+            @else
+                <div class="col-4">
+                    <label for="destination-id">Ajuste de Inventario</label>
+                    <input type="text" class="form-control" value="{{ $control->adjust_inventory_format }}" id="destination-id" readonly>
+                </div>
+            @endif
         @endif
     </div>
 

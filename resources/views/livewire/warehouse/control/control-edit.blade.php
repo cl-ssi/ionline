@@ -8,6 +8,8 @@
         'control' => $control,
         'type'  => $type,
         'disableProgram' => true,
+        'showInputAdjustInventory' => false,
+        'disabledAdjustInventory' => true,
     ])
 
     <button class="btn btn-primary" wire:click="controlUpdate">
