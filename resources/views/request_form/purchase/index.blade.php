@@ -17,14 +17,14 @@
                 <tr class="text-center">
                     <th>ID</th>
                     <th>Folio</th>
-                    <th style="width: 7%">Fecha Creación</th>
+{{--                    <th style="width: 7%">Fecha Creación</th>--}}
                     <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
-                    <th>Etapas de aprobación</th>
+{{--                    <th>Etapas de aprobación</th>--}}
                     <th></th>
                 </tr>
             </thead>
@@ -39,7 +39,7 @@
                         @endif
                     </td>
                     <td>{{ $requestForm->folio }}</td>
-                    <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+{{--                    <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>--}}
                     <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                         {{ $requestForm->SubtypeValue }}
                     </td>
@@ -50,23 +50,23 @@
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>
-                    <td>
-                        @foreach($requestForm->eventRequestForms as $sign)
-                        @if($sign->status == 'pending')
-                        <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        @endif
-                        @if($sign->status == 'approved')
-                        <span style="color: green;">
-                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        </span>
-                        @endif
-                        @if($sign->status == 'rejected')
-                        <span style="color: Tomato;">
-                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        </span>
-                        @endif
-                        @endforeach
-                    </td>
+{{--                    <td>--}}
+{{--                        @foreach($requestForm->eventRequestForms as $sign)--}}
+{{--                        @if($sign->status == 'pending')--}}
+{{--                        <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        @endif--}}
+{{--                        @if($sign->status == 'approved')--}}
+{{--                        <span style="color: green;">--}}
+{{--                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        </span>--}}
+{{--                        @endif--}}
+{{--                        @if($sign->status == 'rejected')--}}
+{{--                        <span style="color: Tomato;">--}}
+{{--                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        </span>--}}
+{{--                        @endif--}}
+{{--                        @endforeach--}}
+{{--                    </td>--}}
                     <td>
                         @if($requestForm->signatures_file_id)
                         <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
@@ -102,13 +102,12 @@
 </div>
 <div class="col">
     <div class="table-responsive">
-        <h6><i class="fas fa-inbox"></i> Formularios asignados</h6>
+        <h6><i class="fas fa-inbox"></i>Todos los formularios</h6>
         <table class="table table-sm table-striped table-bordered small">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
                     <th>Folio</th>
-                    <th style="width: 7%">Fecha Creación</th>
                     <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
@@ -116,7 +115,7 @@
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
-                    <th>Etapas de aprobación</th>
+{{--                    <th>Etapas de aprobación</th>--}}
                     <th></th>
                 </tr>
             </thead>
@@ -131,7 +130,6 @@
                         @endif
                     </td>
                     <td>{{ $requestForm->folio }}</td>
-                    <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                     <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                         {{ $requestForm->SubtypeValue }}
                     </td>
@@ -143,23 +141,23 @@
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>
-                    <td>
-                        @foreach($requestForm->eventRequestForms as $sign)
-                        @if($sign->status == 'pending')
-                        <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        @endif
-                        @if($sign->status == 'approved')
-                        <span style="color: green;">
-                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        </span>
-                        @endif
-                        @if($sign->status == 'rejected')
-                        <span style="color: Tomato;">
-                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-                        </span>
-                        @endif
-                        @endforeach
-                    </td>
+{{--                    <td>--}}
+{{--                        @foreach($requestForm->eventRequestForms as $sign)--}}
+{{--                        @if($sign->status == 'pending')--}}
+{{--                        <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        @endif--}}
+{{--                        @if($sign->status == 'approved')--}}
+{{--                        <span style="color: green;">--}}
+{{--                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        </span>--}}
+{{--                        @endif--}}
+{{--                        @if($sign->status == 'rejected')--}}
+{{--                        <span style="color: Tomato;">--}}
+{{--                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>--}}
+{{--                        </span>--}}
+{{--                        @endif--}}
+{{--                        @endforeach--}}
+{{--                    </td>--}}
                     <td>
                         @if($requestForm->iAmPurchaser())
                         @if($requestForm->signatures_file_id)
