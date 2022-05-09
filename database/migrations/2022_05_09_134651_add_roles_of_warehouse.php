@@ -21,7 +21,6 @@ class AddRolesOfWarehouse extends Migration
         $roleStoreUser = Role::create(['name' => 'Store: user']);
         $roleStoreSuperAdmin = Role::create(['name' => 'Store: Super admin']);
 
-
         // TODO: Definir mas permisos por rol
         $permission = Permission::create(['name' => 'Store: index']);
 
