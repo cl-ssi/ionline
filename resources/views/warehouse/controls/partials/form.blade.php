@@ -1,4 +1,31 @@
-<div class="form-row mt-3">
+<div class="form-row">
+    @if($showInputAdjustInventory)
+        <div class="form-group col-md-12">
+            <label class="font-weigth-bold mr-2">Es ajuste de Inventario:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    wire:model="adjust_inventory"
+                    id="option-1"
+                    value="1"
+                >
+                <label class="form-check-label" for="option-1">Si</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    wire:model="adjust_inventory"
+                    id="option-2"
+                    value="0"
+                >
+                <label class="form-check-label" for="option-2">No</label>
+            </div>
+        </div>
+    @endif
+</div>
+
+<div class="form-row">
     <fieldset class="form-group col-md-2">
         <label for="date">Fecha</label>
         <input
@@ -24,7 +51,7 @@
                 wire:model="program_id"
                 id="program-id"
             >
-                <option value="">Seleccione un programa</option>
+                <option value="">Sin programa</option>
                 @foreach($programs as $program)
                     <option
                         value="{{ $program->id }}"
@@ -35,15 +62,15 @@
                 @endforeach
             </select>
             @error('program_id')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
             @enderror
         @else
             <input
                 type="text"
                 class="form-control"
-                value="{{ optional($control->program)->name }}"
+                value="{{ $control->program_name }}"
                 readonly
             >
         @endif
@@ -67,30 +94,45 @@
                 @endforeach
             </select>
             @error('origin_id')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
             @enderror
         </fieldset>
     @else
-        <fieldset class="form-group col-md-5">
-            <label for="destination-id">Destino</label>
-            <select
-                class="form-control @error('destination_id') is-invalid @enderror"
-                wire:model="destination_id"
-                id="destination-id"
-            >
-                <option value="">Selecciona un destino</option>
-                @foreach($store->destinations as $destination)
-                    <option value="{{ $destination->id }}">{{ $destination->name }}</option>
-                @endforeach
-            </select>
-            @error('destination_id')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-            @enderror
-        </fieldset>
+        @if($disabledAdjustInventory && $control->isAdjustInventory())
+            <fieldset class="form-group col-md-4">
+                <label for="adjust-inventory">Ajuste de Inventario</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    value="{{ $control->adjust_inventory_format }}"
+                    id="adjust-inventory"
+                    readonly
+                >
+            </fieldset>
+        @endif
+
+        @if($adjust_inventory == 0)
+            <fieldset class="form-group col-md-4">
+                <label for="destination-id">Destino</label>
+                <select
+                    class="form-control @error('destination_id') is-invalid @enderror"
+                    wire:model="destination_id"
+                    id="destination-id"
+                >
+                    <option value="">Selecciona un destino</option>
+                    @foreach($store->destinations as $destination)
+                        <option value="{{ $destination->id }}">{{ $destination->name }}</option>
+                    @endforeach
+                </select>
+                @error('destination_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+        @endif
     @endif
 </div>
 
@@ -106,9 +148,9 @@
             required
         >
         @error('note')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 </div>
