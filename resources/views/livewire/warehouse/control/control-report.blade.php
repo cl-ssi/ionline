@@ -28,6 +28,7 @@
             <label for="program-id">Programa</label>
             <select wire:model="program_id" id="program-id" class="form-control">
                 <option value="">Todos</option>
+                <option value="-1">Sin Programa</option>
                 @foreach($programs as $program)
                     <option value="{{ $program->id }}">{{ $program->name }}</option>
                 @endforeach
@@ -72,7 +73,7 @@
                                 {{ optional($controlItem->control->origin)->name }}
                             @else
                                 @if($controlItem->control->isAdjustInventory())
-                                    {{ $controlItem->control->adjust_inventory_format }}
+                                    {{ $controlItem->control->type_dispatch }}
                                 @else
                                     {{ optional($controlItem->control->destination)->name }}
                                 @endif

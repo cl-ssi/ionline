@@ -5,7 +5,7 @@
             <input
                 type="text"
                 class="form-control"
-                value="{{ optional($control->program)->name }}"
+                value="{{ $control->program_name }}"
                 readonly
             >
         </fieldset>
