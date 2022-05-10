@@ -23,6 +23,7 @@
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
+                    <th>Vencimiento</th>
                     <th></th>
                 </tr>
             </thead>
@@ -47,6 +48,7 @@
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>
+                    <td title="Aprobación: {{$requestForm->approvedAt}}" >{{ $requestForm->expireAt . ' (' . $requestForm->daysToExpire . ' días)' }}</td>
                     <td>
                         @if($requestForm->signatures_file_id)
                         <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
@@ -95,6 +97,7 @@
                     <th>Items</th>
                     <th>Presupuesto</th>
                     <th>Espera</th>
+                    <th>Vencimiento</th>
                     <th></th>
                 </tr>
             </thead>
@@ -120,6 +123,8 @@
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>
+                    <td title="Aprobación: {{$requestForm->approvedAt}}">{{ $requestForm->expireAt . ' (' . $requestForm->daysToExpire . ' días)' }}</td>
+
                     <td>
                         @if($requestForm->iAmPurchaser())
                         @if($requestForm->signatures_file_id)
