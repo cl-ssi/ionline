@@ -1,11 +1,11 @@
 <div>
-    <h3>
+    <h5>
         @if($type == 'receiving')
             Nuevo Ingreso
         @else
             Nuevo Egreso
         @endif
-    </h3>
+    </h5>
 
     @include('warehouse.controls.partials.form', [
         'control' => null,

@@ -1,5 +1,5 @@
 <div>
-    <h4>Reporte de Producto</h4>
+    <h5>Reporte de Producto</h5>
 
     <div class="form-row">
         <fieldset class="form-group col-md-2">

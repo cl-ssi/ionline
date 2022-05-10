@@ -60,7 +60,15 @@
 
     <fieldset class="form-group col-md-5">
         <label for="program-id">Programa</label>
-        @if(!$disableProgram)
+        @if($disableProgram)
+            <input
+                type="text"
+                class="form-control"
+                value="{{ $control->program_name }}"
+                readonly
+            >
+
+        @else
             <select
                 class="form-control @error('program_id') is-invalid @enderror"
                 wire:model="program_id"
@@ -81,13 +89,6 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-        @else
-            <input
-                type="text"
-                class="form-control"
-                value="{{ $control->program_name }}"
-                readonly
-            >
         @endif
     </fieldset>
 
