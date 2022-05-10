@@ -1,5 +1,5 @@
 <div>
-    <div class="row my-3">
+    <div class="row my-2">
         <div class="col">
             <h5>Categorías: {{ $store->name }}</h5>
         </div>
