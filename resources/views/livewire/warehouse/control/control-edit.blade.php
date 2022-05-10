@@ -1,7 +1,7 @@
 <div>
-    <h4>
+    <h5>
         Editar {{ $control->type_format }} {{ $control->id }}
-    </h4>
+    </h5>
 
     @include('warehouse.controls.partials.form', [
         'store' => $store,

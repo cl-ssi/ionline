@@ -1,22 +1,24 @@
 <div>
     <div class="row">
-        <div class="col mb-2">
-            <h3>
+        <div class="col my-2">
+            <h5>
                 Listado de
                 @if($type == 'receiving')
-                    Ingreso
+                    Ingresos
                 @else
-                    Egreso
+                    Egresos
                 @endif
-            </h3>
+                - {{ $store->name }}
+            </h5>
         </div>
+
         <div class="col text-right">
             @if($type == 'receiving')
-                @if(Auth::user()->active_store)
+                @if($store)
                 <a
                     class="btn btn-primary"
                     href="{{ route('warehouse.controls.create', [
-                        'store' => Auth::user()->active_store,
+                        'store' => $store,
                         'type' => 'receiving'
                     ]) }}"
                 >
@@ -24,11 +26,11 @@
                 </a>
                 @endif
             @else
-                @if(Auth::user()->active_store)
+                @if($store)
                 <a
                     class="btn btn-primary"
                     href="{{ route('warehouse.controls.create', [
-                        'store' => Auth::user()->active_store,
+                        'store' => $store,
                         'type' => 'dispatch'
                     ]) }}"
                 >
