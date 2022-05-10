@@ -41,7 +41,10 @@
                             {{ $product->id }}
                         </a>
                     </td>
-                    <td>{{ optional($product->product)->name }}</td>
+                    <td>
+                        {{ optional($product->product)->name }}
+                        - {{ $product->name }}
+                    </td>
                     <td>
                         {{ $product->category_name }}
                     </td>
