@@ -17,7 +17,7 @@
                 aria-current="page"
                 href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'receiving']) }}"
             >
-                <i class="fas fa-download"></i> Ingreso
+                <i class="fas fa-shopping-basket"></i> Ingreso
             </a>
         </li>
         <li class="nav-item">
@@ -26,7 +26,7 @@
                 aria-current="page"
                 href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'dispatch']) }}"
             >
-                <i class="fas fa-upload"></i> Egreso
+                <i class="fas fa-shipping-fast"></i> Egreso
             </a>
         </li>
         <li class="nav-item dropdown">
@@ -73,13 +73,13 @@
                     class="dropdown-item"
                     href="{{ route('warehouse.origins.index', Auth::user()->active_store) }}"
                 >
-                    <i class="fas fa-arrow-left"></i> Origenes
+                    <i class="fas fa-download"></i> Origenes
                 </a>
                 <a
                     class="dropdown-item"
                     href="{{ route('warehouse.destinations.index', Auth::user()->active_store) }}"
                 >
-                    <i class="fas fa-arrow-right"></i> Destinos
+                    <i class="fas fa-upload"></i> Destinos
                 </a>
             </div>
         </li>
