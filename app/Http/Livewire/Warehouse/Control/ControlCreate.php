@@ -21,15 +21,15 @@ class ControlCreate extends Component
     public $rulesReceiving = [
         'date'          => 'required|date_format:Y-m-d',
         'note'          => 'required|string|min:2|max:255',
-        'program_id'    => 'nullable|exists:frm_programs,id',
+        'program_id'    => 'nullable|integer|exists:frm_programs,id',
         'origin_id'     => 'required|exists:wre_origins,id',
     ];
 
     public $rulesDispatch = [
         'date'              => 'required|date_format:Y-m-d',
         'note'              => 'required|string|min:2|max:255',
-        'program_id'        => 'nullable|exists:frm_programs,id',
-        'destination_id'    => 'nullable|required_if:type_dispatch,0|exists:wre_destinations,id',
+        'program_id'        => 'nullable|integer|exists:frm_programs,id',
+        'destination_id'    => 'nullable|required_if:type_dispatch,0|integer|exists:wre_destinations,id',
         'type_dispatch'     => 'required|boolean',
     ];
 
