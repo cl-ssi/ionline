@@ -1,5 +1,14 @@
 <div>
-    <div class="row mb-2">
+    @if($control->isDispatch())
+        <div class="form-row mb-2">
+            <div class="col-4">
+                <label for="type-dispatch">Tipo de Egreso</label>
+                <input type="text" class="form-control" value="{{ $control->type_dispatch }}" id="type-dispatch" readonly>
+            </div>
+        </div>
+    @endif
+
+    <div class="form-row">
         <div class="col-4">
             <label for="date">Fecha</label>
             <input type="text" class="form-control" value="{{ $control->date_format }}" id="date" readonly>
@@ -16,11 +25,6 @@
                 <input type="text" class="form-control" value="{{ optional($control->origin)->name }}" id="origin-id" readonly>
             </div>
         @else
-            <div class="col-4">
-                <label for="type-dispatch">Tipo de Egreso</label>
-                <input type="text" class="form-control" value="{{ $control->type_dispatch }}" id="type-dispatch" readonly>
-            </div>
-
             @if(!$control->isAdjustInventory())
                 <div class="col-4">
                     <label for="destination-id">Destino</label>
@@ -30,7 +34,7 @@
         @endif
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <div class="col-12">
             <label for="note">Nota</label>
             <input type="text" class="form-control" value="{{ $control->note }}" readonly>
