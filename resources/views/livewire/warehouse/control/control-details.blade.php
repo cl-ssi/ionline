@@ -10,21 +10,21 @@
             <input type="text" class="form-control" value="{{ $control->program_name }}" id="program-id" readonly>
         </div>
 
-        @if($control->type)
+        @if($control->isReceiving())
             <div class="col-4">
                 <label for="origin-id">Origen</label>
                 <input type="text" class="form-control" value="{{ optional($control->origin)->name }}" id="origin-id" readonly>
             </div>
         @else
+            <div class="col-4">
+                <label for="type-dispatch">Tipo de Egreso</label>
+                <input type="text" class="form-control" value="{{ $control->type_dispatch }}" id="type-dispatch" readonly>
+            </div>
+
             @if(!$control->isAdjustInventory())
                 <div class="col-4">
                     <label for="destination-id">Destino</label>
                     <input type="text" class="form-control" value="{{ optional($control->destination)->name }}" id="destination-id" readonly>
-                </div>
-            @else
-                <div class="col-4">
-                    <label for="destination-id">Ajuste de Inventario</label>
-                    <input type="text" class="form-control" value="{{ $control->adjust_inventory_format }}" id="destination-id" readonly>
                 </div>
             @endif
         @endif
