@@ -13,18 +13,15 @@ class ProductCreate extends Component
     public $programs;
     public $categories;
     public $name;
-    public $program_id;
     public $category_id;
 
     public $rules = [
         'name'          => 'required|string|min:2|max:255',
         'category_id'   => 'nullable|exists:wre_categories,id',
-        'program_id'    => 'required|exists:frm_programs,id'
     ];
 
     public function mount()
     {
-        $this->programs = Program::all();
         $this->categories = $this->store->categories;
     }
 
