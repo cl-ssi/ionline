@@ -69,18 +69,7 @@ class ControlController extends Controller
     }
 
     /**
-     * Add product to Control
-     *
-     * @param  \App\Models\Warehouse\Store  $store
-     * @return \Illuminate\Http\Response
-     */
-    public function report(Store $store)
-    {
-        return view('warehouse.controls.report', compact('store'));
-    }
-
-    /**
-     * Add product to Control
+     * Dispatch PDF report
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
