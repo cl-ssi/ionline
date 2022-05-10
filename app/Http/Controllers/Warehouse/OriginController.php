@@ -8,6 +8,11 @@ use App\Models\Warehouse\Store;
 
 class OriginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ensure.origin')->only('edit');
+    }
+
     /**
      * Display a listing of the resource.
      *
