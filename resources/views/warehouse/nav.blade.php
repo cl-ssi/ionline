@@ -41,7 +41,7 @@
             <div class="dropdown-menu">
                 <a
                     class="dropdown-item"
-                    href="{{ route('warehouse.control.report', Auth::user()->active_store) }}"
+                    href="{{ route('warehouse.store.report', Auth::user()->active_store) }}"
                 >
                     <i class="fas fa-file-alt"></i> Reporte Bincard
                 </a>
