@@ -89,9 +89,12 @@ class Control extends Model
     public function getTypeDispatchAttribute()
     {
         $name = null;
-        if($this->isDispatch() && $this->isAdjustInventory())
+        if($this->isDispatch())
         {
-            $name = 'Ajuste de Inventario';
+            if($this->isAdjustInventory())
+                $name = 'Ajuste de Inventario';
+            else
+                $name = 'Egreso Común';
         }
         return $name;
     }
