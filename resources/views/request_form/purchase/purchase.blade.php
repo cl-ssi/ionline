@@ -478,7 +478,6 @@
 </div>
 @endif --}}
 
-{{--
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 <div class="row">
     <div class="col-sm">
@@ -589,7 +588,6 @@
     </div>
 </div>
 @endif
---}}
 
 <br>
 
