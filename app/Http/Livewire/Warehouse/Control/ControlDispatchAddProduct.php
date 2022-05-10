@@ -50,7 +50,7 @@ class ControlDispatchAddProduct extends Component
 
     public function getControlItems()
     {
-        $productsOutStock = Product::outStock($this->control->program);
+        $productsOutStock = Product::outStock($this->store, $this->control->program);
 
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {

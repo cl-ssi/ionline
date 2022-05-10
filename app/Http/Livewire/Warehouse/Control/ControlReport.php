@@ -6,7 +6,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Pharmacies\Program;
 use Livewire\Component;
- 
+
 class ControlReport extends Component
 {
     public $store;
@@ -50,7 +50,7 @@ class ControlReport extends Component
     {
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
-                $query->where('store_id', $this->store->id);
+                $query->where('store_id', '=', $this->store->id);
             })
             ->when($this->start_date, function($query) {
                 $query->where('created_at', '>=', $this->start_date);
@@ -59,7 +59,11 @@ class ControlReport extends Component
                 $query->where('created_at', '<=', $this->end_date);
             })
             ->when($this->program_id, function($query) {
-                $query->where('program_id', $this->program_id);
+                $query->when($this->program_id == -1, function($subquery) {
+                    $subquery->where('program_id', '=', null);
+                }, function ($subquery) {
+                    $subquery->where('program_id', '=', $this->program_id);
+                });
             })
             ->when($this->product_id, function($query) {
                 $query->where('product_id', $this->product_id);

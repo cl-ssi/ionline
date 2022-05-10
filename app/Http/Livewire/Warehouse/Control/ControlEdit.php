@@ -9,7 +9,7 @@ class ControlEdit extends Component
     public $store;
     public $control;
     public $type;
-    public $adjust_inventory;
+    public $type_dispatch;
     public $date;
     public $note;
     public $origin_id;
@@ -24,14 +24,14 @@ class ControlEdit extends Component
     public $rulesDispatch = [
         'date'              => 'required|date_format:Y-m-d',
         'note'              => 'required|string|min:2|max:255',
-        'destination_id'    => 'nullable|required_if:adjust_inventory,0|exists:wre_destinations,id',
+        'destination_id'    => 'nullable|required_if:type_dispatch,0|exists:wre_destinations,id',
     ];
 
     public function mount()
     {
         $this->date = $this->control->date_format;
         $this->note = $this->control->note;
-        $this->adjust_inventory = $this->control->adjust_inventory;
+        $this->type_dispatch = $this->control->adjust_inventory;
         $this->origin_id = $this->control->origin_id;
         $this->destination_id = $this->control->destination_id;
     }

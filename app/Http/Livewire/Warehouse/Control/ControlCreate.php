@@ -10,7 +10,7 @@ class ControlCreate extends Component
 {
     public $store;
     public $type;
-    public $adjust_inventory;
+    public $type_dispatch;
     public $date;
     public $note;
     public $program_id;
@@ -30,12 +30,12 @@ class ControlCreate extends Component
         'note'              => 'required|string|min:2|max:255',
         'program_id'        => 'nullable|exists:frm_programs,id',
         'destination_id'    => 'nullable|required_if:type_dispatch,0|exists:wre_destinations,id',
-        'adjust_inventory'  => 'required|boolean',
+        'type_dispatch'     => 'required|boolean',
     ];
 
     public function mount()
     {
-        $this->adjust_inventory = 0;
+        $this->type_dispatch = 0;
         $this->programs = Program::orderBy('name', 'asc')->get();
     }
 
@@ -52,7 +52,7 @@ class ControlCreate extends Component
         $dataValidated['store_id'] = $this->store->id;
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
 
-        $dataValidated['adjust_inventory'] = ($this->type == 'dispatch') ? $dataValidated['adjust_inventory'] : 0;
+        $dataValidated['adjust_inventory'] = ($this->type == 'dispatch') ? $dataValidated['type_dispatch'] : 0;
 
         $control = Control::create($dataValidated);
 
