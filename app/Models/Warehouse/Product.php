@@ -45,11 +45,13 @@ class Product extends Model
         return $categoryName;
     }
 
-    public static function lastBalance(Product $product, Program $program)
+    public static function lastBalance(Product $product, Program $program = null)
     {
         $controlItem = ControlItem::query()
             ->whereProductId($product->id)
-            ->whereProgramId($program->id)
+            ->when($program, function ($query) use($program) {
+                $query->where('program_id', '=', $program->id);
+            })
             ->latest()
             ->first();
 
@@ -61,12 +63,17 @@ class Product extends Model
         return 0;
     }
 
-    public static function outStock(Program $program)
+    public static function outStock(Store $store, Program $program = null)
     {
         $productIds = collect([]);
 
         $controlItems = ControlItem::query()
-            ->whereProgramId($program->id)
+            ->when($program, function ($query) use($program) {
+                $query->where('program_id', '=', $program->id);
+            })
+            ->whereHas('control', function ($query) use($store) {
+                $query->where('store_id', '=', $store->id);
+            })
             ->groupBy('product_id')
             ->get();
 
