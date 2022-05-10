@@ -142,6 +142,10 @@ return [
             '1' => 'Producto nuevo',
             '0' => 'Producto existente',
         ],
+        'type_dispatch' => [
+            '1' => 'Ajuste Inventario',
+            '0' => 'Egreso Común',
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
@@ -156,6 +160,7 @@ return [
 
     'attributes' => [
         'address'               => 'dirección',
+        'adjust_inventory'      => 'ajuste de inventario',
         'applicant'             => 'solicitante',
         'age'                   => 'edad',
         'barcode'               => 'código de barra',
@@ -206,7 +211,7 @@ return [
         'time'                  => 'hora',
         'title'                 => 'título',
         'type'                  => 'tipo',
-        'adjust_inventory'      => 'ajuste de inventario',
+        'type_dispatch'         => 'tipo de egreso',
         'telephone'             => 'teléfono',
         'username'              => 'usuario',
         'user_id'               => 'usuario',
