@@ -1,27 +1,42 @@
 <div class="form-row">
     @if($showInputAdjustInventory)
         <div class="form-group col-md-12">
-            <label class="font-weigth-bold mr-2">Es ajuste de Inventario:</label>
+            <label class="font-weigth-bold mr-2">Tipo de Egreso:</label>
             <div class="form-check form-check-inline">
                 <input class="form-check-input"
                     type="radio"
-                    wire:model="adjust_inventory"
+                    wire:model="type_dispatch"
                     id="option-1"
                     value="1"
                 >
-                <label class="form-check-label" for="option-1">Si</label>
+                <label class="form-check-label" for="option-1">Ajuste Inventario</label>
             </div>
             <div class="form-check form-check-inline">
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model="adjust_inventory"
+                    wire:model="type_dispatch"
                     id="option-2"
                     value="0"
                 >
-                <label class="form-check-label" for="option-2">No</label>
+                <label class="form-check-label" for="option-2">Egreso Común</label>
             </div>
         </div>
+    @endif
+
+    @if($type == 'dispatch')
+        @if($disabledAdjustInventory)
+            <fieldset class="form-group col-md-4">
+                <label for="type-dispatch">Tipo de Egreso</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    value="{{ $control->type_dispatch }}"
+                    id="type-dispatch"
+                    readonly
+                >
+            </fieldset>
+        @endif
     @endif
 </div>
 
@@ -100,20 +115,7 @@
             @enderror
         </fieldset>
     @else
-        @if($disabledAdjustInventory && $control->isAdjustInventory())
-            <fieldset class="form-group col-md-4">
-                <label for="adjust-inventory">Ajuste de Inventario</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ $control->adjust_inventory_format }}"
-                    id="adjust-inventory"
-                    readonly
-                >
-            </fieldset>
-        @endif
-
-        @if($adjust_inventory == 0)
+        @if($type_dispatch == 0)
             <fieldset class="form-group col-md-4">
                 <label for="destination-id">Destino</label>
                 <select
