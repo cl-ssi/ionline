@@ -1347,7 +1347,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
         Route::prefix('{store}')->middleware('ensure.store')->group(function () {
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
             Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
-            Route::get('report', [ControlController::class, 'report'])->name('control.report'); // pasar a store controller
+            Route::get('report', [StoreController::class, 'report'])->name('store.report');
             Route::resource('controls', 'Warehouse\ControlController')->except(['store', 'update', 'show']);
             Route::resource('products', 'Warehouse\ProductController')->only(['index', 'create', 'edit']);
             Route::resource('categories', 'Warehouse\CategoryController')->only(['index', 'create', 'edit']);
