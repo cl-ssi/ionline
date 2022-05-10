@@ -19,9 +19,12 @@
 <div class="titulo">ACTA DE EGRESO N° {{ $control->id }}</div>
 
 <div style="padding-bottom: 8px;">
+    <strong>Tipo de Egreso:</strong> {{ $control->type_dispatch }}<br>
     <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
-    <strong>Programa:</strong> {{ optional($control->program)->name }}<br>
-    <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
+    <strong>Programa:</strong> {{ $control->program_name }}<br>
+    @if(!$control->isAdjustInventory())
+        <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
+    @endif
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
@@ -35,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($control->items as $item)
+        @forelse($control->items as $item)
             <tr>
                 <td class="center" style="vertical-align: top;">
                     {{ $item->quantity }}
@@ -51,7 +54,13 @@
                     {{ $control->date->format('d/m/Y')}}
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td class="center" colspan="4">
+                    <strong>No hay productos</strong>
+                </td>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 
