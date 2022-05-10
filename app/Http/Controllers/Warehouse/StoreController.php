@@ -74,4 +74,15 @@ class StoreController extends Controller
 
         return redirect()->route('warehouse.store.welcome');
     }
+
+    /**
+     * Bincard Report
+     *
+     * @param  \App\Models\Warehouse\Store  $store
+     * @return \Illuminate\Http\Response
+     */
+    public function report(Store $store)
+    {
+        return view('warehouse.stores.report', compact('store'));
+    }
 }
