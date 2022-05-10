@@ -8,6 +8,11 @@ use App\Models\Warehouse\Store;
 
 class DestinationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ensure.destination')->only('edit');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -10,7 +10,6 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ensure.store');
         $this->middleware('ensure.category')->only('edit');
     }
 

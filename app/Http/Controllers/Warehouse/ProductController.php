@@ -10,7 +10,6 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('ensure.store');
         $this->middleware('ensure.product')->only('edit');
     }
     /**
