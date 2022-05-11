@@ -102,6 +102,16 @@
             href="{{ route('parameters.suppliers.index') }}">
             <i class="fas fa-shopping-cart"></i> Proveedores</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active('segments.index') }}" href="{{ route('segments.index') }}">
+            <i class="fas fa-list"></i> Segmentos UNSPSC
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active('products.all') }}" href="{{ route('products.all') }}">
+            <i class="fas fa-search"></i> Productos UNSPSC
+        </a>
+    </li>
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">
