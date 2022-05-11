@@ -73,7 +73,6 @@
                 href="{{ route('pharmacies.reports.consume_history') }}">
                 <i class="fas fa-file-alt"></i> Consumos históricos</a>
 
-
         </div>
     </li>
     @endcan
@@ -86,7 +85,6 @@
             <i class="fas fa-wrench"></i> Mantenedores</a>
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
             <a class="dropdown-item"
                 href="{{ route('pharmacies.products.index') }}">
                 <i class="fas fa-pills"></i> Productos</a>
@@ -99,9 +97,9 @@
                 href="{{ route('pharmacies.suppliers.index') }}">
                 <i class="fas fa-industry"></i> Proveedores</a>
 
-                <a class="dropdown-item"
-                    href="{{ route('pharmacies.programs.index') }}">
-                    <i class="fas fa-industry"></i> Programas</a>
+            <a class="dropdown-item"
+                href="{{ route('pharmacies.programs.index') }}">
+                <i class="fas fa-industry"></i> Programas</a>
 
         </div>
     </li>

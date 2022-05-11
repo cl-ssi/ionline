@@ -252,6 +252,12 @@
                                                     @csrf
                                                     @method(isset($result) ? 'PUT' : 'POST')
                                                     @endif
+
+{{--                                                    @if($requestForm->type_form === 'bienes y/o servicios')--}}
+{{--                                                        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
+{{--                                                    @else--}}
+{{--                                                        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
+{{--                                                    @endif--}}
                                                     <table class="table table-sm table-striped table-bordered small">
                                                         <thead class="text-center">
                                                             <tr>
@@ -472,7 +478,6 @@
 </div>
 @endif --}}
 
-{{--
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 <div class="row">
     <div class="col-sm">
@@ -583,7 +588,6 @@
     </div>
 </div>
 @endif
---}}
 
 <br>
 
