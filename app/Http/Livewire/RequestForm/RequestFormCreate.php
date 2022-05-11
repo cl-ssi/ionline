@@ -66,7 +66,7 @@ class RequestFormCreate extends Component
         'program.required'             =>  'Ingrese un Programa Asociado.',
         'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
         'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-        'typeOfCurrency'               =>  'Ingrese un tipo de moneda',
+        'typeOfCurrency.required'      =>  'Ingrese un tipo de moneda',
         ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
       ];
     }
@@ -371,10 +371,12 @@ class RequestFormCreate extends Component
 
               $emails = [$mail_notification_ou_manager->user->email];
 
-              if($mail_notification_ou_manager){
-                  Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+              if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+                if($mail_notification_ou_manager){
+                    Mail::to($emails)
+                      ->cc(env('APP_RF_MAIL'))
+                      ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+                }
               }
               //---------------------------------------------------------
 
