@@ -645,12 +645,10 @@
 
         @if($ServiceRequest->program_contract_type == "Mensual")
         <p class="">
-
-          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
           @if($ServiceRequest->profession->category == "A")
-          Médico,
+            <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico,
           @else
-          No Médico,
+            <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico,
           @endif
           del presupuesto del
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -661,25 +659,17 @@
           Unidad demandante COVID-19.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
-        @if($ServiceRequest->profession->category == "A")
-        <p class="">
-
-
-          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
-
-          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
-
-
-
-
-
-        </p>
-        @else
-        <p class="">
-          <strong>3.</strong>
-          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
-        </p>
-        @endif
+          @if($ServiceRequest->profession->category == "A")
+          <p class="">
+            <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
+            IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
+          </p>
+          @else
+          <p class="">
+            <strong>3.</strong>
+            IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
+          </p>
+          @endif
         @endif
 
         <p class="center">
