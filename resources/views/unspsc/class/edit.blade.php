@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('pharmacies.nav')
-
 @livewire('unspsc.clase.clase-edit', [
     'segment' => $segment,
     'family' => $family,
