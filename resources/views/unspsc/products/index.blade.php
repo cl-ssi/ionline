@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('pharmacies.nav')
-
 @livewire('unspsc.product.product-index', [
     'segment' => $segment,
     'family' => $family,
