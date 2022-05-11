@@ -3,9 +3,9 @@
         <div class="input-group-prepend">
             <span class="input-group-text" wire:loading.remove>
                 @if($results->count() == 0)
-                <i class="fas fa-times text-danger"></i>
+                    <i class="fas fa-times text-danger"></i>
                 @else
-                <i class="fas fa-check text-success"></i>
+                    <i class="fas fa-check text-success"></i>
                 @endif
             </span>
             <span class="input-group-text" wire:loading>
@@ -18,7 +18,8 @@
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:loading.attr="disabled"
             wire:target="updatedSearch"
-            required>
+            required
+        >
             <option value="">Selecciona un producto</option>
             @forelse($results as $item)
                 <option value="" disabled>--{{ $item['title'] }}</option>
