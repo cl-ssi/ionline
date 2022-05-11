@@ -86,14 +86,6 @@
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item"
-                href="{{ route('segments.index') }}">
-                <i class="fas fa-list"></i> Rubros por UNSPSC</a>
-
-            <a class="dropdown-item"
-                href="{{ route('products.all') }}">
-                <i class="fas fa-list"></i> Buscar Productos del UNSPSC</a>
-
-            <a class="dropdown-item"
                 href="{{ route('pharmacies.products.index') }}">
                 <i class="fas fa-pills"></i> Productos</a>
 
