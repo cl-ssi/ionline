@@ -66,7 +66,7 @@ class RequestFormCreate extends Component
         'program.required'             =>  'Ingrese un Programa Asociado.',
         'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
         'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-        'typeOfCurrency'               =>  'Ingrese un tipo de moneda',
+        'typeOfCurrency.required'      =>  'Ingrese un tipo de moneda',
         ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
       ];
     }
@@ -134,7 +134,7 @@ class RequestFormCreate extends Component
     private function setItems($item){
       $this->items[]=[
             'id'                       => $item->id,
-            'article'                  => $item->article,
+            'product_id'               => $item->product_id,
             'unitOfMeasurement'        => $item->unit_of_measurement,
             'technicalSpecifications'  => $item->specification,
             'quantity'                 => $item->quantity,
@@ -301,11 +301,11 @@ class RequestFormCreate extends Component
               ],
               [
                 'request_form_id'       =>      $req->id,
-                'article'               =>      $item['article'],
                 'unit_of_measurement'   =>      $item['unitOfMeasurement'],
                 'specification'         =>      $item['technicalSpecifications'],
                 'quantity'              =>      $item['quantity'],
                 'unit_value'            =>      $item['unitValue'],
+                'product_id'            =>      $item['product_id'],
                 'tax'                   =>      $item['taxes'],
                 'expense'               =>      $item['totalValue'],
                 'article_file'          =>      $item['articleFile']
@@ -371,10 +371,12 @@ class RequestFormCreate extends Component
 
               $emails = [$mail_notification_ou_manager->user->email];
 
-              if($mail_notification_ou_manager){
-                  Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+              if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+                if($mail_notification_ou_manager){
+                    Mail::to($emails)
+                      ->cc(env('APP_RF_MAIL'))
+                      ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
+                }
               }
               //---------------------------------------------------------
 

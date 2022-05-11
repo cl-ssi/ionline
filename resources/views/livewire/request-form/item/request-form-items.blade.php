@@ -3,19 +3,26 @@
         <div class="card-body">
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
             <div class="form-row">
+                <fieldset class="form-group col-sm-3">
+                    <label for="product-search">Buscar Producto o Servicio</label>
+                    <input wire:model.debounce.500ms="search_product" id="product-search" class="form-control form-control-sm" type="text">
+                </fieldset>
+            </div>
+
+            <div class="form-row">
                 <fieldset class="form-group col-sm-5">
-                    <label for="forRut">Artículo:</label>
-                    <input wire:model.defer="article" name="article" class="form-control form-control-sm" type="text" value="{{$article}}">
+                    <label for="product-id">Seleccionar Producto o Servicio</label>
+                    @livewire('unspsc.product-search', ['smallInput' => true, 'showCode' => true])
                 </fieldset>
 
                 <fieldset class="form-group col-sm-3">
-                  <label>Unidad de Medida:</label><br>
-                  <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-control form-control-sm" required>
-                      <option value="">Seleccione...</option>
-                      @foreach($lstUnitOfMeasurement as $val)
-                        <option value="{{$val->name}}">{{$val->name}}</option>
-                      @endforeach
-                  </select>
+                    <label>Unidad de Medida:</label><br>
+                    <select wire:model.defer="unitOfMeasurement" name="unitOfMeasurement" class="form-control form-control-sm" required>
+                        <option value="">Seleccione...</option>
+                        @foreach($lstUnitOfMeasurement as $val)
+                            <option value="{{$val->name}}">{{$val->name}}</option>
+                        @endforeach
+                    </select>
                 </fieldset>
 
                 <fieldset class="form-group col-sm-2">
@@ -55,7 +62,7 @@
                       </select>
                   </fieldset>
                   <fieldset class="form-group col-sm-4">
-                      <label class="form-label">Documento Informativo (optativo): 
+                      <label class="form-label">Documento Informativo (optativo):
                           @if($savedArticleFile)
                           <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
                           @endif
@@ -117,7 +124,13 @@
               @foreach($items as $key => $item)
                 <tr>
                     <td class="brd-l">{{$key+1}}</td>
-                    <td>{{$item['article']}}</td>
+                    <td>
+                        @if($item['product_id'] == null)
+                            {{ $item['article'] }}
+                        @else
+                            {{ $item['product_name'] }}
+                        @endif
+                    </td>
                     <td>{{$item['unitOfMeasurement']}}</td>
                     <td>{{$item['technicalSpecifications']}}</td>
                     <td style="text-align:center">

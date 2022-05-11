@@ -61,7 +61,7 @@
               <th class="text-muted col-3 align-middle">Unidad de Compra</th>
               <td class="col-3 align-middle">
                 <select wire:model.defer="purchaseUnit" wire:click="resetError" name="purchaseUnit" class="form-control form-control-sm" required>
-                    
+
                   @foreach($lstPurchaseUnit as $unit)
                     <option value="{{$unit->id}}">{{$unit->name}}</option>
                   @endforeach
@@ -127,7 +127,13 @@
                       <td class="align-middle brd-l">{{ $key+1 }}</td>
                       <td class="align-middle">{{ $item->id }}</td>
                       <td class="align-middle">{{ $item->budgetItem()->first()->fullName() }}</td>
-                      <td class="align-middle">{{ $item->article }}</td>
+                      <td class="align-middle">
+                        @if($item->product_id)
+                          {{ optional($item->product)->name }}
+                        @else
+                          {{ $item->article }}
+                        @endif
+                      </td>
                       <td class="align-middle">{{ $item->unit_of_measurement }}</td>
                       <td class="align-middle">{{ $item->specification }}</td>
                       <td class="align-middle">FILE</td>

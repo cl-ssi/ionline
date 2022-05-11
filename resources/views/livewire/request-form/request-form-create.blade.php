@@ -147,6 +147,7 @@
         </div>
     </div> -->
 
+
     <div class="float-right">
         <button wire:click="saveRequestForm('save')"  class="btn btn-primary btn-sm" type="button" wire:loading.attr="disabled">
             <i class="fas fa-save"></i> Guardar
@@ -158,9 +159,10 @@
 
     </div>
 
-    @if (count($errors) > 0 and ($errors->has('purchaseMechanism') or $errors->has('program') or $errors->has('justify') or $errors->has('items') or $errors->has('balance')))
-      <div class="row justify-content-around mt-0">
-         <div class="alert alert-danger col-6 mt-1">
+    @if ($errors)
+    {{-- > 0 and ($errors->has('purchaseMechanism') or $errors->has('program') or $errors->has('justify') or $errors->has('items') or $errors->has('balance')))--}}
+
+         <div class="alert alert-danger mt-5">
           <p>Corrige los siguientes errores:</p>
              <ul>
                  @foreach ($errors->all() as $message)
@@ -168,9 +170,7 @@
                  @endforeach
              </ul>
          </div>
-      </div>
-    @else
-      <br/><br/>
+
     @endif
 
 </div>

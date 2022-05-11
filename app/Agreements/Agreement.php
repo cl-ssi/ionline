@@ -110,6 +110,10 @@ class Agreement extends Model
                 if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
         return false;
     }
+
+    public function isTypeMandate(){
+        return $this->program_id == 44 && $this->agreement_amounts->count() == 1 && $this->agreement_amounts->first()->program_component_id == 48; //Programa CAPACITACION con el unico COMPONENTE DESARROLLO RRHH
+    }
     
 
     use SoftDeletes;
