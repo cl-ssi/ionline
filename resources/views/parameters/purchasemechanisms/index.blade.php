@@ -18,7 +18,6 @@
             <th>ID</th>
             <th>Mecanismo de Compra</th>
             <th>Tipo de Compra</th>
-            <th>Días Hábiles</th>
             <th>Días Corridos</th>
             <th>Acciones</th>
         </tr>
@@ -41,7 +40,6 @@
               @endif
 
                 <td>{{ $purchaseType->name }}</td>
-                <td>{{ $purchaseType->finance_business_day }}</td>
                 <td>{{ $purchaseType->supply_continuous_day }}</td>
 
                 @if($key == 0 )
