@@ -1,5 +1,7 @@
 <div>
-    <h5>Todos los Productos</h5>
+    @include('parameters.nav')
+
+    <h5>Todos los Productos de UNSPSC</h5>
 
     <div class="input-group my-2">
         <div class="input-group-prepend">
