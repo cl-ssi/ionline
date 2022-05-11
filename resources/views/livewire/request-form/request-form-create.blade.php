@@ -8,7 +8,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label for="forRut">Nombre de Formulario:</label>
                     <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" value="">
-                    {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
+                    @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
@@ -22,12 +22,13 @@
                         @endforeach
                       </select>
                     </div>
+                    @error('contractManagerId') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
                     <label for="forRut">Programa Asociado:</label>
                     <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" value="">
-                    {{-- @error('program') <span class="error">{{ $message }}</span> @enderror --}}
+                    @error('program') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
             </div>
@@ -41,6 +42,7 @@
                             <option value="{{$val->id}}">{{$val->name}}</option>
                         @endforeach
                     </select>
+                    @error('purchaseMechanism') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
@@ -52,6 +54,7 @@
                         <option value="servicios ejecución inmediata">Servicios Ejecución Inmediata</option>
                         <option value="servicios ejecución tiempo">Servicios Ejecución En Tiempo</option>
                     </select>
+                    @error('subtype') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
@@ -62,19 +65,20 @@
                         <option value="dolar">Dolar</option>
                         <option value="uf">U.F.</option>
                     </select>
+                    @error('typeOfCurrency') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
             </div>
 
             <div class="form-row">
-                    <fieldset class="form-group col-sm-4">
-                        <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
-                        <div class="mt-1 ml-4">
-                            <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if($editRF) disabled @endif>
-                            <label class="form-check-label" for="flexCheckDefault">
-                              Sí
-                            </label>
-                        </div>
-                    </fieldset>
+                <fieldset class="form-group col-sm-4">
+                    <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
+                    <div class="mt-1 ml-4">
+                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if($editRF) disabled @endif>
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Sí
+                        </label>
+                    </div>
+                </fieldset>
 
                 <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento(s) de Respaldo:</label>
@@ -87,6 +91,7 @@
                 <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
                     <textarea wire:model.defer="justify" name="justify" class="form-control form-control-sm" rows="3"></textarea>
+                    @error('justify') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
             </div>
             <div class="form-row">
@@ -159,7 +164,7 @@
 
     </div>
 
-    @if ($errors)
+    @if(count($errors) > 0)
     {{-- > 0 and ($errors->has('purchaseMechanism') or $errors->has('program') or $errors->has('justify') or $errors->has('items') or $errors->has('balance')))--}}
 
          <div class="alert alert-danger mt-5">
@@ -173,4 +178,5 @@
 
     @endif
 
+    <br>
 </div>
