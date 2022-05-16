@@ -61,6 +61,8 @@
           <option value="TURNOS VACANTES" @if($request->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
           <option value="OTROS PROGRAMAS HETG" @if($request->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
           <option value="CAMPAÑA INVIERNO" @if($request->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+          <option value="CONTINGENCIA RESPIRATORIA" @if($request->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
+          
           <option value="PABELLON TARDE" @if($request->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
           <option value="PABELLON GINE" @if($request->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
           <option value="TURNO DE RESIDENCIA" @if($request->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
@@ -73,6 +75,7 @@
           <option value="OTROS PROGRAMAS SSI" @if($request->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
           <option value="LISTA ESPERA" @if($request->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
           <option value="CAMPAÑA INVIERNO" @if($request->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+          <option value="CONTINGENCIA RESPIRATORIA" @if($request->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
 
           <option value="ADP DIRECTOR" @if($request->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
           <option value="SENDA" @if($request->programm_name == 'SENDA') selected @endif>SENDA</option>
