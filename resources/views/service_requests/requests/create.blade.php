@@ -228,7 +228,8 @@
 				<option value="DFL">DFL</option>
 				<option value="TURNOS VACANTES">TURNOS VACANTES</option>
 				<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
-				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+				<!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
+				<option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
 				<option value="PABELLON TARDE">PABELLON TARDE</option>
 				<option value="PABELLON GINE">PABELLON GINE</option>
 				<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
@@ -240,8 +241,9 @@
 				<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
 				<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
 				<option value="LISTA ESPERA">LISTA ESPERA</option>
-				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
-
+				<!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
+				<option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
+		
 				<option value="ADP DIRECTOR">ADP DIRECTOR</option>
 				<option value="SENDA">SENDA</option>
 				<option value="LEY DE ALCOHOL">LEY DE ALCOHOL</option>
@@ -497,7 +499,8 @@
 		$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
-		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 		$("#programm_name option[value='SENDA']").hide();
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
@@ -513,7 +516,8 @@
 		$("#programm_name option[value='DFL']").hide();
 		$("#programm_name option[value='TURNOS VACANTES']").hide();
 		$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
-		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 		$("#programm_name option[value='PABELLON TARDE']").hide();
 		$("#programm_name option[value='PABELLON GINE']").hide();
 		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
@@ -743,7 +747,8 @@
 				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
 				$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 				$("#programm_name option[value='LISTA ESPERA']").hide();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 
 				$("#programm_name option[value='ADP DIRECTOR']").hide();
 				$("#programm_name option[value='SENDA']").hide();
@@ -758,7 +763,9 @@
 				$("#programm_name option[value='DFL']").show();
 				$("#programm_name option[value='TURNOS VACANTES']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				// $("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").show();
+				
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
@@ -772,7 +779,8 @@
 				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
 				$("#programm_name option[value='LISTA ESPERA']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				// $("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").show();
 
 				$("#programm_name option[value='ADP DIRECTOR']").show();
 				$("#programm_name option[value='SENDA']").show();
@@ -787,7 +795,8 @@
 				$("#programm_name option[value='DFL']").hide();
 				$("#programm_name option[value='TURNOS VACANTES']").hide();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
@@ -818,7 +827,8 @@
 			$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
 			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 			$("#programm_name option[value='LISTA ESPERA']").hide();
-			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 
 			$("#programm_name option[value='ADP DIRECTOR']").hide();
 			$("#programm_name option[value='SENDA']").hide();
@@ -833,7 +843,8 @@
 			$("#programm_name option[value='DFL']").hide();
 			$("#programm_name option[value='TURNOS VACANTES']").hide();
 			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
-			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			// $("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 			$("#programm_name option[value='PABELLON TARDE']").hide();
 			$("#programm_name option[value='PABELLON GINE']").hide();
 			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
