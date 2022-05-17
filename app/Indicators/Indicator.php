@@ -33,7 +33,7 @@ class Indicator extends Model
 
     public function values()
     {
-        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
+        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('id')->orderBy('month');
     }
 
     public function getValuesAcum($factor)
