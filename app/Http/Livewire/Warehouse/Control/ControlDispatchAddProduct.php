@@ -6,6 +6,7 @@ use App\Models\Cfg\Program;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
+use App\Models\Warehouse\TypeReception;
 use Livewire\Component;
 
 class ControlDispatchAddProduct extends Component
@@ -57,10 +58,12 @@ class ControlDispatchAddProduct extends Component
                 $query->whereStoreId($this->store->id);
             })
             ->whereProgramId($this->control->program_id)
-            ->groupby('program_id', 'product_id')
+            ->groupBy('program_id', 'product_id')
             ->whereNotIn('product_id', $productsOutStock)
             ->get();
+            // ->pluck('id')->toArray();
 
+        // dd($controlItems);
         return $controlItems;
     }
 
@@ -84,6 +87,7 @@ class ControlDispatchAddProduct extends Component
         $dataValidated['control_id'] = $this->control->id;
         $dataValidated['program_id'] = $this->control->program_id;
         $dataValidated['product_id'] = $controlItem->product_id;
+        $dataValidated['confirm'] = $this->control->isSendToStore() ? false : true;
 
         $controlItem = ControlItem::query()
             ->whereControlId($this->control->id)
@@ -103,6 +107,7 @@ class ControlDispatchAddProduct extends Component
             $controlItem = ControlItem::create($dataValidated);
         }
 
+        $this->render();
         $this->resetInput();
         $this->emit('refreshControlProductList');
     }

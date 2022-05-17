@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Warehouse\Control;
 
-use App\Models\Warehouse\Category;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use Livewire\Component;
@@ -76,6 +75,7 @@ class ControlReceivingAddProduct extends Component
         $dataValidated['control_id'] = $this->control->id;
         $dataValidated['program_id'] = $this->control->program_id;
         $dataValidated['product_id'] = $product->id;
+        $dataValidated['confirm'] = true;
 
         $controlItem = ControlItem::query()
             ->whereControlId($this->control->id)
@@ -96,6 +96,7 @@ class ControlReceivingAddProduct extends Component
         }
 
         $this->emit('refreshControlProductList');
+        $this->emit('productId', null);
         $this->resetInput();
     }
 
