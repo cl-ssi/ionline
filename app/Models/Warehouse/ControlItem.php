@@ -16,6 +16,7 @@ class ControlItem extends Model
     protected $fillable = [
         'quantity',
         'balance',
+        'confirm',
         'control_id',
         'program_id',
         'product_id',
