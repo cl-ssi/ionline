@@ -48,10 +48,15 @@ class Product extends Model
     public static function lastBalance(Product $product, Program $program = null)
     {
         $controlItem = ControlItem::query()
-            ->whereProductId($product->id)
-            ->when($program, function ($query) use($program) {
-                $query->where('program_id', '=', $program->id);
+            ->whereHas('control', function($query) {
+                $query->whereConfirm(true);
             })
+            ->when($program, function ($query) use($program) {
+                $query->whereProgramId($program->id);
+            }, function($query) {
+                $query->whereProgramId(null);
+            })
+            ->whereProductId($product->id)
             ->latest()
             ->first();
 
@@ -68,11 +73,13 @@ class Product extends Model
         $productIds = collect([]);
 
         $controlItems = ControlItem::query()
-            ->when($program, function ($query) use($program) {
-                $query->where('program_id', '=', $program->id);
-            })
             ->whereHas('control', function ($query) use($store) {
-                $query->where('store_id', '=', $store->id);
+                $query->whereStoreId($store->id);
+            })
+            ->when($program, function ($query) use($program) {
+                $query->whereProgramId($program->id);
+            }, function($query) {
+                $query->whereProgramId(null);
             })
             ->groupBy('product_id')
             ->get();
