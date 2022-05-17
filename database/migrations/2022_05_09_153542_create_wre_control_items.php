@@ -18,6 +18,7 @@ class CreateWreControlItems extends Migration
 
             $table->integer('quantity')->nullable();
             $table->integer('balance')->nullable();
+            $table->boolean('confirm')->nullable();
 
             $table->foreignId('control_id')->nullable()->constrained('wre_controls');
             $table->foreignId('program_id')->nullable()->constrained('cfg_programs');
