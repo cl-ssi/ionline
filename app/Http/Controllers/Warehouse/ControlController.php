@@ -52,7 +52,10 @@ class ControlController extends Controller
      */
     public function edit(Store $store, Control $control)
     {
-        return view('warehouse.controls.edit', compact('store', 'control'));
+        if($control->isReceiveFromStore())
+            return view('warehouse.controls.review-product', compact('store', 'control'));
+        else
+            return view('warehouse.controls.edit', compact('store', 'control'));
     }
 
     /**s
@@ -64,7 +67,6 @@ class ControlController extends Controller
      */
     public function addProduct(Store $store, Control $control)
     {
-        // TODO: Proteger ruta: Store->id = Control->store_id
         return view('warehouse.controls.add-product', compact('store', 'control'));
     }
 
