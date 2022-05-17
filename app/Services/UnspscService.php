@@ -30,22 +30,27 @@ class UnspscService
 
         if(!empty($search))
         {
+            $code = is_numeric($search) ? $search : null;
             $search = Str::lower("%$search%");
 
             $products = Product::query()
-                ->whereRaw('lower(`name`) LIKE ? ', $search)
-                ->orWhere(function ($query) use($search) {
-                    $query->whereRaw('lower(`name`) LIKE ? ', $search)
-                    ->whereHas('class', function ($subquery) use ($search) {
-                        $subquery->whereHas('family', function ($q) use($search) {
-                            $q->whereRaw('lower(`name`) LIKE ? ', $search);
+                ->when($code, function ($q) use($code) {
+                    $q->where('code', 'like', "%$code%");
+                }, function($q) use ($search) {
+                    $q->whereRaw('lower(`name`) LIKE ? ', $search)
+                        ->orWhere(function ($query) use($search) {
+                            $query->whereRaw('lower(`name`) LIKE ? ', $search)
+                                ->whereHas('class', function ($subquery) use ($search) {
+                                    $subquery->whereHas('family', function ($q) use($search) {
+                                        $q->whereRaw('lower(`name`) LIKE ? ', $search);
+                                    });
+                                });
+                        })
+                        ->orWhere(function ($query) use ($search) {
+                            $query->whereHas('class', function ($subquery) use($search) {
+                                $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
+                            });
                         });
-                    });
-                })
-                ->orWhere(function ($query) use ($search) {
-                    $query->whereHas('class', function ($subquery) use($search) {
-                        $subquery->whereRaw('lower(`name`) LIKE ? ', $search);
-                    });
                 })
                 ->limit(500) // Limite para optimizar respuesta
                 ->orderBy('class_id');
