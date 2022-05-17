@@ -60,6 +60,13 @@
                         </a>
                     </td>
                     <td class="text-center">
+                        <a
+                            class="btn btn-sm btn-outline-secondary"
+                            href="{{ route('warehouse.store.report', ['store' => $store])}}"
+                            title="Reporte Bincard"
+                        >
+                            <i class="fas fa-file-alt"></i>
+                        </a>
                         <div class="btn-group" role="group">
                             <a
                                 class="btn btn-sm btn-outline-secondary"
