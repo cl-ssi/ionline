@@ -15,7 +15,7 @@
 <hr>
 <h4 class="my-2">Agregar Producto</h4>
 
-@if($control->type)
+@if($control->isReceiving())
     @livewire('warehouse.control.control-receiving-add-product', [
         'store' => $store,
         'control' => $control,
@@ -31,7 +31,8 @@
 <h4>Productos agregados</h4>
 
 @livewire('warehouse.control.control-product-list', [
-    'control' => $control
+    'control' => $control,
+    'store' => $store,
 ])
 
 @endsection

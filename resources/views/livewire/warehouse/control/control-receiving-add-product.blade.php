@@ -20,19 +20,18 @@
                 <input
                     wire:model.debounce.600ms="search_product"
                     id="product-search"
-                    class="form-control @error('unspsc_product_id') is-invalid @enderror"
+                    class="form-control"
                     type="text"
                 >
-                @error('unspsc_product_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
             </fieldset>
 
             <fieldset class="form-group col-md-6">
-                <label for="product-search">Producto o Servicio</label>
+                <label for="product-id">Selecciona Producto o Servicio</label>
                 @livewire('unspsc.product-search')
+                <input
+                    class="form-control @error('unspsc_product_id') is-invalid @enderror"
+                    type="hidden"
+                >
                 @error('unspsc_product_id')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -138,7 +137,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-12">
+        <fieldset class="form-group col-md-12 text-right">
             <button class="btn btn-primary" wire:click="addProduct" wire:loading.attr="disabled">
                 <span
                     class="spinner-border spinner-border-sm"
@@ -147,7 +146,7 @@
                     wire:loading
                     wire:target="addProduct"
                 ></span>
-                Agregar producto
+                <i class="fas fa-plus"></i> Agregar producto
             </button>
         </fieldset>
     </div>

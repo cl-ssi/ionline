@@ -6,14 +6,7 @@
 
 @include('warehouse.nav')
 
-<h4>
-    @if($control->type)
-        Ingreso
-    @else
-        Egreso
-    @endif
-    {{ $control->id }}
-</h4>
+<h4>{{ $control->type_format }} {{ $control->id }}</h4>
 
 @livewire('warehouse.control.control-details', [
     'control' => $control
@@ -22,7 +15,7 @@
 <hr>
 <h4 class="my-2">Agregar Producto</h4>
 
-@if($control->type)
+@if($control->isReceiving())
     @livewire('warehouse.control.control-receiving-add-product', [
         'store' => $store,
         'control' => $control,
@@ -39,7 +32,8 @@
 <h4>Productos agregados</h4>
 
 @livewire('warehouse.control.control-product-list', [
-    'control' => $control
+    'control' => $control,
+    'store' => $store,
 ])
 
 @endsection

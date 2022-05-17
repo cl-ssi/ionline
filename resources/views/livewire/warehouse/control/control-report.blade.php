@@ -1,5 +1,5 @@
 <div>
-    <h5>Reporte de Producto</h5>
+    <h5>Reporte Bincard: {{ $store->name }}</h5>
 
     <div class="form-row">
         <fieldset class="form-group col-md-2">
@@ -40,6 +40,7 @@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
+                    <th class="text-center">ID</th>
                     <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Origen/Destino</th>
@@ -52,31 +53,61 @@
             </thead>
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none">
-                    <td class="text-center" colspan="8">
+                    <td class="text-center" colspan="9">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controlItems as $controlItem)
                 <tr wire:loading.remove>
+                    <td class="text-center">
+                        <small class="text-monospace">
+                            {{ optional($controlItem->control)->id }}
+                        </small>
+                    </td>
                     <td>
                         {{ $controlItem->control->type_format }}
-                        @if($controlItem->control->type)
-                            {{ $controlItem->control_id }}
-                        @else
-                            {{ $controlItem->control_id }}
-                        @endif
                     </td>
-                    <td>{{ $controlItem->control->date_format }}</td>
+                    <td>
+                        {{ $controlItem->control->date_format }}
+                    </td>
                     <td>
                         @if($controlItem->control)
-                            @if($controlItem->control->isReceiving())
-                                {{ optional($controlItem->control->origin)->name }}
+                            @if($controlItem->control->isDispatch())
+                                @switch($controlItem->control->type_dispatch_id)
+                                    @case(\App\Models\Warehouse\TypeDispatch::dispatch())
+                                        {{ optional($controlItem->control->destination)->name }}
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
+                                        {{ optional($controlItem->control->typeDispatch)->name }}
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
+                                        {{ optional($controlItem->control->destinationStore)->name }}
+                                        <br>
+                                        <small>
+                                            {{ optional($controlItem->control->typeDispatch)->name }}
+                                        </small>
+                                        @break
+                                @endswitch
                             @else
-                                @if($controlItem->control->isAdjustInventory())
-                                    {{ $controlItem->control->type_dispatch }}
-                                @else
-                                    {{ optional($controlItem->control->destination)->name }}
-                                @endif
+                                @switch($controlItem->control->type_reception_id)
+                                    @case(\App\Models\Warehouse\TypeReception::receiving())
+                                        {{ optional($controlItem->control->origin)->name }}
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
+                                        {{ optional($controlItem->control->originStore)->name }}
+                                        <br>
+                                        <small>
+                                            {{ optional($controlItem->control->typeReception)->name }}
+                                        </small>
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeReception::return())
+                                        {{ optional($controlItem->control->originStore)->name }}
+                                        <br>
+                                        <small>
+                                            {{ optional($controlItem->control->typeReception)->name }}
+                                        </small>
+                                        @break
+                                @endswitch
                             @endif
                         @endif
                     </td>
@@ -84,7 +115,7 @@
                         {{ $controlItem->product->product->name }}
                         <br>
                         <small>
-                            {{ $controlItem->product->name }}
+                            {{ optional($controlItem->product)->name }}
                         </small>
                     </td>
                     <td>{{ $controlItem->program_name }}</td>
@@ -114,7 +145,7 @@
                 </tr>
                 @empty
                 <tr wire:loading.remove>
-                    <td class="text-center" colspan="8">
+                    <td class="text-center" colspan="9">
                         <em>No hay resultados</em>
                     </td>
                 </tr>
