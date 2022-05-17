@@ -50,7 +50,8 @@ class ControlReport extends Component
     {
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
-                $query->where('store_id', '=', $this->store->id);
+                $query->whereStoreId($this->store->id)
+                    ->whereConfirm(true);
             })
             ->when($this->start_date, function($query) {
                 $query->where('created_at', '>=', $this->start_date);
