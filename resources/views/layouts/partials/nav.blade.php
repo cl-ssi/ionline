@@ -312,12 +312,23 @@
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Bodegas</h6>
 
-                                @foreach(Auth::user()->stores as $store)
-                                    <a class="dropdown-item @if($store->id == optional(Auth::user()->active_store)->id) active @endif"
-                                        href="{{ route('warehouse.store.active', $store)}}">
-                                        {{ $store->name }}
+                                @forelse(Auth::user()->stores as $store)
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('warehouse.store.active', $store) }}"
+                                    >
+                                        @if($store->id == optional(Auth::user()->active_store)->id)
+                                            <i class="fas fa-check"></i>
+                                        @else
+                                            <i class="fas fa-circle"></i>
+                                        @endif
+                                         {{ $store->name }}
                                     </a>
-                                @endforeach
+                                @empty
+                                    <a class="dropdown-item" href="#">
+                                        No posee bodegas
+                                    </a>
+                                @endforelse
 
                                 @role('Store: Super admin')
                                     <a
