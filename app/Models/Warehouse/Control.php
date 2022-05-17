@@ -15,13 +15,17 @@ class Control extends Model
 
     protected $fillable = [
         'type',
-        'adjust_inventory',
         'date',
         'note',
+        'confirm',
         'store_id',
-        'program_id',
         'origin_id',
         'destination_id',
+        'type_dispatch_id',
+        'type_reception_id',
+        'store_origin_id',
+        'store_destination_id',
+        'program_id',
     ];
 
     protected $dates = [
@@ -53,6 +57,26 @@ class Control extends Model
         return $this->hasMany(ControlItem::class, 'control_id');
     }
 
+    public function typeDispatch()
+    {
+        return $this->belongsTo(TypeDispatch::class);
+    }
+
+    public function typeReception()
+    {
+        return $this->belongsTo(TypeReception::class);
+    }
+
+    public function destinationStore()
+    {
+        return $this->belongsTo(Store::class, 'store_destination_id');
+    }
+
+    public function originStore()
+    {
+        return $this->belongsTo(Store::class, 'store_origin_id');
+    }
+
     public function isReceiving()
     {
         return $this->type == 1;
@@ -61,6 +85,36 @@ class Control extends Model
     public function isDispatch()
     {
         return $this->type == 0;
+    }
+
+    public function isDispatchNormal()
+    {
+        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::dispatch());
+    }
+
+    public function isAdjustInventory()
+    {
+        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::adjustInventory());
+    }
+
+    public function isSendToStore()
+    {
+        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::sendToStore());
+    }
+
+    public function isReceptionNormal()
+    {
+        return $this->isReceiving() && ($this->type_reception_id == TypeReception::receiving());
+    }
+
+    public function isReceiveFromStore()
+    {
+        return $this->isReceiving() && ($this->type_reception_id == TypeReception::receiveFromStore());
+    }
+
+    public function isConfirmed()
+    {
+        return $this->confirm == true;
     }
 
     public function getTypeFormatAttribute()
@@ -86,34 +140,19 @@ class Control extends Model
         return $programName;
     }
 
-    public function getTypeDispatchAttribute()
+    public function getStatusColorAttribute()
     {
-        $name = null;
-        if($this->isDispatch())
-        {
-            if($this->isAdjustInventory())
-                $name = 'Ajuste de Inventario';
-            else
-                $name = 'Egreso Común';
-        }
-        return $name;
+        $status = 'danger';
+        if($this->isConfirmed())
+            $status = 'success';
+        return $status;
     }
 
-    public function getAdjustInventoryFormatAttribute()
+    public function getStatusAttribute()
     {
-        $name = null;
-        if($this->isDispatch())
-        {
-            if($this->isAdjustInventory())
-                $name = 'Si';
-            else
-                $name = 'No';
-        }
-        return $name;
-    }
-
-    public function isAdjustInventory()
-    {
-        return $this->adjust_inventory == 1;
+        $status = 'no confirmado';
+        if($this->isConfirmed())
+            $status = 'confirmado';
+        return $status;
     }
 }
