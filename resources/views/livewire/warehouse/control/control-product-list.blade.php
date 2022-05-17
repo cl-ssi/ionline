@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th class="text-center">Código de Barra</th>
-                    <th>Producto</th>
+                    <th>Producto o Servicio</th>
                     <th>Programa</th>
                     <th>Categoría</th>
                     <th class="text-center">Cantidad</th>
@@ -20,7 +20,7 @@
                 @forelse($controlItems as $controlItem)
                 <tr wire:loading.remove>
                     <td class="text-center">
-                        <small>
+                        <small class="text-monospace">
                             {{ optional($controlItem->product)->barcode }}
                         </small>
                     </td>
@@ -49,5 +49,28 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-right">
+            @if($control->isSendToStore() && !$control->isConfirmed())
+                <button
+                    class="btn btn-success"
+                    wire:click="sendToStore"
+                    @if($control->items->count() == 0)
+                        disabled
+                    @endif
+                >
+                    <i class="fas fa-sync"></i> Transferir y Terminar
+                </button>
+            @else
+                <a
+                    class="btn btn-success"
+                    href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $control->isReceiving() ? 'receiving' : 'dispatch' ]) }}"
+                >
+                    <i class="fas fa-check"></i> Terminar
+                </a>
+            @endif
+        </div>
     </div>
 </div>

@@ -4,11 +4,11 @@
             <h5>
                 Listado de
                 @if($type == 'receiving')
-                    Ingresos
+                    Ingresos:
                 @else
-                    Egresos
+                    Egresos:
                 @endif
-                - {{ $store->name }}
+                 {{ $store->name }}
             </h5>
         </div>
 
@@ -45,7 +45,7 @@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th class="text-center">ID</th>
                     <th>Fecha</th>
                     <th>
                         @if($type == 'receiving')
@@ -56,7 +56,7 @@
                     </th>
                     <th>Programa</th>
                     <th class="text-center"># Productos</th>
-                    <th>Nota</th>
+                    <th class="text-center">Estado</th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,7 +68,7 @@
                 </tr>
                 @forelse($controls as $control)
                 <tr>
-                    <td>
+                    <td class="text-center">
                         <a
                             href="{{ route('warehouse.controls.edit', [
                                 'store' => $store,
@@ -81,19 +81,43 @@
                     </td>
                     <td>{{ $control->date_format }}</td>
                     <td>
-                        @if($control->isReceiving())
-                            {{ optional($control->origin)->name }}
+                        @if($control->isDispatch())
+                            @switch($control->type_dispatch_id)
+                                @case(\App\Models\Warehouse\TypeDispatch::dispatch())
+                                    {{ optional($control->destination)->name }}
+                                    @break
+                                @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
+                                    {{ optional($control->typeDispatch)->name }}
+                                    @break
+                                @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
+                                    {{ optional($control->destinationStore)->name }}
+                                    @break
+                            @endswitch
                         @else
-                            @if($control->isAdjustInventory())
-                                {{ $control->type_dispatch }}
-                            @else
-                                {{ optional($control->destination)->name }}
-                            @endif
+                            @switch($control->type_reception_id)
+                                @case(\App\Models\Warehouse\TypeReception::receiving())
+                                    {{ optional($control->origin)->name }}
+                                    @break
+                                @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
+                                    {{ optional($control->originStore)->name }}
+                                    @break
+                                @case(\App\Models\Warehouse\TypeReception::return())
+                                    {{ optional($control->originStore)->name }}
+                                    <br>
+                                    <small>
+                                        {{ optional($control->typeReception)->name }}
+                                    </small>
+                                    @break
+                            @endswitch
                         @endif
                     </td>
                     <td>{{ $control->program_name }}</td>
                     <td class="text-center">{{ $control->items->count() }}</td>
-                    <td>{{ $control->short_note }}</td>
+                    <td class="text-center">
+                        <span class="badge badge-{{ $control->status_color }}">
+                            {{ $control->status }}
+                        </span>
+                    </td>
                     <td class="text-center">
                         @if($control->isDispatch())
                         <a

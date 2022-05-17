@@ -73,7 +73,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-12">
+        <fieldset class="form-group col-md-12 text-right">
             <button class="btn btn-primary" wire:click="addProduct">
                 <span
                     class="spinner-border spinner-border-sm"
@@ -82,7 +82,7 @@
                     wire:loading
                     wire:target="addProduct"
                 ></span>
-                Agregar producto
+                <i class="fas fa-plus"></i> Agregar producto
             </button>
         </fieldset>
     </div>

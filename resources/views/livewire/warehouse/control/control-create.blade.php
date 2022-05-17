@@ -1,20 +1,32 @@
 <div>
     <h5>
         @if($type == 'receiving')
-            Nuevo Ingreso
+            Nuevo Ingreso:
         @else
-            Nuevo Egreso
+            Nuevo Egreso:
         @endif
+         {{ $store->name }}
     </h5>
 
-    @include('warehouse.controls.partials.form', [
-        'control' => null,
-        'store' => $store,
-        'type' => $type,
-        'disableProgram' => false,
-        'showInputAdjustInventory' => true,
-        'disabledAdjustInventory' => false,
-    ])
+    @if($type == 'receiving')
+        @include('warehouse.controls.partials.form-receiving', [
+            'control' => null,
+            'store' => $store,
+            'type' => $type,
+            'disableProgram' => false,
+            'showInputTypeReceiving' => true,
+            'showTypeReceivingDisabled' => false,
+        ])
+    @else
+        @include('warehouse.controls.partials.form-dispatch', [
+            'control' => null,
+            'store' => $store,
+            'type' => $type,
+            'disableProgram' => false,
+            'showInputTypeDispatch' => true,
+            'showTypeDispatchDisabled' => false,
+        ])
+    @endif
 
     <button class="btn btn-primary" wire:click="createControl">
         Crear

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($type == 'receiving') ? 'Lista de Ingreso' : 'Listado de Egreso')
+@section('title', ($type == 'receiving') ? 'Lista de Ingresos' : 'Listado de Egresos')
 
 @section('content')
 

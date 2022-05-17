@@ -1,42 +1,34 @@
 <div class="form-row">
-    @if($showInputAdjustInventory)
+    @if($showInputTypeDispatch)
         <div class="form-group col-md-12">
             <label class="font-weigth-bold mr-2">Tipo de Egreso:</label>
+            @foreach($typeDispatches as $type)
             <div class="form-check form-check-inline">
                 <input class="form-check-input"
                     type="radio"
-                    wire:model="type_dispatch"
-                    id="option-1"
-                    value="1"
+                    wire:model="type_dispatch_id"
+                    id="option-{{ $type->id }}"
+                    value="{{ $type->id }}"
                 >
-                <label class="form-check-label" for="option-1">Ajuste Inventario</label>
+                <label class="form-check-label" for="option-{{ $type->id }}">
+                    {{ $type->name }}
+                </label>
             </div>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="radio"
-                    wire:model="type_dispatch"
-                    id="option-2"
-                    value="0"
-                >
-                <label class="form-check-label" for="option-2">Egreso Común</label>
-            </div>
+            @endforeach
         </div>
     @endif
 
-    @if($type == 'dispatch')
-        @if($disabledAdjustInventory)
-            <fieldset class="form-group col-md-4">
-                <label for="type-dispatch">Tipo de Egreso</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ $control->type_dispatch }}"
-                    id="type-dispatch"
-                    readonly
-                >
-            </fieldset>
-        @endif
+    @if($showTypeDispatchDisabled)
+        <fieldset class="form-group col-md-4">
+            <label for="type-dispatch">Tipo de Egreso</label>
+            <input
+                type="text"
+                class="form-control"
+                value="{{ optional($control->typeDispatch)->name }}"
+                id="type-dispatch"
+                readonly
+            >
+        </fieldset>
     @endif
 </div>
 
@@ -52,9 +44,9 @@
             required
         >
         @error('date')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 
@@ -67,7 +59,6 @@
                 value="{{ $control->program_name }}"
                 readonly
             >
-
         @else
             <select
                 class="form-control @error('program_id') is-invalid @enderror"
@@ -92,31 +83,8 @@
         @endif
     </fieldset>
 
-    @if($type == 'receiving')
-        <fieldset class="form-group col-md-5">
-            <label for="origin-id">Origen</label>
-            <select
-                class="form-control @error('origin_id') is-invalid @enderror"
-                wire:model="origin_id" id="origin-id"
-            >
-                <option value="">Selecciona un origen</option>
-                @foreach($store->origins as $origin)
-                    <option
-                        value="{{ $origin->id }}"
-                        {{ old('mobile_id', optional($control)->origin_id) == $origin->id ? 'selected' : '' }}
-                    >
-                        {{ $origin->name }}
-                    </option>
-                @endforeach
-            </select>
-            @error('origin_id')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-    @else
-        @if($type_dispatch == 0)
+    @switch($type_dispatch_id)
+        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
             <fieldset class="form-group col-md-4">
                 <label for="destination-id">Destino</label>
                 <select
@@ -135,8 +103,29 @@
                     </span>
                 @enderror
             </fieldset>
-        @endif
-    @endif
+            @break
+        @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
+            <fieldset class="form-group col-md-4">
+                <label for="store-destination-id">Bodega Destino</label>
+                <select
+                    class="form-control @error('store_destination_id') is-invalid @enderror"
+                    wire:model="store_destination_id"
+                    id="store-destination-id"
+                >
+                    <option value="">Selecciona una bodega destino</option>
+                    @foreach($stores as $store)
+                        <option value="{{ $store->id }}">{{ $store->name }}</option>
+                    @endforeach
+                </select>
+                @error('store_destination_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+            @break
+        @default
+    @endswitch
 </div>
 
 <div class="form-row">
