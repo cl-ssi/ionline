@@ -17,15 +17,22 @@ class CreateWreControls extends Migration
             $table->id();
 
             $table->boolean('type')->nullable(); // 1:ingreso 0:egreso
-            $table->boolean('adjust_inventory')->nullable(); // 1: Es un Ajuste de Inventenario
-                                                                // 0: No es Un Ajuste de Inventario
+            $table->boolean('confirm')->nullable(); // 1:si 0:no
+
             $table->date('date')->nullable();
             $table->text('note')->nullable();
 
+
+            $table->foreignId('type_dispatch_id')->nullable()->constrained('wre_type_dispatches');
+            $table->foreignId('type_reception_id')->nullable()->constrained('wre_type_receptions');
+
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
-            $table->foreignId('program_id')->nullable()->constrained('cfg_programs');
             $table->foreignId('origin_id')->nullable()->constrained('wre_origins');
             $table->foreignId('destination_id')->nullable()->constrained('wre_destinations');
+            $table->foreignId('store_origin_id')->nullable()->constrained('wre_stores');
+            $table->foreignId('store_destination_id')->nullable()->constrained('wre_stores');
+            $table->foreignId('program_id')->nullable()->constrained('cfg_programs');
+
 
             $table->timestamps();
             $table->softDeletes();
