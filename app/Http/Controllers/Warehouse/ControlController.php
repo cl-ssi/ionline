@@ -52,7 +52,7 @@ class ControlController extends Controller
      */
     public function edit(Store $store, Control $control)
     {
-        if($control->isReceiveFromStore())
+        if($control->isReceiveFromStore() && !$control->isConfirmed())
             return view('warehouse.controls.review-product', compact('store', 'control'));
         else
             return view('warehouse.controls.edit', compact('store', 'control'));
