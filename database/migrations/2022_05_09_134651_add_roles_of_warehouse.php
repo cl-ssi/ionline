@@ -36,6 +36,12 @@ class AddRolesOfWarehouse extends Migration
             'store_id' => 1,
             'role_id' => 18
         ]);
+
+        StoreUser::create([
+            'user_id' => 1005298,
+            'store_id' => 2,
+            'role_id' => 18
+        ]);
     }
 
     /**
