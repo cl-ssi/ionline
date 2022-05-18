@@ -56,6 +56,7 @@ class Product extends Model
             }, function($query) {
                 $query->whereProgramId(null);
             })
+            ->whereConfirm(true)
             ->whereProductId($product->id)
             ->latest()
             ->first();
