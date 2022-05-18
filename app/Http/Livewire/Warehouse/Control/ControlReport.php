@@ -69,6 +69,7 @@ class ControlReport extends Component
             ->when($this->product_id, function($query) {
                 $query->where('product_id', $this->product_id);
             })
+            ->whereConfirm(true)
             ->orderBy('created_at', 'desc')
             ->get();
 
