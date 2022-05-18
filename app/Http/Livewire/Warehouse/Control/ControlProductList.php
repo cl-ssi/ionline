@@ -28,12 +28,12 @@ class ControlProductList extends Component
         $currentBalance = Product::lastBalance($controlItem->product, $controlItem->program);
         $amountToRemove = $controlItem->quantity;
 
-        if(($controlItem->control->isReceiving() && ($currentBalance >= $controlItem->balance))
-            OR $controlItem->control->isDispatch())
+        if(($controlItem->control->isReceiving() && ($currentBalance >= $controlItem->balance)) OR $controlItem->control->isDispatch())
         {
             $controlItems = ControlItem::query()
                 ->whereProgramId($controlItem->program_id)
                 ->whereProductId($controlItem->product_id)
+                ->whereConfirm(true)
                 ->where('id', '>', $controlItem->id)
                 ->get();
 
@@ -103,6 +103,7 @@ class ControlProductList extends Component
                 $controlItem = ControlItem::create([
                     'quantity' => $item->quantity,
                     'balance' => 0,
+                    'confirm' => false,
                     'control_id' => $controlDispatch->id,
                     'program_id' => $item->program_id,
                     'product_id' => $product->id
