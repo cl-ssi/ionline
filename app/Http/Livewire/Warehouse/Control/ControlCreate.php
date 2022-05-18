@@ -31,7 +31,7 @@ class ControlCreate extends Component
     public $rulesReceiving = [
         'date'              => 'required|date_format:Y-m-d',
         'note'              => 'required|string|min:2|max:255',
-        'program_id'        => 'nullable|integer|exists:frm_programs,id',
+        'program_id'        => 'nullable|exists:cfg_programs,id',
         'origin_id'         => 'required|integer|exists:wre_origins,id',
     ];
 
@@ -39,7 +39,7 @@ class ControlCreate extends Component
         'date'                  => 'required|date_format:Y-m-d',
         'note'                  => 'required|string|min:2|max:255',
         'type_dispatch_id'      => 'required|exists:wre_type_dispatches,id',
-        'program_id'            => 'nullable|integer|exists:frm_programs,id',
+        'program_id'            => 'nullable|exists:cfg_programs,id',
         'destination_id'        => 'nullable|required_if:type_dispatch_id,1|integer|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|integer|exists:wre_type_receptions,id',
     ];
@@ -63,6 +63,7 @@ class ControlCreate extends Component
         $rules = ($this->type == 'receiving') ? $this->rulesReceiving : $this->rulesDispatch;
 
         $dataValidated = $this->validate($rules);
+        $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['store_id'] = $this->store->id;
         $dataValidated['confirm'] = $this->getConfirm();
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
