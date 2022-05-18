@@ -2,6 +2,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
+            
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="product-search">Buscar Producto o Servicio</label>
@@ -59,7 +60,7 @@
                     </div>
                     <div class="form-row">
 
-                        <fieldset class="form-group col-sm-6">
+                        <fieldset class="form-group col-sm-4">
                             <label>Tipo de Impuestos:</label><br>
                             <select wire:model.defer="taxes" name="taxes" class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
@@ -70,7 +71,8 @@
                             <option value="nd">No Definido</option>
                             </select>
                         </fieldset>
-                        <fieldset class="form-group col-sm-6">
+
+                        <fieldset class="form-group col-sm-8">
                             <label class="form-label">Documento Informativo (optativo):
                                 @if($savedArticleFile)
                                 <a class="text-info" href="#items" wire:click="deleteFile({{$key}})">Borrar <i class="fas fa-paperclip"></i></a>
@@ -79,6 +81,7 @@
                             <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile" id="upload{{ $iteration }}" @if($savedArticleFile) disabled @endif>
                             <div wire:loading wire:target="articleFile">Cargando archivo...</div>
                         </fieldset>
+
                     </div>
                 </div>
             </div>
