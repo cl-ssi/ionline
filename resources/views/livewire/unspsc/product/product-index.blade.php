@@ -30,7 +30,7 @@
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
                     <td class="text-center" colspan="4">
-                        <em>Cargando...</em>
+                        @include('layouts.partials.spinner')
                     </td>
                 </tr>
                 @forelse($products as $product)
