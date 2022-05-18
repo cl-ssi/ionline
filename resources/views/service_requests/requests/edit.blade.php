@@ -322,6 +322,7 @@
 				<option value="TURNOS VACANTES" @if($serviceRequest->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
 				<option value="OTROS PROGRAMAS HETG" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
 				<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+				<option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
 				<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
 				<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 				<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
@@ -334,6 +335,7 @@
 				<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
 				<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
 				<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+				<option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
 
 				<option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
 				<option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
@@ -1219,6 +1221,7 @@
   				$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
   				$("#programm_name option[value='LISTA ESPERA']").hide();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 
 				$("#programm_name option[value='ADP DIRECTOR']").hide();
 				$("#programm_name option[value='SENDA']").hide();
@@ -1234,6 +1237,7 @@
   				$("#programm_name option[value='TURNOS VACANTES']").show();
   				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").show();
   				$("#programm_name option[value='PABELLON TARDE']").show();
   				$("#programm_name option[value='PABELLON GINE']").show();
   				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
@@ -1246,6 +1250,7 @@
   				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
   				$("#programm_name option[value='LISTA ESPERA']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").show();
 
 				$("#programm_name option[value='ADP DIRECTOR']").show();
 				$("#programm_name option[value='SENDA']").show();
@@ -1261,6 +1266,7 @@
 				$("#programm_name option[value='TURNOS VACANTES']").hide();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
 				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
@@ -1290,6 +1296,7 @@
   			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
   			$("#programm_name option[value='LISTA ESPERA']").hide();
   			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 
   			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
   			$("#programm_name option[value='33 MIL HORAS']").hide();
@@ -1297,6 +1304,7 @@
   			$("#programm_name option[value='TURNOS VACANTES']").hide();
   			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
   			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
   			$("#programm_name option[value='PABELLON TARDE']").hide();
   			$("#programm_name option[value='PABELLON GINE']").hide();
   			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();

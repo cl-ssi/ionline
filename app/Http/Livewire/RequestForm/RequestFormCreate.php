@@ -59,14 +59,14 @@ class RequestFormCreate extends Component
 
     protected function messages(){
       return [
-        'name.required'                =>  'Debe ingresar un nombre a este formulario.',
-        'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
-        'subtype.required'             =>  'Seleccione el tipo para este formulario.',
-        'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
-        'program.required'             =>  'Ingrese un Programa Asociado.',
+        'name.required'                =>  'Debe ingresar un "Nombre de formulario".',
+        'contractManagerId.required'   =>  'Debe ingresar un "Administrador de Contrato".',
+        'subtype.required'             =>  'Seleccione un "Tipo" para este formulario.',
+        'purchaseMechanism.required'   =>  'Seleccione un "Mecanismo de Compra".',
+        'program.required'             =>  'Ingrese un "Programa Asociado".',
         'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
-        'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-        'typeOfCurrency.required'      =>  'Ingrese un tipo de moneda',
+        'justify.required'             =>  'Debe agregar una "Justificación de Adquisición".',
+        'typeOfCurrency.required'      =>  'Ingrese un "Tipo de Moneda"',
         ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
       ];
     }

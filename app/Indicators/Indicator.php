@@ -33,7 +33,7 @@ class Indicator extends Model
 
     public function values()
     {
-        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
+        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('id')->orderBy('month');
     }
 
     public function getValuesAcum($factor)
@@ -100,9 +100,9 @@ class Indicator extends Model
     public function getCompliance()
     {
         if(isset($this->numerator_acum_last_year)) // REM P
-            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * 100 : 0;
+            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (Str::contains($this->goal, '%') ? 100 : 1) : 0;
         else
-            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * 100 : 0;
+            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (Str::contains($this->goal, '%') ? 100 : 1) : 0;
     }
 
     public function getCompliance2($commune, $establishment)
