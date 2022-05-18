@@ -715,8 +715,11 @@
 
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="">
-
-        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
+        @if($ServiceRequest->profession->category == "A")
+          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico,
+        @else
+          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico,
+        @endif
         @if($ServiceRequest == NULL)
           @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
             Médico,
