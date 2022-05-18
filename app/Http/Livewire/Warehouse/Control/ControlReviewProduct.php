@@ -44,7 +44,7 @@ class ControlReviewProduct extends Component
         return [
             'description'       => 'required|string|min:2|max:255',
             'unspsc_product_id' => 'required|integer|exists:unspsc_products,id',
-            'quantity_received'        => 'required|integer|min:0|max:' . $this->quantity
+            'quantity_received' => 'required|integer|min:0|max:' . $this->quantity
         ];
     }
 
