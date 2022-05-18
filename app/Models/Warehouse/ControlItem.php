@@ -38,6 +38,21 @@ class ControlItem extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function isConfirmed()
+    {
+        return $this->confirm == true;
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->isConfirmed() ? 'confirmado' : 'rechazado';
+    }
+
+    public function getColorAttribute()
+    {
+        return $this->isConfirmed() ? 'success' : 'danger';
+    }
+
     public function getProgramNameAttribute()
     {
         $programName = 'Sin Programa';
