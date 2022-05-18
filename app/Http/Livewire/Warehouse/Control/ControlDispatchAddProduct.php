@@ -87,7 +87,7 @@ class ControlDispatchAddProduct extends Component
         $dataValidated['control_id'] = $this->control->id;
         $dataValidated['program_id'] = $this->control->program_id;
         $dataValidated['product_id'] = $controlItem->product_id;
-        $dataValidated['confirm'] = $this->control->isSendToStore() ? false : true;
+        $dataValidated['confirm'] = true;
 
         $controlItem = ControlItem::query()
             ->whereControlId($this->control->id)
