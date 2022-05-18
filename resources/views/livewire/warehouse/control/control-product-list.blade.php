@@ -7,13 +7,14 @@
                     <th>Producto o Servicio</th>
                     <th>Programa</th>
                     <th>Categoría</th>
-                    <th class="text-center">Cantidad</th>
+                    <th class="text-center">Cant.</th>
+                    <th class="text-center">Estado</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none">
-                    <td class="text-center" colspan="6">
+                    <td class="text-center" colspan="7">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
@@ -34,6 +35,11 @@
                     <td>{{ optional($controlItem->control)->program_name }}</td>
                     <td>{{ optional($controlItem->product)->category_name }}</td>
                     <td class="text-center">{{ $controlItem->quantity }}</td>
+                    <td class="text-center">
+                        <span class="badge badge-{{ $controlItem->color }}">
+                            {{ $controlItem->status }}
+                        </span>
+                    </td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-danger" wire:click="deleteItem({{ $controlItem }})">
                             <i class="fas fa-trash"></i>
