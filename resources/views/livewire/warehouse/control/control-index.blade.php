@@ -91,6 +91,10 @@
                                     @break
                                 @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
                                     {{ optional($control->destinationStore)->name }}
+                                    <br>
+                                    <small>
+                                        {{ optional($control->typeDispatch)->name }}
+                                    </small>
                                     @break
                             @endswitch
                         @else
@@ -100,6 +104,10 @@
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
                                     {{ optional($control->originStore)->name }}
+                                    <br>
+                                    <small>
+                                        {{ optional($control->typeReception)->name }}
+                                    </small>
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::return())
                                     {{ optional($control->originStore)->name }}
