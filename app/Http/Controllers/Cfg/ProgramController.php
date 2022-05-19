@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cfg;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Cfg\Program;
 
 class ProgramController extends Controller
 {
@@ -24,17 +24,17 @@ class ProgramController extends Controller
      */
     public function create()
     {
-        //
+        return view('cfg.programs.create');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Cfg\Program  $program
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Program $program)
     {
-        //
+        return view('cfg.programs.edit', compact('program'));
     }
 }
