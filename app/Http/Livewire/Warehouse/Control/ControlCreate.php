@@ -40,12 +40,14 @@ class ControlCreate extends Component
         'note'                  => 'required|string|min:2|max:255',
         'type_dispatch_id'      => 'required|exists:wre_type_dispatches,id',
         'program_id'            => 'nullable|exists:cfg_programs,id',
-        'destination_id'        => 'nullable|required_if:type_dispatch_id,1|integer|exists:wre_destinations,id',
-        'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|integer|exists:wre_type_receptions,id',
+        'destination_id'        => 'nullable|required_if:type_dispatch_id,1|exists:wre_destinations,id',
+        'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
     ];
 
     public function mount()
     {
+        $this->destination_id = null;
+        $this->store_destination_id = null;
         $this->type_dispatch_id = 1;
         $this->typeDispatches = TypeDispatch::all();
         $this->typeReceptions = TypeReception::all();
@@ -66,7 +68,6 @@ class ControlCreate extends Component
         $dataValidated['confirm'] = $this->getConfirm();
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
         $dataValidated['store_id'] = $this->store->id;
-        $dataValidated['destination_id'] = ($dataValidated['destination_id'] != '') ? $dataValidated['destination_id'] : null;
         $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? TypeReception::receiving() : null;
         $control = Control::create($dataValidated);
