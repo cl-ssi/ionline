@@ -51,7 +51,7 @@ class ControlReviewProduct extends Component
     public function getRulesFinish()
     {
         return [
-            'return_note' => 'nullable|required_if:generate_return,true',
+            'return_note' => 'nullable|required_if:generate_return,1',
         ];
     }
 
