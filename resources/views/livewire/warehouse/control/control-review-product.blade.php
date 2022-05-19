@@ -15,7 +15,7 @@
         </fieldset>
 
         <fieldset class="form-group col-md-6">
-            <label for="product-id">Selecciona Producto o Servicio {{ $unspsc_product_id }}</label>
+            <label for="product-id">Selecciona Producto o Servicio</label>
             <input
                 class="form-control @error('unspsc_product_id') is-invalid @enderror"
                 type="hidden"
@@ -119,12 +119,12 @@
         <table class="table small table-sm table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">Codigo de Barra</th>
+                    <th class="text-center">Código de Barra</th>
                     <th>Producto o Servicio</th>
                     <th>Programa</th>
-                    <th class="text-center">Cant Enviada</th>
-                    <th class="text-center">Cant Recibida</th>
-                    <th class="text-center">Cant a Devolver</th>
+                    <th class="text-center">Enviados</th>
+                    <th class="text-center">Recibidos</th>
+                    <th class="text-center">Devolver</th>
                     <th class="text-center">Estado</th>
                     <th></th>
                 </tr>
@@ -135,8 +135,6 @@
                     <td class="text-center">
                         <small class="text-monospace">
                             {{ $item['barcode'] }}
-                            - {{ $item['item_id'] }}
-                            {{-- - {{ $item['unspsc_product_id'] }} --}}
                         </small>
                     </td>
                     <td>
@@ -163,12 +161,12 @@
                                 @break
                             @case(-1)
                                 <span class="badge badge-warning">
-                                   Recepcion parcial
+                                   Recepción parcial
                                 </span>
                                 @break
                             @case(1)
                                 <span class="badge badge-success">
-                                    Recepcion completa
+                                    Recepción completa
                                 </span>
                                 @break
                             @endswitch
@@ -188,6 +186,32 @@
     </div>
 
     @if($generate_return)
+        <h5>Detalles de Devolución</h5>
+
+        <div class="form-row">
+            <fieldset class="form-group col-md-4">
+                <label for="generate-return">Generar Devolución</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    value="{{ ($generate_return) ? 'SI' : 'NO' }}"
+                    id="generate-return"
+                    readonly
+                >
+            </fieldset>
+
+            <fieldset class="form-group col-md-4">
+                <label for="store-return">Bodega que recibe la Devolución</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    value="{{ optional($control->originStore)->name }}"
+                    id="store-return"
+                    readonly
+                >
+            </fieldset>
+        </div>
+
         <div class="form-row">
             <fieldset class="form-group col-md-12">
                 <label for="return-note">Nota de Devolución</label>
