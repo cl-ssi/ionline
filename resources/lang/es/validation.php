@@ -143,14 +143,17 @@ return [
             '0' => 'Producto existente',
         ],
         'type_reception_id' => [
-            '1' => 'Ingreso Común',
+            '1' => 'Ingreso Normal',
             '2' => 'Recibir de Bodega',
         ],
         'type_dispatch_id' => [
-            '1' => 'Egreso Común',
+            '1' => 'Egreso Normal',
             '2' => 'Ajuste de Inventario',
             '3' => 'Enviar a Bodega',
         ],
+        'generate_return' => [
+            '1' => 'Si'
+        ]
     ],
     /*
     |--------------------------------------------------------------------------
@@ -185,6 +188,7 @@ return [
         'excerpt'               => 'extracto',
         'first_name'            => 'nombre',
         'gender'                => 'género',
+        'generate_return'       => 'generar devolución',
         'hour'                  => 'hora',
         'information'           => 'información',
         'last_name'             => 'apellido',
