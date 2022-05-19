@@ -17,4 +17,25 @@ class Program extends Model
         'start',
         'end',
     ];
+
+    protected $dates = [
+        'start',
+        'end'
+    ];
+
+    public function getStartFormatAttribute()
+    {
+        $date = '-';
+        if($this->start)
+            $this->start->format('d/m/Y');
+        return $date;
+    }
+
+    public function getEndFormatAttribute()
+    {
+        $date = '-';
+        if($this->end)
+            $this->end->format('d/m/Y');
+        return $date;
+    }
 }
