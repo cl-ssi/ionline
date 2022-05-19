@@ -25,9 +25,19 @@ class ProgramIndex extends Component
         $search = "%$this->search%";
 
         $programs = Program::query()
-            ->where('name', 'like', $search)
+            ->when($this->search, function ($query) use ($search) {
+                $query->where('name', 'like', $search)
+                    ->orWhere('description', 'like', $search);
+            })
+            ->orderBy('name')
             ->paginate(10);
 
         return $programs;
+    }
+
+    public function delete(Program $program)
+    {
+        $program->delete();
+        $this->render();
     }
 }
