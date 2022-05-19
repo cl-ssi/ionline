@@ -28,6 +28,9 @@ class AddRolesOfWarehouse extends Migration
         $user->assignRole($roleStoreSuperAdmin);
         $user->givePermissionTo('Store: index');
 
+        $user = User::find(16469490);
+        $user->assignRole($roleStoreUser);
+
         $roleStoreSuperAdmin->givePermissionTo($permission);
 
         // TODO: Eliminar
