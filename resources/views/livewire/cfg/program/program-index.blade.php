@@ -1,6 +1,17 @@
 <div>
-    <h3 class="my-2">Programas</h3>
-
+    <div class="row my-3">
+        <div class="col">
+            <h3>Programas</h3>
+        </div>
+        <div class="col text-right">
+            <a
+                href="{{ route('cfg.programs.create') }}"
+                class="btn btn-primary"
+                >
+                <i class="fas fa-plus"></i> Crear Programa
+            </a>
+        </div>
+    </div>
     <div class="input-group my-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Buscar</span>
@@ -9,7 +20,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
@@ -20,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search, delete">
                     <td class="text-center" colspan="5">
                         @include('layouts.partials.spinner')
                     </td>
@@ -28,15 +39,18 @@
                 @forelse($programs as $program)
                 <tr wire:loading.remove>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                        <a
+                            href="{{ route('cfg.programs.edit', $program) }}"
+                            class="btn btn-sm btn-outline-secondary"
+                            >
                             <i class="fas fa-edit"></i> {{ $program->id }}
                         </a>
                     </td>
                     <td>{{ $program->name }}</td>
-                    <td class="text-center">{{ $program->start_format }}</td>
-                    <td class="text-center">{{ $program->end_format }}</td>
+                    <td class="text-center">{{ $program->start_date_format }}</td>
+                    <td class="text-center">{{ $program->end_date_format }}</td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-outline-danger">
+                        <button class="btn btn-sm btn-outline-danger" wire:click="delete({{ $program }})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
