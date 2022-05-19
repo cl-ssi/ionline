@@ -14,28 +14,29 @@ class Program extends Model
 
     protected $fillable = [
         'name',
-        'start',
-        'end',
+        'description',
+        'start_date',
+        'end_date',
     ];
 
     protected $dates = [
-        'start',
-        'end'
+        'start_date',
+        'end_date'
     ];
 
-    public function getStartFormatAttribute()
+    public function getStartDateFormatAttribute()
     {
         $date = '-';
-        if($this->start)
-            $this->start->format('d/m/Y');
+        if($this->start_date)
+            $date = $this->start_date->format('Y-m-d');
         return $date;
     }
 
-    public function getEndFormatAttribute()
+    public function getEndDateFormatAttribute()
     {
         $date = '-';
-        if($this->end)
-            $this->end->format('d/m/Y');
+        if($this->end_date != null)
+            $date = $this->end_date->format('Y-m-d');
         return $date;
     }
 }
