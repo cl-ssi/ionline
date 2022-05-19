@@ -180,6 +180,11 @@ class ControlReviewProduct extends Component
                 ->whereBarcode($localProduct->barcode)
                 ->first();
 
+            $localProduct->update([
+                'name' => $item['description'],
+                'unspsc_product_id' => $item['unspsc_product_id'],
+            ]);
+            
             $foreignBalance = Product::lastBalance($foreignProduct, $program);
             $localBalance = Product::lastBalance($localProduct, $program);
 
