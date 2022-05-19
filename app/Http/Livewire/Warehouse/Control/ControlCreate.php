@@ -63,10 +63,11 @@ class ControlCreate extends Component
         $rules = ($this->type == 'receiving') ? $this->rulesReceiving : $this->rulesDispatch;
 
         $dataValidated = $this->validate($rules);
-        $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
-        $dataValidated['store_id'] = $this->store->id;
         $dataValidated['confirm'] = $this->getConfirm();
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
+        $dataValidated['store_id'] = $this->store->id;
+        $dataValidated['destination_id'] = ($dataValidated['destination_id'] != '') ? $dataValidated['destination_id'] : null;
+        $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? TypeReception::receiving() : null;
         $control = Control::create($dataValidated);
 
