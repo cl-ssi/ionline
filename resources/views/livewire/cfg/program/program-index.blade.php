@@ -20,8 +20,13 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
+                    <td class="text-center" colspan="5">
+                        @include('layouts.partials.spinner')
+                    </td>
+                </tr>
                 @forelse($programs as $program)
-                <tr>
+                <tr wire:loading.remove>
                     <td class="text-center">
                         <a href="#" class="btn btn-sm btn-outline-secondary">
                             <i class="fas fa-edit"></i> {{ $program->id }}
@@ -37,6 +42,11 @@
                     </td>
                 </tr>
                 @empty
+                <tr wire:loading.remove>
+                    <td class="text-center" colspan="5">
+                        <em>No hay resultados</em>
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
             <caption>
