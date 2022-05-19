@@ -1363,6 +1363,11 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 });
 
+// Configuration
+Route::prefix('cfg')->as('cfg.')->middleware('auth')->group(function () {
+    Route::resource('programs', 'Cfg\ProgramController')->only(['index', 'create', 'edit']);
+});
+
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
