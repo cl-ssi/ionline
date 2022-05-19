@@ -312,23 +312,25 @@
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Bodegas</h6>
 
-                                @forelse(Auth::user()->stores as $store)
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route('warehouse.store.active', $store) }}"
-                                    >
-                                        @if($store->id == optional(Auth::user()->active_store)->id)
-                                            <i class="fas fa-check"></i>
-                                        @else
-                                            <i class="fas fa-circle"></i>
-                                        @endif
-                                         {{ $store->name }}
-                                    </a>
-                                @empty
-                                    <a class="dropdown-item" href="#">
-                                        No posee bodegas
-                                    </a>
-                                @endforelse
+                                @hasanyrole('Store: admin|Store: user')
+                                    @forelse(Auth::user()->stores as $store)
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('warehouse.store.active', $store) }}"
+                                        >
+                                            @if($store->id == optional(Auth::user()->active_store)->id)
+                                                <i class="fas fa-check"></i>
+                                            @else
+                                                <i class="fas fa-circle"></i>
+                                            @endif
+                                            {{ $store->name }}
+                                        </a>
+                                    @empty
+                                        <a class="dropdown-item" href="#">
+                                            No posee bodegas
+                                        </a>
+                                    @endforelse
+                                @endhasanyrole
 
                                 @role('Store: Super admin')
                                     <a
