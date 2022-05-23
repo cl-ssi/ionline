@@ -18,6 +18,10 @@ class Control extends Model
         'date',
         'note',
         'confirm',
+        'oc',
+        'guide_number',
+        'bill_number',
+        'status',
         'store_id',
         'origin_id',
         'destination_id',
@@ -117,6 +121,16 @@ class Control extends Model
         return $this->confirm == true;
     }
 
+    public function isClose()
+    {
+        return $this->status == false;
+    }
+
+    public function isOpen()
+    {
+        return $this->status == true;
+    }
+
     public function getTypeFormatAttribute()
     {
         return ($this->type) ? 'Ingreso' : 'Egreso';
@@ -140,7 +154,7 @@ class Control extends Model
         return $programName;
     }
 
-    public function getStatusColorAttribute()
+    public function getColorConfirmAttribute()
     {
         $status = 'danger';
         if($this->isConfirmed())
@@ -148,7 +162,7 @@ class Control extends Model
         return $status;
     }
 
-    public function getStatusAttribute()
+    public function getConfirmFormatAttribute()
     {
         $status = 'no confirmado';
         if($this->isConfirmed())
