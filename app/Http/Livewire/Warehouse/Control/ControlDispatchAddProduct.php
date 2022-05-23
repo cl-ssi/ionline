@@ -6,7 +6,6 @@ use App\Models\Cfg\Program;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
-use App\Models\Warehouse\TypeReception;
 use Livewire\Component;
 
 class ControlDispatchAddProduct extends Component
@@ -15,6 +14,8 @@ class ControlDispatchAddProduct extends Component
     public $control;
     public $control_item_id;
     public $barcode;
+    public $search_store_product;
+    public $controlItems;
     public $quantity = 0;
     public $max = 0;
 
@@ -28,9 +29,12 @@ class ControlDispatchAddProduct extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.control.control-dispatch-add-product', [
-            'controlItems' => $this->getControlItems()
-        ]);
+        return view('livewire.warehouse.control.control-dispatch-add-product');
+    }
+
+    public function mount()
+    {
+        $this->controlItems = collect([]);
     }
 
     public function getPrograms()
@@ -49,22 +53,37 @@ class ControlDispatchAddProduct extends Component
         return $programs;
     }
 
-    public function getControlItems()
+    public function updatedSearchStoreProduct($searchValue)
     {
-        $productsOutStock = Product::outStock($this->store, $this->control->program);
+        $this->resetInput();
+        $controlItems = collect([]);
+        $search = "%$searchValue%";
 
-        $controlItems = ControlItem::query()
-            ->whereHas('control', function($query) {
-                $query->whereStoreId($this->store->id);
-            })
-            ->whereProgramId($this->control->program_id)
-            ->groupBy('program_id', 'product_id')
-            ->whereNotIn('product_id', $productsOutStock)
-            ->get();
-            // ->pluck('id')->toArray();
+        // dd($this->control->program_id);
+        if($searchValue)
+        {
+            $productsOutStock = Product::outStock($this->store, $this->control->program);
 
-        // dd($controlItems);
-        return $controlItems;
+            $controlItems = ControlItem::query()
+                ->when($searchValue, function($query) use($search) {
+                    $query->whereHas('product', function($subquery) use($search) {
+                        $subquery->where('name', 'like', $search)
+                            ->orWhere('barcode', 'like', $search)
+                            ->orWhereHas('product', function ($q) use($search) {
+                                $q->where('name', 'like', $search);
+                            });
+                    });
+                })
+                ->whereHas('control', function($query) {
+                    $query->whereStoreId($this->store->id);
+                })
+                ->whereProgramId($this->control->program_id)
+                ->groupBy('program_id', 'product_id')
+                ->whereNotIn('product_id', $productsOutStock)
+                ->get();
+        }
+
+        $this->controlItems = $controlItems;
     }
 
     public function updatedControlItemId()
@@ -107,6 +126,8 @@ class ControlDispatchAddProduct extends Component
             $controlItem = ControlItem::create($dataValidated);
         }
 
+        $this->search_store_product = '';
+        $this->controlItems = collect([]);
         $this->render();
         $this->resetInput();
         $this->emit('refreshControlProductList');
@@ -114,9 +135,9 @@ class ControlDispatchAddProduct extends Component
 
     public function resetInput()
     {
-        $this->control_item_id = null;
+        $this->control_item_id = '';
+        $this->barcode = '';
         $this->max = 0;
         $this->quantity = 0;
-        $this->barcode = '';
     }
 }
