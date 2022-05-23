@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ControlReceivingAddProduct extends Component
@@ -12,12 +13,15 @@ class ControlReceivingAddProduct extends Component
     public $control;
     public $type;
     public $unspsc_product_id;
-    public $search_product;
+    public $search_unspsc_product;
     public $description;
     public $wre_product_id;
     public $category_id;
     public $quantity;
     public $barcode;
+    public $product_barcode;
+    public $search_store_product;
+    public $store_products;
     public $categories;
 
     protected $listeners = [
@@ -29,7 +33,14 @@ class ControlReceivingAddProduct extends Component
         return [
             'unspsc_product_id' => 'nullable|required_if:type,1|exists:unspsc_products,id',
             'description'       => 'nullable|required_if:type,1|string|min:1|max:255',
-            'barcode'           => 'nullable|required_if:type,1|string|min:1|max:255',
+            'barcode'           => [
+                'nullable',
+                'required_if:type,1',
+                'string',
+                'min:1',
+                'max:255',
+                Rule::unique('wre_products', 'barcode')->where('store_id', $this->store->id)
+            ],
             'wre_product_id'    => 'nullable|required_if:type,0|exists:wre_products,id',
             'category_id'       => 'nullable|exists:wre_categories,id',
             'quantity'          => 'required|integer|min:1',
@@ -39,7 +50,7 @@ class ControlReceivingAddProduct extends Component
     public function mount()
     {
         $this->type = 1;
-        $this->products = collect([]);
+        $this->store_products = collect([]);
         $this->categories = $this->store->categories->sortBy('name');
     }
 
@@ -103,7 +114,7 @@ class ControlReceivingAddProduct extends Component
     public function resetInput()
     {
         $this->type = 1;
-        $this->search_product = null;
+        $this->search_unspsc_product = null;
         $this->unspsc_product_id = null;
         $this->wre_product_id = null;
         $this->quantity = null;
@@ -112,31 +123,52 @@ class ControlReceivingAddProduct extends Component
         $this->emit('onClearSearch');
     }
 
-    public function updatedSearchProduct()
+    public function updatedSearchStoreProduct($searchValue)
     {
-        $this->emit('searchProduct', $this->search_product);
+        $search = "%$searchValue%";
+        $products = collect([]);
+
+        if($searchValue != '')
+        {
+            $products = Product::query()
+                ->where('barcode', 'like', $search)
+                ->orWhere('name', 'like', $search)
+                ->orWhereHas('product', function($query) use($search) {
+                    $query->where('name', 'like', $search);
+                })
+                ->whereStoreId($this->store->id)
+                ->get();
+        }
+        $this->store_products = $products;
+        $this->wre_product_id = null;
+        $this->product_barcode = null;
     }
 
-    public function myProductId($value)
+    public function updatedSearchUnspscProduct()
     {
-        $this->unspsc_product_id = $value;
+        $this->emit('searchProduct', $this->search_unspsc_product);
     }
 
     public function updatedWreProductId()
     {
-        $this->barcode = '';
+        $this->product_barcode = '';
         if($this->type == 0 && $this->wre_product_id)
         {
             $product = Product::find($this->wre_product_id);
-            $this->barcode = $product->barcode;
+            $this->product_barcode = $product->barcode;
         }
     }
 
     public function updatedType()
     {
-        if($this->type)
-        {
-            $this->barcode = '';
-        }
+        $this->store_products = collect([]);
+        $this->product_barcode = null;
+        $this->search_store_product = null;
+        $this->search_unspsc_product = null;
+    }
+
+    public function myProductId($value)
+    {
+        $this->unspsc_product_id = $value;
     }
 }
