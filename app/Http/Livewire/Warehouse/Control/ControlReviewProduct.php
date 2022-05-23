@@ -184,7 +184,7 @@ class ControlReviewProduct extends Component
                 'name' => $item['description'],
                 'unspsc_product_id' => $item['unspsc_product_id'],
             ]);
-            
+
             $foreignBalance = Product::lastBalance($foreignProduct, $program);
             $localBalance = Product::lastBalance($localProduct, $program);
 
@@ -203,14 +203,14 @@ class ControlReviewProduct extends Component
             }
 
             $this->updateControlItem($controlItem, $item['status'], $item['quantity'], $item['quantity_received'], $localBalance);
-
         }
 
         $this->control->update([
-            'confirm' => true
+            'confirm' => true,
+            'status' => false,
         ]);
 
-        session()->flash('success', "Se ha completado el proceso de transferencia.");
+        session()->flash('success', "Se ha completado la revisión de la transferencia.");
 
         return redirect()->route('warehouse.controls.index', [
             'store' => $this->store,
@@ -243,7 +243,6 @@ class ControlReviewProduct extends Component
                     'confirm' => false,
                 ]);
                 break;
-
         }
     }
 
@@ -266,6 +265,4 @@ class ControlReviewProduct extends Component
             $reception_status = true;
         return $reception_status;
     }
-
-
 }
