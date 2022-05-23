@@ -23,6 +23,11 @@ class ControlProductList extends Component
         $this->controlItems = $this->control->items->sortByDesc('created_at');
     }
 
+    public function render()
+    {
+        return view('livewire.warehouse.control.control-product-list');
+    }
+
     public function deleteItem(ControlItem $controlItem)
     {
         $currentBalance = Product::lastBalance($controlItem->product, $controlItem->program);
@@ -56,17 +61,13 @@ class ControlProductList extends Component
         $this->mount();
     }
 
-    public function render()
-    {
-        return view('livewire.warehouse.control.control-product-list');
-    }
-
     public function sendToStore()
     {
         $control = $this->control;
 
         $control->update([
             'confirm' => true,
+            'status' => false
         ]);
 
         if($control->isSendToStore())
@@ -117,6 +118,20 @@ class ControlProductList extends Component
             'store' => $this->store,
             'control' => $this->control,
             'type' => 'dispatch'
+        ]);
+    }
+
+    public function finish()
+    {
+        $this->control->update([
+            'status' => false
+        ]);
+
+        session()->flash('success', 'El archivo fue cargado exitosamente.');
+
+        return redirect()->route('warehouse.controls.index', [
+            'store' => $this->store,
+            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch'
         ]);
     }
 }
