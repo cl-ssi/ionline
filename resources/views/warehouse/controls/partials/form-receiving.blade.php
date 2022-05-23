@@ -1,5 +1,5 @@
 <div class="form-row">
-    @if($showTypeReceivingDisabled)
+    @if($mode == 'edit')
         <fieldset class="form-group col-md-4">
             <label for="type-dispatch">Tipo de Ingreso</label>
             <input
@@ -33,7 +33,7 @@
 
     <fieldset class="form-group col-md-5">
         <label for="program-id">Programa</label>
-        @if($disableProgram)
+        @if($mode == 'edit')
             <input
                 type="text"
                 class="form-control"
@@ -64,28 +64,43 @@
         @endif
     </fieldset>
 
-    <fieldset class="form-group col-md-5">
-        <label for="origin-id">Origen</label>
-        <select
-            class="form-control @error('origin_id') is-invalid @enderror"
-            wire:model="origin_id" id="origin-id"
-        >
-            <option value="">Selecciona un origen</option>
-            @foreach($store->origins as $origin)
-                <option
-                    value="{{ $origin->id }}"
-                    {{ old('mobile_id', optional($control)->origin_id) == $origin->id ? 'selected' : '' }}
-                >
-                    {{ $origin->name }}
-                </option>
-            @endforeach
-        </select>
-        @error('origin_id')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-    </fieldset>
+    @if($mode == 'create')
+        <fieldset class="form-group col-md-5">
+            <label for="origin-id">Origen</label>
+            <select
+                class="form-control @error('origin_id') is-invalid @enderror"
+                wire:model="origin_id" id="origin-id"
+            >
+                <option value="">Selecciona un origen</option>
+                @foreach($store->origins as $origin)
+                    <option
+                        value="{{ $origin->id }}"
+                        {{ old('mobile_id', optional($control)->origin_id) == $origin->id ? 'selected' : '' }}
+                    >
+                        {{ $origin->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('origin_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+    @endif
+
+    @if($mode == 'edit' && $control->isReceiveFromStore())
+        <fieldset class="form-group col-md-5">
+            <label for="store-origin-id">Bodega Origen</label>
+            <input
+                type="text"
+                class="form-control"
+                id="store-origin-id"
+                value="{{ optional($control->originStore)->name }}"
+                readonly
+            >
+        </fieldset>
+    @endif
 </div>
 
 <div class="form-row">

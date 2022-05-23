@@ -1,50 +1,70 @@
 <div>
     <div class="form-row">
-        <fieldset class="form-group col-md-3">
-            <label for="program-id">Programa</label>
+        <fieldset class="form-group col-md-4">
+            <label for="search-store-product">Buscar Producto</label>
             <input
                 type="text"
                 class="form-control"
-                value="{{ $control->program_name }}"
-                readonly
+                id="search-store-product"
+                placeholder="Búsqueda por código de barra o nombre"
+                wire:model.debounce.700ms="search_store_product"
             >
         </fieldset>
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-3">
-            <label for="barcode">Código de Barra</label>
-            <input
-                type="text"
-                class="form-control @error('barcode') is-invalid @enderror"
-                min="0"
-                wire:model="barcode"
-                id="barcode"
-                readonly
-            >
-            @error('barcode')
+        <fieldset class="form-group col-md-6">
+            <label for="product-search">Selecciona un Producto</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" wire:loading.remove wire:target="search_store_product">
+                        @if($controlItems->count() == 0)
+                            <i class="fas fa-times text-danger"></i>
+                        @else
+                            <i class="fas fa-check text-success"></i>
+                        @endif
+                    </span>
+                    <span class="input-group-text" wire:loading wire:target="search_store_product">
+                        <span
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                        >
+                        </span>
+                        <span class="sr-only">...</span>
+                    </span>
+                </div>
+                <select
+                    class="form-control  @error('control_item_id') is-invalid @enderror"
+                    wire:model="control_item_id"
+                    id="product-search"
+                >
+                    <option value="">Selecciona un producto o servicio</option>
+                    @foreach($controlItems as $controlItem)
+                        <option value="{{ $controlItem->id }}">
+                            {{ $controlItem->product->product->name }} -
+                            {{ $controlItem->product->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @error('control_item_id')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-md-6">
-            <label for="product-search">Producto o Servicio</label>
-            <select
-                class="form-control  @error('control_item_id') is-invalid @enderror"
-                wire:model="control_item_id"
-                id="product-search"
+        <fieldset class="form-group col-md-3">
+            <label for="barcode">Código de Barra</label>
+            <input
+                type="text"
+                class="form-control @error('barcode') is-invalid @enderror"
+                wire:model="barcode"
+                id="barcode"
+                readonly
             >
-                <option value="">Selecciona un producto o servicio</option>
-                @foreach($controlItems as $controlItem)
-                    <option value="{{ $controlItem->id }}">
-                        {{ $controlItem->product->product->name }} -
-                        {{ $controlItem->product->name }}
-                    </option>
-                @endforeach
-            </select>
-            @error('control_item_id')
+            @error('barcode')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

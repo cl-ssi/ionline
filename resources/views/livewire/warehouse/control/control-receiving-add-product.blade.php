@@ -18,7 +18,7 @@
             <fieldset class="form-group col-md-3">
                 <label for="product-search">Buscar Producto o Servicio</label>
                 <input
-                    wire:model.debounce.600ms="search_product"
+                    wire:model.debounce.600ms="search_unspsc_product"
                     id="product-search"
                     class="form-control"
                     type="text"
@@ -26,7 +26,7 @@
             </fieldset>
 
             <fieldset class="form-group col-md-6">
-                <label for="product-id">Selecciona Producto o Servicio</label>
+                <label for="product-id">Selecciona un Producto o Servicio</label>
                 @livewire('unspsc.product-search')
                 <input
                     class="form-control @error('unspsc_product_id') is-invalid @enderror"
@@ -62,23 +62,79 @@
         </div>
     @endif
 
+    @if($type == 0)
+        <div class="form-row">
+            <fieldset class="form-group col-md-4">
+                <label for="search-store-product">Buscar Producto</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    min="0"
+                    placeholder="Búsqueda por código de barra o nombre"
+                    wire:model.debounce.700ms="search_store_product"
+                    id="search-store-product"
+                >
+            </fieldset>
+        </div>
+    @endif
+
     <div class="form-row">
         @if($type == 0)
             <fieldset class="form-group col-md-6">
-                <label for="wre-product-id">Producto</label>
-                <select
-                    class="form-control @error('wre_product_id') is-invalid @enderror"
-                    wire:model="wre_product_id"
-                    id="wre-product-id"
-                >
-                    <option value="">Selecciona un producto</option>
-                    @foreach($store->products as $product)
-                        <option value="{{ $product->id }}">
-                            {{ optional($product->product)->name }} - {{ $product->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="wre-product-id">Selecciona un Producto</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" wire:loading.remove wire:target="search_store_product">
+                            @if($store_products->count() == 0)
+                                <i class="fas fa-times text-danger"></i>
+                            @else
+                                <i class="fas fa-check text-success"></i>
+                            @endif
+                        </span>
+                        <span class="input-group-text" wire:loading wire:target="search_store_product">
+                            <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            >
+                            </span>
+                            <span class="sr-only">...</span>
+                        </span>
+                    </div>
+                    <select
+                        class="form-control @error('wre_product_id') is-invalid @enderror"
+                        wire:model="wre_product_id"
+                        id="wre-product-id"
+                    >
+                        <option value="">Selecciona un producto</option>
+                        @foreach($store_products as $product)
+                            <option value="{{ $product->id }}">
+                                {{ optional($product->product)->name }} - {{ $product->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <small id="product-id" class="form-text text-muted">
+                    {{ $store_products->count() }} resultados.
+                </small>
                 @error('wre_product_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+
+            <fieldset class="form-group col-md-3">
+                <label for="product-barcode">Código de Barra</label>
+                <input
+                    type="text"
+                    class="form-control @error('product_barcode') is-invalid @enderror"
+                    min="0"
+                    wire:model="product_barcode"
+                    id="product-barcode"
+                    @if($type == 0) disabled @endif
+                >
+                @error('product_barcode')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -100,24 +156,24 @@
                     </span>
                 @enderror
             </fieldset>
-        @endif
 
-        <fieldset class="form-group col-md-3">
-            <label for="barcode">Código de Barra</label>
-            <input
-                type="text"
-                class="form-control @error('barcode') is-invalid @enderror"
-                min="0"
-                wire:model="barcode"
-                id="barcode"
-                @if($type == 0) disabled @endif
-            >
-            @error('barcode')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
+            <fieldset class="form-group col-md-3">
+                <label for="barcode">Código de Barra</label>
+                <input
+                    type="text"
+                    class="form-control @error('barcode') is-invalid @enderror"
+                    min="0"
+                    wire:model="barcode"
+                    id="barcode"
+                    @if($type == 0) disabled @endif
+                >
+                @error('barcode')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+        @endif
 
         <fieldset class="form-group col-md-3">
             <label for="quantity">Cantidad</label>

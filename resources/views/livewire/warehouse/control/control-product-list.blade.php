@@ -70,12 +70,24 @@
                     <i class="fas fa-sync"></i> Transferir y Terminar
                 </button>
             @else
-                <a
-                    class="btn btn-success"
-                    href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $control->isReceiving() ? 'receiving' : 'dispatch' ]) }}"
-                >
-                    <i class="fas fa-check"></i> Terminar
-                </a>
+                @if($control->isOpen())
+                    <button
+                        class="btn btn-success"
+                        wire:click="finish"
+                    >
+                        <i class="fas fa-check"></i> Terminar
+                    </button>
+                @else
+                    <a
+                        class="btn btn-primary"
+                        href="{{ route('warehouse.controls.index', [
+                            'store' => $store,
+                            'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                        ]) }}"
+                    >
+                        <i class="fas fa-arrow-circle-left"></i> Salir
+                    </a>
+                @endif
             @endif
         </div>
     </div>

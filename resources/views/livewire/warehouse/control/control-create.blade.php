@@ -13,18 +13,14 @@
             'control' => null,
             'store' => $store,
             'type' => $type,
-            'disableProgram' => false,
-            'showInputTypeReceiving' => true,
-            'showTypeReceivingDisabled' => false,
+            'mode' => 'create',
         ])
     @else
         @include('warehouse.controls.partials.form-dispatch', [
             'control' => null,
             'store' => $store,
             'type' => $type,
-            'disableProgram' => false,
-            'showInputTypeDispatch' => true,
-            'showTypeDispatchDisabled' => false,
+            'mode' => 'create',
         ])
     @endif
 

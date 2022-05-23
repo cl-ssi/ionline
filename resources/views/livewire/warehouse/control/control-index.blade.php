@@ -122,8 +122,8 @@
                     <td>{{ $control->program_name }}</td>
                     <td class="text-center">{{ $control->items->count() }}</td>
                     <td class="text-center">
-                        <span class="badge badge-{{ $control->status_color }}">
-                            {{ $control->status }}
+                        <span class="badge badge-{{ $control->color_confirm }}">
+                            {{ $control->confirm_format }}
                         </span>
                     </td>
                     <td class="text-center">
