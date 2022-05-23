@@ -175,4 +175,13 @@ class Indicator extends Model
         $factor = $value == 'numerador' ? $this->numerator_source : $this->denominator_source;
         return Str::contains(mb_strtoupper($factor), 'REM') ? substr($factor, 0, 5) : $factor;
     }
+
+    public function hasEstablishments($establishments, $commune)
+    {
+        // me indica la cantidad de establecimientos asociados al indicador en el cual hace match con un array de establecimientos X segun comuna
+        $count = 0;
+        foreach($establishments as $establishment)
+            if($establishment->comuna == $commune && Str::contains($this->establishment_cods, $establishment->Codigo)) $count++;
+        return $count;
+    }
 }
