@@ -4,8 +4,6 @@ namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Cfg\Program;
 use App\Models\Warehouse\Control;
-use App\Models\Warehouse\ControlItem;
-use App\Models\Warehouse\Product;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\TypeDispatch;
 use App\Models\Warehouse\TypeReception;
@@ -65,6 +63,7 @@ class ControlCreate extends Component
         $rules = ($this->type == 'receiving') ? $this->rulesReceiving : $this->rulesDispatch;
 
         $dataValidated = $this->validate($rules);
+        $dataValidated['status'] = true;
         $dataValidated['confirm'] = $this->getConfirm();
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
         $dataValidated['store_id'] = $this->store->id;
@@ -91,8 +90,6 @@ class ControlCreate extends Component
             else
                 $confirm = true;
         }
-
         return $confirm;
     }
-
 }
