@@ -18,10 +18,12 @@ class CreateWreControls extends Migration
 
             $table->boolean('type')->nullable(); // 1:ingreso 0:egreso
             $table->boolean('confirm')->nullable(); // 1:si 0:no
-
             $table->date('date')->nullable();
             $table->text('note')->nullable();
-
+            $table->string('oc', 255)->nullable();
+            $table->string('guide_number', 255)->nullable();
+            $table->string('bill_number', 255)->nullable();
+            $table->boolean('status')->nullable(); // 1:abierto 0:cerrado
 
             $table->foreignId('type_dispatch_id')->nullable()->constrained('wre_type_dispatches');
             $table->foreignId('type_reception_id')->nullable()->constrained('wre_type_receptions');
