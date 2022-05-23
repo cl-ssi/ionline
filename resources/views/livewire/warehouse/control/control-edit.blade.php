@@ -8,18 +8,14 @@
             'control' => $control,
             'store' => $store,
             'type' => $type,
-            'disableProgram' => true,
-            'showInputTypeReceiving' => false,
-            'showTypeReceivingDisabled' => true,
+            'mode' => 'edit'
         ])
     @else
         @include('warehouse.controls.partials.form-dispatch', [
             'control' => $control,
             'store' => $store,
             'type' => $type,
-            'disableProgram' => true,
-            'showInputTypeDispatch' => false,
-            'showTypeDispatchDisabled' => true,
+            'mode' => 'edit',
         ])
     @endif
 
@@ -31,5 +27,4 @@
         href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type]) }}">
         Cancelar
     </a>
-
 </div>

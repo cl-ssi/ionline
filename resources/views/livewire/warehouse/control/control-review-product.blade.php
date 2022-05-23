@@ -1,7 +1,7 @@
 <div>
 
     <hr>
-    <h4 class="my-2">Editar: {{ $indexEdit }}</h4>
+    <h4 class="my-2">Editar: {{ $barcode }}</h4>
 
     <div class="form-row">
         <fieldset class="form-group col-md-3">
@@ -239,13 +239,6 @@
                 >
                     <i class="fas fa-check"></i> Terminar
                 </button>
-            @else
-                <a
-                    class="btn btn-success"
-                    href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => 'receiving' ]) }}"
-                >
-                    <i class="fas fa-check"></i> Terminar
-                </a>
             @endif
         </div>
     </div>

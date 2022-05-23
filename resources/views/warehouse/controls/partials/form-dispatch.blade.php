@@ -1,5 +1,5 @@
 <div class="form-row">
-    @if($showInputTypeDispatch)
+    @if($mode == 'create')
         <div class="form-group col-md-12">
             <label class="font-weigth-bold mr-2">Tipo de Egreso:</label>
             @foreach($typeDispatches as $type)
@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    @if($showTypeDispatchDisabled)
+    @if($mode == 'edit')
         <fieldset class="form-group col-md-4">
             <label for="type-dispatch">Tipo de Egreso</label>
             <input
@@ -52,14 +52,7 @@
 
     <fieldset class="form-group col-md-5">
         <label for="program-id">Programa</label>
-        @if($disableProgram)
-            <input
-                type="text"
-                class="form-control"
-                value="{{ $control->program_name }}"
-                readonly
-            >
-        @else
+        @if($mode == 'create')
             <select
                 class="form-control @error('program_id') is-invalid @enderror"
                 wire:model="program_id"
@@ -80,6 +73,13 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
+        @else
+            <input
+                type="text"
+                class="form-control"
+                value="{{ $control->program_name }}"
+                readonly
+            >
         @endif
     </fieldset>
 
@@ -107,21 +107,31 @@
         @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
             <fieldset class="form-group col-md-4">
                 <label for="store-destination-id">Bodega Destino</label>
-                <select
-                    class="form-control @error('store_destination_id') is-invalid @enderror"
-                    wire:model="store_destination_id"
-                    id="store-destination-id"
-                >
-                    <option value="">Selecciona una bodega destino</option>
-                    @foreach($stores as $store)
-                        <option value="{{ $store->id }}">{{ $store->name }}</option>
-                    @endforeach
-                </select>
-                @error('store_destination_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+                @if($mode == 'create')
+                    <select
+                        class="form-control @error('store_destination_id') is-invalid @enderror"
+                        wire:model="store_destination_id"
+                        id="store-destination-id"
+                    >
+                        <option value="">Selecciona una bodega destino</option>
+                        @foreach($stores as $store)
+                            <option value="{{ $store->id }}">{{ $store->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('store_destination_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                @else
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="store-destination-id"
+                        value="{{ optional($control->destinationStore)->name }}"
+                        readonly
+                    >
+                @endif
             </fieldset>
             @break
         @default
