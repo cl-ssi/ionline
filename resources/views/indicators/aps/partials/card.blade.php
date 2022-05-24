@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <strong>Indicadores (APS - Hospital)<br></strong>
+        <strong>Indicadores PRAPS (Programa Reforzamiento Atención Primaria)</strong>
     </div>
 
     <ul class="list-group list-group-flush">
