@@ -11,7 +11,7 @@
 <form method="POST" action="{{ route('pharmacies.programs.store') }}" enctype="multipart/form-data">
 	@csrf
 
-	<div class="row">
+	<div class="form-row">
 
 		<fieldset class="form-group col">
 		    <label for="for_name">Nombre</label>

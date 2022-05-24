@@ -12,7 +12,7 @@
   @method('PUT')
 	@csrf
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col-3">
         <label for="for_date">Fecha</label>
         <input type="date" class="form-control" id="for_date" name="date" required="required" value="{{$purchase->date->format('Y-m-d')}}">
@@ -30,7 +30,7 @@
     </fieldset>
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col-2">
         <label for="for_text">OC</label>
         <input type="text" class="form-control" id="for_text" placeholder="" required="required"  name="purchase_order" value="{{$purchase->purchase_order}}">
@@ -49,7 +49,7 @@
     </fieldset>
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col-4">
         <label for="for_text">Guía</label>
         <input type="text" class="form-control" id="for_text" name="despatch_guide" value="{{$purchase->despatch_guide}}">
@@ -70,7 +70,7 @@
     </fieldset>
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col">
         <label for="for_note">Nota</label>
         <input type="text" class="form-control" id="for_note" placeholder="" name="notes" value="{{$purchase->notes}}">
@@ -82,7 +82,7 @@
     </fieldset>-->
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <!--<fieldset class="form-group col-3">
         <label for="for_note">Acta recep.</label>
         <input type="text" class="form-control" id="for_note" placeholder="" name="acceptance_certificate" value="{{$purchase->acceptance_certificate}}">
@@ -98,7 +98,7 @@
     </fieldset>
   </div>
 
-  <!--<div class="row">
+  <!--<div class="form-row">
     <fieldset class="form-group col-3">
     </fieldset>
 
