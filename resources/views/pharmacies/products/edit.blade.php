@@ -12,7 +12,7 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_barcode">Código</label>
             <input type="text" class="form-control" id="for_barcode"
@@ -32,7 +32,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <!--<fieldset class="form-group col-4">
             <label for="for_expiration">Fecha Expiración</label>
             <input type="date" class="form-control" id="for_expiration"
@@ -77,7 +77,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
 
       <fieldset class="form-group col-4">
           <label for="for_critic_stock">Stock Crítico</label>
@@ -99,7 +99,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
       <fieldset class="form-group col">
           <label for="for_storage_conditions">Condiciones de Almacenamiento</label>
           <input type="text" class="form-control" id="for_storage_conditions" placeholder="" name="storage_conditions" value = '{{ $product->storage_conditions }}'>

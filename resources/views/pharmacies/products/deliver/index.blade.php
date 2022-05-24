@@ -32,7 +32,7 @@
 	
 </div>
 @cannot(['Pharmacy: transfer view ortesis'])
-<div class="row">
+<div class="form-row">
 	<div class="form-group col">
 		<h5 class="sub-header">Búsqueda por {{$filter->name}}</h5>
 		<div class="table-responsive">

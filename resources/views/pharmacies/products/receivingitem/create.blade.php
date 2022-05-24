@@ -1,7 +1,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.receiving_item.store') }}">
     @csrf
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código de Barra</label>
             <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode">
@@ -28,7 +28,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_serie">F. Vencimiento</label>
             <input type="date" class="form-control" id="for_date" name="due_date" required="required">
