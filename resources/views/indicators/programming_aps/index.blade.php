@@ -12,8 +12,8 @@
         <strong>Monitoreo COMGES Programación APS</strong>
     </div>
     <ul class="list-group list-group-flush">
-    <li class="list-group-item">
-            <a href="{{ route('indicators.programming_aps.show', [2022, 6]) }}">2022</a> <span class="badge badge-warning">En Desarrollo</span>
+        <li class="list-group-item">
+            <a href="{{ route('indicators.programming_aps.show', [2022, 6]) }}">2022</a>
         </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.programming_aps.show', [2021, 6]) }}">2021</a>
