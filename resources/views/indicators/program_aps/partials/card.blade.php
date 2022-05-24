@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <strong>Monitoreo COMGES Programación APS</strong>
+        <strong>Monitoreo Programación APS (Trazadoras)</strong>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
