@@ -78,7 +78,10 @@ class RequestFormController extends Controller {
         $request_forms = RequestForm::Search($request)->latest('id')->paginate(30);
         //$users = User::where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
         //$users = User::all();
-        $users = User::where('organizational_unit_id', 37)->orderBy('name','asc')->get(); //Listado de compradores
+        $users = User::whereHas('organizationalUnit',function($q){
+            $q->where('establishment_id', 38);
+        })
+        ->orderBy('name','asc')->get();
         // dd($users);
 
         $request->flash();
