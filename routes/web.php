@@ -104,6 +104,8 @@ Route::get('/calendar', function () {
 
 Route::get('corrige_firmas','ServiceRequests\ServiceRequestController@corrige_firmas')->middleware('auth');
 
+Route::get('/open-notification/{notification}','Rrhh\UserController@openNotification')->middleware('auth')->name('openNotification');
+
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
 });
