@@ -27,8 +27,9 @@ class ProductIndex extends Component
         $search = "%$this->search%";
 
         $products = Product::query()
-            ->where('store_id', '=', $this->store->id)
+            ->whereStoreId($this->store->id)
             ->where('name', 'like', $search)
+            ->orWhere('barcode', 'like', $search)
             ->when($this->search, function($q) use($search) {
                 $q->orWhere(function($query) use($search) {
                     $query->whereHas('category', function ($subquery) use($search) {
