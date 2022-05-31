@@ -49,6 +49,7 @@
             <p>No existen indicadores o no se han definido aún para el indicador APS actual.</p>
         @else
             @foreach($iaps->indicators as $indicator)
+            @if($indicator->hasEstablishments($iaps->establishments, $commune))
         <div class="table-responsive">
             <table class="table table-sm table-bordered small mb-4">
                 <thead>
@@ -87,7 +88,7 @@
             <div class="collapse" id="collapseExample">
                 <div class="card card-body">
             @foreach($iaps->establishments as $establishment)
-                @if($establishment->comuna == $commune)
+                @if($establishment->comuna == $commune && Str::contains($indicator->establishment_cods, $establishment->Codigo))
                 <strong> {{ $establishment->alias_estab }} </strong>
                 <table class="table table-sm table-bordered small mb-4">
                     <thead>
@@ -128,6 +129,7 @@
                 <br>
             </div>
         </div>
+        @endif
             @endforeach
         @endif
     </div>

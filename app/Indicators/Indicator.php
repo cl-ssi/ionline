@@ -100,9 +100,9 @@ class Indicator extends Model
     public function getCompliance()
     {
         if(isset($this->numerator_acum_last_year)) // REM P
-            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (Str::contains($this->goal, '%') ? 100 : 1) : 0;
+            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
         else
-            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (Str::contains($this->goal, '%') ? 100 : 1) : 0;
+            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
     }
 
     public function getCompliance2($commune, $establishment)
@@ -174,5 +174,14 @@ class Indicator extends Model
     {
         $factor = $value == 'numerador' ? $this->numerator_source : $this->denominator_source;
         return Str::contains(mb_strtoupper($factor), 'REM') ? substr($factor, 0, 5) : $factor;
+    }
+
+    public function hasEstablishments($establishments, $commune)
+    {
+        // me indica la cantidad de establecimientos asociados al indicador en el cual hace match con un array de establecimientos X segun comuna
+        $count = 0;
+        foreach($establishments as $establishment)
+            if($establishment->comuna == $commune && Str::contains($this->establishment_cods, $establishment->Codigo)) $count++;
+        return $count;
     }
 }

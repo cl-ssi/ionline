@@ -13,23 +13,23 @@
 <form method="POST" action="{{ route('pharmacies.products.purchase.store') }}">
 	@csrf
 
-		<div class="row">
-      <fieldset class="form-group col-3">
-          <label for="for_date">Fecha</label>
-          <input type="date" class="form-control" id="for_date" name="date" required="required">
-      </fieldset>
+		<div class="form-row">
+			<fieldset class="form-group col-3">
+				<label for="for_date">Fecha</label>
+				<input type="date" class="form-control" id="for_date" name="date" required="required">
+			</fieldset>
 
-      <fieldset class="form-group col">
-          <label for="for_origin">Proveedor</label>
-					<select name="supplier_id" class="form-control selectpicker" data-live-search="true" required="">
-						@foreach ($suppliers as $key => $supplier)
-							<option value="{{$supplier->id}}">{{$supplier->name}}</option>
-						@endforeach
-					</select>
-      </fieldset>
+			<fieldset class="form-group col">
+				<label for="for_origin">Proveedor</label>
+							<select name="supplier_id" class="form-control selectpicker" data-live-search="true" required="">
+								@foreach ($suppliers as $key => $supplier)
+									<option value="{{$supplier->id}}">{{$supplier->name}}</option>
+								@endforeach
+							</select>
+			</fieldset>
 		</div>
 
-		<div class="row">
+		<div class="form-row">
 			<fieldset class="form-group col-2">
 					<label for="for_text">OC</label>
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order" required="">
@@ -48,7 +48,7 @@
 			</fieldset>
 		</div>
 
-		<div class="row">
+		<div class="form-row">
 			<fieldset class="form-group col-4">
 					<label for="for_text">Guía</label>
 					<input type="number" class="form-control" id="for_text" name="despatch_guide">
@@ -63,7 +63,7 @@
       </fieldset>
 		</div>
 
-    <div class="row">
+		<div class="form-row">
       <fieldset class="form-group col">
           <label for="for_note">Nota</label>
           <input type="text" class="form-control" id="for_note" placeholder="" name="notes" required="">
@@ -75,7 +75,7 @@
       </fieldset>-->
     </div>
 
-		<div class="row">
+	<div class="form-row">
       <!--<fieldset class="form-group col-3">
           <label for="for_note">Acta recep.</label>
           <input type="text" class="form-control" id="for_note" placeholder="" name="acceptance_certificate" required="">
@@ -92,7 +92,7 @@
       </fieldset>
     </div>
 
-		<!--<div class="row">
+		<!--<div class="form-row">
       <fieldset class="form-group col-3">
       </fieldset>
 

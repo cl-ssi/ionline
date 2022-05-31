@@ -17,7 +17,7 @@
                             <fieldset class="form-group col-sm">
                                 <label>Comprador Actual:</label><br>
                                 <select name="" class="form-control form-control-sm" disabled>
-                                    @foreach($users as $user)
+                                    @foreach($users->where('organizational_unit_id', 37) as $user)
                                     <option value="{{ $user->id }}" {{ ($requestForm->purchasers->first()->id==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
                                     @endforeach
                                 </select>
@@ -27,7 +27,7 @@
                                 <label>Nuevo Comprador:</label><br>
                                 <select name="new_purchaser_user_id" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" required>
                                     <option value="">Seleccione...</option>
-                                    @foreach($users as $user)
+                                    @foreach($users->where('organizational_unit_id', 37) as $user)
                                     <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
                                     @endforeach
                                 </select>
