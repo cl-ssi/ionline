@@ -401,6 +401,24 @@
                     </li>
                 @else
                     <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <i class="fas fa-bell" title="Notificaciones"></i>
+                            @if(count(auth()->user()->unreadNotifications))
+                            <span class="badge badge-secondary">{{ count(auth()->user()->unreadNotifications) }}</span>
+                            @endif
+                        </a>
+
+                        @if(count(auth()->user()->unreadNotifications))
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            @foreach(auth()->user()->unreadNotifications as $notification)
+                            <a class="dropdown-item" href="{{ route('openNotification',$notification) }}">
+                                {{ substr($notification->data['subject'],0,100) }} ...
+                            </a>
+                            @endforeach
+                        </div>
+                        @endif
+                    </li>
+                    <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->firstName }} <span class="caret"></span>
                         </a>
