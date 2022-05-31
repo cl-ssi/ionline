@@ -81,4 +81,15 @@ class ControlController extends Controller
     {
         return view('warehouse.pdf.report-dispatch', compact('store', 'control'));
     }
+
+    /**
+     * Generate Reception
+     *
+     * @param  \App\Models\Warehouse\Store  $store
+     * @return \Illuminate\Http\Response
+     */
+    public function generateReception(Store $store)
+    {
+        return view('warehouse.stores.generate-reception', compact('store'));
+    }
 }
