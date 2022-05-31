@@ -31,4 +31,9 @@ class TypeReception extends Model
     {
         return 3;
     }
+
+    public static function purchaseOrder()
+    {
+        return 4;
+    }
 }
