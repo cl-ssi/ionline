@@ -35,8 +35,8 @@ class ControlReport extends Component
 
         $this->programs = Program::findMany($idsPrograms);
 
-        $this->start_date = now()->startOfMonth()->format('Y-m-d');
-        $this->end_date = now()->endOfMonth()->format('Y-m-d');
+        $this->start_date = now()->startOfMonth()->format('Y-m-d H:i:s');
+        $this->end_date = now()->endOfMonth()->format('Y-m-d H:i:s');
     }
 
     public function render()
