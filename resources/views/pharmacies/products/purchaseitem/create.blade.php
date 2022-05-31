@@ -1,7 +1,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.purchase_item.store') }}">
     @csrf
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código de Barra</label>
             <input type="number" class="form-control" id="for_barcode" placeholder="Código de barra" name="barcode">
@@ -27,7 +27,7 @@
         <input type="hidden" id="for_unity" name="unity" />
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="for_unit_cost">Precio</label>
             <input step="any" type="number" class="form-control" id="for_unit_cost" placeholder="Precio" name="unit_cost" required="">

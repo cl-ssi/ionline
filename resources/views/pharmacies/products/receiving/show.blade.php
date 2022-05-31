@@ -8,7 +8,7 @@
 
 <h3>Nuevo Ingreso</h3>
 
-<div class="row">
+<div class="form-row">
       <fieldset class="form-group col-3">
           <label for="for_date">Fecha</label>
           <input type="text" class="form-control" id="for_date" name="date" value="{{ Carbon\Carbon::parse($receiving->date)->format('d/m/Y')}}" disabled>
@@ -22,7 +22,7 @@
       </fieldset>
 </div>
 
-<div class="row">
+<div class="form-row">
     <fieldset class="form-group col">
         <label for="for_note">Nota</label>
         <input type="text" class="form-control" id="for_note" placeholder="" name="notes" value="{{$receiving->notes}}" disabled>

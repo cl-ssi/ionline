@@ -8,7 +8,7 @@
 
 <h3>Nueva compra</h3>
 
-<div class="row">
+<div class="form-row">
   <fieldset class="form-group col-3">
       <label for="for_date">Fecha</label>
       <input type="text" class="form-control" id="for_date" name="date" value="{{ Carbon\Carbon::parse($purchase->date)->format('d/m/Y')}}" disabled>
@@ -22,7 +22,7 @@
   </fieldset>
 </div>
 
-<div class="row">
+<div class="form-row">
   <fieldset class="form-group col-2">
       <label for="for_text">OC</label>
       <input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order" value="{{$purchase->purchase_order}}" disabled>
@@ -41,7 +41,7 @@
   </fieldset>
 </div>
 
-<div class="row">
+<div class="form-row">
   <fieldset class="form-group col-4">
       <label for="for_text">Guía</label>
       <input type="text" class="form-control" id="for_text" name="despatch_guide" value="{{$purchase->despatch_guide}}" disabled>
@@ -60,7 +60,7 @@
   </fieldset>
 </div>
 
-<div class="row">
+<div class="form-row">
   <fieldset class="form-group col">
       <label for="for_note">Nota</label>
       <input type="text" class="form-control" id="for_note" placeholder="" name="notes" value="{{$purchase->notes}}" disabled>
@@ -72,7 +72,7 @@
   </fieldset>-->
 </div>
 
-<div class="row">
+<div class="form-row">
   <!--<fieldset class="form-group col-3">
       <label for="for_note">Acta recep.</label>
       <input type="text" class="form-control" id="for_note" placeholder="" name="acceptance_certificate" value="{{$purchase->acceptance_certificate}}" disabled>
@@ -88,7 +88,7 @@
   </fieldset>
 </div>
 
-<!--<div class="row">
+<!--<div class="form-row">
   <fieldset class="form-group col-3">
 
   </fieldset>
