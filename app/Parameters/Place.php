@@ -7,23 +7,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Place extends Model
 {
-    //
+    use SoftDeletes;
+
+    protected $table = 'cfg_places';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'location_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'location_id',
+        'floor_number'
+    ];
 
-    public function location() {
-        return $this->belongsTo('App\Parameters\Location');
-    }
-
-    public function computers() {
-        return $this->hasMany('App\Resources\Computer');
-    }
-
-    use SoftDeletes;
     /**
      * The attributes that should be mutated to dates.
      *
@@ -31,6 +30,14 @@ class Place extends Model
      */
     protected $dates = ['deleted_at'];
 
-    protected $table = 'cfg_places';
 
+    public function location()
+    {
+        return $this->belongsTo('App\Parameters\Location');
+    }
+
+    public function computers()
+    {
+        return $this->hasMany('App\Resources\Computer');
+    }
 }
