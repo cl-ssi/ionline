@@ -2,7 +2,9 @@
 
 namespace App\Models\Warehouse;
 
+use App\Models\Arq\Provider;
 use App\Models\Cfg\Program;
+use App\Models\Parameters\Supplier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,9 +20,12 @@ class Control extends Model
         'date',
         'note',
         'confirm',
-        'oc',
+        'po_code',
+        'po_date',
+        'invoice_number',
+        'invoice_date',
         'guide_number',
-        'bill_number',
+        'guide_date',
         'status',
         'store_id',
         'origin_id',
@@ -29,7 +34,9 @@ class Control extends Model
         'type_reception_id',
         'store_origin_id',
         'store_destination_id',
+        'supplier_id',
         'program_id',
+        'po_id',
     ];
 
     protected $dates = [
@@ -81,6 +88,11 @@ class Control extends Model
         return $this->belongsTo(Store::class, 'store_origin_id');
     }
 
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
     public function isReceiving()
     {
         return $this->type == 1;
@@ -114,6 +126,11 @@ class Control extends Model
     public function isReceiveFromStore()
     {
         return $this->isReceiving() && ($this->type_reception_id == TypeReception::receiveFromStore());
+    }
+
+    public function isPurchaseOrder()
+    {
+        return $this->isReceiving() && ($this->type_reception_id == TypeReception::purchaseOrder());
     }
 
     public function isConfirmed()
