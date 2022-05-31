@@ -36,6 +36,10 @@ class CreateWreTypeReceptionsTable extends Migration
             [
                 'name' => 'Devolución',
                 'active' => true,
+            ],
+            [
+                'name' => 'Orden de Compra',
+                'active' => true,
             ]
         ];
 
