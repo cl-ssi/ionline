@@ -14,7 +14,21 @@ class Supplier extends Model
     use softDeletes;
 
     protected $fillable = [
-        'run', 'dv', 'name', 'address', 'region_id', 'commune_id', 'telephone'
+        'run',
+        'dv',
+        'code',
+        'name',
+        'branch_code',
+        'branch_name',
+        'contact_name',
+        'contact_phone',
+        'contact_email',
+        'contact_charge',
+        'commercial_activity',
+        'address',
+        'region_id',
+        'commune_id',
+        'telephone'
     ];
 
     protected $table = 'cfg_suppliers';
