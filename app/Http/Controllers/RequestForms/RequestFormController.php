@@ -82,7 +82,7 @@ class RequestFormController extends Controller {
             $q->where('establishment_id', 38);
         })
         ->orderBy('name','asc')->get();
-        //dd($users);
+        // dd($users);
 
         $request->flash();
 

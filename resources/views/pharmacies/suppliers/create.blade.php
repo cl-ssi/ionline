@@ -12,7 +12,7 @@
     @csrf
     @method('POST')
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col">
             <label for="for_name">Nombre</label>
@@ -26,7 +26,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
@@ -40,7 +40,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col">
             <label for="for_telephone">Teléfono</label>
