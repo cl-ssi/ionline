@@ -107,6 +107,13 @@
                                             {{ optional($controlItem->control->typeReception)->name }}
                                         </small>
                                         @break
+                                    @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
+                                        {{ $controlItem->control->po_code }}
+                                        <br>
+                                        <small>
+                                            {{ optional($controlItem->control->typeReception)->name }}
+                                        </small>
+                                        @break
                                 @endswitch
                             @endif
                         @endif
