@@ -21,3 +21,4 @@ yarn-error.log
 .tic-ssi.json
 app.yaml
 docker-compose.yml
+.vscode

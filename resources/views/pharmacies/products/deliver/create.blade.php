@@ -16,7 +16,7 @@
 <form method="POST" action="{{ route('pharmacies.products.deliver.store') }}">
 	@csrf
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="from">Origen solicitud</label>
 			<input type="text" class="form-control" id="for_from" name="establishment_id" value="{{$products_by_establishment->first()->establishments->first()->name}}" disabled>
@@ -36,7 +36,7 @@
         </fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_patient_rut">RUT paciente</label>
             <input type="text" class="form-control" id="for_patient_rut" name="patient_rut" placeholder="Ej: 11111111-1" required="">
@@ -59,7 +59,7 @@
 		</fieldset>
     </div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col-4">
 			<label for="product">Ayuda técnica</label>
 			<select name="product_id" class="form-control selectpicker" data-live-search="true" required="">

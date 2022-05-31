@@ -31,7 +31,7 @@
 		</div>
 	</div>
 	@foreach($stocks as $product)
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col-md-4">
 			<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{$product->name}}">
 			<input type="hidden" name="product_id[]" value="{{$product->id}}">

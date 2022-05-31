@@ -10,7 +10,7 @@
 	@csrf
 	@method('PUT')
 
-	<div class="row">
+	<div class="form-row">
 
 		<fieldset class="form-group col">
 		    <label for="for_name">Nombre</label>

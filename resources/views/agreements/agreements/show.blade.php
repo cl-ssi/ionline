@@ -63,6 +63,8 @@
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordCollaboration', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->isTypeMandate()) <!-- convenio mandato para program id 44 con componente de desarrollo rrhh -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandate', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+        @elseif($agreement->program_id == 51) <!-- convenio mandato PFC para program id 51 -->
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandatePFC', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->period >= 2022)
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectEvalOption"
