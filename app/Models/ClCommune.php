@@ -12,14 +12,18 @@ class ClCommune extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'id','name','code_deis','region_id'
+        'id',
+        'name',
+        'code_deis',
+        'region_id'
     ];
-
-    public function region() {
-        return $this->belongsTo('\App\Models\Parameters\ClRegion');
-    }
 
     protected $dates = ['deleted_at'];
 
     protected $table = 'cl_communes';
+
+    public function region()
+    {
+        return $this->belongsTo(ClRegion::class);
+    }
 }
