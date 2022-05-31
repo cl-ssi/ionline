@@ -182,7 +182,7 @@ Route::get('/claveunica/callback-testing', 'ClaveUnicaController@callback');
 Route::get('/claveunica/login/{access_token}', 'ClaveUnicaController@login')->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', 'ClaveUnicaController@loginExternal');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::Class,'index'])->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
@@ -765,8 +765,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function () {
-    Route::get('/', 'Parameters\ParameterController@index')->name('index');
-    Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
+    Route::get('/', [App\Http\Controllers\Parameters\ParameterController::class,'index'])->name('index');
+    Route::put('/{parameter}', [App\Http\Controllers\Parameters\ParameterController::class,'update'])->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     //Route::resource('permissions', 'Parameters\PermissionController');
     Route::prefix('permissions')->as('permissions.')->group(function () {
@@ -810,10 +810,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/{establishment}', 'Parameters\EstablishmentController@update')->name('update');
     });
 
-    Route::prefix('holidays')->as('holidays.')->group(function () {
-        Route::get('/', 'Parameters\HolidayController@index')->name('index');
-        Route::put('/{holiday}', 'Parameters\HolidayController@update')->name('update');
-    });
+    Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');
 
     Route::prefix('locations')->as('locations.')->group(function () {
         Route::get('/', 'Parameters\LocationController@index')->name('index');
