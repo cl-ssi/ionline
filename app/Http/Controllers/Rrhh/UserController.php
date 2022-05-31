@@ -461,4 +461,12 @@ class UserController extends Controller
         $users = User::permission('Drugs')->get();
         return view('drugs.users',compact('users'));
     }
+
+    public function openNotification($notification) 
+	{
+        $notification = auth()->user()->notifications->find($notification);
+		$url = $notification->data['action'];
+        $notification->markAsRead();
+		return redirect($url);
+	}
 }
