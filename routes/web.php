@@ -1348,12 +1348,13 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
             Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
             Route::get('report', [StoreController::class, 'report'])->name('store.report');
+            Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate.reception');
+
             Route::resource('controls', 'Warehouse\ControlController')->except(['store', 'update', 'show']);
             Route::resource('products', 'Warehouse\ProductController')->only(['index', 'create', 'edit']);
             Route::resource('categories', 'Warehouse\CategoryController')->only(['index', 'create', 'edit']);
             Route::resource('origins', 'Warehouse\OriginController')->only(['index', 'create', 'edit']);
             Route::resource('destinations', 'Warehouse\DestinationController')->only(['index', 'create', 'edit']);
-
             Route::prefix('control/{control}')->group(function () {
                 Route::get('pdf', [ControlController::class, 'pdf'])->name('control.pdf');
                 Route::get('add-products', [ControlController::class, 'addProduct'])->name('control.add-product');
