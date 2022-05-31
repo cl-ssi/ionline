@@ -22,6 +22,7 @@
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
+                    <th class="text-center">Barcode</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th class="text-center">Acciones</th>
@@ -36,27 +37,45 @@
                 @forelse($products as $product)
                 <tr wire:loading.remove wire:target="search">
                     <td class="text-center">
-                        <a href="{{ route('warehouse.products.edit', ['store' => $store, 'product' => $product]) }}" class="btn btn-sm btn-outline-secondary">
+                        <a
+                            href="{{ route('warehouse.products.edit', ['store' => $store, 'product' => $product]) }}"
+                            class="btn btn-sm btn-outline-secondary"
+                        >
                             <i class="fas fa-edit"></i>
                             {{ $product->id }}
                         </a>
                     </td>
+                    <td class="text-center">
+                        <small class="text-monospace">
+                            @if($product->barcode)
+                                {{ $product->barcode }}
+                            @else
+                                -
+                            @endif
+                        </small>
+                    </td>
                     <td>
                         {{ optional($product->product)->name }}
-                        - {{ $product->name }}
+                        <br>
+                        <small>
+                            {{ $product->name }}
+                        </small>
                     </td>
                     <td>
                         {{ $product->category_name }}
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-outline-danger" wire:click="deleteProduct({{ $product }})">
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            wire:click="deleteProduct({{ $product }})"
+                        >
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>
                 @empty
                 <tr wire:loading.remove>
-                    <td class="text-center" colspan="4">
+                    <td class="text-center" colspan="5">
                         <em>No hay resultados</em>
                     </td>
                 </tr>
