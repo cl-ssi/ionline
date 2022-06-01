@@ -17,61 +17,61 @@ use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\Drugs\CourtController;
 
-use App\Http\Controllers\Indicators\ApsController;
-use App\Http\Controllers\Indicators\IaapsController;
-use App\Http\Controllers\Indicators\ComgesController;
-use App\Http\Controllers\Indicators\ProgramApsController;
-use App\Http\Controllers\Indicators\SingleParameterController;
-use App\Http\Controllers\Indicators\HealthGoalController;
-
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
+use App\Http\Controllers\Indicators\ApsController;
 use App\Http\Controllers\Parameters\LogController;
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Rrhh\AuthorityController;
+
 use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Drugs\ReceptionController;
-
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\DigitalSignatureController;
+use App\Http\Controllers\Indicators\IaapsController;
 
 use App\Http\Controllers\Parameters\PlaceController;
 use App\Http\Controllers\Resources\MobileController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Auth\VerificationController;
 
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Resources\PrinterController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Agreements\ProgramController;
+
 use App\Http\Controllers\Documents\DocumentController;
-
 use App\Http\Controllers\Parameters\CommuneController;
-
+use App\Http\Controllers\Requirements\EventController;
 use App\Http\Controllers\Resources\ComputerController;
 
 use App\Http\Controllers\Agreements\AddendumController;
+
 use App\Http\Controllers\Agreements\WordTestController;
 
 use App\Http\Controllers\Documents\SignatureController;
-
 use App\Http\Controllers\Parameters\LocationController;
+
 use App\Http\Controllers\Pharmacies\PharmacyController;
+
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Resources\TelephoneController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolsController;
-
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Parameters\ParameterController;
+
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\Indicators\HealthGoalController;
+use App\Http\Controllers\Indicators\ProgramApsController;
 
 use App\Http\Controllers\Parameters\BudgetItemController;
 use App\Http\Controllers\Parameters\PermissionController;
@@ -105,6 +105,7 @@ use App\Http\Controllers\Programmings\ProfessionalController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
 
+use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
