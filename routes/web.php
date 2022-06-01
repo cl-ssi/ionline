@@ -1060,9 +1060,9 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Indicators\IAAPSController::class,'index'])->name('index');
-        Route::get('/{year}', [App\Http\Controllers\Indicators\IAAPSController::class,'list'])->name('list');
-        Route::get('/{year}/{commune}', [App\Http\Controllers\Indicators\IAAPSController::class,'show'])->name('show');
+        Route::get('/', [App\Http\Controllers\Indicators\IaapsController::class,'index'])->name('index');
+        Route::get('/{year}', [App\Http\Controllers\Indicators\IaapsController::class,'list'])->name('list');
+        Route::get('/{year}/{commune}', [App\Http\Controllers\Indicators\IaapsController::class,'show'])->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
