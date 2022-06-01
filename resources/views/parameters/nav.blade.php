@@ -33,7 +33,7 @@
 
     <li class="nav-item">
         <a class="nav-link {{active('parameters.holidays.index')}}"
-            href="{{ route('parameters.holidays.index') }}">
+            href="{{ route('parameters.holidays') }}">
             <i class="fas fa-suitcase"></i> Feriados</a>
     </li>
 
