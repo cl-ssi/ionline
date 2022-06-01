@@ -947,7 +947,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
     });
 
-    Route::resource('programs', 'Parameters\ProgramController')->only(['index', 'create', 'edit']);
+    Route::resource('programs', App\Http\Controllers\Parameters\ProgramController::class)->only(['index', 'create', 'edit']);
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
