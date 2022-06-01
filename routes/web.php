@@ -410,7 +410,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 /** Inicio Recursos */
 Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function () {
 
-    Route::get('report', [Reportcontroller::class,'report'])->name('report');
+    Route::get('report', [App\Http\Controllers\Resources\ReportController::class,'report'])->name('report');
 
     Route::prefix('telephones')->name('telephone.')->group(function () {
         Route::get('/', [TelephoneController::class,'index'])->name('index');
@@ -482,7 +482,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/addendum/downloadRes/{addendum}', [AddendumController::class,'downloadRes'])->name('addendum.downloadRes');
     Route::get('/addendum/sign/{addendum}/type/{type}', [AddendumController::class,'sign'])->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', [AddendumController::class,'preview'])->name('addendum.preview');
-    Route::resource('programs', ProgramController::class);
+    Route::resource('programs', App\Http\Controllers\Agreements\ProgramController::class);
     Route::prefix('programs')->name('programs.')->group(function () {
         Route::resource('resolutions', ProgramResolutionController::class);
         Route::get('resolution/createWord/{program_resolution}', [WordTestController::class,'createWordDocxResProgram'])->name('resolution.createWord');
@@ -736,7 +736,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
-            Route::get('/to-pay', [ReportController::class, 'toPay'])->name('to-pay');
+            Route::get('/to-pay', [App\Http\Controllers\ServiceRequests\ReportController::class, 'toPay'])->name('to-pay');
             Route::get('/payed', [ReportController::class, 'payed'])->name('payed');
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
