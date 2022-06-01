@@ -8,6 +8,7 @@ use Livewire\Component;
 class ProgramCreate extends Component
 {
     public $name;
+    public $alias;
     public $start_date;
     public $end_date;
     public $description;
@@ -21,6 +22,7 @@ class ProgramCreate extends Component
     {
         return [
             'name'          => 'required|string|min:2|max:255',
+            'alias'         => 'required|string|min:2|max:50',
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',

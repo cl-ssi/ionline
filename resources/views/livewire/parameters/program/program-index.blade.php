@@ -25,6 +25,7 @@
                 <tr>
                     <th class="text-center">ID</th>
                     <th>Nombre</th>
+                    <th>Alias</th>
                     <th class="text-center">Inicio</th>
                     <th class="text-center">Fin</th>
                     <th></th>
@@ -47,6 +48,7 @@
                         </a>
                     </td>
                     <td>{{ $program->name }}</td>
+                    <td>{{ $program->alias }}</td>
                     <td class="text-center">{{ $program->start_date_format }}</td>
                     <td class="text-center">{{ $program->end_date_format }}</td>
                     <td class="text-center">

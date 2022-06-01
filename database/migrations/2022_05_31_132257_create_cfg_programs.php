@@ -19,6 +19,7 @@ class CreateCfgPrograms extends Migration
             $table->id();
 
             $table->string('name', 255)->nullable();
+            $table->string('alias', 50)->nullable();
             $table->string('description', 255)->nullable();
 
             $table->date('start_date')->nullable();
