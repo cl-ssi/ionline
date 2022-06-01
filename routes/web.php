@@ -17,10 +17,16 @@ use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\Indicators\IaapsController;
+use App\Http\Controllers\Indicators\ComgesController;
+use App\Http\Controllers\Indicators\ProgramApsController;
+use App\Http\Controllers\Indicators\SingleParameterController;
+use App\Http\Controllers\Indicators\HealthGoalController;
+
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
-use App\Http\Controllers\Indicators\ApsController;
 use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
@@ -31,13 +37,13 @@ use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Agreements\StageController;
 
 use App\Http\Controllers\DigitalSignatureController;
-use App\Http\Controllers\Indicators\IaapsController;
+
 use App\Http\Controllers\Parameters\PlaceController;
 use App\Http\Controllers\Resources\MobileController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\Indicators\ComgesController;
+
 use App\Http\Controllers\Resources\PrinterController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Agreements\ProgramController;
@@ -63,7 +69,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Parameters\ParameterController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
-use App\Http\Controllers\Indicators\ProgramApsController;
+
 
 use App\Http\Controllers\Parameters\BudgetItemController;
 use App\Http\Controllers\Parameters\PermissionController;
@@ -96,7 +102,7 @@ use App\Http\Controllers\Parameters\PhraseOfTheDayController;
 use App\Http\Controllers\Programmings\ProfessionalController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
-use App\Http\Controllers\Indicators\SingleParameterController;
+
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
@@ -400,7 +406,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 
 /** Inicio Recursos */
 Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function () {
-    
+
     Route::get('report', [Reportcontroller::class,'report'])->name('report');
 
     Route::prefix('telephones')->name('telephone.')->group(function () {
@@ -1025,16 +1031,16 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('health_goals')->as('health_goals.')->group(function () {
-        Route::get('/show_file/{attachedFile}', [HealthGoalcontroller::class,'show_file'])->name('ind.value.show_file');
-        Route::delete('/{attachedFile}', [HealthGoalcontroller::class,'destroy_file'])->middleware('auth')->name('ind.value.destroy_file');
+        Route::get('/show_file/{attachedFile}', [HealthGoalController::class,'show_file'])->name('ind.value.show_file');
+        Route::delete('/{attachedFile}', [HealthGoalController::class,'destroy_file'])->middleware('auth')->name('ind.value.destroy_file');
         Route::get('/{law}', [HealthGoalController::class,'index'])->name('index');
-        Route::get('/{law}/{year}', [HealthGoalcontroller::class,'list'])->name('list');
-        Route::get('/{law}/{year}/{health_goal}', [HealthGoalcontroller::class,'show'])->name('show');
-        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', [HealthGoalcontroller::class,'editInd'])->middleware('auth')->name('ind.edit');
-        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', [HealthGoalcontroller::class,'updateInd'])->middleware('auth')->name('ind.update');
-        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', [HealthGoalcontroller::class,'importIndValues'])->middleware('auth')->name('ind.import');
-        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalcontroller::class,'storeIndValue'])->middleware('auth')->name('ind.value.store');
-        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalcontroller::class,'updateIndValue'])->middleware('auth')->name('ind.value.update');
+        Route::get('/{law}/{year}', [HealthGoalController::class,'list'])->name('list');
+        Route::get('/{law}/{year}/{health_goal}', [HealthGoalController::class,'show'])->name('show');
+        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', [HealthGoalController::class,'editInd'])->middleware('auth')->name('ind.edit');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', [HealthGoalController::class,'updateInd'])->middleware('auth')->name('ind.update');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', [HealthGoalController::class,'importIndValues'])->middleware('auth')->name('ind.import');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'storeIndValue'])->middleware('auth')->name('ind.value.store');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'updateIndValue'])->middleware('auth')->name('ind.value.update');
     });
 
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
