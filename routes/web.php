@@ -15,56 +15,61 @@ use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClaveUnicaController;
 use App\Http\Controllers\WebserviceController;
-use App\Http\Controllers\VaccinationController;
+use App\Http\Controllers\Drugs\CourtController;
 
+use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Indicators\ApsController;
 use App\Http\Controllers\Parameters\LogController;
-use App\Http\Controllers\Rrhh\AuthorityController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Documents\ParteController;
+use App\Http\Controllers\Drugs\ReceptionController;
+
+use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Agreements\StageController;
-
 use App\Http\Controllers\DigitalSignatureController;
+use App\Http\Controllers\Drugs\PoliceUnitController;
 use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Parameters\PlaceController;
 use App\Http\Controllers\Resources\MobileController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Drugs\DestructionController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Resources\PrinterController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Agreements\ProgramController;
 use App\Http\Controllers\Documents\DocumentController;
+
 use App\Http\Controllers\Parameters\CommuneController;
+
 use App\Http\Controllers\Resources\ComputerController;
+
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\WordTestController;
+
 use App\Http\Controllers\Documents\SignatureController;
 
 use App\Http\Controllers\Parameters\LocationController;
-
 use App\Http\Controllers\Pharmacies\PharmacyController;
-
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Resources\TelephoneController;
-
 use App\Http\Controllers\Suitability\OptionsController;
-
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolsController;
+
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Parameters\ParameterController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Indicators\ProgramApsController;
-
 use App\Http\Controllers\Parameters\BudgetItemController;
 use App\Http\Controllers\Parameters\PermissionController;
 use App\Http\Controllers\Parameters\ProfessionController;
@@ -102,6 +107,7 @@ use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
 use App\Http\Controllers\ServiceRequests\AttachmentController;
 use App\Http\Controllers\Agreements\WordMandateAgreeController;
+use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ProgrammingDayController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
@@ -401,7 +407,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 /** Inicio Recursos */
 Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function () {
     
-    Route::get('report', [Reportcontroller::class,'report'])->name('report');
+    Route::get('report', [ReportController::class,'report'])->name('report');
 
     Route::prefix('telephones')->name('telephone.')->group(function () {
         Route::get('/', [TelephoneController::class,'index'])->name('index');
@@ -794,12 +800,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::delete('/{user}', [UserController::class,'destroy'])->name('destroy')->middleware('auth');
 
         Route::prefix('service_requests')->name('service_requests.')->group(function () {
-            Route::get('/', [Usercontroller::class,'index_sr'])->name('index')->middleware('auth');
-            Route::get('/create', [Usercontroller::class,'create_sr'])->name('create')->middleware('auth');
-            Route::post('/', [Usercontroller::class,'store_sr'])->name('store')->middleware('auth');
-            Route::get('/{user}/edit', [Usercontroller::class,'edit_sr'])->name('edit')->middleware('auth');
-            Route::put('/{user}', [Usercontroller::class,'update_sr'])->name('update')->middleware('auth');
-            Route::delete('/{user}', [Usercontroller::class,'destroy_sr'])->name('destroy')->middleware('auth');
+            Route::get('/', [UserController::class,'index_sr'])->name('index')->middleware('auth');
+            Route::get('/create', [UserController::class,'create_sr'])->name('create')->middleware('auth');
+            Route::post('/', [UserController::class,'store_sr'])->name('store')->middleware('auth');
+            Route::get('/{user}/edit', [UserController::class,'edit_sr'])->name('edit')->middleware('auth');
+            Route::put('/{user}', [UserController::class,'update_sr'])->name('update')->middleware('auth');
+            Route::delete('/{user}', [UserController::class,'destroy_sr'])->name('destroy')->middleware('auth');
 
             /** TODO que hace esto? */
             Route::prefix('rrhh')->as('rrhh.')->group(function () {
@@ -812,7 +818,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function () {
     Route::get('/', [ParameterController::class,'index'])->name('index');
     Route::put('/{parameter}', [ParameterController::class,'update'])->name('update');
-    Route::get('drugs', [Parametercontroller::class,'indexDrugs'])->name('drugs')->middleware(['role:Drugs: admin']);
+    Route::get('drugs', [ParameterController::class,'indexDrugs'])->name('drugs')->middleware(['role:Drugs: admin']);
     //Route::resource('permissions', PermissionController::class);
     Route::prefix('permissions')->as('permissions.')->group(function () {
         Route::get('/create/{guard}', [PermissionController::class,'create'])->name('create');
@@ -941,14 +947,14 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
-    Route::post('/create_from_previous', [Documentcontroller::class,'createFromPrevious'])->name('createFromPrevious');
+    Route::post('/create_from_previous', [DocumentController::class,'createFromPrevious'])->name('createFromPrevious');
     Route::get('/{document}/download', [DocumentController::class,'download'])->name('download');
-    Route::put('/{document}/store_number', [Documentcontroller::class,'storeNumber'])->name('store_number');
-    Route::delete('/{document}/delete_file', [Documentcontroller::class,'deleteFile'])->name('delete_file');
-    Route::get('/add_number', [Documentcontroller::class,'addNumber'])->name('add_number');
-    Route::post('/find', [Documentcontroller::class,'find'])->name('find');
-    Route::get('/report', [Documentcontroller::class,'report'])->name('report');
-    Route::get('/{document}/sendForSignature/', [Documentcontroller::class,'sendForSignature'])->name('sendForSignature');
+    Route::put('/{document}/store_number', [DocumentController::class,'storeNumber'])->name('store_number');
+    Route::delete('/{document}/delete_file', [DocumentController::class,'deleteFile'])->name('delete_file');
+    Route::get('/add_number', [DocumentController::class,'addNumber'])->name('add_number');
+    Route::post('/find', [DocumentController::class,'find'])->name('find');
+    Route::get('/report', [DocumentController::class,'report'])->name('report');
+    Route::get('/{document}/sendForSignature/', [DocumentController::class,'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
@@ -965,14 +971,14 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/index/{tab}', [SignatureController::class,'index'])->name('signatures.index');
     Route::get('signatures/create/{xAxis?}/{yAxis?}', [SignatureController::class,'create'])->name('signatures.create');
     Route::resource('signatures', SignatureController::class)->except(['index', 'create']);
-    Route::get('/showPdf/{signaturesFile}/{timestamp?}', [Signaturecontroller::class,'showPdf'])->name('signatures.showPdf');
-    Route::post('/showPdfFromFile', [Signaturecontroller::class,'showPdfFromFile'])->name('signatures.showPdfFromFile');
-    Route::get('/showPdfAnexo/{anexo}', [Signaturecontroller::class,'showPdfAnexo'])->name('signatures.showPdfAnexo');
-    Route::post('/{idSignaturesFlow}/rechazar', [Signaturecontroller::class,'rejectSignature'])->name('signatures.rejectSignature');
-    Route::get('signatures/signatureFlows/{signatureId}', [Signaturecontroller::class,'signatureFlows'])->name('signatures.signatureFlows');
-    Route::get('signatures/signModal/{pendingSignaturesFlowId}', [Signaturecontroller::class,'signModal'])->name('signatures.signModal');
-    Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [Signaturecontroller::class,'massSignModal'])->name('signatures.massSignModal');
-    Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [Signaturecontroller::class,'callbackFirma'])->name('callbackFirma');
+    Route::get('/showPdf/{signaturesFile}/{timestamp?}', [SignatureController::class,'showPdf'])->name('signatures.showPdf');
+    Route::post('/showPdfFromFile', [SignatureController::class,'showPdfFromFile'])->name('signatures.showPdfFromFile');
+    Route::get('/showPdfAnexo/{anexo}', [SignatureController::class,'showPdfAnexo'])->name('signatures.showPdfAnexo');
+    Route::post('/{idSignaturesFlow}/rechazar', [SignatureController::class,'rejectSignature'])->name('signatures.rejectSignature');
+    Route::get('signatures/signatureFlows/{signatureId}', [SignatureController::class,'signatureFlows'])->name('signatures.signatureFlows');
+    Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class,'signModal'])->name('signatures.signModal');
+    Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class,'massSignModal'])->name('signatures.massSignModal');
+    Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class,'callbackFirma'])->name('callbackFirma');
 });
 Route::resource('documents', DocumentController::class)->middleware('auth');
 
@@ -986,7 +992,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
     Route::get('create_requirement/{parte}',  [RequirementController::class,'create_requirement'])->name('create_requirement');
     Route::get('create_requirement_sin_parte',  [RequirementController::class,'create_requirement_sin_parte'])->name('create_requirement_sin_parte');
-    // Route::get('create_event/{req_id}',  [Eventcontroller::class,'create_event'])->name('create_event');
+    // Route::get('create_event/{req_id}',  [EventController::class,'create_event'])->name('create_event');
     Route::resource('categories', CategoryController::class);
     Route::resource('events', EventController::class);
     Route::get('report1', [RequirementController::class,'report1'])->name('report1');
@@ -1007,51 +1013,51 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         return view('indicators.index');
     })->name('index');
 
-    Route::get('/population', [SingleParametercontroller::class,'population'])->name('population');
+    Route::get('/population', [SingleParameterController::class,'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
 
     Route::prefix('comges')->as('comges.')->group(function () {
         Route::get('/', [ComgesController::class,'index'])->name('index');
-        Route::get('/{year}', [Comgescontroller::class,'list'])->name('list');
+        Route::get('/{year}', [ComgesController::class,'list'])->name('list');
         Route::post('/{year}', [ComgesController::class,'store'])->name('store');
         Route::get('/{year}/create', [ComgesController::class,'create'])->middleware('auth')->name('create');
         Route::get('/{comges}/edit', [ComgesController::class,'edit'])->middleware('auth')->name('edit');
         Route::put('/{comges}', [ComgesController::class,'update'])->middleware('auth')->name('update');
-        Route::get('/{year}/{comges}/corte/{section}', [Comgescontroller::class,'show'])->name('show');
-        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/create', [Comgescontroller::class,'createAction'])->middleware('auth')->name('action.create');
-        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', [Comgescontroller::class,'editAction'])->middleware('auth')->name('action.edit');
-        Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', [Comgescontroller::class,'updateAction'])->middleware('auth')->name('action.update');
-        Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', [Comgescontroller::class,'storeAction'])->middleware('auth')->name('action.store');
+        Route::get('/{year}/{comges}/corte/{section}', [ComgesController::class,'show'])->name('show');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/create', [ComgesController::class,'createAction'])->middleware('auth')->name('action.create');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', [ComgesController::class,'editAction'])->middleware('auth')->name('action.edit');
+        Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', [ComgesController::class,'updateAction'])->middleware('auth')->name('action.update');
+        Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', [ComgesController::class,'storeAction'])->middleware('auth')->name('action.store');
     });
 
     Route::prefix('health_goals')->as('health_goals.')->group(function () {
-        Route::get('/show_file/{attachedFile}', [HealthGoalcontroller::class,'show_file'])->name('ind.value.show_file');
-        Route::delete('/{attachedFile}', [HealthGoalcontroller::class,'destroy_file'])->middleware('auth')->name('ind.value.destroy_file');
+        Route::get('/show_file/{attachedFile}', [HealthGoalController::class,'show_file'])->name('ind.value.show_file');
+        Route::delete('/{attachedFile}', [HealthGoalController::class,'destroy_file'])->middleware('auth')->name('ind.value.destroy_file');
         Route::get('/{law}', [HealthGoalController::class,'index'])->name('index');
-        Route::get('/{law}/{year}', [HealthGoalcontroller::class,'list'])->name('list');
-        Route::get('/{law}/{year}/{health_goal}', [HealthGoalcontroller::class,'show'])->name('show');
-        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', [HealthGoalcontroller::class,'editInd'])->middleware('auth')->name('ind.edit');
-        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', [HealthGoalcontroller::class,'updateInd'])->middleware('auth')->name('ind.update');
-        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', [HealthGoalcontroller::class,'importIndValues'])->middleware('auth')->name('ind.import');
-        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalcontroller::class,'storeIndValue'])->middleware('auth')->name('ind.value.store');
-        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalcontroller::class,'updateIndValue'])->middleware('auth')->name('ind.value.update');
+        Route::get('/{law}/{year}', [HealthGoalController::class,'list'])->name('list');
+        Route::get('/{law}/{year}/{health_goal}', [HealthGoalController::class,'show'])->name('show');
+        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', [HealthGoalController::class,'editInd'])->middleware('auth')->name('ind.edit');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', [HealthGoalController::class,'updateInd'])->middleware('auth')->name('ind.update');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', [HealthGoalController::class,'importIndValues'])->middleware('auth')->name('ind.import');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'storeIndValue'])->middleware('auth')->name('ind.value.store');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'updateIndValue'])->middleware('auth')->name('ind.value.update');
     });
 
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
         Route::get('/', [ProgramApsController::class,'index'])->name('index');
-        Route::get('/{year}/{commune}', [ProgramApscontroller::class,'show'])->name('show');
+        Route::get('/{year}/{commune}', [ProgramApsController::class,'show'])->name('show');
     });
 
     Route::prefix('iaps')->as('iaps.')->group(function () {
         Route::get('/', [ApsController::class,'index'])->name('index');
-        Route::get('/{year}', [Apscontroller::class,'list'])->name('list');
-        Route::get('/{year}/{slug}/{establishment_type}', [Apscontroller::class,'show'])->name('show');
+        Route::get('/{year}', [ApsController::class,'list'])->name('list');
+        Route::get('/{year}/{slug}/{establishment_type}', [ApsController::class,'show'])->name('show');
     });
 
     Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
         Route::get('/', [App\Http\Controllers\Indicators\IAAPSController::class,'index'])->name('index');
-        Route::get('/{year}', [App\Http\Controllers\Indicators\IAAPScontroller::class,'list'])->name('list');
-        Route::get('/{year}/{commune}', [App\Http\Controllers\Indicators\IAAPScontroller::class,'show'])->name('show');
+        Route::get('/{year}', [App\Http\Controllers\Indicators\IAAPSController::class,'list'])->name('list');
+        Route::get('/{year}/{commune}', [App\Http\Controllers\Indicators\IAAPSController::class,'show'])->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
@@ -1060,44 +1066,44 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         })->name('index');
 
         Route::prefix('2018')->as('2018.')->group(function () {
-            //Route::get('', [Indicatorcontroller::class,'index_19813')->name('index');
+            //Route::get('', [IndicatorController::class,'index_19813')->name('index');
             Route::get('/', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'index'])->name('index');
 
-            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador1'])->name('indicador1');
-            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador2'])->name('indicador2');
-            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador3a'])->name('indicador3a');
-            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador3b'])->name('indicador3b');
-            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador3c'])->name('indicador3c');
-            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador4a'])->name('indicador4a');
-            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador4b'])->name('indicador4b');
-            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador5'])->name('indicador5');
-            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2018\Indicator19813controller::class,'indicador6'])->name('indicador6');
+            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador1'])->name('indicador1');
+            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador2'])->name('indicador2');
+            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador3a'])->name('indicador3a');
+            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador3b'])->name('indicador3b');
+            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador3c'])->name('indicador3c');
+            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador4a'])->name('indicador4a');
+            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador4b'])->name('indicador4b');
+            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador5'])->name('indicador5');
+            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2018\Indicator19813Controller::class,'indicador6'])->name('indicador6');
         });
 
         Route::prefix('2019')->as('2019.')->group(function () {
             Route::get('/',           [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'index'])->name('index');
-            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador1'])->name('indicador1');
-            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador2'])->name('indicador2');
-            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador3a'])->name('indicador3a');
-            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador3b'])->name('indicador3b');
-            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador3c'])->name('indicador3c');
-            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador4a'])->name('indicador4a');
-            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador4b'])->name('indicador4b');
-            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador5'])->name('indicador5');
-            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2019\Indicator19813controller::class,'indicador6'])->name('indicador6');
+            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador1'])->name('indicador1');
+            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador2'])->name('indicador2');
+            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador3a'])->name('indicador3a');
+            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador3b'])->name('indicador3b');
+            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador3c'])->name('indicador3c');
+            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador4a'])->name('indicador4a');
+            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador4b'])->name('indicador4b');
+            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador5'])->name('indicador5');
+            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2019\Indicator19813Controller::class,'indicador6'])->name('indicador6');
         });
 
         Route::prefix('2020')->as('2020.')->group(function () {
             Route::get('/',           [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'index'])->name('index');
-            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador1'])->name('indicador1');
-            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador2'])->name('indicador2');
-            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador3a'])->name('indicador3a');
-            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador3b'])->name('indicador3b');
-            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador3c'])->name('indicador3c');
-            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador4a'])->name('indicador4a');
-            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador4b'])->name('indicador4b');
-            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador5'])->name('indicador5');
-            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2020\Indicator19813controller::class,'indicador6'])->name('indicador6');
+            Route::get('/indicador1', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador1'])->name('indicador1');
+            Route::get('/indicador2', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador2'])->name('indicador2');
+            Route::get('/indicador3a', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador3a'])->name('indicador3a');
+            Route::get('/indicador3b', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador3b'])->name('indicador3b');
+            Route::get('/indicador3c', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador3c'])->name('indicador3c');
+            Route::get('/indicador4a', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador4a'])->name('indicador4a');
+            Route::get('/indicador4b', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador4b'])->name('indicador4b');
+            Route::get('/indicador5', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador5'])->name('indicador5');
+            Route::get('/indicador6', [App\Http\Controllers\Indicators\_2020\Indicator19813Controller::class,'indicador6'])->name('indicador6');
         });
     });
 
@@ -1108,23 +1114,23 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
 
         Route::prefix('2018')->as('2018.')->group(function () {
             Route::get('/', [App\Http\Controllers\Indicators\_2018\Indicator19664Controller::class,'index'])->name('index');
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2018\Indicator19664controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2018\Indicator19664controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2018\Indicator19664controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2018\Indicator19664Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2018\Indicator19664Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2018\Indicator19664Controller::class,'reyno'])->name('reyno');
         });
 
         Route::prefix('2019')->as('2019.')->group(function () {
             Route::get('/', [App\Http\Controllers\Indicators\_2019\Indicator19664Controller::class,'index'])->name('index');
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2019\Indicator19664controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2019\Indicator19664controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2019\Indicator19664controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2019\Indicator19664Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2019\Indicator19664Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2019\Indicator19664Controller::class,'reyno'])->name('reyno');
         });
 
         Route::prefix('2020')->as('2020.')->group(function () {
             Route::get('/', [App\Http\Controllers\Indicators\_2020\Indicator19664Controller::class,'index'])->name('index');
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\Indicator19664controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\Indicator19664controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\Indicator19664controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\Indicator19664Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\Indicator19664Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\Indicator19664Controller::class,'reyno'])->name('reyno');
         });
     });
 
@@ -1134,30 +1140,30 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         })->name('index');
 
         Route::prefix('2018')->as('2018.')->group(function () {
-            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'index_18834'])->name('index');
+            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'index_18834'])->name('index');
             Route::get('/', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'index'])->name('index');
 
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'reyno'])->name('reyno');
         });
 
         Route::prefix('2019')->as('2019.')->group(function () {
-            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'index_18834'])->name('index');
+            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'index_18834'])->name('index');
             Route::get('/', [App\Http\Controllers\Indicators\_2019\Indicator18834Controller::class,'index'])->name('index');
 
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2019\Indicator18834controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2019\Indicator18834controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2019\Indicator18834controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2019\Indicator18834Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2019\Indicator18834Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2019\Indicator18834Controller::class,'reyno'])->name('reyno');
         });
 
         Route::prefix('2020')->as('2020.')->group(function () {
-            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834controller::class,'index_18834'])->name('index');
+            //Route::get('', [App\Http\Controllers\Indicators\_2018\Indicator18834Controller::class,'index_18834'])->name('index');
             Route::get('/', [App\Http\Controllers\Indicators\_2020\Indicator18834Controller::class,'index'])->name('index');
 
-            Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\Indicator18834controller::class,'servicio'])->name('servicio');
-            Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\Indicator18834controller::class,'hospital'])->name('hospital');
-            Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\Indicator18834controller::class,'reyno'])->name('reyno');
+            Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\Indicator18834Controller::class,'servicio'])->name('servicio');
+            Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\Indicator18834Controller::class,'hospital'])->name('hospital');
+            Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\Indicator18834Controller::class,'reyno'])->name('reyno');
         });
     });
 
@@ -1197,84 +1203,84 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         })->name('index');
         Route::prefix('2020')->as('2020.')->group(function () {
             Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorAPSController::class,'index'])->name('index');
-            Route::get('/pmasama', [App\Http\Controllers\Indicators\_2020\IndicatorAPScontroller::class,'pmasama'])->name('pmasama');
+            Route::get('/pmasama', [App\Http\Controllers\Indicators\_2020\IndicatorAPSController::class,'pmasama'])->name('pmasama');
 
             Route::prefix('chcc')->as('chcc.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorChccController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorChcccontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorChcccontroller::class,'reyno'])->name('reyno');
-                Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\IndicatorChcccontroller::class,'hospital'])->name('hospital');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorChccController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorChccController::class,'reyno'])->name('reyno');
+                Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\IndicatorChccController::class,'hospital'])->name('hospital');
             });
 
             Route::prefix('depsev')->as('depsev.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorDepsevController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorDepsevcontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorDepsevcontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorDepsevController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorDepsevController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('saserep')->as('saserep.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepcontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepcontroller::class,'reyno'])->name('reyno');
-                Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepcontroller::class,'hospital'])->name('hospital');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepController::class,'reyno'])->name('reyno');
+                Route::get('/hospital', [App\Http\Controllers\Indicators\_2020\IndicatorSaserepController::class,'hospital'])->name('hospital');
             });
 
             Route::prefix('ges_odont')->as('ges_odont.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorGesOdontController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorGesOdontcontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorGesOdontcontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorGesOdontController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorGesOdontController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('sembrando_sonrisas')->as('sembrando_sonrisas.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorSembrandoSonrisasController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorSembrandoSonrisascontroller::class,'aps'])->name('aps');
-                Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\IndicatorSembrandoSonrisascontroller::class,'servicio'])->name('servicio');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorSembrandoSonrisasController::class,'aps'])->name('aps');
+                Route::get('/servicio', [App\Http\Controllers\Indicators\_2020\IndicatorSembrandoSonrisasController::class,'servicio'])->name('servicio');
             });
 
             Route::prefix('mejoramiento_atencion_odontologica')->as('mejoramiento_atencion_odontologica.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorMejorAtenOdontController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorMejorAtenOdontcontroller::class,'aps'])->name('aps');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorMejorAtenOdontController::class,'aps'])->name('aps');
             });
 
             Route::prefix('odontologico_integral')->as('odontologico_integral.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorOdontIntegralController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorOdontIntegralcontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorOdontIntegralcontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorOdontIntegralController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorOdontIntegralController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('resolutividad')->as('resolutividad.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorResolutividadController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorResolutividadcontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorResolutividadcontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorResolutividadController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorResolutividadController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('pespi')->as('pespi.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorPespiController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorPespicontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorPespicontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorPespiController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorPespiController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('equidad_rural')->as('equidad_rural.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorEquidadRuralController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorEquidadRuralcontroller::class,'aps'])->name('aps');
-                // Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorEquidadRuralcontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorEquidadRuralController::class,'aps'])->name('aps');
+                // Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorEquidadRuralController::class,'reyno'])->name('reyno');
             });
 
             Route::prefix('respiratorio')->as('respiratorio.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Indicators\_2020\IndicatorRespiratorioController::class,'index'])->name('index');
 
-                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorRespiratoriocontroller::class,'aps'])->name('aps');
-                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorRespiratoriocontroller::class,'reyno'])->name('reyno');
+                Route::get('/aps', [App\Http\Controllers\Indicators\_2020\IndicatorRespiratorioController::class,'aps'])->name('aps');
+                Route::get('/reyno', [App\Http\Controllers\Indicators\_2020\IndicatorRespiratorioController::class,'reyno'])->name('reyno');
             });
         });
     });
@@ -1290,15 +1296,15 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
                 ->name('index');
 
             /* Iquique 1101 */
-            Route::get('/{comuna}', [App\Http\Controllers\Indicators\IAAPS\_2019\IAAPScontroller::class,'show'])
+            Route::get('/{comuna}', [App\Http\Controllers\Indicators\IAAPS\_2019\IAAPSController::class,'show'])
                 ->name('show');
         });
     });
 
     Route::prefix('rem')->as('rem.')->group(function () {
-        Route::get('/{year}', [App\Http\Controllers\Indicators\Remcontroller::class,'list'])->name('list');
+        Route::get('/{year}', [App\Http\Controllers\Indicators\RemController::class,'list'])->name('list');
         Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\RemController::class,'index'])->name('index');
-        Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\Remcontroller::class,'show'])->name('show');
+        Route::get('/{year}/{serie}/{nserie}/{unique?}', [App\Http\Controllers\Indicators\RemController::class,'show'])->name('show');
     });
 
     Route::prefix('rems')->as('rems.')->group(function () {
@@ -1310,42 +1316,43 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
             return view('indicators.rem.2020.index');
         })->name('2020.index');
 
-        Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\Rems\Remcontroller::class,'index_serie_year'])->name('year.serie.index');
+        Route::get('/{year}/{serie}', [App\Http\Controllers\Indicators\Rems\RemController::class,'index_serie_year'])->name('year.serie.index');
 
-        Route::get('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\Remcontroller::class,'a01'])->name('year.serie.nserie.index');
-        Route::post('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\Remcontroller::class,'show'])->name('year.serie.nserie.index');
+        Route::get('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\RemController::class,'a01'])->name('year.serie.nserie.index');
+        Route::post('/{year}/{serie}/{nserie}', [App\Http\Controllers\Indicators\Rems\RemController::class,'show'])->name('year.serie.nserie.index');
     });
 });
 
 
 /* Middleware 'Drugs' hace que no se pueda tener acceso al módulo de drogas fuera de horario de oficina */
-Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','Drugs')->group(function(){
+Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','drugs')->group(function(){
     Route::resource('courts',App\Http\Controllers\Drugs\CourtController::class);
     Route::resource('police_units',App\Http\Controllers\Drugs\PoliceUnitController::class);
     Route::resource('substances',App\Http\Controllers\Drugs\SubstanceController::class);
 
-    Route::get('users',[Usercontroller::class,'drugs'])->name('users');
+    Route::get('users',[UserController::class,'drugs'])->name('users');
 
-    Route::get('receptions/report',[App\Http\Controllers\Drugs\Receptioncontroller::class,'report'])->name('receptions.report');
-    Route::get('receptions/{reception}/record',[App\Http\Controllers\Drugs\Receptioncontroller::class,'showRecord'])->name('receptions.record');
-    Route::get('receptions/{receptionitem}/edit_item',[App\Http\Controllers\Drugs\Receptioncontroller::class,'editItem'])->name('receptions.edit_item');
-    Route::put('receptions/{receptionitem}/update_item',[App\Http\Controllers\Drugs\Receptioncontroller::class,'updateItem'])->name('receptions.update_item');
-    Route::delete('receptions/{receptionitem}/destroy_item',[App\Http\Controllers\Drugs\Receptioncontroller::class,'destroyItem'])->name('receptions.destroy_item');
-    Route::put('receptions/{receptionitem}/store_result',[App\Http\Controllers\Drugs\Receptioncontroller::class,'storeResult'])->name('receptions.store_result');
-    Route::put('receptions/{receptionitem}/store_protocol',[App\Http\Controllers\Drugs\Receptioncontroller::class,'storeProtocol'])->name('receptions.store_protocol');
-    Route::get('receptions/protocols/{protocol}',[App\Http\Controllers\Drugs\Receptioncontroller::class,'showProtocol'])->name('receptions.protocols.show');
-    Route::post('receptions/{reception}/item',[App\Http\Controllers\Drugs\Receptioncontroller::class,'storeItem'])->name('receptions.storeitem');
-    Route::get('receptions/{reception}/doc_fiscal',[App\Http\Controllers\Drugs\Receptioncontroller::class,'showDocFiscal'])->name('receptions.doc_fiscal');
-    Route::get('receptions/{reception}/sample_to_isp',[App\Http\Controllers\Drugs\SampleToIspcontroller::class,'show'])->name('receptions.sample_to_isp.show');
+    Route::get('receptions/report',[App\Http\Controllers\Drugs\ReceptionController::class,'report'])->name('receptions.report');
+    Route::get('receptions/{reception}/record',[App\Http\Controllers\Drugs\ReceptionController::class,'showRecord'])->name('receptions.record');
+    Route::get('receptions/{receptionitem}/edit_item',[App\Http\Controllers\Drugs\ReceptionController::class,'editItem'])->name('receptions.edit_item');
+    Route::put('receptions/{receptionitem}/update_item',[App\Http\Controllers\Drugs\ReceptionController::class,'updateItem'])->name('receptions.update_item');
+    Route::delete('receptions/{receptionitem}/destroy_item',[App\Http\Controllers\Drugs\ReceptionController::class,'destroyItem'])->name('receptions.destroy_item');
+    Route::put('receptions/{receptionitem}/store_result',[App\Http\Controllers\Drugs\ReceptionController::class,'storeResult'])->name('receptions.store_result');
+    Route::put('receptions/{receptionitem}/store_protocol',[App\Http\Controllers\Drugs\ReceptionController::class,'storeProtocol'])->name('receptions.store_protocol');
+    Route::get('receptions/protocols/{protocol}',[App\Http\Controllers\Drugs\ReceptionController::class,'showProtocol'])->name('receptions.protocols.show');
+    Route::post('receptions/{reception}/item',[App\Http\Controllers\Drugs\ReceptionController::class,'storeItem'])->name('receptions.storeitem');
+    Route::get('receptions/{reception}/doc_fiscal',[App\Http\Controllers\Drugs\ReceptionController::class,'showDocFiscal'])->name('receptions.doc_fiscal');
+    Route::get('receptions/{reception}/sample_to_isp',[App\Http\Controllers\Drugs\SampleToIspController::class,'show'])->name('receptions.sample_to_isp.show');
     Route::post('receptions/{reception}/sample_to_isp',[App\Http\Controllers\Drugs\SampleToIspController::class,'store'])->name('receptions.sample_to_isp.store');
-    Route::get('receptions/{reception}/record_to_court',[App\Http\Controllers\Drugs\RecordToCourtcontroller::class,'show'])->name('receptions.record_to_court.show');
+    Route::get('receptions/{reception}/record_to_court',[App\Http\Controllers\Drugs\RecordToCourtController::class,'show'])->name('receptions.record_to_court.show');
     Route::post('receptions/{reception}/record_to_court',[App\Http\Controllers\Drugs\RecordToCourtController::class,'store'])->name('receptions.record_to_court.store');
+    
     Route::resource('receptions',App\Http\Controllers\Drugs\ReceptionController::class);
 
     Route::resource('destructions',App\Http\Controllers\Drugs\DestructionController::class)->except(['create']);
 
     Route::get('rosters/analisis_to_admin',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'index'])->name('roster.analisis_to_admin.index');
-    Route::get('rosters/analisis_to_admin/{id}',[App\Http\Controllers\Drugs\RosterAnalisisToAdmincontroller::class,'show'])->name('roster.analisis_to_admin.show');
+    Route::get('rosters/analisis_to_admin/{id}',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'show'])->name('roster.analisis_to_admin.show');
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class,'index'])->middleware('auth')->name('health_plan.index');
@@ -1382,8 +1389,8 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\Pharmacies\PharmacyController::class,'index'])->name('index');
-    Route::get('admin_view', [App\Http\Controllers\Pharmacies\Pharmacycontroller::class,'admin_view'])->name('admin_view');
-    Route::get('pharmacy_users', [App\Http\Controllers\Pharmacies\Pharmacycontroller::class,'pharmacy_users'])->name('pharmacy_users');
+    Route::get('admin_view', [App\Http\Controllers\Pharmacies\PharmacyController::class,'admin_view'])->name('admin_view');
+    Route::get('pharmacy_users', [App\Http\Controllers\Pharmacies\PharmacyController::class,'pharmacy_users'])->name('pharmacy_users');
     Route::post('user_asign_store', [PharmacyController::class, 'user_asign_store'])->name('user_asign_store');
     Route::delete('/{pharmacy}/{user}/user_asign_destroy', [PharmacyController::class, 'user_asign_destroy'])->name('user_asign_destroy');
 
@@ -1395,61 +1402,61 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
     Route::prefix('products')->as('products.')->middleware('auth')->group(function () {
         Route::resource('receiving', App\Http\Controllers\Pharmacies\ReceivingController::class);
         Route::resource('receiving_item', App\Http\Controllers\Pharmacies\ReceivingItemController::class);
-        Route::get('receiving/record/{receiving}', [App\Http\Controllers\Pharmacies\Receivingcontroller::class,'record'])->name('receiving.record');
-        Route::get('dispatch/product/due_date/{product_id?}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'getFromProduct_due_date'])->name('dispatch.product.due_date')->middleware('auth');
-        Route::get('dispatch/product/batch/{product_id?}/{due_date?}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'getFromProduct_batch'])->name('dispatch.product.batch')->middleware('auth');
-        Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'getFromProduct_count'])->name('dispatch.product.count')->middleware('auth');
-        Route::get('/exportExcel', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'exportExcel'])->name('exportExcel')->middleware('auth');
+        Route::get('receiving/record/{receiving}', [App\Http\Controllers\Pharmacies\ReceivingController::class,'record'])->name('receiving.record');
+        Route::get('dispatch/product/due_date/{product_id?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_due_date'])->name('dispatch.product.due_date')->middleware('auth');
+        Route::get('dispatch/product/batch/{product_id?}/{due_date?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_batch'])->name('dispatch.product.batch')->middleware('auth');
+        Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_count'])->name('dispatch.product.count')->middleware('auth');
+        Route::get('/exportExcel', [App\Http\Controllers\Pharmacies\DispatchController::class,'exportExcel'])->name('exportExcel')->middleware('auth');
 
         Route::resource('dispatch', App\Http\Controllers\Pharmacies\DispatchController::class);
         Route::resource('dispatch_item', App\Http\Controllers\Pharmacies\DispatchItemController::class);
-        Route::get('dispatch/record/{dispatch}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'record'])->name('dispatch.record');
-        Route::get('dispatch/sendC19/{dispatch}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'sendC19'])->name('dispatch.sendC19');
-        Route::get('dispatch/deleteC19/{dispatch}', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'deleteC19'])->name('dispatch.deleteC19');
-        Route::post('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'storeFile'])->name('dispatch.storeFile');
-        Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\Dispatchcontroller::class,'openFile'])->name('dispatch.openFile');
+        Route::get('dispatch/record/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'record'])->name('dispatch.record');
+        Route::get('dispatch/sendC19/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'sendC19'])->name('dispatch.sendC19');
+        Route::get('dispatch/deleteC19/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'deleteC19'])->name('dispatch.deleteC19');
+        Route::post('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'storeFile'])->name('dispatch.storeFile');
+        Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'openFile'])->name('dispatch.openFile');
         Route::resource('purchase', App\Http\Controllers\Pharmacies\PurchaseController::class);
         Route::resource('purchase_item', App\Http\Controllers\Pharmacies\PurchaseItemController::class);
-        Route::get('purchase/sendForSignature/{purchase}/', [App\Http\Controllers\Pharmacies\Purchasecontroller::class,'sendForSignature'])->name('purchase.sendForSignature');
-        Route::get('purchase/record/{purchase}', [App\Http\Controllers\Pharmacies\Purchasecontroller::class,'record'])->name('purchase.record');
-        Route::get('purchase/record-pdf/{purchase}', [App\Http\Controllers\Pharmacies\Purchasecontroller::class,'recordPdf'])->name('purchase.record_pdf');
+        Route::get('purchase/sendForSignature/{purchase}/', [App\Http\Controllers\Pharmacies\PurchaseController::class,'sendForSignature'])->name('purchase.sendForSignature');
+        Route::get('purchase/record/{purchase}', [App\Http\Controllers\Pharmacies\PurchaseController::class,'record'])->name('purchase.record');
+        Route::get('purchase/record-pdf/{purchase}', [App\Http\Controllers\Pharmacies\PurchaseController::class,'recordPdf'])->name('purchase.record_pdf');
         Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
         Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
 
         Route::resource('transfer', App\Http\Controllers\Pharmacies\TransferController::class);
-        Route::get('transfer/{establishment}/auth', [App\Http\Controllers\Pharmacies\Transfercontroller::class,'auth'])->name('transfer.auth');
+        Route::get('transfer/{establishment}/auth', [App\Http\Controllers\Pharmacies\TransferController::class,'auth'])->name('transfer.auth');
         Route::resource('deliver', App\Http\Controllers\Pharmacies\DeliverController::class);
-        Route::put('deliver/{deliver}/confirm', [App\Http\Controllers\Pharmacies\Delivercontroller::class,'confirm'])->name('deliver.confirm');
-        Route::put('deliver/{deliver}/saveDocId', [App\Http\Controllers\Pharmacies\Delivercontroller::class,'saveDocId'])->name('deliver.saveDocId');
-        Route::delete('deliver/{deliver}/restore', [App\Http\Controllers\Pharmacies\Delivercontroller::class,'restore'])->name('deliver.restore');
+        Route::put('deliver/{deliver}/confirm', [App\Http\Controllers\Pharmacies\DeliverController::class,'confirm'])->name('deliver.confirm');
+        Route::put('deliver/{deliver}/saveDocId', [App\Http\Controllers\Pharmacies\DeliverController::class,'saveDocId'])->name('deliver.saveDocId');
+        Route::delete('deliver/{deliver}/restore', [App\Http\Controllers\Pharmacies\DeliverController::class,'restore'])->name('deliver.restore');
     });
     Route::resource('products', App\Http\Controllers\Pharmacies\ProductController::class);
 
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
-        Route::get('bincard', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repBincard'])->name('bincard');
-        Route::get('purchase_report', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repPurchases'])->name('purchase_report');
-        Route::get('informe_movimientos', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repInformeMovimientos'])->name('informe_movimientos');
-        Route::get('product_last_prices', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repProductLastPrices'])->name('product_last_prices');
-        Route::get('consume_history', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repConsumeHistory'])->name('consume_history');
+        Route::get('bincard', [App\Http\Controllers\Pharmacies\ProductController::class,'repBincard'])->name('bincard');
+        Route::get('purchase_report', [App\Http\Controllers\Pharmacies\ProductController::class,'repPurchases'])->name('purchase_report');
+        Route::get('informe_movimientos', [App\Http\Controllers\Pharmacies\ProductController::class,'repInformeMovimientos'])->name('informe_movimientos');
+        Route::get('product_last_prices', [App\Http\Controllers\Pharmacies\ProductController::class,'repProductLastPrices'])->name('product_last_prices');
+        Route::get('consume_history', [App\Http\Controllers\Pharmacies\ProductController::class,'repConsumeHistory'])->name('consume_history');
 
-        Route::get('products', [App\Http\Controllers\Pharmacies\Productcontroller::class,'repProduct'])->name('products');
+        Route::get('products', [App\Http\Controllers\Pharmacies\ProductController::class,'repProduct'])->name('products');
     });
 });
 
 /*formulario de requerimiento compra o servicio */
 /*
-Route::get('request_forms/my_request_inbox', 'RequestForms\RequestFormcontroller::class,'myRequestInbox'])->name('request_forms.my_request_inbox')->middleware('auth');
-Route::get('request_forms/authorize_inbox', 'RequestForms\RequestFormcontroller::class,'authorizeInbox'])->name('request_forms.authorize_inbox')->middleware('auth');
-Route::get('request_forms/{requestForm}/record', 'RequestForms\RequestFormcontroller::class,'record'])->name('request_forms.record')->middleware('auth');
-Route::get('request_forms/finance_inbox', 'RequestForms\RequestFormcontroller::class,'financeInbox'])->name('request_forms.finance_inbox')->middleware('auth');
-Route::get('request_forms/director_inbox', 'RequestForms\RequestFormcontroller::class,'directorPassageInbox'])->name('request_forms.director_inbox')->middleware('auth');
+Route::get('request_forms/my_request_inbox', 'RequestForms\RequestFormController::class,'myRequestInbox'])->name('request_forms.my_request_inbox')->middleware('auth');
+Route::get('request_forms/authorize_inbox', 'RequestForms\RequestFormController::class,'authorizeInbox'])->name('request_forms.authorize_inbox')->middleware('auth');
+Route::get('request_forms/{requestForm}/record', 'RequestForms\RequestFormController::class,'record'])->name('request_forms.record')->middleware('auth');
+Route::get('request_forms/finance_inbox', 'RequestForms\RequestFormController::class,'financeInbox'])->name('request_forms.finance_inbox')->middleware('auth');
+Route::get('request_forms/director_inbox', 'RequestForms\RequestFormController::class,'directorPassageInbox'])->name('request_forms.director_inbox')->middleware('auth');
 
-Route::put('request_forms/store_approved_request/{request_form}', 'RequestForms\RequestFormcontroller::class,'storeApprovedRequest'])->name('request_forms.store_approved_request')->middleware('auth');
-Route::put('request_forms/store_approved_chief/{request_form}', 'RequestForms\RequestFormcontroller::class,'storeApprovedChief'])->name('request_forms.store_approved_chief')->middleware('auth');
-Route::put('request_forms/store_finance_data/{request_form}', 'RequestForms\RequestFormcontroller::class,'storeFinanceData'])->name('request_forms.store_finance_data')->middleware('auth');
-Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFormcontroller::class,'addItemForm'])->name('request_forms.add_item_form')->middleware('auth');
-Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormcontroller::class,'storeApprovedFinance'])->name('request_forms.store_approved_finance')->middleware('auth');
-Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormcontroller::class,'storeReject'])->name('request_forms.store_reject')->middleware('auth');
+Route::put('request_forms/store_approved_request/{request_form}', 'RequestForms\RequestFormController::class,'storeApprovedRequest'])->name('request_forms.store_approved_request')->middleware('auth');
+Route::put('request_forms/store_approved_chief/{request_form}', 'RequestForms\RequestFormController::class,'storeApprovedChief'])->name('request_forms.store_approved_chief')->middleware('auth');
+Route::put('request_forms/store_finance_data/{request_form}', 'RequestForms\RequestFormController::class,'storeFinanceData'])->name('request_forms.store_finance_data')->middleware('auth');
+Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFormController::class,'addItemForm'])->name('request_forms.add_item_form')->middleware('auth');
+Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormController::class,'storeApprovedFinance'])->name('request_forms.store_approved_finance')->middleware('auth');
+Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormController::class,'storeReject'])->name('request_forms.store_reject')->middleware('auth');
 */
 //Route::resource('request_forms', 'RequestForms\RequestFormController::class)->middleware('auth');
 /*
@@ -1709,7 +1716,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
         Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
-        //Route::get('results/{result_id}', 'Resultscontroller::class,'show'])->name('results.show');
+        //Route::get('results/{result_id}', 'ResultsController::class,'show'])->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
