@@ -1157,22 +1157,24 @@
         $(this).find('textarea[name="observation"]').focus();
     });
 
-
-
     $('#btn_licitacion').click(function() {
         if(document.getElementById("for_tender_number").value != '')
         {
+            $('#btn_licitacion').prop('disabled', true).html("Cargando...");
             axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
             .then(function(response) {
                 // handle success
-                //console.log(response);
-                console.log(response.data.Listado[0].Nombre);
-                document.getElementById("for_description").value = response.data.Listado[0].Nombre;
+                console.log(response.data);
+                $('#btn_licitacion').prop('disabled', false).html("Consultar");
+                // console.log(response.data.Listado[0].Nombre);
+                // document.getElementById("for_description").value = response.data.Listado[0].Nombre;
+                $('#for_description').val(response.data.Listado[0].Nombre);
                 //alert(response.data.Listado.Nombre);
             })
             .catch(function(error) {
                 // handle error
                 //alert(response.data.Cantidad);
+                $('#btn_licitacion').prop('disabled', false).html("Consultar");
                 alert('valor digitado no se encuentra en Mercado Público o error en la Comunicación');
                 console.log(error);
             })
