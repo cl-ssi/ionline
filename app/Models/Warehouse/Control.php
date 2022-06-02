@@ -5,6 +5,7 @@ namespace App\Models\Warehouse;
 use App\Models\Arq\Provider;
 use App\Models\Cfg\Program;
 use App\Models\Parameters\Supplier;
+use App\Models\RequestForms\PurchaseOrder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,7 @@ class Control extends Model
         'supplier_id',
         'program_id',
         'po_id',
+        'request_form_id',
     ];
 
     protected $dates = [
@@ -51,6 +53,21 @@ class Control extends Model
     public function program()
     {
         return $this->belongsTo(Program::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    }
+
+    public function requestForm()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
     }
 
     public function origin()
@@ -86,11 +103,6 @@ class Control extends Model
     public function originStore()
     {
         return $this->belongsTo(Store::class, 'store_origin_id');
-    }
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
     }
 
     public function isReceiving()
