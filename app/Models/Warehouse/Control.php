@@ -2,8 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\Models\Arq\Provider;
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\PurchaseOrder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

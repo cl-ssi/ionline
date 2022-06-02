@@ -2,7 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use App\Models\Unspsc\Product as UnspscProduct;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

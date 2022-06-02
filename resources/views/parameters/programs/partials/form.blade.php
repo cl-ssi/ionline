@@ -1,5 +1,5 @@
 <div class="form-row mt-3">
-    <fieldset class="form-group col-md-6">
+    <fieldset class="form-group col-md-5">
         <label for="name">Nombre</label>
         <input
             type="text"
@@ -11,6 +11,24 @@
             required
         >
         @error('name')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-3">
+        <label for="alias">Alias</label>
+        <input
+            type="text"
+            class="form-control @error('alias') is-invalid @enderror"
+            id="alias"
+            wire:model="alias"
+            placeholder="Ingresa el alias o nombre corto"
+            value="{{ old('alias', optional($program)->alias) }}"
+            required
+        >
+        @error('alias')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>

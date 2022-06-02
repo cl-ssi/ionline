@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Cfg;
+namespace App\Models\Parameters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +14,7 @@ class Program extends Model
 
     protected $fillable = [
         'name',
+        'alias',
         'description',
         'start_date',
         'end_date',

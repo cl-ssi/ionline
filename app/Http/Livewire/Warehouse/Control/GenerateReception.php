@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Http\Requests\Warehouse\Control\AddProductRequest;
 use App\Http\Requests\Warehouse\Control\GenerationReceptionRequest;
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use App\Models\ClCommune;
 use App\Models\Inv\Inventory;
 use App\Models\Parameters\Supplier;

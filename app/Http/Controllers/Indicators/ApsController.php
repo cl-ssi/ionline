@@ -115,7 +115,7 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'ssi', function($query){
                                         return $query->where('IdEstablecimiento', 102010);
                                     })
-                                    ->when($factor_source == 'REM P', function($query){
+                                    ->when(Str::contains($factor_source, 'REM P'), function($query){
                                         return $query->whereIn('Mes', [6,12]);
                                     })
                                     ->when($last_year, function($query) use ($last_month_rem){
@@ -151,7 +151,7 @@ class ApsController extends Controller
                                     ->when($establishment_type == 'ssi', function($query){
                                         return $query->where('IdEstablecimiento', 102010);
                                     })
-                                    ->when($factor_source == 'REM P', function($query){
+                                    ->when(Str::contains($factor_source, 'REM P'), function($query){
                                         return $query->whereIn('Mes', [6,12]);
                                     })
                                     ->when($last_year, function($query) use ($last_month_rem){

@@ -20,6 +20,8 @@ use App\Models\RequestForms\PettyCash;
 use App\Models\RequestForms\PurchasingProcessDetail;
 use App\Models\RequestForms\Tender;
 use App\Models\RequestForms\DirectDeal;
+use App\Models\RequestForms\PurchaseOrder;
+use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -61,15 +63,20 @@ class PurchasingProcessController extends Controller
             //dd($requestForm.purchasingProcess.details);
             
             //dd($requestForm->purchasingProcess->details->first()->immediatePurchase);
-            $ticket = env('TICKET_MERCADO_PUBLICO');
-            $responseoc = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo=1058052-14-AG22&ticket='.$ticket.'');
-            $jsonoc = $responseoc->json();
+            // $ticket = env('TICKET_MERCADO_PUBLICO');
+            // $responseoc = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo=1058052-14-AG22&ticket='.$ticket.'');
+            // $jsonoc = $responseoc->json();
 
-            $objoc = json_decode($responseoc);
+            // $objoc = json_decode($responseoc);
             //dd($objoc);
             // dd($objoc->Listado[0]);
 
             //dd($json);
+
+            // return MercadoPublico::getTender('1077499-1-LE22');
+            // return MercadoPublico::getPurchaseOrder('1058052-14-AG22');
+            $objoc = null;
+
             return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending','objoc'));
         } else {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');

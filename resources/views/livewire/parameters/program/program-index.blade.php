@@ -5,16 +5,16 @@
         </div>
         <div class="col text-right">
             <a
-                href="{{ route('cfg.programs.create') }}"
+                href="{{ route('parameters.programs.create') }}"
                 class="btn btn-primary"
-                >
+            >
                 <i class="fas fa-plus"></i> Crear Programa
             </a>
         </div>
     </div>
     <div class="input-group my-2">
         <div class="input-group-prepend">
-          <span class="input-group-text">Buscar</span>
+            <span class="input-group-text">Buscar</span>
         </div>
         <input type="text" class="form-control" wire:model="search">
     </div>
@@ -25,6 +25,7 @@
                 <tr>
                     <th class="text-center">ID</th>
                     <th>Nombre</th>
+                    <th>Alias</th>
                     <th class="text-center">Inicio</th>
                     <th class="text-center">Fin</th>
                     <th></th>
@@ -40,17 +41,21 @@
                 <tr wire:loading.remove>
                     <td class="text-center">
                         <a
-                            href="{{ route('cfg.programs.edit', $program) }}"
+                            href="{{ route('parameters.programs.edit', $program) }}"
                             class="btn btn-sm btn-outline-secondary"
-                            >
+                        >
                             <i class="fas fa-edit"></i> {{ $program->id }}
                         </a>
                     </td>
                     <td>{{ $program->name }}</td>
+                    <td>{{ $program->alias }}</td>
                     <td class="text-center">{{ $program->start_date_format }}</td>
                     <td class="text-center">{{ $program->end_date_format }}</td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-outline-danger" wire:click="delete({{ $program }})">
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            wire:click="delete({{ $program }})"
+                        >
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>

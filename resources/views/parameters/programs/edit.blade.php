@@ -6,7 +6,7 @@
 
 @include('parameters.nav')
 
-@livewire('cfg.program.program-edit', [
+@livewire('parameters.program.program-edit', [
     'program' => $program
 ])
 

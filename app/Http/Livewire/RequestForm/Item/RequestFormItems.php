@@ -23,6 +23,7 @@ class RequestFormItems extends Component
     ];
 
     protected $rules = [
+        'product_id'          =>  'required',
         'unitValue'           =>  'required|numeric|min:1',
         'quantity'            =>  'required|numeric|min:0.1',
         'unitOfMeasurement'   =>  'required',
@@ -31,6 +32,7 @@ class RequestFormItems extends Component
     ];
 
     protected $messages = [
+        'product_id.required'         => 'Producto o servicio no puede estar vacio.',
         'unitValue.required'          => 'Valor Unitario no puede estar vacio.',
         'unitValue.numeric'           => 'Valor Unitario debe ser numérico.',
         'unitValue.min'               => 'Valor Unitario debe ser mayor o igual a 1.',

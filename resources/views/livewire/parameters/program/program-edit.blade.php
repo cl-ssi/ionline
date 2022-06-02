@@ -1,7 +1,7 @@
 <div>
     <h5>Editar Programa</h5>
 
-    @include('cfg.programs.partials.form', [
+    @include('parameters.programs.partials.form', [
         'program' => $program,
     ])
 
@@ -10,7 +10,8 @@
     </button>
     <a
         class="btn btn-outline-primary"
-        href="{{ route('cfg.programs.index') }}">
+        href="{{ route('parameters.programs.index') }}"
+    >
         Cancelar
     </a>
 </div>

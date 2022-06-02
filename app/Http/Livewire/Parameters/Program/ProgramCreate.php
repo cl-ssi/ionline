@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Http\Livewire\Cfg\Program;
+namespace App\Http\Livewire\Parameters\Program;
 
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use Livewire\Component;
 
 class ProgramCreate extends Component
 {
     public $name;
+    public $alias;
     public $start_date;
     public $end_date;
     public $description;
 
     public function render()
     {
-        return view('livewire.cfg.program.program-create');
+        return view('livewire.parameters.program.program-create');
     }
 
     public function rules()
     {
         return [
             'name'          => 'required|string|min:2|max:255',
+            'alias'         => 'required|string|min:2|max:50',
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',
@@ -33,6 +35,6 @@ class ProgramCreate extends Component
         Program::create($dataValidated);
 
         session()->flash('success', 'El programa fue creado exitosamente.');
-        return redirect()->route('cfg.programs.index');
+        return redirect()->route('parameters.programs.index');
     }
 }
