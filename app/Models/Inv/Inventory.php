@@ -23,12 +23,14 @@ class Inventory extends Model
         'po_price',
         'po_date',
         'deliver_date',
-        'delivered_to',
         'reception_confirmation',
+        'user_id',
+        'organization_id',
         'product_id',
         'po_id',
         'control_id',
         'place_id',
         'store_id',
+        'request_form_id',
     ];
 }
