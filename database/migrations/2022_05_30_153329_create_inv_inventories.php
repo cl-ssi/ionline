@@ -19,7 +19,6 @@ class CreateInvInventories extends Migration
             $table->integer('number')->nullable();
             $table->integer('useful_life')->nullable();
             $table->string('applicant', 255)->nullable();// request form
-            $table->foreignId('organization_id', 255)->nullable()->constrained('organizational_units');// request form
 
             $table->string('brand', 255)->nullable();
             $table->string('model', 255)->nullable();
@@ -34,12 +33,14 @@ class CreateInvInventories extends Migration
             $table->timestamp('deliver_date')->nullable();
             $table->boolean('reception_confirmation')->nullable();
 
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('organization_id', 255)->nullable()->constrained('organizational_units');//request form
+            $table->foreignId('user_id')->nullable()->constrained('users'); // delivery to
             $table->foreignId('product_id')->nullable()->constrained('wre_products');
             $table->foreignId('control_id')->nullable()->constrained('wre_controls');
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
-            $table->foreignId('po_id')->nullable()->constrained('arq_purchase_orders');
             $table->foreignId('place_id')->nullable()->constrained('cfg_places');
+            $table->foreignId('po_id')->nullable()->constrained('arq_purchase_orders');
+            $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
 
             $table->timestamps();
             $table->softDeletes();
