@@ -40,7 +40,13 @@ class InvoiceController extends Controller
             } else if (env('APP_ENV') == 'local') {
                 $user_id = $access_token;
             }
-            return $this->show($user_id);
+            if($user_id)
+            {
+                return $this->show($user_id);
+            }
+            else{
+                return redirect()->route('invoice.welcome');
+            }
         }
     }
 
