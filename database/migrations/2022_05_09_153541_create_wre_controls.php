@@ -41,6 +41,7 @@ class CreateWreControls extends Migration
             $table->foreignId('supplier_id')->nullable()->constrained('cfg_suppliers');
             $table->foreignId('program_id')->nullable()->constrained('cfg_programs');
             $table->foreignId('po_id')->nullable()->constrained('arq_purchase_orders');
+            $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
 
             $table->timestamps();
             $table->softDeletes();
