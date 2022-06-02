@@ -34,7 +34,7 @@ class PrefinanceAuthorization extends Component
       $this->requestForm        = $requestForm;
       $this->round_trips        = $roundTrips;
       $this->baggages           = $baggages;
-      $this->comment    = '';
+      $this->comment            = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
@@ -51,11 +51,12 @@ class PrefinanceAuthorization extends Component
 
 
     public function acceptRequestForm() {
+
       $this->validate(
         [
             'sigfe'                        =>  'required',
             'program'                      =>  'required',
-            'arrayItemRequest'             =>  'required|min:'.(count($this->requestForm->itemRequestForms)+1)
+            'arrayItemRequest'             =>  'required|min:'.(($this->requestForm->itemRequestForms->count() > 0 ? count($this->requestForm->itemRequestForms) : count($this->requestForm->passengers)) + 1)
         ],
         [
             'sigfe.required'               =>  'Ingrese valor para  SIGFE.',
@@ -63,10 +64,21 @@ class PrefinanceAuthorization extends Component
             'arrayItemRequest.min'         =>  'Debe seleccionar todos los items presupuestario.',
         ],
       );
-      foreach($this->requestForm->itemRequestForms as $item){
-        $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
-        $item->save();
+
+      if($this->requestForm->passengers->count() > 0){
+          foreach($this->requestForm->passengers as $passenger){
+            $passenger->budget_item_id = $this->arrayItemRequest[$passenger->id]['budgetId'];
+            $passenger->save();
+          }
       }
+      else{
+          foreach($this->requestForm->itemRequestForms as $item){
+            $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
+            $item->save();
+          }
+      }
+
+
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           //  $this->requestForm->status = 'pending';
@@ -82,7 +94,7 @@ class PrefinanceAuthorization extends Component
 
           $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
 
-           if(!$nextEvent->isEmpty()){
+          if(!$nextEvent->isEmpty()){
                //Envío de notificación para visación.
                $now = Carbon::now();
                //manager
