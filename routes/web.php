@@ -61,6 +61,7 @@ use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Documents\ParteController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\SignatureController;
+use App\Http\Controllers\Documents\ParteFileController;
 
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\MobileController;
