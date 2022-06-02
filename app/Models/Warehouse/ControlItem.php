@@ -2,7 +2,7 @@
 
 namespace App\Models\Warehouse;
 
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

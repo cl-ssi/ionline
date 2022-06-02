@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Cfg\Program as CfgProgram;
-use App\Pharmacies\Program;
+use App\Models\Parameters\Program as ParametersProgram;
+use App\Pharmacies\Program as PharmaciesProgram;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +19,8 @@ class CreateCfgPrograms extends Migration
             $table->id();
 
             $table->string('name', 255)->nullable();
-            $table->text('description', 255)->nullable();
+            $table->string('alias', 50)->nullable();
+            $table->string('description', 255)->nullable();
 
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
@@ -28,11 +29,11 @@ class CreateCfgPrograms extends Migration
             $table->softDeletes();
         });
 
-        $pharmacyPrograms = Program::all();
+        $pharmacyPrograms = PharmaciesProgram::all();
 
         foreach($pharmacyPrograms as $program)
         {
-            CfgProgram::create([
+            ParametersProgram::create([
                 'name' => $program->name,
             ]);
         }

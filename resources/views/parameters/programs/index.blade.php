@@ -6,6 +6,6 @@
 
 @include('parameters.nav')
 
-@livewire('cfg.program.program-index')
+@livewire('parameters.program.program-index')
 
 @endsection

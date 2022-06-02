@@ -15,6 +15,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
+        /** TODO: #52 Paginar y suppliers es de parameters o de arq? */
         $suppliers = Supplier::with('region', 'commune')->get();
         return view('parameters.suppliers.index', compact('suppliers'));
     }

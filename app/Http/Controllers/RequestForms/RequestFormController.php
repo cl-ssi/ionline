@@ -475,7 +475,7 @@ class RequestFormController extends Controller {
         $newRequestForm->has_increased_expense = null;
         $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
         $newRequestForm->sigfe = null;
-        $newRequestForm->status = 'pending';
+        $newRequestForm->status = 'saved';
         $newRequestForm->signatures_file_id = null;
         $newRequestForm->old_signatures_file_id = null;
         $newRequestForm->push();
@@ -496,46 +496,47 @@ class RequestFormController extends Controller {
 
         $newRequestForm->update(['estimated_expense' => $total]);
 
-        EventRequestform::createLeadershipEvent($newRequestForm);
-        EventRequestform::createPreFinanceEvent($newRequestForm);
-        EventRequestform::createFinanceEvent($newRequestForm);
-        EventRequestform::createSupplyEvent($newRequestForm);
+        // EventRequestform::createLeadershipEvent($newRequestForm);
+        // EventRequestform::createPreFinanceEvent($newRequestForm);
+        // EventRequestform::createFinanceEvent($newRequestForm);
+        // EventRequestform::createSupplyEvent($newRequestForm);
 
-        //Envío de notificación a Adm de Contrato y abastecimiento.
-        $mail_contract_manager = User::select('email')
-        ->where('id', $newRequestForm->contract_manager_id)
-        ->first();
+        // //Envío de notificación a Adm de Contrato y abastecimiento.
+        // $mail_contract_manager = User::select('email')
+        // ->where('id', $newRequestForm->contract_manager_id)
+        // ->first();
 
 
-        if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
-            if($mail_contract_manager){
-                $emails = [$mail_contract_manager];
-                Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new NewRequestFormNotification($newRequestForm));
-            }
-        }
-        //---------------------------------------------------------
+        // if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+        //     if($mail_contract_manager){
+        //         $emails = [$mail_contract_manager];
+        //         Mail::to($emails)
+        //             ->cc(env('APP_RF_MAIL'))
+        //             ->send(new NewRequestFormNotification($newRequestForm));
+        //     }
+        // }
+        // //---------------------------------------------------------
 
-        //Envío de notificación para visación.
-        //manager
-        $type = 'manager';
-        $mail_notification_ou_manager = Authority::getAuthorityFromDate($newRequestForm->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+        // //Envío de notificación para visación.
+        // //manager
+        // $type = 'manager';
+        // $mail_notification_ou_manager = Authority::getAuthorityFromDate($newRequestForm->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
 
-        $emails = [$mail_notification_ou_manager->user->email];
+        // $emails = [$mail_notification_ou_manager->user->email];
 
-        if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
-            if($mail_notification_ou_manager){
-                Mail::to($emails)
-                    ->cc(env('APP_RF_MAIL'))
-                    ->send(new RequestFormSignNotification($newRequestForm, $newRequestForm->eventRequestForms->first()));
-            }
-        }
-        //---------------------------------------------------------
+        // if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
+        //     if($mail_notification_ou_manager){
+        //         Mail::to($emails)
+        //             ->cc(env('APP_RF_MAIL'))
+        //             ->send(new RequestFormSignNotification($newRequestForm, $newRequestForm->eventRequestForms->first()));
+        //     }
+        // }
+        // //---------------------------------------------------------
 
         session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->folio.' fue creado con éxito. <br>
                                   Recuerde que es un formulario dependiente de ID N° '.$requestForm->folio.'. <br>
-                                  Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
+                                  Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento. <br>
+                                  Guarde y envíe su formulario cuando esté listo para su tramitación en los departamentos correspondientes.');
         return redirect()->route('request_forms.edit', $newRequestForm);
     }
 

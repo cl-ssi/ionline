@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Cfg\Program;
+namespace App\Http\Livewire\Parameters\Program;
 
 use Livewire\Component;
 
@@ -8,6 +8,7 @@ class ProgramEdit extends Component
 {
     public $program;
     public $name;
+    public $alias;
     public $start_date;
     public $end_date;
 
@@ -15,6 +16,7 @@ class ProgramEdit extends Component
     {
         return [
             'name'          => 'required|string|min:2|max:255',
+            'alias'         => 'required|string|min:2|max:50',
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',
@@ -23,12 +25,13 @@ class ProgramEdit extends Component
 
     public function render()
     {
-        return view('livewire.cfg.program.program-edit');
+        return view('livewire.parameters.program.program-edit');
     }
 
     public function mount()
     {
         $this->name = $this->program->name;
+        $this->alias = $this->program->alias;
         $this->start_date = $this->program->start_date ? $this->program->start_date->format('Y-m-d') : null;
         $this->end_date = $this->program->end_date ? $this->program->end_date->format('Y-m-d') : null;
         $this->description = $this->program->description;
@@ -40,6 +43,6 @@ class ProgramEdit extends Component
         $this->program->update($dataValidated);
 
         session()->flash('success', 'El programa fue actualizado exitosamente.');
-        return redirect()->route('cfg.programs.index');
+        return redirect()->route('parameters.programs.index');
     }
 }

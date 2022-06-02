@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Warehouse\Control;
 
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;

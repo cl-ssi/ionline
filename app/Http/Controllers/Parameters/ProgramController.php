@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Cfg;
+namespace App\Http\Controllers\Parameters;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 
 class ProgramController extends Controller
 {
@@ -14,7 +14,7 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        return view('cfg.programs.index');
+        return view('parameters.programs.index');
     }
 
     /**
@@ -24,17 +24,17 @@ class ProgramController extends Controller
      */
     public function create()
     {
-        return view('cfg.programs.create');
+        return view('parameters.programs.create');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Cfg\Program  $program
+     * @param  \App\Models\Parameters\Program  $program
      * @return \Illuminate\Http\Response
      */
     public function edit(Program $program)
     {
-        return view('cfg.programs.edit', compact('program'));
+        return view('parameters.programs.edit', compact('program'));
     }
 }

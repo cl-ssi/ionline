@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Cfg\Program;
+namespace App\Http\Livewire\Parameters\Program;
 
-use App\Models\Cfg\Program;
+use App\Models\Parameters\Program;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,7 +15,7 @@ class ProgramIndex extends Component
 
     public function render()
     {
-        return view('livewire.cfg.program.program-index', [
+        return view('livewire.parameters.program.program-index', [
             'programs' => $this->getPrograms()
         ]);
     }
