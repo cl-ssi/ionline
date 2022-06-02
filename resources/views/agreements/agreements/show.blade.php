@@ -476,10 +476,16 @@
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> 
                             @endif
                             @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
-                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
-                            <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
-                                <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
-                            </span>
+                                @if($addendum->file)
+                                <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
+                                <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
+                                </span>
+                                @else
+                                <span class="tooltip-wrapper disabled" data-title="No existe registro de archivo docx versión final del Addendum, adjuntelo para habilitar esta opción">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary disabled"><i class="fas fa-file-download"></i></a>
+                                </span>
+                                @endif
                             @endif
                             @endcan
                         </td>
