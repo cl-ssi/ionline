@@ -302,7 +302,7 @@
                     <th>RUT</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
-                    <th>Cod. Pres.</th>
+                    <th>Item Pres.</th>
                     <th>Tipo viaje</th>
                     <th>Origen</th>
                     <th>Destino</th>
@@ -319,7 +319,7 @@
                         <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
                         <td>{{ $passenger->name }}</td>
                         <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
-                        <td>-</td>
+                        <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
                         <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
                         <td>{{ $passenger->origin }}</td>
                         <td>{{ $passenger->destination }}</td>
@@ -367,7 +367,7 @@
                             <th>Item</th>
                             <th>Fecha</th>
                             <th>Tipo de compra</th>
-                            <th>Cod.Presup.</th>
+                            <th>Item Pres.</th>
                             <th>Artículo</th>
                             <th>UM</th>
                             <th>Especificaciones Técnicas</th>
