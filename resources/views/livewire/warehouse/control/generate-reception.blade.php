@@ -179,7 +179,7 @@
                 id="program-id"
                 class="form-control form-control-sm @error('program_id') is-invalid @enderror"
                 @if($disabled_program)
-                readonly
+                readonly disabled
                 @endif
             >
                 <option value="">Sin Programa</option>
@@ -249,7 +249,7 @@
                         @if($index_selected === $index )
                             <div class="form-row">
                                 <fieldset class="form-group col-sm-12">
-                                    <label class="text-left" for="quantity">Cantidad Recibida</label>
+                                    <label class="col-form-label-sm text-left my-0" for="quantity">Cantidad Recibida</label>
                                     <input
                                         class="form-control form-control-sm @error('quantity') is-invalid @enderror"
                                         id="quantity"
@@ -278,8 +278,8 @@
                         @endif
                     </td>
                     <td>
-                        @if($index_selected === $index)
-                            <label class="text-left" for="unspsc-name">Producto</label>
+                        @if($index_selected === $index && $po_item['disabled_wre_product'] == false)
+                            <label class="col-form-label-sm text-left my-0" for="unspsc-name" >Producto</label>
                             <input
                                 class="form-control form-control-sm"
                                 id="unspsc-name"
@@ -287,8 +287,8 @@
                                 type="text"
                                 readonly
                             >
-                            <br>
-                            <label class="text-left" for="description">Descripción</label>
+                            <div class="mt-1"></div>
+                            <label class="col-form-label-sm text-left my-0" for="description">Descripción</label>
                             <input
                                 class="form-control form-control-sm @error('description') is-invalid @enderror"
                                 id="description"
@@ -310,38 +310,44 @@
                     </td>
                     <td>
                         @if($index_selected === $index && $po_item['disabled_wre_product'] == false)
-                            <div class="custom-control custom-radio custom-control-inline">
+                            <div class="form-check form-check-inline">
                                 <input
                                     type="radio"
                                     id="new-product"
                                     value="1"
                                     wire:model="type_product"
-                                    class="custom-control-input"
+                                    class="form-check-input"
                                 >
-                                <label class="custom-control-label" for="new-product">Nuevo Producto</label>
+                                <label class="form-check-label" for="new-product">Nuevo Producto</label>
                             </div>
-                            <div class="custom-control custom-radio custom-control-inline">
+
+                            <div class="form-check form-check-inline">
                                 <input
                                     type="radio"
-                                    id="buscar-product"
+                                    id="select-product"
                                     wire:model="type_product"
                                     value="0"
-                                    class="custom-control-input"
+                                    class="form-check-input"
                                 >
-                                <label class="custom-control-label" for="buscar-product">Buscar producto</label>
+                                <label class="form-check-label" for="select-product">Seleccionar producto</label>
                             </div>
 
                             <br>
 
                             @if($type_product == 0)
-                                <label class="text-left" for="search-product">Buscar Producto</label>
+                                <label class="col-form-label-sm text-left my-0" for="search-product">
+                                    Buscar Producto
+                                </label>
                                 <input
                                     class="form-control form-control-sm @error('search_product') is-invalid @enderror"
                                     id="search-product"
                                     wire:model.debounce.700ms="search_product"
                                     type="text"
                                 >
-                                <label class="text-left" for="wre-product-id">Selecciona un producto</label>
+                                <div class="mt-1"></div>
+                                <label class="col-form-label-sm text-left my-0" for="wre-product-id">
+                                    Seleccionar un producto
+                                </label>
                                 <select
                                     wire:model="wre_product_id"
                                     id="wre-product-id"
@@ -356,7 +362,7 @@
                                 </select>
                             @else
                             <div class="mb-2">
-                                <label class="text-left" for="barcode">Código de Barra</label>
+                                <label class="col-form-label-sm text-left my-0" for="barcode">Código de Barra</label>
                                 <input
                                     class="form-control form-control-sm @error('barcode') is-invalid @enderror"
                                     id="barcode"
