@@ -8,6 +8,9 @@ use App\Models\Cfg\Program;
 use App\Models\ClCommune;
 use App\Models\Inv\Inventory;
 use App\Models\Parameters\Supplier;
+use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\RequestForms\PurchasingProcess;
+use App\Models\RequestForms\PurchasingProcessDetail;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
@@ -15,6 +18,8 @@ use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class GenerateReception extends Component
@@ -28,6 +33,7 @@ class GenerateReception extends Component
     public $date;
     public $note;
     public $program_id;
+    public $request_form_id;
     public $disabled_program;
     public $po_code;
     public $po_date;
@@ -79,7 +85,7 @@ class GenerateReception extends Component
 
     public function rules()
     {
-        return (new AddProductRequest($this->max_quantity))->rules();
+        return (new AddProductRequest($this->store->id, $this->max_quantity))->rules();
     }
 
     public function getRulesReception()
@@ -110,6 +116,8 @@ class GenerateReception extends Component
             $this->supplier_name = $purchaseOrder->supplier_name;
             $this->program_id = $this->getProgramId($this->po_search);
             $this->disabled_program = $this->program_id ? true : false;
+            $this->request_form_id = $this->getRequestFormId($this->po_search);
+
             foreach($purchaseOrder->items as $item)
             {
                 $quantity = $this->getMaxQuantity($this->po_search, $item->Correlativo, $item->Cantidad);
@@ -237,6 +245,23 @@ class GenerateReception extends Component
         return $supplier;
     }
 
+    public function getRequestFormId($code)
+    {
+        $request_form_id = null;
+        $immediatePurchase = ImmediatePurchase::wherePoId($code)->first();
+        if($immediatePurchase)
+        {
+            $purchasingDetail = PurchasingProcessDetail::whereImmediatePurchaseId($immediatePurchase->id)->first();
+            if($purchasingDetail)
+            {
+                $purchasingProcess = PurchasingProcess::find($purchasingDetail->purchasing_process_id);
+                if($purchasingProcess)
+                    $request_form_id = $purchasingProcess->request_form_id;
+            }
+        }
+        return $request_form_id;
+    }
+
     public function editProduct($index)
     {
         $this->index_selected = $index;
@@ -253,10 +278,16 @@ class GenerateReception extends Component
 
     public function updateProduct()
     {
-        $this->validate();
-        $this->po_items[$this->index_selected]['quantity'] = $this->quantity;
-        $this->po_items[$this->index_selected]['description'] = $this->description;
-        $this->po_items[$this->index_selected]['barcode'] = $this->barcode;
+        $dataValidated = $this->validate();
+        $copyPoItems = $this->po_items;
+        unset($copyPoItems[$this->index_selected]);
+
+        if(in_array($dataValidated['barcode'], array_column($copyPoItems, 'barcode')))
+            throw ValidationException::withMessages(['barcode' => 'El campo código de barra ya ha sido registrado.']);
+
+        $this->po_items[$this->index_selected]['quantity'] = $dataValidated['quantity'];
+        $this->po_items[$this->index_selected]['description'] = $dataValidated['description'];
+        $this->po_items[$this->index_selected]['barcode'] = $dataValidated['barcode'];
         $this->po_items[$this->index_selected]['unspsc_product_name'] = $this->unspsc_product_name;
         $this->po_items[$this->index_selected]['unspsc_product_id'] = $this->unspsc_product_id;
         $this->po_items[$this->index_selected]['wre_product_id'] = $this->wre_product_id;
@@ -298,17 +329,21 @@ class GenerateReception extends Component
         }
     }
 
-    public function saveInventory(ControlItem $controlItem, $price)
+    public function saveInventory(ControlItem $controlItem, $quantity, $price)
     {
-        Inventory::create([
-            'po_code'=> $controlItem->control->po_code,
-            'po_date'=> $controlItem->control->po_date,
-            'po_price'=> $price,
-            'product_id' => $controlItem->product_id,
-            'po_id' => $controlItem->control->po_id,
-            'control_id' => $controlItem->control_id,
-            'store_id' => $this->store->id,
-        ]);
+        for($i = 0; $i < $quantity; $i++)
+        {
+            Inventory::create([
+                'po_code'=> $controlItem->control->po_code,
+                'po_date'=> $controlItem->control->po_date,
+                'po_price'=> $price,
+                'product_id' => $controlItem->product_id,
+                'po_id' => $controlItem->control->po_id,
+                'control_id' => $controlItem->control_id,
+                'store_id' => $this->store->id,
+                'request_form_id' => $controlItem->control->request_form_id
+            ]);
+        }
     }
 
     public function resetInputProduct()
@@ -340,6 +375,7 @@ class GenerateReception extends Component
         $this->invoice_number = null;
         $this->program_id = null;
         $this->note = null;
+        $this->disabled_program = false;
     }
 
     public function finish()
@@ -358,13 +394,14 @@ class GenerateReception extends Component
             'po_code' => $dataValidated['po_code'],
             'invoice_number' => $dataValidated['invoice_number'],
             'invoice_date' => $dataValidated['invoice_date'],
-            'guide_date' => $dataValidated['guide_date'],
+            'guide_number' => $dataValidated['guide_number'],
             'guide_date' => $dataValidated['guide_date'],
             'type_reception_id' => TypeReception::purchaseOrder(),
             'store_id' => $this->store->id,
             'program_id' => $program ? $program->id : null,
             'supplier_id' => $supplier->id,
-            'po_id' => $this->purchaseOrder->id
+            'po_id' => $this->purchaseOrder->id,
+            'request_form_id' => $this->request_form_id,
         ]);
 
         foreach($this->po_items as $item)
@@ -396,7 +433,7 @@ class GenerateReception extends Component
                     'product_id' => $wreProduct->id,
                 ]);
 
-                $this->saveInventory($controlItem, $item['price']);
+                $this->saveInventory($controlItem, $item['quantity'], $item['price']);
             }
         }
 
