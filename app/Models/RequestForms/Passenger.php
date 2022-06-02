@@ -5,6 +5,7 @@ namespace App\Models\RequestForms;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Parameters\BudgetItem;
 
 class Passenger extends Model
 {
@@ -14,6 +15,10 @@ class Passenger extends Model
         'birthday', 'phone_number', 'email', 'round_trip', 'origin', 'destination',
         'departure_date', 'return_date', 'baggage', 'unit_value', 'request_form_id'
     ];
+
+    public function budgetItem() {
+        return $this->belongsTo(BudgetItem::class);
+    }
 
     public function getRunFormatAttribute() {
         return number_format($this->run, 0,'.','.') . '-' . $this->dv;
