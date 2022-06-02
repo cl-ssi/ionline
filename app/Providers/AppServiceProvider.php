@@ -74,9 +74,9 @@ class AppServiceProvider extends ServiceProvider
             // $query->bindings; // the parameters passed to the sql query (this replace the '?'s in the sql string)
             // $query->time; // the time it took for the query to execute;
 
-            Log::info($query->sql);
-            Log::info($query->bindings);
-            Log::info($query->time);
+            // Log::info($query->sql);
+            // Log::info($query->bindings);
+            // Log::info($query->time);
         });
 
         Paginator::useBootstrap();
