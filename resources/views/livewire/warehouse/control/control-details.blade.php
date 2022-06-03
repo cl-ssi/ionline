@@ -18,7 +18,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-md-4">
-            <label for="date">Fecha</label>
+            <label for="date">Fecha {{ $control->type_format }}</label>
             <input
                 type="text"
                 class="form-control"
@@ -81,7 +81,7 @@
                 @break
             @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
                 <fieldset class="form-group col-md-4">
-                    <label for="origin-id">Bodega Origen</label>
+                    <label for="store-origin-id">Bodega Origen</label>
                     <input
                         type="text"
                         class="form-control"
@@ -91,8 +91,91 @@
                     >
                 </fieldset>
                 @break
+            @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
+                <fieldset class="form-group col-md-4">
+                    <label for="purchase-order-code">Código OC</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ $control->po_code }}"
+                        id="purchase-order-code"
+                        readonly
+                    >
+                </fieldset>
+                @break
         @endswitch
     </div>
+
+    @if($control->isPurchaseOrder())
+        <div class="form-row">
+            <fieldset class="form-group col-md-4">
+                <label for="po-date">Fecha OC</label>
+                <input
+                    type="text"
+                    id="po-date"
+                    class="form-control"
+                    value="{{ $control->po_date }}"
+                    readonly
+                >
+            </fieldset>
+            <fieldset class="form-group col-md-8">
+                <label for="supplier-name">Proveedor</label>
+                <input
+                    type="text"
+                    id="supplier-name"
+                    class="form-control"
+                    value="{{ optional($control->supplier)->name }}"
+                    readonly
+                >
+            </fieldset>
+        </div>
+
+        <div class="form-row">
+            <fieldset class="form-group col-md-3">
+                <label for="guide-date">Fecha Guía</label>
+                <input
+                    type="date"
+                    id="guide-date"
+                    class="form-control"
+                    value="{{ $control->guide_date }}"
+                    readonly
+                >
+            </fieldset>
+
+            <fieldset class="form-group col-md-3">
+                <label for="guide-number">Número Guía</label>
+                <input
+                    type="text"
+                    id="guide-number"
+                    class="form-control"
+                    value="{{ $control->po_date }}"
+                    readonly
+                >
+            </fieldset>
+
+            <fieldset class="form-group col-md-3">
+                <label for="invoice-date">Fecha Factura</label>
+                <input
+                    type="date"
+                    id="invoice-date"
+                    class="form-control"
+                    value="{{ $control->po_date }}"
+                    readonly
+                >
+            </fieldset>
+
+            <fieldset class="form-group col-md-3">
+                <label for="invoice-number">Número Factura</label>
+                <input
+                    type="text"
+                    id="invoice-number"
+                    class="form-control"
+                    value="{{ $control->po_date }}"
+                    readonly
+                >
+            </fieldset>
+        </div>
+    @endif
 
     <div class="form-row">
         <fieldset class="form-group col-md-12">
@@ -102,7 +185,8 @@
                 class="form-control"
                 value="{{ $control->note }}"
                 id="note"
-                readonly>
+                readonly
+            >
         </fieldset>
     </div>
 </div>

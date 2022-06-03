@@ -12,20 +12,21 @@
     'control' => $control
 ])
 
-<hr>
-<h4 class="my-2">Agregar Producto</h4>
+@if($control->isOpen())
+    <hr>
+    <h4 class="my-2">Agregar Producto</h4>
 
-@if($control->isReceiving())
-    @livewire('warehouse.control.control-receiving-add-product', [
-        'store' => $store,
-        'control' => $control,
-
-    ])
-@else
-    @livewire('warehouse.control.control-dispatch-add-product', [
-        'store' => $store,
-        'control' => $control
-    ])
+    @if($control->isReceiving())
+        @livewire('warehouse.control.control-receiving-add-product', [
+            'store' => $store,
+            'control' => $control,
+        ])
+    @else
+        @livewire('warehouse.control.control-dispatch-add-product', [
+            'store' => $store,
+            'control' => $control
+        ])
+    @endif
 @endif
 
 <hr>

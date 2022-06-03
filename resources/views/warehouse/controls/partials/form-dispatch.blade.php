@@ -34,7 +34,7 @@
 
 <div class="form-row">
     <fieldset class="form-group col-md-2">
-        <label for="date">Fecha</label>
+        <label for="date">Fecha Egreso</label>
         <input
             type="date"
             id="date"
