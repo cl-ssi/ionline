@@ -27,17 +27,10 @@ class ProductIndex extends Component
         $search = "%$this->search%";
 
         $products = Product::query()
-            ->whereStoreId($this->store->id)
-            ->where('name', 'like', $search)
-            ->orWhere('barcode', 'like', $search)
             ->when($this->search, function($q) use($search) {
-                $q->orWhere(function($query) use($search) {
-                    $query->whereHas('category', function ($subquery) use($search) {
-                        $subquery->where('name', 'like', $search);
-                    })
-                    ->where('store_id', '=', $this->store->id);
-                });
+                $q->where('name', 'like', $search);
             })
+            ->whereStoreId($this->store->id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
