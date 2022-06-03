@@ -1,6 +1,6 @@
 @extends('warehouse.pdf.layouts')
 
-@section('title', "Acta de Egreso " . $control->id )
+@section('title', "Acta de Egreso " . $control->id)
 
 @section('content')
 
@@ -12,6 +12,7 @@
         <i>correo@redsalud.gob.cl</i>
     </div>
 </div>
+
 <div class="right" style="width: 49%; display: inline-block;">
     Iquique {{ $control->date->formatLocalized('%d de %B del %Y') }}<br>
 </div>
@@ -19,12 +20,17 @@
 <div class="titulo">ACTA DE EGRESO N° {{ $control->id }}</div>
 
 <div style="padding-bottom: 8px;">
-    <strong>Tipo de Egreso:</strong> {{ $control->type_dispatch }}<br>
+    <strong>Tipo de Egreso:</strong> {{ optional($control->typeDispatch)->name }}<br>
+    @switch($control->type_dispatch_id)
+        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
+            <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
+            @break
+        @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
+            <strong>Bodega Destino:</strong> {{ optional($control->destinationStore)->name }}<br>
+            @break
+    @endswitch
     <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
     <strong>Programa:</strong> {{ $control->program_name }}<br>
-    @if(!$control->isAdjustInventory())
-        <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
-    @endif
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
@@ -44,11 +50,16 @@
                     {{ $item->quantity }}
                 </td>
                 <td class="center" style="vertical-align: top;">
-                    {{ optional($item->product)->barcode }}
+                    <span class="monospace siete">
+                        {{ optional($item->product)->barcode }}
+                    </span>
                 </td>
                 <td style="vertical-align: top;">
                     {{ optional($item->product->product)->name }}
-                    - {{ optional($item->product)->name }}
+                    -
+                    <small>
+                        {{ optional($item->product)->name }}
+                    </small>
                 </td>
                 <td class="center" style="vertical-align: top;">
                     {{ $control->date->format('d/m/Y')}}
