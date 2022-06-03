@@ -41,7 +41,13 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-danger" wire:click="deleteItem({{ $controlItem }})">
+                        <button
+                            class="btn btn-sm btn-danger"
+                            wire:click="deleteItem({{ $controlItem }})"
+                            @if($control->isClose())
+                                disabled
+                            @endif
+                        >
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
