@@ -104,7 +104,7 @@ use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 
 use App\Http\Controllers\Mammography\MammographyController;
-
+use App\Http\Controllers\Parameters\ProgramController as ParametersProgramController;
 use App\Http\Controllers\Requirements\EventController;
 use App\Http\Controllers\Requirements\CategoryController;
 use App\Http\Controllers\Requirements\RequirementController;
@@ -170,6 +170,10 @@ use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 use App\Http\Controllers\RequestForms\EventRequestFormFileController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
+use App\Http\Controllers\Warehouse\DestinationController;
+use App\Http\Controllers\Warehouse\OriginController;
+use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -205,7 +209,7 @@ Route::get('logout', [LoginController::class,'logout'])->name('logout');
 /* Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', [LoginController::class,'logout'])->name('logout-testing');
 
-Route::get('/home', [App\Http\Controllers\HomeController::Class,'index'])->name('home');
+Route::get('/home', [HomeController::class,'index'])->name('home');
 
 
 
@@ -962,7 +966,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
     });
 
-    Route::resource('programs', App\Http\Controllers\Parameters\ProgramController::class)->only(['index', 'create', 'edit']);
+    Route::resource('programs', ParametersProgramController::class)->only(['index', 'create', 'edit']);
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1408,7 +1412,7 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 // Warehouse
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
 
-    Route::resource('stores', 'Warehouse\StoreController')->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
+    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
 
     Route::prefix('/store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
@@ -1417,13 +1421,13 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
             Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
             Route::get('report', [StoreController::class, 'report'])->name('store.report');
-            Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate.reception');
+            Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
 
-            Route::resource('controls', 'Warehouse\ControlController')->except(['store', 'update', 'show']);
-            Route::resource('products', 'Warehouse\ProductController')->only(['index', 'create', 'edit']);
-            Route::resource('categories', 'Warehouse\CategoryController')->only(['index', 'create', 'edit']);
-            Route::resource('origins', 'Warehouse\OriginController')->only(['index', 'create', 'edit']);
-            Route::resource('destinations', 'Warehouse\DestinationController')->only(['index', 'create', 'edit']);
+            Route::resource('controls', ControlController::class)->except(['store', 'update', 'show']);
+            Route::resource('products', WarehouseProductController::class)->only(['index', 'create', 'edit']);
+            Route::resource('categories', WarehouseCategoryController::class)->only(['index', 'create', 'edit']);
+            Route::resource('origins', OriginController::class)->only(['index', 'create', 'edit']);
+            Route::resource('destinations', DestinationController::class)->only(['index', 'create', 'edit']);
             Route::prefix('control/{control}')->group(function () {
                 Route::get('pdf', [ControlController::class, 'pdf'])->name('control.pdf');
                 Route::get('add-products', [ControlController::class, 'addProduct'])->name('control.add-product');
