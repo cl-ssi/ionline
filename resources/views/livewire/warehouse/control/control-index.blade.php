@@ -15,15 +15,37 @@
         <div class="col text-right">
             @if($type == 'receiving')
                 @if($store)
-                <a
-                    class="btn btn-primary"
-                    href="{{ route('warehouse.controls.create', [
-                        'store' => $store,
-                        'type' => 'receiving'
-                    ]) }}"
-                >
-                    <i class="fas fa-plus"></i> Nuevo Ingreso
-                </a>
+                <div class="dropdown">
+                    <button
+                        class="btn btn-primary dropdown-toggle"
+                        type="button"
+                        id="control-reception"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <i class="fas fa-plus"></i> Nuevo Ingreso
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="control-reception">
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('warehouse.controls.create', [
+                                'store' => $store,
+                                'type' => 'receiving'
+                            ]) }}"
+                        >
+                            <i class="fas fa-download"></i> Ingreso Normal
+                        </a>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('warehouse.generate-reception', [
+                                'store' => $store,
+                            ]) }}"
+                        >
+                            <i class="fas fa-shopping-cart"></i> Ingreso Orden de Compra
+                        </a>
+                    </div>
+                </div>
+
                 @endif
             @else
                 @if($store)
@@ -111,6 +133,13 @@
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::return())
                                     {{ optional($control->originStore)->name }}
+                                    <br>
+                                    <small>
+                                        {{ optional($control->typeReception)->name }}
+                                    </small>
+                                    @break
+                                @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
+                                    {{ $control->po_code }}
                                     <br>
                                     <small>
                                         {{ optional($control->typeReception)->name }}
