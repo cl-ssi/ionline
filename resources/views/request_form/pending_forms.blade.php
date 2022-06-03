@@ -22,6 +22,7 @@
     </fieldset>--}}
 
     @if(count($my_pending_forms_to_signs) > 0)
+    </div>
         <div class="col">
             <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
             <div class="table-responsive">

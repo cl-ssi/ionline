@@ -283,7 +283,7 @@
           <td>{{ $passenger->name }}</td>
           <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
           @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
-          <td>-</td>
+          <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
           @endif
           <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
           <td>{{ $passenger->origin }}</td>

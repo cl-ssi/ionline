@@ -92,7 +92,17 @@
                         <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
                         <td>{{ $passenger->name }}</td>
                         <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
-                        <td>-</td>
+                        <td>
+                          <div wire:ignore id="for-bootstrap-select">
+                            <select  wire:model.defer="arrayItemRequest.{{ $passenger->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select"
+                              class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
+                                <!-- <option value="">Seleccione...</option> -->
+                                @foreach($lstBudgetItem as $val)
+                                  <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
+                                @endforeach
+                            </select>
+                          </div>
+                        </td>
                         <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
                         <td>{{ $passenger->origin }}</td>
                         <td>{{ $passenger->destination }}</td>
@@ -110,6 +120,7 @@
             </tr>
         </tfoot>
         </table>
+    @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
     @endif
 
         <div class="card">
