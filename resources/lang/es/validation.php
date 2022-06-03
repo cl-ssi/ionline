@@ -145,6 +145,7 @@ return [
         'type_reception_id' => [
             '1' => 'Ingreso Normal',
             '2' => 'Recibir de Bodega',
+            '4' => 'Orden de Compra',
         ],
         'type_dispatch_id' => [
             '1' => 'Egreso Normal',
