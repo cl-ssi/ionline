@@ -113,12 +113,12 @@
                                     @break
                                 @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
                                     {{ optional($control->destinationStore)->name }}
-                                    <br>
-                                    <small>
-                                        {{ optional($control->typeDispatch)->name }}
-                                    </small>
                                     @break
                             @endswitch
+                            <br>
+                            <small>
+                                {{ optional($control->typeDispatch)->name }}
+                            </small>
                         @else
                             @switch($control->type_reception_id)
                                 @case(\App\Models\Warehouse\TypeReception::receiving())
@@ -126,26 +126,18 @@
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
                                     {{ optional($control->originStore)->name }}
-                                    <br>
-                                    <small>
-                                        {{ optional($control->typeReception)->name }}
-                                    </small>
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::return())
                                     {{ optional($control->originStore)->name }}
-                                    <br>
-                                    <small>
-                                        {{ optional($control->typeReception)->name }}
-                                    </small>
                                     @break
                                 @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                                     {{ $control->po_code }}
-                                    <br>
-                                    <small>
-                                        {{ optional($control->typeReception)->name }}
-                                    </small>
                                     @break
                             @endswitch
+                            <br>
+                            <small>
+                                {{ optional($control->typeReception)->name }}
+                            </small>
                         @endif
                     </td>
                     <td>{{ $control->program_name }}</td>
