@@ -18,7 +18,6 @@ use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
@@ -387,6 +386,7 @@ class GenerateReception extends Component
         $control = Control::create([
             'type' => true,
             'confirm' => true,
+            'status' => false,
             'note' => $dataValidated['note'],
             'date' => $dataValidated['date'],
             'status' => true,
