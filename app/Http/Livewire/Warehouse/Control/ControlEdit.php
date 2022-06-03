@@ -12,6 +12,10 @@ class ControlEdit extends Component
     public $type;
     public $date;
     public $note;
+    public $guide_date;
+    public $guide_number;
+    public $invoice_date;
+    public $invoice_number;
     public $type_dispatch_id;
     public $type_reception_id;
     public $origin_id;
@@ -25,6 +29,10 @@ class ControlEdit extends Component
         'note'              => 'required|string|min:2|max:255',
         'origin_id'         => 'nullable|required_if:type_reception_id,1|integer|exists:wre_origins,id',
         'store_origin_id'   => 'nullable|required_if:type_reception_id,2|integer|exists:wre_type_receptions,id',
+        'guide_date'        => 'nullable|required_if:type_reception_id,4|date_format:Y-m-d',
+        'guide_number'      => 'nullable|required_if:type_reception_id,4',
+        'invoice_date'      => 'nullable|required_if:type_reception_id,4|date_format:Y-m-d',
+        'invoice_number'    => 'nullable|required_if:type_reception_id,4',
     ];
 
     public $rulesDispatch = [
@@ -38,6 +46,11 @@ class ControlEdit extends Component
     {
         $this->date = $this->control->date_format;
         $this->note = $this->control->note;
+        $this->guide_date = $this->control->guide_date;
+        $this->guide_number = $this->control->guide_number;
+        $this->invoice_date = $this->control->invoice_date;
+        $this->invoice_number = $this->control->invoice_number;
+
         $this->origin_id = $this->control->origin_id;
         $this->destination_id = $this->control->destination_id;
         $this->type_dispatch_id = $this->control->type_dispatch_id;
