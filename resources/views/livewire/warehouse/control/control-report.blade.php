@@ -82,12 +82,12 @@
                                         @break
                                     @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
                                         {{ optional($controlItem->control->destinationStore)->name }}
-                                        <br>
-                                        <small>
-                                            {{ optional($controlItem->control->typeDispatch)->name }}
-                                        </small>
                                         @break
                                 @endswitch
+                                <br>
+                                <small>
+                                    {{ optional($controlItem->control->typeDispatch)->name }}
+                                </small>
                             @else
                                 @switch($controlItem->control->type_reception_id)
                                     @case(\App\Models\Warehouse\TypeReception::receiving())
@@ -95,26 +95,18 @@
                                         @break
                                     @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
                                         {{ optional($controlItem->control->originStore)->name }}
-                                        <br>
-                                        <small>
-                                            {{ optional($controlItem->control->typeReception)->name }}
-                                        </small>
                                         @break
                                     @case(\App\Models\Warehouse\TypeReception::return())
                                         {{ optional($controlItem->control->originStore)->name }}
-                                        <br>
-                                        <small>
-                                            {{ optional($controlItem->control->typeReception)->name }}
-                                        </small>
                                         @break
                                     @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                                         {{ $controlItem->control->po_code }}
-                                        <br>
-                                        <small>
-                                            {{ optional($controlItem->control->typeReception)->name }}
-                                        </small>
                                         @break
                                 @endswitch
+                                <br>
+                                <small>
+                                    {{ optional($controlItem->control->typeReception)->name }}
+                                </small>
                             @endif
                         @endif
                     </td>
@@ -127,7 +119,7 @@
                     </td>
                     <td>{{ $controlItem->program_name }}</td>
                     <td>
-                        @if($controlItem->control->type)
+                        @if($controlItem->control->isReceiving())
                             <p class="text-success">
                                 {{ $controlItem->quantity }}
                             </p>
@@ -136,7 +128,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($controlItem->control->type)
+                        @if($controlItem->control->isReceiving())
                             0
                         @else
                             <p class="text-danger">
