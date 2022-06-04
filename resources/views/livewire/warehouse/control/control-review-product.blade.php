@@ -1,5 +1,4 @@
 <div>
-
     <hr>
     <h4 class="my-2">Editar: {{ $barcode }}</h4>
 
