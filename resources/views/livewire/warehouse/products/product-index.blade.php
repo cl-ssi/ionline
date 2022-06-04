@@ -22,8 +22,8 @@
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Barcode</th>
-                    <th>Nombre</th>
+                    <th class="text-center">Código Barra</th>
+                    <th>Producto o Servicio</th>
                     <th>Categoría</th>
                     <th class="text-center">Acciones</th>
                 </tr>
