@@ -80,7 +80,7 @@ class ControlProductList extends Component
                 'confirm' => false,
                 'type' => true,
                 'date' => $control->date,
-                'note' => $control->note,
+                'status' => true
             ]);
 
             foreach($control->items as $item)
