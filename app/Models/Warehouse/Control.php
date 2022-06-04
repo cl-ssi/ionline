@@ -5,6 +5,7 @@ namespace App\Models\Warehouse;
 use App\Models\Parameters\Program;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\PurchaseOrder;
+use App\Models\RequestForms\RequestForm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -66,7 +67,7 @@ class Control extends Model
 
     public function requestForm()
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->belongsTo(RequestForm::class);
     }
 
     public function origin()
