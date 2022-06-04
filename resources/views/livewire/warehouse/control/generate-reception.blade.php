@@ -23,7 +23,7 @@
             </div>
         </fieldset>
 
-        <fieldset class="form-group col-sm-6 mb-0">
+        <fieldset class="form-group col-sm-5 mb-0">
             <div class="input-group input-group-sm has-validation">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Orden de Compra</span>
@@ -39,7 +39,7 @@
                         class="btn btn-sm btn-primary"
                         wire:click="getPurchaseOrder"
                         wire:loading.attr="disabled"
-                        >
+                    >
                         <span
                             class="spinner-border spinner-border-sm"
                             role="status"
@@ -58,6 +58,18 @@
                         <b>{{ $msg }}</b>
                     </small>
                 </div>
+            @endif
+        </fieldset>
+
+        <fieldset class="form-group col-sm-3 mb-0">
+            @if($request_form_id)
+            <a
+                class="btn btn-sm btn-primary btn-block"
+                href="{{ route('request_forms.show', $request_form_id) }}"
+                target="_blank"
+            >
+                <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $request_form_id }}
+            </a>
             @endif
         </fieldset>
     </div>
@@ -230,8 +242,8 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">Código Producto</th>
-                    <th class="text-center">Cant. Recibida</th>
+                    <th class="text-center">Código</th>
+                    <th class="text-center" width="150px">Cant. Recibida</th>
                     <th>Producto</th>
                     <th class="text-center">Código de Barra</th>
                     <th></th>
@@ -310,7 +322,7 @@
                     </td>
                     <td>
                         @if($index_selected === $index && $po_item['disabled_wre_product'] == false)
-                            <div class="form-check form-check-inline">
+                            <div class="form-check">
                                 <input
                                     type="radio"
                                     id="new-product"
@@ -320,8 +332,7 @@
                                 >
                                 <label class="form-check-label" for="new-product">Nuevo Producto</label>
                             </div>
-
-                            <div class="form-check form-check-inline">
+                            <div class="form-check">
                                 <input
                                     type="radio"
                                     id="select-product"
@@ -331,8 +342,6 @@
                                 >
                                 <label class="form-check-label" for="select-product">Seleccionar producto</label>
                             </div>
-
-                            <br>
 
                             @if($type_product == 0)
                                 <label class="col-form-label-sm text-left my-0" for="search-product">
@@ -344,7 +353,7 @@
                                     wire:model.debounce.700ms="search_product"
                                     type="text"
                                 >
-                                <div class="mt-1"></div>
+
                                 <label class="col-form-label-sm text-left my-0" for="wre-product-id">
                                     Seleccionar un producto
                                 </label>
@@ -361,7 +370,6 @@
                                     @endforeach
                                 </select>
                             @else
-                            <div class="mb-2">
                                 <label class="col-form-label-sm text-left my-0" for="barcode">Código de Barra</label>
                                 <input
                                     class="form-control form-control-sm @error('barcode') is-invalid @enderror"
@@ -374,7 +382,6 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
                             @endif
                         @else
                             <small class="text-monospace text-center">
@@ -402,6 +409,7 @@
                             >
                                 <i class="fas fa-edit"></i> Actualizar
                             </button>
+                            <div class="my-1"></div>
                             <button
                                 class="btn btn-sm btn-outline-secondary"
                                 wire:click="resetInputProduct"
@@ -432,7 +440,23 @@
         </table>
     </div>
 
-    <button class="btn btn-primary" wire:click="finish">
+    <button
+        class="btn btn-success"
+        wire:click="finish"
+        wire:loading.attr="disabled"
+        wire:target="finish"
+        @if($po_code == null)
+            disabled
+        @endif
+    >
+        <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            wire:loading
+            wire:target="finish"
+            aria-hidden="true"
+        >
+        </span>
         Terminar
     </button>
 </div>

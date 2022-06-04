@@ -6,9 +6,9 @@
                 type="text"
                 class="form-control"
                 @if($control->isDispatch())
-                value="{{ optional($control->typeDispatch)->name }}"
+                    value="{{ optional($control->typeDispatch)->name }}"
                 @else
-                value="{{ optional($control->typeReception)->name }}"
+                    value="{{ optional($control->typeReception)->name }}"
                 @endif
                 id="type"
                 readonly
@@ -148,7 +148,7 @@
                     type="text"
                     id="guide-number"
                     class="form-control"
-                    value="{{ $control->po_date }}"
+                    value="{{ $control->guide_number }}"
                     readonly
                 >
             </fieldset>
@@ -159,7 +159,7 @@
                     type="date"
                     id="invoice-date"
                     class="form-control"
-                    value="{{ $control->po_date }}"
+                    value="{{ $control->invoice_date }}"
                     readonly
                 >
             </fieldset>
@@ -170,7 +170,7 @@
                     type="text"
                     id="invoice-number"
                     class="form-control"
-                    value="{{ $control->po_date }}"
+                    value="{{ $control->invoice_date }}"
                     readonly
                 >
             </fieldset>
