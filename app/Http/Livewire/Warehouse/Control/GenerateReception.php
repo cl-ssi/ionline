@@ -80,6 +80,7 @@ class GenerateReception extends Component
         $this->wre_products = collect([]);
         $this->po_items = [];
         $this->error = false;
+        $this->request_form_id = null;
     }
 
     public function rules()
@@ -278,11 +279,9 @@ class GenerateReception extends Component
     public function updateProduct()
     {
         $dataValidated = $this->validate();
-        $copyPoItems = $this->po_items;
-        unset($copyPoItems[$this->index_selected]);
 
-        if(in_array($dataValidated['barcode'], array_column($copyPoItems, 'barcode')))
-            throw ValidationException::withMessages(['barcode' => 'El campo código de barra ya ha sido registrado.']);
+        if($this->barcodeExists($this->po_items, $dataValidated['barcode'], $this->index_selected))
+            throw ValidationException::withMessages(['barcode' => '.El campo código de barra ya ha sido registrado.']);
 
         $this->po_items[$this->index_selected]['quantity'] = $dataValidated['quantity'];
         $this->po_items[$this->index_selected]['description'] = $dataValidated['description'];
@@ -340,11 +339,24 @@ class GenerateReception extends Component
                 'po_id' => $controlItem->control->po_id,
                 'control_id' => $controlItem->control_id,
                 'store_id' => $this->store->id,
+                'request_user_id' => ($controlItem->control->requestForm) ? $controlItem->control->requestForm->request_user_id : null,
+                'request_user_ou_id' => ($controlItem->control->requestForm) ? $controlItem->control->requestForm->request_user_ou_id : null,
                 'request_form_id' => $controlItem->control->request_form_id
             ]);
         }
     }
 
+    public function barcodeExists($items, $barcode, $index)
+    {
+        unset($items[$index]);
+
+        $newArray = array_filter($items, function($item) {
+            if($item['barcode'] != null)
+                return $item;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return in_array($barcode, array_column($newArray, 'barcode'));
+    }
     public function resetInputProduct()
     {
         $this->index_selected = null;
@@ -375,6 +387,7 @@ class GenerateReception extends Component
         $this->program_id = null;
         $this->note = null;
         $this->disabled_program = false;
+        $this->request_form_id = null;
     }
 
     public function finish()
@@ -389,7 +402,6 @@ class GenerateReception extends Component
             'status' => false,
             'note' => $dataValidated['note'],
             'date' => $dataValidated['date'],
-            'status' => true,
             'po_date' => Carbon::parse($dataValidated['po_date'])->format('Y-m-d H:i:s'),
             'po_code' => $dataValidated['po_code'],
             'invoice_number' => $dataValidated['invoice_number'],
