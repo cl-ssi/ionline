@@ -162,6 +162,7 @@ class ControlReviewProduct extends Component
                 'type' => 1,
                 'date' => now(),
                 'confirm' => true,
+                'status' => false,
                 'note' => $dataValidated['return_note'],
                 'program_id' =>  $this->control->program_id,
                 'type_reception_id' => TypeReception::return(),
