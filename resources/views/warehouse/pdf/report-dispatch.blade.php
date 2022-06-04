@@ -20,6 +20,8 @@
 <div class="titulo">ACTA DE EGRESO N° {{ $control->id }}</div>
 
 <div style="padding-bottom: 8px;">
+    <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
+    <strong>Programa:</strong> {{ $control->program_name }}<br>
     <strong>Tipo de Egreso:</strong> {{ optional($control->typeDispatch)->name }}<br>
     @switch($control->type_dispatch_id)
         @case(\App\Models\Warehouse\TypeDispatch::dispatch())
@@ -29,8 +31,6 @@
             <strong>Bodega Destino:</strong> {{ optional($control->destinationStore)->name }}<br>
             @break
     @endswitch
-    <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
-    <strong>Programa:</strong> {{ $control->program_name }}<br>
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
