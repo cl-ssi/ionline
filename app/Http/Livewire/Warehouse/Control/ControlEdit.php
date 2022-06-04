@@ -26,7 +26,7 @@ class ControlEdit extends Component
 
     public $rulesReceiving = [
         'date'              => 'required|date_format:Y-m-d',
-        'note'              => 'required|string|min:2|max:255',
+        'note'              => 'nullable|string|min:2|max:255',
         'origin_id'         => 'nullable|required_if:type_reception_id,1|integer|exists:wre_origins,id',
         'store_origin_id'   => 'nullable|required_if:type_reception_id,2|integer|exists:wre_type_receptions,id',
         'guide_date'        => 'nullable|required_if:type_reception_id,4|date_format:Y-m-d',
@@ -37,7 +37,7 @@ class ControlEdit extends Component
 
     public $rulesDispatch = [
         'date'                  => 'required|date_format:Y-m-d',
-        'note'                  => 'required|string|min:2|max:255',
+        'note'                  => 'nullable|string|min:2|max:255',
         'destination_id'        => 'nullable|required_if:type_dispatch_id,1|integer|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|integer|exists:wre_type_receptions,id',
     ];
