@@ -18,7 +18,6 @@ class CreateInvInventories extends Migration
 
             $table->integer('number')->nullable();
             $table->integer('useful_life')->nullable();
-            $table->string('applicant', 255)->nullable();// request form
 
             $table->string('brand', 255)->nullable();
             $table->string('model', 255)->nullable();
@@ -28,13 +27,16 @@ class CreateInvInventories extends Migration
             $table->string('po_price', 255)->nullable();
             $table->string('po_date', 255)->nullable();
 
-            // add establishment_id
-            $table->string('organization_unit', 255)->nullable();
-            $table->timestamp('deliver_date')->nullable();
+            // delivered at
             $table->boolean('reception_confirmation')->nullable();
+            $table->timestamp('deliver_date')->nullable();
+            $table->foreignId('delivered_user_ou_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('delivered_user_id')->nullable()->constrained('users');
 
-            $table->foreignId('organization_id', 255)->nullable()->constrained('organizational_units');//request form
-            $table->foreignId('user_id')->nullable()->constrained('users'); // delivery to
+            // requested by
+            $table->foreignId('request_user_ou_id')->nullable()->constrained('organizational_units');
+            $table->foreignId('request_user_id')->nullable()->constrained('users');
+
             $table->foreignId('product_id')->nullable()->constrained('wre_products');
             $table->foreignId('control_id')->nullable()->constrained('wre_controls');
             $table->foreignId('store_id')->nullable()->constrained('wre_stores');
