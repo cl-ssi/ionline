@@ -34,7 +34,7 @@ class HealthGoalController extends Controller
             $communes = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->select('comuna')->distinct()->pluck('comuna')->toArray();
             foreach($healthGoals as $healthGoal)
                 foreach($healthGoal->indicators as $indicator){
-                    $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+                    $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
                     $this->loadValuesWithRemSourceLaw19813($year, $indicator);
                 }
             // return $healthGoals;
@@ -49,7 +49,8 @@ class HealthGoalController extends Controller
             $currentMonth = Rem::year($year)->max('Mes');
             $indicator->currentMonth = $currentMonth;
             $indicator->load('values.attachedFiles');
-            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+            $healthGoal = HealthGoal::find($indicator->indicatorable_id);
+            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
             // return $indicator;
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else { // ley 18834 o 19664
