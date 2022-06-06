@@ -17,7 +17,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-3">
+    <fieldset class="form-group col-md-2">
         <label for="alias">Alias</label>
         <input
             type="text"
@@ -29,6 +29,24 @@
             required
         >
         @error('alias')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-1">
+        <label for="folio">Folio</label>
+        <input
+            type="text"
+            class="form-control @error('folio') is-invalid @enderror"
+            id="folio"
+            wire:model="folio"
+            placeholder="Nº folio"
+            value="{{ old('folio', optional($program)->folio) }}"
+            required
+        >
+        @error('folio')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>

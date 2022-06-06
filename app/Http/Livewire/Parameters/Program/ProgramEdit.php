@@ -9,6 +9,7 @@ class ProgramEdit extends Component
     public $program;
     public $name;
     public $alias;
+    public $folio;
     public $start_date;
     public $end_date;
 
@@ -17,6 +18,7 @@ class ProgramEdit extends Component
         return [
             'name'          => 'required|string|min:2|max:255',
             'alias'         => 'required|string|min:2|max:50',
+            'folio'         => 'nullable|string|min:2|max:50',
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',
@@ -32,6 +34,7 @@ class ProgramEdit extends Component
     {
         $this->name = $this->program->name;
         $this->alias = $this->program->alias;
+        $this->folio = $this->program->folio;
         $this->start_date = $this->program->start_date ? $this->program->start_date->format('Y-m-d') : null;
         $this->end_date = $this->program->end_date ? $this->program->end_date->format('Y-m-d') : null;
         $this->description = $this->program->description;

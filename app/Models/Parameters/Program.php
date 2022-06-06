@@ -15,6 +15,7 @@ class Program extends Model
     protected $fillable = [
         'name',
         'alias',
+        'folio',
         'description',
         'start_date',
         'end_date',
