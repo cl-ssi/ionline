@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Carbon\Carbon;
 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::directive('active', function ($route) {
             //$route = array('home','login');
-            if( is_array( $route ) ){
+            if (is_array($route)) {
                 return in_array(request()->is(), $route) ? 'active' : '';
             }
             return request()->is($route) ? 'active' : '';
@@ -49,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('numero_decimal', function ($numero) {
             return "<?php echo number_format($numero, 2, '.', '.'); ?>";
         });
-
+        
         Paginator::useBootstrap();
     }
 }

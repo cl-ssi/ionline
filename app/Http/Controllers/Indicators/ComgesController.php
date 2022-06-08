@@ -92,7 +92,8 @@ class ComgesController extends Controller
                 $new_indicator->numerator_source = $indicator['numerator_source'];
                 $new_indicator->denominator = $indicator['denominator'];
                 $new_indicator->denominator_source = $indicator['denominator_source'];
-                $new_indicator->comges_id = $comges->id;
+                $new_indicator->indicatorable_id = $comges->id;
+                $new_indicator->indicatorable_type = 'App\Indicators\Comges';
                 $new_indicator->save();
 
                 foreach($indicator['cortes'] as $i => $weighting)

@@ -33,7 +33,7 @@
 
     <li class="nav-item">
         <a class="nav-link {{active('parameters.holidays.index')}}"
-            href="{{ route('parameters.holidays.index') }}">
+            href="{{ route('parameters.holidays') }}">
             <i class="fas fa-suitcase"></i> Feriados</a>
     </li>
 
@@ -103,6 +103,14 @@
             <i class="fas fa-shopping-cart"></i> Proveedores</a>
     </li>
     <li class="nav-item">
+        <a
+            class="nav-link {{ active('parameters.programs.index') }}"
+            href="{{ route('parameters.programs.index') }}"
+        >
+            <i class="fas fa-box-open"></i> Programas
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {{ active('segments.index') }}" href="{{ route('segments.index') }}">
             <i class="fas fa-list"></i> Segmentos UNSPSC
         </a>
@@ -112,6 +120,7 @@
             <i class="fas fa-search"></i> Productos UNSPSC
         </a>
     </li>
+
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">

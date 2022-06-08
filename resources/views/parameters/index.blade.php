@@ -6,7 +6,7 @@
 
 @include('parameters/nav')
 
-<h3 class="mb-3">Mantenedores de parámentros</h3>
+<h3 class="mb-3">Mantenedores de parámetros</h3>
 
 
 

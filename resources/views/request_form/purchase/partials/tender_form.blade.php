@@ -5,11 +5,14 @@
     </div>
     <div class="card-body">
         <div class="form-row">
-            <fieldset class="form-group col-sm-2">
+            <fieldset class="form-group col-sm-12">
                 <label for="for_tender_number">ID de la licitación:</label>
-                <input type="text" class="form-control form-control-sm" id="for_tender_number" name="tender_number" value="{{ old('tender_number') }}">
+                <input type="text" class="form-control form-control-sm col-sm-3" id="for_tender_number" name="tender_number" value="{{ old('tender_number') }}"> 
+                <button class="btn btn-outline-primary" id="btn_licitacion">Consultar</button>
             </fieldset>
-            <fieldset class="form-group col-sm-10">
+        </div>
+        <div class="form-row">
+            <fieldset class="form-group col-sm-12">
                 <label for="for_description">Nombre y descripción de la licitación:</label>
                 <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
             </fieldset>
