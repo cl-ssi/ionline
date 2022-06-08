@@ -139,7 +139,7 @@ class Authorization extends Component
           $event->signerUser()->associate(auth()->user());
           $event->save();
 
-          if($event->isLast()) $this->requestForm->update(['approved_at', now()]);
+          // if($event->isLast()) $this->requestForm->update(['approved_at', now()]);
 
           $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
 

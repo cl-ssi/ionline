@@ -23,6 +23,7 @@ class InvoiceController extends Controller
 
     public function login($access_token = null)
     {
+        $user_id = '';
         if ($access_token) {
 
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
@@ -40,7 +41,10 @@ class InvoiceController extends Controller
             } else if (env('APP_ENV') == 'local') {
                 $user_id = $access_token;
             }
-            return $this->show($user_id);
+            if($user_id)
+            {
+                return $this->show($user_id);
+            }
         }
     }
 
