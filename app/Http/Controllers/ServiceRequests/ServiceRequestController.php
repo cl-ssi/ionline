@@ -1451,4 +1451,14 @@ class ServiceRequestController extends Controller
     //            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
     //        }
   }
+
+  public function existing_contracts($user_id){
+    $date = Carbon::today();
+    $serviceRequests = ServiceRequest::where('user_id',$user_id)
+                                      ->where('start_date','<=',$date)
+                                      ->where('end_date','>=',$date)
+                                      ->get()
+                                      ->toJson();
+    return $serviceRequests;
+  }
 }
