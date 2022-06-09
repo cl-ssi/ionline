@@ -5,7 +5,7 @@
             type="text"
             class="form-control @error('name') is-invalid @enderror"
             id="name"
-            wire:model="name"
+            wire:model.debounce.1000ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($program)->name) }}"
             required
@@ -23,7 +23,7 @@
             type="text"
             class="form-control @error('alias') is-invalid @enderror"
             id="alias"
-            wire:model="alias"
+            wire:model.debounce.1000ms="alias"
             placeholder="Ingresa el alias o nombre corto"
             value="{{ old('alias', optional($program)->alias) }}"
             required
@@ -41,7 +41,7 @@
             type="text"
             class="form-control @error('folio') is-invalid @enderror"
             id="folio"
-            wire:model="folio"
+            wire:model.debounce.1000ms="folio"
             placeholder="Nº folio"
             value="{{ old('folio', optional($program)->folio) }}"
             required
@@ -59,7 +59,7 @@
             type="date"
             class="form-control @error('start_date') is-invalid @enderror"
             id="start-date"
-            wire:model="start_date"
+            wire:model.debounce.1000ms="start_date"
             value="{{ old('start_date', optional($program)->start_date) }}"
             required
         >
@@ -76,7 +76,7 @@
             type="date"
             class="form-control @error('end_date') is-invalid @enderror"
             id="end-date"
-            wire:model="end_date"
+            wire:model.debounce.1000ms="end_date"
             value="{{ old('end_date', optional($program)->end_date) }}"
             required
         >
@@ -95,7 +95,7 @@
             type="text"
             class="form-control @error('description') is-invalid @enderror"
             id="description"
-            wire:model="description"
+            wire:model.debounce.1000ms="description"
             value="{{ old('description', optional($program)->description) }}"
             required
         >
