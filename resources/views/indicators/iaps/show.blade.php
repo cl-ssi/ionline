@@ -162,7 +162,7 @@
                             <tbody>
                             <!-- numerador -->
                             <tr class="text-center">
-                                <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></td>
+                                <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('numerador') }}</span> @if($indicator->getSourceAbbreviated('numerador') != $indicator->numerator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->numerator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                                 <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                                 <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance(), 2, ',', '.')}}%</td>
                                 <td class="text-center">{{number_format($indicator->numerator_source == 'REM P' ? $indicator->getLastValueByFactor('numerador') : $indicator->getValuesAcum('numerador'), 0, ',', '.')}}</td>
@@ -172,7 +172,7 @@
                             </tr>
                             <!-- denominador -->
                             <tr class="text-center">
-                                <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
+                                <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('denominador') }}</span> @if($indicator->getSourceAbbreviated('denominador') != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                                 <td class="text-center">{{number_format($indicator->denominator_source == 'REM P' ? $indicator->getLastValueByFactor('denominador') : $indicator->getValuesAcum('denominador'), 0, ',', '.')}}</td>
                                 @foreach($months as $number => $month)
                                 @if($indicator->id == 310)
