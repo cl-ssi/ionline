@@ -148,7 +148,6 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        @if($control->isDispatch())
                         <a
                             href="{{ route('warehouse.control.pdf', [
                                 'store' => $store,
@@ -158,7 +157,6 @@
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
-                        @endif
                     </td>
                 </tr>
                 @empty
