@@ -88,6 +88,17 @@
         </div>
     </div>
     <div class="form-row">
+        <div class="form-group col-md-6 source" style="display: none">
+            <label for="numerator_cods">Códigos de prestación para numerador separados por coma</label>
+            <input type="text" class="form-control" id="numerator_cods" name="numerator_cods" disabled>
+        </div>
+        <div class="form-group col-md-6 source" style="display: none">
+            <label for="numerator_cols">Columnas para numerador separados por coma</label>
+            <input type="text" class="form-control" id="numerator_cols" name="numerator_cols" disabled>
+        </div>
+    </div>
+    <hr>
+    <div class="form-row">
         <div class="form-group col-md{{(isset($corte) ? $corte->number : $section) > 2 ? '-12' : '' }}">
             <label for="denominator">Nombre denominador</label>
             <input type="text" class="form-control" id="denominator" name="denominator" value="">
@@ -101,6 +112,16 @@
         <div class="form-group col-md-3 source" style="display: none">
             <label for="denominator_source">Fuente datos</label>
             <input type="text" class="form-control" id="denominator_source" name="denominator_source" disabled>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 source" style="display: none">
+            <label for="denominator_cods">Códigos de prestación para denominador separados por coma</label>
+            <input type="text" class="form-control" id="denominator_cods" name="denominator_cods" disabled>
+        </div>
+        <div class="form-group col-md-6 source" style="display: none">
+            <label for="denominator_cols">Columnas para denominador separados por coma</label>
+            <input type="text" class="form-control" id="denominator_cols" name="denominator_cols" disabled>
         </div>
     </div>
     <h4 class="mb-3">Cálculos de cumplimiento</h4><hr>
@@ -179,12 +200,12 @@
         $('input[type="checkbox"]').click(function() {
             if($(this).prop('checked') == true){
                 $(".source").show();
-                $('#numerator_source, #denominator_source').prop('disabled', false);
+                $('#numerator_source, #denominator_source, #numerator_cods, #numerator_cols, #denominator_cods, #denominator_cols').prop('disabled', false);
                 $(".months").hide();
                 $('#numerator_month, #denominator_month').prop('disabled', true);
             } else {
                 $(".source").hide();
-                $('#numerator_source, #denominator_source').prop('disabled', true);
+                $('#numerator_source, #denominator_source, #numerator_cods, #numerator_cols, #denominator_cods, #denominator_cols').prop('disabled', true);
                 $(".months").show();
                 $('#numerator_month, #denominator_month').prop('disabled', false);
             }
