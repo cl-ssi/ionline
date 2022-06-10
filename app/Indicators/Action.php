@@ -65,6 +65,6 @@ class Action extends Model
 
     public function isActionWithFactorSource()
     {
-        return $this->numerator_source != null || $this->denominator_source != null;
+        return ($this->numerator_cols != null &&  $this->numerator_cols) != null || ($this->denominator_cols != null && $this->denominator_cods != null);
     }
 }
