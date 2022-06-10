@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
-                    <th class="text-center">Código Barra</th>
+                    <th class="text-center">Código</th>
                     <th>Producto o Servicio</th>
                     <th>Categoría</th>
                     <th class="text-center">Acciones</th>
@@ -47,17 +47,17 @@
                     </td>
                     <td class="text-center">
                         <small class="text-monospace">
-                            @if($product->barcode)
-                                {{ $product->barcode }}
-                            @else
-                                -
-                            @endif
+                            {{ optional($product->product)->code }}
                         </small>
                     </td>
                     <td>
                         {{ optional($product->product)->name }}
                         <br>
                         <small>
+                            @if($product->barcode)
+                                <span class="text-monospace">{{ $product->barcode }}</span>
+                                -
+                            @endif
                             {{ $product->name }}
                         </small>
                     </td>
