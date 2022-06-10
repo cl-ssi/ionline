@@ -30,7 +30,7 @@ class ProgramIndex extends Component
                     ->orWhere('description', 'like', $search);
             })
             ->orderBy('name')
-            ->paginate(10);
+            ->paginate(100);
 
         return $programs;
     }

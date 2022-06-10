@@ -8,7 +8,8 @@ class Action extends Model
 {
     protected $table = 'ind_actions';
     protected $fillable = ['number', 'name', 'verification_means', 'numerator', 'numerator_source',
-                           'denominator', 'denominator_source', 'weighting', 'section_id', 'target_type'];
+                           'denominator', 'denominator_source', 'weighting', 'section_id', 'target_type',
+                           'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_cols'];
 
     public function section()
     {
@@ -64,6 +65,6 @@ class Action extends Model
 
     public function isActionWithFactorSource()
     {
-        return $this->numerator_source != null || $this->denominator_source != null;
+        return ($this->numerator_cols != null &&  $this->numerator_cols) != null || ($this->denominator_cols != null && $this->denominator_cods != null);
     }
 }

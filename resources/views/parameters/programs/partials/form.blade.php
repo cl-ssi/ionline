@@ -5,7 +5,7 @@
             type="text"
             class="form-control @error('name') is-invalid @enderror"
             id="name"
-            wire:model="name"
+            wire:model.debounce.1000ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($program)->name) }}"
             required
@@ -17,18 +17,35 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-3">
+    <fieldset class="form-group col-md-2">
         <label for="alias">Alias</label>
         <input
             type="text"
             class="form-control @error('alias') is-invalid @enderror"
             id="alias"
-            wire:model="alias"
+            wire:model.debounce.1000ms="alias"
             placeholder="Ingresa el alias o nombre corto"
             value="{{ old('alias', optional($program)->alias) }}"
             required
         >
         @error('alias')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-1">
+        <label for="period">Período</label>
+        <input
+            type="number"
+            class="form-control @error('period') is-invalid @enderror"
+            id="period"
+            wire:model.debounce.1000ms="period"
+            value="{{ old('period', optional($program)->period) }}"
+            required
+        >
+        @error('period')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
@@ -41,7 +58,7 @@
             type="date"
             class="form-control @error('start_date') is-invalid @enderror"
             id="start-date"
-            wire:model="start_date"
+            wire:model.debounce.1000ms="start_date"
             value="{{ old('start_date', optional($program)->start_date) }}"
             required
         >
@@ -58,7 +75,7 @@
             type="date"
             class="form-control @error('end_date') is-invalid @enderror"
             id="end-date"
-            wire:model="end_date"
+            wire:model.debounce.1000ms="end_date"
             value="{{ old('end_date', optional($program)->end_date) }}"
             required
         >
@@ -69,7 +86,6 @@
         @enderror
     </fieldset>
 </div>
-
 <div class="form-row">
     <fieldset class="form-group col-md-12">
         <label for="description">Descripción</label>
@@ -77,7 +93,7 @@
             type="text"
             class="form-control @error('description') is-invalid @enderror"
             id="description"
-            wire:model="description"
+            wire:model.debounce.1000ms="description"
             value="{{ old('description', optional($program)->description) }}"
             required
         >
@@ -88,3 +104,100 @@
         @enderror
     </fieldset>
 </div>
+
+<hr>
+<h5>Finanzas</h5>
+
+<div class="form-row">
+    <fieldset class="form-group col-md-4">
+        <label for="alias_finance">Nombre en finanzas</label>
+        <input
+            type="text"
+            class="form-control @error('alias_finance') is-invalid @enderror"
+            id="alias_finance"
+            wire:model.debounce.1000ms="alias_finance"
+            placeholder="Nombre de finanzas"
+            value="{{ old('alias_finance', optional($program)->alias_finance) }}"
+            required
+        >
+        @error('alias_finance')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-1">
+        <label for="subtitle_id">Sub</label>
+        <select class="form-control @error('subtitle_id') is-invalid @enderror"
+            id="subtitle_id"
+            wire:model.debounce.1000ms="subtitle_id"
+            required>
+            <option></option>
+            @foreach($subtitles as $id => $subtitle)
+            <option value="{{ $id }}">{{ $subtitle }}</option>
+            @endforeach
+        </select>
+        @error('subtitle_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-3">
+        <label for="financial_type">Tipo Financiamiento</label>
+        <input
+            type="text"
+            class="form-control @error('financial_type') is-invalid @enderror"
+            id="financial_type"
+            wire:model.debounce.1000ms="financial_type"
+            placeholder="Ingresa tipo de financiamiento"
+            value="{{ old('financial_type', optional($program)->financial_type) }}"
+            required
+        >
+        @error('financial_type')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-2">
+        <label for="folio">Folio</label>
+        <input
+            type="text"
+            class="form-control @error('folio') is-invalid @enderror"
+            id="folio"
+            wire:model.debounce.1000ms="folio"
+            placeholder="Nº folio"
+            value="{{ old('folio', optional($program)->folio) }}"
+            required
+        >
+        @error('folio')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-2">
+        <label for="amount">Monto</label>
+        <input
+            type="text"
+            class="form-control @error('amount') is-invalid @enderror"
+            id="amount"
+            wire:model.debounce.1000ms="amount"
+            placeholder="Nº amount"
+            value="{{ old('amount', optional($program)->amount) }}"
+            required
+        >
+        @error('amount')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+</div>
+
