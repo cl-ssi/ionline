@@ -135,7 +135,7 @@ class ControlProductList extends Component
             'status' => false
         ]);
 
-        session()->flash('success', 'El archivo fue cargado exitosamente.');
+        session()->flash('success', 'El ' . $this->control->type_format . ' fue cargado exitosamente.');
 
         return redirect()->route('warehouse.controls.index', [
             'store' => $this->store,
