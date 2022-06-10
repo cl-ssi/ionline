@@ -10,11 +10,13 @@ class AddProductRequest extends FormRequest
 {
     public $max_quantity;
     public $store_id;
+    public $type_product;
 
-    public function __construct($store_id, $max_quantity)
+    public function __construct($store_id, $max_quantity, $type_product)
     {
         $this->store_id = $store_id;
         $this->max_quantity = $max_quantity;
+        $this->type_product = $type_product;
     }
 
     /**
@@ -35,14 +37,16 @@ class AddProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'type_product'  => 'required',
             'quantity'      => 'required|integer|min:0|max:' . $this->max_quantity,
-            'description'   => 'required',
+            'description'   => 'required|string|min:2|max:255',
+            'inventory'     => 'required|boolean',
             'barcode'       => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:255',
-                Rule::unique('wre_products', 'barcode')->where('store_id', $this->store_id)
+                ($this->type_product == 1) ? Rule::unique('wre_products', 'barcode')->where('store_id', $this->store_id) : ''
             ],
         ];
     }
