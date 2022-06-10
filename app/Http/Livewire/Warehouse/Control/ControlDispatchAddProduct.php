@@ -59,7 +59,6 @@ class ControlDispatchAddProduct extends Component
         $controlItems = collect([]);
         $search = "%$searchValue%";
 
-        // dd($this->control->program_id);
         if($searchValue)
         {
             $productsOutStock = Product::outStock($this->store, $this->control->program);
@@ -122,9 +121,7 @@ class ControlDispatchAddProduct extends Component
             ]);
         }
         else
-        {
             $controlItem = ControlItem::create($dataValidated);
-        }
 
         $this->search_store_product = '';
         $this->controlItems = collect([]);
