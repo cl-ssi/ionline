@@ -5,6 +5,7 @@ namespace App\Models\Parameters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Parameters\Subtitle;
 
 class Program extends Model
 {
@@ -15,16 +16,27 @@ class Program extends Model
     protected $fillable = [
         'name',
         'alias',
+        'alias_finance',
+        'financial_type',
         'folio',
-        'description',
+        'subtitle_id',
+        'amount',
+        'period',
         'start_date',
         'end_date',
+        'description',
     ];
 
     protected $dates = [
         'start_date',
         'end_date'
     ];
+
+    public function Subtitle()
+    {
+        return $this->belongsTo(Subtitle::class);
+    }
+    
 
     public function getStartDateFormatAttribute()
     {
