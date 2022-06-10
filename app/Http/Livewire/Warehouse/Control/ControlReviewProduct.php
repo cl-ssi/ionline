@@ -18,6 +18,9 @@ class ControlReviewProduct extends Component
     public $indexEdit;
     public $item_id;
     public $wre_product_id;
+    public $selected_wre_product_id;
+    public $selected_wre_product_name;
+    public $selected_unspsc_product_name;
     public $unspsc_product_id;
     public $unspsc_product_name;
     public $description;
@@ -27,12 +30,22 @@ class ControlReviewProduct extends Component
     public $quantity_return;
     public $generate_return;
     public $return_note;
-    public $switch_status;
+    public $can_edit;
+    public $type_wre_product;
+    public $wre_products;
     public $items;
 
     protected $listeners = [
         'myProductId'
     ];
+
+    public function mount()
+    {
+        $this->items = $this->getItems();
+        $this->productId = null;
+        $this->generate_return = false;
+        $this->indexEdit = null;
+    }
 
     public function render()
     {
@@ -42,9 +55,10 @@ class ControlReviewProduct extends Component
     public function rules()
     {
         return [
-            'description'       => 'required|string|min:2|max:255',
-            'unspsc_product_id' => 'required|integer|exists:unspsc_products,id',
-            'quantity_received' => 'required|integer|min:0|max:' . $this->quantity
+            'description'               => 'required|string|min:2|max:255',
+            'unspsc_product_id'         => 'required|integer|exists:unspsc_products,id',
+            'selected_wre_product_id'   => 'nullable|required_if:type_wre_product,2|exists:wre_products,id',
+            'quantity_received'         => 'required|integer|min:0|max:' . $this->quantity
         ];
     }
 
@@ -53,14 +67,6 @@ class ControlReviewProduct extends Component
         return [
             'return_note' => 'nullable|required_if:generate_return,1',
         ];
-    }
-
-    public function mount()
-    {
-        $this->items = $this->getItems();
-        $this->productId = null;
-        $this->generate_return = false;
-        $this->switch_status = 1;
     }
 
     public function getItems()
@@ -77,10 +83,16 @@ class ControlReviewProduct extends Component
             $item['wre_product_id'] = $controlItem->product->id;
             $item['unspsc_product_id'] = $controlItem->product->unspsc_product_id;
             $item['unspsc_product_name'] = $controlItem->product->product->name;
+            $item['unspsc_product_code'] = $controlItem->product->product->code;
             $item['description'] = $controlItem->product->name;
             $item['program_name'] = $controlItem->program_name;
             $item['program_id'] = $controlItem->program_id;
             $item['barcode'] = $controlItem->product->barcode;
+            $item['type_wre_product'] = $controlItem->product->barcode == null ? 1 : null; // 1:nuevo 2:seleccionar
+            $item['can_edit'] = $controlItem->product->barcode == null ? true : false;
+            $item['selected_wre_product_id'] = null;
+            $item['selected_wre_product_name'] = null;
+            $item['selected_unspsc_product_name'] = null;
             $item['status'] = $this->getStatus($item['quantity'], $item['quantity_received']);
 
             $arrayItems[] = $item;
@@ -88,10 +100,84 @@ class ControlReviewProduct extends Component
         return $arrayItems;
     }
 
+    public function getStatus($quantity, $quantity_received)
+    {
+        if($quantity_received == 0)
+            $status = 0;
+        elseif($quantity_received < $quantity)
+            $status = -1;
+        elseif($quantity_received == $quantity)
+            $status = 1;
+
+        return $status;
+    }
+
+    public function getRecepcionStatus($status)
+    {
+        $reception_status = false;
+        if($status == 0 || $status == -1)
+            $reception_status = true;
+        return $reception_status;
+    }
+
+    public function getLocalProduct($type_wre_product, $wre_product_id, $selected_wre_product_id, $description, $unspsc_product_id)
+    {
+        if($type_wre_product == null)
+        {
+            $localProduct = Product::find($wre_product_id);
+            $localProduct->update([
+                'name' => $description,
+                'unspsc_product_id' => $unspsc_product_id
+            ]);
+        }
+        else
+        {
+            switch ($type_wre_product)
+            {
+                case 1:
+                    $localProduct = Product::create([
+                        'name' => $description,
+                        'unspsc_product_id' => $unspsc_product_id,
+                        'store_id' => $this->store->id,
+                    ]);
+                    break;
+                case 2:
+                    $localProduct = Product::find($selected_wre_product_id);
+                    $localProduct->update([
+                        'name' => $description
+                    ]);
+                    break;
+            }
+        }
+        return $localProduct;
+    }
+
+    public function getForeignProduct($type_wre_product, $wre_product_id, $barcode)
+    {
+        if($type_wre_product == null)
+        {
+            $foreignProduct = Product::query()
+                ->whereStoreId($this->control->store_origin_id)
+                ->whereBarcode($barcode)
+                ->first();
+        }
+        else
+        {
+            $foreignProduct = Product::find($wre_product_id);
+        }
+        return $foreignProduct;
+    }
+
     public function editProduct($index)
     {
+        $this->search_product = null;
+
         $this->indexEdit = $index;
         $this->item_id = $this->items[$index]['item_id'];
+        $this->type_wre_product = $this->items[$index]['type_wre_product'];
+        $this->can_edit = $this->items[$index]['can_edit'];
+        $this->selected_wre_product_id = $this->items[$index]['selected_wre_product_id'];
+        $this->selected_wre_product_name = $this->items[$index]['selected_wre_product_name'];
         $this->wre_product_id = $this->items[$index]['wre_product_id'];
         $this->unspsc_product_id = $this->items[$index]['unspsc_product_id'];
         $this->unspsc_product_name = $this->items[$index]['unspsc_product_name'];
@@ -99,6 +185,13 @@ class ControlReviewProduct extends Component
         $this->barcode = $this->items[$index]['barcode'];
         $this->quantity = $this->items[$index]['quantity'];
         $this->quantity_received = $this->items[$index]['quantity_received'];
+        $this->quantity_return = $this->items[$index]['quantity_return'];
+        $this->selected_unspsc_product_name = $this->items[$index]['selected_unspsc_product_name'];
+
+        $this->wre_products = Product::query()
+            ->whereStoreId($this->store->id)
+            ->whereUnspscProductId($this->unspsc_product_id)
+            ->get();
 
         $this->emit('searchProduct',  $this->items[$index]['unspsc_product_name']);
         $this->emit('productId', $this->items[$index]['unspsc_product_id']);
@@ -109,13 +202,17 @@ class ControlReviewProduct extends Component
         $dataValidated = $this->validate();
 
         $product = UnspscProduct::find($dataValidated['unspsc_product_id']);
+        $selectedWreProduct =  ($dataValidated['selected_wre_product_id']) ? Product::find($dataValidated['selected_wre_product_id']) : null;
+
         $quantity = $this->items[$this->indexEdit]['quantity'];
         $quantity_received = $dataValidated['quantity_received'];
         $status = $this->getStatus($quantity, $quantity_received);
 
-        $this->items[$this->indexEdit]['unspsc_product_id'] = $product->id;
-        $this->items[$this->indexEdit]['unspsc_product_name'] = $product->name;
-        $this->items[$this->indexEdit]['description'] = $dataValidated['description'];
+        $this->items[$this->indexEdit]['type_wre_product'] = $this->type_wre_product;
+        $this->items[$this->indexEdit]['selected_wre_product_id'] = $dataValidated['selected_wre_product_id'];
+        $this->items[$this->indexEdit]['unspsc_product_id'] = $selectedWreProduct ? $selectedWreProduct->product->id : $product->id;
+        $this->items[$this->indexEdit]['unspsc_product_name'] = $selectedWreProduct ? $selectedWreProduct->product->name : $product->name;
+        $this->items[$this->indexEdit]['description'] = $selectedWreProduct ? $selectedWreProduct->name : $dataValidated['description'];
         $this->items[$this->indexEdit]['quantity_received'] = $dataValidated['quantity_received'];
         $this->items[$this->indexEdit]['quantity_return'] = $quantity - $dataValidated['quantity_received'];
         $this->items[$this->indexEdit]['status'] = $status;
@@ -140,6 +237,8 @@ class ControlReviewProduct extends Component
     {
         $this->indexEdit = null;
         $this->item_id = null;
+        $this->type_wre_product = null;
+        $this->can_edit = null;
         $this->description = null;
         $this->wre_product_id = null;
         $this->unspsc_product_id = null;
@@ -164,8 +263,8 @@ class ControlReviewProduct extends Component
                 'confirm' => true,
                 'status' => false,
                 'note' => $dataValidated['return_note'],
-                'program_id' =>  $this->control->program_id,
                 'type_reception_id' => TypeReception::return(),
+                'program_id' =>  $this->control->program_id,
                 'store_id' => $this->control->store_origin_id,
                 'store_origin_id' => $this->store->id,
             ]);
@@ -174,17 +273,11 @@ class ControlReviewProduct extends Component
         foreach($this->items as $item)
         {
             $program = $item['program_id'] ? Program::find($item['program_id']) : null;
-            $localProduct = Product::find($item['wre_product_id']);
 
-            $foreignProduct = Product::query()
-                ->whereStoreId($this->control->store_origin_id)
-                ->whereBarcode($localProduct->barcode)
-                ->first();
+            $localProduct = $this->getLocalProduct($item['type_wre_product'], $item['wre_product_id'],
+                $item['selected_wre_product_id'], $item['description'], $item['unspsc_product_id']);
 
-            $localProduct->update([
-                'name' => $item['description'],
-                'unspsc_product_id' => $item['unspsc_product_id'],
-            ]);
+            $foreignProduct = $this->getForeignProduct($item['type_wre_product'], $item['wre_product_id'], $item['barcode']);
 
             $foreignBalance = Product::lastBalance($foreignProduct, $program);
             $localBalance = Product::lastBalance($localProduct, $program);
@@ -203,6 +296,7 @@ class ControlReviewProduct extends Component
                 ]);
             }
 
+            $this->updateProductId($controlItem, $localProduct, $item['type_wre_product']);
             $this->updateControlItem($controlItem, $item['status'], $item['quantity'], $item['quantity_received'], $localBalance);
         }
 
@@ -247,23 +341,13 @@ class ControlReviewProduct extends Component
         }
     }
 
-    public function getStatus($quantity, $quantity_received)
+    public function updateProductId(ControlItem $controlItem, Product $localProduct, $type_wre_product)
     {
-        if($quantity_received == 0)
-            $status = 0;
-        elseif($quantity_received < $quantity)
-            $status = -1;
-        elseif($quantity_received == $quantity)
-            $status = 1;
-
-        return $status;
-    }
-
-    public function getRecepcionStatus($status)
-    {
-        $reception_status = false;
-        if($status == 0 || $status == -1)
-            $reception_status = true;
-        return $reception_status;
+        if($type_wre_product == 2)
+        {
+            $controlItem->update([
+                'product_id' => $localProduct->id,
+            ]);
+        }
     }
 }
