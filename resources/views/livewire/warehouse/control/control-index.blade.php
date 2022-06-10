@@ -154,6 +154,7 @@
                                 'control' => $control
                             ]) }}"
                             class="btn btn-sm btn-outline-secondary"
+                            target="_blank"
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
