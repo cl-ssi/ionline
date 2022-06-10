@@ -8,6 +8,7 @@ use App\Indicators\Action;
 use App\Indicators\Comges;
 use App\User;
 use App\Indicators\Indicator;
+use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +38,9 @@ class ComgesController extends Controller
             $q->where('ind_sections.number', $section)->with('values');
         }]);
         $corte = $comges->sections()->where('ind_sections.number', $section)->first();
-        $this->loadActionsWithRemSource($year, $comges->number, $section, $indicators);
+        // $this->loadActionsWithRemSource($year, $comges->number, $section, $indicators);
+        $this->loadValuesWithRemSource($year, $comges->number, $section, $indicators);
+        // return $indicators;
         return view('indicators.comges.show', compact('comges', $corte !=null ? 'corte' : 'section', 'indicators'));
     }
 
@@ -118,8 +121,12 @@ class ComgesController extends Controller
             'target_type' => $request->get('target_type'),
             'numerator' => $request->get('numerator'),
             'numerator_source' => $request->has('numerator_source') ? $request->get('numerator_source') : null,
+            'numerator_cods' => $request->has('numerator_cods') ? $request->get('numerator_cods') : null,
+            'numerator_cols' => $request->has('numerator_cols') ? $request->get('numerator_cols') : null,
             'denominator' => $request->get('denominator'),
-            'denominator_source' => $request->has('numerator_source') ? $request->get('denominator_source') : null,
+            'denominator_source' => $request->has('denominator_source') ? $request->get('denominator_source') : null,
+            'denominator_cods' => $request->has('denominator_cods') ? $request->get('denominator_cods') : null,
+            'denominator_cols' => $request->has('denominator_cols') ? $request->get('denominator_cols') : null,
             'weighting' => $request->get('weighting'),
             'section_id' => $corte->id
         ]);
@@ -201,8 +208,12 @@ class ComgesController extends Controller
         $action->target_type = $request->get('target_type');
         $action->numerator = $request->get('numerator');
         $action->numerator_source = $request->has('numerator_source') ? $request->get('numerator_source') : null;
+        $action->numerator_cods = $request->has('numerator_cods') ? $request->get('numerator_cods') : null;
+        $action->numerator_cols = $request->has('numerator_cols') ? $request->get('numerator_cols') : null;
         $action->denominator = $request->get('denominator');
         $action->denominator_source = $request->has('denominator_source') ? $request->get('denominator_source') : null;
+        $action->denominator_cods = $request->has('denominator_cods') ? $request->get('denominator_cods') : null;
+        $action->denominator_cols = $request->has('denominator_cols') ? $request->get('denominator_cols') : null;
         $action->save();
 
         // $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
@@ -338,8 +349,41 @@ class ComgesController extends Controller
         // return $indicators;
     }
 
-    private function loadActionsWithPreviousSections($year, $comges, $section, $indicators)
+    private function loadValuesWithRemSource($year, $comges, $section, $indicators)
     {
+        // Último mes según corte
+        $last_month_section = [1 => 3, 2 => 6, 3 => 9, 4 => 12];
 
+        foreach($indicators as $indicator){
+            foreach($indicator->actions as $action){
+                foreach(array('numerador', 'denominador') as $factor){
+                    $factor_cods = $factor == 'numerador' ? $action->numerator_cods : $action->denominator_cods;
+                    $factor_cols = $factor == 'numerador' ? $action->numerator_cols : $action->denominator_cols;
+
+                    if($factor_cods != null && $factor_cols != null){
+                        //procesamos los datos necesarios para todas consultas rem que se necesiten en las acciones
+                        $cods_array = array_map('trim', explode(';', $factor_cods));
+                        $cols_array = array_map('trim', explode(';', $factor_cols));
+
+                        for($i = 0; $i < count($cods_array); $i++){
+                            //procesamos los datos necesarios para las consultas rem
+                            $cods = array_map('trim', explode(',', $cods_array[$i]));
+                            $cols = array_map('trim', explode(',', $cols_array[$i]));
+                            $raws = null;
+                            foreach($cols as $col)
+                                $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                            $raws .= ' AS valor, Mes';
+            
+                            $result = Rem::year($year)->selectRaw($raws)
+                                        ->where('Mes', '<=', $last_month_section[$section])->where('IdEstablecimiento', 102100)
+                                        ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
+            
+                            foreach($result as $item)
+                                $action->values->add(new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
