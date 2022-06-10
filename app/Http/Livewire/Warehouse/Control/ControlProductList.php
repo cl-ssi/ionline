@@ -85,29 +85,37 @@ class ControlProductList extends Component
 
             foreach($control->items as $item)
             {
-                $existsProduct = Product::query()
+                if($item->product->barcode != null)
+                {
+                    $existsProduct = Product::query()
                     ->whereStoreId($controlDispatch->store_id)
                     ->whereBarcode($item->product->barcode);
 
-                if($existsProduct->exists())
-                    $product = clone $existsProduct->first();
+                    if($existsProduct->exists())
+                        $product = clone $existsProduct->first();
+                    else
+                    {
+                        $product = Product::create([
+                            'name' => $item->product->name,
+                            'barcode' => $item->product->barcode,
+                            'unspsc_product_id' => $item->product->unspsc_product_id,
+                            'store_id' => $controlDispatch->store_id,
+                        ]);
+                    }
+                    $product_id = $product->id;
+                }
                 else
                 {
-                    $product = Product::create([
-                        'name' => $item->product->name,
-                        'barcode' => $item->product->barcode,
-                        'unspsc_product_id' => $item->product->unspsc_product_id,
-                        'store_id' => $controlDispatch->store_id,
-                    ]);
+                    $product_id = $item->product->id;
                 }
 
-                $controlItem = ControlItem::create([
+                ControlItem::create([
                     'quantity' => $item->quantity,
                     'balance' => 0,
                     'confirm' => false,
                     'control_id' => $controlDispatch->id,
                     'program_id' => $item->program_id,
-                    'product_id' => $product->id
+                    'product_id' => $product_id
                 ]);
             }
         }
