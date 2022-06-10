@@ -28,23 +28,7 @@ class AddRolesOfWarehouse extends Migration
         $user->assignRole($roleStoreSuperAdmin);
         $user->givePermissionTo('Store: index');
 
-        $user = User::find(16469490);
-        $user->assignRole($roleStoreUser);
-
         $roleStoreSuperAdmin->givePermissionTo($permission);
-
-        // TODO: Eliminar
-        StoreUser::create([
-            'user_id' => 16469490,
-            'store_id' => 1,
-            'role_id' => 18
-        ]);
-
-        StoreUser::create([
-            'user_id' => 1005298,
-            'store_id' => 2,
-            'role_id' => 18
-        ]);
     }
 
     /**
