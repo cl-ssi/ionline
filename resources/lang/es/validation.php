@@ -154,6 +154,10 @@ return [
         ],
         'generate_return' => [
             '1' => 'Si'
+        ],
+        'type_wre_product' => [
+            '1' => 'Crear producto',
+            '2' => 'Seleccionar producto'
         ]
     ],
     /*
@@ -224,6 +228,7 @@ return [
         'role'                  => 'rol',
         'role_id'               => 'rol',
         'second'                => 'segundo',
+        'selected_wre_product_id'=> 'producto similar',
         'sex'                   => 'sexo',
         'store_destination_id'  => 'bodega destino',
         'subject'               => 'asunto',
@@ -233,6 +238,7 @@ return [
         'type'                  => 'tipo',
         'type_dispatch_id'      => 'tipo de egreso',
         'type_reception_id'     => 'tipo de ingreso',
+        'type_wre_product'      => 'tipo de producto',
         'telephone'             => 'teléfono',
         'username'              => 'usuario',
         'user_id'               => 'usuario',
