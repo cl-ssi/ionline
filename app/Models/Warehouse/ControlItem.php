@@ -18,6 +18,7 @@ class ControlItem extends Model
         'balance',
         'confirm',
         'correlative_po',
+        'unit_price',
         'control_id',
         'program_id',
         'product_id',
@@ -60,5 +61,18 @@ class ControlItem extends Model
         if($this->program)
             $programName = $this->program->name;
         return $programName;
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->quantity * $this->unit_price;
+    }
+
+    public function getTaxAttribute()
+    {
+        $tax = $this->control->purchaseOrder->tax_percentage;
+        if($this->control->purchaseOrder)
+            $tax = $this->total_price * ($this->control->purchaseOrder->tax_percentage / 100);
+        return $tax;
     }
 }
