@@ -242,16 +242,55 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th></th>
                     <th class="text-center">Código</th>
                     <th class="text-center" width="150px">Cant. Recibida</th>
                     <th>Producto</th>
-                    <th class="text-center">Código de Barra</th>
+                    <th class="text-center">Código Barra</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($po_items as $index => $po_item)
+                @foreach($po_items as $index => $po_item)
                 <tr>
+                    <td>
+                        @if($index_selected === $index )
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                wire:model="inventory"
+                                id="option-1"
+                                value="1"
+                            >
+                            <label class="form-check-label" for="option-1">
+                                Inventariable
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                wire:model="inventory"
+                                id="option-2"
+                                value="0"
+                            >
+                            <label class="form-check-label" for="option-2">
+                                No inventariable
+                            </label>
+                        </div>
+                        @else
+                            <div class="text-center">
+                                <small>
+                                    @if($po_item['inventory'])
+                                        Inventariable
+                                    @else
+                                        No inventariable
+                                    @endif
+                                </small>
+                            </div>
+                        @endif
+                    </td>
                     <td class="text-center">
                         <small class="text-monospace">
                             {{ $po_item['unspsc_product_code'] }}
@@ -281,7 +320,7 @@
                             </div>
                         @else
                             <div class="text-center">
-                                    {{ $po_item['quantity'] }} / {{ $po_item['max_quantity'] }}
+                                {{ $po_item['quantity'] }} / {{ $po_item['max_quantity'] }}
                                 <br>
                                 <small class="text-muted">
                                     Cantidad OC: {{ $po_item['po_quantity'] }}
@@ -365,7 +404,7 @@
                                     <option value="">Seleccione Producto</option>
                                     @foreach($wre_products as $wre_product)
                                         <option value="{{ $wre_product->id }}">
-                                            {{ $wre_product->name }}
+                                            {{ $wre_product->product->code }} - {{ $wre_product->product->name }} - {{ $wre_product->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -384,21 +423,23 @@
                                 @enderror
                             @endif
                         @else
-                            <small class="text-monospace text-center">
-                                @if($po_item['barcode'])
-                                    {{ $po_item['barcode'] }}
-                                @else
-                                    -
-                                @endif
-                            </small>
-                            <br>
-                            <small class="text-muted text-center">
-                                @if($po_item['wre_product_id'])
-                                    Producto: {{ $po_item['wre_product_name'] }}
-                                @else
-                                    Crear Producto
-                                @endif
-                            </small>
+                            <div class="text-center">
+                                <small class="text-monospace">
+                                    @if($po_item['barcode'])
+                                        {{ $po_item['barcode'] }}
+                                    @else
+                                        -
+                                    @endif
+                                </small>
+                                <br>
+                                <span class="badge badge-secondary">
+                                    @if($po_item['wre_product_id'])
+                                        Producto: {{ $po_item['wre_product_name'] }}
+                                    @else
+                                        Crear Producto
+                                    @endif
+                                </span>
+                            </div>
                         @endif
                     </td>
                     <td class="text-center">
@@ -429,13 +470,7 @@
                         @endif
                     </td>
                 </tr>
-                @empty
-                <tr>
-                    <td class="text-center" colspan="5">
-                        <em>No hay productos</em>
-                    </td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>

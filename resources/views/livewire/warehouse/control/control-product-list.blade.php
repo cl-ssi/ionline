@@ -3,7 +3,7 @@
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">Código Barra</th>
+                    <th class="text-center">Código</th>
                     <th>Producto o Servicio</th>
                     <th>Programa</th>
                     <th>Categoría</th>
@@ -22,17 +22,19 @@
                 <tr wire:loading.remove>
                     <td class="text-center">
                         <small class="text-monospace">
-                            @if($controlItem->product->barcode)
-                                {{ optional($controlItem->product)->barcode }}
-                            @else
-                                -
-                            @endif
+                            {{ optional($controlItem->product->product)->code }}
                         </small>
                     </td>
                     <td>
                         {{ optional($controlItem->product->product)->name }}
                         <br>
                         <small>
+                            @if($controlItem->product->barcode)
+                                <span class="text-monospace">
+                                    {{ optional($controlItem->product)->barcode }}
+                                </span>
+                                -
+                            @endif
                             {{ optional($controlItem->product)->name }}
                         </small>
                     </td>
