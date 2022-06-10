@@ -12,6 +12,8 @@
     'control' => $control
 ])
 
+<hr>
+
 @livewire('warehouse.control.control-review-product', [
     'store' => $store,
     'control' => $control,
