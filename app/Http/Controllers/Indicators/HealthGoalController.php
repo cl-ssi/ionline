@@ -84,13 +84,13 @@ class HealthGoalController extends Controller
                     //procesamos los datos necesarios para todas consultas rem que se necesiten para la meta sanitaria
                     $cods_array = array_map('trim', explode(';', $factor_cods));
                     $cols_array = array_map('trim', explode(';', $factor_cols));
-                    $establishment_cods_array = $indicator->establishment_cods != null ? array_map('trim', explode(';',$indicator->establishment_cods)) : null; //para la consulta de distintos establecimientos a cada consulta rem en el orden en que se registre
+                    $establishment_cods_array = array_map('trim', explode(';',$indicator->establishment_cods)); //para la consulta de distintos establecimientos a cada consulta rem en el orden en que se registre
 
                     for($i = 0; $i < count($cods_array); $i++){
                         //procesamos los datos necesarios para las consultas rem
                         $cods = array_map('trim', explode(',', $cods_array[$i]));
                         $cols = array_map('trim', explode(',', $cols_array[$i]));
-                        $establishment_cods = $establishment_cods_array ? array_map('trim', explode(',', $establishment_cods_array[$i])) : $establishment_cods;
+                        $establishment_cods = count($establishment_cods_array) > 1 ? array_map('trim', explode(',', $establishment_cods_array[$i])) : $establishment_cods;
                         $raws = null;
                         foreach($cols as $col)
                             $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
