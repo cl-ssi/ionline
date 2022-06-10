@@ -71,7 +71,7 @@ class ControlController extends Controller
     }
 
     /**
-     * Dispatch PDF report
+     * Dispatch & Reception PDF report
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
@@ -79,7 +79,10 @@ class ControlController extends Controller
      */
     public function pdf(Store $store, Control $control)
     {
-        return view('warehouse.pdf.report-dispatch', compact('store', 'control'));
+        if($control->isReceiving())
+            return view('warehouse.pdf.report-reception', compact('store', 'control'));
+        else
+            return view('warehouse.pdf.report-dispatch', compact('store', 'control'));
     }
 
     /**
