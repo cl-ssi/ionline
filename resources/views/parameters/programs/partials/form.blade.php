@@ -36,17 +36,16 @@
     </fieldset>
 
     <fieldset class="form-group col-md-1">
-        <label for="folio">Folio</label>
+        <label for="period">Período</label>
         <input
-            type="text"
-            class="form-control @error('folio') is-invalid @enderror"
-            id="folio"
-            wire:model.debounce.1000ms="folio"
-            placeholder="Nº folio"
-            value="{{ old('folio', optional($program)->folio) }}"
+            type="number"
+            class="form-control @error('period') is-invalid @enderror"
+            id="period"
+            wire:model.debounce.1000ms="period"
+            value="{{ old('period', optional($program)->period) }}"
             required
         >
-        @error('folio')
+        @error('period')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
@@ -87,7 +86,6 @@
         @enderror
     </fieldset>
 </div>
-
 <div class="form-row">
     <fieldset class="form-group col-md-12">
         <label for="description">Descripción</label>
@@ -106,3 +104,100 @@
         @enderror
     </fieldset>
 </div>
+
+<hr>
+<h5>Finanzas</h5>
+
+<div class="form-row">
+    <fieldset class="form-group col-md-4">
+        <label for="alias_finance">Nombre en finanzas</label>
+        <input
+            type="text"
+            class="form-control @error('alias_finance') is-invalid @enderror"
+            id="alias_finance"
+            wire:model.debounce.1000ms="alias_finance"
+            placeholder="Nombre de finanzas"
+            value="{{ old('alias_finance', optional($program)->alias_finance) }}"
+            required
+        >
+        @error('alias_finance')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-1">
+        <label for="subtitle_id">Sub</label>
+        <select class="form-control @error('subtitle_id') is-invalid @enderror"
+            id="subtitle_id"
+            wire:model.debounce.1000ms="subtitle_id"
+            required>
+            <option></option>
+            @foreach($subtitles as $id => $subtitle)
+            <option value="{{ $id }}">{{ $subtitle }}</option>
+            @endforeach
+        </select>
+        @error('subtitle_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-3">
+        <label for="financial_type">Tipo Financiamiento</label>
+        <input
+            type="text"
+            class="form-control @error('financial_type') is-invalid @enderror"
+            id="financial_type"
+            wire:model.debounce.1000ms="financial_type"
+            placeholder="Ingresa tipo de financiamiento"
+            value="{{ old('financial_type', optional($program)->financial_type) }}"
+            required
+        >
+        @error('financial_type')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-2">
+        <label for="folio">Folio</label>
+        <input
+            type="text"
+            class="form-control @error('folio') is-invalid @enderror"
+            id="folio"
+            wire:model.debounce.1000ms="folio"
+            placeholder="Nº folio"
+            value="{{ old('folio', optional($program)->folio) }}"
+            required
+        >
+        @error('folio')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+    <fieldset class="form-group col-md-2">
+        <label for="amount">Monto</label>
+        <input
+            type="text"
+            class="form-control @error('amount') is-invalid @enderror"
+            id="amount"
+            wire:model.debounce.1000ms="amount"
+            placeholder="Nº amount"
+            value="{{ old('amount', optional($program)->amount) }}"
+            required
+        >
+        @error('amount')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+
+</div>
+
