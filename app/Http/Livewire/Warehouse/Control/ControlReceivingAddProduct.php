@@ -35,7 +35,6 @@ class ControlReceivingAddProduct extends Component
             'description'       => 'nullable|required_if:type,1|string|min:1|max:255',
             'barcode'           => [
                 'nullable',
-                'required_if:type,1',
                 'string',
                 'min:1',
                 'max:255',
