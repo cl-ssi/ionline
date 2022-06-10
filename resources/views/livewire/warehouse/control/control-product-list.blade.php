@@ -4,10 +4,10 @@
             <thead>
                 <tr>
                     <th class="text-center">Código</th>
+                    <th class="text-center">Cant.</th>
                     <th>Producto o Servicio</th>
                     <th>Programa</th>
                     <th>Categoría</th>
-                    <th class="text-center">Cant.</th>
                     <th class="text-center">Estado</th>
                     <th></th>
                 </tr>
@@ -25,6 +25,7 @@
                             {{ optional($controlItem->product->product)->code }}
                         </small>
                     </td>
+                    <td class="text-center">{{ $controlItem->quantity }}</td>
                     <td>
                         {{ optional($controlItem->product->product)->name }}
                         <br>
@@ -40,7 +41,6 @@
                     </td>
                     <td>{{ optional($controlItem->control)->program_name }}</td>
                     <td>{{ optional($controlItem->product)->category_name }}</td>
-                    <td class="text-center">{{ $controlItem->quantity }}</td>
                     <td class="text-center">
                         <span class="badge badge-{{ $controlItem->color }}">
                             {{ $controlItem->status }}
