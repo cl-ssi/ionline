@@ -1,6 +1,6 @@
 @extends('warehouse.pdf.layouts')
 
-@section('title', "Acta de Egreso " . $control->id)
+@section('title', "Acta de Ingreso " . $control->id)
 
 @section('content')
 
@@ -18,19 +18,25 @@
 </div>
 
 <div class="titulo">
-    ACTA DE EGRESO N° {{ $control->id }}
+    ACTA DE INGRESO N° {{ $control->id }}
 </div>
 
 <div style="padding-bottom: 8px;">
     <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
     <strong>Programa:</strong> {{ $control->program_name }}<br>
-    <strong>Tipo de Egreso:</strong> {{ optional($control->typeDispatch)->name }}<br>
-    @switch($control->type_dispatch_id)
-        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-            <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
+    <strong>Tipo de Ingreso:</strong> {{ optional($control->typeReception)->name }}<br>
+    @switch($control->type_reception_id)
+        @case(\App\Models\Warehouse\TypeReception::receiving())
+            <strong>Origen:</strong>{{ optional($control->origin)->name }}<br>
             @break
-        @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
-            <strong>Bodega Destino:</strong> {{ optional($control->destinationStore)->name }}<br>
+        @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
+            <strong>Bodega Origen:</strong> {{ optional($control->originStore)->name }}<br>
+            @break
+        @case(\App\Models\Warehouse\TypeReception::return())
+            <strong>Bodega Origen:</strong> {{ optional($control->originStore)->name }}<br>
+            @break
+        @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
+            <strong>Código OC:</strong> {{ $control->po_code }}<br>
             @break
     @endswitch
     <strong>Nota:</strong> {{ $control->note }}<br>
@@ -78,9 +84,37 @@
                 </td>
             </tr>
         @endforelse
+        <tr>
+            <td colspan="2"></td>
+            <td class="right">
+                <strong>NETO</strong>
+            </td>
+            <td class="right">
+                <strong>{{ money($control->net_total) }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="right">
+                <strong>IVA {{ optional($control->purchaseOrder)->tax_percentage }}%</strong>
+            </td>
+            <td class="right">
+                <strong>{{ money($control->total_tax) }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td class="right">
+                <strong>TOTAL</strong>
+            </td>
+            <td class="right">
+                <strong>{{ money($control->total) }}</strong>
+            </td>
+        </tr>
     </tbody>
 </table>
 
+<br>
 
 <div id="firmas">
     <div class="center" style="width: 49%">
