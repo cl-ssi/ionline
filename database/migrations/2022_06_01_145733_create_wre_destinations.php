@@ -23,12 +23,6 @@ class CreateWreDestinations extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        // TODO: Eliminar
-        Destination::create([
-            'name' => 'Hospital 3000',
-            'store_id' => 1
-        ]);
     }
 
     /**

@@ -23,12 +23,6 @@ class CreateWreOrigins extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        // TODO: Eliminar
-        Origin::create([
-            'name' => 'Proveedor Import 2021',
-            'store_id' => 1
-        ]);
     }
 
     /**
