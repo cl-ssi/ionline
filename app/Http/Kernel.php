@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 class Kernel extends HttpKernel
 {
@@ -66,11 +67,12 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'drugs' => \App\Http\Middleware\Drugs::class,
+        'client' => CheckClientCredentials::class,
         'ensure.store' => \App\Http\Middleware\Warehouse\EnsureStore::class,
         'ensure.product' => \App\Http\Middleware\Warehouse\EnsureProduct::class,
         'ensure.category' => \App\Http\Middleware\Warehouse\EnsureCategory::class,
         'ensure.destination' => \App\Http\Middleware\Warehouse\EnsureDestination::class,
         'ensure.origin' => \App\Http\Middleware\Warehouse\EnsureOrigin::class,
-
     ];
+
 }

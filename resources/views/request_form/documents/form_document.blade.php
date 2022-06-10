@@ -345,7 +345,7 @@
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Monto $</th>
-                  <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                  <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->has_increased_expense ? $requestForm->new_estimated_expense : $requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Fecha</th>

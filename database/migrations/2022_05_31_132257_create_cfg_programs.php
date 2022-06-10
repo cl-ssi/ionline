@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Parameters\Program as ParametersProgram;
-use App\Pharmacies\Program as PharmaciesProgram;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,25 +16,22 @@ class CreateCfgPrograms extends Migration
         Schema::create('cfg_programs', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name', 255)->nullable();
+            $table->string('name', 255);
             $table->string('alias', 50)->nullable();
-            $table->string('description', 255)->nullable();
-
+            $table->string('alias_finance', 255)->nullable();
+            $table->string('financial_type', 50)->nullable();
+            $table->unsignedSmallInteger('folio')->nullable();
+            $table->foreignId('subtitle_id')->constrained('cfg_subtitles');
+            $table->integer('amount')->nullable();
+            $table->unsignedSmallInteger('period');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('description', 255)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
         });
 
-        $pharmacyPrograms = PharmaciesProgram::all();
-
-        foreach($pharmacyPrograms as $program)
-        {
-            ParametersProgram::create([
-                'name' => $program->name,
-            ]);
-        }
     }
 
     /**

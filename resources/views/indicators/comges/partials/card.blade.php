@@ -5,7 +5,7 @@
 
     <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted">
-            2022
+            <a href="{{ route('indicators.comges.list', 2022) }}">2022</a>
         </li>
         <li class="list-group-item text-muted">
             2021

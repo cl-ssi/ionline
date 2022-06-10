@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ServiceRequests\ServiceRequestController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/** RUTAS API HETG **/
+Route::prefix('service_request')->name('service_request.')->middleware('client')->group(function (){
+    Route::get('/existing_contracts/{user_id}', [ServiceRequestController::class, 'existing_contracts']);
 });

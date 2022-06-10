@@ -34,7 +34,7 @@ class HealthGoalController extends Controller
             $communes = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->select('comuna')->distinct()->pluck('comuna')->toArray();
             foreach($healthGoals as $healthGoal)
                 foreach($healthGoal->indicators as $indicator){
-                    $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+                    $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
                     $this->loadValuesWithRemSourceLaw19813($year, $indicator);
                 }
             // return $healthGoals;
@@ -49,7 +49,8 @@ class HealthGoalController extends Controller
             $currentMonth = Rem::year($year)->max('Mes');
             $indicator->currentMonth = $currentMonth;
             $indicator->load('values.attachedFiles');
-            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+            $healthGoal = HealthGoal::find($indicator->indicatorable_id);
+            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
             // return $indicator;
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else { // ley 18834 o 19664
@@ -83,11 +84,13 @@ class HealthGoalController extends Controller
                     //procesamos los datos necesarios para todas consultas rem que se necesiten para la meta sanitaria
                     $cods_array = array_map('trim', explode(';', $factor_cods));
                     $cols_array = array_map('trim', explode(';', $factor_cols));
+                    $establishment_cods_array = $indicator->establishment_cods != null ? array_map('trim', explode(';',$indicator->establishment_cods)) : null; //para la consulta de distintos establecimientos a cada consulta rem en el orden en que se registre
 
                     for($i = 0; $i < count($cods_array); $i++){
                         //procesamos los datos necesarios para las consultas rem
                         $cods = array_map('trim', explode(',', $cods_array[$i]));
                         $cols = array_map('trim', explode(',', $cols_array[$i]));
+                        $establishment_cods = $establishment_cods_array ? array_map('trim', explode(',', $establishment_cods_array[$i])) : $establishment_cods;
                         $raws = null;
                         foreach($cols as $col)
                             $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';

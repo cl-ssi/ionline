@@ -26,8 +26,12 @@
                     <th class="text-center">ID</th>
                     <th>Nombre</th>
                     <th>Alias</th>
-                    <th class="text-center">Inicio</th>
-                    <th class="text-center">Fin</th>
+                    <th>Alias finanzas</th>
+                    <th>Financiamiento</th>
+                    <th>Folio</th>
+                    <th>Subtitulo</th>
+                    <th>Monto</th>
+                    <th>Periodo</th>
                     <th></th>
                 </tr>
             </thead>
@@ -49,8 +53,12 @@
                     </td>
                     <td>{{ $program->name }}</td>
                     <td>{{ $program->alias }}</td>
-                    <td class="text-center">{{ $program->start_date_format }}</td>
-                    <td class="text-center">{{ $program->end_date_format }}</td>
+                    <td>{{ $program->alias_finance }}</td>
+                    <td>{{ $program->financial_type }}</td>
+                    <td>{{ $program->folio }}</td>
+                    <td>{{ $program->subtitle->name }}</td>
+                    <td>{{ $program->amount }}</td>
+                    <td>{{ $program->period }}</td>
                     <td class="text-center">
                         <button
                             class="btn btn-sm btn-outline-danger"
