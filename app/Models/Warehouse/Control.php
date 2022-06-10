@@ -62,7 +62,7 @@ class Control extends Model
 
     public function purchaseOrder()
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->belongsTo(PurchaseOrder::class, 'po_id');
     }
 
     public function requestForm()
@@ -197,5 +197,20 @@ class Control extends Model
         if($this->isConfirmed())
             $status = 'confirmado';
         return $status;
+    }
+
+    public function getNetTotalAttribute()
+    {
+        return $this->items->sum('total_price');
+    }
+
+    public function getTotalTaxAttribute()
+    {
+        return $this->items->sum('tax');
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->net_total + $this->total_tax;
     }
 }
