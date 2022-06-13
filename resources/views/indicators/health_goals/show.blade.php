@@ -242,8 +242,9 @@
             </form>
             @endif
             <br>
+            @php($values = $indicator->getValuesBy($commune, null))
             @if(!in_array($commune, ['IQUIQUE', 'ALTO HOSPICIO']))
-                @if(!$indicator->hasValuesBy($commune, null))
+                @if(!$values)
                 <p class="text-center">No se han registrado actividades programadas.</p>
                 @else
                 <!-- detalle actividades por comuna -->
@@ -264,17 +265,18 @@
                         </thead>
                         <tbody>
                         @php($key = 1)
-                        @forelse($indicator->getValuesBy($commune, null) as $value)
+                        @forelse($values as $value)
                             
                             <tr class="text-center">
                                 <td class="text-left glosa" style="width:20px;">{{$key}}</td>
                                 <td class="text-left glosa">{{$value->activity_name}}.</td>
-                                <td>{{$indicator->getValuesAcumByActivityName('denominador', $value->activity_name, $commune, null)}}</td>
+                                <td>{{$value->value}}</td>
                                 @foreach($months as $number => $month)
                                 <td>
+                                @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
                                     <!-- Button trigger modal -->
                                     <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                        @if($indicator->hasValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
+                                        @if($result)
                                             <i class="fas fa-circle text-success"></i>
                                         @else
                                             @if($isManager)
@@ -290,7 +292,7 @@
                                                     <h5 class="modal-title" id="registerActivityLabel">Actividad #{{$key}} - {{$Fmonths[$number]}} {{$healthGoal->year}}</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                 </div>
-                                                @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
+                                                
                                                 <form method="post" id="form-edit{{$value->id}}-{{$number}}" action="{{ $result ? route('indicators.health_goals.ind.value.update', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator->id, $result->id]) : route('indicators.health_goals.ind.value.store', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator->id, $value->id]) }}" enctype="multipart/form-data">
                                                     {{ method_field($result ? 'PUT' : 'POST') }} {{ csrf_field() }}
                                                 </form>
@@ -358,12 +360,13 @@
                 </div>
                 @endif
             @else
-                @if(!$indicator->hasValuesBy($commune, null))
+                @if(!$values)
                 <p class="text-center">No se han registrado actividades programadas.</p>
                 @else
                 <!-- detalle actividades por establecimiento -->
                 @foreach($indicator->establishments as $establishment)
-                    @if($establishment->comuna == $commune && $indicator->hasValuesBy($commune, $establishment->alias_estab))
+                    @php($values = $indicator->getValuesBy($commune, $establishment->alias_estab))
+                    @if($establishment->comuna == $commune && $values)
                     <strong> {{ $establishment->alias_estab }} </strong>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered small mb-4 table-hover">
@@ -382,17 +385,17 @@
                             </thead>
                             <tbody>
                             @php($key = 1)
-                            @forelse($indicator->getValuesBy($commune, $establishment->alias_estab) as $value)
-                                
+                            @forelse($values as $value)                              
                                 <tr class="text-center">
                                     <td class="text-left glosa" style="width:20px;">{{$key}}</td>
                                     <td class="text-left glosa">{{$value->activity_name}}.</td>
-                                    <td>{{$indicator->getValuesAcumByActivityName('denominador', $value->activity_name, $commune, $establishment->alias_estab)}}</td>
+                                    <td>{{$value->value}}</td>
                                     @foreach($months as $number => $month)
                                     <td>
+                                    @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
                                         <!-- Button trigger modal -->
                                         <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                            @if($indicator->hasValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
+                                            @if($result)
                                                 <i class="fas fa-circle text-success"></i>
                                             @else
                                                 @if($isManager)
@@ -408,7 +411,7 @@
                                                         <h5 class="modal-title" id="registerActivityLabel">Actividad #{{$key}} - {{$Fmonths[$number]}} {{$healthGoal->year}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                     </div>
-                                                    @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
+                                                    
                                                     <form method="post" id="form-edit{{$value->id}}-{{$number}}" action="{{ $result ? route('indicators.health_goals.ind.value.update', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator->id, $result->id]) : route('indicators.health_goals.ind.value.store', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator->id, $value->id]) }}" enctype="multipart/form-data">
                                                         {{ method_field($result ? 'PUT' : 'POST') }} {{ csrf_field() }}
                                                     </form>
