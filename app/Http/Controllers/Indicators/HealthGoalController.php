@@ -46,10 +46,12 @@ class HealthGoalController extends Controller
     {
         if($law == '19813'){
             $indicator = Indicator::findOrFail($health_goal);
-            $currentMonth = Rem::year($year)->max('Mes');
-            $indicator->currentMonth = $currentMonth;
-            $indicator->load('values.attachedFiles');
+            $indicator->load('values.attachedFiles', 'attachedFiles');
             $healthGoal = HealthGoal::find($indicator->indicatorable_id);
+            if($healthGoal->number != 7){
+                $currentMonth = Rem::year($year)->max('Mes');
+                $indicator->currentMonth = $currentMonth;
+            }
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->when($healthGoal->number == 7, function($q){ return $q->orWhere('Codigo', 102307); })->orderBy('comuna')->get();
             // return $indicator;
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
@@ -364,7 +366,8 @@ class HealthGoalController extends Controller
                 $fileModel = new AttachedFile();
                 $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
                 $fileModel->document_name = $filename;
-                $fileModel->value_id = $newValue->id;
+                $fileModel->attachable_id = $newValue->id;
+                $fileModel->attachable_type = 'App\Indicators\Value';
                 $fileModel->save();
             }
         }
@@ -385,7 +388,8 @@ class HealthGoalController extends Controller
                 $fileModel = new AttachedFile();
                 $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
                 $fileModel->document_name = $filename;
-                $fileModel->value_id = $value->id;
+                $fileModel->attachable_id = $value->id;
+                $fileModel->attachable_type = 'App\Indicators\Value';
                 $fileModel->save();
             }
         }
