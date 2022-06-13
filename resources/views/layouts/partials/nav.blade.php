@@ -144,7 +144,7 @@
                     'Replacement Staff: view requests'])
                 <!-- En la linea de abajo hay un error en active -->
                 <!-- rrhh.organizationalUnits.*' -->
-                <li class="nav-item dropdown @active('rrhh.users.*')">
+                <li class="nav-item dropdown @active(['rrhh.users.*', 'rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-users"></i> RRHH
@@ -350,7 +350,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-clipboard-list"></i> 
+                        <i class="fas fa-clipboard-list"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
