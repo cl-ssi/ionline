@@ -42,7 +42,12 @@ class Value extends Model
         return $this->belongsTo('App\User','edited_by')->withTrashed();
     }
 
-    public function attachedFiles(){
-        return $this->hasMany('App\Indicators\AttachedFile');
+    // public function attachedFiles(){
+    //     return $this->hasMany('App\Indicators\AttachedFile');
+    // }
+
+    public function attachedFiles()
+    {
+        return $this->morphMany('App\Indicators\AttachedFile', 'attachable');
     }
 }
