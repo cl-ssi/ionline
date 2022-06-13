@@ -190,7 +190,7 @@
 <div class="tab-content mt-3">
     @foreach($communes as $index => $commune)
     <div class="tab-pane" id="{{ str_replace(" ","_",$commune) }}" role="tabpanel" >
-        <h4>{{ $commune }}</h4>
+        <h4>{{ $commune }} </h4>
         <!-- print indicador law 19.813 -->
         <div class="table-responsive">
             <table class="table table-sm table-bordered small mb-4">
@@ -235,10 +235,41 @@
             </div>
             @endif
             <div class="form-group">
-                <label class="sr-only" for="exampleFormControlFile1">Example file input</label>
-                <input type="file" name="file" class="form-control-file form-control-sm mb-2 mr-sm-2" id="exampleFormControlFile1" accept=".xlsx, .xls, .csv" required>
+                <label class="sr-only" for="importFile">Example file input</label>
+                <input type="file" name="file" class="form-control-file form-control-sm mb-2 mr-sm-2" id="importFile" accept=".xlsx, .xls, .csv" required>
             </div>
-            <button type="submit" class="btn btn-primary mb-2 btn-sm"><i class="fas fa-save" aria-hidden="true"></i> Importar</button>
+            <button type="submit" class="btn btn-primary mb-2 btn-sm"><i class="fas fa-save" aria-hidden="true"></i> Importar actividades programadas</button>
+            </form>
+            <br>
+            <form method="POST" class="form-inline" action="{{ route('indicators.health_goals.ind.saveFile', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator]) }}" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="commune" value="{{$commune}}">
+            @if(in_array($commune, ['IQUIQUE', 'ALTO HOSPICIO']))
+            <div class="form-group">
+                <select class="form-control form-control-sm mb-2 mr-sm-2" name="establishment" required>
+                    <option value="">Seleccione establecimiento...</option>
+                @foreach($indicator->establishments as $establishment)
+                    @if($establishment->comuna == $commune)
+                    <option value="{{$establishment->alias_estab}}">{{$establishment->alias_estab}}</option>
+                    @endif
+                @endforeach
+                </select>
+            </div>
+            @endif
+            <div class="form-group">
+                <select class="form-control form-control-sm mb-2 mr-sm-2" name="section" required>
+                    <option value="">Seleccione corte...</option>
+                    <option value="1">Primer corte</option>
+                    <option value="2">Segundo corte</option>
+                    <option value="3">Tercer corte</option>
+                    <option value="4">Cuarto corte</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="saveFile">Example file input</label>
+                <input type="file" name="file" class="form-control-file form-control-sm mb-2 mr-sm-2" id="saveFile" accept=".pdf, .doc, .docx" required>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 btn-sm"><i class="fas fa-save" aria-hidden="true"></i> Guardar archivo al corte</button>
             </form>
             @endif
             <br>
@@ -247,6 +278,13 @@
                 @if(!$values)
                 <p class="text-center">No se han registrado actividades programadas.</p>
                 @else
+                <!-- archivos por corte -->
+                <div class="float-right">
+                    @php($ends = [1 => '1er', 2 => '2o', 3 => '3er', 4 => '4o'])
+                    @foreach($indicator->getAttachedFilesBy($commune, null) as $attachedFile)
+                    <a href="{{ route('indicators.health_goals.ind.show_file', $attachedFile) }}" target="_blank" class="badge badge-pill badge-primary"><i class="fas fa-file"></i> {{$ends[$attachedFile->section]}} corte</a>
+                    @endforeach
+                </div>
                 <!-- detalle actividades por comuna -->
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered small mb-4 table-hover">
@@ -322,7 +360,7 @@
                                                                     @foreach($result->attachedFiles as $file)
                                                                         <li class="list-group-item py-2">
                                                                             <div style="float: left">{{ $file->document_name }}</div>
-                                                                            <a href="{{ route('indicators.health_goals.ind.value.show_file', $file) }}"
+                                                                            <a href="{{ route('indicators.health_goals.ind.show_file', $file) }}"
                                                                                 class="btn btn-link btn-sm float-right" title="Ver" target="_blank"><i class="far fa-eye"></i></a>
                                                                             @if($isManager)
                                                                             <form method="POST" id="form-delete{{$file}}" class="form-horizontal" action="{{ route('indicators.health_goals.ind.value.destroy_file', $file) }}">
@@ -368,6 +406,13 @@
                     @php($values = $indicator->getValuesBy($commune, $establishment->alias_estab))
                     @if($establishment->comuna == $commune && $values)
                     <strong> {{ $establishment->alias_estab }} </strong>
+                    <!-- archivos por corte -->
+                    <div class="float-right">
+                        @php($ends = [1 => '1er', 2 => '2o', 3 => '3er', 4 => '4o'])
+                        @foreach($indicator->getAttachedFilesBy($commune, $establishment->alias_estab) as $attachedFile)
+                        <a href="{{ route('indicators.health_goals.ind.show_file', $attachedFile) }}" target="_blank" class="badge badge-pill badge-primary"><i class="fas fa-file"></i> {{$ends[$attachedFile->section]}} corte</a>
+                        @endforeach
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered small mb-4 table-hover">
                             <thead>
@@ -441,7 +486,7 @@
                                                                         @foreach($result->attachedFiles as $file)
                                                                             <li class="list-group-item py-2">
                                                                                 <div style="float: left">{{ $file->document_name }}</div>
-                                                                                <a href="{{ route('indicators.health_goals.ind.value.show_file', $file) }}"
+                                                                                <a href="{{ route('indicators.health_goals.ind.show_file', $file) }}"
                                                                                     class="btn btn-link btn-sm float-right" title="Ver" target="_blank"><i class="far fa-eye"></i></a>
                                                                                 @if($isManager)
                                                                                 <form method="POST" id="form-delete{{$file}}" class="form-horizontal" action="{{ route('indicators.health_goals.ind.value.destroy_file', $file) }}">
@@ -571,7 +616,7 @@
     }
     //Validación de .xlsx, .xls, .csv
     const allowedExtensions = ["xlsx", "xls", "csv"];
-    if( (this).id != 'for_attachedFile' && !allowedExtensions.includes(this.files[0]?.name.split('.').pop())){
+    if( (this).id == 'importFile' && !allowedExtensions.includes(this.files[0]?.name.split('.').pop())){
         alert("Debe seleccionar un archivo con extensión xlsx, xls o csv.");
         $(this).val('');
     }
