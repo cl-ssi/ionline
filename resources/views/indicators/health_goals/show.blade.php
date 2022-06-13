@@ -242,7 +242,7 @@
             </form>
             @endif
             <br>
-            @php($values = $indicator->getValuesBy($commune, null));
+            @php($values = $indicator->getValuesBy($commune, null))
             @if(!in_array($commune, ['IQUIQUE', 'ALTO HOSPICIO']))
                 @if(!$values)
                 <p class="text-center">No se han registrado actividades programadas.</p>
