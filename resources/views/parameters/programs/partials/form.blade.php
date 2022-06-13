@@ -17,7 +17,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-2">
+    <fieldset class="form-group col-md-3">
         <label for="alias">Alias</label>
         <input
             type="text"
@@ -37,14 +37,11 @@
 
     <fieldset class="form-group col-md-1">
         <label for="period">Período</label>
-        <input
-            type="number"
-            class="form-control @error('period') is-invalid @enderror"
-            id="period"
-            wire:model.debounce.1000ms="period"
-            value="{{ old('period', optional($program)->period) }}"
-            required
-        >
+        <select wire:model="period" id="period" class="form-control @error('period') is-invalid @enderror">
+            <option>{{ date('Y') }}</option>
+            <option>{{ date('Y') +1 }}</option>
+            <option>{{ date('Y') -1 }}</option>
+        </select>
         @error('period')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -52,7 +49,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-2">
+    <!--fieldset class="form-group col-md-2">
         <label for="start-date">Fecha Inicio</label>
         <input
             type="date"
@@ -67,9 +64,9 @@
                 <strong>{{ $message }}</strong>
             </span>
         @enderror
-    </fieldset>
+    </fieldset-->
 
-    <fieldset class="form-group col-md-2">
+    <!--fieldset class="form-group col-md-2">
         <label for="end-date">Fecha Fin</label>
         <input
             type="date"
@@ -84,7 +81,7 @@
                 <strong>{{ $message }}</strong>
             </span>
         @enderror
-    </fieldset>
+    </fieldset-->
 </div>
 <div class="form-row">
     <fieldset class="form-group col-md-12">
@@ -163,7 +160,7 @@
         @enderror
     </fieldset>
 
-    <fieldset class="form-group col-md-2">
+    <fieldset class="form-group col-md-1">
         <label for="folio">Folio</label>
         <input
             type="text"
@@ -182,17 +179,17 @@
     </fieldset>
 
     <fieldset class="form-group col-md-2">
-        <label for="amount">Monto</label>
+        <label for="budget">Presupuesto</label>
         <input
             type="text"
-            class="form-control @error('amount') is-invalid @enderror"
-            id="amount"
-            wire:model.debounce.1000ms="amount"
-            placeholder="Nº amount"
-            value="{{ old('amount', optional($program)->amount) }}"
+            class="form-control @error('budget') is-invalid @enderror"
+            id="budget"
+            wire:model.debounce.1000ms="budget"
+            placeholder=""
+            value="{{ old('budget', optional($program)->budget) }}"
             required
         >
-        @error('amount')
+        @error('budget')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>
