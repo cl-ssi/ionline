@@ -20,7 +20,7 @@ class Program extends Model
         'financial_type',
         'folio',
         'subtitle_id',
-        'amount',
+        'budget',
         'period',
         'start_date',
         'end_date',
