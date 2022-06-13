@@ -15,7 +15,7 @@
         <input type="text"
             class="form-control @error('name') is-invalid @enderror"
             id="name"
-            wire:model="name"
+            wire:model.debounce.1500ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($product)->name) }}"
             required
@@ -32,7 +32,7 @@
         <select
             id="category-id"
             class="form-control @error('category_id') is-invalid @enderror"
-            wire:model="category_id"
+            wire:model.debounce.1500ms="category_id"
             required
         >
             <option value="">Selecciona la categoría</option>
