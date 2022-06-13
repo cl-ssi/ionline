@@ -14,9 +14,9 @@ class StoreCreate extends Component
     public $communes;
 
     public $rules = [
-        'name' => 'required|string|min:2|max:255',
-        'address' => 'required|string|min:5|max:255',
-        'commune_id' => 'required|exists:communes,id'
+        'name'          => 'required|string|min:2|max:255',
+        'address'       => 'required|string|min:5|max:255',
+        'commune_id'    => 'required|exists:communes,id'
     ];
 
     public function mount()
