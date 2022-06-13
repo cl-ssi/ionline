@@ -11,7 +11,7 @@
         @endforeach
         </select>
 
-        <select class="form-control" id="for_replacement_staff_id" name="replacement_staff_id" data-live-search="true" wire:model.defer="selectedReplacementStaff" required>
+        <select class="form-control" id="for_replacement_staff_id" name="replacement_staff_id" data-live-search="true" wire:model.defer="selectedReplacementStaff">
             <option value="">Seleccione...</option>
               @if(!is_null($staffManageByOu))
                 @foreach($staffManageByOu as $ou)
