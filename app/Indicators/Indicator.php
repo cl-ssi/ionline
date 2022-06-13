@@ -36,6 +36,11 @@ class Indicator extends Model
         return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('id')->orderBy('month');
     }
 
+    public function attachedFiles()
+    {
+        return $this->morphMany('App\Indicators\AttachedFile', 'attachable');
+    }
+
     public function getValuesAcum($factor)
     {
         return $this->values->where('factor', $factor)->sum('value');
