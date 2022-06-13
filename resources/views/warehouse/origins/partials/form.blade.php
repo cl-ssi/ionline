@@ -10,7 +10,7 @@
             type="text"
             class="form-control @error('name') is-invalid @enderror"
             id="name"
-            wire:model="name"
+            wire:model.debounce.1500ms="name"
             placeholder="Ingresa el nombre"
             value="{{ old('name', optional($origin)->name) }}"
             required

@@ -18,7 +18,7 @@
             <fieldset class="form-group col-md-3">
                 <label for="product-search">Buscar Producto o Servicio</label>
                 <input
-                    wire:model.debounce.600ms="search_unspsc_product"
+                    wire:model.debounce.1500ms="search_unspsc_product"
                     id="product-search"
                     class="form-control"
                     type="text"
@@ -43,7 +43,7 @@
                 <label for="category-id">Categoría</label>
                 <select
                     class="form-control @error('category_id') is-invalid @enderror"
-                    wire:model="category_id"
+                    wire:model.debounce.1500ms="category_id"
                     id="wre-category-id"
                 >
                     <option value="">Sin categoría</option>
@@ -71,7 +71,7 @@
                     class="form-control"
                     min="0"
                     placeholder="Búsqueda por código de barra o nombre"
-                    wire:model.debounce.700ms="search_store_product"
+                    wire:model.debounce.1500ms="search_store_product"
                     id="search-store-product"
                 >
             </fieldset>
@@ -103,7 +103,7 @@
                     </div>
                     <select
                         class="form-control @error('wre_product_id') is-invalid @enderror"
-                        wire:model="wre_product_id"
+                        wire:model.debounce.1500ms="wre_product_id"
                         id="wre-product-id"
                     >
                         <option value="">Selecciona un producto</option>
@@ -130,7 +130,7 @@
                     type="text"
                     class="form-control @error('product_barcode') is-invalid @enderror"
                     min="0"
-                    wire:model="product_barcode"
+                    wire:model.debounce.1500ms="product_barcode"
                     id="product-barcode"
                     @if($type == 0) disabled @endif
                 >
@@ -147,7 +147,7 @@
                     type="text"
                     class="form-control @error('description') is-invalid @enderror"
                     min="0"
-                    wire:model="description"
+                    wire:model.debounce.1500ms="description"
                     id="description"
                 >
                 @error('description')
@@ -163,7 +163,7 @@
                     type="text"
                     class="form-control @error('barcode') is-invalid @enderror"
                     min="0"
-                    wire:model="barcode"
+                    wire:model.debounce.1500ms="barcode"
                     id="barcode"
                     @if($type == 0) disabled @endif
                 >
@@ -181,7 +181,7 @@
                 type="number"
                 class="form-control @error('quantity') is-invalid @enderror"
                 min="0"
-                wire:model="quantity"
+                wire:model.debounce.1500ms="quantity"
                 id="quantity"
             >
             @error('quantity')
