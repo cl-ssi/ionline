@@ -22,7 +22,7 @@ class CreateCfgPrograms extends Migration
             $table->string('financial_type', 50)->nullable();
             $table->unsignedSmallInteger('folio')->nullable();
             $table->foreignId('subtitle_id')->constrained('cfg_subtitles');
-            $table->integer('amount')->nullable();
+            $table->integer('budget')->nullable();
             $table->unsignedSmallInteger('period');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

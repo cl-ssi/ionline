@@ -30,7 +30,7 @@
                     <th>Financiamiento</th>
                     <th>Folio</th>
                     <th>Subtitulo</th>
-                    <th>Monto</th>
+                    <th>Presup.</th>
                     <th>Periodo</th>
                     <th></th>
                 </tr>
@@ -57,7 +57,7 @@
                     <td>{{ $program->financial_type }}</td>
                     <td>{{ $program->folio }}</td>
                     <td>{{ $program->subtitle->name }}</td>
-                    <td>{{ $program->amount }}</td>
+                    <td>{{ $program->budget }}</td>
                     <td>{{ $program->period }}</td>
                     <td class="text-center">
                         <button
