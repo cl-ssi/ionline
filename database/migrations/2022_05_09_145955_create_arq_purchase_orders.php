@@ -32,6 +32,6 @@ class CreateArqPurchaseOrders extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cfg_purchase_orders');
+        Schema::dropIfExists('arq_purchase_orders');
     }
 }

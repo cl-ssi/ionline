@@ -142,7 +142,9 @@
                     'Service Request',
                     'Replacement Staff: create request',
                     'Replacement Staff: view requests'])
-                <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
+                <!-- En la linea de abajo hay un error en active -->
+                <!-- rrhh.organizationalUnits.*' -->
+                <li class="nav-item dropdown @active(['rrhh.users.*', 'rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-users"></i> RRHH
@@ -294,16 +296,51 @@
                             @endcanany
 
                             @if(Auth::user()->pharmacies->count() > 0)
-                              <a class="dropdown-item"
-                                  href="{{ route('pharmacies.index') }}">
-                                  <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
-                              </a>
+                                <h6 class="dropdown-header">Farmacia</h6>
+
+                                <a class="dropdown-item"
+                                    href="{{ route('pharmacies.index') }}">
+                                    <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
+                                </a>
                             @else
-                              <a class="dropdown-item">
-                                  <i class="fas fa-fw fa-solid fa-x"></i> Falta asignar bodega
-                              </a>
+                                <a class="dropdown-item">
+                                    <i class="fas fa-fw fa-solid fa-x"></i> Falta asignar bodega
+                                </a>
                             @endif
 
+                            @auth
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Bodegas</h6>
+
+                                @hasanyrole('Store: admin|Store: user')
+                                    @forelse(Auth::user()->stores as $store)
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('warehouse.store.active', $store) }}"
+                                        >
+                                            @if($store->id == optional(Auth::user()->active_store)->id)
+                                                <i class="fas fa-check"></i>
+                                            @else
+                                                <i class="fas fa-circle"></i>
+                                            @endif
+                                            {{ $store->name }}
+                                        </a>
+                                    @empty
+                                        <a class="dropdown-item" href="#">
+                                            No posee bodegas
+                                        </a>
+                                    @endforelse
+                                @endhasanyrole
+
+                                @role('Store: Super admin')
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('warehouse.stores.index') }}"
+                                    >
+                                        <i class="fas fa-list"></i> Administrar Bodegas
+                                    </a>
+                                @endrole
+                            @endauth
                         </div>
                     </li>
                 @endcanany
@@ -313,7 +350,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-clipboard-list"></i> 
+                        <i class="fas fa-clipboard-list"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 

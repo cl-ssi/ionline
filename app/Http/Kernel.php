@@ -68,6 +68,11 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'drugs' => \App\Http\Middleware\Drugs::class,
         'client' => CheckClientCredentials::class,
+        'ensure.store' => \App\Http\Middleware\Warehouse\EnsureStore::class,
+        'ensure.product' => \App\Http\Middleware\Warehouse\EnsureProduct::class,
+        'ensure.category' => \App\Http\Middleware\Warehouse\EnsureCategory::class,
+        'ensure.destination' => \App\Http\Middleware\Warehouse\EnsureDestination::class,
+        'ensure.origin' => \App\Http\Middleware\Warehouse\EnsureOrigin::class,
     ];
 
 }
