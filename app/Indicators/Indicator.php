@@ -113,7 +113,7 @@ class Indicator extends Model
     {
         if(isset($this->numerator_acum_last_year)) // REM P
             return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
-        elseif($this->id == 445) // indicador N° 10 en DSSI, metas sanitarias 19.664 año 2022
+        elseif(in_array($this->id, [445,453])) // indicador N° 10 en DSSI y Hospital, metas sanitarias 19.664 año 2022
             return $this->getValuesAcum('numerador');
         else
             return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
