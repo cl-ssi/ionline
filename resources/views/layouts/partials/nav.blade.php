@@ -142,8 +142,6 @@
                     'Service Request',
                     'Replacement Staff: create request',
                     'Replacement Staff: view requests'])
-                <!-- En la linea de abajo hay un error en active -->
-                <!-- rrhh.organizationalUnits.*' -->
                 <li class="nav-item dropdown @active(['rrhh.users.*', 'rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -165,8 +163,6 @@
                                 <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                             </a>
                         @endcan
-
-
 
                         @canany(['Authorities: view', 'Authorities: create'])
                             <a class="dropdown-item"
@@ -312,7 +308,16 @@
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Bodegas</h6>
 
-                                @hasanyrole('Store: admin|Store: user')
+                                @role('Store: Super admin')
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('warehouse.stores.index') }}"
+                                    >
+                                        <i class="fas fa-list"></i> Administrar Bodegas
+                                    </a>
+                                @endrole
+
+                                @hasanyrole('Store: admin|Store: user|Store: Super admin')
                                     @forelse(Auth::user()->stores as $store)
                                         <a
                                             class="dropdown-item"
@@ -332,14 +337,6 @@
                                     @endforelse
                                 @endhasanyrole
 
-                                @role('Store: Super admin')
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route('warehouse.stores.index') }}"
-                                    >
-                                        <i class="fas fa-list"></i> Administrar Bodegas
-                                    </a>
-                                @endrole
                             @endauth
                         </div>
                     </li>
