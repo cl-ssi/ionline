@@ -21,7 +21,7 @@
             id="date"
             class="form-control @error('date') is-invalid @enderror"
             value="{{ old('date', optional($control)->date) }}"
-            wire:model="date"
+            wire:model.debounce.1500ms="date"
             required
         >
         @error('date')
@@ -43,7 +43,7 @@
         @else
             <select
                 class="form-control @error('program_id') is-invalid @enderror"
-                wire:model="program_id"
+                wire:model.debounce.1500ms="program_id"
                 id="program-id"
             >
                 <option value="">Sin programa</option>
@@ -69,7 +69,8 @@
             <label for="origin-id">Origen</label>
             <select
                 class="form-control @error('origin_id') is-invalid @enderror"
-                wire:model="origin_id" id="origin-id"
+                wire:model.debounce.1500ms="origin_id"
+                id="origin-id"
             >
                 <option value="">Selecciona un origen</option>
                 @foreach($store->origins as $origin)
@@ -174,7 +175,7 @@
                 type="date"
                 id="guide-date"
                 class="form-control @error('guide_date') is-invalid @enderror"
-                wire:model="guide_date"
+                wire:model.debounce.1500ms="guide_date"
             >
             @error('guide_date')
                 <span class="invalid-feedback" role="alert">
@@ -189,7 +190,7 @@
                 type="text"
                 id="guide-number"
                 class="form-control @error('guide_number') is-invalid @enderror"
-                wire:model="guide_number"
+                wire:model.debounce.1500ms="guide_number"
             >
             @error('guide_number')
                 <span class="invalid-feedback" role="alert">
@@ -204,7 +205,7 @@
                 type="date"
                 id="invoice-date"
                 class="form-control @error('invoice_date') is-invalid @enderror"
-                wire:model="invoice_date"
+                wire:model.debounce.1500ms="invoice_date"
             >
             @error('invoice_date')
                 <span class="invalid-feedback" role="alert">
@@ -219,7 +220,7 @@
                 type="text"
                 id="invoice-number"
                 class="form-control @error('invoice_number') is-invalid @enderror"
-                wire:model="invoice_number"
+                wire:model.debounce.1500ms="invoice_number"
             >
             @error('invoice_number')
                 <span class="invalid-feedback" role="alert">
@@ -238,7 +239,7 @@
             id="note"
             class="form-control @error('note') is-invalid @enderror"
             value="{{ optional($control)->name }}"
-            wire:model="note"
+            wire:model.debounce.1500ms="note"
         >
         @error('note')
             <span class="invalid-feedback" role="alert">

@@ -6,7 +6,7 @@
             <div class="form-check form-check-inline">
                 <input class="form-check-input"
                     type="radio"
-                    wire:model="type_dispatch_id"
+                    wire:model.debounce.1500ms="type_dispatch_id"
                     id="option-{{ $type->id }}"
                     value="{{ $type->id }}"
                 >
@@ -40,7 +40,7 @@
             id="date"
             class="form-control @error('date') is-invalid @enderror"
             value="{{ old('date', optional($control)->date) }}"
-            wire:model="date"
+            wire:model.debounce.1500ms="date"
             required
         >
         @error('date')
@@ -55,7 +55,7 @@
         @if($mode == 'create')
             <select
                 class="form-control @error('program_id') is-invalid @enderror"
-                wire:model="program_id"
+                wire:model.debounce.1500ms="program_id"
                 id="program-id"
             >
                 <option value="">Sin programa</option>
@@ -89,7 +89,7 @@
                 <label for="destination-id">Destino</label>
                 <select
                     class="form-control @error('destination_id') is-invalid @enderror"
-                    wire:model="destination_id"
+                    wire:model.debounce.1500ms="destination_id"
                     id="destination-id"
                 >
                     <option value="">Selecciona un destino</option>
@@ -110,7 +110,7 @@
                 @if($mode == 'create')
                     <select
                         class="form-control @error('store_destination_id') is-invalid @enderror"
-                        wire:model="store_destination_id"
+                        wire:model.debounce.1500ms="store_destination_id"
                         id="store-destination-id"
                     >
                         <option value="">Selecciona una bodega destino</option>
@@ -146,7 +146,7 @@
             id="note"
             class="form-control @error('note') is-invalid @enderror"
             value="{{ optional($control)->name }}"
-            wire:model="note"
+            wire:model.debounce.1500ms="note"
             required
         >
         @error('note')

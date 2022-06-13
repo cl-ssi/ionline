@@ -12,7 +12,7 @@
                 <input
                     class="form-control form-control-sm @error('date') is-invalid @enderror"
                     id="date"
-                    wire:model="date"
+                    wire:model.debounce.1500ms="date"
                     type="date"
                 >
                 @error('date')
@@ -32,7 +32,7 @@
                     type="text"
                     class="form-control form-control-sm"
                     placeholder="Ingresa el código"
-                    wire:model="po_search"
+                    wire:model.debounce.1500ms="po_search"
                 >
                 <div class="input-group-append">
                     <button
@@ -82,7 +82,7 @@
             <input
                 class="form-control form-control-sm @error('po_code') is-invalid @enderror"
                 id="po-code"
-                wire:model="po_code"
+                wire:model.debounce.1500ms="po_code"
                 type="text"
                 readonly
             >
@@ -98,7 +98,7 @@
             <input
                 class="form-control form-control-sm @error('po_date') is-invalid @enderror"
                 id="po-date"
-                wire:model="po_date"
+                wire:model.debounce.1500ms="po_date"
                 type="text"
                 readonly
             >
@@ -114,7 +114,7 @@
             <input
                 class="form-control form-control-sm @error('supplier_name') is-invalid @enderror"
                 id="supplier-name"
-                wire:model="supplier_name"
+                wire:model.debounce.1500ms="supplier_name"
                 type="text"
                 readonly
             >
@@ -127,7 +127,7 @@
             <input
                 class="form-control form-control-sm @error('guide_date') is-invalid @enderror"
                 id="guide-date"
-                wire:model="guide_date"
+                wire:model.debounce.1500ms="guide_date"
                 type="date"
             >
             @error('guide_date')
@@ -142,7 +142,7 @@
             <input
                 class="form-control form-control-sm @error('guide_number') is-invalid @enderror"
                 id="guide-number"
-                wire:model="guide_number"
+                wire:model.debounce.1500ms="guide_number"
                 type="text"
             >
             @error('guide_number')
@@ -157,7 +157,7 @@
             <input
                 class="form-control form-control-sm @error('invoice_date') is-invalid @enderror"
                 id="invoice-date"
-                wire:model="invoice_date"
+                wire:model.debounce.1500ms="invoice_date"
                 type="date"
             >
             @error('invoice_date')
@@ -172,7 +172,7 @@
             <input
                 class="form-control form-control-sm @error('invoice_number') is-invalid @enderror"
                 id="invoice-number"
-                wire:model="invoice_number"
+                wire:model.debounce.1500ms="invoice_number"
                 type="text"
             >
             @error('invoice_number')
@@ -187,7 +187,7 @@
         <fieldset class="form-group col-sm-3">
             <label for="program-id">Programa</label>
             <select
-                wire:model="program_id"
+                wire:model.debounce.1500ms="program_id"
                 id="program-id"
                 class="form-control form-control-sm @error('program_id') is-invalid @enderror"
                 @if($disabled_program)
@@ -213,7 +213,7 @@
             <input
                 class="form-control form-control-sm @error('note') is-invalid @enderror"
                 id="note"
-                wire:model="note"
+                wire:model.debounce.1500ms="note"
                 type="text"
             >
             @error('note')
@@ -304,7 +304,7 @@
                                     <input
                                         class="form-control form-control-sm @error('quantity') is-invalid @enderror"
                                         id="quantity"
-                                        wire:model="quantity"
+                                        wire:model.debounce.1500ms="quantity"
                                         type="number"
                                         min="0"
                                     >
@@ -330,7 +330,7 @@
                     </td>
                     <td>
                         @if($index_selected === $index && $po_item['disabled_wre_product'] == false)
-                            <label class="col-form-label-sm text-left my-0" for="unspsc-name" >Producto</label>
+                            <label class="col-form-label-sm text-left my-0" for="unspsc-name">Producto</label>
                             <input
                                 class="form-control form-control-sm"
                                 id="unspsc-name"
@@ -343,7 +343,7 @@
                             <input
                                 class="form-control form-control-sm @error('description') is-invalid @enderror"
                                 id="description"
-                                wire:model="description"
+                                wire:model.debounce.1500ms="description"
                                 type="text"
                             >
                             @error('description')
@@ -389,7 +389,7 @@
                                 <input
                                     class="form-control form-control-sm @error('search_product') is-invalid @enderror"
                                     id="search-product"
-                                    wire:model.debounce.700ms="search_product"
+                                    wire:model.debounce.1500ms="search_product"
                                     type="text"
                                 >
 
@@ -413,7 +413,7 @@
                                 <input
                                     class="form-control form-control-sm @error('barcode') is-invalid @enderror"
                                     id="barcode"
-                                    wire:model="barcode"
+                                    wire:model.debounce.1500ms="barcode"
                                     type="text"
                                 >
                                 @error('barcode')
