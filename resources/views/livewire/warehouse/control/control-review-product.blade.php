@@ -46,7 +46,7 @@
                                 <div class="form-group">
                                     <label class="my-0" for="type-product">Tipo de Producto</label>
                                     <select
-                                        wire:model="type_wre_product"
+                                        wire:model.debounce.1500ms="type_wre_product"
                                         id="type-product"
                                         class="form-control form-control-sm"
                                     >
@@ -68,7 +68,7 @@
                                     <select
                                         class="form-control form-control-sm @error('selected_wre_product_id') is-invalid @enderror"
                                         id="wre-product-id"
-                                        wire:model="selected_wre_product_id"
+                                        wire:model.debounce.1500ms="selected_wre_product_id"
                                     >
                                         <option value="">Selecciona un producto</option>
                                         @foreach($wre_products as $product)
@@ -91,7 +91,7 @@
                                         class="form-control form-control-sm"
                                         type="text"
                                         id="search-product"
-                                        wire:model.debounce.600ms="search_product"
+                                        wire:model.debounce.1500ms="search_product"
                                     >
                                 </fieldset>
 
@@ -114,7 +114,7 @@
                                     <input
                                         class="form-control form-control-sm @error('description') is-invalid @enderror"
                                         type="text"
-                                        wire:model="description"
+                                        wire:model.debounce.1500ms="description"
                                         id="description"
                                     >
                                     @error('description')
@@ -156,7 +156,7 @@
                     <td>
                         @if($index === $indexEdit)
                             <fieldset class="form-group">
-                                <label class="my-0" for="quantity">Cantidad Enviadas</label>
+                                <label class="my-0" for="quantity">Cantidad Enviada</label>
                                 <input
                                     class="form-control form-control-sm"
                                     type="number"
@@ -167,11 +167,11 @@
                             </fieldset>
 
                             <fieldset class="form-group">
-                                <label class="my-0" for="quantity-received">Cantidad Recibidas</label>
+                                <label class="my-0" for="quantity-received">Cantidad Recibida</label>
                                 <input
                                     class="form-control form-control-sm @error('quantity_received') is-invalid @enderror"
                                     type="number"
-                                    wire:model="quantity_received"
+                                    wire:model.debounce.1500ms="quantity_received"
                                     id="quantity-received"
                                 >
                                 @error('quantity_received')
@@ -285,7 +285,7 @@
                 <input
                     class="form-control @error('return_note') is-invalid @enderror"
                     type="text"
-                    wire:model="return_note"
+                    wire:model.debounce.1500ms="return_note"
                     id="return-note"
                 >
                 @error('return_note')

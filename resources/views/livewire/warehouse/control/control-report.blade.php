@@ -4,17 +4,17 @@
     <div class="form-row">
         <fieldset class="form-group col-md-2">
             <label for="start-date">Desde</label>
-            <input class="form-control" type="date" wire:model="start_date" id="start-date">
+            <input class="form-control" type="date" wire:model.debounce.1500ms="start_date" id="start-date">
         </fieldset>
 
         <fieldset class="form-group col-md-2">
             <label for="end-date">Hasta</label>
-            <input class="form-control" type="date" wire:model="end_date" id="end-date">
+            <input class="form-control" type="date" wire:model.debounce.1500ms="end_date" id="end-date">
         </fieldset>
 
         <fieldset class="form-group col-md-4">
             <label for="product-id">Producto</label>
-            <select wire:model="product_id" id="product-id" class="form-control">
+            <select wire:model.debounce.1500ms="product_id" id="product-id" class="form-control">
                 <option value="">Todos</option>
                 @foreach($store->products as $product)
                     <option value="{{ $product->id }}">
@@ -26,7 +26,7 @@
 
         <fieldset class="form-group col-md-4">
             <label for="program-id">Programa</label>
-            <select wire:model="program_id" id="program-id" class="form-control">
+            <select wire:model.debounce.1500ms="program_id" id="program-id" class="form-control">
                 <option value="">Todos</option>
                 <option value="-1">Sin Programa</option>
                 @foreach($programs as $program)
