@@ -159,8 +159,7 @@ use App\Http\Controllers\RequestForms\PassengerController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\RequestFormController;
 use App\Http\Controllers\RequestForms\AttachedFilesController;
-use App\Http\Controllers\Warehouse\ControlController;
-use App\Http\Controllers\Warehouse\StoreController;
+
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
 use App\Http\Controllers\RequestForms\ItemRequestFormController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
@@ -170,10 +169,13 @@ use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 use App\Http\Controllers\RequestForms\EventRequestFormFileController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
+use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
+use App\Http\Controllers\Warehouse\StoreController;
 
 /*
 |--------------------------------------------------------------------------
