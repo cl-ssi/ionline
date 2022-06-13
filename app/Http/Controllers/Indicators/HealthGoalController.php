@@ -347,6 +347,35 @@ class HealthGoalController extends Controller
         return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
     }
 
+    public function saveFileInd($law, $year, $health_goal, Indicator $indicator, Request $request)
+    {
+        // return $request;
+
+        if($request->hasFile('file')){
+            $existingFile = $indicator->attachedFiles()->where('commune', $request->commune)->where('establishment', $request->establishment)->where('section', $request->section)->first();
+            if($existingFile){
+                $existingFile->delete();
+                Storage::disk('gcs')->delete($existingFile->file);
+            }
+
+            $file = $request->file('file');
+            $filename = $file->getClientOriginalName();
+            $fileModel = new AttachedFile();
+            $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
+            $fileModel->document_name = $filename;
+            $fileModel->commune =  $request->commune;
+            $fileModel->establishment = $request->establishment;
+            $fileModel->section = $request->section;
+            $fileModel->attachable_id = $indicator->id;
+            $fileModel->attachable_type = 'App\Indicators\Indicator';
+            $fileModel->save();
+        }
+
+        session()->flash('commune', str_replace(" ","_",$request->commune)); //Necesario para ubicar comuna en el conjunto de tabs
+        session()->flash('success', 'Archivo para comuna de '.$request->commune.' se registra satisfactoriamente.');
+        return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
+    }
+
     public function storeIndValue($law, $year, $health_goal, Indicator $indicator, Value $value, Request $request)
     {
         $newValue = Value::create([

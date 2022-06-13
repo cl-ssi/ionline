@@ -13,7 +13,7 @@ class AttachedFile extends Model
 
     protected $table = 'ind_attached_files';
     protected $fillable = [
-        'file', 'document_name', 'commune', 'establishment', 'attachable_type', 'attachable_id'
+        'file', 'document_name', 'commune', 'establishment', 'section', 'attachable_type', 'attachable_id'
     ];
 
     public function attachable(){

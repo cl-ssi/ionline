@@ -1056,7 +1056,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 
     Route::prefix('health_goals')->as('health_goals.')->group(function () {
-        Route::get('/show_file/{attachedFile}', [HealthGoalController::class,'show_file'])->name('ind.value.show_file');
+        Route::get('/show_file/{attachedFile}', [HealthGoalController::class,'show_file'])->name('ind.show_file');
         Route::delete('/{attachedFile}', [HealthGoalController::class,'destroy_file'])->middleware('auth')->name('ind.value.destroy_file');
         Route::get('/{law}', [HealthGoalController::class,'index'])->name('index');
         Route::get('/{law}/{year}', [HealthGoalController::class,'list'])->name('list');
@@ -1064,6 +1064,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', [HealthGoalController::class,'editInd'])->middleware('auth')->name('ind.edit');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', [HealthGoalController::class,'updateInd'])->middleware('auth')->name('ind.update');
         Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/import', [HealthGoalController::class,'importIndValues'])->middleware('auth')->name('ind.import');
+        Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/saveFile', [HealthGoalController::class,'saveFileInd'])->middleware('auth')->name('ind.saveFile');
         Route::post('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'storeIndValue'])->middleware('auth')->name('ind.value.store');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}/value/{value}', [HealthGoalController::class,'updateIndValue'])->middleware('auth')->name('ind.value.update');
     });

@@ -38,7 +38,7 @@ class Indicator extends Model
 
     public function attachedFiles()
     {
-        return $this->morphMany('App\Indicators\AttachedFile', 'attachable');
+        return $this->morphMany('App\Indicators\AttachedFile', 'attachable')->orderBy('section');
     }
 
     public function getValuesAcum($factor)
@@ -49,6 +49,13 @@ class Indicator extends Model
     public function getValuesBy($commune, $establishment)
     {
         return $this->values->where('factor', 'denominador')->where('commune', $commune)->when($establishment, function($q) use ($establishment){
+            return $q->where('establishment', $establishment);
+        });
+    }
+    
+    public function getAttachedFilesBy($commune, $establishment)
+    {
+        return $this->attachedFiles->where('commune', $commune)->when($establishment, function($q) use ($establishment){
             return $q->where('establishment', $establishment);
         });
     }
