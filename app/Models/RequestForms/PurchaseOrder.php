@@ -23,6 +23,7 @@ class PurchaseOrder extends Model
     protected $appends = [
         'version',
         'date_creation',
+        'tax_percentage',
         'supplier_rut_full',
         'supplier_rut',
         'supplier_dv',
@@ -54,6 +55,11 @@ class PurchaseOrder extends Model
     public function getDateCreationAttribute()
     {
         return Carbon::parse($this->data_object->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s');
+    }
+
+    public function getTaxPercentageAttribute()
+    {
+        return $this->data_object->Listado[0]->PorcentajeIva;
     }
 
     public function getItemsAttribute()
