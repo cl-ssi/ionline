@@ -14,7 +14,6 @@ use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements Auditable
 {
