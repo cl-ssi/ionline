@@ -76,7 +76,8 @@ class ControlEdit extends Component
 
         return redirect()->route('warehouse.control.add-product', [
             'store' => $this->store,
-            'control'  => $this->control
+            'control'  => $this->control,
+            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch'
         ]);
     }
 }
