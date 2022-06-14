@@ -75,7 +75,8 @@ class ControlCreate extends Component
 
         return redirect()->route('warehouse.control.add-product', [
             'store' => $this->store,
-            'control' => $control
+            'control' => $control,
+            'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
         ]);
     }
 
