@@ -13,7 +13,7 @@ class ControlController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param \Iluminate\Http\Request  $request
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Store $store, Request $request)
@@ -30,7 +30,7 @@ class ControlController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param \Iluminate\Http\Request  $request
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Store $store, Request $request)
