@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ active('warehouse.store.welcome') }}"
                 href="{{ route('warehouse.store.welcome') }}"
                 role="button"
                 aria-haspopup="true"
@@ -13,7 +13,7 @@
         </li>
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ request()->query('type') === 'receiving' ? 'active' : '' }} {{ active('warehouse.generate-reception') }}"
                 aria-current="page"
                 href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'receiving']) }}"
             >
@@ -22,7 +22,7 @@
         </li>
         <li class="nav-item">
             <a
-                class="nav-link"
+                class="nav-link {{ request()->query('type') === 'dispatch' ? 'active' : '' }}"
                 aria-current="page"
                 href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'dispatch']) }}"
             >
@@ -30,7 +30,8 @@
             </a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle"
+            <a
+                class="nav-link dropdown-toggle  {{ active('warehouse.store.report') }}"
                 data-toggle="dropdown"
                 href="#"
                 role="button"
@@ -48,7 +49,13 @@
             </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle"
+            <a
+                class="nav-link dropdown-toggle {{ active([
+                    'warehouse.products.*',
+                    'warehouse.categories.*',
+                    'warehouse.origins.*',
+                    'warehouse.destinations.*'
+                ]) }}"
                 data-toggle="dropdown"
                 href="#"
                 role="button"
