@@ -31,7 +31,10 @@
           </div>
       </div>
       
-      <input type="text" name="product_id" value="{{ optional($product)->id }}" style="display:none;" required wire:model.lazy="product_id">
+      @if($product)
+        <input type="text" value="{{ $product->id }}"  style="display:none;" wire:model.lazy="product_id">
+        <input type="hidden" name="product_id" value="{{$product->id}}"> 
+      @endif
       
       @if(!empty($query))
           <ul class="list-group col-12" style="z-index: 3; position: absolute;">

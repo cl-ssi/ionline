@@ -40,7 +40,8 @@ class DispatchItemController extends Controller
     {
       $this->validate($request, [
           'barcode' => 'required|integer',
-          'amount' => 'required|numeric'
+          'amount' => 'required|numeric',
+          'product_id' => 'required'
       ]);
 
       // obtiene valores
