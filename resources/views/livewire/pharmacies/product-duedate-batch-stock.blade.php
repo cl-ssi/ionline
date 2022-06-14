@@ -7,14 +7,47 @@
 
       <input type="hidden" name="dispatch_id" value="{{$dispatch->id}}" />
 
-      <fieldset class="form-group col">
-          <label for="for_product">Producto</label>
-          <select id="for_product" class="form-control" name="product_id" wire:model.lazy="product_id" required="">
-              <option></option>
-            @foreach ($products as $key => $product)
-              <option value="{{$product->id}}">{{$product->name}}</option>
-            @endforeach
-          </select>
+      <fieldset  class="form-group col-8">
+      <label for="for_product">Producto</label>
+      <div class="input-group">
+          <input
+              type="text"
+              class="form-control"
+              placeholder="Nombre Funcionario"
+              aria-label="Nombre"
+              wire:keydown.escape="resetx"
+          @if(!$product)
+              wire:model.debounce.1000ms="query"
+              required
+          @else
+              wire:model.debounce.1000ms="selectedName"
+              disabled readonly
+          @endif
+          />
+
+          <div class="input-group-append">
+              <a class="btn btn-outline-secondary" wire:click="resetx">
+                  <i class="fas fa-eraser"></i> Limpiar</a>
+          </div>
+      </div>
+      
+      <input type="text" name="product_id" value="{{ optional($product)->id }}" style="display:none;" required wire:model.lazy="product_id">
+      
+      @if(!empty($query))
+          <ul class="list-group col-12" style="z-index: 3; position: absolute;">
+              @if( count($products) >= 1 )
+                  @foreach($products as $product)
+                      <a wire:click="setProduct({{$product->id}})" wire:click.prevent="addSearchedProduct({{ $product }})"
+                          class="list-group-item list-group-item-action"
+                      >{{ $product->name }} </a>
+                  @endforeach
+              @elseif($msg_too_many)
+                  <div class="list-group-item list-group-item-info">Hemos encontrado muchas coincidencias</div>
+              @else
+                  <div class="list-group-item list-group-item-warning">No hay resultados</div>
+              @endif
+          </ul>
+      @endif
       </fieldset>
 
       <fieldset class="form-group col-2">
