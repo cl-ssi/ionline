@@ -94,7 +94,8 @@
                         <a
                             href="{{ route('warehouse.controls.edit', [
                                 'store' => $store,
-                                'control' => $control
+                                'control' => $control,
+                                'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
                             ]) }}"
                             class="btn btn-sm btn-outline-secondary"
                         >
