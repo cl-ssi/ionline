@@ -16,11 +16,81 @@ class ProductDuedateBatchStock extends Component
     public $barcode;
     public $unity;
 
+
+
+
+
+
+    public $query;
+    public $product;
+    public $selectedName;
+    public $msg_too_many;
+
+    public function resetx()
+    {
+        $this->query = '';
+        $this->products = [];
+        $this->product = null;
+        $this->selectedName = null;
+        $this->barcode = null;
+        $this->due_date_batch = [];
+        $this->count = null;
+    }
+
+    // public function mount()
+    // {
+    //     if($this->product) {
+    //         $this->setProduct($this->product);
+    //     }
+    // }
+
+    public function setProduct(Product $product)
+    {
+        $this->resetx();
+        $this->product = $product;
+        $this->selectedName = $product->name;
+    }
+
+    public function updatedQuery()
+    {
+        // $this->products = Product::where('name','LIKE','%'.$this->query.'%')
+        //                         ->orderBy('name','Asc')
+        //                         ->get();
+
+        $this->products = Product::where('pharmacy_id',session('pharmacy_id'))
+                                ->where('name','LIKE','%'.$this->query.'%')
+                                ->where('stock','>',0)
+                                ->orderBy('name', 'ASC')->get();
+
+        /** Más de 50 resultados  */
+        if(count($this->products) >= 25)
+        {
+            $this->products = [];
+            $this->msg_too_many = true;
+        }
+        else {
+            $this->msg_too_many = false;
+        }
+    }
+
+    public function addSearchedProduct($productId){
+        $this->searchedProduct= $productId;
+        $this->emit('searchedProduct', $this->searchedProduct);
+    }
+
+
+
+
+
     public function mount()
     {
-      	$this->products = Product::where('pharmacy_id',session('pharmacy_id'))
-			->where('stock','>',0)
-            ->orderBy('name', 'ASC')->get();
+      	// $this->products = Product::where('pharmacy_id',session('pharmacy_id'))
+        //                           ->where('stock','>',0)
+        //                           ->orderBy('name', 'ASC')->get();
+
+        // if($this->product) {
+        //   $this->setProduct($this->product);
+        // }
     }
 
     public function foo(){
@@ -30,46 +100,14 @@ class ProductDuedateBatchStock extends Component
 
     public function render()
     {
-        // dd($this->barcode);
-        $product = Product::with(['purchaseItems','receivingItems'])->find($this->product_id);
-        // foreach ($products as $key1 => $product) {
+      if($this->product){
+        $product = Product::with(['purchaseItems','receivingItems'])->find($this->product->id);
         $this->array = [];
         if ($product) {
 
           $this->barcode = $product->barcode;
           $this->unity = $product->unit;
           $this->count = "";
-
-          // foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-          //   $this->array[$purchaseItem->due_date->format('d-m-Y') . " - " . $purchaseItem->batch] = 0;
-          // }
-          // foreach ($product->receivingItems as $key2 => $receivingItems) {
-          //   $this->array[$receivingItems->due_date->format('d-m-Y') . " - " . $receivingItems->batch] = 0;
-          // }
-          // foreach ($product->dispatchItems as $key3 => $dispatchItems) {
-          //   $this->array[$dispatchItems->due_date->format('d-m-Y') . " - " . $dispatchItems->batch] = 0;
-          // }
-          //
-          // foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-          //   $this->array[$purchaseItem->due_date->format('d-m-Y') . " - " . $purchaseItem->batch] += $purchaseItem->amount;
-          // }
-          // foreach ($product->receivingItems as $key2 => $receivingItems) {
-          //   $this->array[$receivingItems->due_date->format('d-m-Y') . " - " . $receivingItems->batch] += $receivingItems->amount;
-          // }
-          // foreach ($product->dispatchItems as $key3 => $dispatchItems) {
-          //   $this->array[$dispatchItems->due_date->format('d-m-Y') . " - " . $dispatchItems->batch] -= $dispatchItems->amount;
-          // }
-          //
-          // foreach ($this->array as $key1 => $value) {
-          //   //elimina valores en cero
-          //   if ($value == 0) {
-          //     unset($this->array[$key1]);
-          //   }
-          //   //seleccion, se obtiene cantidad
-          //   if ($key1 == $this->due_date_batch) {
-          //     $this->count = $value;
-          //   }
-          // }
 
           // se obtienen lotes desde tabla batchs
           foreach ($product->batchs as $key => $batch) {
@@ -93,6 +131,8 @@ class ProductDuedateBatchStock extends Component
           }
 
         }
+      }
+        
 
         return view('livewire.pharmacies.product-duedate-batch-stock');
     }
