@@ -13,8 +13,8 @@
     </div>
 </div>
 
-<div class="right" style="width: 49%; display: inline-block;">
-    Iquique, {{ $control->date->formatLocalized('%d de %B del %Y') }}<br>
+<div class="right" style="width: 50%; display: inline-block;">
+    Iquique, {{ $control->format_date }}<br>
 </div>
 
 <div class="titulo">
