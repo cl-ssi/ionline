@@ -76,7 +76,7 @@ class GenerateReception extends Component
     public function mount()
     {
         $this->type_product = 1;
-        $this->programs = Program::get(['id', 'name']);
+        $this->programs = Program::orderBy('name')->get(['id', 'name']);
         $this->wre_products = collect([]);
         $this->po_items = [];
         $this->error = false;
