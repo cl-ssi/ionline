@@ -39,19 +39,22 @@ class RequirementController extends Controller
     {
         //         set_time_limit(3600);
         $users[0] = Auth::user()->id;
-        $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
-        foreach ($ous_secretary as $secretary) {
-            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
-        }
+        $ous_secretary = [];
+
+        // 14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
+        // $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+        // foreach ($ous_secretary as $secretary) {
+        //     $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        // }
 
         //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
-        $userIsSecretary = (count($ous_secretary) > 0);
+        $userIsSecretary = (count($ous_secretary) > 0); //Será false
 
         //Se obtienen unidades organizacionales donde usuario es secretary
         $secretaryOuIds = [];
-        foreach ($ous_secretary as $ou_secretary) {
-            $secretaryOuIds[] = $ou_secretary['organizational_unit_id'];
-        }
+        // foreach ($ous_secretary as $ou_secretary) {
+        //     $secretaryOuIds[] = $ou_secretary['organizational_unit_id'];
+        // }
 
         $request_usu = $request['request_usu'];
         $archived_requirements = Requirement::with('events')
@@ -291,6 +294,247 @@ class RequirementController extends Controller
         return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
     }
 
+
+
+
+    public function secretary_outbox(Request $request)
+    {
+        $ous_secretary = [];
+        $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+        foreach ($ous_secretary as $secretary) {
+            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        }
+
+        //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
+        $userIsSecretary = (count($ous_secretary) > 0); 
+
+        //Se obtienen unidades organizacionales donde usuario es secretary
+        $secretaryOuIds = [];
+        foreach ($ous_secretary as $ou_secretary) {
+            $secretaryOuIds[] = $ou_secretary['organizational_unit_id'];
+        }
+
+        $request_usu = $request['request_usu'];
+        $archived_requirements = Requirement::with('events')
+            ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $users) {
+                $query->whereHas('events', function ($query) use ($users) {
+                    $query->whereIn('from_user_id', $users)
+                        ->orWhereIn('to_user_id', $users);
+                })->whereHas('RequirementStatus', function ($query) use ($users) {
+                    $query->where('status', 'viewed')
+                        ->whereIn('user_id', $users);
+                })->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+                    $query->getSentToAuthority($secretaryOuIds, $users, true);
+                });
+            })
+            ->when($request['request_req'], function ($query, $request) {
+                return $query->Search($request);
+            })
+            ->when($request['request_cat'], function ($query, $request) {
+                return $query->whereHas('categories', function ($query) use ($request) {
+                    $query->Search($request);
+                });
+            })
+            ->when($request_usu, function ($query, $request_usu) {
+                return $query->whereHas('events', function ($query) use ($request_usu) {
+                    $query->whereHas('from_user', function ($query) use ($request_usu) {
+                        $query->Search($request_usu);
+                    })
+                        ->OrWhereHas('to_user', function ($query) use ($request_usu) {
+                            $query->Search($request_usu);
+                        });
+                });
+            })
+            ->when($request['request_parte'], function ($query, $request) {
+                return $query->whereHas('parte', function ($query) use ($request) {
+                    $query->Search2($request);
+                });
+            })
+            ->orderBy('created_at', 'DESC');
+
+        $archived_requirements_count = $archived_requirements;
+        $archived_requirements_paginate = $archived_requirements;
+
+        //se obtienen los id de requerimientos archivados
+        $archivados = $archived_requirements_count->pluck('id');
+
+        //si objeto es nulo, esporque no existen id's archivados, y no se debe agregar la clausula whereNotIn
+        if (empty($archivados)) {
+
+            $created_requirements = Requirement::with('events')
+                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $users) {
+                    $query->whereHas('events', function ($query) use ($users) {
+                        $query->whereIn('from_user_id', $users)
+                            ->orWhereIn('to_user_id', $users);
+                    })->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+                        $query->getSentToAuthority($secretaryOuIds, $users, false);
+                    });
+                })
+                ->when($request['request_req'], function ($query, $request) {
+                    return $query->Search($request);
+                })
+                ->when($request['request_cat'], function ($query, $request) {
+                    return $query->whereHas('categories', function ($query) use ($request) {
+                        $query->Search($request);
+                    });
+                })
+                ->when($request_usu, function ($query, $request_usu) {
+                    return $query->whereHas('events', function ($query) use ($request_usu) {
+                        $query->whereHas('from_user', function ($query) use ($request_usu) {
+                            $query->Search($request_usu);
+                        })
+                            ->OrWhereHas('to_user', function ($query) use ($request_usu) {
+                                $query->Search($request_usu);
+                            });
+                    });
+                })
+                ->when($request['request_parte'], function ($query, $request) {
+                    return $query->whereHas('parte', function ($query) use ($request) {
+                        $query->Search2($request);
+                    });
+                })
+                ->orderBy('created_at', 'DESC');
+        } else {
+            $created_requirements = Requirement::with('events')
+                ->where(function ($query) use ($secretaryOuIds, $userIsSecretary, $request_usu, $request, $users) {
+                    $query->whereHas('events', function ($query) use ($users) {
+                        $query->whereIn('from_user_id', $users)
+                            ->orWhereIn('to_user_id', $users);
+                    })
+                        ->when($userIsSecretary, function ($query) use ($users, $secretaryOuIds) {
+                            $query->getSentToAuthority($secretaryOuIds, $users, false);
+                        });
+                })
+                ->when($request['request_req'], function ($query, $request) {
+                    return $query->Search($request);
+                })
+                ->when($request['request_cat'], function ($query, $request) {
+                    return $query->whereHas('categories', function ($query) use ($request) {
+                        $query->Search($request);
+                    });
+                })
+                ->when($request_usu, function ($query, $request_usu) {
+                    return $query->whereHas('events', function ($query) use ($request_usu) {
+                        $query->whereHas('from_user', function ($query) use ($request_usu) {
+                            $query->Search($request_usu);
+                        })
+                            ->OrWhereHas('to_user', function ($query) use ($request_usu) {
+                                $query->Search($request_usu);
+                            });
+                    });
+                })
+                ->when($request['request_parte'], function ($query, $request) {
+                    return $query->whereHas('parte', function ($query) use ($request) {
+                        $query->Search2($request);
+                    });
+                })
+                ->whereIntegerNotInRaw('id', $archivados) //<--- esta clausula permite traer todos los requerimientos que no esten archivados
+                ->orderBy('created_at', 'DESC');
+        }
+
+        $created_requirements_paginate = $created_requirements;
+        $created_requirements = $created_requirements_paginate->paginate(50);
+
+        $archived_requirements = $archived_requirements_paginate->paginate(50);
+
+        $legend['creados'] = 0;
+        $legend['recibidos'] = 0;
+        $legend['respondidos'] = 0;
+        $legend['derivados'] = 0;
+        $legend['cerrados'] = 0;
+        $legend['reabiertos'] = 0;
+        $legend['en copia'] = 0;
+
+        foreach ($created_requirements as $req) {
+
+            $flag = 0;
+            foreach ($req->events as $key => $event) {
+                if ($event->status == "en copia" && $event->to_user_id == $users[0]) {
+                    $flag = 1;
+                    break;
+                }
+            }
+            //si es que estuvo al menos "en copia" en req
+            if ($flag == 1) {
+                $legend['en copia']++;
+            } else {
+                switch ($req->status) {
+                    case 'creado':
+                        if ($req->user->id == $users[0]) {
+                            $legend['creados']++;
+                        } else {
+                            $legend['recibidos']++;
+                        }
+                        break;
+                    case 'respondido':
+                        $legend['respondidos']++;
+                        break;
+                    case 'derivado':
+                        $legend['derivados']++;
+                        break;
+                    case 'cerrado':
+                        $legend['cerrados']++;
+                        break;
+                    case 'reabierto':
+                        $legend['reabiertos']++;
+                        break;
+                }
+            }
+        }
+
+
+        //fixme SE DEMORA MUCHO
+        //ciclo para definir si requerimiento tiene todos los eventos vistos (ticket verde) o no (ticket plomo)
+        $events_status_id_event_array = EventStatus::where('user_id', $users[0])->pluck('event_id')->toArray();
+
+        foreach ($created_requirements as $key => $req) {
+            $flag = 0;
+            foreach ($req->events as $key => $event) {
+                foreach ($events_status_id_event_array as $key => $event_id) {
+                    if ($event->id == $event_id) {
+                        $flag += 1;
+                    }
+                }
+            }
+            if (count($req->events) == $flag) {
+                $req->status_view = "visto";
+            } else {
+                $req->status_view = "sin revisar";
+            }
+            if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
+                $req->status_view = "visto";
+            }
+        }
+
+
+        //fixme SE DEMORA MUCHO
+        foreach ($archived_requirements as $key => $req) {
+            $flag = 0;
+            foreach ($req->events as $key => $event) {
+                foreach ($events_status_id_event_array as $key => $event_id) {
+                    if ($event->id == $event_id) {
+                        $flag += 1;
+                    }
+                }
+            }
+            if (count($req->events) == $flag) {
+                $req->status_view = "visto";
+            } else {
+                $req->status_view = "sin revisar";
+            }
+            if ($req->status == 'creado' && $req->user_id == auth()->user()->id) {
+                $req->status_view = "visto";
+            }
+        }
+
+        return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
+    }
+
+
+
+
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -340,7 +584,8 @@ class RequirementController extends Controller
             ->where('status', 'viewed');
         $requirementStatus->delete();
 
-        return redirect()->route('requirements.outbox');
+        // return redirect()->route('requirements.outbox');
+        return redirect()->back()->with('success', 'Se han eliminado correctamente');
     }
 
 
@@ -765,6 +1010,7 @@ class RequirementController extends Controller
 
         session()->flash('success', 'El requerimiento ' . $id . ' ha sido eliminado');
 
-        return redirect()->route('requirements.outbox');
+        // return redirect()->route('requirements.outbox');
+        return redirect()->back();
     }
 }
