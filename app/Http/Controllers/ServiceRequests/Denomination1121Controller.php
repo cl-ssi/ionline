@@ -4,11 +4,11 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Parameters\Location;
 use App\Models\ServiceRequests\Denomination1121;
 
 class Denomination1121Controller extends Controller
 {
-    //
     /**
      * Display a listing of the resource.
      *
@@ -49,18 +49,18 @@ class Denomination1121Controller extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\Parameters\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function show(Location $location)
     {
-
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\ServiceRequests\Denomination1121  $denomination1121
      * @return \Illuminate\Http\Response
      */
     public function edit(Denomination1121 $denomination1121)
@@ -72,7 +72,7 @@ class Denomination1121Controller extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\ServiceRequests\Denomination1121  $denomination1121
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Denomination1121 $denomination1121)
@@ -88,12 +88,11 @@ class Denomination1121Controller extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\ServiceRequests\Denomination1121  $denomination1121
      * @return \Illuminate\Http\Response
      */
     public function destroy(Denomination1121 $denomination1121)
     {
         //
     }
-
 }

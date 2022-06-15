@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Parameters;
 
-use App\Parameters\Location;
+use App\Models\Parameters\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -48,7 +48,7 @@ class LocationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\Parameters\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function show(Location $location)
@@ -59,7 +59,7 @@ class LocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\Parameters\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function edit(Location $location)
@@ -71,7 +71,7 @@ class LocationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\Parameters\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Location $location)
@@ -87,7 +87,7 @@ class LocationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Parameters\Location  $location
+     * @param  \App\Models\Parameters\Location  $location
      * @return \Illuminate\Http\Response
      */
     public function destroy(Location $location)
