@@ -177,6 +177,10 @@ use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\StoreController;
 
+use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
+use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
+use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -840,7 +844,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function () {
-    Route::get('/', [ParameterController::class,'index'])->name('index');
+    Route::get('/', [ParameterController::class, 'welcome'])->name('welcome');
+    Route::get('/all', ParameterIndex::class)->name('index');
+    Route::get('/create', ParameterCreate::class)->name('create');
+    Route::get('/{parameter}/edit', ParameterEdit::class)->name('edit');
     Route::put('/{parameter}', [ParameterController::class,'update'])->name('update');
     Route::get('drugs', [ParameterController::class,'indexDrugs'])->name('drugs')->middleware(['role:Drugs: admin']);
     //Route::resource('permissions', PermissionController::class);
