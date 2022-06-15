@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Parameters\Place;
+use App\Models\Parameters\Place;
 
 class PlaceSeeder extends Seeder
 {
