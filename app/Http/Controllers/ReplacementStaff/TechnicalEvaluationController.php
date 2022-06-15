@@ -100,6 +100,8 @@ class TechnicalEvaluationController extends Controller
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $users = User::orderBy('name', 'ASC')->get();
 
+        dd($users);
+
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
         $requestChilds = RequestReplacementStaff::
