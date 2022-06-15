@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parameters;
+namespace App\Models\Parameters;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,7 +20,7 @@ class Place extends Model
         'name',
         'description',
         'location_id',
-        'floor_number'
+        'floor_number',
     ];
 
     /**
@@ -28,12 +28,13 @@ class Place extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
-
+    protected $dates = [
+        'deleted_at',
+    ];
 
     public function location()
     {
-        return $this->belongsTo('App\Parameters\Location');
+        return $this->belongsTo(Location::class);
     }
 
     public function computers()
