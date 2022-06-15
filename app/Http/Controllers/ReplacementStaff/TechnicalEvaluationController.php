@@ -98,7 +98,11 @@ class TechnicalEvaluationController extends Controller
     public function edit(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        $users = User::orderBy('name', 'ASC')->get();
+        //$users = User::orderBy('name', 'ASC')->get();
+
+        $users = User::where('external', 0)
+          ->orderBy('name', 'ASC')
+          ->get(['id', 'name', 'fathers_family', 'mothers_family']);
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
