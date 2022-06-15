@@ -121,7 +121,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active('parameters.index') }}" href="{{ route('parameters.index') }}">
+        <a class="nav-link {{ active('parameters.*') }}" href="{{ route('parameters.index') }}">
             <i class="fas fa-cog"></i> Parámetros
         </a>
     </li>
