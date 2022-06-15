@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers\Parameters;
 
-use App\Parameters\Parameter;
+use App\Models\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 
 class ParameterController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display welcome view of parameters.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function welcome()
     {
         $parameters = Parameter::where('module','Drugs')->get();
-        return view('parameters/index')->withParameters($parameters);
+        return view('parameters.welcome')->withParameters($parameters);
     }
 
     /**
@@ -28,8 +27,7 @@ class ParameterController extends Controller
     public function indexDrugs()
     {
         $parameters = Parameter::where('module','drugs')->get();
-        //$users = User::orderBy('name')->get();
-        return view('drugs.parameters')->withParameters($parameters);//->withUsers($users);
+        return view('drugs.parameters')->withParameters($parameters);
     }
 
     /**
@@ -56,7 +54,7 @@ class ParameterController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Parameters\Parameter  $parameter
+     * @param  \App\Models\Parameters\Parameter  $parameter
      * @return \Illuminate\Http\Response
      */
     public function show(Parameter $parameter)
@@ -67,7 +65,7 @@ class ParameterController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Parameters\Parameter  $parameter
+     * @param  \App\Models\Parameters\Parameter  $parameter
      * @return \Illuminate\Http\Response
      */
     public function edit(Parameter $parameter)
@@ -79,7 +77,7 @@ class ParameterController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Parameters\Parameter  $parameter
+     * @param  \App\Models\Parameters\Parameter  $parameter
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Parameter $parameter)
@@ -93,11 +91,11 @@ class ParameterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Parameters\Parameter  $parameter
+     * @param  \App\Models\Parameters\Parameter  $parameter
      * @return \Illuminate\Http\Response
      */
     public function destroy(Parameter $parameter)
     {
         //
     }
-    }
+}

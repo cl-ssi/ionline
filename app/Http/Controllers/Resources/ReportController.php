@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Resources\Computer;
 use App\Resources\Printer;
-use App\Parameters\Location;
-use App\Parameters\Place;
+use App\Models\Parameters\Location;
+use App\Models\Parameters\Place;
 
 class ReportController extends Controller
 {
