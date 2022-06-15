@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UnitOfMeasurement extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    protected $table = 'cfg_unit_of_measurements';
+
     //
     /**
      * The attributes that are mass assignable.
@@ -17,18 +21,14 @@ class UnitOfMeasurement extends Model
      */
     protected $fillable = ['name', 'prefix'];
 
-
     // public function RequestServices() {
     //     return $this->hasMany(RequestService::class);
     // }
 
-    use SoftDeletes;
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
     //protected $dates = ['deleted_at'];
-
-    protected $table = 'cfg_unit_of_measurements';
 }
