@@ -85,46 +85,37 @@ class Requirement extends Model implements Auditable
 
     public static function getPendingRequirements()
     {
-      $users[0] = Auth::user()->id;
-      $ous_secretary = [];
-    //   14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
-    //   $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'),'secretary', Auth::user()->id);
-    //   foreach($ous_secretary as $secretary){
-    //     if (Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')) {
-    //       $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
-    //     }
-    //   }
+        $users[0] = Auth::user()->id;
+        $ous_secretary = [];
+        //   14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
+        //   $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'),'secretary', Auth::user()->id);
+        //   foreach($ous_secretary as $secretary){
+        //     if (Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')) {
+        //       $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        //     }
+        //   }
 
-      $archived_requirements = Requirement::with('events')
-                                        ->whereHas('events', function ($query) use ($users) {
-                                             $query->whereIn('from_user_id',$users)
-                                                   ->orWhereIn('to_user_id',$users);
-                                        })->whereHas('RequirementStatus', function ($query) use ($users) {
-                                             $query->where('status','viewed')
-                                                   ->whereIn('user_id',$users);
-                                        })->get();
+        $archived_requirements = Requirement::with('events')
+                                ->whereHas('events', function ($query) use ($users) {
+                                        $query->whereIn('from_user_id',$users)
+                                            ->orWhereIn('to_user_id',$users);
+                                })->whereHas('RequirementStatus', function ($query) use ($users) {
+                                        $query->where('status','viewed')
+                                            ->whereIn('user_id',$users);
+                                })->count();
 
-      //se obtienen los id de requerimientos archivados
-      $archivados[] = null;
-      foreach ($archived_requirements as $key => $req) {
-        $archivados[$key] =$req->id;
-      }
+        $created_requirements = Requirement::whereHas('events', function ($query) use ($users) {
+                                    $query->whereIn('from_user_id',$users)
+                                            ->orWhereIn('to_user_id',$users);
+                                })
+                                ->count();
+                                
+        $total = $created_requirements - $archived_requirements;
 
-      //dd($archivados);
-
-      $created_requirements = Requirement::whereHas('events', function ($query) use ($users) {
-                                               $query->whereIn('from_user_id',$users)
-                                                     ->orWhereIn('to_user_id',$users);
-                                          })
-                                          ->when($archivados, function ($query, $archivados) {
-                                            return $query->whereIntegerNotInRaw('id',$archivados); //<--- esta clausula permite traer todos los requerimientos que no esten archivados
-                                          })
-                                          ->count();
-
-      if($created_requirements > 0)
-      {
-          return $created_requirements;
-      }
+        if($total > 0)
+        {
+            return $total;
+        }
     }
 
     use SoftDeletes;
