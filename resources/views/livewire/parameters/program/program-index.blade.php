@@ -12,6 +12,7 @@
             </a>
         </div>
     </div>
+
     <div class="input-group my-2">
         <div class="input-group-prepend">
             <span class="input-group-text">Buscar</span>
@@ -56,7 +57,7 @@
                     <td>{{ $program->alias_finance }}</td>
                     <td>{{ $program->financial_type }}</td>
                     <td>{{ $program->folio }}</td>
-                    <td>{{ $program->subtitle->name }}</td>
+                    <td>{{ optional($program->subtitle)->name }}</td>
                     <td>{{ $program->budget }}</td>
                     <td>{{ $program->period }}</td>
                     <td class="text-center">
