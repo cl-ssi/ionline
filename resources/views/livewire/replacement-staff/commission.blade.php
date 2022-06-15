@@ -18,7 +18,7 @@
           <div class="form-row">
               <fieldset class="form-group col mt">
                   <label for="for_user_id">Integrante</label>
-                  <select name="user_id[]" class="form-control" required>
+                  <select wire:ignore name="user_id[]" class="form-control" required>
                       <option value="">Seleccione</option>
                       @foreach($users as $user)
                           <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
