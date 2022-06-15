@@ -2,6 +2,7 @@
 
 namespace App\Resources;
 
+use App\Models\Parameters\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,7 +19,7 @@ class Computer extends Model
     }
 
     public function place() {
-        return $this->belongsTo('App\Parameters\Place');
+        return $this->belongsTo(Place::class);
     }
 
     public function scopeSearch($query, $search) {
