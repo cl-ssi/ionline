@@ -10,6 +10,8 @@
       @endif
   </div>
 
+  {{-- dd($users) --}}
+
   <form method="POST" class="form-horizontal"
       action="{{ route('replacement_staff.request.technical_evaluation.commission.store', $technicalEvaluation) }}"/>
       @csrf
