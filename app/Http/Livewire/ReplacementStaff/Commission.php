@@ -34,6 +34,7 @@ class Commission extends Component
 
     public function render()
     {
-        return view('livewire.replacement-staff.commission', compact($this->users, $this->technicalEvaluation));
+        return view('livewire.replacement-staff.commission', ['users' => $this->users,
+            'technicalEvaluation' => $this->technicalEvaluation]);
     }
 }

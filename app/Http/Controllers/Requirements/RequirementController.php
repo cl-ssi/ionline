@@ -176,7 +176,6 @@ class RequirementController extends Controller
 
         $created_requirements_paginate = $created_requirements;
         $created_requirements = $created_requirements_paginate->paginate(50);
-
         $archived_requirements = $archived_requirements_paginate->paginate(50);
 
         $legend['creados'] = 0;
@@ -250,16 +249,19 @@ class RequirementController extends Controller
         //        $events_status = EventStatus::where('user_id',Auth::user()->id)->get();
         $events_status_id_event_array = EventStatus::where('user_id', Auth::user()->id)->pluck('event_id')->toArray();
 
+        // dd($created_requirements->first()->events);
         foreach ($created_requirements as $key => $req) {
-            $flag = 0;
-            foreach ($req->events as $key => $event) {
-                foreach ($events_status_id_event_array as $key => $event_id) {
-                    if ($event->id == $event_id) {
-                        $flag += 1;
-                    }
-                }
-            }
-            if (count($req->events) == $flag) {
+            // $flag = 0;
+            // foreach ($req->events as $key => $event) {
+            //     foreach ($events_status_id_event_array as $key => $event_id) {
+            //         if ($event->id == $event_id) {
+            //             $flag += 1;
+            //         }
+            //     }
+            // }
+
+            // cuando la cantidad de eventos es igual a la cantidad de statusEventos (viewed)
+            if ($req->events->count() == EventStatus::where('user_id', Auth::user()->id)->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
                 $req->status_view = "visto";
             } else {
                 $req->status_view = "sin revisar";
@@ -272,15 +274,16 @@ class RequirementController extends Controller
 
         //fixme SE DEMORA MUCHO
         foreach ($archived_requirements as $key => $req) {
-            $flag = 0;
-            foreach ($req->events as $key => $event) {
-                foreach ($events_status_id_event_array as $key => $event_id) {
-                    if ($event->id == $event_id) {
-                        $flag += 1;
-                    }
-                }
-            }
-            if (count($req->events) == $flag) {
+            // $flag = 0;
+            // foreach ($req->events as $key => $event) {
+            //     foreach ($events_status_id_event_array as $key => $event_id) {
+            //         if ($event->id == $event_id) {
+            //             $flag += 1;
+            //         }
+            //     }
+            // }
+
+            if ($req->events->count() == EventStatus::where('user_id', Auth::user()->id)->whereIn('event_id',$req->events->pluck('id')->toArray())->count()) {
                 $req->status_view = "visto";
             } else {
                 $req->status_view = "sin revisar";
