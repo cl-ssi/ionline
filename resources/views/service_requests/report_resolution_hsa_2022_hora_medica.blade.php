@@ -423,36 +423,42 @@
         </p>
 
         <p class="">
-            <strong>3.</strong> El gasto corresponde
-            @if($ServiceRequest->subt31)
-                {{$ServiceRequest->subt31}}
+            @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA")
+                <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Requerimiento Contingencia Respiratoria Unidad demandante COVID-19.
             @else
-                al ítem
-            @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
-                21-03-001-001-02
-            @elseif($ServiceRequest->programm_name == "SENDA")
-                11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1,
-            @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
-                11450602
-            @elseif($ServiceRequest->programm_name == "LEY DE ALCOHOL" || $ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
-                114050601
-            @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
-                11450602
-            @elseif($ServiceRequest->programm_name == "PESPI")
-                21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
-            @elseif($ServiceRequest->programm_name == "SUBT.31")
-                El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
-            @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
-                @if($ServiceRequest->profession->category == "A")
-                    21-03-001-001-03 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
+                <strong>3.</strong> El gasto corresponde
+                @if($ServiceRequest->subt31)
+                    {{$ServiceRequest->subt31}}
                 @else
-                    21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
-                @endif
-            @elseif($ServiceRequest->programm_name == "33 MIL HORAS")
-                21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21.
-            @endif
-            Honorario Suma Alzada.
+                    al ítem
 
+                    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
+                        21-03-001-001-02
+                    @elseif($ServiceRequest->programm_name == "SENDA")
+                        11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1,
+                    @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
+                        11450602
+                    @elseif($ServiceRequest->programm_name == "LEY DE ALCOHOL" || $ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
+                        114050601
+                    @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
+                        11450602
+                    @elseif($ServiceRequest->programm_name == "PESPI")
+                        21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
+                    @elseif($ServiceRequest->programm_name == "SUBT.31")
+                        El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
+                    @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
+                        @if($ServiceRequest->profession->category == "A")
+                            21-03-001-001-03 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
+                        @else
+                            21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
+                        @endif
+                    @elseif($ServiceRequest->programm_name == "33 MIL HORAS")
+                        21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21.
+                    @endif
+                
+                    Honorario Suma Alzada.
+
+                @endif
             @endif
         </p>
         <br>
