@@ -33,7 +33,7 @@
         <a class="nav-link {{ active('requirements.inbox')}}"
             href="{{ route('requirements.inbox') }}">
             <i class="fas fa-inbox text-danger"></i>
-            &nbsp;
+            Nueva
         </a>
     </li>
 

@@ -68,16 +68,17 @@ class RequirementController extends Controller
             
         if($request->has('archived'))
         {
-            $requirements_query->whereHas('archived', function ($query) use ($auth_user) {
-                $query->where('user_id', $auth_user->id);
+            $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
+                $query->whereIn('user_id', [$user->id,$auth_user->id]);
             });
         }
         else
         {
-            $requirements_query->whereDoesntHave('archived', function ($query) use ($auth_user) {
-                $query->where('user_id', $auth_user->id);
+            $requirements_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
+                $query->whereIn('user_id', [$user->id,$auth_user->id]);
             });
         }
+
         $requirements = $requirements_query->latest()->paginate(50);
 
         /* Contadores */
