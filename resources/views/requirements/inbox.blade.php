@@ -51,10 +51,10 @@
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
 		<td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}">Pendientes</a>
+			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">Pendientes</a>
 		</td>
         <td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}?archived=true">Archivados ({{ $counters['archived'] }})</a>
+			<a href="{{ route('requirements.inbox',$user) }}?archived=true" class="btn-link {{ request()->has('archived') ? 'disabled':'' }}">Archivados ({{ $counters['archived'] }})</a>
 		</td>
     </tr>
 </table>
