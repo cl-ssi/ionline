@@ -279,7 +279,7 @@
                                                         <tbody>
                                                             @foreach($requestForm->itemRequestForms as $key => $item)
                                                             @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
-                                                            <tr>
+                                                            <tr data-id="{{$item->product->code ?? ''}}">
                                                                 <td>{{ $key+1 }}</td>
                                                                 <td>{{ $item->status }}</td>
                                                                 <td>{{ $item->budgetItem()->first()->fullName() }}</td>
@@ -299,7 +299,15 @@
                                                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
                                                                 </td>
                                                                 <td align="right">
-                                                                    <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}">
+                                                                    <!-- <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}"> -->
+                                                                    <select name="tax[]" class="form-control form-control-sm" id="for_tax">
+                                                                        <option value="">Seleccione...</option>    
+                                                                        <option value="iva" {{$item->tax == 'iva' ? 'selected' : ''}} >I.V.A. 19%</option>
+                                                                        <option value="bh" {{$item->tax == 'bh' ? 'selected' : ''}} ></option>
+                                                                        <option value="srf" {{$item->tax == 'srf' ? 'selected' : ''}} >S.R.F Zona Franca 0%</option>
+                                                                        <option value="e" {{$item->tax == 'e' ? 'selected' : ''}}>Exento 0%</option>
+                                                                        <option value="nd" {{$item->tax == 'nd' ? 'selected' : ''}} >No Definido</option>
+                                                                    </select>
                                                                 </td>
                                                                 <td align="right">
                                                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
@@ -382,9 +390,9 @@
 @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
-@if(env('APP_ENV') == 'local')
+{{--@if(env('APP_ENV') == 'local')
 @include('request_form.purchase.partials.immediate_purchase_form_mp')
-@endif
+@endif--}}
 
 </form>
 @endif
@@ -443,7 +451,7 @@
                         <th>Cantidad</th>
                         <th>UM</th>
                         <th>Valor U.</th>
-                        <th>Impuestos</th>
+                        <th>Impto.</th>
                         <th>Total Item</th>
                         <th>Datos Adquisición</th>
                         <!-- <th></th>  -->
@@ -500,7 +508,7 @@
                         <th>Archivo</th>
                         <th>Cantidad</th>
                         <th>Valor U.</th>
-                        <th>Impuestos</th>
+                        <th>Impto.</th>
                         <th>Total Item</th>
                         <th></th>
                         <!-- <th></th>  -->
@@ -514,31 +522,23 @@
                         <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
                         <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                         <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
-
-                        @if($detail->pivot->internalPurchaseOrder)
-                        <td>Prov:{{ $detail->pivot->internalPurchaseOrder->supplier->name}}</td>
-                        @endif
-
-                        @if($detail->pivot->tender)
                         <td>
+                        @if($detail->pivot->internalPurchaseOrder)
+                            Prov:{{ $detail->pivot->internalPurchaseOrder->supplier->name}}
+                        @elseif($detail->pivot->tender)
                             Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
-                            Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>s
-                            Plazo vig en días:{{ $detail->pivot->tender->duration??'' }}
-
+                            Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>
+                            Plazo vig en días:{{ $detail->pivot->tender->duration ?? '' }}
+                        @elseif($detail->pivot->directDeal)
+                            Nº Resol:{{ $detail->pivot->directDeal->resol_direct_deal}} <br><br>
+                            Prov:{{ $detail->pivot->directDeal->supplier->name }}
+                        @elseif($detail->pivot->immediatePurchase)
+                            ID OC:{{ $detail->pivot->immediatePurchase->po_id }} <br><br>
+                            Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}
+                        @else
+                            -
+                        @endif
                         </td>
-                        @endif
-
-                        @if($detail->pivot->directDeal)
-                        <td>Nº Resol:{{ $detail->pivot->directDeal->resol_direct_deal}} <br><br>
-                            Prov:{{ $detail->pivot->directDeal->supplier->name }}</td>
-                        @endif
-
-                        @if($detail->pivot->immediatePurchase)
-                        <td>ID OC:{{ $detail->pivot->immediatePurchase->po_id }} <br><br>
-                            Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}</td>
-                        @endif
-
-
                         <td>{{ $detail->article }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
                         <td>{{ $detail->specification }}</td>
@@ -550,7 +550,7 @@
                         </td>
                         <td align="right">{{ $detail->pivot->quantity }}</td>
                         <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
-                        <td>{{ $detail->tax }}</td>
+                        <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
                         <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
                         <!-- <td align="center">
                             <fieldset class="form-group">
@@ -575,11 +575,11 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="11" class="text-right">Valor Total</td>
+                        <th colspan="12" class="text-right">Valor Total</td>
                         <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                     <tr>
-                        <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
+                        <th colspan="12" class="text-right">Saldo disponible Requerimiento</td>
                         <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                 </tfoot>
@@ -965,6 +965,9 @@
     }
     var year = new Date().getFullYear();
 
+    // se imprime valor % boleta de honorarios que corresponda segun el año vigente
+    $('#for_tax option[value=bh]').text("Boleta de Honorarios " + (withholding_tax[year] ? withholding_tax[year] * 100 : withholding_tax[Object.keys(withholding_tax).pop()] * 100) + "%");
+
     calculateAmount();
     @if(isset($result_details))
     calculateAmount(true);
@@ -976,11 +979,11 @@
         return value;
     }
 
-    $('#for_quantity,#for_unit_value').on('change keyup', function() {
+    $('#for_quantity,#for_unit_value,#for_tax').on('change keyup', function() {
         var tr = $(this).closest('tr')
         var qty = tr.find('input[name="quantity[]"]')
         var price = tr.find('input[name="unit_value[]"]')
-        var tax = tr.find('input[name="tax[]"]')
+        var tax = tr.find('select[name="tax[]"] option:selected')
         var total = tr.find('input[name="item_total[]"]')
         var grand_total = $('#total_amount')
 
@@ -1161,7 +1164,8 @@
         if(document.getElementById("for_tender_number").value != '')
         {
             $('#btn_licitacion').prop('disabled', true).html("Cargando...");
-            axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            // axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            axios.get('/request_forms/supply/mercado-publico-api/licitaciones/' + document.getElementById("for_tender_number").value)
             .then(function(response) {
                 // handle success
                 console.log(response.data);
@@ -1169,7 +1173,22 @@
                 // console.log(response.data.Listado[0].Nombre);
                 // document.getElementById("for_description").value = response.data.Listado[0].Nombre;
                 $('#for_description').val(response.data.Listado[0].Nombre);
-                //alert(response.data.Listado.Nombre);
+                $('#for_status').val(response.data.Listado[0].Estado.toLowerCase()).change();
+                if(response.data.Listado[0].Items){
+                    var productos = [];
+                    for(var i = 0; i < response.data.Listado[0].Items.Cantidad; i++)
+                        productos.push({codigo: response.data.Listado[0].Items.Listado[i].CodigoProducto, cantidad: response.data.Listado[0].Items.Listado[i].Cantidad})
+                    const duplicates = productos.map(p => p.codigo).filter((e, index, arr) => arr.indexOf(e) !== index)
+                    // console.log(duplicates)
+                    for(var i in productos){
+                        if(!duplicates.includes(productos[i].codigo)){
+                            var tr = $("tr[data-id="+ productos[i].codigo + "]");
+                            tr.find('#for_item_id').prop('checked', true);
+                            tr.find('#for_quantity').val(productos[i].cantidad).change();
+                        }
+                        // console.log(productos[i])
+                    }
+                }
             })
             .catch(function(error) {
                 // handle error
@@ -1194,16 +1213,19 @@
     $('#btn_oc').click(function() {
         if(document.getElementById("for_po_id").value != '')
         {
-            axios.get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            $('#btn_oc').prop('disabled', true).html("Cargando...");
+            // axios.get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            axios.get('/request_forms/supply/mercado-publico-api/ordenesdecompra/' + document.getElementById("for_po_id").value)
             .then(function(response) {
                 // handle success
-                console.log(response);
-                var fecha_envio = new Date(response.data.Listado[0].Fechas.FechaEnvio).toISOString().slice(0, 10);
-                var fecha_aceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion).toISOString().slice(0, 10);
-                document.getElementById("for_description").value = response.data.Listado[0].Nombre;
-                document.getElementById("for_po_accepted_date").value = fecha_aceptacion;
-                document.getElementById("for_po_sent_date").value = fecha_envio;
-                document.getElementById("for_supplier_specifications").value = response.data.Listado[0].Items.Listado[0].EspecificacionProveedor;
+                console.log(response.data);
+                $('#btn_oc').prop('disabled', false).html("Consultar");
+                // var fecha_envio = new Date(response.data.Listado[0].Fechas.FechaEnvio).toISOString().slice(0, 10);
+                // var fecha_aceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion).toISOString().slice(0, 10);
+                // document.getElementById("for_description").value = response.data.Listado[0].Nombre;
+                // document.getElementById("for_po_accepted_date").value = fecha_aceptacion;
+                // document.getElementById("for_po_sent_date").value = fecha_envio;
+                // document.getElementById("for_supplier_specifications").value = response.data.Listado[0].Items.Listado[0].EspecificacionProveedor;
 
 
 
@@ -1213,6 +1235,7 @@
             .catch(function(error) {
                 // handle error
                 //alert(response.data.Cantidad);
+                $('#btn_oc').prop('disabled', false).html("Consultar");
                 alert('valor digitado no se encuentra en Mercado Público o error en la Comunicación');
                 console.log(error);
             })

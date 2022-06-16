@@ -8,7 +8,7 @@
             <fieldset class="form-group col-sm-12">
                 <label for="for_tender_number">ID de la licitación:</label>
                 <input type="text" class="form-control form-control-sm col-sm-3" id="for_tender_number" name="tender_number" value="{{ old('tender_number') }}"> 
-                <button class="btn btn-outline-primary" id="btn_licitacion">Consultar</button>
+                @if(env('APP_ENV') == 'local') <button class="btn btn-outline-primary" id="btn_licitacion">Consultar</button> @endif
             </fieldset>
         </div>
         <div class="form-row">

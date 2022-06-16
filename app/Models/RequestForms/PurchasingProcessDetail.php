@@ -19,7 +19,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
 
     protected $fillable = [
         'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
-        'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'expense', 'status', 'release_observation'
+        'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation'
     ];
 
     public function purchasingProcess() {
