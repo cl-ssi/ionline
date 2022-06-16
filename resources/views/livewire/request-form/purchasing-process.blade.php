@@ -9,7 +9,7 @@
               <th class="text-muted col-3" scope="row">Gasto Estimado</th>
               <td class="col-3">{{ $requestForm->estimatedExpense() }}</td>
               <th class="text-muted col-3" scope="row">Nombre del Solicitante</th>
-              <td class="col-3">{{ $requestForm->creator->tinnyName()}}</td>
+              <td class="col-3">{{ $requestForm->creator->tinnyName }}</td>
           </tr>
           <tr>
               <th class="text-muted col-3 align-middle">Unidad Organizacional</th>
