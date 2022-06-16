@@ -81,6 +81,7 @@ class RequirementController extends Controller
 
         $requirements = $requirements_query->latest()->paginate(50);
 
+
         /* Contadores */
         $counters_query = Requirement::query();
         $counters_query->whereHas('events', function ($query) use ($user) {
@@ -88,13 +89,13 @@ class RequirementController extends Controller
             });
         
         $counters['archived'] = $counters_query->clone()
-                ->whereHas('archived', function ($query) use ($auth_user) {
-                $query->where('user_id', $auth_user->id);
-            })->count();
+                ->whereHas('archived', function ($query) use ($user,$auth_user) {
+                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
+                })->count();
 
-        $counters_query->whereDoesntHave('archived', function ($query) use ($auth_user) {
-                $query->where('user_id', $auth_user->id);
-            });
+        $counters_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
+                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
+                });
 
         $counters['created'] = $counters_query->clone()->where('status','creado')->count();
         $counters['replyed'] = $counters_query->clone()->where('status','respondido')->count();
