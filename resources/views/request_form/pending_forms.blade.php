@@ -122,7 +122,7 @@
         <div class="col">
             <h6><i class="fas fa-inbox"></i> Formularios con nuevo presupuesto pendiente de firma</h6>
             <div class="table-responsive">
-                <table class="table table-sm table-striped table-bordered">
+                <table class="table table-sm table-hover table-bordered">
                   <thead class="small">
                     <tr class="text-center">
                       <th>ID</th>
@@ -209,7 +209,7 @@
         <div class="col">
             <h6><i class="fas fa-archive"></i> Mis formularios aprobados o rechazados</h6>
             <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered">
+            <table class="table table-sm table-hover table-bordered">
               <thead class="small">
                 <tr class="text-center">
                   <th>ID</th>
@@ -330,7 +330,7 @@
             <div class="col">
                 <h6><i class="fas fa-archive"></i> Formularios aprobados o rechazados</h6>
                 <div class="table-responsive">
-                <table class="table table-sm table-striped table-bordered">
+                <table class="table table-sm table-hover table-bordered">
                 <thead class="small">
                     <tr class="text-center">
                     <th>ID</th>

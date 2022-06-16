@@ -25,7 +25,7 @@
         <div class="col">
             <h6><i class="fas fa-archive"></i> Formularios pendientes de aprobación, aprobados y/o rechazados</h6>
             <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered small">
+            <table class="table table-sm table-hover table-bordered small">
               <thead>
                 <tr class="text-center">
                   <th>ID</th>
