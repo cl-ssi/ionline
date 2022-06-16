@@ -1,64 +1,26 @@
-@extends('layouts.app')
-
-@section('title', 'Requerimientos')
-
-@section('content')
-
-@include('requirements.partials.nav')
-
-
-@livewire('requirements.filter',[$user])
-
-<div class="row">
-
-	<div class="col">
-		<h3 class="mb-3">
-		@if(request()->has('archived'))
-			Archivados
-		@else
-			Pendientes por atender
-		@endif
-		</h3>
-	</div>
-
-	<div class="col">
-		<ul class="nav justify-content-end">
-			<li class="nav-item">
-				<a class="nav-link {{ ($user->id == auth()->id())?'disabled':'' }}" 
-					href="{{ route('requirements.inbox',auth()->user()) }}">
-					{{ auth()->user()->tinnyName }}
-				</a> 
-			</li>
-			@foreach($allowed_users as $allowed)
-			<li class="nav-item">
-				<a class="nav-link {{ ($user == $allowed)?'disabled':'' }}" 
-					href="{{ route('requirements.inbox',$allowed) }}">
-					{{ $allowed->tinnyName }}
-				</a>
-			</li>
-			@endforeach
-		</ul>
-	</div>
-
-</div>
+<div>
+    
+    <div class="input-group mb-3">
+        <input type="number" wire:model.debounce.600ms="req_id" class="form-control" placeholder="N°">
+        <input type="text" wire:model.debounce.600ms="subject" class="form-control" placeholder="Asunto">
+        <select wire:model.debounce.600ms="category" class="form-control">
+            <option></option>
+            @foreach(auth()->user()->reqCategories->pluck('name') as $category)
+            <option>{{ $category }}</option>
+            @endforeach
+        </select>
+        <!--input type="text" wire:model.debounce.600ms="user_involved" class="form-control" placeholder="Usuario involucrado"-->
+        <!--input type="text" wire:model.debounce.600ms="parte" class="form-control" placeholder="Origen, N°Origen"-->
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" wire:click="search">
+                <i class="fas fa-search" aria-hidden="true"></i></button>
+            </div>
+    </div>
 
 
-
-<table class="table table-sm small table-bordered">
-    <tr>
-        <td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}">Pendientes</a>
-		</td>
-        <td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
-        <td class="alert-warning text-center">Respondidos ({{ $counters['replyed'] }})</td>
-        <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
-        <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
-        <td class="alert-light text-center"><a href="{{ route('requirements.inbox',$user) }}?archived=true">Archivados ({{ $counters['archived'] }})</a></td>
-    </tr>
-</table>
-
-
-<table class="table table-sm table-bordered small">
+    @if($requirements->isNotEmpty())
+    <h4>Resultado de la busqueda</h4>
+    <table class="table table-sm table-bordered small">
     <thead>
         <tr>
             <th>N°</th>
@@ -135,17 +97,13 @@
 						<i class="fas fa-box-open"></i>
 					</a>
 					@endif
+
 				</td>
 			</tr>
 		@endforeach
     </tbody>
 </table>
 
-{{ $requirements->links() }}
+    @endif
 
-
-@endsection
-
-@section('custom_js')
-
-@endsection
+</div>
