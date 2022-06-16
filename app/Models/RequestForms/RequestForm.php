@@ -323,7 +323,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
         if (!is_null($event))
-            return $event->signerUser->tinnyName();
+            return $event->signerUser->tinnyName;
     }
 
     public function rejectedComment()
@@ -354,7 +354,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
         if (!is_null($event)) {
-            return $event->signerUser->tinnyName();
+            return $event->signerUser->tinnyName ;
         }
     }
 

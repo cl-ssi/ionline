@@ -138,7 +138,7 @@ class User extends Authenticatable implements Auditable
         return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
     }
 
-    public function tinnyName() {
+    public function getTinnyNameAttribute() {
         if(!is_null($this->name)){
           $name = explode(" ", $this->name)[0];
           return $name.' '.$this->fathers_family;}
