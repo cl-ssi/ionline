@@ -258,7 +258,7 @@
 {{--                                                    @else--}}
 {{--                                                        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
 {{--                                                    @endif--}}
-                                                    <table class="table table-sm table-striped table-bordered small">
+                                                    <table class="table table-sm table-hover table-bordered small">
                                                         <thead class="text-center">
                                                             <tr>
                                                                 <th>Item</th>
@@ -438,7 +438,7 @@
             TOTAL ITEM
             DATOS ADQUISICION -->
 
-            <table class="table table-sm table-striped table-bordered small">
+            <table class="table table-sm table-hover table-bordered small">
                 <thead class="text-center">
                     <tr>
                         <th>Item</th>
@@ -493,7 +493,7 @@
             <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
 
 
-            <table class="table table-sm table-striped table-bordered small">
+            <table class="table table-sm table-hover table-bordered small">
                 <thead class="text-center">
                     <tr>
                         <th>Item</th>
@@ -596,7 +596,7 @@
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Historial de bienes y/o servicios ejecución inmediata</h6>
-            <table class="table table-sm table-striped table-bordered small">
+            <table class="table table-sm table-hover table-bordered small">
                 <thead class="text-center">
                     <tr>
                         <th>Item</th>
