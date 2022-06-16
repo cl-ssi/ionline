@@ -57,7 +57,7 @@
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
 		<td class="alert-light text-center">
 			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
-				Pendientes ({{ $requirements->count() }})
+				Pendientes ({{ $requirements->total() }})
 			</a>
 		</td>
         <td class="alert-light text-center">
