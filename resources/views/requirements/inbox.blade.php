@@ -6,6 +6,11 @@
 
 @include('requirements.partials.nav')
 
+<div class="alert alert-info" role="alert">
+	Esta es una nueva bandeja para ver los requerimientos, es más rápida y 
+	también permite cambiar a las bandeja de su jefatura.<br>
+	Puede intercambiar en lado derecho de la tabla resumen entre los "pendientes" y "archivados" .
+</div>
 
 @livewire('requirements.filter',[$user])
 
@@ -65,10 +70,8 @@
         <tr>
             <th>N°</th>
             <th>Asunto</th>
-            <th>Unidad Organizacional</th>
-            <th>Funcionario</th>
-            <th>Fecha creación</th>
-            <th>Transcurridos</th>
+            <th width="160">Creado</th>
+            <th width="160">Ultimo evento</th>
             <th>Fecha límite</th>
             <td></td>
         </tr>
@@ -121,11 +124,43 @@
 						</div>
 					@endif
 				</td>
-				<td>{{ $req->events->last()->to_ou->name }}</td>
-				<td>{{ $req->events->last()->to_user->fullName }}</td>
-				<td>{{ $req->created_at->format('Y-m-d H:i') }}</td>
-				<td>{{ $req->created_at->diffForHumans() }}</td>
-				<td>@if($req->limit_at <> NULL){{ $req->limit_at->format('Y-m-d')}} @endif</td>
+				<td>
+					<b>Creado por</b><br>
+					{{ $req->events->first()->from_user->tinnyName }}<br>
+					{{ $req->created_at->format('Y-m-d H:i') }}<br>
+					{{ $req->created_at->diffForHumans() }}<br>
+				</td>
+
+				<td>
+				@switch($req->status)
+					@case('creado')
+					@break
+
+					@case('cerrado')
+					<b>Cerrado por</b><br>
+					{{ $req->events->last()->from_user->tinnyName }}<br>
+					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
+					@break
+
+					@case('respondido')
+					@case('reabierto')
+					<b>{{ ucfirst($req->status) }} por</b><br>
+					{{ $req->events->last()->from_user->tinnyName }}<br>
+					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
+					<b>para </b>{{ $req->events->last()->to_user->tinnyName }}
+					@break
+
+
+					@case('derivado')
+					<b>{{ ucfirst($req->status) }} para</b><br>
+					{{ $req->events->last()->to_user->tinnyName }}<br>
+					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
+					<b>de </b>{{ $req->events->last()->from_user->tinnyName }}
+					@break
+				@endswitch
+				</td>
+
+				<td>{{ optional($req->limit_at)->format('Y-m-d') }}</td>
 
 				<td>
 					@if($req->archived->where('user_id',auth()->id())->isEmpty())
