@@ -45,15 +45,17 @@
 
 
 <table class="table table-sm small table-bordered">
-    <tr>
-        <td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}">Pendientes</a>
-		</td>
-        <td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
+	<tr>
+		<td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
         <td class="alert-warning text-center">Respondidos ({{ $counters['replyed'] }})</td>
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
-        <td class="alert-light text-center"><a href="{{ route('requirements.inbox',$user) }}?archived=true">Archivados ({{ $counters['archived'] }})</a></td>
+		<td class="alert-light text-center">
+			<a href="{{ route('requirements.inbox',$user) }}">Pendientes</a>
+		</td>
+        <td class="alert-light text-center">
+			<a href="{{ route('requirements.inbox',$user) }}?archived=true">Archivados ({{ $counters['archived'] }})</a>
+		</td>
     </tr>
 </table>
 
