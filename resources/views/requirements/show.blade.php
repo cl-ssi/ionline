@@ -55,11 +55,25 @@ bottom: 5px;
 </style>
 
 <div class="row mb-3 d-print-none">
-    <div class="col">
+    <div class="col-2">
         <a class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample"
             href="{{ route('requirements.create') }}">
             <i class="fas fa-plus"></i> Nuevo evento
         </a>
+    </div>
+    <div class="col-1">
+		@can('Requirements: delete')
+			@if($requirement->status == 'creado')
+			<form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
+				@csrf
+				@method('DELETE')
+				<button type="submit" class="btn btn-sm btn-outline-danger" 
+					onclick="return confirm('¿Desea eliminar este requerimiento?')">
+					<i class="fas fa-trash"></i><span>
+				</button>
+			</form>
+			@endif
+		@endcan
     </div>
 
     <div class="col">

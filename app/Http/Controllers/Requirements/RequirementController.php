@@ -31,8 +31,76 @@ class RequirementController extends Controller
         Carbon::setLocale('es');
     }
 
-    public function inbox()
+    public function inbox(Request $request, User $user = null)
     {
+        // 14107361 Pamela Villagran
+        $auth_user = auth()->user();
+        $allowed_users = collect();
+
+        /** Modelo authority del cual soy secretary */
+        $authority_secretary = Authority::getAmIAuthorityFromOu(now(), 'secretary', $auth_user->id);
+
+        /** Si soy secretary entonces obtengo la(s) autoridad(es) en $allowed_users */
+        if(!empty($authority_secretary))
+        {
+            foreach($authority_secretary as $authority)
+            {
+                $allowed_users->push(Authority::getAuthorityFromDate($authority->organizational_unit_id, now(), 'manager')->user);
+                // 0 => 14104369 Carlos Calvo
+                // 1 => 10278387 José Donoso
+            }
+        }
+
+        /** Si no pasó ningún usuario por parametro o
+         * si el usuario es distinto al user logeado ($auth_user) y 
+         * si el $user no existe en los permitidos entonces mostramos su bandeja personal */
+        if(is_null($user) OR ($user != $auth_user AND !$allowed_users->contains($user) ) )
+        {
+            return redirect()->route('requirements.inbox',$auth_user);
+        }
+       
+        $requirements_query = Requirement::query();
+        $requirements_query
+            ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->whereHas('events', function ($query) use ($user) {
+                $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
+            });
+            
+        if($request->has('archived'))
+        {
+            $requirements_query->whereHas('archived', function ($query) use ($auth_user) {
+                $query->where('user_id', $auth_user->id);
+            });
+        }
+        else
+        {
+            $requirements_query->whereDoesntHave('archived', function ($query) use ($auth_user) {
+                $query->where('user_id', $auth_user->id);
+            });
+        }
+        $requirements = $requirements_query->latest()->paginate(50);
+
+        /* Contadores */
+        $counters_query = Requirement::query();
+        $counters_query->whereHas('events', function ($query) use ($user) {
+                $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
+            });
+        
+        $counters['archived'] = $counters_query->clone()
+                ->whereHas('archived', function ($query) use ($auth_user) {
+                $query->where('user_id', $auth_user->id);
+            })->count();
+
+        $counters_query->whereDoesntHave('archived', function ($query) use ($auth_user) {
+                $query->where('user_id', $auth_user->id);
+            });
+
+        $counters['created'] = $counters_query->clone()->where('status','creado')->count();
+        $counters['replyed'] = $counters_query->clone()->where('status','respondido')->count();
+        $counters['derived'] = $counters_query->clone()->where('status','derivado')->count();
+        $counters['closed'] = $counters_query->clone()->where('status','cerrado')->count();
+
+        return view('requirements.inbox', compact('requirements','user','allowed_users','counters'));
     }
 
     public function outbox(Request $request)

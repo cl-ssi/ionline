@@ -30,7 +30,7 @@ class Event extends Model
     }
 
     public function from_ou() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'from_ou')->withTrashed();
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'from_ou_id')->withTrashed();
     }
 
     public function to_user() {

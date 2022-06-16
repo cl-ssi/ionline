@@ -30,6 +30,14 @@
     @endif
 
     <li class="nav-item">
+        <a class="nav-link {{ active('requirements.inbox')}}"
+            href="{{ route('requirements.inbox') }}">
+            <i class="fas fa-inbox text-danger"></i>
+            &nbsp;
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link {{active('requirements.categories.index')}}"
             href="{{ route('requirements.categories.index') }}">
             <i class="fas fa-book"></i>
