@@ -4,6 +4,7 @@
     <fieldset class="form-group col-sm-2">
         <label for="for_po_id">ID de la OC:</label>
         <input type="text" class="form-control form-control-sm" id="for_po_id" name="po_id" value="{{ old('po_id') }}" >
+        @if(env('APP_ENV') == 'local') <button class="btn btn-outline-primary" id="btn_oc">Consultar</button> @endif
     </fieldset>
     <fieldset class="form-group col-sm-10">
         <label for="for_po_description">Nombre de la OC:</label>

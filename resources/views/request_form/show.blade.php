@@ -399,7 +399,7 @@
                                 </td>
                                 <td align="right">{{ $detail->pivot->quantity }}</td>
                                 <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
-                                <td>{{ $detail->tax }}</td>
+                                <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
                                 <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
                                 <td>
                                     <button type="button" id="btn_items_{{$key}}" class="btn btn-link btn-sm"
