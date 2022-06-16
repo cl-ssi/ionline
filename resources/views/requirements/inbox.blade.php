@@ -56,10 +56,14 @@
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
 		<td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">Pendientes</a>
+			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
+				Pendientes ({{ $requirements->count() }})
+			</a>
 		</td>
         <td class="alert-light text-center">
-			<a href="{{ route('requirements.inbox',$user) }}?archived=true" class="btn-link {{ request()->has('archived') ? 'disabled':'' }}">Archivados ({{ $counters['archived'] }})</a>
+			<a href="{{ route('requirements.inbox',$user) }}?archived=true" class="btn-link {{ request()->has('archived') ? 'disabled':'' }}">
+				Archivados ({{ $counters['archived'] }})
+			</a>
 		</td>
     </tr>
 </table>
@@ -78,36 +82,38 @@
     </thead>
     <tbody>
 		@foreach($requirements as $req)
-			@if($req->events->where('to_user_id',$user->id)->count() == $req->ccEvents->where('to_user_id',$user->id)->count())
-				<tr class="alert-secondary">
-			@else
-				@switch($req->status)
-					@case('creado')
-						@if($req->user_id == auth()->id())
-							<tr class="alert-info">
-						@else
-							<tr class="alert-light">
-						@endif
-						@break
-					@case('respondido') 
-						<tr class="alert-warning"> 	@break
-					@case('cerrado') 
-						<tr class="alert-success"> @break
-					@case('derivado') 
-						<tr class="alert-primary"> @break
-					@case('reabierto') 
-						<tr class="alert-light"> @break
-				@endswitch
-			@endif
 
-				<td>
+			@switch($req->status)
+				@case('creado')
+					@if($req->user_id == auth()->id())
+						<tr class="alert-info">
+					@else
+						<tr class="alert-light">
+					@endif
+					@break
+				@case('respondido') 
+					<tr class="alert-warning"> @break
+				@case('cerrado') 
+					<tr class="alert-success"> @break
+				@case('derivado') 
+					<tr class="alert-primary"> @break
+				@case('reabierto') 
+					<tr class="alert-light"> @break
+			@endswitch
+			
+			@php
+			$copia = ($req->events->where('to_user_id',$user->id)->count() == $req->ccEvents->where('to_user_id',$user->id)->count())?'alert-secondary':'';
+			@endphp
+
+				<td class="{{ $copia }}">
 					{{ $req->id }}
 					<br>
 					<a href="{{ route('requirements.show',$req->id) }}" class="btn btn-sm btn-outline-primary">
 						<i class="fas fa-edit"></i>
 					</a>
 				</td>
-				<td>
+
+				<td class="{{ $copia }}">
 					{{ $req->subject }}
 					<br>
                     @foreach($req->categories->where('user_id', auth()->id()) as $category)
@@ -124,7 +130,8 @@
 						</div>
 					@endif
 				</td>
-				<td>
+
+				<td class="{{ $copia }}">
 					<b>Creado por</b><br>
 					{{ $req->events->first()->from_user->tinnyName }}<br>
 					{{ $req->created_at->format('Y-m-d H:i') }}<br>
@@ -160,9 +167,11 @@
 				@endswitch
 				</td>
 
-				<td>{{ optional($req->limit_at)->format('Y-m-d') }}</td>
+				<td class="{{ $copia }}">
+					{{ optional($req->limit_at)->format('Y-m-d') }}
+				</td>
 
-				<td>
+				<td class="{{ $copia }}">
 					@if($req->archived->where('user_id',auth()->id())->isEmpty())
 					<a href="{{ route('requirements.archive_requirement',$req) }}" title="Archivar" class="btn btn-sm btn-outline-primary">
 						<i class="fas fa-box"></i>

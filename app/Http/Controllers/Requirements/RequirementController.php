@@ -79,11 +79,12 @@ class RequirementController extends Controller
             });
         }
 
-        $requirements = $requirements_query->latest()->paginate(50);
+        $requirements = $requirements_query->latest()->paginate(50)->withQueryString();
 
 
         /* Contadores */
         $counters_query = Requirement::query();
+        
         $counters_query->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
