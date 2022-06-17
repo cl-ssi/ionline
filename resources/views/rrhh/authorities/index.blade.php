@@ -30,26 +30,30 @@
                 @foreach($calendar as $item)
                     <div class="dia_calendario small p-2 text-center" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
 
-                        {{ $item['date'] }}
+                        @if(App\Holiday::checkDate($item['date']))
+                            <span class="text-danger">{{ $item['date'] }}</span>
+                        @else
+                            {{ $item['date'] }}
+                        @endif
 
                         @if($item['manager'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['manager']->id) }}"> @endcan
-                            {{ optional($item['manager']->user)->fullName }} <br>
+                            {{ optional($item['manager']->user)->tinnyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['manager']->position }}</em><br>
                         @endif
                         @if($item['delegate'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['delegate']->id) }}"> @endcan
-                            {{ $item['delegate']->user->fullName }} <br>
+                            {{ $item['delegate']->user->tinnyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['delegate']->position }}</em><br>
                         @endif
                         @if($item['secretary'])
                             <hr class="mt-1 mb-1" >
                             @can('Authorities: edit') <a href="{{ route('rrhh.authorities.edit', $item['secretary']->id) }}"> @endcan
-                            {{ $item['secretary']->user->fullName }} <br>
+                            {{ $item['secretary']->user->tinnyName }} <br>
                             @can('Authorities: edit') </a> @endcan
                             <em class="text-muted">{{ $item['secretary']->position }}</em> <br>
                         @endif
@@ -105,13 +109,13 @@
                     <tbody>
                     @foreach($authorities as $authority)
                         <tr class="small">
-                            <td>{{ optional($authority->user)->fullName }} {{ trashed($authority->user) }}</td>
+                            <td>{{ optional($authority->user)->tinnyName }} {{ trashed($authority->user) }}</td>
                             <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
                             <td nowrap>{{ ($authority->to) ? $authority->to->format('d-m-Y') : '' }}</td>
                             <td>{{ $authority->position }}</td>
                             <td>
                                 {{ $authority->created_at->format('Y-m-d H:i') }}<br>
-                                <small>{{ $authority->creator->fullName }}</small>
+                                <small>{{ $authority->creator->tinnyName }}</small>
                             </td>
                             <th>
                                 @can('Authorities: edit')

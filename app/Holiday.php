@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+/** TODO mover a directorio models */
 class Holiday extends Model
 {
     /**
@@ -15,6 +16,15 @@ class Holiday extends Model
     protected $fillable = [
         'date', 'name', 'region'
     ];
+    
+    /** Retorna si es feriado o domingo */
+    public static function checkDate($date)
+    {
+        return (date('N', strtotime($date)) > 6) OR 
+            Holiday::whereDate('date',$date)->get()->isNotEmpty();
+    }
+
+
 
     public function getFormattedDateAttribute()
     {
@@ -41,4 +51,3 @@ class Holiday extends Model
 
     protected $table = 'cfg_holidays';
 }
-// TODO: #1 update this  @tebiccr details at issue #1 
