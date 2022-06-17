@@ -3,7 +3,7 @@
       @if($technicalEvaluation->technical_evaluation_status == 'pending')
       <fieldset class="form-group">
           <label for="">&nbsp;</label>
-          <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})">
+          <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})" @if($count>0) disabled @endif>
               Agregar <i class="fas fa-plus"></i>
           </button>
       </fieldset>
@@ -16,6 +16,7 @@
       @method('POST')
       @foreach($inputs as $key => $value)
           <div class="form-row">
+              {{--
               <fieldset class="form-group col mt">
                   <label for="for_user_id">Integrante</label>
                   <select wire:ignore name="user_id[]" class="form-control" required>
@@ -25,11 +26,17 @@
                       @endforeach
                   </select>
               </fieldset>
+              --}}
+
+              <fieldset class="form-group col">
+                  <label for="for_user_id">Funcionario*</label>
+                  @livewire('search-select-user', ['required' => 'required'])
+              </fieldset>
 
               <fieldset class="form-group col mt">
                   <fieldset class="form-group">
                       <label for="for_job_title">Cargo</label>
-                      <input type="text" class="form-control" name="job_title[]" required>
+                      <input type="text" class="form-control" name="job_title" required>
                   </fieldset>
               </fieldset>
 
