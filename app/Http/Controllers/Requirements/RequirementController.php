@@ -33,7 +33,7 @@ class RequirementController extends Controller
 
     public function inbox(Request $request, User $user = null)
     {
-        // 14107361 Pamela Villagran
+        /** Hay dos usuarios, el logeado "$auth_user" y al que voy a mostrar los sgr "$user" */
         $auth_user = auth()->user();
         $allowed_users = collect();
 
@@ -58,14 +58,14 @@ class RequirementController extends Controller
         {
             return redirect()->route('requirements.inbox',$auth_user);
         }
-       
+
+        /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
             ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
-            
         if($request->has('archived'))
         {
             $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
@@ -78,11 +78,11 @@ class RequirementController extends Controller
                 $query->whereIn('user_id', [$user->id,$auth_user->id]);
             });
         }
+        $requirements = $requirements_query->latest()->paginate(100)->withQueryString();
+        /** Fin de la query de requerimientos */
 
-        $requirements = $requirements_query->latest()->paginate(50)->withQueryString();
 
-
-        /* Contadores */
+        /* Query para los contadores */
         $counters_query = Requirement::query();
         
         $counters_query->whereHas('events', function ($query) use ($user) {
@@ -103,8 +103,10 @@ class RequirementController extends Controller
         $counters['derived'] = $counters_query->clone()->where('status','derivado')->count();
         $counters['closed'] = $counters_query->clone()->where('status','cerrado')->count();
 
+        /** Retorno a la vista */
         return view('requirements.inbox', compact('requirements','user','allowed_users','counters'));
     }
+    
 
     public function outbox(Request $request)
     {

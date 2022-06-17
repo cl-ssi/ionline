@@ -125,7 +125,7 @@
 
                 @can('Requirements: create')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('requirements.outbox') }}">
+                    <a class="nav-link" href="{{ route('requirements.inbox') }}">
                       <i class="fas fa-rocket"></i> SGR
                       <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span>
                     </a>

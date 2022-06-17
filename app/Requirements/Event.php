@@ -82,7 +82,7 @@ class Event extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at, limit_at'];
+    protected $dates = ['deleted_at', 'limit_at'];
 
     /**
     * The table associated with the model.
