@@ -7,9 +7,11 @@
 @include('requirements.partials.nav')
 
 <div class="alert alert-info" role="alert">
-	Esta es una nueva bandeja para ver los requerimientos, es más rápida y 
-	también permite cambiar a las bandeja de su jefatura.<br>
-	Puede intercambiar en lado derecho de la tabla resumen entre los "pendientes" y "archivados" .
+	<li>Hola {{ (auth()->id() == 14107361) ? 'Piquichi' : auth()->user()->firstName }}, 
+	esta es la nueva bandeja para ver los requerimientos, tiene una nueva columna "Último evento", además es más rápida y simple.</li>
+	<li>Puedes intercambiar en lado derecho de la tabla resumen entre los "pendientes" y "archivados".</li>
+	<li>Recuerda siempre cerrar los requerimientos y archivarlos si ya están terminados.</li>
+	<li>Si eres secretario/a puedes cambiar a las bandeja(s) de tu jefatura, haciendo click en su nombre.</li>
 </div>
 
 @livewire('requirements.filter',[$user])
@@ -49,12 +51,13 @@
 
 
 
-<table class="table table-sm small table-bordered">
+<table class="table table-sm table-bordered">
 	<tr>
 		<td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
         <td class="alert-warning text-center">Respondidos ({{ $counters['replyed'] }})</td>
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
         <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
+        <td class="alert-secondary text-center">En copia</td>
 		<td class="alert-light text-center">
 			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
 				Pendientes ({{ $requirements->count() }})
@@ -69,123 +72,8 @@
 </table>
 
 
-<table class="table table-sm table-bordered small">
-    <thead>
-        <tr>
-            <th>N°</th>
-            <th>Asunto</th>
-            <th width="160">Creado</th>
-            <th width="160">Ultimo evento</th>
-            <th>Fecha límite</th>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-		@foreach($requirements as $req)
+@include('requirements.partials.list')
 
-			@switch($req->status)
-				@case('creado')
-					@if($req->user_id == auth()->id())
-						<tr class="alert-info">
-					@else
-						<tr class="alert-light">
-					@endif
-					@break
-				@case('respondido') 
-					<tr class="alert-warning"> @break
-				@case('cerrado') 
-					<tr class="alert-success"> @break
-				@case('derivado') 
-					<tr class="alert-primary"> @break
-				@case('reabierto') 
-					<tr class="alert-light"> @break
-			@endswitch
-			
-			@php
-			$copia = ($req->events->where('to_user_id',$user->id)->count() == $req->ccEvents->where('to_user_id',$user->id)->count())?'alert-secondary':'';
-			@endphp
-
-				<td class="{{ $copia }}">
-					{{ $req->id }}
-					<br>
-					<a href="{{ route('requirements.show',$req->id) }}" class="btn btn-sm btn-outline-primary">
-						<i class="fas fa-edit"></i>
-					</a>
-				</td>
-
-				<td class="{{ $copia }}">
-					{{ $req->subject }}
-					<br>
-                    @foreach($req->categories->where('user_id', auth()->id()) as $category)
-                        <span class='badge badge-primary' style='background-color: #{{$category->color}};'>
-							{{$category->name}}
-						</span>
-                    @endforeach
-
-					@if($req->parte)
-						<div>
-							<small>
-								Parte: <b>{{ $req->parte->origin}} - {{$req->parte->number}}</b>
-							</small>
-						</div>
-					@endif
-				</td>
-
-				<td class="{{ $copia }}">
-					<b>Creado por</b><br>
-					{{ $req->events->first()->from_user->tinnyName }}<br>
-					{{ $req->created_at->format('Y-m-d H:i') }}<br>
-					{{ $req->created_at->diffForHumans() }}<br>
-				</td>
-
-				<td>
-				@switch($req->status)
-					@case('creado')
-					@break
-
-					@case('cerrado')
-					<b>Cerrado por</b><br>
-					{{ $req->events->last()->from_user->tinnyName }}<br>
-					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
-					@break
-
-					@case('respondido')
-					@case('reabierto')
-					<b>{{ ucfirst($req->status) }} por</b><br>
-					{{ $req->events->last()->from_user->tinnyName }}<br>
-					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
-					<b>para </b>{{ $req->events->last()->to_user->tinnyName }}
-					@break
-
-
-					@case('derivado')
-					<b>{{ ucfirst($req->status) }} para</b><br>
-					{{ $req->events->last()->to_user->tinnyName }}<br>
-					{{ $req->events->last()->created_at->format('Y-m-d H:i') }}<br>
-					<b>de </b>{{ $req->events->last()->from_user->tinnyName }}
-					@break
-				@endswitch
-				</td>
-
-				<td class="{{ $copia }}">
-					{{ optional($req->limit_at)->format('Y-m-d') }}
-				</td>
-
-				<td class="{{ $copia }}">
-					@if($req->archived->where('user_id',auth()->id())->isEmpty())
-					<a href="{{ route('requirements.archive_requirement',$req) }}" title="Archivar" class="btn btn-sm btn-outline-primary">
-						<i class="fas fa-box"></i>
-					</a>
-					@else
-					<a href="{{ route('requirements.archive_requirement_delete',$req) }}" title="Desarchivar" class="btn btn-sm btn-outline-secondary">
-						<i class="fas fa-box-open"></i>
-					</a>
-					@endif
-				</td>
-			</tr>
-		@endforeach
-    </tbody>
-</table>
 
 {{ $requirements->links() }}
 

@@ -22,7 +22,6 @@ class Filter extends Component
 
     public function mount(User $user)
     {
-        $this->requirements = collect();
         $this->user = $user;
     }
 
@@ -47,8 +46,25 @@ class Filter extends Component
             }
             if($this->category)
             {
-                $requirements->whereHas('categories',function($query){
+                $requirements->whereHas('categories', function ($query) {
                     $query->where('name','LIKE','%'.$this->category.'%');
+                });
+            }
+            if($this->parte)
+            {
+                $requirements->whereHas('parte', function ($query) {
+                    $query->search2($this->parte);
+                });
+            }
+            if($this->user_involved)
+            {
+                $requirements->whereHas('events', function ($query) {
+                    $query->whereHas('from_user', function ($q) {
+                        $q->fullSearch($this->user_involved);
+                    });
+                    $query->orWhereHas('to_user', function ($q) {
+                        $q->fullSearch($this->user_involved);
+                    });
                 });
             }
             $this->requirements = $requirements->get();

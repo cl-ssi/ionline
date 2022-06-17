@@ -59,6 +59,7 @@ class Parte extends Model
         return $query;
     }
 
+    /** Fixme cambiar nombre */
     public function scopeSearch2($query, $request) {
         if($request != "") {
             $query->where('number','LIKE','%'.$request.'%')

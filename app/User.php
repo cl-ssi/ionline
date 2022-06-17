@@ -111,6 +111,26 @@ class User extends Authenticatable implements Auditable
         }
     }
 
+	/**
+     * Retorna Usuarios según contenido en $searchText
+     * Busqueda realizada en: nombres, apellidos, rut.
+     * @return Patient[]|Builder[]|Collection
+     */
+    public static function scopeFullSearch($query, $searchText){
+		$query->withTrashed();
+		$array_search = explode(' ', $searchText);
+		foreach($array_search as $word){
+			$query->where(function($q) use($word){
+				$q->where('name', 'LIKE', '%'.$word.'%')
+				  ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+				  ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+				  ->orwhere('id','LIKE', '%'.$word.'%');
+			});
+		}//End foreach
+		return $query;
+	}// End getPatientsBySearch
+
+
     public function runFormat() {
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
     }

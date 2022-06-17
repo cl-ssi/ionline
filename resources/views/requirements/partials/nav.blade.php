@@ -9,10 +9,18 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{active('requirements.outbox')}}"
+        <a class="nav-link {{ active('requirements.inbox')}}"
+            href="{{ route('requirements.inbox') }}">
+            <i class="fas fa-inbox text-danger"></i>
+            Nueva bandeja
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ active('requirements.outbox') }}"
             href="{{ route('requirements.outbox') }}">
             <i class="fas fa-inbox"></i>
-            Bandeja
+            Bandeja antigua
         </a>
     </li>
 
@@ -23,19 +31,11 @@
             <a class="nav-link {{active('requirements.secretary_outbox')}}"
                 href="{{ route('requirements.secretary_outbox') }}">
                 <i class="fas fa-inbox"></i>
-                Bandeja (Jefatura)
+                Bandeja antigua (Jefatura)
             </a>
         </li>
     
     @endif
-
-    <li class="nav-item">
-        <a class="nav-link {{ active('requirements.inbox')}}"
-            href="{{ route('requirements.inbox') }}">
-            <i class="fas fa-inbox text-danger"></i>
-            Nueva
-        </a>
-    </li>
 
     <li class="nav-item">
         <a class="nav-link {{active('requirements.categories.index')}}"
