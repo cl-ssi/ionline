@@ -45,7 +45,15 @@ class RequirementController extends Controller
         {
             foreach($authority_secretary as $authority)
             {
-                $allowed_users->push(Authority::getAuthorityFromDate($authority->organizational_unit_id, now(), 'manager')->user);
+                $authority_chief = Authority::getAuthorityFromDate($authority->organizational_unit_id, now(), 'manager');
+                $allowed_users->push($authority_chief->user);
+                /** Esto permite ver también la bandeja del "representa" 
+                 * que se puede agregar al crear una autoridad
+                 */
+                if($authority_chief->represents)
+                {
+                    $allowed_users->push($authority_chief->represents);
+                }
                 // 0 => 14104369 Carlos Calvo
                 // 1 => 10278387 José Donoso
             }
