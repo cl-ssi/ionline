@@ -123,14 +123,14 @@
 
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
-        <tbody>
+        <tbody class="small">
             <tr>
                 <td colspan="{{ $technicalEvaluation->requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
                   <td class="table-active text-center">
-                      <strong>{{ $sign->organizationalUnit->name }}
+                      <strong>{{ $sign->organizationalUnit->name }}</strong>
                   </td>
                 @endforeach
             </tr>
