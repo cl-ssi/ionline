@@ -155,6 +155,7 @@ use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Models\WebService\MercadoPublico;
 use App\Http\Controllers\RequestForms\PassengerController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\RequestFormController;
@@ -1010,7 +1011,6 @@ Route::resource('documents', DocumentController::class)->middleware('auth');
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
     /** Custom routes */
     Route::get('download/{file}',  [EventController::class,'download'])->name('download');
-    Route::get('inbox', [RequirementController::class,'inbox'])->name('inbox');
     Route::get('outbox', [RequirementController::class,'outbox'])->name('outbox');
     Route::get('secretary_outbox', [RequirementController::class,'secretary_outbox'])->name('secretary_outbox');
     Route::get('archive_requirement/{requirement}', [RequirementController::class,'archive_requirement'])->name('archive_requirement');
@@ -1023,14 +1023,16 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::resource('events', EventController::class);
     Route::get('report1', [RequirementController::class,'report1'])->name('report1');
     // Route::get('report_reqs_by_org', [RequirementController::class,'report_reqs_by_org])->name('report_reqs_by_org');
+    
+    //Route::get('/', [RequirementController::class,'outbox'])->name('index');
+    //Route::get('inbox/{user?}', [RequirementController::class,'inbox'])->name('inbox');
+    Route::get('/inbox/{user?}', [RequirementController::class,'inbox'])->name('inbox');
 
-    Route::get('/', [RequirementController::class,'outbox'])->name('index');
     Route::get('/create', [RequirementController::class,'show'])->name('create');
     Route::post('/', [RequirementController::class,'store'])->name('store');
     Route::get('/{requirement}', [RequirementController::class,'show'])->name('show');
     Route::delete('/{requirement}', [RequirementController::class,'destroy'])->name('destroy');
 });
-//Route::resource('requirements', RequirementController::class)->middleware('auth');
 
 Route::view('calendars', 'calendars.index')->name('calendars');
 
@@ -1574,6 +1576,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
+        Route::get('/mercado-publico-api/{type}/{code}', function($type, $code){
+            if($type == 'licitaciones') return MercadoPublico::getTender($code);
+            elseif($type == 'ordenesdecompra') return MercadoPublico::getPurchaseOrder($code);
+            else return null;
+        });
     });
 
     /* DOCUMENTS */

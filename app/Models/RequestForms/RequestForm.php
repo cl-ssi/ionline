@@ -33,6 +33,11 @@ class RequestForm extends Model implements Auditable
         'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
     ];
 
+    public function isBlocked()
+    {
+        return in_array($this->id, [172,173,164,176,180,181]); // FR ids con restricción de No generar suministros
+    }
+
     public function getFolioAttribute($value)
     {
         return $value . ($this->has_increased_expense ? '-M' : '');
@@ -323,7 +328,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
         if (!is_null($event))
-            return $event->signerUser->tinnyName();
+            return $event->signerUser->tinnyName;
     }
 
     public function rejectedComment()
@@ -354,7 +359,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
         if (!is_null($event)) {
-            return $event->signerUser->tinnyName();
+            return $event->signerUser->tinnyName ;
         }
     }
 
