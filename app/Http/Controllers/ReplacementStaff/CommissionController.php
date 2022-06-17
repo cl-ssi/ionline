@@ -41,10 +41,11 @@ class CommissionController extends Controller
      */
     public function store(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
-        foreach ($request->user_id as $key_file => $req) {
-            $commission = new Commission();
-            $commission->user_id = $req;
-            $commission->job_title = $request->input('job_title.'.$key_file.'');
+        //foreach ($request->user_id as $key_file => $req) {
+            $commission = new Commission($request->all());
+
+            // $commission->user_id = $req;
+            // $commission->job_title = $request->input('job_title.'.$key_file.'');
 
             $user_ou = User::where('id', $commission->user_id)->first();
             $commission->organizational_unit_id = $user_ou->organizationalUnit->id;
@@ -53,7 +54,7 @@ class CommissionController extends Controller
             $commission->register_user_id = Auth::user()->id;
 
             $commission->save();
-        }
+        //}
 
         return redirect()
           ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#commission')

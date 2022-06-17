@@ -131,7 +131,7 @@
                       <tr>
                           @foreach($requestReplacementStaff->RequestSign as $sign)
                             <td class="table-active text-center">
-                                {{ $sign->organizationalUnit->name }}<br>
+                                <strong>{{ $sign->organizationalUnit->name }}</strong><br>
                             </td>
                           @endforeach
                       </tr>

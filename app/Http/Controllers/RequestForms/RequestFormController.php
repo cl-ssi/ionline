@@ -453,6 +453,11 @@ class RequestFormController extends Controller {
 
     public function create_provision(RequestForm $requestForm)
     {
+        if($requestForm->isBlocked()){ // FR ids con restricción de No generar suministros
+            session()->flash('danger', 'No se puede generar un nuevo suministro para el formulario de requerimiento N° '.$requestForm->folio.'.');
+            return redirect()->back();
+        }
+
         $requestForm->load('purchasingProcess.details', 'children.purchasingProcess.details');
         // Validar que el formulario req padre esté finalizado.
         if(!$requestForm->purchasingProcess || $requestForm->purchasingProcess->status != 'finalized'){
