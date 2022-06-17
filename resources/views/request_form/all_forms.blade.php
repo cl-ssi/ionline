@@ -15,7 +15,7 @@
 <div class="col">
   <h6><i class="fas fa-archive"></i> Formularios creados, aprobados y rechazados</h6>
   <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered small">
+    <table class="table table-sm table-bordered small table-hover">
       <thead>
         <tr class="text-center">
           <th>ID</th>
@@ -135,7 +135,7 @@
             </a>
             @endif
 
-            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo'))
+            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
             <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
             </a>
             @endif
