@@ -42,6 +42,12 @@
                             <i class="fas fa-edit"></i> Editar formulario
                         </a>
                     @endif
+
+                    @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                    <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" 
+                        href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-link btn-sm float-right font-weight-bold align-top" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i> Crear suministro
+                    </a>
+                    @endif
                 </h6>
                 <table class="table table-sm table-bordered">
                     <tbody class="small">
@@ -295,7 +301,7 @@
         <!-- Pasajeros -->
         <div class="table-responsive">
             <h6><i class="fas fa-info-circle"></i> Lista de Pasajeros</h6>
-            <table class="table table-sm table-striped table-bordered small">
+            <table class="table table-sm table-hover table-bordered small">
                 <thead class="text-center small">
                 <tr>
                     <th>#</th>
@@ -361,7 +367,7 @@
                     <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
 
 
-                    <table class="table table-sm table-striped table-bordered small">
+                    <table class="table table-sm table-hover table-bordered small">
                         <thead class="text-center">
                         <tr>
                             <th>Item</th>
@@ -436,7 +442,7 @@
             <div class="col-sm">
                 <div class="table-responsive">
                     <h6><i class="fas fa-shopping-cart"></i> Historial de compras ejecución inmediata</h6>
-                    <table class="table table-sm table-striped table-bordered small">
+                    <table class="table table-sm table-hover table-bordered small">
                         <thead class="text-center">
                         <tr>
                             <th>Item</th>

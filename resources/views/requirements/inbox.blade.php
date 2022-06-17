@@ -60,7 +60,7 @@
         <td class="alert-secondary text-center">En copia</td>
 		<td class="alert-light text-center">
 			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
-				Pendientes ({{ $requirements->count() }})
+				Pendientes ({{ $requirements->total() }})
 			</a>
 		</td>
         <td class="alert-light text-center">

@@ -33,6 +33,11 @@ class RequestForm extends Model implements Auditable
         'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
     ];
 
+    public function isBlocked()
+    {
+        return in_array($this->id, [172,173,164,176,180,181]); // FR ids con restricción de No generar suministros
+    }
+
     public function getFolioAttribute($value)
     {
         return $value . ($this->has_increased_expense ? '-M' : '');

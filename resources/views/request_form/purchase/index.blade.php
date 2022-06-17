@@ -12,7 +12,7 @@
 <div class="col">
     <div class="table-responsive">
         <h6><i class="fas fa-inbox"></i> Mis Formularios asignados</h6>
-        <table class="table table-sm table-striped table-bordered small">
+        <table class="table table-sm table-hover table-bordered small">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
@@ -88,7 +88,7 @@
 <div class="col">
     <div class="table-responsive">
         <h6><i class="fas fa-inbox"></i>Todos los formularios</h6>
-        <table class="table table-sm table-striped table-bordered small">
+        <table class="table table-sm table-hover table-bordered small">
             <thead>
                 <tr class="text-center">
                     <th>ID</th>
