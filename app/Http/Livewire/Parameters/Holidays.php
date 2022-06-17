@@ -33,7 +33,7 @@ class Holidays extends Component
 
     public function mount()
     {
-        $this->holidays = Holiday::orderBy('date')->get();
+        $this->holidays = Holiday::latest()->get();
         $this->view = 'index';
     }
 
