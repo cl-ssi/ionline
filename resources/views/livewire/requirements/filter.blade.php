@@ -26,7 +26,7 @@
 
 		@else
 
-			<h4 class="text-danger text-center">No hay resultados</h4>
+			<h4 class="text-danger text-center">Que penita, no se han encontrado resultados.</h4>
 			<hr>
 
 		@endif
