@@ -67,10 +67,8 @@ class Filter extends Component
                     });
                 });
             }
-            $this->requirements = $requirements->get();
         }
-
-
+        $this->requirements = $requirements->get();
 
     }
     public function render()
