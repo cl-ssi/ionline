@@ -67,7 +67,7 @@
 
     <fieldset class="form-group">
         <label for="for_subject">Asunto*</label>
-        <input type="text" class="form-control" id="for_subject" name="subject" required>
+        <textarea name="subject" id="for_subject" class="form-control" rows="3" required></textarea>
     </fieldset>
 
 

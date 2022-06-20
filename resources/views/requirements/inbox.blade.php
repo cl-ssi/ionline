@@ -7,7 +7,7 @@
 @include('requirements.partials.nav')
 
 <div class="alert alert-info" role="alert">
-	<li>Hola {{ (auth()->id() == 14107361) ? 'Piquichi' : auth()->user()->firstName }}, 
+	<li>Hola {{ auth()->user()->firstName }}, 
 	esta es la nueva bandeja para ver los requerimientos, tiene una nueva columna "Último evento", además es más rápida y simple.</li>
 	<li>Puedes intercambiar en lado derecho de la tabla resumen entre los "pendientes" y "archivados".</li>
 	<li>Recuerda siempre cerrar los requerimientos y archivarlos si ya están terminados.</li>
