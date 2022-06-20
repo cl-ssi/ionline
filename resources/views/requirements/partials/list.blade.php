@@ -97,15 +97,15 @@
 				</td>
 
 				<td class="{{ $copia }}">
-						@if($req->limit_at)
+					@if($req->limit_at)
 					
 						<div class="text-danger">
 							<i class="fas fa-fw fa-chess-king"></i>
 							{{ $req->limit_at->format('Y-m-d') }}
 						</div>
 
-						@if($req->events->whereNotNull('limit_at')->count() >= 1)
-							@foreach($req->events->whereNotNull('limit_at') as $event)
+						@if($req->events->whereNotNull('limit_at')->where('status','!=','en copia')->count() >= 1)
+							@foreach($req->events->whereNotNull('limit_at')->where('status','!=','en copia') as $event)
 
 								<div class="{{ now() >= $event->limit_at ? 'text-danger':'' }}">
 									<i class="fas fa-fw fa-chess-pawn"></i>
@@ -114,7 +114,6 @@
 
 							@endforeach
 						@endif
-						{{-- if( now() >= $created->limit_at ) --}}
 
 					@endif
 
