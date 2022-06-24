@@ -430,6 +430,10 @@ class ReportController extends Controller
 
   public function resolutionPDF(ServiceRequest $ServiceRequest)
   {
+    if($ServiceRequest <= 105){
+      dd("");
+    }
+
     $formatter = new NumeroALetras();
     $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
