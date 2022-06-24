@@ -430,10 +430,6 @@ class ReportController extends Controller
 
   public function resolutionPDF(ServiceRequest $ServiceRequest)
   {
-    if($ServiceRequest->id == 1){
-      dd("Contactar a Nataly del área de RRHH, e indicar que los pasos que hizo antes que se activara esta pantalla. Muchas gracias.");
-    }
-    
     $formatter = new NumeroALetras();
     $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
