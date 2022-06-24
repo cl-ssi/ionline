@@ -430,7 +430,7 @@ class ReportController extends Controller
 
   public function resolutionPDF(ServiceRequest $ServiceRequest)
   {
-    if($ServiceRequest <= 105){
+    if($ServiceRequest->id <= 105){
       dd("");
     }
 
