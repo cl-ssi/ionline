@@ -418,7 +418,8 @@ class RequestFormController extends Controller {
             $requestForm = RequestForm::find($modelId);
 
             //ACTUALIZAO EVENTO DE FINANZAS
-            $requestForm->eventRequestForms->where('event_type', 'budget_event')->first()->update([
+            $event = $requestForm->eventRequestForms->where('event_type', 'budget_event')->where('status', 'pending')->first();
+            $event->update([
               'signature_date'       => Carbon::now(),
               'position_signer_user' => auth()->user()->position,
               'status'               => 'approved',
@@ -426,7 +427,7 @@ class RequestFormController extends Controller {
             ]);
 
             $requestForm->has_increased_expense = true;
-            $requestForm->estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'approved')->where('event_type', 'budget_event')->first()->purchaser_amount;
+            $requestForm->estimated_expense = $requestForm->estimated_expense + $event->purchaser_amount;
             $requestForm->old_signatures_file_id = $requestForm->signatures_file_id;
             $requestForm->signatures_file_id = $signaturesFile->id;
             $requestForm->save();
