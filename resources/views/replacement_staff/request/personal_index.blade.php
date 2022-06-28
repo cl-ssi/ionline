@@ -54,7 +54,7 @@
                   <th>Jornada</th>
                   <th>Solicitante</th>
                   <th>Estado</th>
-                  <th style="width: 2%"></th>
+                  <th style="width: 4%" colspan="2"></th>
               </tr>
           </thead>
           <tbody class="small">
@@ -129,6 +129,12 @@
                         <i class="fas fa-eye"></i>
                       </button>
                       @include('replacement_staff.modals.modal_to_view_request')
+                  </td>
+                  <td>
+                    @if($requestReplacementStaff->technicalEvaluation)
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff->technicalEvaluation) }}"
+                                  class="btn btn-outline-info btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a>
+                    @endif
                   </td>
               </tr>
               @endforeach
