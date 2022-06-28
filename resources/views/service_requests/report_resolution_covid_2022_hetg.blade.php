@@ -610,7 +610,7 @@
 
 
               <ins>Permiso Administrativo (Solo para convenios por 3 meses):</ins><br>
-              Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
+              Permisos para ausentarse de sus labores por motivos particulares por 1 y 1/2 día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día y 1/2 o 3 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
 
 
               {!! nl2br($ServiceRequest->additional_benefits) !!}
