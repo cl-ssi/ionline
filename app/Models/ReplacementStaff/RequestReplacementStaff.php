@@ -130,7 +130,7 @@ class RequestReplacementStaff extends Model
             return 'Pendiente';
             break;
           case 'complete':
-            return 'Completa';
+            return 'Finalizada';
             break;
           case 'rejected':
             return 'Rechazada';

@@ -167,11 +167,11 @@ class TechnicalEvaluationController extends Controller
         return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]);
     }
 
-    public function create_document(TechnicalEvaluation $technicalEvaluation){
-        //dd($requestForm);
+    public function create_document(RequestReplacementStaff $requestReplacementStaff){
+        //dd($requestReplacementStaff);
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('replacement_staff.request.documents.technical_evaluation_document', compact('technicalEvaluation'));
+        $pdf->loadView('replacement_staff.request.documents.technical_evaluation_document', compact('requestReplacementStaff'));
 
         return $pdf->stream('mi-archivo.pdf');
 

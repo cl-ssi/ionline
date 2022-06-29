@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Resumen de la Solicitud de Contratación Nº {{ $technicalEvaluation->requestReplacementStaff->id }}</title>
+  <title>Resumen de la Solicitud de Contratación Nº {{ $requestReplacementStaff->id }}</title>
   <meta name="description" content="">
   <meta name="author" content="Servicio de Salud Iquique">
   <style media="screen">
@@ -172,45 +172,45 @@
       <table class="table table-sm table-bordered">
           <thead>
               <tr class="table-active">
-                  <td colspan="3"><strong>Formulario Contratación de Personal - Solicitud Nº {{ $technicalEvaluation->requestReplacementStaff->id }}</strong></td>
+                  <td colspan="3"><strong>Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</strong></td>
               </tr>
           </thead>
           <tbody>
               <tr>
                   <td><strong>Estado</strong></td>
                   <td colspan="2">
-                      {{ $technicalEvaluation->requestReplacementStaff->StatusValue }}
+                      {{ $requestReplacementStaff->StatusValue }}
                   </td>
               </tr>
               <tr>
                   <td><strong>Por medio del presente</strong></td>
                   <td colspan="2">
-                      {{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}
+                      {{ $requestReplacementStaff->organizationalUnit->name }}
                   </td>
               </tr>
               <tr>
                   <td><strong>Nombre / Nº de Cargos</strong></td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->charges_number }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
               </tr>
               <tr>
                   <td><strong>Estamento / Grado</strong></td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->profile_manage->name }}</td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
               </tr>
               <tr>
                   <td><strong>Calidad Jurídica / $ Honorarios</strong></td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->legalQualityManage->NameValue }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                   <td style="width: 33%">
-                    @if($technicalEvaluation->requestReplacementStaff->LegalQualityValue == 'Honorarios')
-                        ${{ number_format($technicalEvaluation->requestReplacementStaff->salary,0,",",".") }}
+                    @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                        ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
                     @endif
                   </td>
               </tr>
               <tr>
                   <td><strong>La Persona cumplirá labores en / Jornada</strong></td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->WorkDayValue }}</td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->other_work_day }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
               </tr>
               <tr>
                   <td>
@@ -220,23 +220,23 @@
                     <strong>
                   </td>
                   <td style="width: 33%">
-                    {{ $technicalEvaluation->requestReplacementStaff->fundamentManage->NameValue }}<br>
-                    {{ $technicalEvaluation->requestReplacementStaff->fundamentDetailManage->NameValue }}
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
                   </td>
-                  <td style="width: 33%">De funcionario: {{ $technicalEvaluation->requestReplacementStaff->name_to_replace }}</td>
+                  <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
               </tr>
               <tr>
                   <td><strong>Otro Fundamento (especifique)</strong></td>
-                  <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
+                  <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
               </tr>
               <tr>
                   <td><strong>Periodo</strong></td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
-                  <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
               </tr>
               <tr>
                   <td><strong>Lugar de Desempeño</strong></td>
-                  <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->ouPerformance->name }}</td>
+                  <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
               </tr>
           </tbody>
       </table>
@@ -252,7 +252,7 @@
       <table class="table table-sm table-bordered">
           <tbody>
               <tr>
-                  @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
+                  @foreach($requestReplacementStaff->RequestSign as $sign)
                     <td align="center">
                       <strong>
                         {{ $sign->organizationalUnit->name }}<br>
@@ -261,7 +261,7 @@
                   @endforeach
               </tr>
               <tr>
-                  @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $requestSign)
+                  @foreach($requestReplacementStaff->RequestSign as $requestSign)
                     <td align="center">
                         @if($requestSign->request_status == 'accepted')
                             {{ $requestSign->StatusValue }}<br>
@@ -286,29 +286,30 @@
 
       <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
-      <table class="table table-sm table-bordered">
-          <tbody>
-              <tr>
-              @if($technicalEvaluation)
-                @if($technicalEvaluation->technical_evaluation_status == 'complete' ||
-                  $technicalEvaluation->technical_evaluation_status == 'rejected')
-                  <tr>
-                      <td style="width: 33%"><strong>Estado de Solicitud</strong></td>
-                      <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->StatusValue }}</td>
-                  </tr>
-                  <tr>
-                      <td><strong>Fecha de Cierre</strong></td>
-                      <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
-                  </tr>
-                @endif
-              @endif
-          </tbody>
-      </table>
+      @if($requestReplacementStaff->technicalEvaluation)
+        @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
+          $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td style="width: 33%"><strong>Estado de Solicitud</strong></td>
+                        <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha de Cierre</strong></td>
+                        <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        @endif
+      @endif
 
       <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
-      @if($technicalEvaluation &&
-              $technicalEvaluation->commissions->count() > 0)
+      @if($requestReplacementStaff->technicalEvaluation &&
+              $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
           <h3>&nbsp; Integrantes Comisión</h3>
           <table class="table table-sm table-bordered">
               <thead class="text-center">
@@ -319,7 +320,7 @@
                   </tr>
               </thead>
               <tbody>
-                @foreach($technicalEvaluation->commissions as $commission)
+                @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
                   <tr>
                       <td>{{ $commission->user->FullName }}</td>
                       <td>{{ $commission->user->organizationalUnit->name }}</td>
@@ -333,8 +334,8 @@
 
       @endif
 
-      @if($technicalEvaluation &&
-        $technicalEvaluation->reason != NULL)
+      @if($requestReplacementStaff->technicalEvaluation &&
+        $requestReplacementStaff->technicalEvaluation->reason != NULL)
 
           <h3>&nbsp; Proceso Selección Finalizado</h3>
           <table class="table table-sm table-bordered">
@@ -347,9 +348,9 @@
               </thead>
               <tbody>
                   <tr>
-                      <td>{{ $technicalEvaluation->ReasonValue }}</td>
-                      <td>{{ $technicalEvaluation->observation }}</td>
-                      <td>{{ $technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                      <td>{{ $requestReplacementStaff->technicalEvaluation->ReasonValue }}</td>
+                      <td>{{ $requestReplacementStaff->technicalEvaluation->observation }}</td>
+                      <td>{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
                   </tr>
               </tbody>
           </table>
@@ -358,8 +359,8 @@
 
       @endif
 
-      @if($technicalEvaluation->requestReplacementStaff->technicalEvaluation &&
-              $technicalEvaluation->requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
+      @if($requestReplacementStaff->technicalEvaluation &&
+              $requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
 
           <h3>&nbsp; Postulantes a cargo(s)</h3>
           <table class="table table-sm table-striped table-bordered">
@@ -375,7 +376,7 @@
                   </tr>
               </thead>
               <tbody>
-                @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
+                @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                   <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
                       <td>
                           @if($applicant->selected == 1 && $applicant->desist == NULL)
