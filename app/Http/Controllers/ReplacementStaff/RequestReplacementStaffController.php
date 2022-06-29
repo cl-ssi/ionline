@@ -95,7 +95,7 @@ class RequestReplacementStaffController extends Controller
               $q->where('request_status', 'complete')
                 ->orWhere('request_status', 'rejected');
             })
-            ->get();
+            ->paginate(10);
 
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }

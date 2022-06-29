@@ -355,7 +355,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::get('/show_file/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'show_file'])->name('show_file');
                 Route::get('/download/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'download'])->name('download');
             });
-            Route::get('/create_document/{technicalEvaluation}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
+            Route::get('/create_document/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
         });
 
     });
@@ -1023,7 +1023,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::resource('events', EventController::class);
     Route::get('report1', [RequirementController::class,'report1'])->name('report1');
     // Route::get('report_reqs_by_org', [RequirementController::class,'report_reqs_by_org])->name('report_reqs_by_org');
-    
+
     //Route::get('/', [RequirementController::class,'outbox'])->name('index');
     //Route::get('inbox/{user?}', [RequirementController::class,'inbox'])->name('inbox');
     Route::get('/inbox/{user?}', [RequirementController::class,'inbox'])->name('inbox');

@@ -63,19 +63,15 @@
                   <td>{{ $requestReplacementStaff->id }} <br>
                     @switch($requestReplacementStaff->request_status)
                         @case('pending')
-                            <i class="fas fa-clock"></i>
+                            <span class="badge badge-warning">Pendiente</span>
                             @break
 
                         @case('complete')
-                            <span style="color: green;">
-                              <i class="fas fa-check-circle"></i>
-                            </span>
+                            <span class="badge badge-success">Finalizada</span>
                             @break
 
                         @case('rejected')
-                            <span style="color: Tomato;">
-                              <i class="fas fa-times-circle"></i>
-                            </span>
+                            <span class="badge badge-danger">Rechazada</span>
                             @break
 
                         @default
@@ -131,10 +127,8 @@
                       @include('replacement_staff.modals.modal_to_view_request')
                   </td>
                   <td>
-                    @if($requestReplacementStaff->technicalEvaluation)
-                      <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff->technicalEvaluation) }}"
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
                                   class="btn btn-outline-info btn-sm" title="Selección" target="_blank"><i class="fas fa-file"></i></a>
-                    @endif
                   </td>
               </tr>
               @endforeach
