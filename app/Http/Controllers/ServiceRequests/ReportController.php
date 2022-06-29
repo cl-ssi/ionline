@@ -624,13 +624,13 @@ class ReportController extends Controller
       ->orderBy('year')
       ->orderBy('month');
 
-
     switch ($who) {
       case 'responsable':
         $query->whereNull('responsable_approbation')
           ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
             $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
-              $subQuery->where('responsable_id', $user_id);
+              $subQuery->where('responsable_id', $user_id)
+                       ->whereIn('type',['Responsable','Supervisor']);
             });
           });
         break;
