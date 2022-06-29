@@ -91,6 +91,9 @@
                                               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
                                       @endif
+                                      @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
                                   @endforeach
                               </td>
                               <td>
@@ -176,6 +179,9 @@
                                           <span style="color: Tomato;">
                                               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
+                                      @endif
+                                      @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                       @endif
                                   @endforeach
                               </td>
@@ -284,6 +290,9 @@
                                         <span style="color: Tomato;">
                                             <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                         </span>
+                                    @endif
+                                    @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                     @endif
                                 @endforeach
                             </td>
@@ -405,6 +414,9 @@
                                             <span style="color: Tomato;">
                                                 <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                             </span>
+                                        @endif
+                                        @if($sign->status == 'does_not_apply')
+                                            <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                         @endif
                                     @endforeach
                                 </td>
