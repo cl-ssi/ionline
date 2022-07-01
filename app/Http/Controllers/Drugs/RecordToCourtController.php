@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Drugs;
 
 use App\Models\Drugs\RecordToCourt;
 use App\Models\Drugs\Reception;
-use App\Parameters\Parameter;
+use App\Models\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;

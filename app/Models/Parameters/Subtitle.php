@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Subtitle extends Model
 {
     use HasFactory;
+
+    protected $table = 'cfg_subtitles';
+
     /**
     * The attributes that are mass assignable.
     *
@@ -16,12 +19,4 @@ class Subtitle extends Model
     protected $fillable = [
         'name',
     ];
-
-    /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */
-    protected $table = 'cfg_subtitles';
-    
 }
