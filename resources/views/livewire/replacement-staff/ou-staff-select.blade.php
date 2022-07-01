@@ -21,21 +21,3 @@
         </select>
     </div>
 </fieldset>
-
-{{-- @section('custom_js')
-<script>
-
-    document.addEventListener("DOMContentLoaded", () => {
-        Livewire.hook('message.received', (message, component) => {
-            $('#for_ou_of_performance_id').selectpicker('destroy');
-            $('#for_replacement_staff_id').selectpicker('destroy');
-        })
-    });
-
-    window.addEventListener('contentChanged', event => {
-        $('#for_ou_of_performance_id').selectpicker();
-        $('#for_replacement_staff_id').selectpicker();
-    });
-
-</script>
-@endsection --}}

@@ -215,20 +215,12 @@ class RequestReplacementStaffController extends Controller
      */
     public function create()
     {
-        // $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        //
-        // $organizationalUnits = OrganizationalUnit::where('id', Auth::user()->organizational_unit_id)
-        //   ->get();
-
         return view('replacement_staff.request.create');
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
     {
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-
-
-
         return view('replacement_staff.request.create_extension', compact('requestReplacementStaff', 'ouRoots'));
     }
 
@@ -240,6 +232,7 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $request_replacement = new RequestReplacementStaff($request->All());
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
@@ -577,21 +570,30 @@ class RequestReplacementStaffController extends Controller
      */
     public function update(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
+        $requestReplacementStaff->fill($request->all());
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+
         if($request->hasFile('job_profile_file')){
-            //DELETE LAST CV
+            //DELETE LAST
             Storage::disk('gcs')->delete($requestReplacementStaff->job_profile_file);
 
             $requestReplacementStaff->fill($request->all());
-            $now = Carbon::now()->format('Y_m_d_H_i_s');
+
             $file = $request->file('job_profile_file');
             $file_name = $now.'_job_profile';
             $requestReplacementStaff->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
-            $requestReplacementStaff->save();
         }
-        else{
-            $requestReplacementStaff->fill($request->all());
-            $requestReplacementStaff->save();
+
+        if($request->hasFile('request_verification_file')){
+            //DELETE LAST
+            Storage::disk('gcs')->delete($requestReplacementStaff->request_verification_file);
+
+            $file_verification = $request->file('request_verification_file');
+            $file_name_verification = $now.'_request_verification';
+            $requestReplacementStaff->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
         }
+
+        $requestReplacementStaff->save();
 
         session()->flash('success', 'Su solicitud ha sido sido correctamente actualizada.');
         return redirect()->route('replacement_staff.request.edit', $requestReplacementStaff);
