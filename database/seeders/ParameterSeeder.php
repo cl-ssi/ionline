@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Parameters\Parameter;
+use App\Models\Parameters\Parameter;
 use Illuminate\Database\Seeder;
 
 class ParameterSeeder extends Seeder

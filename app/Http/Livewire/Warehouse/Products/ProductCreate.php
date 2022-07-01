@@ -2,9 +2,8 @@
 
 namespace App\Http\Livewire\Warehouse\Products;
 
-use App\Models\Warehouse\Category;
+use App\Http\Requests\Warehouse\Product\CreateProductRequest;
 use App\Models\Warehouse\Product;
-use App\Pharmacies\Program;
 use Livewire\Component;
 
 class ProductCreate extends Component
@@ -12,22 +11,30 @@ class ProductCreate extends Component
     public $store;
     public $programs;
     public $categories;
-    public $name;
-    public $category_id;
 
-    public $rules = [
-        'name'          => 'required|string|min:2|max:255',
-        'category_id'   => 'nullable|exists:wre_categories,id',
+    public $name;
+    public $barcode;
+    public $category_id;
+    public $unspsc_product_id;
+    public $search_unspsc_product;
+
+    protected $listeners = [
+        'myProductId'
     ];
 
-    public function mount()
+    public function rules()
     {
-        $this->categories = $this->store->categories;
+        return (new CreateProductRequest($this->store))->rules();
     }
 
     public function render()
     {
         return view('livewire.warehouse.products.product-create');
+    }
+
+    public function mount()
+    {
+        $this->categories = $this->store->categories;
     }
 
     public function createProduct()
@@ -42,5 +49,15 @@ class ProductCreate extends Component
     public function delete(Product $product)
     {
         $product->delete();
+    }
+
+    public function updatedSearchUnspscProduct()
+    {
+        $this->emit('searchProduct', $this->search_unspsc_product);
+    }
+
+    public function myProductId($value)
+    {
+        $this->unspsc_product_id = $value;
     }
 }

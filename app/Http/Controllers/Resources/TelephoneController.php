@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Resources\Telephone;
 use App\User;
-use App\Parameters\Place;
+use App\Models\Parameters\Place;
 use App\Http\Requests\Resources\UpdateTelephoneRequest;
 use App\Http\Requests\Resources\StoreTelephoneRequest;
 

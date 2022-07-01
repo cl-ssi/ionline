@@ -213,4 +213,9 @@ class Control extends Model
     {
         return $this->net_total + $this->total_tax;
     }
+
+    public function getFormatDateAttribute()
+    {
+        return $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year;
+    }
 }
