@@ -100,7 +100,7 @@ use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\SingleParameterController;
-
+use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 
 use App\Http\Controllers\Mammography\MammographyController;
@@ -1441,6 +1441,13 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
         });
     });
 
+});
+
+Route::prefix('inventories')->as('inventories.')->group(function() {
+    Route::get('last-income', [InventoryController::class, 'last_income'])->name('last-income');
+    Route::get('pending-inventory', [InventoryController::class, 'pending_inventory'])->name('pending-inventory');
+    Route::get('/', [InventoryController::class, 'index'])->name('index');
+    Route::get('inventory/1/details', [InventoryController::class, 'details'])->name('details');
 });
 
 /* Bodega de Farmacia */
