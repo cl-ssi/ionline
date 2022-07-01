@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Parameters\PhraseOfTheDay;
+use App\Models\Parameters\PhraseOfTheDay;
 
 class HomeController extends Controller
 {
