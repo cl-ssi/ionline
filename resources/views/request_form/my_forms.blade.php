@@ -26,7 +26,7 @@
 <div class="col">
   <h6><i class="fas fa-inbox"></i> Formularios pendientes de aprobación</h6>
   <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered small">
+    <table class="table table-sm table-hover table-bordered small">
       <thead>
         <tr class="text-center">
           <th>ID</th>
@@ -92,6 +92,9 @@
                       <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                     </span>
                     @endif
+                    @if($sign->status == 'does_not_apply')
+                      <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    @endif
                 @endforeach
             @else
                 <i class="fas fa-save fa-2x"></i>
@@ -137,7 +140,7 @@
 <div class="col">
   <h6><i class="fas fa-archive"></i> Formularios aprobados, cerrados o rechazados</h6>
   <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered small">
+    <table class="table table-sm table-hover table-bordered small">
       <thead>
         <tr class="text-center">
           <th>ID</th>
@@ -217,6 +220,9 @@
               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
             </span>
             @endif
+            @if($sign->status == 'does_not_apply')
+              <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            @endif
             @endforeach
           </td>
           <td>
@@ -234,7 +240,7 @@
             </a>
             @endif
 
-            @if(Str::contains($requestForm->subtype, 'tiempo'))
+            @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
             <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
             </a>
             @endif
@@ -262,7 +268,7 @@
 <div class="col">
   <h6><i class="fa fa-sitemap"></i> Formularios de mi unidad organizacional</h6>
   <div class="table-responsive">
-    <table class="table table-sm table-striped table-bordered small">
+    <table class="table table-sm table-hover table-bordered small">
       <thead>
         <tr class="text-center">
           <th>ID</th>
@@ -341,6 +347,9 @@
             <span style="color: Tomato;">
               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
             </span>
+            @endif
+            @if($sign->status == 'does_not_apply')
+              <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
             @endif
             @endforeach
           </td>

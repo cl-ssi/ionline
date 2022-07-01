@@ -360,10 +360,9 @@ class ShowTotalHours extends Component
             // 14/02/2022: nataly solicita que desde enero del 2022, no se incluya la multiplicación de 1.5 para horarios nocturnos
             // 15/09/2022: modificación, solo debe aplicar hasta fines de abril.
             case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA'  && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))
-                                                                                        && (Carbon::parse('31-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('30-04-2022 00:00'))):
+                                                                                        && (Carbon::parse('30-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('30-04-2022 00:00'))):
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-01-2022 00:00'))
-                                                                                        && (Carbon::parse('31-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('30-04-2022 00:00'))):
-
+                                                                                        && (Carbon::parse('30-'. $this->fulfillment->month ."-". $this->fulfillment->year) <= Carbon::parse('30-04-2022 00:00'))):
               // programas covid: valor unico (solo hora extra)
               // otros programas hospital/todo el resto: nocturno y diruno
 

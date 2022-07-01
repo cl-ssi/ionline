@@ -9,7 +9,7 @@
               <th class="text-muted col-3" scope="row">Gasto Estimado</th>
               <td class="col-3">{{ $requestForm->estimatedExpense() }}</td>
               <th class="text-muted col-3" scope="row">Nombre del Solicitante</th>
-              <td class="col-3">{{ $requestForm->creator->tinnyName()}}</td>
+              <td class="col-3">{{ $requestForm->creator->tinnyName }}</td>
           </tr>
           <tr>
               <th class="text-muted col-3 align-middle">Unidad Organizacional</th>
@@ -79,7 +79,7 @@
 
     <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA ITEMS-->
       <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
-      <table class="table table-sm small">
+      <table class="table table-sm small table-hover">
         <thead>
           <tr class="bgTableTittle">
             <th class="brd-l">Item</th>
