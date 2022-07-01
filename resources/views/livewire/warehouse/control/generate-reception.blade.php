@@ -242,7 +242,6 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th></th>
                     <th class="text-center">Código</th>
                     <th class="text-center" width="150px">Cant. Recibida</th>
                     <th>Producto</th>
@@ -253,48 +252,10 @@
             <tbody>
                 @foreach($po_items as $index => $po_item)
                 <tr>
-                    <td>
-                        @if($index_selected === $index )
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                wire:model="inventory"
-                                id="option-1"
-                                value="1"
-                            >
-                            <label class="form-check-label" for="option-1">
-                                Inventariable
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                wire:model="inventory"
-                                id="option-2"
-                                value="0"
-                            >
-                            <label class="form-check-label" for="option-2">
-                                No inventariable
-                            </label>
-                        </div>
-                        @else
-                            <div class="text-center">
-                                <small>
-                                    @if($po_item['inventory'])
-                                        Inventariable
-                                    @else
-                                        No inventariable
-                                    @endif
-                                </small>
-                            </div>
-                        @endif
-                    </td>
                     <td class="text-center">
                         <small class="text-monospace">
                             {{ $po_item['unspsc_product_code'] }}
-                        </small>
+                        </small>Reporte Bincard
                     </td>
                     <td>
                         @if($index_selected === $index )
