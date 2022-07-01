@@ -35,8 +35,8 @@ class ControlReport extends Component
 
         $this->programs = Program::findMany($idsPrograms);
 
-        $this->start_date = now()->startOfMonth()->format('Y-m-d H:i:s');
-        $this->end_date = now()->endOfMonth()->format('Y-m-d H:i:s');
+        $this->start_date = now()->startOfMonth()->format('Y-m-d');
+        $this->end_date = now()->endOfMonth()->format('Y-m-d');
     }
 
     public function render()
@@ -54,10 +54,10 @@ class ControlReport extends Component
                     ->whereConfirm(true);
             })
             ->when($this->start_date, function($query) {
-                $query->where('created_at', '>=', $this->start_date);
+                $query->whereDate('created_at', '>=', $this->start_date);
             })
             ->when($this->end_date, function($query) {
-                $query->where('created_at', '<=', $this->end_date);
+                $query->whereDate('created_at', '<=', $this->end_date);
             })
             ->when($this->program_id, function($query) {
                 $query->when($this->program_id == -1, function($subquery) {
