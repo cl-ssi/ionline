@@ -45,13 +45,12 @@
         </thead>
         <tbody class="small">
             <tr>
-                <th class="table-active">Por medio del presente</th>
-                <td colspan="2">
-                  {{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}
-                </td>
+                <th class="table-active">Solicitante</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->user->FullName }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</td>
             </tr>
             <tr>
-                <th class="table-active">Nombre / Nº de Cargos</th>
+                <th class="table-active">Nombre de Formulario / Nº de Cargos</th>
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->charges_number }}</td>
             </tr>
@@ -59,6 +58,11 @@
                 <th class="table-active">Estamento / Grado</th>
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->profile_manage->name }}</td>
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Periodo</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <th class="table-active">Calidad Jurídica / $ Honorarios</th>
@@ -70,29 +74,29 @@
                 </td>
             </tr>
             <tr>
-                <th class="table-active">La Persona cumplirá labores en Jornada</th>
-                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->WorkDayValue }}</td>
-                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->other_work_day }}</td>
-            </tr>
-            <tr>
                 <th class="table-active">
-                  Fundamento de la Contratación<br>
-                  Detalle de Fundamento
+                  Fundamento de la Contratación / Detalle de Fundamento
                 </th>
                 <td style="width: 33%">
-                  {{ $technicalEvaluation->requestReplacementStaff->fundamentManage->NameValue }}<br>
+                  {{ $technicalEvaluation->requestReplacementStaff->fundamentManage->NameValue }}
+                </td>
+                <td style="width: 33%">
                   {{ $technicalEvaluation->requestReplacementStaff->fundamentDetailManage->NameValue }}
                 </td>
-                <td style="width: 33%">De funcionario: {{ $technicalEvaluation->requestReplacementStaff->name_to_replace }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">De funcionario:
+                </th>
+                <td style="width: 33%">
+                  @if($technicalEvaluation->requestReplacementStaff->run)
+                      {{$technicalEvaluation->requestReplacementStaff->run}}-{{$technicalEvaluation->requestReplacementStaff->dv}}
+                  @endif
+                </td>
+                <td style="width: 33%">{{$technicalEvaluation->requestReplacementStaff->name_to_replace}}</td>
             </tr>
             <tr>
                 <th class="table-active">Otro Fundamento (especifique)</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
-            </tr>
-            <tr>
-                <th class="table-active">Periodo</th>
-                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
-                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <th class="table-active">Archivos</th>

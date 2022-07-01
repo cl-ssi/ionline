@@ -14,7 +14,21 @@ class OuStaffSelect extends Component
 
     public $staffManageByOu = null;
 
+    public $requestReplacementStaff;
+
+    /* Para editar y precargar los select */
+    public $ouSelected = null;
+    public $replacementStaffSelected = null;
+
     public function mount(){
+        if($this->requestReplacementStaff) {
+            $this->selectedOu = $this->requestReplacementStaff->ou_of_performance_id;
+
+            $this->staffManageByOu = StaffManage::where('organizational_unit_id', $this->selectedOu)->get();
+
+            $this->selectedReplacementStaff = $this->requestReplacementStaff->replacement_staff_id;
+        }
+
         // $this->selectedOu = $request->ou_of_performance_id;
         // $this->selectedReplacementStaff = $request->replacement_staff_id;
 
