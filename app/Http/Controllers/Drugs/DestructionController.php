@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Drugs;
 
 use App\Models\Drugs\Destruction;
-use App\Models\Drugs\Reception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Parameters\Parameter;
+use App\Models\Parameters\Parameter;
 
 class DestructionController extends Controller
 {

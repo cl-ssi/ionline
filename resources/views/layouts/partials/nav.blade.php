@@ -431,7 +431,7 @@
 
                             @role('god')
                             <a class="dropdown-item"
-                               href="{{ route('parameters.index') }}">
+                               href="{{ route('parameters.welcome') }}">
                                 <i class="fas fa-cog fa-fw"></i> Mantenedores
                             </a>
 

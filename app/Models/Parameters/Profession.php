@@ -16,7 +16,10 @@ class Profession extends Model implements Auditable
     public $table = 'cfg_professions';
 
     protected $fillable = [
-        'name', 'category', 'estamento','sirh_plant', 'sirh_profession'
+        'name',
+        'category',
+        'estamento',
+        'sirh_plant',
+        'sirh_profession',
     ];
-
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Parameters;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Parameters\PhraseOfTheDay;
+use App\Models\Parameters\PhraseOfTheDay;
 
 class PhraseOfTheDayController extends Controller
 {
@@ -71,7 +71,7 @@ class PhraseOfTheDayController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Parameters\PhraseOfTheDay  $phrase
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, PhraseOfTheDay $phrase)

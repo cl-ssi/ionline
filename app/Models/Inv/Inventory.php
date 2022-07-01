@@ -7,7 +7,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\Store;
-use App\Parameters\Place;
+use App\Models\Parameters\Place;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

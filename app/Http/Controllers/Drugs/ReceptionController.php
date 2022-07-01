@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Drugs;
 use App\Models\Drugs\Reception;
 use App\Models\Drugs\ReceptionItem;
 use App\User;
-use App\Parameters\Parameter;
+use App\Models\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Drugs\Court;

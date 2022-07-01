@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Resources\Computer;
-use App\Resources\Printer;
 use App\User;
-use App\Parameters\Place;
-use App\Parameters\Location;
+use App\Models\Parameters\Place;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resources\StoreComputerRequest;

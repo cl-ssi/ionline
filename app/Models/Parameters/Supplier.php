@@ -13,6 +13,8 @@ class Supplier extends Model
     use HasFactory;
     use softDeletes;
 
+    protected $table = 'cfg_suppliers';
+
     protected $fillable = [
         'run',
         'dv',
@@ -30,8 +32,6 @@ class Supplier extends Model
         'commune_id',
         'telephone'
     ];
-
-    protected $table = 'cfg_suppliers';
 
     public function region()
     {

@@ -12,15 +12,21 @@ class BudgetItem extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['id', 'code', 'name'];
+    protected $table = 'cfg_budget_items';
 
-    public function itemRequestForms() {
+    protected $fillable = [
+        'id',
+        'code',
+        'name',
+    ];
+
+    public function itemRequestForms()
+    {
         return $this->hasMany(ItemRequestForm::class, 'budget_item_id');
     }
 
-    public function fullName(){
-      return $this->code.' '.$this->name;
+    public function fullName()
+    {
+        return $this->code.' '.$this->name;
     }
-
-    protected $table = 'cfg_budget_items';
 }

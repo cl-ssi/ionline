@@ -25,12 +25,11 @@ class Log extends Model
                 $color='info'; break;
             case 'WARNING':
                 $color='warning'; break;
-            case 'ERROR': 
+            case 'ERROR':
                 $color='danger'; break;
-            default: 
+            default:
                 $color='danger'; break;
         }
         return $color;
     }
-    
 }
