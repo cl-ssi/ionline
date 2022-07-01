@@ -24,9 +24,32 @@ class ShowLegalQualityRequest extends Component
 
     /* Para editar y precargar los select */
     public $legalQualitySelected = null;
+    public $fundamentSelected = null;
+    public $fundamentDetailSelected = null;
 
-    public function render()
-    {
+    public function mount(){
+        if($this->requestReplacementStaff) {
+            $this->selectedLegalQuality = $this->requestReplacementStaff->legal_quality_manage_id;
+            $this->selectedFundament = $this->requestReplacementStaff->fundament_manage_id;
+
+            $this->fundamentLegalQualities = FundamentLegalQuality::where('legal_quality_manage_id', $this->selectedLegalQuality)->get();
+            if($this->selectedFundament == 2){
+                $this->salaryStateInput = '';
+            }
+            else{
+                $this->salaryStateInput = 'disabled';
+            }
+
+            $this->selectedFundamentDetail = $this->requestReplacementStaff->fundament_detail_manage_id;
+
+            $this->detailFundaments = RstDetailFundament::where('fundament_manage_id', $this->selectedFundament)->get();
+            if($this->selectedFundamentDetail == 4){
+                $this->otherFundamentInput = '';
+            }
+        }
+    }
+
+    public function render(){
         return view('livewire.replacement-staff.show-legal-quality-request',[
             'legal_qualities' => LegalQualityManage::all()
         ]);

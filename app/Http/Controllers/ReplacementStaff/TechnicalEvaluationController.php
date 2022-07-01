@@ -98,7 +98,11 @@ class TechnicalEvaluationController extends Controller
     public function edit(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        $users = User::orderBy('name', 'ASC')->get();
+        //$users = User::orderBy('name', 'ASC')->get();
+
+        $users = User::where('external', 0)
+          ->orderBy('name', 'ASC')
+          ->get(['id', 'name', 'fathers_family', 'mothers_family']);
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
@@ -163,11 +167,11 @@ class TechnicalEvaluationController extends Controller
         return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]);
     }
 
-    public function create_document(TechnicalEvaluation $technicalEvaluation){
-        //dd($requestForm);
+    public function create_document(RequestReplacementStaff $requestReplacementStaff){
+        //dd($requestReplacementStaff);
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('replacement_staff.request.documents.technical_evaluation_document', compact('technicalEvaluation'));
+        $pdf->loadView('replacement_staff.request.documents.technical_evaluation_document', compact('requestReplacementStaff'));
 
         return $pdf->stream('mi-archivo.pdf');
 

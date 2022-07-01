@@ -201,7 +201,7 @@
           <tr>
               <th align="left">Subdirección</th>
               <td colspan="2">
-                @if($requestForm->contractManager->organizationalUnit->father->level == 2)
+                @if($requestForm->contractManager->organizationalUnit->father && $requestForm->contractManager->organizationalUnit->father->level == 2)
                     {{ $requestForm->contractManager ? $requestForm->contractManager->organizationalUnit->father->name : 'Usuario eliminado' }}
                 @else
                     -
@@ -256,6 +256,7 @@
 
       <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
+      @if($requestForm->type_form == 'bienes y/o servicios')
       <table class="siete">
           <thead>
               <tr>
@@ -288,7 +289,56 @@
               </tr>
           </tfoot>
       </table>
-
+      @else
+      <!-- Pasajeros -->
+      @php($round_trips = ['round trip' => 'Ida y Vuelta', 'one-way only' => 'Solo Ida'])
+      @php($baggages = ['handbag' => 'Bolso de Mano', 'hand luggage' => 'Equipaje de Cabina', 'baggage' => 'Equipaje de Bodega', 'oversized baggage' => 'Equipaje Sobredimensionado'])
+      
+      <table class="siete">
+          <thead>
+          <tr>
+              <th>#</th>
+              <th style="width:70px">RUT</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Item Pres.</th>
+              <th>Tipo viaje</th>
+              <th>Origen</th>
+              <th>Destino</th>
+              <th>Fecha ida</th>
+              <th>Fecha vuelta</th>
+              <th>Equipaje</th>
+              <th>Total pasaje *</th>
+          </tr>
+          </thead>
+          <tbody>
+          @foreach($requestForm->passengers as $key => $passenger)
+              <tr>
+                  <td>{{ $key+1 }}</td>
+                  <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                  <td>{{ $passenger->name }}</td>
+                  <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                  <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
+                  <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
+                  <td>{{ $passenger->origin }}</td>
+                  <td>{{ $passenger->destination }}</td>
+                  <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
+                  <td>{{ $passenger->return_date->format('d-m-Y H:i') }}</td>
+                  <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
+                  <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
+              </tr>
+          @endforeach
+          </tbody>
+          <tfoot>
+          <tr align="right">
+              <th colspan="11">
+                  Valor Total
+              </th>
+              <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</th>
+          </tr>
+          </tfoot>
+      </table>
+      @endif
       <div>
           <p align="right">* El valor total presenta impuestos incluidos.</p>
       </div>

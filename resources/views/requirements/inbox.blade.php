@@ -6,98 +6,77 @@
 
 @include('requirements.partials.nav')
 
-<h3 class="mb-3">Recepcionados Abiertos</h3>
+<div class="alert alert-info" role="alert">
+	<li>Hola {{ auth()->user()->firstName }}, 
+	esta es la nueva bandeja para ver los requerimientos, tiene una nueva columna "Último evento", además es más rápida y simple.</li>
+	<li>Puedes intercambiar en lado derecho de la tabla resumen entre los "pendientes" y "archivados".</li>
+	<li>Recuerda siempre cerrar los requerimientos y archivarlos si ya están terminados.</li>
+	<li>Si eres secretario/a puedes cambiar a las bandeja(s) de tu jefatura, haciendo click en su nombre.</li>
+</div>
 
-<table class="table table-sm table-bordered small">
-    <thead>
-        <tr>
-            <th>Cat.</th>
-            <th>N°</th>
-            <th>Remitente</th>
-            <th>Funcionario</th>
-            <th>Asunto</th>
-            <th>Fecha creación</th>
-            <th>Días transcurridos</th>
-            <th>Fecha límite</th>
-            <!-- <th>Fecha cierre</th> -->
-            <th>Última actividad</th>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-      @foreach($openRequirements as $open)
-  			<tr>
-          <td>
-            @foreach($open->categories as $category)
-              @if(Auth::user()->id == $category->user_id)
-                <span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span><br>
-              @endif
-            @endforeach
-          </td>
-					<td>{{$open->id}}</td>
-					<td>{{$open->subject}}</td>
-					<td>{{$open->events->first()->user->organizationalUnit->name}}</td>
-					<td>{{$open->events->first()->user->getFullNameAttribute()}}</td>
-					<td>{{Carbon\Carbon::parse($open->created_at)->format('d/m/Y H:i')}}</td>
-					<td>{{Carbon\Carbon::parse($open->created_at)->diffInDays(Carbon\Carbon::now())}}</td>
-					<td>@if($open->limit_at <> NULL){{Carbon\Carbon::parse($open->limit_at)->format('d/m/Y')}} @endif</td>
-          <td>{{Carbon\Carbon::parse($open->updated_at)->format('d/m/Y')}}</td>
-					<td>
-						<a href="{{ route('requirements.show',$open->id) }}">
-								<i class="fas fa-edit"></i>
-						</a>
-					</td>
-  			</tr>
-  		@endforeach
-    </tbody>
+@livewire('requirements.filter',[$user])
+
+<div class="row">
+
+	<div class="col">
+		<h3 class="mb-3">
+		@if(request()->has('archived'))
+			Archivados
+		@else
+			Pendientes por atender
+		@endif
+		</h3>
+	</div>
+
+	<div class="col">
+		<ul class="nav justify-content-end">
+			<li class="nav-item">
+				<a class="nav-link {{ ($user->id == auth()->id())?'disabled':'' }}" 
+					href="{{ route('requirements.inbox',auth()->user()) }}">
+					{{ auth()->user()->tinnyName }}
+				</a> 
+			</li>
+			@foreach($allowed_users as $allowed)
+			<li class="nav-item">
+				<a class="nav-link {{ ($user == $allowed)?'disabled':'' }}" 
+					href="{{ route('requirements.inbox',$allowed) }}">
+					{{ $allowed->tinnyName }}
+				</a>
+			</li>
+			@endforeach
+		</ul>
+	</div>
+
+</div>
+
+
+
+<table class="table table-sm table-bordered">
+	<tr>
+		<td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
+        <td class="alert-warning text-center">Respondidos ({{ $counters['replyed'] }})</td>
+        <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>
+        <td class="alert-success text-center">Cerrados ({{ $counters['closed'] }})</td>
+        <td class="alert-secondary text-center">En copia</td>
+		<td class="alert-light text-center">
+			<a href="{{ route('requirements.inbox',$user) }}" class="btn-link {{ request()->has('archived') ? '':'disabled' }}">
+				Pendientes ({{ $requirements->total() }})
+			</a>
+		</td>
+        <td class="alert-light text-center">
+			<a href="{{ route('requirements.inbox',$user) }}?archived=true" class="btn-link {{ request()->has('archived') ? 'disabled':'' }}">
+				Archivados ({{ $counters['archived'] }})
+			</a>
+		</td>
+    </tr>
 </table>
 
 
-<h3 class="mb-3">Recepcionados Cerrados</h3>
+@include('requirements.partials.list')
 
-<table class="table table-sm table-bordered small">
-    <thead>
-        <tr>
-            <th>Cat.</th>
-            <th>N°</th>
-            <th>Remitente</th>
-            <th>Funcionario</th>
-            <th>Asunto</th>
-            <th>Fecha creación</th>
-            <th>Días transcurridos</th>
-            <th>Fecha límite</th>
-            <th>Fecha cierre</th>
-            <!-- <th>Última actividad</th> -->
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-      @foreach($closedRequirements as $closed)
-  			<tr>
-            <td>
-              @foreach($closed->categories as $category)
-                @if(Auth::user()->id == $category->user_id)
-                  <span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span><br>
-                @endif
-              @endforeach
-            </td>
-  					<td>{{$closed->id}}</td>
-  					<td>{{$closed->subject}}</td>
-            <td>{{$closed->events->first()->user->organizationalUnit->name}}</td>
-  					<td>{{$closed->events->first()->user->getFullNameAttribute()}}</td>
-  					<td>{{Carbon\Carbon::parse($closed->created_at)->format('d/m/Y H:i')}}</td>
-  					<td>{{Carbon\Carbon::parse($closed->created_at)->diffInDays(Carbon\Carbon::now())}}</td>
-  					<td>@if($closed->limit_at <> NULL){{Carbon\Carbon::parse($closed->limit_at)->format('d/m/Y')}} @endif</td>
-            <td>{{Carbon\Carbon::parse($closed->updated_at)->format('d/m/Y')}}</td>
-  					<td>
-  						<a href="{{ route('requirements.show',$closed->id) }}">
-  								<i class="fas fa-edit"></i>
-  						</a>
-  					</td>
-  			</tr>
-  		@endforeach
-    </tbody>
-</table>
+
+{{ $requirements->links() }}
+
 
 @endsection
 

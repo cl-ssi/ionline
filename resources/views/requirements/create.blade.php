@@ -164,12 +164,20 @@
 
 
             <div class="form-row">
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
+                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col @endif">
                     <label for="for_date">Asunto</label>
-                    <input type="text" class="form-control" id="for_subject"
-                           name="subject" required="required" value="{{$parte->subject}}">
+                    <textarea name="subject" id="for_subject" class="form-control" rows="2" required>{{ $parte->subject }}</textarea>
                 </fieldset>
+            </div>
+            
+            <div class="row">
+                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col @endif">
+                    <label for="for_date">Requerimiento</label>
+                    <textarea class="form-control" id="for_body" name="body" rows="4" required></textarea>
+                </fieldset>
+            </div>
 
+            <div class="form-row">
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-2 @endif">
                     <label for="for_origin">Tipo</label>
                     <select class="form-control" name="priority" id="priority" >
@@ -211,12 +219,7 @@
                 </fieldset>
             </div>
 
-            <div class="row">
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col @endif">
-                    <label for="for_date">Requerimiento</label>
-                    <textarea class="form-control" id="for_body" name="body" rows="3" required></textarea>
-                </fieldset>
-            </div>
+
 
             <button type="submit" class="btn btn-primary">Crear</button>
 

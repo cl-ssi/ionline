@@ -46,13 +46,12 @@
                   </thead>
                   <tbody>
                       <tr>
-                          <th class="table-active">Por medio del presente</th>
-                          <td colspan="2">
-                              {{ $requestReplacementStaff->organizationalUnit->name }}
-                          </td>
+                          <th class="table-active">Solicitante</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
                       </tr>
                       <tr>
-                          <th class="table-active">Nombre / Nº de Cargos</th>
+                          <th class="table-active">Nombre de Formulario / Nº de Cargos</th>
                           <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
                           <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
                       </tr>
@@ -60,6 +59,11 @@
                           <th class="table-active">Estamento / Grado</th>
                           <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
                           <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Periodo</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Calidad Jurídica / $ Honorarios</th>
@@ -71,29 +75,29 @@
                           </td>
                       </tr>
                       <tr>
-                          <th class="table-active">La Persona cumplirá labores en / Jornada</th>
-                          <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
-                          <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
-                      </tr>
-                      <tr>
                           <th class="table-active">
-                            Fundamento de la Contratación<br>
-                            Detalle de Fundamento
+                            Fundamento de la Contratación / Detalle de Fundamento
                           </th>
                           <td style="width: 33%">
-                            {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                            {{ $requestReplacementStaff->fundamentManage->NameValue }}
+                          </td>
+                          <td style="width: 33%">
                             {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
                           </td>
-                          <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">De funcionario:
+                          </th>
+                          <td style="width: 33%">
+                            @if($requestReplacementStaff->run)
+                                {{$requestReplacementStaff->run}}-{{$requestReplacementStaff->dv}}
+                            @endif
+                          </td>
+                          <td style="width: 33%">{{$requestReplacementStaff->name_to_replace}}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Otro Fundamento (especifique)</th>
                           <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
-                      </tr>
-                      <tr>
-                          <th class="table-active">Periodo</th>
-                          <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
-                          <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Archivos</th>
@@ -131,7 +135,7 @@
                       <tr>
                           @foreach($requestReplacementStaff->RequestSign as $sign)
                             <td class="table-active text-center">
-                                {{ $sign->organizationalUnit->name }}<br>
+                                <strong>{{ $sign->organizationalUnit->name }}</strong><br>
                             </td>
                           @endforeach
                       </tr>

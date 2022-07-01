@@ -430,6 +430,10 @@ class ReportController extends Controller
 
   public function resolutionPDF(ServiceRequest $ServiceRequest)
   {
+    if($ServiceRequest->id <= 105){
+      dd("");
+    }
+
     $formatter = new NumeroALetras();
     $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
@@ -620,13 +624,13 @@ class ReportController extends Controller
       ->orderBy('year')
       ->orderBy('month');
 
-
     switch ($who) {
       case 'responsable':
         $query->whereNull('responsable_approbation')
           ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
             $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
-              $subQuery->where('responsable_id', $user_id);
+              $subQuery->where('responsable_id', $user_id)
+                       ->whereIn('type',['Responsable','Supervisor']);
             });
           });
         break;

@@ -91,6 +91,9 @@
                                               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
                                       @endif
+                                      @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
                                   @endforeach
                               </td>
                               <td>
@@ -122,7 +125,7 @@
         <div class="col">
             <h6><i class="fas fa-inbox"></i> Formularios con nuevo presupuesto pendiente de firma</h6>
             <div class="table-responsive">
-                <table class="table table-sm table-striped table-bordered">
+                <table class="table table-sm table-hover table-bordered">
                   <thead class="small">
                     <tr class="text-center">
                       <th>ID</th>
@@ -177,6 +180,9 @@
                                               <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
                                       @endif
+                                      @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
                                   @endforeach
                               </td>
                               <td>{{ $requestForm->eventRequestForms->where('signer_user_id', Auth::user()->id)->last()->signature_date?? 'No se ha firmado Documento' }}</td>
@@ -209,7 +215,7 @@
         <div class="col">
             <h6><i class="fas fa-archive"></i> Mis formularios aprobados o rechazados</h6>
             <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered">
+            <table class="table table-sm table-hover table-bordered">
               <thead class="small">
                 <tr class="text-center">
                   <th>ID</th>
@@ -285,6 +291,9 @@
                                             <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                         </span>
                                     @endif
+                                    @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                    @endif
                                 @endforeach
                             </td>
                             <td>{{ $requestForm->eventRequestForms->where('signer_user_id', Auth::user()->id)->last()->signature_date?? 'No se ha firmado Documento' }}
@@ -330,7 +339,7 @@
             <div class="col">
                 <h6><i class="fas fa-archive"></i> Formularios aprobados o rechazados</h6>
                 <div class="table-responsive">
-                <table class="table table-sm table-striped table-bordered">
+                <table class="table table-sm table-hover table-bordered">
                 <thead class="small">
                     <tr class="text-center">
                     <th>ID</th>
@@ -405,6 +414,9 @@
                                             <span style="color: Tomato;">
                                                 <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                             </span>
+                                        @endif
+                                        @if($sign->status == 'does_not_apply')
+                                            <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                         @endif
                                     @endforeach
                                 </td>
