@@ -72,7 +72,7 @@
                               </td>
                           </tr>
                           <tr>
-                              <th class="table-active">De funcionario:
+                              <th class="table-active">Funcionario a Reemplazar
                               </th>
                               <td style="width: 33%">
                                 @if($requestReplacementStaff->run)

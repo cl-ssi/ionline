@@ -183,13 +183,12 @@
                   </td>
               </tr>
               <tr>
-                  <td><strong>Por medio del presente</strong></td>
-                  <td colspan="2">
-                      {{ $requestReplacementStaff->organizationalUnit->name }}
-                  </td>
+                  <td><strong>Solicitante</strong></th>
+                  <td style="width: 33%">{{ $requestReplacementStaff->user->FullName }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->organizationalUnit->name }}</td>
               </tr>
               <tr>
-                  <td><strong>Nombre / Nº de Cargos</strong></td>
+                  <td><strong>Nombre de Formulario / Nº de Cargos</strong></td>
                   <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
                   <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
               </tr>
@@ -197,6 +196,11 @@
                   <td><strong>Estamento / Grado</strong></td>
                   <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
                   <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Periodo</strong></td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
               </tr>
               <tr>
                   <td><strong>Calidad Jurídica / $ Honorarios</strong></td>
@@ -208,35 +212,43 @@
                   </td>
               </tr>
               <tr>
-                  <td><strong>La Persona cumplirá labores en / Jornada</strong></td>
-                  <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
-                  <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
-              </tr>
-              <tr>
-                  <td>
-                    <strong>
-                    Fundamento de la Contratación<br>
-                    Detalle de Fundamento
-                    <strong>
+                  <td><strong>Fundamento de la Contratación / Detalle de Fundamento</strong></td>
+                  <td style="width: 33%">
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}
                   </td>
                   <td style="width: 33%">
-                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
                     {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
                   </td>
-                  <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
               </tr>
               <tr>
                   <td><strong>Otro Fundamento (especifique)</strong></td>
                   <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
               </tr>
               <tr>
-                  <td><strong>Periodo</strong></td>
-                  <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
-                  <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
+                  <td><strong>Funcionario a Reemplazar</strong></td>
+                  <td style="width: 33%">
+                    @if($requestReplacementStaff->run)
+                        {{$requestReplacementStaff->run}}-{{$requestReplacementStaff->dv}}
+                    @endif
+                  </td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->name_to_replace }}</td>
+              </tr>
+              <tr>
+                  <td><strong>La Persona cumplirá labores en / Jornada</strong></td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
+                  <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
               </tr>
               <tr>
                   <td><strong>Lugar de Desempeño</strong></td>
                   <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
+              </tr>
+              <tr>
+                  <td><strong>Staff Sugerido</strong></td>
+                  <td colspan="2">
+                    @if($requestReplacementStaff->replacementStaff)
+                        {{ $requestReplacementStaff->replacementStaff->FullName }}
+                    @endif
+                  </td>
               </tr>
           </tbody>
       </table>
