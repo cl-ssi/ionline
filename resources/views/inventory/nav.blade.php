@@ -29,7 +29,7 @@
             class="nav-link {{ active('inventories.details') }}"
             href="{{ route('inventories.details') }}"
         >
-            <i class="fas fa-shipping-fast"></i> Item Inventario
+            <i class="fas fa-edit"></i> Item Inventario (ejemplo)
         </a>
     </li>
 </ul>

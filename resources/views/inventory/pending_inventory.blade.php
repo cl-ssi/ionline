@@ -38,9 +38,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
@@ -71,9 +71,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
@@ -104,9 +104,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
@@ -137,9 +137,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
@@ -170,9 +170,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
@@ -203,9 +203,9 @@
                     &nbsp;
                 </label>
                 <br>
-                <button class="btn btn-sm btn-block btn-primary">
+                <a class="btn btn-sm btn-block btn-primary" href="{{ route('inventories.details') }}">
                     <i class="fas fa-edit"></i>
-                </button>
+                </a>
             </fieldset>
         </div>
 
