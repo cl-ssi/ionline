@@ -1,6 +1,15 @@
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
         <a
+            class="nav-link {{ active('inventories.index') }}"
+            aria-current="page"
+            href="{{ route('inventories.index') }}"
+        >
+            <i class="fas fa-list-alt"></i> Inventario
+        </a>
+    </li>
+    <li class="nav-item">
+        <a
             class="nav-link {{ active('inventories.last-income') }}"
             href="{{ route('inventories.last-income') }}"
         >
@@ -21,15 +30,6 @@
             href="{{ route('inventories.details') }}"
         >
             <i class="fas fa-shipping-fast"></i> Item Inventario
-        </a>
-    </li>
-    <li class="nav-item">
-        <a
-            class="nav-link {{ active('inventories.index') }}"
-            aria-current="page"
-            href="{{ route('inventories.index') }}"
-        >
-            <i class="fas fa-list-alt"></i> Inventario
         </a>
     </li>
 </ul>
