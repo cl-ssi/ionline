@@ -35,6 +35,20 @@
 
 @include('pharmacies.products.dispatchitem.create')
 
+<!-- @if($dispatch->dispatchItems->count() > 0)
+  <form method="GET" action="{{ route('pharmacies.products.dispatch.sendEmailValidation',$dispatch) }}">
+    <div class="form-row">
+        <fieldset class="form-group col-9">
+            
+        </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_note"></label>
+            <button type="submit" class="form-control btn btn-success">Enviar correo</button>
+        </fieldset>
+    </div>
+  </form>
+@endif -->
+
 @endsection
 
 @section('custom_js')

@@ -18,6 +18,11 @@
 		    <input type="text" class="form-control" id="for_name" placeholder="Nombre del establecimiento" name="name" required="required">
 		</fieldset>
 
+		<fieldset class="form-group col">
+		    <label for="for_name">Correo electrónico</label>
+		    <input type="text" class="form-control" id="for_name" placeholder="Correo electrónico" name="email" required="required">
+		</fieldset>
+
 	</div>
 
 	<button type="submit" class="btn btn-primary">Crear</button>

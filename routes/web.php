@@ -234,6 +234,12 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class,'externalLogin']);
 
+// acceso a usuarios verificación entrega de farmacias
+Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
+    Route::get('confirmation_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationDispatchVerificationNotification'])->name('confirmation_verification');
+}); 
+
+
 Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
     //Route::view('/external', 'external')->name('external');
@@ -1478,6 +1484,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/product/batch/{product_id?}/{due_date?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_batch'])->name('dispatch.product.batch')->middleware('auth');
         Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_count'])->name('dispatch.product.count')->middleware('auth');
         Route::get('/exportExcel', [App\Http\Controllers\Pharmacies\DispatchController::class,'exportExcel'])->name('exportExcel')->middleware('auth');
+        Route::get('dispatch/sendEmailValidation/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'sendEmailValidation'])->name('dispatch.sendEmailValidation')->middleware('auth');
 
         Route::resource('dispatch', App\Http\Controllers\Pharmacies\DispatchController::class);
         Route::resource('dispatch_item', App\Http\Controllers\Pharmacies\DispatchItemController::class);
