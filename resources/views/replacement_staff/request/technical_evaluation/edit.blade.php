@@ -188,20 +188,28 @@
                   </td>
                 @endforeach
             </tr>
-            @if($technicalEvaluation->technical_evaluation_status == 'complete' ||
-              $technicalEvaluation->technical_evaluation_status == 'rejected')
+        </tbody>
+    </table>
+</div>
+
+<br>
+
+@if($technicalEvaluation->technical_evaluation_status == 'complete' ||
+    $technicalEvaluation->technical_evaluation_status == 'rejected')
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered small">
             <tr>
-                <th class="table-active">Estado de Solicitud</th>
+                <th class="table-active" style="width: 33%">Estado de Solicitud</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->StatusValue }}</td>
             </tr>
             <tr>
                 <th class="table-active">Fecha de Cierre</th>
                 <td colspan="2">{{ $technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
             </tr>
-            @endif
-        </tbody>
-    </table>
-</div>
+        </table>
+    </div>
+@endif
+
 
 <br>
 

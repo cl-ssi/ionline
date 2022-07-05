@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\Applicant;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
+use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Rrhh\Authority;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -99,12 +100,19 @@ class ApplicantController extends Controller
         $applicant->fill($request->all());
         $applicant->save();
 
-        // session()->flash('success', 'Calificación '.$applicant->score.' ingresada para: '.$applicant->replacement_staff->FullName);
-        // return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant');
+        if($request->has('sirh_contract')){
+            $applicant->technicalEvaluation->requestReplacementStaff->sirh_contract = 1;
+            $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-        return redirect()
-          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
-          ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
+            return redirect()
+              ->to(route('replacement_staff.request.technical_evaluation.show', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
+              ->with('message-success-sirh-contract', 'Fecha de contrato correctamente ingresada para: '.$applicant->replacementStaff->FullName);
+        }
+        else{
+            return redirect()
+              ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
+              ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
+        }
     }
 
     /**
@@ -189,49 +197,29 @@ class ApplicantController extends Controller
 
         //if($applicant->reason == 'renuncia a reemplazo'){
 
-            $applicantsSelected = Applicant::where('technical_evaluation_id', $applicant->technical_evaluation_id)
-                ->where('selected', 1)
-                ->where('desist', NULL)
-                ->get();
+        $applicantsSelected = Applicant::where('technical_evaluation_id', $applicant->technical_evaluation_id)
+            ->where('selected', 1)
+            ->where('desist', NULL)
+            ->get();
 
-            if($applicantsSelected->count() == 0){
-                $applicant->technicalEvaluation->technical_evaluation_status = 'pending';
-                $applicant->technicalEvaluation->date_end = NULL;
-                $applicant->technicalEvaluation->save();
+        if($applicantsSelected->count() == 0){
+            $applicant->technicalEvaluation->technical_evaluation_status = 'pending';
+            $applicant->technicalEvaluation->date_end = NULL;
+            $applicant->technicalEvaluation->save();
 
-                $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'pending';
-                $applicant->technicalEvaluation->requestReplacementStaff->save();
+            $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'pending';
+            $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-                /* RR.HH. Nuevamente queda Disponible */
-                $applicant->replacementStaff->status = 'immediate_availability';
-                $applicant->replacementStaff->save();
-            }
-            return redirect()
-              ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
-              ->with('message-danger-aplicant-desist', 'Estimado usuario, se ha registrado el postulante ha desestimado el proceso de selección');
+            /* RR.HH. Nuevamente queda Disponible */
+            $applicant->replacementStaff->status = 'immediate_availability';
+            $applicant->replacementStaff->save();
 
-            // return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $applicant->technicalEvaluation]);
-        //}
+            $applicant->technicalEvaluation->requestReplacementStaff->sirh_contract = NULL;
+            $applicant->technicalEvaluation->requestReplacementStaff->save();
+        }
+        return redirect()
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+            ->with('message-danger-aplicant-desist', 'Estimado usuario, se ha registrado el postulante ha desestimado el proceso de selección');
 
-        //if($applicant->reason == 'renuncia a reemplazo'){
-
-            /* CONSULTA POR NOTIFICACIÓN */
-
-            //Request
-            // $mail_request = $applicant->technicalEvaluation->requestReplacementStaff->user->email;
-            // //Manager
-            // $type = 'manager';
-            // $mail_notification_ou_manager = Authority::getAuthorityFromDate($applicant->technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), $type);
-            //
-            // $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
-            //
-            // $emails = [$mail_request,
-            //             $mail_notification_ou_manager->user->email,
-            //             $ou_personal_manager->user->email];
-            //
-            // Mail::to($emails)
-            //   ->cc(env('APP_RYS_MAIL'))
-            //   ->send(new EndSelectionNotification($applicant->technicalEvaluation));
-        //
     }
 }

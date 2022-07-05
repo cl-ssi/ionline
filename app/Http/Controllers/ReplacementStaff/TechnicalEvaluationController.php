@@ -84,9 +84,10 @@ class TechnicalEvaluationController extends Controller
      * @param  \App\Models\TechnicalEvaluation  $technicalEvaluation
      * @return \Illuminate\Http\Response
      */
-    public function show(TechnicalEvaluation $technicalEvaluation)
+    public function show(RequestReplacementStaff $requestReplacementStaff)
     {
-        //
+        return view('replacement_staff.request.technical_evaluation.show',
+            compact('requestReplacementStaff'));
     }
 
     /**

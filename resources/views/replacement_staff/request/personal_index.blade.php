@@ -59,7 +59,7 @@
           </thead>
           <tbody class="small">
               @foreach($requests as $requestReplacementStaff)
-              <tr>
+              <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':''}}">
                   <td>{{ $requestReplacementStaff->id }} <br>
                     @switch($requestReplacementStaff->request_status)
                         @case('pending')
@@ -77,6 +77,9 @@
                         @default
                             Default case...
                     @endswitch
+                    @if($requestReplacementStaff->sirh_contract)
+                        <i class="fas fa-file-signature"></i>
+                    @endif
                   </td>
                   <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                   <td>{{ $requestReplacementStaff->name }}</td>
@@ -120,11 +123,8 @@
                       @endforeach
                   </td>
                   <td>
-                      <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
-                        <i class="fas fa-eye"></i>
-                      </button>
-                      @include('replacement_staff.modals.modal_to_view_request')
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                  class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                   </td>
                   <td>
                       <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"

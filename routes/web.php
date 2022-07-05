@@ -212,7 +212,9 @@ Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callbac
 Route::get('/claveunica/login/{access_token}', [ClaveUnicaController::class,'login'])->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::class,'loginExternal']);
 
-Route::get('logout', [LoginController::class,'logout'])->name('logout');
+Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
+
+Route::get('logout', [LoginController::class,'logout']);
 /* Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', [LoginController::class,'logout'])->name('logout-testing');
 
@@ -346,6 +348,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
             Route::prefix('commission')->name('commission.')->group(function(){

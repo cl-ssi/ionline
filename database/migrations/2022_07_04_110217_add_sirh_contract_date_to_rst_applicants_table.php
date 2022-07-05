@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRunToRstRequestReplacementStaffTable extends Migration
+class AddSirhContractDateToRstApplicantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddRunToRstRequestReplacementStaffTable extends Migration
      */
     public function up()
     {
+        Schema::table('rst_applicants', function (Blueprint $table) {
+            $table->date('sirh_contract')->nullable()->after('replacement_reason');
+        });
+
         Schema::table('rst_request_replacement_staff', function (Blueprint $table) {
-            $table->unsignedInteger('run')->nullable()->after('name_to_replace');
-            $table->char('dv',1)->nullable()->after('run');
+            $table->boolean('sirh_contract')->nullable()->after('request_status');
         });
     }
 
@@ -26,9 +29,12 @@ class AddRunToRstRequestReplacementStaffTable extends Migration
      */
     public function down()
     {
+        Schema::table('rst_applicants', function (Blueprint $table) {
+            $table->dropColumn('sirh_contract');
+        });
+
         Schema::table('rst_request_replacement_staff', function (Blueprint $table) {
-            $table->dropColumn('run');
-            $table->dropColumn('dv');
+            $table->dropColumn('sirh_contract');
         });
     }
 }
