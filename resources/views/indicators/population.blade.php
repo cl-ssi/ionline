@@ -22,7 +22,7 @@
 	    			@livewire('indicators.dashboard.population-search-form', ['request' => $request])
 
 						<fieldset class="form-group col-sm-2">
-			        <label>Género</label>
+			        <label>Sexo</label>
 			        <select class="form-control selectpicker" name="gender_id[]" data-actions-box="true" multiple required>
 			          <option value="M" @if($request->type!= NULL && in_array('M', $request->gender_id)) selected @endif>Masculino</option>
 			          <option value="F" @if($request->type!= NULL && in_array('F', $request->gender_id)) selected @endif>Femenino</option>
@@ -78,7 +78,7 @@
 						<div id="chart_div"></div>
 				</div>
 		</div>
-		
+
 @elseif($request->has('type') && $total_pob->count() == 0)
 
 	<div class="row">
