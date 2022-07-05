@@ -452,6 +452,7 @@ class ShowTotalHours extends Component
               break;
 
             // 15/06/2022: nataly solicita que desde mayo del 2022, se aplique para todos valores diurnos y nocturnos, nocturnos con factor 1.2
+            // 05/07/2022: nataly indica que hoy autorizaron que los extras covid y contingencia respiratoria se pague a valor único criterio (sin el 1.2) aplicado hasta agosto del 2022
             case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-05-2022 00:00'))):
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-05-2022 00:00'))):
     
@@ -500,7 +501,7 @@ class ShowTotalHours extends Component
                   }
     
                 $totalAmountDayRefund = floor($this->totalHoursDay) * $value;
-                $totalAmountNight = floor($this->totalHoursNight) * $value * 1.2;
+                $totalAmountNight = floor($this->totalHoursNight) * $value;
                 $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
     
                 $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
