@@ -46,5 +46,10 @@ class Dispatch extends Model
     return $this->hasMany('App\Pharmacies\File');
   }
 
+  public function verificationMailings()
+  {
+    return $this->hasMany('App\Pharmacies\DispatchVerificationMailing');
+  }
+
   protected $dates = ['date'];
 }
