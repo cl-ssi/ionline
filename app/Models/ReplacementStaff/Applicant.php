@@ -16,7 +16,7 @@ class Applicant extends Model implements Auditable
     protected $fillable = [
         'replacement_staff_id', 'psycholabor_evaluation_score', 'technical_evaluation_score',
         'observations', 'selected', 'desist', 'desist_observation', 'start_date',
-        'end_date', 'name_to_replace', 'replacement_reason', 'ou_of_performance_id'
+        'end_date', 'name_to_replace', 'sirh_contract', 'replacement_reason', 'ou_of_performance_id'
     ];
 
     public function replacementStaff() {
@@ -63,7 +63,7 @@ class Applicant extends Model implements Auditable
     ];
 
     protected $dates = [
-      'start_date', 'end_date'
+      'start_date', 'end_date', 'sirh_contract'
     ];
 
     protected $table = 'rst_applicants';
