@@ -126,11 +126,8 @@
                       <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                           class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                       @else
-                      <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
-                        <i class="fas fa-eye"></i>
-                      </button>
-                      @include('replacement_staff.modals.modal_to_view_request')
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                          class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                       @endif
                     @endif
                   </td>
@@ -231,11 +228,8 @@
                       @endforeach
                   </td>
                   <td>
-                      <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
-                        <i class="fas fa-eye"></i>
-                      </button>
-                      @include('replacement_staff.modals.modal_to_view_request')
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                          class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                   </td>
               </tr>
               @endforeach
