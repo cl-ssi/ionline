@@ -41,7 +41,13 @@
     <hr>
     @foreach($indicators as $indicator)
         <p><a href="" class="dropdown-toggle" data-toggle="collapse" data-target="#ind{{ $indicator->number }}">{{ $comges->number }}.{{$indicator->number}} {{$indicator->name}}</a>
-        @if($comges->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif</p>
+        @if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif
+        <br>
+        @php($referente = $comges->getReferrer(1) ?? $indicator->getReferrer(1) )
+        @if($referente)<span class="badge badge-pill badge-light">Referente titular: {{$referente->tinnyName}}</span> @endif
+        @php($referente = $comges->getReferrer(2) ?? $indicator->getReferrer(2) )
+        @if($referente)<span class="badge badge-pill badge-light">Referente subrogante: {{$referente->tinnyName}}</span>@endif
+        </p>
         <div class="collapse" id="ind{{ $indicator->number }}">
         <!-- resumen indicador -->
         @if($indicator->actions->isEmpty())
@@ -73,7 +79,7 @@
                 <table class="table table-sm table-bordered small mb-4">
                     <thead>
                         <tr class="text-center">
-                            <th colspan="100%">ACCIÓN {{$action->number}} @if($comges->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.edit', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator, $action])}}"><span class="fa fa-edit"></span></a>@endif</th>
+                            <th colspan="100%">ACCIÓN {{$action->number}} @if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.edit', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator, $action])}}"><span class="fa fa-edit"></span></a>@endif</th>
                         </tr>
                         <tr class="text-center">
                             <th class="label">Indicador</th>

@@ -41,6 +41,19 @@ class Indicator extends Model
         return $this->morphMany('App\Indicators\AttachedFile', 'attachable')->orderBy('section');
     }
 
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'indicators_users')
+                    ->withPivot('referrer_number')
+                    ->withTimestamps()
+                    ->orderBy('referrer_number');
+    }
+
+    public function getReferrer($number)
+    {
+        return $this->users()->wherePivot('referrer_number', $number)->first();
+    }
+
     public function getValuesAcum($factor)
     {
         return $this->values->where('factor', $factor)->sum('value');
