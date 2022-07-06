@@ -11,9 +11,9 @@
 @forelse($comges as $item)
     <p><a href="#comges{{$item->number}}" class="dropdown-toggle" data-toggle="collapse">{{$item->number}}. {{$item->name}}</a>
     @canany(['Indicators: manager']) <a href="{{route('indicators.comges.edit', [$item])}}"><span class="fa fa-edit"></span></a> @endcanany
-    @foreach($item->users as $referente)
+    {{--@foreach($item->users as $referente)
         <span class="badge badge-pill badge-light">{{$referente->pivot->referrer_number}}. {{$referente->name}} {{$referente->fathers_family}}</span>
-    @endforeach
+    @endforeach--}}
     <!-- <span class="badge badge-success"><i class="fas fa-check"></i></span> -->
     @php ($romans = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'])
     @for($i = 1 ; $i <= 4 ; $i++)
