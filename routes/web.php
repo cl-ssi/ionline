@@ -100,7 +100,6 @@ use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\SingleParameterController;
-use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\QualityAps\QualityApsController;
 
 use App\Http\Controllers\Mammography\MammographyController;
@@ -178,6 +177,10 @@ use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\StoreController;
 
+use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryIndex;
+use App\Http\Livewire\Inventory\InventoryLastReceptions;
+use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
@@ -1450,11 +1453,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 });
 
+// Inventories
 Route::prefix('inventories')->as('inventories.')->group(function() {
-    Route::get('last-income', [InventoryController::class, 'last_income'])->name('last-income');
-    Route::get('pending-inventory', [InventoryController::class, 'pending_inventory'])->name('pending-inventory');
-    Route::get('/', [InventoryController::class, 'index'])->name('index');
-    Route::get('inventory/1/details', [InventoryController::class, 'details'])->name('details');
+    Route::get('/', InventoryIndex::class)->name('index');
+    Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
+    Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
+    Route::get('/{inventory}/edit', InventoryEdit::class)->name('edit');
 });
 
 /* Bodega de Farmacia */
