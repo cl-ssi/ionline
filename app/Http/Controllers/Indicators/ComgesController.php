@@ -34,7 +34,7 @@ class ComgesController extends Controller
         $indicators = $comges->indicators()->whereHas('sections', function($q) use ($section){
             $q->where('ind_sections.number', $section);
         })->get();
-        $indicators->load(['actions' => function($q) use ($section){
+        $indicators->load(['users', 'actions' => function($q) use ($section){
             $q->where('ind_sections.number', $section)->with('values');
         }]);
         $corte = $comges->sections()->where('ind_sections.number', $section)->first();
@@ -46,10 +46,11 @@ class ComgesController extends Controller
 
     public function create($year)
     {
-        $last_comges = Comges::where('year', $year)->orderBy('number', 'desc')->first();
-        $last_number = $last_comges != null ? $last_comges->number + 1 : 1;
+        // $last_comges = Comges::where('year', $year)->orderBy('number', 'desc')->first();
+        // $last_number = $last_comges != null ? $last_comges->number + 1 : 1;
         $users = User::select('id', 'name', 'fathers_family', 'mothers_family')->orderBy('name')->get();
-        return view('indicators.comges.create', compact('year', 'last_number', 'users'));
+        // return view('indicators.comges.create', compact('year', 'last_number', 'users'));
+        return view('indicators.comges.create', compact('year', 'users'));
     }
 
     public function createAction($year, $comges, $section, Indicator $indicator)
@@ -57,18 +58,20 @@ class ComgesController extends Controller
         // $corte = $indicator->sections()->where('ind_sections.number', $section)->first();
         // $last_action = $corte->actions->last();
         // $last_number = $last_action != null ? $last_action->number + 1 : 1;
+        $indicator->load('users');
         return view('indicators.comges.action.create', compact('section', 'indicator'))->with(['comges' => $indicator->indicatorable]);
     }
 
     public function edit(Comges $comges)
     {
         $users = User::select('id', 'name', 'fathers_family', 'mothers_family')->orderBy('name')->get();
-        $comges->load('indicators.sections');
+        $comges->load('indicators.sections', 'indicators.users');
         return view('indicators.comges.edit', compact('comges', 'users'));
     }
 
     public function editAction($year, $comges, $section, Indicator $indicator, Action $action)
     {
+        $indicator->load('users');
         $action->load('values', 'compliances');
         return view('indicators.comges.action.edit', compact('section', 'indicator', 'action'))->with(['comges' => $indicator->indicatorable]);
     }
@@ -104,6 +107,9 @@ class ComgesController extends Controller
                         'number' => $i+1,
                         'weighting' => $weighting
                     ]);
+
+                foreach($indicator['referrers'] as $i => $referrer_id)
+                    $new_indicator->users()->attach($referrer_id, ['referrer_number' => $i+1]);
             }
 
         return redirect()->route('indicators.comges.list', [$year])->with('success', 'Registro creado satisfactoriamente');
@@ -173,9 +179,8 @@ class ComgesController extends Controller
         // return $request;
         $comges->name = $request->get('name');
         $comges->save();
-
-        $comges->users()->detach();
         
+        $comges->users()->detach();
         foreach($request->get('referrer') as $i => $referrer_id)
             $comges->users()->attach($referrer_id, ['referrer_number' => $i+1]);
 
@@ -193,6 +198,10 @@ class ComgesController extends Controller
                 $ind_updated->sections()->updateOrCreate(['number' => $j+1], [
                     'weighting' => $weighting
                 ]);
+            
+            $ind_updated->users()->detach();
+            foreach($indicator['referrers'] as $j => $referrer_id)
+                $ind_updated->users()->attach($referrer_id, ['referrer_number' => $j+1]);
         }
 
         return redirect()->route('indicators.comges.list', [$comges->year])->with('success', 'Registro actualizado satisfactoriamente');

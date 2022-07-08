@@ -19,6 +19,12 @@
 		    <input type="text" class="form-control" id="for_name"
 				value="{{ $establishment->name }}" name="name" required="required">
 		</fieldset>
+
+		<fieldset class="form-group col">
+		    <label for="for_name">Correo electrónico</label>
+		    <input type="text" class="form-control" id="for_email"
+				value="{{ $establishment->email }}" name="email" required="required">
+		</fieldset>
 	</div>
 	<div class="form-row">
 	<fieldset class="form-group col">

@@ -215,7 +215,9 @@ Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callbac
 Route::get('/claveunica/login/{access_token}', [ClaveUnicaController::class,'login'])->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::class,'loginExternal']);
 
-Route::get('logout', [LoginController::class,'logout'])->name('logout');
+Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
+
+Route::get('logout', [LoginController::class,'logout']);
 /* Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', [LoginController::class,'logout'])->name('logout-testing');
 
@@ -236,6 +238,12 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class,'externalLogin']);
+
+// acceso a usuarios verificación entrega de farmacias
+Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
+    Route::get('confirmation_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationDispatchVerificationNotification'])->name('confirmation_verification');
+}); 
+
 
 Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
@@ -343,6 +351,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
             Route::prefix('commission')->name('commission.')->group(function(){
@@ -1482,6 +1491,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/product/batch/{product_id?}/{due_date?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_batch'])->name('dispatch.product.batch')->middleware('auth');
         Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}', [App\Http\Controllers\Pharmacies\DispatchController::class,'getFromProduct_count'])->name('dispatch.product.count')->middleware('auth');
         Route::get('/exportExcel', [App\Http\Controllers\Pharmacies\DispatchController::class,'exportExcel'])->name('exportExcel')->middleware('auth');
+        Route::get('dispatch/sendEmailValidation/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'sendEmailValidation'])->name('dispatch.sendEmailValidation')->middleware('auth');
 
         Route::resource('dispatch', App\Http\Controllers\Pharmacies\DispatchController::class);
         Route::resource('dispatch_item', App\Http\Controllers\Pharmacies\DispatchItemController::class);

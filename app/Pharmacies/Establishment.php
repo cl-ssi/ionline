@@ -13,7 +13,7 @@ class Establishment extends Model
      * @var array
      */
     protected $fillable = [
-        'name'
+        'name','email'
     ];
 
     use SoftDeletes;
