@@ -69,7 +69,7 @@
                 <td class="text-center">$100</td>
                 <td></td>
                 <td class="text-center">
-                    <a class="btn btn-sm btn-primary" href="{{ route('inventories.details') }}">
+                    <a class="btn btn-sm btn-primary" href="#">
                         <i class="fas fa-eye"></i>
                     </a>
                 </td>
