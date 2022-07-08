@@ -31,6 +31,7 @@
 	<thead>
 		<tr>
 			<th scope="col">Nombre</th>
+			<th scope="col">Correo electrónico</th>
 			<th scope="col"></th>
 		</tr>
 	</thead>
@@ -38,6 +39,7 @@
 	@foreach($establishments as $establishment)
 		<tr>
 			<td>{{ $establishment->name }}</td>
+			<td>{{ $establishment->email }}</td>
 			<td>
 				<a href="{{ route('pharmacies.establishments.edit', $establishment) }}"
 					class="btn btn-sm btn-outline-secondary">

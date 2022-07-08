@@ -216,7 +216,7 @@ class ClaveUnicaController extends Controller
             return redirect()->route('logout');
         }else{
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
-            $url_redirect = "https://www.saludiquique.app/logout";
+            $url_redirect = env('APP_URL')."/logout";
             $url = $url_logout.urlencode($url_redirect);
         }        
 

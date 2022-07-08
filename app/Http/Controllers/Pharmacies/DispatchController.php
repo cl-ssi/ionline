@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pharmacies;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Pharmacies\Dispatch;
+use App\Pharmacies\DispatchVerificationMailing;
 use App\Pharmacies\Establishment;
 use App\Pharmacies\File;
 use App\Pharmacies\Product;
@@ -14,6 +15,10 @@ use App\Exports\DispatchExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Auth;
+
+use App\Mail\DispatchVerificationNotification;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class DispatchController extends Controller
 {
@@ -409,6 +414,40 @@ class DispatchController extends Controller
 
     public function exportExcel(){
         return Excel::download(new DispatchExport, 'entregas.xlsx');
+    }
+
+    public function sendEmailValidation(Dispatch $dispatch)
+    {
+      if($dispatch->establishment->email == null ){
+        session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+        return redirect()->back();
+      }
+
+      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+        $verificationMailing->status = "Verificación cancelada.";
+        $verificationMailing->sender_observation = "Se ha creado nueva verificación.";
+        $verificationMailing->save();
+      }
+
+      $dispatchVerificationMailing = new DispatchVerificationMailing();
+      $dispatchVerificationMailing->dispatch_id = $dispatch->id;
+      $dispatchVerificationMailing->status = "Pendiente";
+      $dispatchVerificationMailing->sender_observation = null;
+      $dispatchVerificationMailing->delivery_date = Carbon::now();
+      $dispatchVerificationMailing->save();
+
+      $base64encode = base64_encode($dispatch->id);
+      $dispatch->base64encode = $base64encode;
+
+      Mail::to($dispatch->establishment->email)->send(new DispatchVerificationNotification($dispatch));
+
+      session()->flash('success', 'El correo ha sido enviado correctamente.');
+      return redirect()->back();
+    }
+
+    public function confirmationDispatchVerificationNotification($id){
+      $dispatch = Dispatch::find(base64_decode($id));
+      dd($dispatch);
     }
 
 }
