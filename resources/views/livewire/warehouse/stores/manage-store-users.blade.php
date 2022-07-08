@@ -16,9 +16,9 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" wire:loading.remove wire:target="search">
                                         @if($user_id == null)
-                                        <i class="fas fa-times text-danger"></i>
+                                            <i class="fas fa-times text-danger"></i>
                                         @else
-                                        <i class="fas fa-check text-success"></i>
+                                            <i class="fas fa-check text-success"></i>
                                         @endif
                                     </span>
                                     <span class="input-group-text" wire:loading wire:target="search">
@@ -32,7 +32,9 @@
                                     class="form-control form-control-sm @error('user_id') is-invalid @enderror"
                                     wire:model.debounce.500ms="search"
                                     placeholder="{{ $selectedName }}"
-                                    value="{{$selectedName}}" @if($user_id) disabled @endif>
+                                    value="{{$selectedName}}"
+                                    @if($user_id) disabled @endif
+                                >
                                 <div class="input-group-append">
                                     <button class="btn btn-sm btn-secondary"
                                         type="button" wire:click="clearSearch">
@@ -46,7 +48,6 @@
                                     </span>
                                 @enderror
                             </div>
-
 
                             <ul class="list-group col-12" style="z-index: 3; position: absolute;">
                                 @if($search)
@@ -110,7 +111,7 @@
                     <button
                         class="btn btn-sm btn-outline-secondary"
                         type="button"
-                        title="Limpiar bússqueda"
+                        title="Limpiar búsqueda"
                         wire:click="clearSearchUser"
                     >
                         <i class="fa fa-times"></i>
