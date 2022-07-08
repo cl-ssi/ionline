@@ -18,6 +18,7 @@ class ControlItem extends Model
         'balance',
         'confirm',
         'correlative_po',
+        'inventory',
         'unit_price',
         'control_id',
         'program_id',
