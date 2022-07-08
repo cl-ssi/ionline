@@ -29,29 +29,24 @@ class Inventory extends Model
         'po_code',
         'po_price',
         'po_date',
-        'reception_confirmation',
-        'deliver_date',
-        'delivered_user_ou_id',
-        'delivered_user_id',
+        'status',
+        'observations',
+        'discharge_date',
+        'act_number',
+        'depreciation',
         'request_user_ou_id',
         'request_user_id',
         'product_id',
         'control_id',
         'store_id',
-        'place_id',
         'po_id',
         'request_form_id',
     ];
 
-    public function deliveredOrganizationalUnit()
-    {
-        return $this->belongsTo(OrganizationalUnit::class, 'delivered_user_ou_id');
-    }
-
-    public function deliveredUser()
-    {
-        return $this->belongsTo(User::class, 'delivered_user_id');
-    }
+    protected $dates = [
+        'po_date',
+        'discharge_date',
+    ];
 
     public function requestOrganizationalUnit()
     {
@@ -78,11 +73,6 @@ class Inventory extends Model
         return $this->belongsTo(Store::class);
     }
 
-    public function place()
-    {
-        return $this->belongsTo(Place::class);
-    }
-
     public function purchaseOrder()
     {
         return $this->belongsTo(PurchaseOrder::class, 'po_id');
@@ -91,5 +81,33 @@ class Inventory extends Model
     public function requestForm()
     {
         return $this->belongsTo(RequestForm::class);
+    }
+
+    public function movements()
+    {
+        return $this->hasMany(InventoryMovement::class);
+    }
+
+    public function getPriceAttribute()
+    {
+        return money($this->po_price);
+    }
+
+    public function getPlaceAttribute()
+    {
+        $lastMovement = $this->movements->last();
+        return ($lastMovement) ? $lastMovement->place : null;
+    }
+
+    public function getResponsibleAttribute()
+    {
+        $lastMovement = $this->movements->last();
+        return ($lastMovement) ? $lastMovement->responsibleUser : null;
+    }
+
+    public function getDateAttribute()
+    {
+        $lastMovement = $this->movements->last();
+        return ($lastMovement) ? $lastMovement->created_at->format('Y-m-d') : null;
     }
 }
