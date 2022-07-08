@@ -111,7 +111,7 @@ class GenerateReception extends Component
             $this->date = now()->format('Y-m-d');
             $this->error = false;
             $this->po_code = $purchaseOrder->code;
-            $this->po_date = $purchaseOrder->date;
+            $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
             $this->supplier_name = $purchaseOrder->supplier_name;
             $this->program_id = $this->getProgramId($this->po_search);
             $this->disabled_program = $this->program_id ? true : false;
