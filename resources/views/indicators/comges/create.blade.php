@@ -29,21 +29,21 @@
     <h4 class="mb-3">Comges</h4><hr>
     <div class="form-row">
         <div class="form-group col-md-1">
-            <label for="number">Número</label>
-            <input type="text" class="form-control" id="number" name="number" value="{{$last_number}}" disabled>
-            <input type="hidden" class="form-control" id="number" name="number" value="{{$last_number}}">
+            <label for="number">Número *</label>
+            <input type="text" class="form-control" id="number" name="number" required>
+            {{--<input type="hidden" class="form-control" id="number" name="number" value="{{$last_number}}">--}}
         </div>
         <div class="form-group col-md-11">
             <label for="name">Nombre *</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
-    </div><br>
+    </div>
     <h4 class="mb-3">Referentes</h4><hr>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="referrer">Primer referente</label>
             <select class="form-control" id="referrer_1" name="referrer[]">
-                <option value="">Seleccione primer referente</option>
+                <option value="">Seleccione referente</option>
                 @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option>
                 @endforeach
@@ -52,7 +52,7 @@
         <div class="form-group col-md-6">
             <label for="referrer">Segundo referente</label>
             <select class="form-control" id="referrer_2" name="referrer[]">
-                <option value="">Seleccione segundo referente</option>
+                <option value="">Seleccione referente</option>
                 @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option>
                 @endforeach
@@ -117,6 +117,27 @@
             <input type="number" class="form-control" id="corte_4" name="indicator[0][cortes][]" disabled>
         </div>
     </div>
+    <p>Referentes</p>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="referrer">Primer referente</label>
+            <select class="form-control" id="referrer_1" name="indicator[0][referrers][]" disabled>
+                <option value="">Seleccione referente</option>
+                @foreach($users as $user)
+                <option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="referrer">Segundo referente</label>
+            <select class="form-control" id="referrer_2" name="indicator[0][referrers][]" disabled>
+            <option value="">Seleccione referente</option>    
+            @foreach($users as $user)
+                <option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     </div>
     <!-- end hidden dynamic element to clone -->
     <h4 class="mb-3">Indicadores</h4>
@@ -137,7 +158,7 @@ $('.add-one').click(function(){
     var newElement = $('.dynamic-element').first().clone();
     var num = $('.dynamic-element').length - 2;
     var newNum = num + 1;
-    newElement.find('input').each(function(i){
+    newElement.find('input,select').each(function(i){
         $(this).attr('name', $(this).attr('name').replace($(this).attr("name").match(/\[[0-9]+\]/), "["+(newNum)+"]"));
         $(this).prop('disabled', false);
     });
