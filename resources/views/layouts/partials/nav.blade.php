@@ -142,22 +142,15 @@
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
 
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item disabled" href="#">
-                            <i class="fas fa-fw fa-warehouse"></i> Bodega
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item disabled" href="#">
-                            <i class="fas fa-fw fa-clipboard-list"></i> Inventario
-                        </a>
 
                         @endcanany
                         <div class="dropdown-divider"></div>
 
                         <h6 class="dropdown-header">Bodegas</h6>
+
+						<a class="dropdown-item disabled" href="#">
+                            <i class="fas fa-fw fa-warehouse"></i> Bodega
+                        </a>
 
                         @role('Store: Super admin')
                             <a
@@ -189,11 +182,17 @@
                         @endhasanyrole
 
 
+                        <div class="dropdown-divider"></div>
+
+						<a class="dropdown-item disabled" href="#">
+							<i class="fas fa-fw fa-clipboard-list"></i> Inventario
+						</a>
+
 
                         @canany(['Pharmacy'])
                         <div class="dropdown-divider"></div>
 
-                        <h6 class="dropdown-header">Droguería</h6>
+                        <h6 class="dropdown-header">Droguerías</h6>
 
                         @canany(['Pharmacy: Administrator'])
                         <a class="dropdown-item {{ active('pharmacies.admin_view') }}"
