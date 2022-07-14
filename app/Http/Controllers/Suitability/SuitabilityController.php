@@ -94,13 +94,15 @@ class SuitabilityController extends Controller
             ->when($school_id != null, function ($q) use ($school_id) {
                 return $q->where('school_id', $school_id);
             })
-            ->get();
+            ->paginate(100);
         return view('suitability.pending', compact('psirequests', 'schools', 'school_id'));
     }
 
     public function approved()
     {
-        $psirequests = PsiRequest::where('status', 'Aprobado')->get();
+        $psirequests = PsiRequest::where('status', 'Aprobado')->paginate(100);
+        
+        
         return view('suitability.approved', compact('psirequests'));
     }
 
@@ -141,7 +143,8 @@ class SuitabilityController extends Controller
         $psirequests = PsiRequest::when($school_id != null, function ($q) use ($school_id) {
             return $q->where('school_id', $school_id);
         })
-            ->get();
+        ->paginate(100);
+            //->get();
         $schools = School::orderBy("name", "asc")->get();
         return view('suitability.indexown', compact('psirequests', 'schools', 'school_id'));
     }

@@ -38,6 +38,8 @@
 </table>
 
 
+{{ $psirequests->links() }}
+
 @endsection
 
 @section('custom_js')
