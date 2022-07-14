@@ -11,22 +11,24 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item">
+                <li class="nav-item {{ active('rrhh.users.directory') }}">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
                         <i class="fas fa-address-book" title="Teléfonos"></i>
                     </a>
                 </li>
 
+                @auth
                 <li class="nav-item {{ active('calendars') }}">
                     <a class="nav-link" href="{{ route('calendars') }}">
                         <i class="fas fa-calendar-alt" title="Calendarios"></i>
                     </a>
                 </li>
+                @endauth
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown {{ active(['indicators.*','programmings.*','communefiles.index','le_extra_plans.index']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-chart-line"></i> Estadísticas
+                        <i class="fas fa-chart-pie"></i> Estadísticas
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -66,8 +68,10 @@
                 </li>
 
                 @auth
+
                 <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+
+                <a class="nav-link dropdown-toggle {{ active(['documents.*','documents.*','agreements.*','quality_aps.*','health_plan.*']) }}" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-file-alt"></i> Docs
                 </a>
@@ -75,21 +79,21 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                     @canany(['Documents: create','Documents: edit','Documents: add number', 'Documents: dev'])
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ active('documents.index') }}"
                         href="{{ route('documents.index') }}">
                         <i class="fas fa-pen"></i> Generador de documentos
                     </a>
                     @endcan
 
                     @canany(['Documents: signatures and distribution'])
-                      <a class="dropdown-item"
+                      <a class="dropdown-item {{ active('documents.signatures.*') }}"
                           href="{{ route('documents.signatures.index', ['pendientes']) }}">
                           <i class="fas fa-signature"></i> Solicitud de firmas
                       </a>
                     @endcan
 
                     @canany(['Partes: oficina','Partes: user','Partes: director'])
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ active('documents.partes.*') }}"
                         href="{{ route('documents.partes.index') }}">
                         <i class="fas fa-file-import"></i> Partes
                     </a>
@@ -97,40 +101,156 @@
 
                     @can('Agreement: view')
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ active('agreements.tracking.*') }}"
                         href="{{ route('agreements.tracking.index') }}">
                         <i class="fas fa-file"></i> Convenios
                     </a>
                     @endcan
 
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ active('quality_aps.*') }}"
                         href="{{ route('quality_aps.index') }}">
                         <i class="fas fa-file-alt"></i> Acreditación de Calidad
                     </a>
 
-                    <a class="dropdown-item"
+                    <a class="dropdown-item {{ active('health_plan.*') }}"
                         href="{{ route('health_plan.index', ['iquique']) }}">
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
                     </div>
                 </li>
-                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
-                <li class="nav-item {{ active('request_forms') }}">
-                    <a class="nav-link" href="{{ route('request_forms.my_forms') }}">
-                        <i class="fas fa-shopping-cart"></i> Abastecimiento
-                    </a>
-                </li>
-                @endif
-                @endauth
+
 
                 @can('Requirements: create')
-                <li class="nav-item">
+                <li class="nav-item {{ active('requirements.*') }}">
                     <a class="nav-link" href="{{ route('requirements.inbox') }}">
                       <i class="fas fa-rocket"></i> SGR
                       <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span>
                     </a>
                 </li>
                 @endcan
+
+
+                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
+                <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*']) }}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-money-check"></i> SDA
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
+                            <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item disabled" href="#">
+                            <i class="fas fa-fw fa-warehouse"></i> Bodega
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item disabled" href="#">
+                            <i class="fas fa-fw fa-clipboard-list"></i> Inventario
+                        </a>
+
+                        @endcanany
+                        <div class="dropdown-divider"></div>
+
+                        <h6 class="dropdown-header">Bodegas</h6>
+
+                        @role('Store: Super admin')
+                            <a
+                                class="dropdown-item {{ active('warehouse.stores.index') }}"
+                                href="{{ route('warehouse.stores.index') }}"
+                            >
+                                <i class="fas fa-list"></i> Administrar Bodegas
+                            </a>
+                        @endrole
+
+                        @hasanyrole('Store: admin|Store: user|Store: Super admin')
+                            @forelse(Auth::user()->stores as $store)
+                                <a
+                                    class="dropdown-item"
+                                    href="{{ route('warehouse.store.active', $store) }}"
+                                >
+                                    @if($store->id == optional(Auth::user()->active_store)->id)
+                                        <i class="fas fa-check"></i>
+                                    @else
+                                        <i class="fas fa-circle"></i>
+                                    @endif
+                                    {{ $store->name }}
+                                </a>
+                            @empty
+                                <a class="dropdown-item" href="#">
+                                    No tiene bodegas asignadas
+                                </a>
+                            @endforelse
+                        @endhasanyrole
+
+
+
+                        @canany(['Pharmacy'])
+                        <div class="dropdown-divider"></div>
+
+                        <h6 class="dropdown-header">Droguería</h6>
+
+                        @canany(['Pharmacy: Administrator'])
+                        <a class="dropdown-item {{ active('pharmacies.admin_view') }}"
+                            href="{{ route('pharmacies.admin_view') }}">
+                            <i class="fas fa-fw fa-user"></i> Administrador
+                        </a>
+                        @endcanany
+
+                        @if(Auth::user()->pharmacies->count() > 0)
+                            <a class="dropdown-item {{ active('pharmacies.index') }}"
+                                href="{{ route('pharmacies.index') }}">
+                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
+                            </a>
+                        @else
+                            <a class="dropdown-item">
+                                <i class="fas fa-fw fa-exclamation-circle"></i> No tiene droguerías asignadas
+                            </a>
+                        @endif
+
+
+                        @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
+
+                        <div class="dropdown-divider"></div>
+                        
+                        <h6 class="dropdown-header">Recursos informáticos</h6>
+                        
+                        <a class="dropdown-item {{ active('resources.computer.*') }}"
+                            href="{{ route('resources.computer.index') }}">
+                            <i class="fas fa-desktop fa-fw"></i> Computadores
+                        </a>
+
+                        <a class="dropdown-item {{ active('resources.printer.*') }}"
+                            href="{{ route('resources.printer.index') }}">
+                            <i class="fas fa-print fa-fw"></i> Impresoras
+                        </a>
+
+                        <a class="dropdown-item {{ active('resources.telephone.*') }}"
+                            href="{{ route('resources.telephone.index') }}">
+                            <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
+                        </a>
+
+                        <a class="dropdown-item {{ active('resources.mobile.*') }}"
+                            href="{{ route('resources.mobile.index') }}">
+                            <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
+                        </a>
+
+                        <a class="dropdown-item {{ active('resources.wingle.*') }}"
+                            href="{{ route('resources.wingle.index') }}">
+                            <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
+                        </a>
+
+                        @endcan
+
+                    </div>
+                </li>
+                @endif
+
 
                 @canany(['Users: create', 'Users: edit','Users: delete',
                     'OrganizationalUnits: create',
@@ -142,7 +262,8 @@
                     'Service Request',
                     'Replacement Staff: create request',
                     'Replacement Staff: view requests'])
-                <li class="nav-item dropdown @active(['rrhh.users.*', 'rrhh.organizationalUnits.*']">
+                <li class="nav-item dropdown 
+                    {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-users"></i> RRHH
@@ -151,21 +272,21 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         @canany(['Users: create', 'Users: edit','Users: delete'])
-                        <a class="dropdown-item @active('rrhh.users.index')"
+                        <a class="dropdown-item {{ active(['rrhh.users.*']) }}"
                             href="{{ route('rrhh.users.index') }}">
                             <i class="fas fa-user fa-fw"></i> Usuarios
                         </a>
                         @endcan
 
                         @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
-                            <a class="dropdown-item"
+                            <a class="dropdown-item {{ active('rrhh.organizational-units.*') }}"
                                href="{{ route('rrhh.organizational-units.index') }}">
                                 <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                             </a>
                         @endcan
 
                         @canany(['Authorities: view', 'Authorities: create'])
-                            <a class="dropdown-item"
+                            <a class="dropdown-item {{ active('rrhh.authorities.*') }}"
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
                             </a>
@@ -174,7 +295,7 @@
                         <div class="dropdown-divider"></div>
 
                         @can('Suitability: ssi')
-                            <a class="dropdown-item"
+                            <a class="dropdown-item {{ active('suitability.*') }}"
                                href="{{ route('suitability.own') }}">
                                 <i class="fas fa-chalkboard-teacher"></i> Idoneidad
                             </a>
@@ -182,14 +303,14 @@
 
 
                         @canany(['Service Request'])
-                        <a class="dropdown-item"
+                        <a class="dropdown-item {{ active('rrhh.service-request.*') }}"
                             href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
                         </a>
                         @endcan
 
                         @canany(['Service Request: export sirh mantenedores'])
-                        <a class="dropdown-item"
+                        <a class="dropdown-item {{ active('parameters.professions.index') }}"
                             href="{{ route('parameters.professions.index') }}">
                             <i class="fas fa-child fa-chevron-right"></i> Mantenedor de profesiones
                         </a>
@@ -201,14 +322,14 @@
                         @endcan
 
                         @canany(['Shift Management: view'])
-                        <a class="dropdown-item @active('rrhh.users.index')"
+                        <a class="dropdown-item {{ active('rrhh.users.index') }}"
                             href="{{ route('rrhh.shiftManag.index') }}">
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>
                         @endcan
 
                         @canany(['Users: service requests'])
-                        <a class="dropdown-item @active('rrhh.users.service_requests.index')"
+                        <a class="dropdown-item {{ active('rrhh.users.service_requests.index') }}"
                             href="{{ route('rrhh.users.service_requests.index') }}">
                             <i class="fas fa-user fa-fw"></i> Usuarios - Contrat. de Servicios
                         </a>
@@ -217,7 +338,7 @@
                         {{-- @if(Auth::user()->hasRole('Replacement Staff: admin'))
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.index')"
+                            <a class="dropdown-item {{ active('replacement_staff.request.index') }}"
                                href="{{ route('replacement_staff.request.index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
@@ -226,7 +347,7 @@
                         @if(Auth::user()->hasRole('Replacement Staff: user rys'))
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.assign_index')"
+                            <a class="dropdown-item {{ active('replacement_staff.request.assign_index') }}"
                                href="{{ route('replacement_staff.request.assign_index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
@@ -240,7 +361,7 @@
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.own_index')"
+                            <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}"
                                href="{{ route('replacement_staff.request.own_index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                                 @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
@@ -252,7 +373,7 @@
                         {{-- @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.personal_index')"
+                            <a class="dropdown-item {{ active('replacement_staff.request.personal_index') }}"
                                href="{{ route('replacement_staff.request.personal_index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
@@ -263,7 +384,7 @@
                 @endcan
 
                 @can('Drugs')
-                <li class="nav-item">
+                <li class="nav-item {{ active('drugs.*') }}">
                     <a class="nav-link" href="{{ route('drugs.receptions.index') }}">
                         <i class="fas fa-cannabis"></i> Drogas</a>
                 </li>
@@ -276,117 +397,13 @@
                   </li>
                 @endcan
 
-                @canany(['Pharmacy'])
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-warehouse"></i> Bodega
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                            @canany(['Pharmacy: Administrator'])
-                            <a class="dropdown-item"
-                                href="{{ route('pharmacies.admin_view') }}">
-                                <i class="fas fa-fw fa-user"></i> Administrador
-                            </a>
-                            @endcanany
-
-                            @if(Auth::user()->pharmacies->count() > 0)
-                                <h6 class="dropdown-header">Farmacia</h6>
-
-                                <a class="dropdown-item"
-                                    href="{{ route('pharmacies.index') }}">
-                                    <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
-                                </a>
-                            @else
-                                <a class="dropdown-item">
-                                    <i class="fas fa-fw fa-solid fa-x"></i> Falta asignar bodega
-                                </a>
-                            @endif
-
-                            @auth
-                                <div class="dropdown-divider"></div>
-                                <h6 class="dropdown-header">Bodegas</h6>
-
-                                @role('Store: Super admin')
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route('warehouse.stores.index') }}"
-                                    >
-                                        <i class="fas fa-list"></i> Administrar Bodegas
-                                    </a>
-                                @endrole
-
-                                @hasanyrole('Store: admin|Store: user|Store: Super admin')
-                                    @forelse(Auth::user()->stores as $store)
-                                        <a
-                                            class="dropdown-item"
-                                            href="{{ route('warehouse.store.active', $store) }}"
-                                        >
-                                            @if($store->id == optional(Auth::user()->active_store)->id)
-                                                <i class="fas fa-check"></i>
-                                            @else
-                                                <i class="fas fa-circle"></i>
-                                            @endif
-                                            {{ $store->name }}
-                                        </a>
-                                    @empty
-                                        <a class="dropdown-item" href="#">
-                                            No posee bodegas
-                                        </a>
-                                    @endforelse
-                                @endhasanyrole
-
-                            @endauth
-                        </div>
-                    </li>
-                @endcanany
-
-
-                @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-clipboard-list"></i>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                        <a class="dropdown-item"
-                            href="{{ route('resources.computer.index') }}">
-                            <i class="fas fa-desktop fa-fw"></i> Computadores
-                        </a>
-
-                        <a class="dropdown-item"
-                            href="{{ route('resources.printer.index') }}">
-                            <i class="fas fa-print fa-fw"></i> Impresoras
-                        </a>
-
-                        <a class="dropdown-item"
-                            href="{{ route('resources.telephone.index') }}">
-                            <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
-                        </a>
-
-                        <a class="dropdown-item"
-                            href="{{ route('resources.mobile.index') }}">
-                            <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
-                        </a>
-
-                        <a class="dropdown-item"
-                            href="{{ route('resources.wingle.index') }}">
-                            <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
-                        </a>
-
-                    </div>
-                </li>
-                @endcan
-
                 @can('Mammography: admin')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('mammography.index') }}" title="Mamografias"> <i class="fas fa-fw fa-dot-circle"></i> </a>
                 </li>
                 @endcan
 
-
+                @endauth
             </ul>
 
             <!-- Right Side Of Navbar -->

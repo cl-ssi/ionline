@@ -213,7 +213,7 @@ class ClaveUnicaController extends Controller
     public function logout() {
         
         if(env('APP_ENV') == 'local'){
-            return redirect()->route('logout');
+            return redirect()->route('logout-local');
         }else{
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL')."/logout";
