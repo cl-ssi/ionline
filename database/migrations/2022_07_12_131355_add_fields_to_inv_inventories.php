@@ -19,8 +19,9 @@ class AddFieldsToInvInventories extends Migration
             $table->timestamp('discharge_date')->nullable()->after('observations');
             $table->string('act_number', 255)->nullable()->after('discharge_date');
             $table->string('depreciation', 255)->nullable()->after('act_number');
-
             $table->string('number', 255)->change();
+
+            $table->foreignId('user_responsible_id')->after('request_user_id')->nullable()->constrained('users');
         });
     }
 
