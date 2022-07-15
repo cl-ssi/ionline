@@ -26,7 +26,7 @@ class AddDischargeDate extends Component
         $dataValidated = $this->validate();
         $this->inventory->update($dataValidated);
         $this->resetInput();
-        $this->emit('movementUpdated');
+        $this->emit('updateMovementIndex');
     }
 
     public function resetInput()

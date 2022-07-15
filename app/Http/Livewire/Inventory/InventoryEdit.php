@@ -30,7 +30,7 @@ class InventoryEdit extends Component
 
         $this->number_inventory = $this->inventory->number;
         $this->useful_life = $this->inventory->useful_life;
-        $this->status = $this->inventory->status;
+        $this->status = ($this->inventory->status === null) ? '1' : $this->inventory->status;
         $this->depreciation = $this->inventory->depreciation;
         $this->brand = $this->inventory->brand;
         $this->model = $this->inventory->model;
@@ -40,7 +40,7 @@ class InventoryEdit extends Component
 
     public function rules()
     {
-        return (new UpdateInventoryRequest())->rules();
+        return (new UpdateInventoryRequest($this->inventory))->rules();
     }
 
     public function update()
