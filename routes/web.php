@@ -176,11 +176,13 @@ use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\StoreController;
-
+use App\Http\Livewire\Inventory\CheckTransfer;
+use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryPending;
+use App\Http\Livewire\Inventory\InventoryProductsReceived;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
@@ -242,7 +244,7 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 // acceso a usuarios verificación entrega de farmacias
 Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
     Route::get('confirmation_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationDispatchVerificationNotification'])->name('confirmation_verification');
-}); 
+});
 
 
 Route::group(['middleware' => 'auth:external'], function () {
@@ -1463,11 +1465,14 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 });
 
 // Inventories
-Route::prefix('inventories')->as('inventories.')->group(function() {
+Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
     Route::get('/', InventoryIndex::class)->name('index');
     Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
     Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
+    Route::get('products-received', InventoryProductsReceived::class)->name('products-received');
     Route::get('/{inventory}/edit', InventoryEdit::class)->name('edit');
+    Route::get('/movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer');
+    Route::get('/{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer');
 });
 
 /* Bodega de Farmacia */
