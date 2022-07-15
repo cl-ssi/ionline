@@ -208,7 +208,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-9">
+        <fieldset class="form-group col-sm-6">
             <label for="note">Nota</label>
             <input
                 class="form-control form-control-sm @error('note') is-invalid @enderror"
@@ -222,6 +222,21 @@
                 </span>
             @enderror
         </fieldset>
+
+        <div class="form-group col-sm-3">
+            <label for="invoice-{{ $iteration }}">Factura</label>
+            <input
+                class="form-control form-control-file form-control-sm @error('invoice_url') is-invalid @enderror"
+                type="file"
+                wire:model="invoice_url"
+                id="invoice{{ $iteration }}"
+            >
+            @error('invoice_url')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
     </div>
 
     <div class="my-2">

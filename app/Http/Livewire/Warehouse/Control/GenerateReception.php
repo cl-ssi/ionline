@@ -18,11 +18,15 @@ use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class GenerateReception extends Component
 {
+    use WithFileUploads;
+
     public $store;
     public $po_search;
     public $error;
@@ -40,6 +44,8 @@ class GenerateReception extends Component
     public $guide_date;
     public $invoice_number;
     public $invoice_date;
+    public $invoice_url;
+    public $iteration;
     public $supplier_name;
     public $branch_code;
     public $branch_name;
@@ -74,6 +80,7 @@ class GenerateReception extends Component
 
     public function mount()
     {
+        $this->iteration = 1;
         $this->type_product = 1;
         $this->programs = Program::orderBy('name')->get(['id', 'name']);
         $this->wre_products = collect([]);
@@ -370,6 +377,28 @@ class GenerateReception extends Component
         $this->note = null;
         $this->disabled_program = false;
         $this->request_form_id = null;
+        $this->invoice_url = null;
+        $this->iteration++;
+    }
+
+    public function saveInvoice(Control $control)
+    {
+        $folder = 'ionline/invoice/';
+        $filename = 'invoice-reception-' . $control->id . '-date-' . now()->format('Y-m-d-H-i-s');
+        $url = $filename.'.pdf';
+
+        if($this->invoice_url)
+        {
+            $this->invoice_url->storeAs(
+                $folder,
+                $url,
+                'public',
+            );
+
+            $control->update([
+                'invoice_url' => Storage::url($folder . $url)
+            ]);
+        }
     }
 
     public function finish()
@@ -432,6 +461,7 @@ class GenerateReception extends Component
 
         $this->po_search = null;
         $this->po_items = [];
+        $this->saveInvoice($control);
         $this->resetInputProduct();
         $this->resetInputReception();
     }
