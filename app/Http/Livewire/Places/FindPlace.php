@@ -10,9 +10,10 @@ class FindPlace extends Component
     public $places;
     public $place_id;
     public $search;
+    public $tagId;
     public $showResult;
-    public $placeholder;
     public $smallInput = false;
+    public $placeholder;
 
     protected $listeners = [
         'clearSearchPlace' => 'clearSearch',
