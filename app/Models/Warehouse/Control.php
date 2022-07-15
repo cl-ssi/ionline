@@ -28,6 +28,7 @@ class Control extends Model
         'guide_number',
         'guide_date',
         'status',
+        'invoice_url',
         'store_id',
         'origin_id',
         'destination_id',
