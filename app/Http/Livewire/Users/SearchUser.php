@@ -10,13 +10,15 @@ class SearchUser extends Component
     public $users;
     public $user_id;
     public $search;
+    public $tagId;
     public $showResult;
     public $eventName;
-    public $placeholder;
     public $smallInput = false;
+    public $placeholder;
 
     protected $listeners = [
         'clearSearchUser' => 'clearSearch',
+        'userId'
     ];
 
     public function mount()
@@ -63,5 +65,10 @@ class SearchUser extends Component
         $this->users = collect([]);
         $this->user_id = null;
         $this->search = null;
+    }
+
+    public function userId($user_id)
+    {
+        $this->user_id = $user_id;
     }
 }
