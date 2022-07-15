@@ -2,8 +2,12 @@
 
 /* Set active route */
 
-function active($route_name) {
-    echo request()->routeIs($route_name) ? 'active' : '';
+function active($route) {
+    if (is_array($route)) {
+        echo in_array(request()->routeIs(), $route) ? 'active' : '';
+    }
+    echo request()->routeIs($route) ? 'active' : '';
+    //echo request()->routeIs($route_name) ? 'active' : '';
 }
 
 function money($value) {

@@ -121,6 +121,7 @@
 
     </table>
 
+    {{ $results->links() }}
     @endsection
 
     @section('custom_js')
