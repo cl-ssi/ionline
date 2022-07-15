@@ -470,6 +470,10 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
+							<a class="dropdown-item" href="{{ route('profile.subrogations') }}">
+								<i class="fas fa-chess"></i> Subrogancia
+							</a>
+
                             @if(session()->has('god'))
                                 <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
                                     <i class="fas fa-eye text-danger"></i> God Like
