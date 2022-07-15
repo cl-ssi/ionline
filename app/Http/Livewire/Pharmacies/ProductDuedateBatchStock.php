@@ -16,11 +16,6 @@ class ProductDuedateBatchStock extends Component
     public $barcode;
     public $unity;
 
-
-
-
-
-
     public $query;
     public $product;
     public $selectedName;
@@ -49,6 +44,39 @@ class ProductDuedateBatchStock extends Component
         $this->resetx();
         $this->product = $product;
         $this->selectedName = $product->name;
+
+        if($this->product){
+          $product = Product::with(['purchaseItems','receivingItems'])->find($this->product->id);
+          $this->array = [];
+          if ($product) {
+  
+            $this->barcode = $product->barcode;
+            $this->unity = $product->unit;
+            $this->count = "";
+  
+            // se obtienen lotes desde tabla batchs
+            foreach ($product->batchs as $key => $batch) {
+              $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = 0;
+            }
+  
+            foreach ($product->batchs as $key => $batch) {
+              $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = $batch->count;
+            }
+  
+            // seteo de lotes
+            foreach ($this->array as $key1 => $value) {
+              //elimina valores en cero
+              if ($value == 0) {
+                unset($this->array[$key1]);
+              }
+              //seleccion, se obtiene cantidad
+              if ($key1 == $this->due_date_batch) {
+                $this->count = $value;
+              }
+            }
+  
+          }
+        }
     }
 
     public function updatedQuery()
@@ -96,44 +124,11 @@ class ProductDuedateBatchStock extends Component
     public function foo(){
       $product = Product::where('barcode',$this->barcode)->first();
       $this->product_id = $product->id;
+      $this->setProduct($product);
     }
 
     public function render()
     {
-      if($this->product){
-        $product = Product::with(['purchaseItems','receivingItems'])->find($this->product->id);
-        $this->array = [];
-        if ($product) {
-
-          $this->barcode = $product->barcode;
-          $this->unity = $product->unit;
-          $this->count = "";
-
-          // se obtienen lotes desde tabla batchs
-          foreach ($product->batchs as $key => $batch) {
-            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = 0;
-          }
-
-          foreach ($product->batchs as $key => $batch) {
-            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = $batch->count;
-          }
-
-          // seteo de lotes
-          foreach ($this->array as $key1 => $value) {
-            //elimina valores en cero
-            if ($value == 0) {
-              unset($this->array[$key1]);
-            }
-            //seleccion, se obtiene cantidad
-            if ($key1 == $this->due_date_batch) {
-              $this->count = $value;
-            }
-          }
-
-        }
-      }
-        
-
         return view('livewire.pharmacies.product-duedate-batch-stock');
     }
 }
