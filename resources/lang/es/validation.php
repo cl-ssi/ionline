@@ -204,6 +204,7 @@ return [
         'information'           => 'información',
         'invoice_date'          => 'fecha de factura',
         'invoice_number'        => 'número de factura',
+        'invoice_url'           => 'factura',
         'installation_date'     => 'fecha instalación',
         'last_name'             => 'apellido',
         'message'               => 'mensaje',
