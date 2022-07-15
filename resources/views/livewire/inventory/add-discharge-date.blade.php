@@ -1,13 +1,13 @@
 <div>
     <div class="form-row mb-3">
         <fieldset class="col-md-2">
-            <label for="reception-confirmation" class="form-label">
+            <label for="discharge-date" class="form-label">
                 Fecha de baja
             </label>
             <input
                 type="date"
                 class="form-control @error('discharge_date') is-invalid @enderror"
-                id="reception-confirmation"
+                id="discharge-date"
                 wire:model.debounce.1500ms="discharge_date"
             >
             @error('discharge_date')

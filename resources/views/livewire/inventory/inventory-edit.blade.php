@@ -33,7 +33,7 @@
 
         <fieldset class="col-md-3">
             <label for="product" class="form-label">
-                Producto (Artículo)
+                Producto <small>(Artículo)</small>
             </label>
             <input
                 type="text"
@@ -47,7 +47,7 @@
 
         <fieldset class="col-md-7">
             <label for="description" class="form-label">
-                Descripción (especificación técnica)
+                Descripción <small>(especificación técnica)</small>
             </label>
             <input
                 type="text"
@@ -132,6 +132,23 @@
                 </span>
             @enderror
         </fieldset>
+
+        <fieldset class="col-md-3">
+            <label for="serial-number" class="form-label">
+                Número de Serie
+            </label>
+            <input
+                type="text"
+                class="form-control @error('serial_number') is-invalid @enderror"
+                id="serial-number"
+                wire:model.debounce.1500ms="serial_number"
+            >
+            @error('serial_number')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
     </div>
 
     <div class="form-row mb-3">
@@ -163,23 +180,6 @@
                 wire:model.debounce.1500ms="model"
             >
             @error('model')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="col-md-3">
-            <label for="serial-number" class="form-label">
-                Número de Serie
-            </label>
-            <input
-                type="text"
-                class="form-control @error('serial_number') is-invalid @enderror"
-                id="serial-number"
-                wire:model.debounce.1500ms="serial_number"
-            >
-            @error('serial_number')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -287,7 +287,7 @@
             >
         </fieldset>
 
-        <fieldset class="col-md-5">
+        <fieldset class="col-md-4">
             <label for="supplier" class="form-label">
                 Proveedor
             </label>
@@ -300,20 +300,37 @@
             >
         </fieldset>
 
-        <fieldset class="col-md-4">
-            <label for="date-reception" class="form-label">
-                Factura (o link)
-            </label>
-            <div class="custom-file">
-                <input
-                    type="file"
-                    class="custom-file-input"
-                    id="customFileLang"
-                    lang="es"
+        @if($inventory->control->invoice_url)
+            <fieldset class="col-md-2">
+                <label for="date-reception" class="form-label">
+                    Factura
+                </label>
+                <br>
+                <a
+                    class="btn btn-primary btn-block"
+                    href="{{ asset($inventory->control->invoice_url) }}"
+                    target="_blank"
                 >
-                <label class="custom-file-label" for="customFileLang" data-browse="Adjuntar">Seleccionar Archivo</label>
-            </div>
-        </fieldset>
+                    <i class="fas fa-eye"></i> Ver archivo
+                </a>
+            </fieldset>
+        @endif
+
+        @if($inventory->control->requestForm)
+            <fieldset class="col-md-3">
+                <label for="date-reception" class="form-label">
+                    Formulario Requerimiento
+                </label>
+                <br>
+                <a
+                class="btn btn-primary btn-block"
+                href="{{ route('request_forms.show', $inventory->control->requestForm) }}"
+                target="_blank"
+            >
+                <i class="fas fa-file-alt"></i> #{{ $inventory->control->requestForm->id }}
+            </a>
+            </fieldset>
+        @endif
     </div>
 
     <div class="form-row mb-3">
@@ -345,9 +362,11 @@
         </div>
     </div>
 
-    <h5>Registrar nuevo traslado y solicitud de recepción</h5>
+    <h5 class="mt-3">Registrar nuevo traslado y solicitud de recepción</h5>
 
-    @livewire('inventory.register-movement', ['inventory' => $inventory])
+    @livewire('inventory.register-movement', ['inventory' => $inventory ])
+
+    @livewire('inventory.update-movement', ['inventory' => $inventory])
 
     <h5 class="mt-3">Registrar baja del ítem</h5>
 

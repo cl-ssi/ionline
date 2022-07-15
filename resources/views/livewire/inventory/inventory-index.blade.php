@@ -1,28 +1,18 @@
 <div>
-
     @section('title', 'Inventario')
 
     @include('inventory.nav')
 
     <div class="form-row my-3">
-        <fieldset class="col-sm-3">
-            <label for="locations" class="form-label">Ubicaciones</label>
-            <input type="text" id="locations" class="form-control" placeholder="Ingresa una ubicacion">
-        </fieldset>
-
-        <fieldset class="col-sm-3">
-            <label for="places" class="form-label">Lugares</label>
-            <input type="text" id="places" class="form-control"  placeholder="Ingresa un lugar">
-        </fieldset>
-
-        <fieldset class="col-sm-3">
-            <label for="article" class="form-label">Articulo</label>
-            <input type="text" id="article" class="form-control"  placeholder="Ingresa un articulo">
-        </fieldset>
-
-        <fieldset class="col-sm-3">
-            <label for="responsability" class="form-label">Responsable</label>
-            <input type="text" id="responsability" class="form-control"  placeholder="Ingresa un responsable">
+        <fieldset class="col">
+            <label for="search" class="form-label">Buscador</label>
+            <input
+                type="text"
+                id="search"
+                class="form-control"
+                placeholder="Ingresa un número inventario, producto, ubicación, lugar o responsable"
+                wire:model="search"
+            >
         </fieldset>
     </div>
 
@@ -32,18 +22,25 @@
                 <tr>
                     <th class="text-center">Nro. Inventario</th>
                     <th>Producto</th>
-                    <th>Ubicacion</th>
+                    <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Fecha Entrega</th>
                     <th>Responsable</th>
                     <th class="text-center">Valor</th>
-                    <th>Subtitulo</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
+                <tr
+                    class="d-none"
+                    wire:loading.class.remove="d-none"
+                >
+                    <td class="text-center" colspan="8">
+                        @include('layouts.partials.spinner')
+                    </td>
+                </tr>
                 @forelse($inventories as $inventory)
-                <tr>
+                <tr wire:loading.remove>
                     <td class="text-center">
                         <small class="text-monospace">
                             {{ $inventory->number }}
@@ -57,21 +54,28 @@
                         </small>
                     </td>
                     <td>
+                        @if($inventory->place)
                         {{ optional($inventory->place)->location->name }}
+                        @endif
                     </td>
                     <td>
-                        {{ optional($inventory->place)->name }}
+                        @if($inventory->place)
+                            {{ optional($inventory->place)->name }}
+                        @endif
                     </td>
                     <td class="text-center">
-                        {{ $inventory->date }}
+                        @if($inventory->deliver_date)
+                            {{ $inventory->deliver_date->format('Y-m-d') }}
+                        @endif
                     </td>
                     <td>
-                        {{ optional($inventory->responsible)->full_name }}
+                        @if($inventory->responsible)
+                            {{ optional($inventory->responsible)->full_name }}
+                        @endif
                     </td>
                     <td class="text-center">
                         ${{ $inventory->price }}
                     </td>
-                    <td></td>
                     <td class="text-center">
                         <a
                             class="btn btn-sm btn-primary"
@@ -82,8 +86,8 @@
                     </td>
                 </tr>
                 @empty
-                <tr class="text-center">
-                    <td colspan="9">
+                <tr class="text-center" wire:loading.remove>
+                    <td colspan="8">
                         <em>No hay registros</em>
                     </td>
                 </tr>

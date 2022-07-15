@@ -1,12 +1,13 @@
 <div>
     <div class="form-row mb-3">
         <fieldset class="col-md-3">
-            <label class="form-label">Responsable</label>
+            <label for="user-responsible-id" class="form-label">Responsable</label>
 
             @livewire('users.search-user', [
                 'smallInput' => true,
                 'placeholder' => 'Ingrese un nombre',
-                'eventName' => 'myUserResponsibleId'
+                'eventName' => 'myUserResponsibleId',
+                'tagId' => 'user-responsible-id',
             ])
 
             <input
@@ -22,12 +23,13 @@
         </fieldset>
 
         <fieldset class="col-md-3">
-            <label class="form-label">Usuario</label>
+            <label for="user-using-id" class="form-label">Usuario</label>
 
             @livewire('users.search-user', [
                 'smallInput' => true,
                 'placeholder' => 'Ingrese un nombre',
-                'eventName' => 'myUserUsingId'
+                'eventName' => 'myUserUsingId',
+                'tagId' => 'user-using-id',
             ])
 
             <input
@@ -43,12 +45,13 @@
         </fieldset>
 
         <fieldset class="col-md-3">
-            <label class="form-label">
+            <label for="place-id" class="form-label">
                 Ubicación
             </label>
 
             @livewire('places.find-place', [
                 'smallInput' => true,
+                'tagId' => 'place-id',
                 'placeholder' => 'Ingrese una ubicación'
             ])
 
@@ -56,6 +59,7 @@
                 class="form-control @error('place_id') is-invalid @enderror"
                 type="hidden"
             >
+            
             @error('place_id')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -65,7 +69,7 @@
 
         <fieldset class="col-md-2">
             <label for="installation-date" class="form-label">
-                Instalación
+                Instalación <small>(opcional)</small>
             </label>
             <input
                 type="date"
@@ -88,8 +92,27 @@
                 class="btn btn-sm btn-primary btn-block"
                 title="Agregar"
                 wire:click="addMovement"
+                wire:loading.attr="disabled"
+                wire:target="addMovement"
+                @if($inventory->number == null || ($inventory->lastMovement && $inventory->lastMovement->reception_date == null))
+                    disabled
+                @endif
             >
-                <i class="fas fa-plus"></i>
+                <span
+                    wire:loading.remove
+                    wire:target="addMovement"
+                >
+                    <i class="fas fa-plus"></i>
+                </span>
+
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
+                    wire:target="addMovement"
+                    aria-hidden="true"
+                >
+                </span>
             </button>
         </div>
     </div>
