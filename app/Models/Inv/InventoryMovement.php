@@ -19,6 +19,7 @@ class InventoryMovement extends Model
         'reception_confirmation',
         'reception_date',
         'installation_date',
+        'observations',
         'inventory_id',
         'place_id',
         'user_responsible_ou_id',
