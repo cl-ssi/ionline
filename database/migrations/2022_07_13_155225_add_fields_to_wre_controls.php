@@ -14,7 +14,7 @@ class AddFieldsToWreControls extends Migration
     public function up()
     {
         Schema::table('wre_controls', function (Blueprint $table) {
-            // donante y link de la factura
+            $table->text('invoice_url')->nullable()->after('status');
         });
     }
 
@@ -25,8 +25,6 @@ class AddFieldsToWreControls extends Migration
      */
     public function down()
     {
-        Schema::table('wre_controls', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

@@ -19,6 +19,7 @@ class CreateInventoryMovements extends Migration
             $table->boolean('reception_confirmation')->default(0)->nullable();
             $table->timestamp('reception_date')->nullable();
             $table->date('installation_date')->nullable();
+            $table->text('observations')->nullable();
 
             $table->foreignId('inventory_id')->nullable()->constrained('inv_inventories');
             $table->foreignId('place_id')->nullable()->constrained('cfg_places');

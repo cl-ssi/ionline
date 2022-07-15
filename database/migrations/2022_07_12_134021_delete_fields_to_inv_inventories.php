@@ -14,10 +14,6 @@ class DeleteFieldsToInvInventories extends Migration
     public function up()
     {
         Schema::table('inv_inventories', function (Blueprint $table) {
-
-            $table->dropForeign(['place_id']);
-            $table->dropColumn('place_id');
-
             $table->dropForeign(['delivered_user_ou_id']);
             $table->dropColumn('delivered_user_ou_id');
 
@@ -26,7 +22,6 @@ class DeleteFieldsToInvInventories extends Migration
 
             $table->dropColumn([
                 'reception_confirmation',
-                'deliver_date'
             ]);
         });
     }
