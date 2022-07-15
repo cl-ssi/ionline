@@ -34,8 +34,11 @@ class Inventory extends Model
         'discharge_date',
         'act_number',
         'depreciation',
+        'deliver_date',
         'request_user_ou_id',
         'request_user_id',
+        'user_responsible_id',
+        'place_id',
         'product_id',
         'control_id',
         'store_id',
@@ -46,6 +49,7 @@ class Inventory extends Model
     protected $dates = [
         'po_date',
         'discharge_date',
+        'deliver_date',
     ];
 
     public function requestOrganizationalUnit()
@@ -88,26 +92,23 @@ class Inventory extends Model
         return $this->hasMany(InventoryMovement::class);
     }
 
+    public function lastMovement()
+    {
+        return $this->hasOne(InventoryMovement::class)->latest();
+    }
+
+    public function responsible()
+    {
+        return $this->belongsTo(User::class, 'user_responsible_id');
+    }
+
+    public function place()
+    {
+        return $this->belongsTo(Place::class);
+    }
+
     public function getPriceAttribute()
     {
         return money($this->po_price);
-    }
-
-    public function getPlaceAttribute()
-    {
-        $lastMovement = $this->movements->last();
-        return ($lastMovement) ? $lastMovement->place : null;
-    }
-
-    public function getResponsibleAttribute()
-    {
-        $lastMovement = $this->movements->last();
-        return ($lastMovement) ? $lastMovement->responsibleUser : null;
-    }
-
-    public function getDateAttribute()
-    {
-        $lastMovement = $this->movements->last();
-        return ($lastMovement) ? $lastMovement->created_at->format('Y-m-d') : null;
     }
 }
