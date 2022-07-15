@@ -33,7 +33,8 @@ class GenerationReceptionRequest extends FormRequest
             'invoice_number'    => 'nullable|string|min:1|max:255',
             'invoice_date'      => 'nullable|date_format:Y-m-d',
             'note'              => 'nullable|string|min:1|max:255',
-            'program_id'        => 'nullable|exists:cfg_programs,id'
+            'program_id'        => 'nullable|exists:cfg_programs,id',
+            'invoice_url'       => 'nullable|mimes:pdf|max:10240'
         ];
     }
 }
