@@ -57,16 +57,19 @@ class RegisterMovement extends Component
 
         $movements = InventoryMovement::create($dataValidated);
         $this->inventory->movements()->save($movements);
-        $this->resetInput();
 
         $this->emit('clearSearchUser');
         $this->emit('clearSearchPlace');
-        $this->emit('movementUpdated');
+        $this->emit('updateMovementIndex');
+        $this->emit('updateMovement');
+
+        $this->resetInput();
     }
 
     public function resetInput()
     {
-        $this->user_id = null;
+        $this->user_using_id = null;
+        $this->user_responsible_id = null;
         $this->place_id = null;
         $this->installation_date = null;
     }

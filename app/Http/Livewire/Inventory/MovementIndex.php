@@ -8,14 +8,16 @@ class MovementIndex extends Component
 {
     public $inventory;
 
-    protected $listeners = ['movementUpdated' => 'onMovementUpdated'];
+    protected $listeners = [
+        'updateMovementIndex' => 'onUpdateMovementIndex'
+    ];
 
     public function render()
     {
         return view('livewire.inventory.movement-index');
     }
 
-    public function onMovementUpdated()
+    public function onUpdateMovementIndex()
     {
         $this->render();
     }
