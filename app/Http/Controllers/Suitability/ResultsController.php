@@ -34,7 +34,7 @@ class ResultsController extends Controller
               });
         })
         ->with('psirequest.school', 'user')
-        ->get();
+        ->paginate(100);
 
         $count = $results->countBy('psirequest.status');
         
