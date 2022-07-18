@@ -129,6 +129,39 @@ class ProductDuedateBatchStock extends Component
 
     public function render()
     {
+      if($this->product){
+        $product = Product::with(['purchaseItems','receivingItems'])->find($this->product->id);
+        $this->array = [];
+        if ($product) {
+
+          $this->barcode = $product->barcode;
+          $this->unity = $product->unit;
+          $this->count = "";
+
+          // se obtienen lotes desde tabla batchs
+          foreach ($product->batchs as $key => $batch) {
+            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = 0;
+          }
+
+          foreach ($product->batchs as $key => $batch) {
+            $this->array[$batch->due_date->format('d-m-Y') . " - " . $batch->batch] = $batch->count;
+          }
+
+          // seteo de lotes
+          foreach ($this->array as $key1 => $value) {
+            //elimina valores en cero
+            if ($value == 0) {
+              unset($this->array[$key1]);
+            }
+            //seleccion, se obtiene cantidad
+            if ($key1 == $this->due_date_batch) {
+              $this->count = $value;
+            }
+          }
+
+        }
+      }
+      
         return view('livewire.pharmacies.product-duedate-batch-stock');
     }
 }
