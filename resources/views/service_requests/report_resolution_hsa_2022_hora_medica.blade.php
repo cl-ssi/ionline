@@ -124,10 +124,19 @@
         .page-break {
             page-break-after: always;
         }
+
+        footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #cce7ef; height: 50px; }
+        footer .pagenum:before {
+            content: counter(page);
+        }
     </style>
 </head>
 
 <body>
+    <footer>
+        <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+    </footer>
+    <main>
     <div class="content">
 
         <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
@@ -533,6 +542,7 @@
 
 
     </div>
+    </main>
 </body>
 
 </html>
