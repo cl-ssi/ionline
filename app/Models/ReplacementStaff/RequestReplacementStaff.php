@@ -25,6 +25,9 @@ class RequestReplacementStaff extends Model
     public function requestFather() {
         return $this->belongsTo('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
     }
+    public function requestChilds() {
+        return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff', 'request_id');
+    }
 
     public function profile_manage() {
         return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
