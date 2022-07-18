@@ -129,7 +129,7 @@
         content: counter(page);
         } */
 
-        footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #cce7ef; height: 50px; }
+        footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #eff8fa; height: 50px; }
         footer .pagenum:before {
             content: counter(page);
         }
