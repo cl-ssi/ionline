@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if(config('app.env') === 'production') {
+            \URL::forceScheme('https');
+        }
+        
         Blade::directive('datetime', function ($expression) {
             return "<?php echo ($expression)?($expression)->format('Y-m-d H:i:s'):''; ?>";
         });

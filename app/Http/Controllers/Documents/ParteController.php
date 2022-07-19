@@ -196,7 +196,7 @@ class ParteController extends Controller
         }
         else
         {
-            logger('No se encontró el archivo '.$file->file);
+            //logger('No se encontró el archivo '.$file->file);
             session()->flash('danger', 'No se encontró el archivo '.$file->file);
             return redirect()->route('documents.partes.index');
         }
