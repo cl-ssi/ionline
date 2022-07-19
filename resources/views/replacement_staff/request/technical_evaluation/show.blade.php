@@ -10,7 +10,10 @@
 <div class="row">
     <div class="col">
       <div class="alert alert-primary" role="alert">
-          Este formulario corresponde a una extensión del formulario Nº {{ $technicalEvaluation->requestReplacementStaff->requestFather->id }} - {{ $requestReplacementStaff->requestFather->name }}
+          Este formulario corresponde a una extensión del formulario Nº
+          <a target="_blank" href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff->requestFather) }}">
+            {{ $requestReplacementStaff->requestFather->id }} - {{ $requestReplacementStaff->requestFather->name }}
+          </a>
       </div>
     </div>
 </div>
@@ -358,6 +361,92 @@
             </tbody>
         </table>
     </div>
+@endif
+
+@if($requestReplacementStaff->requestChilds->count() > 0)
+<div class="row">
+    <div class="col-sm">
+        <h5><i class="fas fa-inbox"></i> Formularios de Continuidad</h5>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="text-center small">
+            <tr>
+                <th>#</th>
+                <th style="width: 8%">Fecha</th>
+                <th>Solicitud</th>
+                <th>Grado</th>
+                <th>Calidad Jurídica</th>
+                <th colspan="2">Periodo</th>
+                <th>Fundamento</th>
+                <th>Jornada</th>
+                <th>Solicitante</th>
+                <th style="width: 2%"></th>
+            </tr>
+        </thead>
+        <tbody class="small">
+            @foreach($requestReplacementStaff->requestChilds as $requestReplacementStaff)
+            <tr>
+                <td>
+                    {{ $requestReplacementStaff->id }} <br>
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
+                </td>
+                <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
+                <td>{{ $requestReplacementStaff->name }}</td>
+                <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
+                <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
+                <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
+                    {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
+                </td>
+                <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
+                    @if($requestReplacementStaff->getNumberOfDays() > 1)
+                        días
+                    @else
+                        dia
+                    @endif
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                </td>
+                <td>
+                    {{ $requestReplacementStaff->WorkDayValue }}
+                </td>
+                <td>{{ $requestReplacementStaff->user->FullName }}<br>
+                    {{ $requestReplacementStaff->organizationalUnit->name }}
+                </td>
+                <td>
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff)}}"
+                                class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                  @endif
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endif
 
 @endsection
