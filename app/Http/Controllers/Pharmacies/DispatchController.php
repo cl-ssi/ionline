@@ -503,6 +503,7 @@ class DispatchController extends Controller
 
       foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
         $verificationMailing->status = "Recepción anulada por destinatario";
+        $verificationMailing->receiver_observation = "Sin observaciones";
         $verificationMailing->confirmation_date = Carbon::now();
         $verificationMailing->save();
       }

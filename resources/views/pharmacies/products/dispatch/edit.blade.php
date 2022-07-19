@@ -46,7 +46,7 @@
 
 @include('pharmacies.products.dispatchitem.create')
 
-<!-- @if($dispatch->dispatchItems->count() > 0)
+@if($dispatch->dispatchItems->count() > 0)
   <div class="form-row">
       <fieldset class="form-group col">
       </fieldset>
@@ -61,7 +61,36 @@
           </form>
       </fieldset>
   </div>
-@endif -->
+@endif
+
+@if($dispatch->verificationMailings->count() > 0)
+<div class="table-responsive">
+	<table class="table table-striped table-sm" id="tabla_dispatch">
+		<thead>
+			<tr>
+				<th scope="col">Estado</th>
+				<th scope="col">Observación remitente</th>
+        <th scope="col">F.Envío</th>
+        <th scope="col">Observación destinatario</th>
+        <th scope="col">F.Confirmación</th>
+			</tr>
+		</thead>
+		<tbody>
+      @foreach($dispatch->verificationMailings as $verificationMailings)
+        <tr>
+          <td>{{$verificationMailings->status}}</td>
+          <td>{{$verificationMailings->sender_observation}}</td>
+          <td>{{$verificationMailings->delivery_date}}</td>
+          <td>{{$verificationMailings->receiver_observation}}</td>
+          <td>{{$verificationMailings->confirmation_date}}</td>
+        </tr>
+      @endforeach
+		</tbody>
+	</table>
+</div>
+@endif
+
+
 
 @endsection
 
