@@ -35,7 +35,7 @@
 
 @include('pharmacies.products.dispatchitem.create')
 
-<!-- @if($dispatch->dispatchItems->count() > 0)
+@if($dispatch->dispatchItems->count() > 0)
 <div class="form-row">
       <fieldset class="form-group col">
       </fieldset>
@@ -50,7 +50,9 @@
           </form>
       </fieldset>
   </div>
-@endif -->
+@endif
+
+
 
 @endsection
 
