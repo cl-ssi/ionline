@@ -21,7 +21,7 @@
       </fieldset>
 
       <fieldset class="form-group col">
-          <label for="for_origin">Origen</label>
+          <label for="for_origin">Destino</label>
           <select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
             @foreach ($establishments as $key => $establishment)
               <option value="{{$establishment->id}}" @if ($dispatch->establishment_id == $establishment->id)
@@ -47,17 +47,20 @@
 @include('pharmacies.products.dispatchitem.create')
 
 <!-- @if($dispatch->dispatchItems->count() > 0)
-  <form method="GET" action="{{ route('pharmacies.products.dispatch.sendEmailValidation',$dispatch) }}">
-    <div class="form-row">
-        <fieldset class="form-group col-9">
-            
-        </fieldset>
-        <fieldset class="form-group col">
-            <label for="for_note"></label>
-            <button type="submit" class="form-control btn btn-success">Enviar correo</button>
-        </fieldset>
-    </div>
-  </form>
+  <div class="form-row">
+      <fieldset class="form-group col">
+      </fieldset>
+      <fieldset class="form-group col-3">
+          <form method="GET" action="{{ route('pharmacies.products.dispatch.sendEmailValidation',$dispatch) }}">
+            <button type="submit" class="form-control btn btn-warning">Enviar correo</button>
+          </form>
+      </fieldset>
+      <fieldset class="form-group col-3">
+          <form method="GET" action="{{ route('pharmacies.products.dispatch.storePrivateVerification',$dispatch) }}">
+            <button type="submit" class="form-control btn btn-success">Confirmar recepción</button>
+          </form>
+      </fieldset>
+  </div>
 @endif -->
 
 @endsection

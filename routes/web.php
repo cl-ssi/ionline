@@ -239,6 +239,9 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 // acceso a usuarios verificación entrega de farmacias
 Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
     Route::get('confirmation_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationDispatchVerificationNotification'])->name('confirmation_verification');
+    Route::get('cancel_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'cancelDispatchVerificationNotification'])->name('cancel_verification');
+    Route::get('confirmation_wobservations_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationWithObservationsDispatchVerificationNotification'])->name('confirmation_wobservations_verification');
+    Route::post('/store', [App\Http\Controllers\Pharmacies\DispatchController::class,'storeVerification'])->name('store');
 }); 
 
 
@@ -1496,6 +1499,8 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/deleteC19/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'deleteC19'])->name('dispatch.deleteC19');
         Route::post('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'storeFile'])->name('dispatch.storeFile');
         Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'openFile'])->name('dispatch.openFile');
+        Route::get('dispatch/storePrivateVerification/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'storePrivateVerification'])->name('dispatch.storePrivateVerification');
+        
         Route::resource('purchase', App\Http\Controllers\Pharmacies\PurchaseController::class);
         Route::resource('purchase_item', App\Http\Controllers\Pharmacies\PurchaseItemController::class);
         Route::get('purchase/sendForSignature/{purchase}/', [App\Http\Controllers\Pharmacies\PurchaseController::class,'sendForSignature'])->name('purchase.sendForSignature');
