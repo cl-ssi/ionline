@@ -18,6 +18,14 @@
         padding: 10px 20px;
         border-radius: 3px;
     }
+
+    .anular {
+        border: 1px solid black;
+        color: black;
+        background: red;
+        padding: 10px 20px;
+        border-radius: 3px;
+    }
 </style>
 
     <div style="text-align: justify;">
@@ -44,10 +52,13 @@
         <br><hr>
         <div style="text-align: right;">
             <a href="{{env('APP_URL').'/external_pharmacy/confirmation_verification/'.$dispatch->base64encode}}">
-                <input type="button" class="confirmar" value ="Confirmar recepción">
+                <input type="button" class="confirmar" value ="Recepción conforme">
             </a>
-            <a href="https://www.w3schools.com">
-                <input type="button" class="gestionar" value ="Gestionar recepción">
+            <a href="{{env('APP_URL').'/external_pharmacy/confirmation_wobservations_verification/'.$dispatch->base64encode}}">
+                <input type="button" class="gestionar" value ="Recepción con observaciones">
+            </a>
+            <a href="{{env('APP_URL').'/external_pharmacy/cancel_verification/'.$dispatch->base64encode}}">
+                <input type="button" class="anular" value ="Anular recepción">
             </a>
         </div>
 

@@ -416,6 +416,10 @@ class DispatchController extends Controller
         return Excel::download(new DispatchExport, 'entregas.xlsx');
     }
 
+
+
+    // desde aqui se hace funcionalidad para enviar correos solicitando confirmación de recepción
+
     public function sendEmailValidation(Dispatch $dispatch)
     {
       if($dispatch->establishment->email == null ){
@@ -447,7 +451,118 @@ class DispatchController extends Controller
 
     public function confirmationDispatchVerificationNotification($id){
       $dispatch = Dispatch::find(base64_decode($id));
-      dd($dispatch);
+
+      if($dispatch->verificationMailings->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      if($dispatch->verificationMailings->where('status','Pendiente')->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes pendientes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+        $verificationMailing->status = "Recepción conforme por destinatario";
+        $verificationMailing->receiver_observation = "Sin observaciones";
+        $verificationMailing->confirmation_date = Carbon::now();
+        $verificationMailing->save();
+      }
+      session()->flash('success', 'La solicitud fue confirmada.');
+      return view('pharmacies.products.dispatch.outview');
+    }
+
+    public function confirmationWithObservationsDispatchVerificationNotification($id){
+      $dispatch = Dispatch::find(base64_decode($id));
+
+      if($dispatch->verificationMailings->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes de recepción en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      if($dispatch->verificationMailings->where('status','Pendiente')->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes de recepción pendientes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      return view('pharmacies.products.dispatch.outview',compact('dispatch'));
+    }
+
+    public function cancelDispatchVerificationNotification($id){
+      $dispatch = Dispatch::find(base64_decode($id));
+
+      if($dispatch->verificationMailings->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes de recepción en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      if($dispatch->verificationMailings->where('status','Pendiente')->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes pendientes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+        $verificationMailing->status = "Recepción anulada por destinatario";
+        $verificationMailing->confirmation_date = Carbon::now();
+        $verificationMailing->save();
+      }
+      session()->flash('success', 'La solicitud de recepción fue anulada.');
+      return view('pharmacies.products.dispatch.outview');
+    }
+
+    public function storeVerification(Request $request){
+      $dispatch = Dispatch::find($request->dispatch_id);
+
+      if(!$dispatch){
+        session()->flash('danger', 'No se ha encontrado la solicitud de entrega enviada.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      if($dispatch->verificationMailings->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      if($dispatch->verificationMailings->where('status','Pendiente')->count() == 0){
+        session()->flash('danger', 'No se han encontrado solicitudes pendientes de confirmación en nuestros registros.');
+        return view('pharmacies.products.dispatch.outview');
+      }
+
+      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+        $verificationMailing->status = "Recepción conforme por destinatario";
+        $verificationMailing->receiver_observation = $request->observation;
+        $verificationMailing->confirmation_date = Carbon::now();
+        $verificationMailing->save();
+      }
+      session()->flash('success', 'La solicitud de recepción con observaciones fué ingresada.');
+      return view('pharmacies.products.dispatch.outview');
+    }
+
+    public function storePrivateVerification(Dispatch $dispatch){
+
+      if($dispatch->establishment->email == null ){
+        session()->flash('warning', 'El establecimiento no tiene correo electrónico asignado.');
+        return redirect()->back();
+      }
+
+      foreach($dispatch->verificationMailings->where('status','Pendiente') as $verificationMailing){
+        $verificationMailing->status = "Verificación cancelada.";
+        $verificationMailing->sender_observation = "Se ha creado nueva verificación.";
+        $verificationMailing->save();
+      }
+
+      $dispatchVerificationMailing = new DispatchVerificationMailing();
+      $dispatchVerificationMailing->dispatch_id = $dispatch->id;
+      $dispatchVerificationMailing->status = "Pendiente";
+      $dispatchVerificationMailing->sender_observation = null;
+      $dispatchVerificationMailing->delivery_date = Carbon::now();
+      $dispatchVerificationMailing->status = "Recepción conforme por origen";
+      $dispatchVerificationMailing->receiver_observation = "Sin observaciones";
+      $dispatchVerificationMailing->confirmation_date = Carbon::now();
+      $dispatchVerificationMailing->save();
+
+      session()->flash('success', 'La recepción fué ingresada.');
+      return redirect()->back();
     }
 
 }
