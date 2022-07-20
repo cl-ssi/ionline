@@ -130,7 +130,7 @@
                 @endcan
 
 
-                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
+                
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -138,15 +138,17 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
+                        @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
+                        @endif
 
                         <div class="dropdown-divider"></div>
 
                         <h6 class="dropdown-header">Bodegas</h6>
 
-			<a class="dropdown-item disabled" href="#">
+			            <a class="dropdown-item disabled" href="#">
                             <i class="fas fa-fw fa-warehouse"></i> Bodega
                         </a>
 
@@ -182,9 +184,9 @@
 
                         <div class="dropdown-divider"></div>
 
-			<a class="dropdown-item disabled" href="#">
-			<i class="fas fa-fw fa-clipboard-list"></i> Inventario
-			</a>
+			            <a class="dropdown-item disabled" href="#">
+			                <i class="fas fa-fw fa-clipboard-list"></i> Inventario
+			            </a>
 
 
                         @canany(['Pharmacy'])
@@ -248,7 +250,7 @@
 
                     </div>
                 </li>
-                @endif
+                
 
 
                 @canany(['Users: create', 'Users: edit','Users: delete',
