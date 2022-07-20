@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldsToWreControls extends Migration
+class DeleteToWreControls extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class AddFieldsToWreControls extends Migration
     public function up()
     {
         Schema::table('wre_controls', function (Blueprint $table) {
-            $table->text('invoice_url')->nullable()->after('status');
+            $table->dropColumn([
+                'invoice_date',
+                'invoice_number',
+            ]);
         });
     }
 
@@ -25,6 +28,8 @@ class AddFieldsToWreControls extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('wre_controls', function (Blueprint $table) {
+            //
+        });
     }
 }
