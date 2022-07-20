@@ -73,7 +73,6 @@ use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\Parameters\PhraseOfTheDayController;
 use App\Http\Controllers\Parameters\PurchaseMechanismController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
-use App\Http\Controllers\Parameters\PlaceController;
 use App\Http\Controllers\Parameters\CommuneController;
 use App\Http\Controllers\Parameters\LocationController;
 use App\Http\Controllers\Parameters\ParameterController;
