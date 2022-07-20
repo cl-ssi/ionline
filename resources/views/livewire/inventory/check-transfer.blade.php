@@ -1,7 +1,7 @@
 <div>
     @section('title', 'Revisar Traspaso')
 
-    @include('inventory.nav')
+    @include('inventory.nav-user')
 
     <h4 class="mb-3">
         Revisar Traspaso

@@ -78,7 +78,7 @@
                     <ul>
                         <li>
                             <span class="text-danger">
-                                El responsable aun no ha confirmado la recepcion del producto.
+                                El responsable aun no ha confirmado la recepción del producto.
                             </span>
                         </li>
                     </ul>
