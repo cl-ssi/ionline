@@ -11,23 +11,40 @@
 <form method="POST" class="form-horizontal" action="{{ route('parameters.places.update', $place) }}">
     @csrf
     @method('PUT')
-    <div class="row">
-        <fieldset class="form-group col">
+
+    <div class="form-row g-2">
+        <fieldset class="form-group col-md-4 col-sm-12">
             <label for="for_name">Nombre*</label>
-            <input type="text" class="form-control" id="for_name"
-            value="{{ $place->name }}" name="name" required>
+            <input
+                type="text"
+                class="form-control"
+                id="for_name"
+                value="{{ $place->name }}"
+                name="name"
+                required
+            >
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-md-4 col-sm-12">
             <label for="for_description">Descripción</label>
-            <input type="text" class="form-control" id="for_description"
-            value="{{ $place->description }}" placeholder="Opcional"
-            name="description">
+            <input
+                type="text"
+                class="form-control"
+                id="for_description"
+                value="{{ $place->description }}"
+                placeholder="Opcional"
+                name="description"
+            >
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-md-4 col-sm-12">
             <label for="for_location_id">Edificio</label>
-            <select name="location_id" id="for_location_id" class="form-control" required>
+            <select
+                name="location_id"
+                id="for_location_id"
+                class="form-control"
+                required
+            >
                 @foreach($locations as $location)
                     <option value="{{ $location->id }}"
                         {{ $location->id == $place->location_id ? 'selected': '' }}>
