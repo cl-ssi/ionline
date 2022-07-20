@@ -48,6 +48,6 @@ class CheckTransfer extends Component
         ]);
 
         session()->flash('success', 'El item del inventario fue recibido exitosamente.');
-        return redirect()->route('inventories.products-received');
+        return redirect()->route('inventories.assigned-products');
     }
 }
