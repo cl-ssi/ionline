@@ -142,13 +142,11 @@
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
 
-
-                        @endcanany
                         <div class="dropdown-divider"></div>
 
                         <h6 class="dropdown-header">Bodegas</h6>
 
-						<a class="dropdown-item disabled" href="#">
+			<a class="dropdown-item disabled" href="#">
                             <i class="fas fa-fw fa-warehouse"></i> Bodega
                         </a>
 
@@ -184,9 +182,9 @@
 
                         <div class="dropdown-divider"></div>
 
-						<a class="dropdown-item disabled" href="#">
-							<i class="fas fa-fw fa-clipboard-list"></i> Inventario
-						</a>
+			<a class="dropdown-item disabled" href="#">
+			<i class="fas fa-fw fa-clipboard-list"></i> Inventario
+			</a>
 
 
                         @canany(['Pharmacy'])
@@ -211,6 +209,8 @@
                                 <i class="fas fa-fw fa-exclamation-circle"></i> No tiene droguerías asignadas
                             </a>
                         @endif
+
+                        @endcan
 
 
                         @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
