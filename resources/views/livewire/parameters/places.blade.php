@@ -60,10 +60,26 @@
             <h3>Editar lugar</h3>
             @include('parameters.places.form')
             <button
-                type="button"
                 class="btn btn-primary"
-                wire:click="update({{$holiday}})"
+                type="button"
+                wire:target="update"
+                wire:loading.attr="disabled"
+                wire:click="update({{ $place }})"
+
             >
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
+                    wire:target="update"
+                    aria-hidden="true"
+                >
+                </span>
+
+                <span wire:loading.remove wire:target="update">
+                    <i class="fas fa-save"></i>
+                </span>
+
                 Guardar
             </button>
             <button
