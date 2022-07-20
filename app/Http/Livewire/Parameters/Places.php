@@ -61,11 +61,7 @@ class Places extends Component
         $place = Place::create($dataValidated);
         $this->mount();
 
-        session()->flash( 'info',
-            'Se ha creado la oficina con el id <span class="h5">'
-            . $place->id .
-            "</span>. Por favor anote el número en la hoja de inventario que está ubicada en la pared."
-        );
+        session()->flash('info', 'Se ha creado la oficina con el id <span class="h5">' . $place->id . "</span>. Por favor anote el número en la hoja de inventario que está ubicada en la pared.");
 
         $this->reset([
             'name',
@@ -90,6 +86,9 @@ class Places extends Component
     {
         $place->update($this->validate());
         $this->mount();
+
+        session()->flash( 'info', 'La oficina fue actualizada exitosamente.');
+
         $this->view = 'index';
     }
 
