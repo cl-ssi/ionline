@@ -176,16 +176,20 @@ use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\StoreController;
+use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryPending;
-use App\Http\Livewire\Inventory\InventoryProductsReceived;
+use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
+use App\Http\Livewire\Inventory\PendingMovements;
+use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
+use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 
 /*
 |--------------------------------------------------------------------------
@@ -919,11 +923,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
     Route::prefix('places')->as('places.')->group(function () {
-        Route::get('/', [PlaceController::class,'index'])->name('index');
-        Route::get('/create', [PlaceController::class,'create'])->name('create');
-        Route::get('/edit/{place}', [PlaceController::class,'edit'])->name('edit');
-        Route::put('/update/{place}', [PlaceController::class,'update'])->name('update');
-        Route::post('/store', [PlaceController::class,'store'])->name('store');
+        Route::get('/', MaintainerPlaces::class)->name('index');
     });
 
     Route::prefix('phrases')->as('phrases.')->group(function () {
@@ -1438,7 +1438,7 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 
 // Warehouse
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
-
+    Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
 
     Route::prefix('/store')->group(function () {
@@ -1469,10 +1469,13 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
     Route::get('/', InventoryIndex::class)->name('index');
     Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
     Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
-    Route::get('products-received', InventoryProductsReceived::class)->name('products-received');
-    Route::get('/{inventory}/edit', InventoryEdit::class)->name('edit');
-    Route::get('/movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer');
-    Route::get('/{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer');
+    Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
+    Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
+    Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
+    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer');
+    Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer');
+    Route::get('/places', InventoryMaintainerPlaces::class)->name('places');
+
 });
 
 /* Bodega de Farmacia */
