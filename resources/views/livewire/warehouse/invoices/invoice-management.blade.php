@@ -62,7 +62,7 @@
                 <tr>
                     <th class="text-center" style="width: 100px"></th>
                     <th>Ingreso</th>
-                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Fecha Ingreso</th>
                     <th>Facturas</th>
                 </tr>
             </thead>
