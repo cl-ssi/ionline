@@ -248,6 +248,9 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 // acceso a usuarios verificación entrega de farmacias
 Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
     Route::get('confirmation_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationDispatchVerificationNotification'])->name('confirmation_verification');
+    Route::get('cancel_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'cancelDispatchVerificationNotification'])->name('cancel_verification');
+    Route::get('confirmation_wobservations_verification/{id}', [App\Http\Controllers\Pharmacies\DispatchController::class,'confirmationWithObservationsDispatchVerificationNotification'])->name('confirmation_wobservations_verification');
+    Route::post('/store', [App\Http\Controllers\Pharmacies\DispatchController::class,'storeVerification'])->name('store');
 });
 
 
@@ -1508,6 +1511,8 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/deleteC19/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'deleteC19'])->name('dispatch.deleteC19');
         Route::post('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'storeFile'])->name('dispatch.storeFile');
         Route::get('dispatch/{dispatch}/file', [App\Http\Controllers\Pharmacies\DispatchController::class,'openFile'])->name('dispatch.openFile');
+        Route::get('dispatch/storePrivateVerification/{dispatch}', [App\Http\Controllers\Pharmacies\DispatchController::class,'storePrivateVerification'])->name('dispatch.storePrivateVerification');
+
         Route::resource('purchase', App\Http\Controllers\Pharmacies\PurchaseController::class);
         Route::resource('purchase_item', App\Http\Controllers\Pharmacies\PurchaseItemController::class);
         Route::get('purchase/sendForSignature/{purchase}/', [App\Http\Controllers\Pharmacies\PurchaseController::class,'sendForSignature'])->name('purchase.sendForSignature');
@@ -1686,26 +1691,28 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
-Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
-Route::prefix('vaccination')->as('vaccination.')->group(function () {
-    Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
-    Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
-    Route::get('/',[VaccinationController::class,'index'])->name('index')->middleware('auth');
-    Route::get('/create',[VaccinationController::class,'create'])->name('create')->middleware('auth');
-    Route::post('/',[VaccinationController::class,'store'])->name('store')->middleware('auth');
-    Route::post('/show',[VaccinationController::class,'show'])->name('show');
-    Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit')->middleware('auth');
-    Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
-    Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
-    Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
-    Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
-    Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
-    Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
-    Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
-    Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
-    Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
-});
+/** Módulo de horas para vacunas. ya no se usa */
+// Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
+
+// Route::prefix('vaccination')->as('vaccination.')->group(function () {
+//     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
+//     Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
+//     Route::get('/',[VaccinationController::class,'index'])->name('index')->middleware('auth');
+//     Route::get('/create',[VaccinationController::class,'create'])->name('create')->middleware('auth');
+//     Route::post('/',[VaccinationController::class,'store'])->name('store')->middleware('auth');
+//     Route::post('/show',[VaccinationController::class,'show'])->name('show');
+//     Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit')->middleware('auth');
+//     Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
+//     Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+//     Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
+//     Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+//     Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
+//     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+//     Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
+//     Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
+//     Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
+// });
 
 Route::prefix('mammography')->as('mammography.')->group(function () {
     Route::get('/welcome',[MammographyController::class,'welcome'])->name('welcome');
@@ -1726,6 +1733,7 @@ Route::prefix('mammography')->as('mammography.')->group(function () {
     // Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
     // Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
+
 
 Route::prefix('invoice')->as('invoice.')->group(function () {
     Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');

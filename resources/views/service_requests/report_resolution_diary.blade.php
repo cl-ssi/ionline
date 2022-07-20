@@ -133,10 +133,19 @@
         page-break-before: always;
       }
     }
+
+    footer { position: fixed; bottom: -60px; left: 0px; right: 0px; background-color: #eff8fa; height: 50px; }
+    footer .pagenum:before {
+        content: counter(page);
+    }
   </style>
 </head>
 
 <body>
+  <footer>
+      <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+  </footer>
+  <main>
   <div class="content">
 
     <div class="content">
@@ -501,6 +510,7 @@
 
 
     </div>
+    </main>
 </body>
 
 </html>
