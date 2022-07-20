@@ -97,9 +97,6 @@
                     <!--./ fin botón-->
                     </div>
 
-                    <br>
-                    <hr class="">
-                    <a href="{{ route('vaccination.welcome')}}">Vacunación funcionarios de salud</a>
                 </div>
             </div>
 

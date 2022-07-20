@@ -21,7 +21,7 @@
       </fieldset>
 
       <fieldset class="form-group col">
-          <label for="for_origin">Origen</label>
+          <label for="for_origin">Destino</label>
           <select name="establishment_id" class="form-control selectpicker" data-live-search="true" required="">
             @foreach ($establishments as $key => $establishment)
               <option value="{{$establishment->id}}" @if ($dispatch->establishment_id == $establishment->id)
@@ -46,19 +46,51 @@
 
 @include('pharmacies.products.dispatchitem.create')
 
-<!-- @if($dispatch->dispatchItems->count() > 0)
-  <form method="GET" action="{{ route('pharmacies.products.dispatch.sendEmailValidation',$dispatch) }}">
-    <div class="form-row">
-        <fieldset class="form-group col-9">
-            
-        </fieldset>
-        <fieldset class="form-group col">
-            <label for="for_note"></label>
-            <button type="submit" class="form-control btn btn-success">Enviar correo</button>
-        </fieldset>
-    </div>
-  </form>
-@endif -->
+@if($dispatch->dispatchItems->count() > 0)
+  <div class="form-row">
+      <fieldset class="form-group col">
+      </fieldset>
+      <fieldset class="form-group col-3">
+          <form method="GET" action="{{ route('pharmacies.products.dispatch.sendEmailValidation',$dispatch) }}">
+            <button type="submit" class="form-control btn btn-warning">Enviar correo</button>
+          </form>
+      </fieldset>
+      <fieldset class="form-group col-3">
+          <form method="GET" action="{{ route('pharmacies.products.dispatch.storePrivateVerification',$dispatch) }}">
+            <button type="submit" class="form-control btn btn-success">Confirmar recepción</button>
+          </form>
+      </fieldset>
+  </div>
+@endif
+
+@if($dispatch->verificationMailings->count() > 0)
+<div class="table-responsive">
+	<table class="table table-striped table-sm" id="tabla_dispatch">
+		<thead>
+			<tr>
+				<th scope="col">Estado</th>
+				<th scope="col">Observación remitente</th>
+        <th scope="col">F.Envío</th>
+        <th scope="col">Observación destinatario</th>
+        <th scope="col">F.Confirmación</th>
+			</tr>
+		</thead>
+		<tbody>
+      @foreach($dispatch->verificationMailings as $verificationMailings)
+        <tr>
+          <td>{{$verificationMailings->status}}</td>
+          <td>{{$verificationMailings->sender_observation}}</td>
+          <td>{{$verificationMailings->delivery_date}}</td>
+          <td>{{$verificationMailings->receiver_observation}}</td>
+          <td>{{$verificationMailings->confirmation_date}}</td>
+        </tr>
+      @endforeach
+		</tbody>
+	</table>
+</div>
+@endif
+
+
 
 @endsection
 

@@ -98,6 +98,7 @@
             <input type="text" class="form-control" id="numerator_cols" name="numerator_cols" value="{{$action->numerator_cols}}" disabled>
         </div>
     </div>
+    <hr>
     <div class="form-row">
         <div class="form-group col-md{{(isset($corte) ? $corte->number : $section) > 2 ? '-12' : '' }}">
             <label for="denominator">Nombre denominador</label>
