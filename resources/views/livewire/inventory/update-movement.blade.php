@@ -42,14 +42,14 @@
 
         <fieldset class="col-md-2">
             <label for="reception-confirmation" class="form-label">
-                Instalación
+                Fecha de Recepción
             </label>
             <input
                 type="text"
                 class="form-control form-control-sm"
                 id="reception-confirmation"
-                @if($movement->installation_date)
-                    value="{{ $movement->installation_date->format('Y-m-d') }}"
+                @if($movement->reception_date)
+                    value="{{ $movement->reception_date }}"
                 @endif
                 readonly
             >
