@@ -27,7 +27,8 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="d-none"
+                <tr
+                    class="d-none"
                     wire:loading.class.remove="d-none"
                     wire:target="search, deleteDestination"
                 >
