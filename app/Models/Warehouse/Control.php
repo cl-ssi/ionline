@@ -4,6 +4,7 @@ namespace App\Models\Warehouse;
 
 use App\Models\Parameters\Program;
 use App\Models\Parameters\Supplier;
+use App\Models\RequestForms\Invoice;
 use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\RequestForm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,12 +24,9 @@ class Control extends Model
         'confirm',
         'po_code',
         'po_date',
-        'invoice_number',
-        'invoice_date',
         'guide_number',
         'guide_date',
         'status',
-        'invoice_url',
         'store_id',
         'origin_id',
         'destination_id',
@@ -104,6 +102,11 @@ class Control extends Model
     public function originStore()
     {
         return $this->belongsTo(Store::class, 'store_origin_id');
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     public function isReceiving()
