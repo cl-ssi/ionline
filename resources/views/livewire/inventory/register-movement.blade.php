@@ -59,7 +59,7 @@
                 class="form-control @error('place_id') is-invalid @enderror"
                 type="hidden"
             >
-            
+
             @error('place_id')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
