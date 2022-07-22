@@ -35,8 +35,9 @@
 				<th scope="col">Fecha</th>
 				<th scope="col">Establecimiento</th>
 				<th scope="col">Notas</th>
+				<th scope="col">Estado recepción</th>
 				<th nowrap scope="col"></th>
-				@if(Auth::user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif
+				<!-- @if(Auth::user()->pharmacies->first()->id != 3) <th nowrap scope="col">C-19</th> @endif -->
 			</tr>
 		</thead>
 		<tbody>
@@ -46,6 +47,13 @@
         		<td>{{ Carbon\Carbon::parse($dispatch->date)->format('d/m/Y')}}</td>
         		<td>{{ $dispatch->establishment->name }}</td>
         		<td>{{ $dispatch->notes }}</td>
+				<td>
+					@if($dispatch->verificationMailings->count()>0)
+						{{$dispatch->verificationMailings->last()->status}}
+					@else
+						--
+					@endif
+				</td>
 				<td nowrap>
 					@can('Pharmacy: edit_delete')
 					<a href="{{ route('pharmacies.products.dispatch.edit', $dispatch) }}" class="btn btn-outline-secondary btn-sm">
@@ -78,7 +86,7 @@
 					@endif
 					{{-- @endcan --}}
 				</td>
-				@if(Auth::user()->pharmacies->first()->id != 3)
+				<!-- @if(Auth::user()->pharmacies->first()->id != 3)
 				<td nowrap>
 					@if($dispatch->sendC19 == 0)
 						<form method="POST" action="{{ route('pharmacies.products.dispatch.sendC19', $dispatch) }}" class="d-inline">
@@ -102,7 +110,7 @@
 						</form>
 					@endif
 				</td>
-				@endif
+				@endif -->
 			</tr>
 			@endforeach
 		</tbody>
