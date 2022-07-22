@@ -13,7 +13,7 @@ class Receiving extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'date', 'establishment_id', 'pharmacy_id', 'notes', 'user_id', 'created_at'
+      'id', 'date', 'establishment_id', 'pharmacy_id', 'notes', 'order_number', 'user_id', 'created_at'
   ];
 
   use SoftDeletes;
