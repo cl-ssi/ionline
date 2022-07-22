@@ -63,6 +63,7 @@
 <div style="padding-bottom: 8px;">
     <strong>Recibido de:</strong> {{ $receiving->establishment->name }}<br>
     <strong>Nota:</strong> {{ $receiving->notes }}<br>
+    <strong>Nro. pedido:</strong> {{ $receiving->order_number }}<br>
 </div>
 
 <table class="ocho">
