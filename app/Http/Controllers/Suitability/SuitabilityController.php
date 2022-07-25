@@ -37,6 +37,7 @@ class SuitabilityController extends Controller
         $schools = School::orderBy('name', 'asc')->get();
         $result = Result::has('signedCertificate')->with('psirequest');
         //$schools = School::orderBy('name', 'asc')->get();        
+        $month = $request->month;    
         $sumesperando = 0;
         $sumfinalizado = 0;
         $sumaprobado = 0;
@@ -46,9 +47,33 @@ class SuitabilityController extends Controller
         if ($request->year != null) {
 
             foreach ($schools as $school) {
-                $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status', 'Aprobado')->where('created_at','like',$request->year.'%')->get()->count();
-                $counteresperando = PsiRequest::where('school_id', $school->id)->where('status', 'Esperando Test')->whereDate('created_at','like',$request->year.'%')->get()->count();
-                $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status', 'Test Finalizado')->whereDate('created_at','like',$request->year.'%')->get()->count();
+                $counteraprobado = PsiRequest::where('school_id', $school->id
+                )->where('status', 'Aprobado')
+                ->where('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
+                $counteresperando = PsiRequest::where('school_id', $school->id)
+                ->where('status', 'Esperando Test')
+                ->whereDate('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
+                $counterfinalizado = PsiRequest::where('school_id', $school->id)
+                ->where('status', 'Test Finalizado')
+                ->whereDate('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
                 $sumaprobado += $counteraprobado;
                 $sumesperando += $counteresperando;
                 $sumfinalizado += $counterfinalizado;
