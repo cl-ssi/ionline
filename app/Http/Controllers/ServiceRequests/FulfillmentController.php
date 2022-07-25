@@ -446,9 +446,11 @@ class FulfillmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Fulfillment $fulfillment)
     {
-        //
+      $fulfillment->delete();
+      session()->flash('success', 'Se ha eliminado el período.');
+      return redirect()->back();
     }
 
     public function certificatePDF(Fulfillment $fulfillment, User $user = null)
