@@ -36,6 +36,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+                      href="{{ route('suitability.reportsigned') }}">
+            <i class="fas fa-signature"></i> Reporte Firmados (en Desarrollo)
+        </a>
+    </li>
+
 
     <div class="dropdown show">
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
