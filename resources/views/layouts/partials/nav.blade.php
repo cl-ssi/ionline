@@ -43,6 +43,13 @@
                             <i class="fas fa-globe-americas"></i> Tablero de población
                         </a>
 
+                        @can('RNI Database: view')
+                        <a class="dropdown-item"
+                           href="{{ route('indicators.rni_db.index') }}">
+                            <i class="fas fa-database"></i> Base de datos RNI
+                        </a>
+                        @endcan
+
                         @can('Programming: view')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
