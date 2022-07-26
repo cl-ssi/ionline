@@ -34,11 +34,15 @@ class PopulationSearchForm extends Component
     }
 
     public function updatedselectedYear($year_id){
-        $this->establishments = Establecimiento::year($year_id)
-          ->where('tablero_poblacion', 1)
-          ->orderBy('comuna')
-          ->get();
-
+        if($year_id != NULL){
+            $this->establishments = Establecimiento::year($year_id)
+              ->where('tablero_poblacion', 1)
+              ->orderBy('comuna')
+              ->get();
+        }
+        else{
+            $this->establishments = [];
+        }
         $this->dispatchBrowserEvent('contentChanged');
     }
 }
