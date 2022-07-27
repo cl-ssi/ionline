@@ -369,6 +369,11 @@ class SignatureController extends Controller
      */
     public function update(Request $request, Signature $signature): RedirectResponse
     {
+        $request->validate([
+            'distribution' => ['nullable', new CommaSeparatedEmails],
+            'recipients' => ['nullable', new CommaSeparatedEmails]
+        ]);
+        
         $signature->fill($request->all());
         $signature->rejected_at = null;
         $signature->save();
