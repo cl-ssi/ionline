@@ -36,9 +36,14 @@ class ShiftsControl extends Component
     {
       if ($shiftControl != null) {
         $shiftControl = ShiftControl::find($shiftControl['id']);
-        $shiftControl->delete();
-
-        $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+        if($shiftControl){
+          $shiftControl->delete();
+          $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+        }else{
+          $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
+          logger("No se encontró shiftcontrol para eliminar.");
+        }
+        
       }else{
         $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
         logger("Se intentó eliminar un shiftcontrol que venía vacío.");
