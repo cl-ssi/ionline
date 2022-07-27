@@ -37,16 +37,17 @@
                     <fieldset class="form-group col-3">
                         <label for="for_request_date">Fecha Documento</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
-                            value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : ''}}" required>
+                            value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date')}}" required>
                     </fieldset>
                 </div>
 
                 <div class="form-row">
-                    @livewire('signatures.document-types') 
+                    @livewire('signatures.document-types')
+                    
                     <fieldset class="form-group col">
                         <label for="for_subject">Materia o tema del documento</label>
                         <input type="text" class="form-control" id="for_subject" name="subject"
-                            value="{{isset($signature) ? $signature->subject : ''}}" required>
+                            value="{{isset($signature) ? $signature->subject : old('subject')}}" required>
                     </fieldset>
                 </div>
 
@@ -54,7 +55,7 @@
                     <fieldset class="form-group col">
                         <label for="for_description">Descripción del documento</label>
                         <input type="text" class="form-control" id="for_description" name="description"
-                            value="{{isset($signature) ? $signature->description : ''}}" required>
+                            value="{{isset($signature) ? $signature->description : old('description')}}" required>
                     </fieldset>
                 </div>
 
@@ -84,7 +85,7 @@
                     <fieldset class="form-group col">
                         <label for="for_url">Link o Url asociado</label>
                         <input type="url" class="form-control" id="for_url" name="url"
-                            value="{{isset($signature) ? $signature->url : ''}}" >
+                            value="{{isset($signature) ? $signature->url : old('url')}}" >
                     </fieldset>
                 </div>
             </div>
@@ -142,13 +143,13 @@
                     <fieldset class="form-group col">
                         <label for="for_distribution">Distribución del documento (separados por coma)</label>
                         <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
-                                rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
+                                rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->distribution)  : old('distribution')}}</textarea>
                     </fieldset>
 
                     <fieldset class="form-group col">
                         <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
-                        ></textarea>
+                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients"
+                                  rows="6"> {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>
                     </fieldset>
                 </div>
             </div>

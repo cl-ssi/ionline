@@ -93,6 +93,7 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\RNIdb\RNIdbController;
 
 use App\Http\Controllers\Indicators\ApsController;
 use App\Http\Controllers\Indicators\IaapsController;
@@ -1063,6 +1064,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/population', [SingleParameterController::class,'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
 
+    Route::prefix('rni_db')->as('rni_db.')->group(function () {
+        Route::get('/', [RNIdbController::class,'index'])->middleware('auth')->name('index');
+        Route::put('/', [RNIdbController::class,'update'])->middleware('auth')->name('update');
+        Route::get('/{file}', [RNIdbController::class,'download'])->middleware('auth')->name('download');
+    });
+
     Route::prefix('comges')->as('comges.')->group(function () {
         Route::get('/', [ComgesController::class,'index'])->name('index');
         Route::get('/{year}', [ComgesController::class,'list'])->name('list');
@@ -1606,9 +1613,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
         Route::get('/mercado-publico-api/{type}/{code}', function($type, $code){
-            if($type == 'licitaciones') return MercadoPublico::getTender($code);
-            elseif($type == 'ordenesdecompra') return MercadoPublico::getPurchaseOrder($code);
-            else return null;
+            return MercadoPublico::getTender($code, $type);
         });
     });
 
