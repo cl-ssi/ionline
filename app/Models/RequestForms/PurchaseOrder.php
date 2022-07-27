@@ -41,6 +41,10 @@ class PurchaseOrder extends Model
         'items'
     ];
 
+    protected $dates = [
+        'date'
+    ];
+    
     public function getDataObjectAttribute()
     {
         $object = json_decode($this->data);

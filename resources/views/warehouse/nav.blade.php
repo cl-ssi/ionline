@@ -29,6 +29,15 @@
                 <i class="fas fa-shipping-fast"></i> Egreso
             </a>
         </li>
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active('warehouse.invoice-management') }}"
+                aria-current="page"
+                href="{{ route('warehouse.invoice-management') }}"
+            >
+                <i class="fas fa-dollar-sign"></i> Facturas
+            </a>
+        </li>
         <li class="nav-item dropdown">
             <a
                 class="nav-link dropdown-toggle  {{ active('warehouse.store.report') }}"

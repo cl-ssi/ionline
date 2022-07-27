@@ -11,20 +11,31 @@
 <form method="POST" class="form-horizontal" action="{{ route('parameters.locations.store') }}">
     @csrf
 
-    <div class="row">
-        <fieldset class="form-group col">
+    <div class="form-row">
+        <fieldset class="form-group col-md col-sm-12">
             <label for="for_name">Nombre*</label>
-            <input type="text" class="form-control" id="for_name"
-            placeholder="Ej: Cosam 1, Edificio 3, Cesfam" name="name" required>
+            <input
+                type="text"
+                class="form-control"
+                id="for_name"
+                placeholder="Ej: Cosam 1, Edificio 3, Cesfam"
+                name="name"
+                required
+            >
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-md col-sm-12">
             <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" id="for_address"
-            placeholder="Opcional" name="address">
+            <input
+                type="text"
+                class="form-control"
+                id="for_address"
+                placeholder="Opcional"
+                name="address"
+            >
         </fieldset>
-
     </div>
+    
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a class="btn btn-outline-secondary" href="{{ route('parameters.locations.index') }}">Volver</a>
 
