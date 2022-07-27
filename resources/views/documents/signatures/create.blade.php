@@ -43,6 +43,7 @@
 
                 <div class="form-row">
                     @livewire('signatures.document-types')
+                    
                     <fieldset class="form-group col">
                         <label for="for_subject">Materia o tema del documento</label>
                         <input type="text" class="form-control" id="for_subject" name="subject"
