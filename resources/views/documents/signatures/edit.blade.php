@@ -10,41 +10,20 @@
     @csrf
     @method('PUT')
     <div class="form-row">
-
         <fieldset class="form-group col-3">
             <label for="for_request_date">Fecha Documento</label>
-            <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($signature->request_date)->format('Y-m-d')}}">
+            <input type="date" class="form-control" id="for_request_date" name="request_date" required
+                   value="{{ old('request_date', \Carbon\Carbon::parse($signature->request_date)->format('Y-m-d')) }}"
+            >
         </fieldset>
     </div>
 
     <div class="form-row">
-
-        <fieldset class="form-group col-3">
-            <label for="for_document_type">Tipo de Documento</label>
-            <select class="form-control selectpicker" data-live-search="true" name="document_type" required="" data-size="5">
-                <option value="Carta" @if($signature->document_type == 'Carta') selected @endif >Carta</option>
-                <option value="Circular" @if($signature->document_type == 'Circular') selected @endif>Circular
-                </option>
-                <option value="Convenios" @if($signature->document_type == 'Convenios') selected @endif>Convenios
-                </option>
-                <option value="Memorando" @if($signature->document_type == 'Memorando') selected @endif>Memorando
-                </option>
-                <option value="Oficio" @if($signature->document_type == 'Oficio') selected @endif>Oficio</option>
-                <option value="Resoluciones" @if($signature->document_type == 'Resoluciones') selected @endif>
-                    Resoluciones
-                </option>
-                <option value="Acta" @if($signature->document_type == 'Acta') selected @endif>
-                    Acta
-                </option>
-                <option value="Protocolo" @if($signature->document_type == 'Protocolo') selected @endif>
-                    Protocolo
-                </option>
-            </select>
-        </fieldset>
+        @livewire('signatures.document-types', ['selectedDocumentType' => $signature->document_type])
 
         <fieldset class="form-group col">
             <label for="for_subject">Materia o tema del documento</label>
-            <input type="text" class="form-control" id="for_subject" name="subject" required value="{{$signature->subject}}">
+            <input type="text" class="form-control" id="for_subject" name="subject" required value="{{ old('subject', $signature->subject) }}">
         </fieldset>
 
     </div>
@@ -52,7 +31,7 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_description">Descripción del documento</label>
-            <input type="text" class="form-control" id="for_description" name="description" value="{{$signature->description}}">
+            <input type="text" class="form-control" id="for_description" name="description" value="{{ old('description', $signature->description) }}">
         </fieldset>
     </div>
 
@@ -80,7 +59,7 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_url">Link o Url asociado</label>
-            <input type="url" class="form-control" id="for_url" name="url" value="{{$signature->url}}">
+            <input type="url" class="form-control" id="for_url" name="url" value="{{ old('url', $signature->url) }}">
         </fieldset>
     </div>
 
@@ -90,19 +69,15 @@
     @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
 
     <div class="form-row">
-
-
-
         <fieldset class="form-group col">
             <label for="for_distribution">Distribución del documento (separados por coma)</label>
-            <textarea class="form-control" id="for_distribution" name="distribution" rows="6">{{$signature->distribution}}</textarea>
+            <textarea class="form-control" id="for_distribution" name="distribution" rows="6">{{ old('distribution', $signature->distribution) }}</textarea>
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-            <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{$signature->recipients}}</textarea>
+            <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{ old('recipients', $signature->recipients) }}</textarea>
         </fieldset>
-
     </div>
 
 
