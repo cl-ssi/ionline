@@ -13,7 +13,8 @@
                 <span class="sr-only">...</span>
             </span>
         </div>
-        <select id="product-id"
+        <select
+            id="product-id"
             wire:model="product_id"
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:loading.attr="disabled"

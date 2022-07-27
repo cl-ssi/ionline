@@ -44,14 +44,18 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{active('parameters.locations.index')}}"
-            href="{{ route('parameters.locations.index') }}">
+        <a
+            class="nav-link {{ active(['parameters.locations.index', 'parameters.locations.create', 'parameters.locations.edit']) }}"
+            href="{{ route('parameters.locations.index') }}"
+        >
             <i class="fas fa-home"></i> Ubicaciones</a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{active('parameters.places.index')}}"
-            href="{{ route('parameters.places.index') }}">
+        <a
+            class="nav-link {{ active(['parameters.places.index', 'parameters.places.create', 'parameters.places.edit']) }}"
+            href="{{ route('parameters.places.index') }}"
+        >
             <i class="fas fa-map-marker-alt"></i> Lugares</a>
     </li>
 
@@ -121,7 +125,10 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active('parameters.*') }}" href="{{ route('parameters.index') }}">
+        <a
+            class="nav-link {{ active(['parameters.index', 'parameters.create', 'parameters.edit']) }}"
+            href="{{ route('parameters.index') }}"
+        >
             <i class="fas fa-cog"></i> Parámetros
         </a>
     </li>

@@ -122,7 +122,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-sm-3">
+        <fieldset class="form-group col-sm-2">
             <label for="guide-date">Fecha Guía</label>
             <input
                 class="form-control form-control-sm @error('guide_date') is-invalid @enderror"
@@ -137,7 +137,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-3">
+        <fieldset class="form-group col-sm-2">
             <label for="guide-number">Nro. Guía</label>
             <input
                 class="form-control form-control-sm @error('guide_number') is-invalid @enderror"
@@ -152,38 +152,6 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-3">
-            <label for="invoice-date">Fecha Factura</label>
-            <input
-                class="form-control form-control-sm @error('invoice_date') is-invalid @enderror"
-                id="invoice-date"
-                wire:model.debounce.1500ms="invoice_date"
-                type="date"
-            >
-            @error('invoice_date')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-sm-3">
-            <label for="invoice-number">Nro. Factura</label>
-            <input
-                class="form-control form-control-sm @error('invoice_number') is-invalid @enderror"
-                id="invoice-number"
-                wire:model.debounce.1500ms="invoice_number"
-                type="text"
-            >
-            @error('invoice_number')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-    </div>
-
-    <div class="form-row">
         <fieldset class="form-group col-sm-3">
             <label for="program-id">Programa</label>
             <select
@@ -208,7 +176,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-9">
+        <fieldset class="form-group col-sm-5">
             <label for="note">Nota</label>
             <input
                 class="form-control form-control-sm @error('note') is-invalid @enderror"
@@ -250,12 +218,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($po_items as $index => $po_item)
+                @forelse($po_items as $index => $po_item)
                 <tr>
                     <td class="text-center">
                         <small class="text-monospace">
                             {{ $po_item['unspsc_product_code'] }}
-                        </small>Reporte Bincard
+                        </small>
                     </td>
                     <td>
                         @if($index_selected === $index )
@@ -431,28 +399,38 @@
                         @endif
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr class="text-center">
+                    <td colspan="5">
+                        <em>No hay productos</em>
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 
-    <button
-        class="btn btn-success"
-        wire:click="finish"
-        wire:loading.attr="disabled"
-        wire:target="finish"
-        @if($po_code == null)
-            disabled
-        @endif
-    >
-        <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            wire:loading
-            wire:target="finish"
-            aria-hidden="true"
-        >
-        </span>
-        Terminar
-    </button>
+    <div class="row">
+        <div class="col text-right">
+            <button
+                class="btn btn-success"
+                wire:click="finish"
+                wire:loading.attr="disabled"
+                wire:target="finish"
+                @if($po_code == null)
+                    disabled
+                @endif
+            >
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
+                    wire:target="finish"
+                    aria-hidden="true"
+                >
+                </span>
+                Terminar
+            </button>
+        </div>
+    </div>
 </div>
