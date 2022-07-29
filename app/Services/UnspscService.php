@@ -74,7 +74,7 @@ class UnspscService
     /**
      * Retorna el resultado de la búsqueda bajo la estructura de Mercado Público de Chile.
      *
-     * @param  $product
+     * @param  $search
      */
     public function search($search)
     {

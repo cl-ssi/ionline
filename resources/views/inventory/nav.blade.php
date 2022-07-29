@@ -10,26 +10,37 @@
     </li>
     <li class="nav-item">
         <a
-            class="nav-link {{ active('inventories.last-income') }}"
-            href="{{ route('inventories.last-income') }}"
+            class="nav-link {{ active('inventories.last-receptions') }}"
+            href="{{ route('inventories.last-receptions') }}"
         >
         <i class="fas fa-clock"></i> Últimos Ingresos a Bodega
         </a>
     </li>
     <li class="nav-item">
         <a
-            class="nav-link {{ active('inventories.pending-inventory') }}"
+            class="nav-link {{ active(['inventories.pending-inventory', 'inventories.edit']) }}"
             href="{{ route('inventories.pending-inventory') }}"
         >
             <i class="fas fa-hourglass"></i> Bandeja Pendiente de Inventario
         </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item dropdown">
         <a
-            class="nav-link {{ active('inventories.details') }}"
-            href="{{ route('inventories.details') }}"
+            class="nav-link dropdown-toggle  {{ active('inventories.places') }}"
+            data-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-expanded="false"
         >
-            <i class="fas fa-edit"></i> Item Inventario (ejemplo)
+            <i class="fas fa-cog"></i> Mantenedores
         </a>
+        <div class="dropdown-menu">
+            <a
+                class="dropdown-item"
+                href="{{ route('inventories.places') }}"
+            >
+                <i class="fas fa-file-alt"></i> Lugares
+            </a>
+        </div>
     </li>
 </ul>

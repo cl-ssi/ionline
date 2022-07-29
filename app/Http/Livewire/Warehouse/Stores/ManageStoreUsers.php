@@ -26,7 +26,6 @@ class ManageStoreUsers extends Component
     public $rules = [
         'user_id' => 'required|exists:users,id',
         'role_id' => 'required|exists:roles,id'
-
     ];
 
     public function mount()

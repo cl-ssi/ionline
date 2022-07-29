@@ -1094,7 +1094,6 @@ class RequirementController extends Controller
 
         session()->flash('success', 'El requerimiento ' . $id . ' ha sido eliminado');
 
-        // return redirect()->route('requirements.outbox');
-        return redirect()->back();
+        return redirect()->route('requirements.inbox');        
     }
 }

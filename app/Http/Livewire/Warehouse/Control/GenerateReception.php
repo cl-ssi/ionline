@@ -38,8 +38,6 @@ class GenerateReception extends Component
     public $po_date;
     public $guide_number;
     public $guide_date;
-    public $invoice_number;
-    public $invoice_date;
     public $supplier_name;
     public $branch_code;
     public $branch_name;
@@ -74,6 +72,7 @@ class GenerateReception extends Component
 
     public function mount()
     {
+        $this->iteration = 1;
         $this->type_product = 1;
         $this->programs = Program::orderBy('name')->get(['id', 'name']);
         $this->wre_products = collect([]);
@@ -111,7 +110,7 @@ class GenerateReception extends Component
             $this->date = now()->format('Y-m-d');
             $this->error = false;
             $this->po_code = $purchaseOrder->code;
-            $this->po_date = $purchaseOrder->date;
+            $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
             $this->supplier_name = $purchaseOrder->supplier_name;
             $this->program_id = $this->getProgramId($this->po_search);
             $this->disabled_program = $this->program_id ? true : false;
@@ -364,8 +363,6 @@ class GenerateReception extends Component
         $this->po_date = null;
         $this->guide_number = null;
         $this->guide_date = null;
-        $this->invoice_date = null;
-        $this->invoice_number = null;
         $this->program_id = null;
         $this->note = null;
         $this->disabled_program = false;
@@ -386,8 +383,6 @@ class GenerateReception extends Component
             'date' => $dataValidated['date'],
             'po_date' => Carbon::parse($dataValidated['po_date'])->format('Y-m-d H:i:s'),
             'po_code' => $dataValidated['po_code'],
-            'invoice_number' => $dataValidated['invoice_number'],
-            'invoice_date' => $dataValidated['invoice_date'],
             'guide_number' => $dataValidated['guide_number'],
             'guide_date' => $dataValidated['guide_date'],
             'type_reception_id' => TypeReception::purchaseOrder(),
