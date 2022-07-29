@@ -6,15 +6,21 @@
 
 @include('parameters.nav')
 
-<h3 class="mb-3">Ubicaciones</h3>
-
-<a class="btn btn-primary mb-3" href="{{ route('parameters.locations.create') }}">
-    Crear
-</a>
+<div class="row">
+    <div class="col">
+        <h3 class="mb-3">Ubicaciones</h3>
+    </div>
+    <div class="col text-right">
+        <a class="btn btn-primary mb-3" href="{{ route('parameters.locations.create') }}">
+            Crear
+        </a>
+    </div>
+</div>
 
 <table class="table">
     <thead>
         <tr>
+            <th class="text-center">ID</th>
             <th>Nombre</th>
             <th>Dirección</th>
             <th>Acciones</th>
@@ -23,6 +29,7 @@
     <tbody>
         @foreach($locations as $location)
         <tr>
+            <td class="text-center">{{ $location->id }}</td>
             <td>{{ $location->name }}</td>
             <td>{{ $location->address }}</td>
             <td>
@@ -34,7 +41,6 @@
         @endforeach
     </tbody>
 </table>
-
 
 @endsection
 

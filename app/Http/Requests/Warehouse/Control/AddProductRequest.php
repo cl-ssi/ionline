@@ -40,7 +40,6 @@ class AddProductRequest extends FormRequest
             'type_product'  => 'required',
             'quantity'      => 'required|integer|min:0|max:' . $this->max_quantity,
             'description'   => 'required|string|min:2|max:255',
-            'inventory'     => 'required|boolean',
             'barcode'       => [
                 'nullable',
                 'string',

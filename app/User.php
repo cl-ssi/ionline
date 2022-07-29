@@ -44,8 +44,8 @@ class User extends Authenticatable implements Auditable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
     public function organizationalUnit() {
+
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 

@@ -30,10 +30,8 @@ class GenerationReceptionRequest extends FormRequest
             'po_items'          => 'required|array|min:1',
             'guide_number'      => 'nullable|string|min:1|max:255',
             'guide_date'        => 'nullable|date_format:Y-m-d',
-            'invoice_number'    => 'nullable|string|min:1|max:255',
-            'invoice_date'      => 'nullable|date_format:Y-m-d',
             'note'              => 'nullable|string|min:1|max:255',
-            'program_id'        => 'nullable|exists:cfg_programs,id'
+            'program_id'        => 'nullable|exists:cfg_programs,id',
         ];
     }
 }
