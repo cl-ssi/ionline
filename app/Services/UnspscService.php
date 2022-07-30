@@ -103,12 +103,12 @@ class UnspscService
             {
                 $results->push([
                     'title' => Str::limit($title, $this->sizeTitle),
-                    'products' => $productsOfClass,
+                    'products' => $productsOfClass->sortBy('name')->values(),
                 ]);
             }
 
         }
 
-        return $results;
+        return $results->sort()->values();
     }
 }
