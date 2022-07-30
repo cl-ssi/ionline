@@ -15,6 +15,7 @@ class AddOrganizationalUnitToWreControls extends Migration
     {
         Schema::table('wre_controls', function (Blueprint $table) {
             $table->foreignId('organizational_unit_id')->after('request_form_id')->nullable()->constrained('organizational_units');
+            $table->boolean('type_destination')->after('type')->nullable(); // 1:interno 0:externo
         });
     }
 
