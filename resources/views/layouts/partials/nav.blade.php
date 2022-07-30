@@ -131,7 +131,7 @@
 
 
                 @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
-                <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*']) }}">
+                <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-money-check"></i> SDA
@@ -142,13 +142,11 @@
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
 
-                        <div class="dropdown-divider"></div>
 
-                        <h6 class="dropdown-header">Bodegas</h6>
-
-			<a class="dropdown-item disabled" href="#">
-                            <i class="fas fa-fw fa-warehouse"></i> Bodega
-                        </a>
+                        @can('Store')
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Bodegas</h6>
+                        @endcan
 
                         @role('Store: Super admin')
                             <a
@@ -158,6 +156,15 @@
                                 <i class="fas fa-list"></i> Administrar Bodegas
                             </a>
                         @endrole
+
+                        @can('Store: add invoice')
+                            <a
+                                class="dropdown-item {{ active('warehouse.invoice-management') }}"
+                                href="{{ route('warehouse.invoice-management') }}"
+                            >
+                                <i class="fas fa-dollar-sign"></i> Facturas
+                            </a>
+                        @endcan('')
 
                         @hasanyrole('Store: admin|Store: user|Store: Super admin')
                             @forelse(Auth::user()->stores as $store)
@@ -179,13 +186,13 @@
                             @endforelse
                         @endhasanyrole
 
+                        @can('Inventory')
+                            <div class="dropdown-divider"></div>
 
-                        <div class="dropdown-divider"></div>
-
-			<a class="dropdown-item disabled" href="#">
-			<i class="fas fa-fw fa-clipboard-list"></i> Inventario
-			</a>
-
+                            <a class="dropdown-item" href="{{ route('inventories.index') }}">
+                                <i class="fas fa-fw fa-clipboard-list"></i> Inventario
+                            </a>
+                        @endcan
 
                         @canany(['Pharmacy'])
                         <div class="dropdown-divider"></div>
@@ -216,9 +223,9 @@
                         @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
 
                         <div class="dropdown-divider"></div>
-                        
+
                         <h6 class="dropdown-header">Recursos informáticos</h6>
-                        
+
                         <a class="dropdown-item {{ active('resources.computer.*') }}"
                             href="{{ route('resources.computer.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Computadores
@@ -261,7 +268,7 @@
                     'Service Request',
                     'Replacement Staff: create request',
                     'Replacement Staff: view requests'])
-                <li class="nav-item dropdown 
+                <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -444,6 +451,9 @@
                                 </a>
                             @endif
 
+                            <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
+                                <i class="fas fa-clock"></i> {{ __('Inventarios Pendientes') }}
+                            </a>
 
                             @role('god')
                             <a class="dropdown-item"
