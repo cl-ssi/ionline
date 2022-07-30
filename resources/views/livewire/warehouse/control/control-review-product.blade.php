@@ -22,7 +22,7 @@
                                 <input
                                     class="form-control form-control-sm @error('barcode') is-invalid @enderror"
                                     type="text"
-                                    wire:model="barcode"
+                                    wire:model.debounce.1500ms="barcode"
                                     id="barcode"
                                     readonly
                                 >
