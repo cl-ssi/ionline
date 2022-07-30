@@ -6,7 +6,6 @@ use App\Http\Requests\Warehouse\Control\AddProductRequest;
 use App\Http\Requests\Warehouse\Control\GenerationReceptionRequest;
 use App\Models\Parameters\Program;
 use App\Models\ClCommune;
-use App\Models\Inv\Inventory;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
@@ -25,8 +24,8 @@ class GenerateReception extends Component
 {
     public $store;
     public $po_search;
-    public $error;
-    public $msg;
+    public $msg = null;
+    public $error = false;
 
     public $purchaseOrder;
     public $date;
@@ -93,18 +92,20 @@ class GenerateReception extends Component
 
     public function getPurchaseOrder()
     {
+        $this->error = false;
+        $this->msg = '';
+        $this->po_items = [];
+        $this->resetInputReception();
+        $this->resetInputProduct();
+
         $this->validate([
             'po_search' => 'required'
         ]);
 
-        $this->resetInputReception();
-        $this->resetInputProduct();
-        $this->error = false;
-        $this->po_items = [];
-
         $purchaseOrder = MercadoPublico::getPurchaseOrder($this->po_search);
+        $this->getError($purchaseOrder);
 
-        if($purchaseOrder)
+        if(!$this->error)
         {
             $this->purchaseOrder = $purchaseOrder;
             $this->date = now()->format('Y-m-d');
@@ -148,10 +149,28 @@ class GenerateReception extends Component
                 $this->resetInputReception();
             }
         }
-        else
+    }
+
+    public function getError($purchaseOrder)
+    {
+        if($purchaseOrder === -2)
         {
+            $this->msg = 'El número de orden de compra es errado.';
             $this->error = true;
+        }elseif($purchaseOrder === -1)
+        {
+            $this->msg = 'La orden de compra está eliminada, no aceptada o es inválida.';
+            $this->error = true;
+        }
+        elseif($purchaseOrder === 0)
+        {
+            $this->msg = 'La orden de compra esta cancelada.';
+            $this->error = true;
+        }
+        elseif($purchaseOrder === null)
+        {
             $this->msg = 'Disculpe, no pudimos obtener los datos de la orden de compra, intente nuevamente.';
+            $this->error = true;
         }
     }
 
