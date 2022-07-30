@@ -4,19 +4,21 @@
         <title>@yield('title')</title>
         <meta name="description" content="Report Store">
         <meta name="author" content="{{ env('APP_SS') }}">
-        <link href="{{ asset('css/report.css') }}" rel="stylesheet">
+        <link href="{{ $type }}css/report.css" rel="stylesheet">
     </head>
     <body>
         <div class="content">
-            <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
+            <div style="padding-bottom: 0.3rem">
+                <img style="padding-bottom: 4px;" src="{{ $type }}images/logo_pluma.jpg"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
+            </div>
 
-            @yield('content')
+                @yield('content')
 
             <div class="pie_pagina seis center">
                 <span class="uppercase">{{ env('APP_SS') }}</span><br>
                 {{ env('APP_SS_ADDRESS') }} -
-                Fono: 572406976 -
+                Fono: {{ env('APP_SS_TELEPHONE') }} -
                 {{ env('APP_SS_WEBSITE') }}
             </div>
         </div>
