@@ -11,7 +11,7 @@
                 id="search"
                 class="form-control"
                 placeholder="Ingresa un número inventario, producto, ubicación, lugar o responsable"
-                wire:model="search"
+                wire:model.debounce.1500ms="search"
             >
         </fieldset>
     </div>

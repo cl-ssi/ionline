@@ -5,7 +5,7 @@
             aria-current="page"
             href="{{ route('inventories.pending-movements') }}"
         >
-            <i class="fas fa-list-alt"></i> Movimientos Pendientes
+            <i class="fas fa-list-alt"></i> Inventarios Pendientes
         </a>
     </li>
 

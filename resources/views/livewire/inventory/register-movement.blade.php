@@ -75,7 +75,7 @@
                 type="date"
                 class="form-control form-control-sm @error('installation_date') is-invalid @enderror"
                 id="installation-date"
-                wire:model="installation_date"
+                wire:model.debounce.1500ms="installation_date"
             >
             @error('installation_date')
                 <span class="invalid-feedback" role="alert">
