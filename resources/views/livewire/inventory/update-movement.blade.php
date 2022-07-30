@@ -46,11 +46,9 @@
             </label>
             <input
                 type="text"
-                class="form-control form-control-sm"
+                class="form-control form-control-sm @if($movement->reception_date == null) text-danger @endif"
                 id="reception-confirmation"
-                @if($movement->reception_date)
-                    value="{{ $movement->reception_date }}"
-                @endif
+                value="{{ ($movement->reception_date) ? $movement->reception_date : 'No Confirmada' }}"
                 readonly
             >
         </fieldset>

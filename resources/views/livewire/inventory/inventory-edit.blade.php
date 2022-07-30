@@ -289,13 +289,21 @@
 
         <fieldset class="col-md-4">
             <label for="supplier" class="form-label">
-                Proveedor
+                @if($inventory->control->isPurchaseOrder())
+                    Proveedor
+                @else
+                    Origen
+                @endif
             </label>
             <input
                 type="text"
                 class="form-control"
                 id="supplier"
-                value="{{ $inventory->purchaseOrder->supplier_name }}"
+                @if($inventory->control->isPurchaseOrder())
+                    value="{{ $inventory->purchaseOrder->supplier_name }}"
+                @else
+                    value="{{ $inventory->control->origin->name }}"
+                @endif
                 disabled
             >
         </fieldset>
