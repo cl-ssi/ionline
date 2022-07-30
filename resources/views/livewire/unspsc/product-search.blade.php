@@ -15,7 +15,7 @@
         </div>
         <select
             id="product-id"
-            wire:model="product_id"
+            wire:model.debounce.1500ms="product_id"
             class="form-control @if($smallInput) form-control-sm @endif"
             wire:loading.attr="disabled"
             wire:target="updatedSearch"
@@ -23,7 +23,9 @@
         >
             <option value="">Selecciona un producto</option>
             @forelse($results as $item)
-                <option value="" disabled>--{{ $item['title'] }}</option>
+                <option value="" disabled>
+                    --{{ $item['title'] }}
+                </option>
                 @foreach($item['products'] as $product)
                     <option value="{{ $product['id'] }}">
                         @if($showCode)
