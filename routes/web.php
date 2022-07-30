@@ -1467,7 +1467,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 });
 
 // Inventories
-Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
+Route::prefix('inventories')->as('inventories.')->middleware('auth', 'role:Inventory: manager')->group(function() {
     Route::get('/', InventoryIndex::class)->name('index');
     Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
     Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
