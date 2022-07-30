@@ -158,6 +158,10 @@ return [
         'type_wre_product' => [
             '1' => 'Crear producto',
             '2' => 'Seleccionar producto'
+        ],
+        'type_destination' => [
+            '1' => 'interno',
+            '0' => 'externo',
         ]
     ],
     /*
@@ -217,6 +221,7 @@ return [
         'note'                  => 'nota',
         'observation'           => 'observación',
         'observations'          => 'observaciones',
+        'organizational_unit_id'=> 'unidad organizacional',
         'origin_id'             => 'origen',
         'parameter'             => 'parámetro',
         'parameter_field'       => 'parámetro',
@@ -228,6 +233,7 @@ return [
         'po_code'               => 'código orden de compra',
         'po_date'               => 'fecha de orden de compra',
         'po_items'              => 'productos de la orden de compra',
+        'po_search'             => 'orden de compra',
         'position'              => 'posición',
         'price'                 => 'precio',
         'product_id'            => 'producto',
@@ -252,6 +258,7 @@ return [
         'time'                  => 'hora',
         'title'                 => 'título',
         'type'                  => 'tipo',
+        'type_destination'      => 'tipo destino',
         'type_dispatch_id'      => 'tipo de egreso',
         'type_reception_id'     => 'tipo de ingreso',
         'type_wre_product'      => 'tipo de producto',
