@@ -12,6 +12,7 @@ use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\SignatureFlow;
+use App\Rules\CommaSeparatedEmails;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -146,6 +147,11 @@ class SignatureController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'distribution' => ['nullable', new CommaSeparatedEmails],
+            'recipients' => ['nullable', new CommaSeparatedEmails]
+        ]);
+
         DB::beginTransaction();
 
         try {
@@ -363,6 +369,11 @@ class SignatureController extends Controller
      */
     public function update(Request $request, Signature $signature): RedirectResponse
     {
+        $request->validate([
+            'distribution' => ['nullable', new CommaSeparatedEmails],
+            'recipients' => ['nullable', new CommaSeparatedEmails]
+        ]);
+        
         $signature->fill($request->all());
         $signature->rejected_at = null;
         $signature->save();

@@ -92,6 +92,7 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\RNIdb\RNIdbController;
 
 use App\Http\Controllers\Indicators\ApsController;
 use App\Http\Controllers\Indicators\IaapsController;
@@ -741,7 +742,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
-            Route::delete('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
+            Route::get('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
             // fin descomposición
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
@@ -1066,6 +1067,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
 
     Route::get('/population', [SingleParameterController::class,'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
+
+    Route::prefix('rni_db')->as('rni_db.')->group(function () {
+        Route::get('/', [RNIdbController::class,'index'])->middleware('auth')->name('index');
+        Route::put('/', [RNIdbController::class,'update'])->middleware('auth')->name('update');
+        Route::get('/{file}', [RNIdbController::class,'download'])->middleware('auth')->name('download');
+    });
 
     Route::prefix('comges')->as('comges.')->group(function () {
         Route::get('/', [ComgesController::class,'index'])->name('index');
@@ -1617,9 +1624,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
         Route::get('/mercado-publico-api/{type}/{code}', function($type, $code){
-            if($type == 'licitaciones') return MercadoPublico::getTender($code);
-            elseif($type == 'ordenesdecompra') return MercadoPublico::getPurchaseOrder($code);
-            else return null;
+            return MercadoPublico::getTender($code, $type);
         });
     });
 
@@ -1747,6 +1752,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
+    Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::put('{psirequest}/update', [SuitabilityController::class, 'update'])->name('update');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');

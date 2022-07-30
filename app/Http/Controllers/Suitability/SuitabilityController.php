@@ -36,19 +36,41 @@ class SuitabilityController extends Controller
         $dataArray = array();
         $schools = School::orderBy('name', 'asc')->get();
         $result = Result::has('signedCertificate')->with('psirequest');
-        //$schools = School::orderBy('name', 'asc')->get();        
+        $month = $request->month;    
         $sumesperando = 0;
         $sumfinalizado = 0;
         $sumaprobado = 0;
 
-
-        //dd($result);
         if ($request->year != null) {
 
             foreach ($schools as $school) {
-                $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status', 'Aprobado')->where('created_at','like',$request->year.'%')->get()->count();
-                $counteresperando = PsiRequest::where('school_id', $school->id)->where('status', 'Esperando Test')->whereDate('created_at','like',$request->year.'%')->get()->count();
-                $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status', 'Test Finalizado')->whereDate('created_at','like',$request->year.'%')->get()->count();
+                $counteraprobado = PsiRequest::where('school_id', $school->id
+                )->where('status', 'Aprobado')
+                ->where('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
+                $counteresperando = PsiRequest::where('school_id', $school->id)
+                ->where('status', 'Esperando Test')
+                ->whereDate('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
+                $counterfinalizado = PsiRequest::where('school_id', $school->id)
+                ->where('status', 'Test Finalizado')
+                ->whereDate('created_at','like',$request->year.'%')
+                ->when($month != 'Todos', function ($q) use ($month) {
+                    return $q->whereMonth('created_at', '=', $month);
+                })
+                ->get()
+                ->count();
+
                 $sumaprobado += $counteraprobado;
                 $sumesperando += $counteresperando;
                 $sumfinalizado += $counterfinalizado;
@@ -69,6 +91,29 @@ class SuitabilityController extends Controller
             }
         }
         return view('suitability.report', compact('dataArray', 'request'));
+    }
+
+    public function reportsigned(Request $request)
+    {
+        
+        $dataArray = array();
+        $schools = School::orderBy('name', 'asc')->get();
+        $month = $request->month;
+        $sumfinalizado = 0;
+
+        $results = Result::has('signedCertificate')->with('psirequest')->get();
+        $cont=0;
+
+        foreach($schools as $school)
+        {
+        foreach ($results as $result) {
+            dump($result->signedCertificate->signaturesFlows->last());      
+
+        }
+    }
+
+
+        return view('suitability.reportsigned', compact('request'));
     }
 
     public function createExternal(School $school)

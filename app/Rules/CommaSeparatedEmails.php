@@ -16,9 +16,12 @@ class CommaSeparatedEmails implements Rule
      */
     public function passes($attribute, $value): bool
     {
+        $emails = '';
+        preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $value, $emails);
+        
         return Validator::make(
             [
-                "attribute" => explode(',', $value)
+                "attribute" => $emails[0]
             ],
             [
                 "attribute.*" => 'required|email:rfc'

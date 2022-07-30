@@ -97,6 +97,7 @@
                     <!--./ fin botón-->
                     </div>
 
+
                 </div>
             </div>
 
@@ -108,7 +109,7 @@
                 <br>
                 <br>
                 <br>
-                <i class="fas fa-clock fa-5x"></i>
+                <i class="fas fa-clock fa-2x"></i>
                 </div>
 <!-- 
                 @php($array = json_decode(file_get_contents('status.json'),true))
