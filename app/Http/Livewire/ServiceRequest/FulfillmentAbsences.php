@@ -112,6 +112,8 @@ class FulfillmentAbsences extends Component
           $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
           break;
         case 'Licencia médica':
+        case 'Permiso Parental':
+        case 'Permiso Excepcional':
         case 'Licencia no covid':
         case 'Fuero maternal':
         //case 'Permiso':
@@ -165,6 +167,8 @@ class FulfillmentAbsences extends Component
 
         switch($this->type) {
           case 'Licencia médica':
+          case 'Permiso Parental':
+          case 'Permiso Excepcional':
           case 'Licencia no covid':
           case 'Fuero maternal':
           case 'Feriado':

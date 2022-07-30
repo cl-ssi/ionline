@@ -1,7 +1,14 @@
 @foreach($serviceRequest->fulfillments as $fulfillment)
 <div class="card border-dark">
 	<div class="card-header">
-		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span> </h4>
+		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) 
+			<span class="small text-muted float-right">{{ $fulfillment->id}}
+			@can('Service Request: delete fulfillments')
+			<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.destroy',$fulfillment) }}" onclick="return confirm('¿Está seguro que desea eliminar el período?')">
+				Eliminar período
+			</a>
+			@endcan
+			</span> </h4>
 	</div>
 
 

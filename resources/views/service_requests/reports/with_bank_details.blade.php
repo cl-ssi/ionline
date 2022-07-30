@@ -32,7 +32,6 @@
         <td>{{ $userbankaccount->bank->name ?? '' }}</td>
         <td>{{ $userbankaccount->number ?? '' }}</td>
         <td>{{ $userbankaccount->getTypeText() ?? '' }}</td>
-
     </tr>
 
     @endforeach

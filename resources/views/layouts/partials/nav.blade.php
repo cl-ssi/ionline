@@ -43,6 +43,13 @@
                             <i class="fas fa-globe-americas"></i> Tablero de población
                         </a>
 
+                        @can('RNI Database: view')
+                        <a class="dropdown-item"
+                           href="{{ route('indicators.rni_db.index') }}">
+                            <i class="fas fa-database"></i> Base de datos RNI
+                        </a>
+                        @endcan
+
                         @can('Programming: view')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
@@ -138,9 +145,11 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
+                        @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
+                        @endif
 
 
                         @can('Store')
