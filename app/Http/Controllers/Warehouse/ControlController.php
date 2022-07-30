@@ -79,10 +79,12 @@ class ControlController extends Controller
      */
     public function pdf(Store $store, Control $control)
     {
+        $type = '/';
+        
         if($control->isReceiving())
-            return view('warehouse.pdf.report-reception', compact('store', 'control'));
+            return view('warehouse.pdf.report-reception', compact('store', 'control', 'type'));
         else
-            return view('warehouse.pdf.report-dispatch', compact('store', 'control'));
+            return view('warehouse.pdf.report-dispatch', compact('store', 'control', 'type'));
     }
 
     /**
