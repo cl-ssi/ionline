@@ -4,9 +4,10 @@
             <label class="font-weigth-bold mr-2">Tipo de Egreso:</label>
             @foreach($typeDispatches as $type)
             <div class="form-check form-check-inline">
-                <input class="form-check-input"
+                <input
+                    class="form-check-input"
                     type="radio"
-                    wire:model.debounce.1500ms="type_dispatch_id"
+                    wire:model.debounce.1000ms="type_dispatch_id"
                     id="option-{{ $type->id }}"
                     value="{{ $type->id }}"
                 >
@@ -83,26 +84,83 @@
         @endif
     </fieldset>
 
-    @switch($type_dispatch_id)
-        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-            <fieldset class="form-group col-md-4">
-                <label for="destination-id">Destino</label>
-                <select
-                    class="form-control @error('destination_id') is-invalid @enderror"
-                    wire:model.debounce.1500ms="destination_id"
-                    id="destination-id"
+    @if($type_dispatch_id == \App\Models\Warehouse\TypeDispatch::dispatch())
+        <fieldset class="form-group col-md-5">
+            <label for="tpye-destination">Tipo Destino</label>
+            <select
+                class="form-control @error('type_destination') is-invalid @enderror"
+                wire:model.debounce.1000ms="type_destination"
+                id="tpye-destination"
+            >
+                <option value="">Seleccione un tipo de destino</option>
+                <option value="1">Interno</option>
+                <option value="0">Externo</option>
+            </select>
+            @error('type_destination')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+    @endif
+</div>
+
+@if($type_destination == 1)
+    @if($type_dispatch_id == \App\Models\Warehouse\TypeDispatch::dispatch())
+        <div class="form-row">
+            <div class="form-group col-md-5">
+                <label for="establishment-id">Establecimiento</label>
+                @livewire('establishment-search', [
+                    'tagId'         => 'establishment-id',
+                    'placeholder'   => 'Ingrese un establecimiento',
+                ])
+            </div>
+
+            <div class="form-group col-md-7">
+                <label for="organizational-unit-id">Unidad Organizacional</label>
+                @livewire('organizational-unit-search', [
+                    'tagId'         => 'organizational-unit-id',
+                    'placeholder'   => 'Ingrese una unidad organizacional',
+                    'component'     => ($mode == 'create') ? 'warehouse.control.control-create' : 'warehouse.control.control-edit',
+                    'event'         => 'organizationalId',
+                ])
+                <input
+                    class="form-control @error('organizational_unit_id') is-invalid @enderror"
+                    type="hidden"
                 >
-                    <option value="">Selecciona un destino</option>
-                    @foreach($store->destinations as $destination)
-                        <option value="{{ $destination->id }}">{{ $destination->name }}</option>
-                    @endforeach
-                </select>
-                @error('destination_id')
+                @error('organizational_unit_id')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-            </fieldset>
+            </div>
+        </div>
+    @endif
+@endif
+
+<div class="form-row">
+    @switch($type_dispatch_id)
+        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
+            @if($type_destination == 0)
+                <fieldset class="form-group col-md-4">
+                    <label for="destination-id">Destino</label>
+                    <select
+                        class="form-control @error('destination_id') is-invalid @enderror"
+                        wire:model.debounce.1500ms="destination_id"
+                        id="destination-id"
+                    >
+                        <option value="">Selecciona un destino</option>
+                        @foreach($store->destinations as $destination)
+                            <option value="{{ $destination->id }}">{{ $destination->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('destination_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </fieldset>
+            @endif
             @break
         @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
             <fieldset class="form-group col-md-4">
@@ -136,10 +194,8 @@
             @break
         @default
     @endswitch
-</div>
 
-<div class="form-row">
-    <fieldset class="form-group col-md-12">
+    <fieldset class="form-group col-md-8">
         <label for="note">Nota</label>
         <input
             type="text"
