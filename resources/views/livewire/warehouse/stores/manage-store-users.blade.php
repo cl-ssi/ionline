@@ -69,7 +69,7 @@
                             <label for="role-id">Rol</label>
                             <select
                                 class="form-control form-control-sm @error('role_id') is-invalid @enderror"
-                                wire:model="role_id"
+                                wire:model.debounce.1500ms="role_id"
                                 id="role-id"
                             >
                                 <option value="">Selecciona un rol</option>
