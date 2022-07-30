@@ -175,9 +175,9 @@
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
-                        <button class="btn btn-sm btn-success" wire:click="sendSignature({{ $control }})">
+                        {{-- <button class="btn btn-sm btn-success" wire:click="sendSignature({{ $control }})">
                             <i class="fas fa-plus"></i>
-                        </button>
+                        </button> --}}
                     </td>
                 </tr>
                 @empty
