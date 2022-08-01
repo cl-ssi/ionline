@@ -21,10 +21,16 @@ class ControlCreate extends Component
     public $type_dispatch_id;
     public $store_origin_id;
     public $store_destination_id;
+    public $organizational_unit_id;
+    public $type_destination;
     public $stores;
     public $programs;
     public $typeDispatches;
     public $typeReceptions;
+
+    protected $listeners = [
+        'organizationalId'
+    ];
 
     public $rulesReceiving = [
         'date'              => 'required|date_format:Y-m-d',
@@ -36,10 +42,12 @@ class ControlCreate extends Component
     public $rulesDispatch = [
         'date'                  => 'required|date_format:Y-m-d',
         'note'                  => 'nullable|string|min:2|max:255',
+        'type_destination'      => 'nullable|required_if:type_dispatch,1',
         'type_dispatch_id'      => 'required|exists:wre_type_dispatches,id',
         'program_id'            => 'nullable|exists:cfg_programs,id',
-        'destination_id'        => 'nullable|required_if:type_dispatch_id,1|exists:wre_destinations,id',
+        'destination_id'        => 'nullable|required_if:type_destination,0|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
+        'organizational_unit_id' => 'nullable|required_if:type_destination,1|exists:organizational_units,id',
     ];
 
     public function mount()
@@ -69,6 +77,7 @@ class ControlCreate extends Component
         $dataValidated['store_id'] = $this->store->id;
         $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? TypeReception::receiving() : null;
+
         $control = Control::create($dataValidated);
 
         session()->flash('success', "Se ha guardado el encabezado del $control->type_format.");
@@ -92,5 +101,23 @@ class ControlCreate extends Component
                 $confirm = true;
         }
         return $confirm;
+    }
+
+    public function updatedTypeDispatchId()
+    {
+        $this->reset([
+            'date',
+            'note',
+            'type_destination',
+            'destination_id',
+            'store_destination_id',
+            'program_id',
+            'organizational_unit_id',
+        ]);
+    }
+
+    public function organizationalId($value)
+    {
+        $this->organizational_unit_id = $value;
     }
 }

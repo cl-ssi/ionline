@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Warehouse\Products;
 
-use App\Http\Requests\Warehouse\Product\UpdateProductRequest;
+use App\Http\Requests\Warehouse\Product\EditProductRequest;
 use Livewire\Component;
 
 class ProductEdit extends Component
@@ -23,7 +23,7 @@ class ProductEdit extends Component
 
     public function rules()
     {
-        return (new UpdateProductRequest($this->store, $this->product))->rules();
+        return (new EditProductRequest($this->store, $this->product))->rules();
     }
 
     public function render()

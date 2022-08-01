@@ -6,7 +6,28 @@
         'product' => $product
     ])
 
-    <button wire:click="updateProduct" class="btn btn-primary">Actualizar</button>
+    <button
+        class="btn btn-primary"
+        wire:click="updateProduct"
+        wire:target="updateProduct"
+        wire:loading.attr="disabled"
+        >
+        <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            wire:loading
+            wire:target="updateProduct"
+            aria-hidden="true"
+        >
+        </span>
+
+        <span wire:loading.remove wire:target="updateProduct">
+            <i class="fas fa-save"></i>
+        </span>
+
+        Actualizar
+    </button>
+
     <a href="{{ route('warehouse.categories.index', $store)}}" class="btn btn-outline-primary">Cancelar</a>
 </div>
 

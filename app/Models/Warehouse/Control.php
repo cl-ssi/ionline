@@ -7,6 +7,7 @@ use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\Invoice;
 use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\RequestForm;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +20,7 @@ class Control extends Model
 
     protected $fillable = [
         'type',
+        'type_destination',
         'date',
         'note',
         'confirm',
@@ -38,6 +40,7 @@ class Control extends Model
         'program_id',
         'po_id',
         'request_form_id',
+        'organizational_unit_id',
     ];
 
     protected $dates = [
@@ -109,6 +112,11 @@ class Control extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function organizationalUnit()
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
+    }
+
     public function isReceiving()
     {
         return $this->type == 1;
@@ -149,6 +157,16 @@ class Control extends Model
         return $this->isReceiving() && ($this->type_reception_id == TypeReception::purchaseOrder());
     }
 
+    public function isDestinationInternal()
+    {
+        return $this->isDispatch() && ($this->type_destination === 1);
+    }
+
+    public function isDestinationExternal()
+    {
+        return $this->isDispatch() && ($this->type_destination ===  0);
+    }
+
     public function isConfirmed()
     {
         return $this->confirm == true;
@@ -167,6 +185,14 @@ class Control extends Model
     public function getTypeFormatAttribute()
     {
         return ($this->type) ? 'Ingreso' : 'Egreso';
+    }
+
+    public function getTypeDestinationFormatAttribute()
+    {
+        $typeDestination = null;
+        if($this->isDispatch())
+            $typeDestination = $this->isDestinationInternal() ? 'Interno' : 'Externo';
+        return $typeDestination;
     }
 
     public function getDateFormatAttribute()

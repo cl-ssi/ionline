@@ -23,7 +23,7 @@
             'control' => $control,
             'store' => $store,
             'type' => $type,
-            'mode' => 'edit'
+            'mode' => 'edit',
         ])
     @else
         @include('warehouse.controls.partials.form-dispatch', [
@@ -43,3 +43,15 @@
         Cancelar
     </a>
 </div>
+
+@section('custom_js')
+<script>
+    document.addEventListener('livewire:load', function () {
+        var organizational_unit_id = @this.organizational_unit_id;
+        var establishment_id = @this.establishment_id;
+
+        Livewire.emitTo('organizational-unit-search', 'addOrganizationalUnit', organizational_unit_id)
+        Livewire.emitTo('establishment-search', 'addEstablishment', establishment_id)
+    });
+</script>
+@endsection

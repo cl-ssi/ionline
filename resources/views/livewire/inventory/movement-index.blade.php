@@ -13,10 +13,12 @@
             </li>
         @endif
 
-        <li>
-            {{ $inventory->purchaseOrder->date->format('Y-m-d') }}
-            - Orden de compra <b>{{ $inventory->purchaseOrder->code }}</b>
-        </li>
+        @if($inventory->purchaseOrder)
+            <li>
+                {{ $inventory->purchaseOrder->date->format('Y-m-d') }}
+                - Orden de compra <b>{{ $inventory->purchaseOrder->code }}</b>
+            </li>
+        @endif
 
         <li>
             {{ $inventory->control->date->format('Y-m-d') }}
@@ -73,14 +75,6 @@
                                 Observación del responsable: {{ $movement->observations }}
                             </li>
                         @endif
-                    </ul>
-                @else
-                    <ul>
-                        <li>
-                            <span class="text-danger">
-                                El responsable aun no ha confirmado la recepción del producto.
-                            </span>
-                        </li>
                     </ul>
                 @endif
             </li>

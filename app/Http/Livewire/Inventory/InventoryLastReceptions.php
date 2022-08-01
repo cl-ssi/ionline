@@ -22,6 +22,9 @@ class InventoryLastReceptions extends Component
     public function getControlItems()
     {
         $controlItems = ControlItem::query()
+            ->whereHas('control', function($query) {
+                $query->whereType(1);
+            })
             ->whereInventory(null)
             ->orderByDesc('created_at')
             ->paginate(5);

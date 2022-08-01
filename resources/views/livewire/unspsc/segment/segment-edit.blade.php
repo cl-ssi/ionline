@@ -16,7 +16,7 @@
 
         <fieldset class="form-group col-md-6">
             <label for="name">Nombre</label>
-            <input type="text" class="form-control" wire:model="name" id="name" placeholder="Aceites vegetales" required>
+            <input type="text" class="form-control" wire:model.debounce.1500ms="name" id="name" placeholder="Aceites vegetales" required>
         </fieldset>
 
         <fieldset class="form-group col-md-4">
