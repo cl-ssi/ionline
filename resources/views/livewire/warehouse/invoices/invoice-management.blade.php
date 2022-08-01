@@ -83,7 +83,7 @@
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
-                                    wire:model="selected_controls"
+                                    wire:model.debounce.9000ms="selected_controls"
                                     value={{ $control->id }}
                                     id="option-{{ $control->id }}"
                                 >
@@ -166,7 +166,7 @@
             <input
                 class="form-control form-control-file @error('file') is-invalid @enderror"
                 type="file"
-                wire:model="file"
+                wire:model.debounce.1500ms="file"
                 id="invoice-{{ $iteration }}"
             >
             @error('file')

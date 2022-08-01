@@ -53,7 +53,7 @@
 
     <li class="nav-item">
         <a
-            class="nav-link {{ active(['parameters.places.index', 'parameters.places.create', 'parameters.places.edit']) }}"
+            class="nav-link {{ active('parameters.places.index') }}"
             href="{{ route('parameters.places.index') }}"
         >
             <i class="fas fa-map-marker-alt"></i> Lugares</a>

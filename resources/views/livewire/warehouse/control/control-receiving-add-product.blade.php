@@ -3,11 +3,11 @@
         <div class="form-group col-md-12">
             <label class="font-weigth-bold mr-2">Tipo:</label>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" wire:model="type" id="option-1" value="1">
+                <input class="form-check-input" type="radio" wire:model.debounce.1000ms="type" id="option-1" value="1">
                 <label class="form-check-label" for="option-1">Producto nuevo</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" wire:model="type" id="option-2" value="0">
+                <input class="form-check-input" type="radio" wire:model.debounce.1000ms="type" id="option-2" value="0">
                 <label class="form-check-label" for="option-2">Producto existente</label>
             </div>
         </div>
@@ -194,15 +194,25 @@
 
     <div class="form-row">
         <fieldset class="form-group col-md-12 text-right">
-            <button class="btn btn-primary" wire:click="addProduct" wire:loading.attr="disabled">
+            <button
+                class="btn btn-primary"
+                wire:click="addProduct"
+                wire:loading.attr="disabled"
+            >
                 <span
                     class="spinner-border spinner-border-sm"
                     role="status"
                     aria-hidden="true"
                     wire:loading
                     wire:target="addProduct"
-                ></span>
-                <i class="fas fa-plus"></i> Agregar producto
+                >
+                </span>
+
+                <span wire:loading.remove wire:target='addProduct'>
+                    <i class="fas fa-plus"></i>
+                </span>
+
+                Agregar producto
             </button>
         </fieldset>
     </div>

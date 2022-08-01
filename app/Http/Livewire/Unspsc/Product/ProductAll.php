@@ -34,6 +34,5 @@ class ProductAll extends Component
         }
 
         $this->products = $products;
-
     }
 }

@@ -32,21 +32,31 @@ class MercadoPublico extends Model
         {
             $purchaseOrder = null;
 
-            $response = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json', [
+            $response = Http::get('https://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json', [
                 'codigo' => $code,
                 'ticket' => env('TICKET_MERCADO_PUBLICO')
             ]);
 
             if($response->successful())
             {
-                $objoc = json_decode($response);
+                $objOC = json_decode($response);
 
-                $purchaseOrder = PurchaseOrder::create([
-                    'code' => $objoc->Listado[0]->Codigo,
-                    'date' => Carbon::parse($objoc->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s'),
-                    'data' => $response,
-                ]);
+                if($objOC->Cantidad == 0) // OC No Valida, Eliminada o No Aceptada
+                    $purchaseOrder = -1;
+                elseif($objOC->Listado[0]->Estado == 'Cancelada') // OC Cancelada
+                    $purchaseOrder = 0;
+
+                if(($objOC->Cantidad > 0) && ($objOC->Listado[0]->Estado != 'Cancelada')) // OC Bien
+                {
+                    $purchaseOrder = PurchaseOrder::create([
+                        'code' => $objOC->Listado[0]->Codigo,
+                        'date' => Carbon::parse($objOC->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s'),
+                        'data' => $response,
+                    ]);
+                }
             }
+            else
+                $purchaseOrder = -2; // Codigo de la OC invalida
         }
 
         return $purchaseOrder;

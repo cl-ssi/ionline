@@ -30,7 +30,7 @@
                 </div>
                 <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control form-control-sm @error('po_search') is-invalid @enderror"
                     placeholder="Ingresa el código"
                     wire:model.debounce.1500ms="po_search"
                 >
@@ -51,7 +51,13 @@
                         Buscar
                     </button>
                 </div>
+                @error('po_search')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+            @enderror
             </div>
+
             @if($error)
                 <div class="d-block my-0 py-0">
                     <small class="text-danger">
@@ -63,13 +69,13 @@
 
         <fieldset class="form-group col-sm-3 mb-0">
             @if($request_form_id)
-            <a
-                class="btn btn-sm btn-primary btn-block"
-                href="{{ route('request_forms.show', $request_form_id) }}"
-                target="_blank"
-            >
-                <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $request_form_id }}
-            </a>
+                <a
+                    class="btn btn-sm btn-primary btn-block"
+                    href="{{ route('request_forms.show', $request_form_id) }}"
+                    target="_blank"
+                >
+                    <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $request_form_id }}
+                </a>
             @endif
         </fieldset>
     </div>

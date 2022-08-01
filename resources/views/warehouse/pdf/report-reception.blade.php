@@ -5,7 +5,7 @@
 @section('content')
 
 <div style="width: 49%; display: inline-block;">
-    <div class="siete" style="padding-top: 3px;">
+    <div class="siete">
         {{ env('APP_SS') }}
     </div>
     <div class="siete" style="padding-top: 3px;">
@@ -27,7 +27,7 @@
     <strong>Tipo de Ingreso:</strong> {{ optional($control->typeReception)->name }}<br>
     @switch($control->type_reception_id)
         @case(\App\Models\Warehouse\TypeReception::receiving())
-            <strong>Origen:</strong>{{ optional($control->origin)->name }}<br>
+            <strong>Origen:</strong> {{ optional($control->origin)->name }}<br>
             @break
         @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
             <strong>Bodega Origen:</strong> {{ optional($control->originStore)->name }}<br>
@@ -54,12 +54,12 @@
     <tbody>
         @forelse($control->items as $item)
             <tr>
-                <td class="center" style="vertical-align: top;">
+                <td class="center" style="width: 1rem; vertical-align: top;">
                     <span class="monospace siete">
                         {{ optional($item->product->product)->code }}
                     </span>
                 </td>
-                <td class="center" style="vertical-align: top;">
+                <td class="center" style="width: 1rem; vertical-align: top;">
                     {{ $item->quantity }}
                 </td>
                 <td style="vertical-align: top;">
@@ -96,7 +96,11 @@
         <tr>
             <td colspan="2"></td>
             <td class="right">
-                <strong>IVA {{ optional($control->purchaseOrder)->tax_percentage }}%</strong>
+                @if($control->purchaseOrder)
+                    <strong>
+                        IVA {{ optional($control->purchaseOrder)->tax_percentage }}%
+                    </strong>
+                @endif
             </td>
             <td class="right">
                 <strong>{{ money($control->total_tax) }}</strong>

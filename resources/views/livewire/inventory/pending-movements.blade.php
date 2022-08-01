@@ -1,10 +1,10 @@
 <div>
-    @section('title', 'Movimientos pendientes')
+    @section('title', 'Inventarios pendientes')
 
     @include('inventory.nav-user')
 
     <h4 class="mb-3">
-        Movimientos pendientes
+        Inventarios pendientes
     </h4>
 
     <table class="table table-bordered">

@@ -15,49 +15,56 @@
         <div class="col text-right">
             @if($type == 'receiving')
                 @if($store)
-                <div class="dropdown">
-                    <button
-                        class="btn btn-primary dropdown-toggle"
-                        type="button"
-                        id="control-reception"
-                        data-toggle="dropdown"
-                        aria-expanded="false"
-                    >
-                        <i class="fas fa-plus"></i> Nuevo Ingreso
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="control-reception">
-                        <a
-                            class="dropdown-item"
-                            href="{{ route('warehouse.controls.create', [
-                                'store' => $store,
-                                'type' => 'receiving'
-                            ]) }}"
-                        >
-                            <i class="fas fa-download"></i> Ingreso Normal
-                        </a>
-                        <a
-                            class="dropdown-item"
-                            href="{{ route('warehouse.generate-reception', [
-                                'store' => $store,
-                            ]) }}"
-                        >
-                            <i class="fas fa-shopping-cart"></i> Ingreso Orden de Compra
-                        </a>
-                    </div>
-                </div>
-
+                    @canany(['Store: create reception by donation', 'Store: create reception by purcharse order'])
+                        <div class="dropdown">
+                            <button
+                                class="btn btn-primary dropdown-toggle"
+                                type="button"
+                                id="control-reception"
+                                data-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <i class="fas fa-plus"></i> Nuevo Ingreso
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="control-reception">
+                                @can('Store: create reception by donation')
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('warehouse.controls.create', [
+                                            'store' => $store,
+                                            'type' => 'receiving'
+                                        ]) }}"
+                                    >
+                                        <i class="fas fa-download"></i> Ingreso Normal
+                                    </a>
+                                @endcan
+                                @can('Store: create reception by purcharse order')
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('warehouse.generate-reception', [
+                                            'store' => $store,
+                                        ]) }}"
+                                    >
+                                        <i class="fas fa-shopping-cart"></i> Ingreso Orden de Compra
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                    @endcan
                 @endif
             @else
                 @if($store)
-                <a
-                    class="btn btn-primary"
-                    href="{{ route('warehouse.controls.create', [
-                        'store' => $store,
-                        'type' => 'dispatch'
-                    ]) }}"
-                >
-                    <i class="fas fa-plus"></i> Nuevo Egreso
-                </a>
+                    @can('Store: create dispatch')
+                        <a
+                            class="btn btn-primary"
+                            href="{{ route('warehouse.controls.create', [
+                                'store' => $store,
+                                'type' => 'dispatch'
+                            ]) }}"
+                        >
+                            <i class="fas fa-plus"></i> Nuevo Egreso
+                        </a>
+                    @endcan
                 @endif
             @endif
         </div>
@@ -107,7 +114,13 @@
                         @if($control->isDispatch())
                             @switch($control->type_dispatch_id)
                                 @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-                                    {{ optional($control->destination)->name }}
+                                    @if($control->isDestinationExternal())
+                                        {{ optional($control->destination)->name }}
+                                    @else
+                                        {{ optional($control->organizationalUnit)->establishment->name }}
+                                        <br>
+                                        {{ optional($control->organizationalUnit)->name }}
+                                    @endif
                                     @break
                                 @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
                                     {{ optional($control->typeDispatch)->name }}
@@ -119,6 +132,9 @@
                             <br>
                             <small>
                                 {{ optional($control->typeDispatch)->name }}
+                                @if($control->isDestinationExternal() || $control->isDestinationInternal())
+                                    - Destino {{ $control->type_destination_format }}
+                                @endif
                             </small>
                         @else
                             @switch($control->type_reception_id)
@@ -159,6 +175,9 @@
                         >
                             <i class="fas fa-file-pdf"></i>
                         </a>
+                        {{-- <button class="btn btn-sm btn-success" wire:click="sendSignature({{ $control }})">
+                            <i class="fas fa-plus"></i>
+                        </button> --}}
                     </td>
                 </tr>
                 @empty

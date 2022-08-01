@@ -71,9 +71,13 @@ class ControlItem extends Model
 
     public function getTaxAttribute()
     {
-        $tax = $this->control->purchaseOrder->tax_percentage;
+        $tax = 0;
         if($this->control->purchaseOrder)
-            $tax = $this->total_price * ($this->control->purchaseOrder->tax_percentage / 100);
+        {
+            $tax = $this->control->purchaseOrder->tax_percentage;
+            if($this->control->purchaseOrder->tax_percentage > 0)
+                $tax = $this->total_price * ($this->control->purchaseOrder->tax_percentage / 100);
+        }
         return $tax;
     }
 }

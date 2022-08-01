@@ -14,7 +14,12 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Buscar</span>
         </div>
-        <input type="text" class="form-control" wire:model.debounce.1500ms="search">
+        <input
+            type="text"
+            class="form-control"
+            wire:model.debounce.1500ms="search"
+            placeholder="Buscar por nombre"
+        >
     </div>
 
     <div class="table-responsive">
