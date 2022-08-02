@@ -23,7 +23,8 @@ class InventoryLastReceptions extends Component
     {
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
-                $query->whereType(1);
+                $query->whereType(1) // Receptions
+                    ->whereNotNull('po_id')->orWhere('type_reception_id', 1); // PurchaseOrder or Donations
             })
             ->whereInventory(null)
             ->orderByDesc('created_at')
