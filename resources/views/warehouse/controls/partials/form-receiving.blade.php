@@ -198,36 +198,6 @@
                 </span>
             @enderror
         </fieldset>
-
-        <fieldset class="form-group col-md-3">
-            <label for="invoice-date">Fecha Factura</label>
-            <input
-                type="date"
-                id="invoice-date"
-                class="form-control @error('invoice_date') is-invalid @enderror"
-                wire:model.debounce.1500ms="invoice_date"
-            >
-            @error('invoice_date')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-md-3">
-            <label for="invoice-number">Número Factura</label>
-            <input
-                type="text"
-                id="invoice-number"
-                class="form-control @error('invoice_number') is-invalid @enderror"
-                wire:model.debounce.1500ms="invoice_number"
-            >
-            @error('invoice_number')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
     </div>
 @endif
 
