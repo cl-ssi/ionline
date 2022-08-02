@@ -39,7 +39,9 @@
                         <td>
                             @if($controlItem->control->isPurchaseOrder())
                                 {{ $controlItem->control->purchaseOrder->supplier_name }}
-                            @else
+                            @endif
+
+                            @if($controlItem->control->origin)
                                 {{ $controlItem->control->origin->name }}
                             @endif
                         </td>
