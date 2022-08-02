@@ -75,7 +75,13 @@
                             @if($controlItem->control->isDispatch())
                                 @switch($controlItem->control->type_dispatch_id)
                                     @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-                                        {{ optional($controlItem->control->destination)->name }}
+                                        @if($controlItem->control->isDestinationExternal())
+                                            {{ optional($controlItem->control->destination)->name }}
+                                        @else
+                                            {{ optional($controlItem->control->organizationalUnit)->establishment->name }}
+                                            <br>
+                                            {{ optional($controlItem->control->organizationalUnit)->name }}
+                                        @endif
                                         @break
                                     @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
                                         {{ optional($controlItem->control->typeDispatch)->name }}
@@ -87,6 +93,9 @@
                                 <br>
                                 <small>
                                     {{ optional($controlItem->control->typeDispatch)->name }}
+                                    @if($controlItem->control->isDestinationExternal() || $controlItem->control->isDestinationInternal())
+                                        - Destino {{ $controlItem->control->type_destination_format }}
+                                    @endif
                                 </small>
                             @else
                                 @switch($controlItem->control->type_reception_id)

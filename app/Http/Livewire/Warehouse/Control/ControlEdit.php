@@ -39,8 +39,6 @@ class ControlEdit extends Component
         'store_origin_id'   => 'nullable|required_if:type_reception_id,2|integer|exists:wre_type_receptions,id',
         'guide_date'        => 'nullable|required_if:type_reception_id,4|date_format:Y-m-d',
         'guide_number'      => 'nullable|required_if:type_reception_id,4',
-        'invoice_date'      => 'nullable|required_if:type_reception_id,4|date_format:Y-m-d',
-        'invoice_number'    => 'nullable|required_if:type_reception_id,4',
     ];
 
     public $rulesDispatch = [
