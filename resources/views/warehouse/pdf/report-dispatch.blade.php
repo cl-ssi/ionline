@@ -27,12 +27,21 @@
     <strong>Tipo de Egreso:</strong> {{ optional($control->typeDispatch)->name }}<br>
     @switch($control->type_dispatch_id)
         @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-            <strong>Destino:</strong> {{ optional($control->destination)->name }}<br>
+            @if($control->isDestinationExternal())
+                <strong>Destino Externo:</strong>
+                {{ optional($control->destination)->name }}<br>
+            @else
+                <strong>Destino Interno:</strong>
+                {{ optional($control->organizationalUnit)->establishment->name }}
+                -
+                {{ optional($control->organizationalUnit)->name }}
+            @endif
             @break
         @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
             <strong>Bodega Destino:</strong> {{ optional($control->destinationStore)->name }}<br>
             @break
     @endswitch
+    <br>
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
