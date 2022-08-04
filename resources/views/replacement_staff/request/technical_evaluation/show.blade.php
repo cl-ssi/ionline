@@ -196,7 +196,8 @@
         @if($requestReplacementStaff->technicalEvaluation &&
           $requestReplacementStaff->end_date < now()->toDateString() &&
             $requestReplacementStaff->technicalEvaluation->date_end != null &&
-              $requestReplacementStaff->user_id == Auth::user()->id)
+              ($requestReplacementStaff->user_id == Auth::user()->id || 
+                $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id))
             <a class="btn btn-success float-right btn-sm" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
                 <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
         @endif
