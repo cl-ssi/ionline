@@ -84,37 +84,39 @@
                 </td>
             </tr>
         @endforelse
-        <tr>
-            <td colspan="2"></td>
-            <td class="right">
-                <strong>NETO</strong>
-            </td>
-            <td class="right">
-                <strong>{{ money($control->net_total) }}</strong>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"></td>
-            <td class="right">
-                @if($control->purchaseOrder)
-                    <strong>
-                        IVA {{ optional($control->purchaseOrder)->tax_percentage }}%
-                    </strong>
-                @endif
-            </td>
-            <td class="right">
-                <strong>{{ money($control->total_tax) }}</strong>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"></td>
-            <td class="right">
-                <strong>TOTAL</strong>
-            </td>
-            <td class="right">
-                <strong>{{ money($control->total) }}</strong>
-            </td>
-        </tr>
+        @if($control->isPurchaseOrder())
+            <tr>
+                <td colspan="2"></td>
+                <td class="right">
+                    <strong>NETO</strong>
+                </td>
+                <td class="right">
+                    <strong>{{ money($control->net_total) }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td class="right">
+                    @if($control->purchaseOrder)
+                        <strong>
+                            IVA {{ optional($control->purchaseOrder)->tax_percentage }}%
+                        </strong>
+                    @endif
+                </td>
+                <td class="right">
+                    <strong>{{ money($control->total_tax) }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td class="right">
+                    <strong>TOTAL</strong>
+                </td>
+                <td class="right">
+                    <strong>{{ money($control->total) }}</strong>
+                </td>
+            </tr>
+        @endif
     </tbody>
 </table>
 
