@@ -65,7 +65,7 @@ class InvoiceManagement extends Component
         $this->file->storeAs(
             $this->folder,
             $url,
-            'public',
+            'gcs',
         );
 
         $invoice->update([
