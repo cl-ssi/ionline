@@ -16,4 +16,9 @@ class Origin extends Model
         'name',
         'store_id',
     ];
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 }
