@@ -67,7 +67,7 @@
                     <td>
                         {{ $controlItem->control->type_format }}
                     </td>
-                    <td>
+                    <td nowrap>
                         {{ $controlItem->control->date_format }}
                     </td>
                     <td>
