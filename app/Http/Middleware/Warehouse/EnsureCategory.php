@@ -27,7 +27,5 @@ class EnsureCategory
 
         session()->flash('danger', 'No posee permiso sobre la categoría.');
         return redirect()->route('warehouse.store.welcome');
-
-
     }
 }
