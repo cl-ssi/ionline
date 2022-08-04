@@ -6,10 +6,14 @@
     <h4 class="mb-3">
         Inventarios pendientes
     </h4>
+    <p class="text-muted">
+        Listado de inventarios pendientes por revisar.
+    </p>
 
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th nowrap>Nro. Inventario</th>
                 <th>Producto</th>
                 <th></th>
             </tr>
@@ -26,15 +30,13 @@
             @forelse($movements as $movement)
                 <tr wire:loading.remove>
                     <td>
-                        Ud. fue asignado como responsable del producto
-                        <b>
-                            {{ $movement->inventory->product->product->name }} -
-                            {{ $movement->inventory->product->name }}
-                        </b>
-                            bajo el número de inventario
-                        <b>
+                        <small class="text-monospace">
                             {{ $movement->inventory->number }}
-                        </b>
+                        </small>
+                    </td>
+                    <td>
+                        {{ $movement->inventory->product->product->name }} -
+                        {{ $movement->inventory->product->name }}
                     </td>
                     <td nowrap>
                         <a

@@ -188,47 +188,49 @@
     </div>
 
     <div class="form-row mb-3">
-        <fieldset class="col-md-2">
-            <label for="oc" class="form-label">
-                OC
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="oc"
-                value="{{ $inventory->po_code }}"
-                disabled
-                readonly
-            >
-        </fieldset>
+        @if($inventory->control->isPurchaseOrder())
+            <fieldset class="col-md-2">
+                <label for="oc" class="form-label">
+                    OC
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="oc"
+                    value="{{ $inventory->po_code }}"
+                    disabled
+                    readonly
+                >
+            </fieldset>
 
-        <fieldset class="col-md-2">
-            <label for="date-oc" class="form-label">
-                Fecha Compra OC
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="date-oc"
-                value="{{ $inventory->po_date }}"
-                disabled
-                readonly
-            >
-        </fieldset>
+            <fieldset class="col-md-2">
+                <label for="date-oc" class="form-label">
+                    Fecha Compra OC
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="date-oc"
+                    value="{{ $inventory->po_date }}"
+                    disabled
+                    readonly
+                >
+            </fieldset>
 
-        <fieldset class="col-md-2">
-            <label for="value-oc" class="form-label">
-                Valor OC
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="value-oc"
-                value="${{ money($inventory->po_price) }}"
-                disabled
-                readonly
-            >
-        </fieldset>
+            <fieldset class="col-md-2">
+                <label for="value-oc" class="form-label">
+                    Valor OC
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="value-oc"
+                    value="${{ money($inventory->po_price) }}"
+                    disabled
+                    readonly
+                >
+            </fieldset>
+        @endif
 
         <fieldset class="col-md-1">
             <label for="subtitle" class="form-label">
@@ -238,13 +240,13 @@
                 type="text"
                 class="form-control"
                 id="subtitle"
-                value="22 ?"
+                value="{{ $inventory->subtitle }}"
                 disabled
                 readonly
             >
         </fieldset>
 
-        <fieldset class="col-md-3">
+        <fieldset class="col-md-2">
             <label for="cost-center" class="form-label">
                 Centro Costo
             </label>
@@ -271,9 +273,7 @@
                 readonly
              >
         </fieldset>
-    </div>
 
-    <div class="form-row mb-3">
         <fieldset class="col-md-3">
             <label for="financing" class="form-label">
                 Financiamiento
