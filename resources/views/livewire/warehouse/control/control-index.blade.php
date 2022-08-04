@@ -165,16 +165,18 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        <a
-                            href="{{ route('warehouse.control.pdf', [
-                                'store' => $store,
-                                'control' => $control
-                            ]) }}"
-                            class="btn btn-sm btn-outline-secondary"
-                            target="_blank"
-                        >
-                            <i class="fas fa-file-pdf"></i>
-                        </a>
+                        @if($control->isConfirmed())
+                            <a
+                                href="{{ route('warehouse.control.pdf', [
+                                    'store' => $store,
+                                    'control' => $control
+                                ]) }}"
+                                class="btn btn-sm btn-outline-secondary"
+                                target="_blank"
+                            >
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        @endif
                         {{-- <button class="btn btn-sm btn-success" wire:click="sendSignature({{ $control }})">
                             <i class="fas fa-plus"></i>
                         </button> --}}
