@@ -142,7 +142,7 @@
     <div class="col">
         <div class="card">
             <div class="card-header">
-                <strong>Serie F</strong>
+                <strong>Serie F (COVID)</strong>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.nserie.index', [2020, 'serie_f', 'covid']) }}">2020</a></li>
