@@ -5,7 +5,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center" style="width: 250px">Código</th>
+                    <th class="text-center" style="width: 100px">Código</th>
                     <th>Producto o Servicio</th>
                     <th class="text-center" style="width: 250px" >Cantidad</th>
                     <th class="text-center">Estado</th>
