@@ -48,8 +48,12 @@
     <div class="col">
         @include('indicators.iaaps.partials.card')
     </div>
+</div>
 
-    <div class="col">
+<br>
+
+<div class="row">
+    <div class="col-sm-4">
         @include('indicators.aps.partials.card')
     </div>
 </div>
@@ -59,7 +63,7 @@
 <h3 class="mb-3 mt-3">Resumen Estadístico Mensual</h3>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col mb-3">
         <div class="card">
             <div class="card-header">
                 <strong>Serie A</strong>
@@ -73,7 +77,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col mb-3">
         <div class="card">
             <div class="card-header">
                 <strong>Serie BM</strong>
@@ -87,7 +91,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col mb-3">
         <div class="card">
             <div class="card-header">
                 <strong>Serie BS</strong>
@@ -101,7 +105,12 @@
             </ul>
         </div>
     </div>
-    <div class="col-3">
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col">
         <div class="card">
             <div class="card-header">
                 <strong>Serie D</strong>
@@ -115,10 +124,8 @@
             </ul>
         </div>
     </div>
-</div>
-<br>
-<div class="row">
-    <div class="col-3">
+
+    <div class="col">
         <div class="card">
             <div class="card-header">
                 <strong>Serie P</strong>
@@ -132,7 +139,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-3">
+    <div class="col">
         <div class="card">
             <div class="card-header">
                 <strong>Serie F</strong>
