@@ -43,6 +43,9 @@
                 title="Guardar"
                 wire:click="save"
                 wire:loading.attr="disabled"
+                @if($inventory->act_number != null)
+                    disabled
+                @endif
             >
                 <span
                     wire:loading.remove
