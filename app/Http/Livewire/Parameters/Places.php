@@ -22,7 +22,8 @@ class Places extends Component
     public function render()
     {
         return view('livewire.parameters.places', [
-            'places' => Place::latest()->paginate(10)
+            //'places' => Place::latest()->paginate(10)            
+            'places' => Place::orderBy('location_id', 'asc')->get()
         ]);
     }
 
