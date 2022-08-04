@@ -7,9 +7,13 @@
         Mis Productos Asignados
     </h4>
 
+    <p class="text-muted">
+        Listado de los productos en donde fue asignado como responsable.
+    </p>
+
     <table class="table table-bordered">
         <thead>
-            <th>Nro Inventario</th>
+            <th>Nro. Inventario</th>
             <th>Producto</th>
             <th>Fecha de Recepción</th>
             <th></th>
@@ -26,7 +30,9 @@
             @forelse($inventories as $inventory)
                 <tr>
                     <td>
-                        {{ $inventory->number }}
+                        <small class="text-monospace">
+                            {{ $inventory->number }}
+                        </small>
                     </td>
                     <td>
                         {{ $inventory->product->product->name }}

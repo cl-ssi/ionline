@@ -12,8 +12,7 @@
             <thead>
                 <tr>
                     <th class="text-center">Ingreso a bodega</th>
-                    <th>Proveedor</th>
-                    <th class="text-center">OC</th>
+                    <th>Proveedor/OC</th>
                     <th class="text-center">Cantidad</th>
                     <th>Producto</th>
                     <th class="text-center">Valor</th>
@@ -27,7 +26,7 @@
                     wire:loading.class.remove="d-none"
                     wire:target="createInventory, discardInventory"
                 >
-                    <td class="text-center" colspan="8">
+                    <td class="text-center" colspan="7">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
@@ -38,15 +37,12 @@
                         </td>
                         <td>
                             @if($controlItem->control->isPurchaseOrder())
-                                {{ $controlItem->control->purchaseOrder->supplier_name }}
-                            @endif
-
-                            @if($controlItem->control->origin)
+                                <span class="text-nowrap">
+                                    {{ $controlItem->control->po_code }}
+                                </span>
+                            @else
                                 {{ $controlItem->control->origin->name }}
                             @endif
-                        </td>
-                        <td class="text-center" nowrap>
-                            {{ $controlItem->control->po_code }}
                         </td>
                         <td class="text-center">
                             {{ $controlItem->quantity }}
@@ -89,7 +85,7 @@
                     </tr>
                 @empty
                     <tr wire:loading.remove>
-                        <td class="text-center" colspan="8">
+                        <td class="text-center" colspan="7">
                             <em>No hay registros</em>
                         </td>
                     </tr>

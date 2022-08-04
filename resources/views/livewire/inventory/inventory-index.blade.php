@@ -25,7 +25,7 @@
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Fecha Entrega</th>
-                    <th>Responsable</th>
+                    <th>Usuario</th>
                     <th class="text-center">Valor</th>
                     <th></th>
                 </tr>
@@ -59,9 +59,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($inventory->place)
-                            {{ optional($inventory->place)->name }}
-                        @endif
+                        {{ optional($inventory->place)->name }}
                     </td>
                     <td class="text-center">
                         @if($inventory->deliver_date)
@@ -69,9 +67,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($inventory->responsible)
-                            {{ optional($inventory->responsible)->full_name }}
-                        @endif
+                        {{ optional($inventory->responsible)->full_name }}
                     </td>
                     <td class="text-center">
                         ${{ $inventory->price }}
