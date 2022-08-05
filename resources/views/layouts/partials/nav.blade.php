@@ -412,6 +412,13 @@
                   </li>
                 @endcan
 
+                @can('Integrity: manage complaints')
+                <li class="nav-item {{ active('rrhh.integrity.complaints.*') }}">
+                    <a class="nav-link" href="{{ route('rrhh.integrity.complaints.index') }}">
+                    <i class="fas fa-balance-scale"></i> Integridad</a>
+                </li>
+                @endcan
+
                 @can('Mammography: admin')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('mammography.index') }}" title="Mamografias"> <i class="fas fa-fw fa-dot-circle"></i> </a>

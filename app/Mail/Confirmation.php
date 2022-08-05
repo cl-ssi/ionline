@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Integrity\Complaint;
+use App\Models\Integrity\Complaint;
 
 class Confirmation extends Mailable
 {

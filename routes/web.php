@@ -617,6 +617,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     /** Inicio Shift Managment */
     Route::prefix('shift-management')->group(function () {
 
+        Route::prefix('integrity')->as('integrity.')->group(function(){
+            Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
+            Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
+            Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
+        });
+    
+
         Route::get('/next', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToNextMonth'])->name('shiftManag.nextMonth')->middleware('auth');
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
