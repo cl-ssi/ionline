@@ -94,7 +94,7 @@
                 wire:click="addMovement"
                 wire:loading.attr="disabled"
                 wire:target="addMovement"
-                @if($inventory->number == null || ($inventory->lastMovement && $inventory->lastMovement->reception_date == null))
+                @if(($inventory->number == null) || ($inventory->act_number != null) || ($inventory->lastMovement && $inventory->lastMovement->reception_date == null))
                     disabled
                 @endif
             >

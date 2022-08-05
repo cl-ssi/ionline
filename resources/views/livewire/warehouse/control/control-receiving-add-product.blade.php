@@ -142,7 +142,7 @@
             </fieldset>
         @else
             <fieldset class="form-group col-md-6">
-                <label for="description">Descripción</label>
+                <label for="description">Descripción <small>(especificación técnica)</small></label>
                 <input
                     type="text"
                     class="form-control @error('description') is-invalid @enderror"

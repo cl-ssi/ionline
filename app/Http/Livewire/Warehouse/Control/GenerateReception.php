@@ -71,7 +71,6 @@ class GenerateReception extends Component
 
     public function mount()
     {
-        $this->iteration = 1;
         $this->type_product = 1;
         $this->programs = Program::orderBy('name')->get(['id', 'name']);
         $this->wre_products = collect([]);
@@ -157,7 +156,8 @@ class GenerateReception extends Component
         {
             $this->msg = 'El número de orden de compra es errado.';
             $this->error = true;
-        }elseif($purchaseOrder === -1)
+        }
+        elseif($purchaseOrder === -1)
         {
             $this->msg = 'La orden de compra está eliminada, no aceptada o es inválida.';
             $this->error = true;
@@ -446,6 +446,18 @@ class GenerateReception extends Component
 
         $this->po_search = null;
         $this->po_items = [];
+        $this->resetInputProduct();
+        $this->resetInputReception();
+
+        session()->flash('success', 'El nuevo ingreso fue guardado exitosamente.');
+    }
+
+    public function clearAll()
+    {
+        $this->po_search = null;
+        $this->po_items = [];
+        $this->msg = '';
+        $this->error = false;
         $this->resetInputProduct();
         $this->resetInputReception();
     }

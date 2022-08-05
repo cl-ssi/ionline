@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Middleware\Warehouse;
+namespace App\Http\Middleware\Inventory;
 
+use App\Models\Inv\InventoryMovement;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EnsureCategory
+class EnsureMovement
 {
     /**
      * Handle an incoming request.
@@ -17,15 +18,12 @@ class EnsureCategory
      */
     public function handle(Request $request, Closure $next)
     {
-        $store = $request->route('store');
-        $category = $request->route('category');
+        $movement = InventoryMovement::find($request->route('movement'));
 
-        if($category->store_id == $store->id)
-        {
+        if($movement->responsibleUser->id == Auth::id())
             return $next($request);
-        }
 
-        session()->flash('danger', 'No posee permiso sobre la categoría.');
-        return redirect()->route('warehouse.store.welcome');
+        session()->flash('danger', 'Ud. no posee los permisos para ver los detalles del movimiento.');
+        return redirect()->route('inventories.pending-movements');
     }
 }

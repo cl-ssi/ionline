@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Inventory;
 
 use App\Models\Inv\Inventory;
+use App\Models\RequestForms\RequestForm;
+use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\ControlItem;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -33,6 +35,17 @@ class InventoryLastReceptions extends Component
         return $controlItems;
     }
 
+    public function getBudgetItemId(RequestForm $requestForm = null, UnspscProduct $product)
+    {
+        $budget_item_id = null;
+        if($requestForm && $requestForm->itemRequestForms->count() > 0)
+        {
+            $itemRequestForm = $requestForm->itemRequestForms->where('product_id', $product->id)->first();
+            $budget_item_id = $itemRequestForm ? $itemRequestForm->budget_item_id : null;
+        }
+        return $budget_item_id;
+    }
+
     public function createInventory(ControlItem $controlItem)
     {
         $controlItem->update([
@@ -52,6 +65,7 @@ class InventoryLastReceptions extends Component
                 'request_form_id' => $controlItem->control->request_form_id,
                 'request_user_ou_id' => optional($controlItem->control->requestForm)->request_user_ou_id,
                 'request_user_id' => optional($controlItem->control->requestForm)->request_user_id,
+                'budget_item_id' => $this->getBudgetItemId($controlItem->control->requestForm, $controlItem->product->product),
             ]);
         }
     }

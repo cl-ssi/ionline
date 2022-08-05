@@ -29,19 +29,22 @@
         @case(\App\Models\Warehouse\TypeDispatch::dispatch())
             @if($control->isDestinationExternal())
                 <strong>Destino Externo:</strong>
-                {{ optional($control->destination)->name }}<br>
+                {{ optional($control->destination)->name }}
+                <br>
             @else
                 <strong>Destino Interno:</strong>
                 {{ optional($control->organizationalUnit)->establishment->name }}
                 -
                 {{ optional($control->organizationalUnit)->name }}
+                <br>
             @endif
             @break
         @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
-            <strong>Bodega Destino:</strong> {{ optional($control->destinationStore)->name }}<br>
+            <strong>Bodega Destino:</strong>
+            {{ optional($control->destinationStore)->name }}
+            <br>
             @break
     @endswitch
-    <br>
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
