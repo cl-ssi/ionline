@@ -14,7 +14,7 @@
                     <th class="text-center">ID</th>
                     <th class="text-center">Código</th>
                     <th>Producto</th>
-                    <th class="text-center" nowrap>OC</th>
+                    <th>Proveedor/OC</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
@@ -44,8 +44,14 @@
                             {{ $inventory->product->name }}
                         </small>
                     </td>
-                    <td class="text-center" nowrap>
-                        {{ $inventory->po_code }}
+                    <td>
+                        @if($inventory->control->isPurchaseOrder())
+                            <span class="text-nowrap">
+                                {{ $inventory->control->po_code }}
+                            </span>
+                        @else
+                            {{ $inventory->control->origin->name }}
+                        @endif
                     </td>
                     <td class="text-center">
                         <a

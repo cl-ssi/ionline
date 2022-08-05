@@ -1474,17 +1474,18 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 });
 
 // Inventories
-Route::prefix('inventories')->as('inventories.')->middleware('auth', 'role:Inventory: manager')->group(function() {
-    Route::get('/', InventoryIndex::class)->name('index');
-    Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
-    Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
+Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
+    Route::middleware(['role:Inventory: manager'])->group(function () {
+        Route::get('/', InventoryIndex::class)->name('index');
+        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
+        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
+        Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
+        Route::get('/places', InventoryMaintainerPlaces::class)->name('places');
+    });
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
-    Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
-    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer');
-    Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer');
-    Route::get('/places', InventoryMaintainerPlaces::class)->name('places');
-
+    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
+    Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')->middleware('ensure.inventory');
 });
 
 /* Bodega de Farmacia */

@@ -68,9 +68,11 @@ class RegisterMovement extends Component
 
     public function resetInput()
     {
-        $this->user_using_id = null;
-        $this->user_responsible_id = null;
-        $this->place_id = null;
-        $this->installation_date = null;
+        $this->reset([
+            'user_using_id',
+            'user_responsible_id',
+            'place_id',
+            'installation_date',
+        ]);
     }
 }

@@ -1,4 +1,6 @@
 <div>
+    @include('layouts.partials.flash_message')
+
     <div class="mt-2">
         <h4>Nuevo Ingreso: {{ $store->name }}</h4>
     </div>
@@ -36,8 +38,18 @@
                 >
                 <div class="input-group-append">
                     <button
+                        class="btn btn-sm btn-secondary"
+                        wire:click="clearAll"
+                        wire:target="getPurchaseOrder, clearAll"
+                        wire:loading.attr="disabled"
+                    >
+                        Limpiar
+                    </button>
+
+                    <button
                         class="btn btn-sm btn-primary"
                         wire:click="getPurchaseOrder"
+                        wire:target="getPurchaseOrder, clearAll"
                         wire:loading.attr="disabled"
                     >
                         <span
@@ -47,6 +59,13 @@
                             wire:target="getPurchaseOrder"
                             aria-hidden="true"
                         >
+                        </span>
+
+                        <span
+                            wire:loading.remove
+                            wire:target="getPurchaseOrder"
+                        >
+                            <i class="fas fa-search"></i>
                         </span>
                         Buscar
                     </button>
@@ -323,9 +342,10 @@
                                 </label>
                                 <input
                                     class="form-control form-control-sm @error('search_product') is-invalid @enderror"
-                                    id="search-product"
-                                    wire:model.debounce.1500ms="search_product"
                                     type="text"
+                                    id="search-product"
+                                    placeholder="Ingrese nombre o código de barra"
+                                    wire:model.debounce.1500ms="search_product"
                                 >
 
                                 <label class="col-form-label-sm text-left my-0" for="wre-product-id">

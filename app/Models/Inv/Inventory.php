@@ -2,6 +2,7 @@
 
 namespace App\Models\Inv;
 
+use App\Models\Parameters\BudgetItem;
 use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Warehouse\Control;
@@ -13,7 +14,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Str;
 class Inventory extends Model
 {
     use HasFactory, SoftDeletes;
@@ -44,6 +45,7 @@ class Inventory extends Model
         'store_id',
         'po_id',
         'request_form_id',
+        'budget_item_id',
     ];
 
     protected $dates = [
@@ -105,6 +107,19 @@ class Inventory extends Model
     public function place()
     {
         return $this->belongsTo(Place::class);
+    }
+
+    public function budgetItem()
+    {
+        return $this->belongsTo(BudgetItem::class);
+    }
+
+    public function getSubtitleAttribute()
+    {
+        if($this->budgetItem)
+            return Str::of($this->budgetItem->code)->substr(0, 2);
+        else
+            return null;
     }
 
     public function getPriceAttribute()
