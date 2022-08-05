@@ -1484,7 +1484,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
     });
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
-    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.mmovement');
+    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')->middleware('ensure.inventory');
 });
 
