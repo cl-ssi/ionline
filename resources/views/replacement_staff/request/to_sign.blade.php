@@ -61,26 +61,21 @@
                 @foreach($pending_requests_to_sign as $requestReplacementStaff)
                 <tr>
                     <td>{{ $requestReplacementStaff->id }}<br>
-                      @switch($requestReplacementStaff->request_status)
-                          @case('pending')
-                              <i class="fas fa-clock"></i>
-                              @break
+                        @switch($requestReplacementStaff->request_status)
+                            @case('pending')
+                                <span class="badge badge-warning">Pendiente</span>
+                                @break
 
-                          @case('complete')
-                              <span style="color: green;">
-                                <i class="fas fa-check-circle"></i>
-                              </span>
-                              @break
+                            @case('complete')
+                                <span class="badge badge-success">Finalizada</span>
+                                @break
+                            @case('rejected')
+                                <span class="badge badge-danger">Rechazada</span>
+                                @break
 
-                          @case('rejected')
-                              <span style="color: Tomato;">
-                                <i class="fas fa-times-circle"></i>
-                              </span>
-                              @break
-
-                          @default
-                              Default case...
-                      @endswitch
+                            @default
+                                Default case...
+                        @endswitch
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
@@ -163,26 +158,22 @@
                 @foreach($requests_to_sign as $requestReplacementStaff)
                 <tr>
                     <td>{{ $requestReplacementStaff->id }}<br>
-                      @switch($requestReplacementStaff->request_status)
-                          @case('pending')
-                              <i class="fas fa-clock"></i>
-                              @break
+                        @switch($requestReplacementStaff->request_status)
+                            @case('pending')
+                                <span class="badge badge-warning">Pendiente</span>
+                                @break
 
-                          @case('complete')
-                              <span style="color: green;">
-                                <i class="fas fa-check-circle"></i>
-                              </span>
-                              @break
+                            @case('complete')
+                                <span class="badge badge-success">Finalizada</span>
+                                @break
 
-                          @case('rejected')
-                              <span style="color: Tomato;">
-                                <i class="fas fa-times-circle"></i>
-                              </span>
-                              @break
+                            @case('rejected')
+                                <span class="badge badge-danger">Rechazada</span>
+                                @break
 
-                          @default
-                              Default case...
-                      @endswitch
+                            @default
+                                Default case...
+                        @endswitch
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>

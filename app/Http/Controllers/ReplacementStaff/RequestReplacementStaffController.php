@@ -495,9 +495,29 @@ class RequestReplacementStaffController extends Controller
     public function store_extension(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
         $newRequestReplacementStaff = new RequestReplacementStaff($request->All());
+        // dd($newRequestReplacementStaff);
         $newRequestReplacementStaff->request_id = $requestReplacementStaff->id;
         $newRequestReplacementStaff->user()->associate(Auth::user());
         $newRequestReplacementStaff->organizational_unit_id = Auth::user()->organizationalUnit->id;
+
+        if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
+            $newRequestReplacementStaff->request_status = 'pending';
+        }
+        else{
+            $newRequestReplacementStaff->request_status = 'complete';
+        }
+
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        if($request->hasFile('job_profile_file')){
+            $file = $request->file('job_profile_file');
+            $file_name = $now.'_job_profile';
+            $newRequestReplacementStaff->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+        }
+
+        $file_verification = $request->file('request_verification_file');
+        $file_name_verification = $now.'_request_verification';
+        $newRequestReplacementStaff->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
+
         $newRequestReplacementStaff->save();
 
         $request_sing = new RequestSign();

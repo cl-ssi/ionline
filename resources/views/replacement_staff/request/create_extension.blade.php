@@ -139,6 +139,17 @@
             </div>
 
             <div class="form-row">
+                @livewire('calculate-dv')
+
+                <fieldset class="form-group col-sm">
+                    <label for="for_end_date">Funcionario a Reemplazar</label>
+                    <input type="text" class="form-control" name="name_to_replace" id="for_name_to_replace"
+                        placeholder="Nombre de Reemplazo"
+                        required>
+                </fieldset>
+            </div>
+
+            <div class="form-row">
                 @livewire('replacement-staff.show-legal-quality-request', ['requestReplacementStaff' => $requestReplacementStaff ])
             </div>
 
