@@ -5,16 +5,24 @@
     </div>
     <div class="card-body">
         <div class="form-row">
-            <fieldset class="form-group col-sm-12">
+            <fieldset class="form-group col-sm-3">
                 <label for="for_tender_number">ID de la licitación:</label>
-                <input type="text" class="form-control form-control-sm col-sm-3" id="for_tender_number" name="tender_number" value="{{ old('tender_number') }}"> 
-                @if(env('APP_ENV') == 'local') <button class="btn btn-outline-primary" id="btn_licitacion">Consultar</button> @endif
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" id="for_tender_number" name="tender_number" value="{{ old('tender_number') }}" aria-describedby="btn_licitacion">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" id="btn_licitacion">Consultar</button>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group col-sm">
+                <label for="for_description">Nombre de la licitación:</label>
+                <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
             </fieldset>
         </div>
         <div class="form-row">
             <fieldset class="form-group col-sm-12">
-                <label for="for_description">Nombre y descripción de la licitación:</label>
-                <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
+                <label for="for_full_description">Descripción de la licitación:</label>
+                <textarea class="form-control form-control-sm" id="for_full_description" name="full_description" rows="3">{!! old('full_description') !!}</textarea>
             </fieldset>
         </div>
         <div class="form-row">
@@ -29,7 +37,7 @@
         </div>
         <div id="adjudicada" style="display: none;">
             <div class="form-row">
-                <fieldset class="form-group col-sm-6">
+            {{--<fieldset class="form-group col-sm-6">
                     <label for="for_supplier">Proveedor</label>
                     <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm selectpicker" data-live-search="true" title="Seleccione...">
                         <option value="">Seleccione...</option>
@@ -40,16 +48,77 @@
                 </fieldset>
 
                 <fieldset class="form-group col-sm-2">
-                <label for="for_start_date">Fecha inicio</label>
-                <input type="date" class="form-control form-control-sm" id="for_start_date" name="start_date"
-                    value="{{ old('start_date') }}">
+                    <label for="for_start_date">Fecha inicio</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_start_date" name="start_date"
+                        value="{{ old('start_date') }}">
                 </fieldset>
                 <fieldset class="form-group col-sm-2">
                     <label for="for_duration">Plazo vigencia en días</label>
                     <input type="number" min="1" class="form-control form-control-sm" id="for_duration" name="duration" value="{{ old('duration') }}">
+                </fieldset>--}}
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_currency">Moneda</label>
+                    <input type="text" class="form-control form-control-sm" id="for_currency" name="currency" value="{{ old('currency') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_n_suppliers">N° oferentes</label>
+                    <input type="number" min="1" class="form-control form-control-sm" id="for_n_suppliers" name="n_suppliers" value="{{ old('n_suppliers') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_creation_date">Fecha creación</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_creation_date" name="creation_date"
+                        value="{{ old('creation_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_closing_date">Fecha cierre</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_closing_date" name="closing_date"
+                        value="{{ old('closing_date') }}">
                 </fieldset>
             </div>
-
+            <div class="form-row">
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_initial_date">Fecha inicio</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_initial_date" name="initial_date"
+                        value="{{ old('initial_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_final_date">Fecha final</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_final_date" name="final_date"
+                        value="{{ old('final_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_pub_answers_date">Fecha pub. respuestas</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_pub_answers_date" name="pub_answers_date"
+                        value="{{ old('pub_answers_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_opening_act_date">Fecha acto apertura</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_opening_act_date" name="opening_act_date"
+                        value="{{ old('opening_act_date') }}">
+                </fieldset>
+            </div>
+            <div class="form-row">
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_pub_date">Fecha publicación</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_pub_date" name="pub_date"
+                        value="{{ old('pub_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_grant_date">Fecha adjudicación</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_grant_date" name="grant_date"
+                        value="{{ old('grant_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_estimated_grant_date">Fecha estimada adjudicación</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_estimated_grant_date" name="estimated_grant_date"
+                        value="{{ old('estimated_grant_date') }}">
+                </fieldset>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_field_visit_date">Fecha visita terreno</label>
+                    <input type="datetime-local" class="form-control form-control-sm" id="for_field_visit_date" name="field_visit_date"
+                        value="{{ old('field_visit_date') }}">
+                </fieldset>
+            </div>
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="for_resol_administrative_bases">Nº Resol. de las Bases Administrativas:</label>
@@ -82,6 +151,12 @@
                 @endif
                 <!-- Licitacion LR MAYOR-->
                 @if(in_array($requestForm->purchase_type_id, [16,17,18]))
+                <fieldset class="form-check" style="display:flex;align-items:center;">
+                <input class="form-check-input" type="checkbox" id="for_has_taking_of_reason" name="has_taking_of_reason" {{ old('taking_of_reason_date') ? 'checked' : '' }}>
+                <label class="form-check-label" for="for_has_taking_of_reason">
+                    Toma de razón
+                </label>
+                </fieldset>
                 <fieldset class="form-group col-sm-4">
                 <label for="for_taking_of_reason_date">Fecha Toma de Razón:</label>
                 <input type="date" class="form-control form-control-sm" id="for_taking_of_reason_date" name="taking_of_reason_date"

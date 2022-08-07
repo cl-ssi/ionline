@@ -41,10 +41,10 @@ class PurchasingProcessController extends Controller
             ->where('status', 'approved')->whereNotNull('signatures_file_id')
             ->whereHas('purchasers', function ($q) {
                 return $q->where('users.id', Auth()->user()->id);
-            })->latest('id')->get();
+            })->latest('id')->paginate(15, ['*'], 'p1');
 
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers')
-            ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15);
+            ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15, ['*'], 'p2');
 
         return view('request_form.purchase.index', compact('my_request_forms', 'request_forms'));
     }
@@ -196,6 +196,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -241,6 +246,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -280,6 +290,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -316,6 +331,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -324,6 +344,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata') && $request->status == 'adjudicada') {
             $oc = new ImmediatePurchase($request->all());
             $oc->description = $request->po_description;
+            $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
             $tender->oc()->save($oc);
         }
 
@@ -371,6 +392,8 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $oc = new ImmediatePurchase($request->all());
+        $oc->description = $request->po_description;
+        $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
         $oc->save();
 
         foreach ($request->item_id as $key => $item) {
@@ -383,6 +406,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -437,6 +465,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -493,6 +526,11 @@ class PurchasingProcessController extends Controller
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
+            $detail->supplier_run               = $request->supplier_run[$key];
+            $detail->supplier_name              = $request->supplier_name[$key];
+            $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            $detail->charges                    = $request->charges[$key];
+            $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -501,6 +539,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata')) {
             $oc = new ImmediatePurchase($request->all());
             $oc->description = $request->po_description;
+            $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
             $directdeal->oc()->save($oc);
         }
 
