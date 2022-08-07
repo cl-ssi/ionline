@@ -108,21 +108,84 @@
                                 <td>{{ $detail->pivot->tender->tender_number }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" style="width: 33%">Descripción de la licitación</th>
+                                <th class="table-active" style="width: 33%">Nombre de la licitación</th>
                                 <td>{{ $detail->pivot->tender->description }}</td>
                             </tr>
                             <tr>
+                                <th class="table-active" style="width: 33%">Descripción de la licitación</th>
+                                <td>{{ $detail->pivot->tender->full_description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Estado</th>
+                                <td>{{ ucfirst($detail->pivot->tender->status) }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Moneda</th>
+                                <td>{{ ucfirst($detail->pivot->tender->currency) }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">N° oferentes</th>
+                                <td>{{ ucfirst($detail->pivot->tender->n_suppliers) }}</td>
+                            </tr>
+                            @if($detail->pivot->tender->oc)
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre del proveedor</th>
+                                <td>{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : $detail->pivot->tender->oc->po_supplier_name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Actividad del proveedor</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_activity }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre de sucursal</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_office_name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">RUT de sucursal</th>
+                                <td>{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run : $detail->pivot->tender->oc->po_supplier_run }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Dirección</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_address }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Comuna</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_commune }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Región</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_region }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre contacto</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_contact_name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Cargo contacto</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_contact_position }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fono contacto</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_contact_phone }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Mail contacto</th>
+                                <td>{{ $detail->pivot->tender->oc->po_supplier_contact_email }}</td>
+                            </tr>
+                            @else
+                            <tr>
                                 <th class="table-active" style="width: 33%">RUT proveedor</th>
-                                <td>{{ $detail->pivot->tender->supplier ? number_format($detail->pivot->tender->supplier->run,0,",",".").'-'.$detail->pivot->tender->supplier->dv : '' }}</td>
+                                <td>{{ $detail->pivot->tender->supplier ? number_format($detail->pivot->tender->supplier->run,0,",",".").'-'.$detail->pivot->tender->supplier->dv : $detail->pivot->supplier_run }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Nombre proveedor</th>
-                                <td>{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}</td>
+                                <td>{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : $detail->pivot->supplier_name }}</td>
                             </tr>
-                            <tr>
+                            @endif
+                            {{--<tr>
                                 <th class="table-active" style="width: 33%">Fecha inicio</th>
                                 <td>{{ $detail->pivot->tender->start_date ? $detail->pivot->tender->start_date->format('d-m-Y') : '' }}</td>
-                            </tr>
+                            </tr>--}}
                             <tr>
                                 <th class="table-active" scope="row">Plazo vigencia en días</th>
                                 <td>{{ $detail->pivot->tender->duration }}</td>
@@ -155,12 +218,12 @@
                             </tr>
                             @endif
                             <!-- Licitacion LR MAYOR-->
-                            {{--@if(in_array($detail->pivot->tender->purchase_type_id, [16,17,18]))
+                            @if(in_array($detail->pivot->tender->purchase_type_id, [16,17,18]))
                             <tr>
                                 <th class="table-active" style="width: 33%">Cuenta con Toma de razón</th>
                                 <td>{{ $detail->pivot->tender->has_taking_of_reason ? 'SÍ' : 'NO' }}</td>
                             </tr>
-                            @endif--}}
+                            @endif
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
                                 <td>{{ $detail->pivot->user->fullName ?? '' }}</td>
@@ -168,6 +231,66 @@
                         </tbody>
                     </table>
                 </div>
+                @if($detail->pivot->tender->oc)
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="table-active" style="width: 33%">ID de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->po_id }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Estado de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->po_status }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de creación de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->po_date ? $detail->pivot->tender->oc->po_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de envío de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->po_sent_date ? $detail->pivot->tender->oc->po_sent_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de aceptación de la OC</th>
+                                <td>{{ $detail->pivot->tender->oc->po_accepted_date ? $detail->pivot->tender->oc->po_accepted_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Descuentos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->tender->oc->po_discounts,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Cargos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->tender->oc->po_charges,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Total Neto</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->tender->oc->po_net_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Porcentaje IVA</th>
+                                <td>{{ $detail->pivot->tender->oc->po_tax_percent }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Impuestos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->tender->oc->po_tax_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Total</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->tender->oc->po_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Bodega destino</th>
+                                <td>{{ $detail->pivot->tender->oc->destination_warehouse }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @endif
                 <h6><i class="fas fas fa-paperclip" aria-hidden="true"></i> Anexos</h6>
                 <div class="list-group">
                     @forelse($detail->pivot->tender->attachedFiles as $attachedFile)
@@ -217,6 +340,66 @@
                         </tbody>
                     </table>
                 </div>
+                @if($detail->pivot->directDeal->oc)
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="table-active" style="width: 33%">ID de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_id }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Estado de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_status }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de creación de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_date ? $detail->pivot->directDeal->oc->po_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de envío de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_sent_date ? $detail->pivot->directDeal->oc->po_sent_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha de aceptación de la OC</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_accepted_date ? $detail->pivot->directDeal->oc->po_accepted_date->format('d-m-Y H:i') : '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Descuentos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->directDeal->oc->po_discounts,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Cargos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->directDeal->oc->po_charges,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Total Neto</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->directDeal->oc->po_net_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Porcentaje IVA</th>
+                                <td>{{ $detail->pivot->directDeal->oc->po_tax_percent }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Impuestos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->directDeal->oc->po_tax_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Total</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->directDeal->oc->po_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Bodega destino</th>
+                                <td>{{ $detail->pivot->directDeal->oc->destination_warehouse }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @endif
                 <h6><i class="fas fas fa-paperclip" aria-hidden="true"></i> Anexos</h6>
                 <div class="list-group">
                     @forelse($detail->pivot->directDeal->attachedFiles as $attachedFile)
@@ -243,52 +426,52 @@
                             </tr>
                             @endif
                             <tr>
-                                <th class="table-active" scope="row">Descripción</th>
+                                <th class="table-active" style="width: 33%">Nombre de la OC</th>
                                 <td>{{ $detail->pivot->immediatePurchase->description }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" style="width: 33%">RUT proveedor</th>
-                                <td>{{ number_format($detail->pivot->immediatePurchase->supplier->run,0,",",".") }}-{{ $detail->pivot->immediatePurchase->supplier->dv }}</td>
+                                <th class="table-active" style="width: 33%">Estado de la OC</th>
+                                <td>{{ $detail->pivot->immediatepurchase->po_status }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" style="width: 33%">Nombre proveedor</th>
-                                <td>{{ $detail->pivot->immediatePurchase->supplier->name }}</td>
+                                <th class="table-active" style="width: 33%">Fecha de creación de la OC</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_date ? $detail->pivot->immediatePurchase->po_date->format('d-m-Y H:i') : '-' }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" style="width: 33%">Fecha OC enviada a proveedor</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_sent_date ? $detail->pivot->immediatePurchase->po_sent_date->format('d-m-Y') : '' }}</td>
+                                <th class="table-active" style="width: 33%">Fecha de envío de la OC</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_sent_date ? $detail->pivot->immediatePurchase->po_sent_date->format('d-m-Y H:i') : '-' }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" scope="row">Fecha OC aceptada</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_accepted_date ? $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y') : '' }}</td>
+                                <th class="table-active" style="width: 33%">Fecha de aceptación de la OC</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_accepted_date ? $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y H:i') : '-' }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" scope="row">Dias</th>
-                                <td>{{ $detail->pivot->immediatePurchase->days_type_delivery }}</td>
+                                <th class="table-active" style="width: 33%">Descuentos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_discounts,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" scope="row">Plazo entrega en días</th>
-                                <td>{{ $detail->pivot->immediatePurchase->days_delivery }}</td>
+                                <th class="table-active" style="width: 33%">Cargos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_charges,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" scope="row">Fecha estimada entrega</th>
-                                <td>{{ $detail->pivot->immediatePurchase->estimated_delivery_date ? $detail->pivot->immediatePurchase->estimated_delivery_date->format('d-m-Y') : '' }}</td>
+                                <th class="table-active" style="width: 33%">Total Neto</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_net_amount,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" scope="row">Fecha OC recepción conforme</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date ? $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date->format('d-m-Y') : '' }}</td>
+                                <th class="table-active" style="width: 33%">Porcentaje IVA</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_tax_percent }}</td>
                             </tr>
                             <tr>
-                                <th class="table-active" style="width: 33%">Monto total</th>
+                                <th class="table-active" style="width: 33%">Impuestos</th>
+                                <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_tax_amount,$requestForm->precision_currency,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Total</th>
                                 <td>{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->immediatePurchase->po_amount,$requestForm->precision_currency,",",".") }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Bodega destino</th>
                                 <td>{{ $detail->pivot->immediatePurchase->destination_warehouse }}</td>
-                            </tr>
-                            <tr>
-                                <th class="table-active" style="width: 33%">Especificaciones del proveedor</th>
-                                <td>{{ $detail->pivot->immediatePurchase->supplier_specifications }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>

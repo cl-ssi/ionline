@@ -112,7 +112,7 @@
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-                Editar Mecanismo de Compra
+                Agregar nuevo proceso de compra
             </button>
 
             @include('request_form.purchase.modals.select_purchase_mechanism')
@@ -199,8 +199,9 @@
 </div>
 
 <br>
-
-<div class="row">
+</main> <!-- close div container -->
+ 
+<div class="container-fluid">
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
@@ -262,15 +263,19 @@
                                                         <thead class="text-center">
                                                             <tr>
                                                                 <th>Item</th>
-                                                                <th>Estado</th>
+                                                                <!-- <th>Estado</th> -->
                                                                 <th>Cod.Presup.</th>
                                                                 <th>Artículo</th>
                                                                 <th>UM</th>
                                                                 <th>Especificaciones Técnicas</th>
-                                                                <th>Archivo</th>
+                                                                <th><i class="fas fa-paperclip"></i></th>
+                                                                <th>Proveedor<br>RUT - Nombre</th>
+                                                                <th>Especificaciones del proveedor</th>
                                                                 <th width="100">Cantidad</th>
                                                                 <th width="150">Valor U.</th>
-                                                                <th width="50">Impto.</th>
+                                                                <th width="80">Impto.</th>
+                                                                <th width="100">Cargos</th>
+                                                                <th width="100">Dsctos</th>
                                                                 <th width="150">Total Item</th>
                                                                 <th colspan="2"></th>
                                                                 <!-- <th></th> -->
@@ -281,7 +286,7 @@
                                                             @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
                                                             <tr data-id="{{$item->product->code ?? ''}}">
                                                                 <td>{{ $key+1 }}</td>
-                                                                <td>{{ $item->status }}</td>
+                                                                <!-- <td>{{ $item->status }}</td> -->
                                                                 <td>{{ $item->budgetItem()->first()->fullName() }}</td>
                                                                 <td>{{ $item->article }}</td>
                                                                 <td>{{ $item->unit_of_measurement }}</td>
@@ -291,6 +296,13 @@
                                                                     <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
                                                                         <i class="fas fa-file"></i></a>
                                                                     @endif
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" class="form-control form-control-sm mb-2" name="supplier_run[]" id="for_supplier_run" value="{{ old('supplier_run.'.$key, $selectedItem->supplier_run ?? '') }}"> 
+                                                                    <textarea class="form-control form-control-sm" name="supplier_name[]" id="for_supplier_name">{{ old('supplier_name.'.$key, $selectedItem->supplier_name ?? '') }}</textarea>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea class="form-control form-control-sm" name="supplier_specifications[]" id="for_supplier_specifications" rows="4">{{ old('supplier_specifications.'.$key, $selectedItem->supplier_specifications ?? '') }}</textarea>
                                                                 </td>
                                                                 <td align="right">
                                                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
@@ -308,6 +320,12 @@
                                                                         <option value="e" {{$item->tax == 'e' ? 'selected' : ''}}>Exento 0%</option>
                                                                         <option value="nd" {{$item->tax == 'nd' ? 'selected' : ''}} >No Definido</option>
                                                                     </select>
+                                                                </td>
+                                                                <td align="right">
+                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_charges" name="charges[]" value="{{ old('charges.'.$key, $selectedItem->charges ?? '') }}">
+                                                                </td>
+                                                                <td align="right">
+                                                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_discounts" name="discounts[]" value="{{ old('discounts.'.$key, $selectedItem->discounts ?? '') }}">
                                                                 </td>
                                                                 <td align="right">
                                                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
@@ -331,14 +349,14 @@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="9"></td>
+                                                                <td colspan="12"></td>
                                                                 <td class="text-right">Valor Total</td>
                                                                 <td align="right">
                                                                     <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="9"></td>
+                                                                <td colspan="12"></td>
                                                                 <td class="text-right">Total seleccionado</td>
                                                                 <td align="right">
                                                                     <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
@@ -350,6 +368,7 @@
     </div>
 </div>
 
+<main class="container pt-3"><!-- open div container again -->
 
 @if($requestForm->isPurchaseInProcess())
 <br>
@@ -372,7 +391,7 @@
 
 <!-- Convenio Marco menos CONVENIO MARCO MENOR A 1.000 UTM (cod 4) -->
 @if($requestForm->purchase_mechanism_id == 2 && !$requestForm->father && $requestForm->purchase_type_id != 4)
-@include('request_form.purchase.partials.convenio_marco_form_mp')
+@include('request_form.purchase.partials.convenio_marco_form')
 @endif
 
 <!-- Trato Directo -->
@@ -487,7 +506,7 @@
 @endif --}}
 
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
-<div class="row">
+{{--<div class="row">
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
@@ -496,7 +515,7 @@
             <table class="table table-sm table-hover table-bordered small">
                 <thead class="text-center">
                     <tr>
-                        <th>Item</th>
+                        <th>#</th>
                         <th>Fecha</th>
                         <!-- <th>Mecanismo de Compra</th> -->
                         <th>Tipo de compra</th>
@@ -586,9 +605,102 @@
             </table>
         </div>
     </div>
+</div>--}}
+<br>
+</main> <!-- close div container -->
+
+<!-- nueva tabla -->
+<div class="container-fluid">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
+            <table class="table table-sm table-hover table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Tipo compra</th>
+                        <th>ID Licitación</th>
+                        <th>Fechas</th>
+                        <th>Orden de compra</th>
+                        <th>Proveedor RUT - nombre</th>
+                        <th>Cotización</th>
+                        <th>N° res.</th>
+                        <th>Especificaciones Técnicas (COMPRADOR/PROVEEDOR)</th>
+                        <th>Cantidad</th>
+                        <th>Unidad de medida</th>
+                        <th>Moneda</th>
+                        <th>Precio neto</th>
+                        <th>Total cargos</th>
+                        <th>Total descuentos</th>
+                        <th>Total impuesto</th>
+                        <th>MONTO TOTAL</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+                        <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
+                        <td align="center">@if($detail->pivot->tender)
+                            <button type="button" class="badge badge-pill badge-dark popover-item" id="detail-{{$detail->id}}" rel="popover"><i class="fas fa-info"></i></button>
+                            <div class="popover-list-content" style="display:none;">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha creación <span class="badge badge-light">{{ $detail->pivot->tender->creation_date ? $detail->pivot->tender->creation_date->format('d-m-Y H:i') : '-' }}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha cierre <span class="badge badge-light">{{$detail->pivot->tender->closing_date ? $detail->pivot->tender->closing_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha inicio <span class="badge badge-light">{{$detail->pivot->tender->initial_date ? $detail->pivot->tender->initial_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha final <span class="badge badge-light">{{$detail->pivot->tender->final_date ? $detail->pivot->tender->final_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación respuestas <span class="badge badge-light">{{$detail->pivot->tender->pub_answers_date ? $detail->pivot->tender->pub_answers_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha acto apertura <span class="badge badge-light">{{$detail->pivot->tender->opening_act_date ? $detail->pivot->tender->opening_act_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación <span class="badge badge-light">{{$detail->pivot->tender->pub_date ? $detail->pivot->tender->pub_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha adjudicación <span class="badge badge-light">{{$detail->pivot->tender->grant_date ? $detail->pivot->tender->grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha estimada adjudicación <span class="badge badge-light">{{$detail->pivot->tender->estimated_grant_date ? $detail->pivot->tender->estimated_grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha visita terreno <span class="badge badge-light">{{$detail->pivot->tender->field_visit_date ? $detail->pivot->tender->field_visit_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                </ul>
+                            </div>
+                            @endif</td>
+                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->oc ? $detail->pivot->tender->oc->po_id : ($detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->po_id : '-') }}</td>
+                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
+                        <td>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
+                        <td>{{ $detail->pivot->directDeal ? $detail->pivot->directDeal->resol_direct_deal : '-'}}</td>
+                        <td>Comprador: {{ $detail->specification }} // proveedor: {{ $detail->pivot->supplier_specifications }}</td>
+                        <td align="right">{{ $detail->pivot->quantity }}</td>
+                        <td>{{ $detail->unit_of_measurement }}</td>
+                        <td>{{ $detail->pivot->tender ? $detail->pivot->tender->currency : '' }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->charges,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->discounts,$requestForm->precision_currency,",",".") }}</td>
+                        <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td>
+                            @if(env('APP_ENV') == 'local')
+                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}" class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                            @endif
+                            <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
+                                <i class="fas fa-receipt"></i>
+                            </button>
+                            @include('request_form.purchase.modals.detail_purchase')
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="16" class="text-right">Valor Total</td>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="16" class="text-right">Saldo disponible Requerimiento</td>
+                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 </div>
 @endif
-
+<main class="container pt-3"><!-- open div container again -->
 <br>
 
 @if(Str::contains($requestForm->subtype, 'tiempo'))
@@ -679,69 +791,6 @@
         </div>
     </div>
 </div>
-@endif
-<br>
-<br>
-<br>
-<br>
-<hr>
-@if(Str::contains($requestForm->subtype, 'tiempo'))
-    @if(env('APP_ENV') == 'local')
-{{--<div class="row">--}}
-{{--    <div class="col-sm">--}}
-{{--        <div class="table-responsive">--}}
-{{--        <h6><i class="fas fa-shopping-cart"></i>MERCADO PÚBLICO ORDEN DE COMPRA {{$objoc->Listado[0]->Codigo }}</h6>--}}
-{{--        <table class="table table-sm table-striped table-bordered small">--}}
-{{--                <thead class="text-center">--}}
-{{--                    <tr>--}}
-{{--                        <th>Item</th>--}}
-{{--                        <th>Orden de Compra</th>--}}
-{{--                        <th>Proveedor (Código Proveedor)</th>--}}
-{{--                        <th>Producto (Código Producto)</th>--}}
-{{--                        <th>Especificaciones Técnicas (Comprador/Proveedor)</th>--}}
-{{--                        <th>Cantidad</th>--}}
-{{--                        <th>Unidad de medida</th>--}}
-{{--                        <th>Moneda</th>--}}
-{{--                        <th>Precio Neto</th>--}}
-{{--                        <th>Total Cargos</th>--}}
-{{--                        <th>Total Descuentos</th>--}}
-{{--                        <th>Total Impuestos</th>--}}
-{{--                        <th>Total</th>--}}
-{{--                        <th>Más Información</th>--}}
-{{--                    </tr>--}}
-{{--                </thead>--}}
-{{--                <tbody>--}}
-{{--                @foreach($objoc->Listado as $oc)--}}
-{{--                @foreach($oc->Items->Listado as $item)--}}
-{{--                <tr>--}}
-{{--                <td>{{ $item->Correlativo }}</td>--}}
-{{--                <td>{{$oc->Codigo}}</td>--}}
-{{--                <td>{{$oc->Proveedor->Nombre}} ({{$oc->Proveedor->Codigo}})</td>--}}
-{{--                <td>{{$item->Producto}} ({{ $item->CodigoProducto }})</td>--}}
-{{--                <td>{{$item->EspecificacionComprador}}/{{$item->EspecificacionProveedor}}</td>--}}
-{{--                <td>{{$item->Cantidad}}</td>--}}
-{{--                <td>{{$item->Unidad}}</td>--}}
-{{--                <td>{{$item->Moneda}}</td>--}}
-{{--                <td>{{$item->PrecioNeto}}</td>--}}
-{{--                <td>{{$item->TotalCargos}}</td>--}}
-{{--                <td>{{$item->TotalDescuentos}}</td>--}}
-{{--                <td>{{$item->TotalImpuestos}}</td>--}}
-{{--                <td>{{$item->Total}}</td>--}}
-{{--                <td><button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#mp-{{ $item->Correlativo }}" title="Ver Más Detalle">--}}
-{{--            <i class="fa fa-info"></i>--}}
-{{--            </button>--}}
-{{--            @include('request_form.purchase.modals.detail_oc_mp')--}}
-{{--        </td>--}}
-{{--                </tr>--}}
-{{--                @endforeach--}}
-
-{{--                @endforeach--}}
-{{--                </tbody>--}}
-{{--        </table>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
-    @endif
 @endif
 
 <hr>
@@ -952,7 +1001,37 @@
 @section('custom_js')
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('.popover-item').popover({
+            html: true,
+            trigger: 'hover',
+            content: function() {
+                return $(this).next('.popover-list-content').html();
+            }
+        });
+    });
+
+    // https://webreflection.medium.com/using-the-input-datetime-local-9503e7efdce
+    Date.prototype.toDatetimeLocal =
+    function toDatetimeLocal() {
+        var
+        date = this,
+        ten = function (i) {
+            return (i < 10 ? '0' : '') + i;
+        },
+        YYYY = date.getFullYear(),
+        MM = ten(date.getMonth() + 1),
+        DD = ten(date.getDate()),
+        HH = ten(date.getHours()),
+        II = ten(date.getMinutes())
+        // SS = ten(date.getSeconds())
+        ;
+        return YYYY + '-' + MM + '-' + DD + 'T' +
+                HH + ':' + II; // + ':' + SS;
+    };
+
     var withholding_tax = {
         2021: 0.115,
         2022: 0.1225,
@@ -979,15 +1058,17 @@
         return value;
     }
 
-    $('#for_quantity,#for_unit_value,#for_tax').on('change keyup', function() {
+    $('#for_quantity,#for_unit_value,#for_tax,#for_charges,#for_discounts').on('change keyup', function() {
         var tr = $(this).closest('tr')
         var qty = tr.find('input[name="quantity[]"]')
         var price = tr.find('input[name="unit_value[]"]')
         var tax = tr.find('select[name="tax[]"] option:selected')
+        var charges = tr.find('input[name="charges[]"]')
+        var discounts = tr.find('input[name="discounts[]"]')
         var total = tr.find('input[name="item_total[]"]')
         var grand_total = $('#total_amount')
 
-        total.val((qty.val() * totalValueWithTaxes(price.val(), tax.val())).toFixed(2))
+        total.val((qty.val() * totalValueWithTaxes(price.val(), tax.val())).toFixed(2) - -charges.val() - discounts.val());
 
         var grandTotal = 0;
         $('table').find('input[name="item_total[]"]').each(function() {
@@ -1039,7 +1120,7 @@
         var tipo = $('#for_days_type_delivery option:selected').val();
 
         if (fechaAceptada && dias && tipo) {
-            var fechaEstimada = new Date(fechaAceptada + "T00:00:00");
+            var fechaEstimada = new Date(fechaAceptada);
             if (tipo == 'corridos') {
                 fechaEstimada.setDate(fechaEstimada.getDate() + parseInt(dias));
             } else { // dias hábiles
@@ -1054,18 +1135,18 @@
                     }
                 }
             }
-            $('#for_estimated_delivery_date').val(formatDateInput(fechaEstimada));
+            $('#for_estimated_delivery_date').val(fechaEstimada.toDatetimeLocal());
         } else {
             $('#for_estimated_delivery_date').val("");
         }
     });
 
-    function formatDateInput(date) {
-        return date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-    }
+    // function formatDateInput(date) {
+    //     return date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+    // }
 
     $('form').submit(function() {
-        $('#save_btn').attr("disabled", true);
+        $('#save_btn,#send_budget').attr("disabled", true);
         return true;
     });
 
@@ -1173,11 +1254,42 @@
                 // console.log(response.data.Listado[0].Nombre);
                 // document.getElementById("for_description").value = response.data.Listado[0].Nombre;
                 $('#for_description').val(response.data.Listado[0].Nombre);
+                $('#for_full_description').val(response.data.Listado[0].Descripcion);
                 $('#for_status').val(response.data.Listado[0].Estado.toLowerCase()).change();
+                if(response.data.Listado[0].Estado.toLowerCase() == 'adjudicada'){
+                    $('#for_currency').val(response.data.Listado[0].Moneda);
+                    $('#for_n_suppliers').val(response.data.Listado[0].Adjudicacion.NumeroOferentes);
+                    var FechaCreacion = new Date(response.data.Listado[0].Fechas.FechaCreacion);
+                    $('#for_creation_date').val(FechaCreacion.toDatetimeLocal());
+                    var FechaCierre = new Date(response.data.Listado[0].Fechas.FechaCierre);
+                    $('#for_closing_date').val(FechaCierre.toDatetimeLocal());
+                    var FechaInicio = new Date(response.data.Listado[0].Fechas.FechaInicio);
+                    $('#for_initial_date').val(FechaInicio.toDatetimeLocal());
+                    var FechaFinal = new Date(response.data.Listado[0].Fechas.FechaFinal);
+                    $('#for_final_date').val(FechaFinal.toDatetimeLocal());
+                    var FechaPubRespuestas = new Date(response.data.Listado[0].Fechas.FechaPubRespuestas);
+                    $('#for_pub_answers_date').val(FechaPubRespuestas.toDatetimeLocal());
+                    var FechaActoAperturaTecnica = new Date(response.data.Listado[0].Fechas.FechaActoAperturaTecnica);
+                    $('#for_opening_act_date').val(FechaActoAperturaTecnica.toDatetimeLocal());
+                    var FechaPublicacion = new Date(response.data.Listado[0].Fechas.FechaPublicacion);
+                    $('#for_pub_date').val(FechaPublicacion.toDatetimeLocal());
+                    var FechaAdjudicacion = new Date(response.data.Listado[0].Fechas.FechaAdjudicacion);
+                    $('#for_grant_date').val(FechaAdjudicacion.toDatetimeLocal());
+                    var FechaEstimadaAdjudicacion = new Date(response.data.Listado[0].Fechas.FechaEstimadaAdjudicacion);
+                    $('#for_estimated_grant_date').val(FechaEstimadaAdjudicacion.toDatetimeLocal());
+                    var FechaVisitaTerreno = new Date(response.data.Listado[0].Fechas.FechaVisitaTerreno);
+                    $('#for_field_visit_date').val(FechaVisitaTerreno.toDatetimeLocal());
+                    $('#for_has_taking_of_reason').prop("checked", parseInt(response.data.Listado[0].TomaRazon));
+                }
                 if(response.data.Listado[0].Items){
                     var productos = [];
                     for(var i = 0; i < response.data.Listado[0].Items.Cantidad; i++)
-                        productos.push({codigo: response.data.Listado[0].Items.Listado[i].CodigoProducto, cantidad: response.data.Listado[0].Items.Listado[i].Cantidad})
+                        productos.push({codigo: response.data.Listado[0].Items.Listado[i].CodigoProducto, 
+                                        cantidad: response.data.Listado[0].Items.Listado[i].Adjudicacion.Cantidad, 
+                                        monto: response.data.Listado[0].Items.Listado[i].Adjudicacion.MontoUnitario,
+                                        rutProveedor: response.data.Listado[0].Items.Listado[i].Adjudicacion.RutProveedor,
+                                        nombreProveedor: response.data.Listado[0].Items.Listado[i].Adjudicacion.NombreProveedor
+                                    })
                     const duplicates = productos.map(p => p.codigo).filter((e, index, arr) => arr.indexOf(e) !== index)
                     // console.log(duplicates)
                     for(var i in productos){
@@ -1185,6 +1297,10 @@
                             var tr = $("tr[data-id="+ productos[i].codigo + "]");
                             tr.find('#for_item_id').prop('checked', true);
                             tr.find('#for_quantity').val(productos[i].cantidad).change();
+                            tr.find('#for_unit_value').val(productos[i].monto).change();
+                            tr.find('#for_supplier_run').val(productos[i].rutProveedor);
+                            tr.find('#for_supplier_name').val(productos[i].nombreProveedor);
+                            disabledSaveBtn();
                         }
                         // console.log(productos[i])
                     }
@@ -1220,17 +1336,60 @@
                 // handle success
                 console.log(response.data);
                 $('#btn_oc').prop('disabled', false).html("Consultar");
-                // var fecha_envio = new Date(response.data.Listado[0].Fechas.FechaEnvio).toISOString().slice(0, 10);
-                // var fecha_aceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion).toISOString().slice(0, 10);
-                // document.getElementById("for_description").value = response.data.Listado[0].Nombre;
-                // document.getElementById("for_po_accepted_date").value = fecha_aceptacion;
-                // document.getElementById("for_po_sent_date").value = fecha_envio;
-                // document.getElementById("for_supplier_specifications").value = response.data.Listado[0].Items.Listado[0].EspecificacionProveedor;
+                $('#for_po_description').val(response.data.Listado[0].Nombre);
+                $('#for_po_status').val(response.data.Listado[0].Estado);
+                var FechaCreacion = new Date(response.data.Listado[0].Fechas.FechaCreacion);
+                $('#for_po_date').val(FechaCreacion.toDatetimeLocal());
+                var FechaAceptacion = new Date(response.data.Listado[0].Fechas.FechaAceptacion);
+                $('#for_po_accepted_date').val(FechaAceptacion.toDatetimeLocal());
+                var FechaEnvio = new Date(response.data.Listado[0].Fechas.FechaEnvio);
+                $('#for_po_sent_date').val(FechaEnvio.toDatetimeLocal());
+                $('#for_po_discounts').val(response.data.Listado[0].Descuentos);
+                $('#for_po_charges').val(response.data.Listado[0].Cargos);
+                $('#for_po_net_amount').val(response.data.Listado[0].TotalNeto);
+                $('#for_po_tax_percent').val(response.data.Listado[0].PorcentajeIva);
+                $('#for_po_tax_amount').val(response.data.Listado[0].Impuestos);
+                $('#for_amount').val(response.data.Listado[0].Total);
+                $('#for_po_supplier_name').val(response.data.Listado[0].Proveedor.Nombre);
+                $('#for_po_supplier_activity').val(response.data.Listado[0].Proveedor.Actividad);
+                $('#for_po_supplier_office_run').val(response.data.Listado[0].Proveedor.RutSucursal);
+                $('#for_po_supplier_office_name').val(response.data.Listado[0].Proveedor.NombreSucursal);
+                $('#for_po_supplier_address').val(response.data.Listado[0].Proveedor.Direccion);
+                $('#for_po_supplier_commune').val(response.data.Listado[0].Proveedor.Comuna);
+                $('#for_po_supplier_region').val(response.data.Listado[0].Proveedor.Region);
+                $('#for_po_supplier_contact_name').val(response.data.Listado[0].Proveedor.NombreContacto);
+                $('#for_po_supplier_contact_position').val(response.data.Listado[0].Proveedor.CargoContacto);
+                $('#for_po_supplier_contact_phone').val(response.data.Listado[0].Proveedor.FonoContacto);
+                $('#for_po_supplier_contact_email').val(response.data.Listado[0].Proveedor.MailContacto);
 
-
-
-                //document.getElementById("for_po_accepted_date").value = response.data.Listado[0].Fechas.FechaAceptacion;
-                //alert(response.data.Listado.Nombre);
+                if(response.data.Listado[0].Items){
+                    var productos = [];
+                    for(var i = 0; i < response.data.Listado[0].Items.Cantidad; i++)
+                        productos.push({codigo: response.data.Listado[0].Items.Listado[i].CodigoProducto, 
+                                        cantidad: response.data.Listado[0].Items.Listado[i].Cantidad, 
+                                        monto: response.data.Listado[0].Items.Listado[i].PrecioNeto,
+                                        cargos: response.data.Listado[0].Items.Listado[i].TotalCargos,
+                                        descto: response.data.Listado[0].Items.Listado[i].TotalDescuentos,
+                                        rutProveedor: response.data.Listado[0].Proveedor.RutSucursal,
+                                        nombreProveedor: response.data.Listado[0].Proveedor.NombreSucursal,
+                                        specsProveedor: response.data.Listado[0].Items.Listado[i].EspecificacionProveedor
+                                    })
+                    const duplicates = productos.map(p => p.codigo).filter((e, index, arr) => arr.indexOf(e) !== index)
+                    // console.log(duplicates)
+                    for(var i in productos){
+                        if(!duplicates.includes(productos[i].codigo)){
+                            var tr = $("tr[data-id="+ productos[i].codigo + "]");
+                            tr.find('#for_item_id').prop('checked', true);
+                            tr.find('#for_quantity').val(productos[i].cantidad).change();
+                            tr.find('#for_unit_value').val(productos[i].monto).change();
+                            tr.find('#for_supplier_run').val(productos[i].rutProveedor);
+                            tr.find('#for_supplier_name').val(productos[i].nombreProveedor);
+                            tr.find('#for_supplier_specifications').val(productos[i].specsProveedor);
+                            disabledSaveBtn();
+                        }
+                        // console.log(productos[i])
+                    }
+                }
             })
             .catch(function(error) {
                 // handle error

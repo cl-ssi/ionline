@@ -73,6 +73,7 @@
             </tbody>
         </table>
     </div>
+    {{$my_request_forms->appends(Request::input())->links()}}
 </div>
 @else
 <h6><i class="fas fa-inbox"></i> Mis Formularios asignados</h6>
@@ -171,7 +172,7 @@
             </tbody>
         </table>
     </div>
-    {{ $request_forms->links() }}
+    {{$request_forms->appends(Request::input())->links()}}
 </div>
 @else
 <h6><i class="fas fa-inbox"></i> Formularios asignados</h6>

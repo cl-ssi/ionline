@@ -18,11 +18,13 @@ class Tender extends Model implements Auditable
     protected $fillable = [
         'purchase_type_id', 'tender_number', 'description', 'resol_administrative_bases', 'resol_adjudication',
         'resol_deserted', 'resol_contract', 'guarantee_ticket', 'has_taking_of_reason', 'taking_of_reason_date',
-        'status', 'supplier_id', 'start_date', 'duration', 'justification', 'guarantee_ticket_exp_date', 'memo_number'
+        'status', 'supplier_id', 'start_date', 'duration', 'justification', 'guarantee_ticket_exp_date', 'memo_number',
+        'full_description', 'currency', 'creation_date', 'closing_date', 'initial_date', 'final_date', 'pub_answers_date', 
+        'opening_act_date', 'pub_date', 'grant_date', 'estimated_grant_date', 'field_visit_date', 'n_suppliers'
     ];
 
     public $dates = [
-        'start_date', 'guarantee_ticket_exp_date'
+        'start_date', 'guarantee_ticket_exp_date', 'creation_date', 'closing_date', 'initial_date', 'final_date', 'pub_answers_date', 'opening_act_date', 'pub_date', 'estimated_grant_date', 'grant_date', 'field_visit_date'
     ];
 
     public function purchaseType()

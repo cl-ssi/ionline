@@ -27,7 +27,7 @@
                             <input type="file" class="form-control" id="for_files" name="files[]" accept="application/pdf" multiple>
                         </fieldset>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right btn-sm">Enviar solicitud</button>
+                    <button type="submit" id="send_budget" class="btn btn-primary float-right btn-sm">Enviar solicitud</button>
                 </form>
             </div>
         </div>

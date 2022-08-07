@@ -12,9 +12,9 @@ class MercadoPublico extends Model
 {
     use HasFactory;
 
-    public static function getTender($code)
+    public static function getTender($code, $type)
     {
-        $response = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json', [
+        $response = Http::get('https://api.mercadopublico.cl/servicios/v1/publico/'.$type.'.json', [
             'codigo' => $code,
             'ticket' => env('TICKET_MERCADO_PUBLICO')
         ]);
