@@ -13,7 +13,8 @@
 @if(count($request_forms) > 0)
 </div>
 <div class="col">
-  <h6><i class="fas fa-archive"></i> Formularios creados, aprobados y rechazados</h6>
+  <h6><i class="fas fa-archive"></i> Formularios creados, aprobados y rechazados
+  <a class="btn btn-outline-success btn-sm mb-1 float-right" href="{{ route('request_forms.export') }}"><i class="fas fa-file-excel"></i> Exportar todos los formularios</a></h6>
   <div class="table-responsive">
     <table class="table table-sm table-bordered small table-hover">
       <thead>
