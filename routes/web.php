@@ -563,6 +563,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 /** Programación Númerica APS */
 Route::resource('programmings', ProgrammingController::class)->middleware('auth');
 Route::put('programmingStatus/{id}', [ProgrammingController::class,'updateStatus'])->middleware('auth')->name('programmingStatus.update');
+// Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class,'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
 
 Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
 Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class,'clone'])->name('programmingitems.clone');
@@ -1594,6 +1595,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/callback-sign-new-budget/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSignNewBudget'])->name('callbackSignNewBudget');
     Route::get('/signed-request-form-pdf/{requestForm}/{original}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
+    Route::get('/export', [RequestFormController::class, 'export'])->name('export');
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');

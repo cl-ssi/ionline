@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RequestForms;
 
+use App\Exports\RequestForms\RequestFormsExport;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\Item;
 use App\RequestForms\Passage;
@@ -28,6 +29,7 @@ use App\User;
 use App\Mail\PurchaserNotification;
 use App\Mail\RfEndNewBudgetSignNotification;
 use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RequestFormController extends Controller {
 
@@ -75,7 +77,7 @@ class RequestFormController extends Controller {
         }
 
         // $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
-        $request_forms = RequestForm::Search($request)->latest('id')->paginate(30);
+        $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')->Search($request)->latest('id')->paginate(30);
         //$users = User::where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
         //$users = User::all();
         $users = User::whereHas('organizationalUnit',function($q){
@@ -554,5 +556,10 @@ class RequestFormController extends Controller {
         if($tax == 'iva') return $value * 1.19;
         if($tax == 'bh') return isset($withholding_tax[date('Y')]) ? round($value / (1 - $withholding_tax[date('Y')])) : round($value / (1 - end($withholding_tax)));
         return $value;
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new RequestFormsExport($request), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
 }
