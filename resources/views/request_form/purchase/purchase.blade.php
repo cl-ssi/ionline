@@ -1281,6 +1281,7 @@
                     $('#for_field_visit_date').val(FechaVisitaTerreno.toDatetimeLocal());
                     $('#for_has_taking_of_reason').prop("checked", parseInt(response.data.Listado[0].TomaRazon));
                 }
+                @if(Str::contains($requestForm->subtype, 'tiempo'))
                 if(response.data.Listado[0].Items){
                     var productos = [];
                     for(var i = 0; i < response.data.Listado[0].Items.Cantidad; i++)
@@ -1305,6 +1306,7 @@
                         // console.log(productos[i])
                     }
                 }
+                @endif
             })
             .catch(function(error) {
                 // handle error
