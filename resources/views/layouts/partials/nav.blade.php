@@ -137,7 +137,7 @@
                 @endcan
 
 
-                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
+                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id != 1)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
