@@ -445,8 +445,9 @@
                       <th style="width: 22%">Observaciones</th>
                       @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                           Auth::user()->hasRole('Replacement Staff: admin'))
-                      <th>Ingreso Efectivo</th>
-                      <th>Fin</th>
+                      <th style="width: 8%">Ingreso Efectivo</th>
+                      <th style="width: 8%">Fin</th>
+                      <th style="width: 8%">Fecha Ingreso Contrato</th>
                       <th colspan="2"></th>
                       @endif
                     </tr>
@@ -480,6 +481,13 @@
                         <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
                         @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                             Auth::user()->hasRole('Replacement Staff: admin'))
+                        <td class="text-center">
+                          @if($applicant->sirh_contract)
+                              {{ $applicant->sirh_contract->format('d-m-Y') }}
+                          @else
+                              -
+                          @endif
+                        </td>
                         <td style="width: 4%">
                             @if($technicalEvaluation->date_end == NULL &&
                               ($applicant->psycholabor_evaluation_score == null || $applicant->technical_evaluation_score == null || $applicant->observations == null))
