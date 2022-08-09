@@ -119,6 +119,10 @@
                               </span>
                             @endif
                         @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
+                        @endif
                     </td>
                     <td>
                         @if($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
@@ -237,6 +241,10 @@
                               </span>
                             @endif
                         @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
+                        @endif
                     </td>
                     <td>
                       @if($requestReplacementStaff->technicalEvaluation)
