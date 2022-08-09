@@ -475,7 +475,8 @@
                             <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum visado"><i class="fas fa-eye"></i></a> 
                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> 
                             @endif
-                            @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
+                            {{--@if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)--}}
+                            @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
                                 @if($addendum->file)
                                 <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
                                 <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
