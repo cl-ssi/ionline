@@ -17,11 +17,6 @@
                 @endif
             </h6>
             <table class="table table-sm table-striped table-bordered">
-                <!-- <thead>
-                    <tr class="table-active">
-                        <th colspan="2">Formulario Contratación de Personal </th>
-                    </tr>
-                </thead> -->
                 <tbody class="small">
                     <tr>
                         <th class="table-active" scope="row">Folio</th>
@@ -253,12 +248,6 @@
                                                     @csrf
                                                     @method(isset($result) ? 'PUT' : 'POST')
                                                     @endif
-
-{{--                                                    @if($requestForm->type_form === 'bienes y/o servicios')--}}
-{{--                                                        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
-{{--                                                    @else--}}
-{{--                                                        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null, 'savedTypeOfCurrency' => $requestForm->type_of_currency ?? null])--}}
-{{--                                                    @endif--}}
                                                     <table class="table table-sm table-hover table-bordered small">
                                                         <thead class="text-center">
                                                             <tr>
@@ -437,178 +426,8 @@
 <br>
 @endif
 
-{{-- @if($requestForm->purchasingProcess &&
-  $requestForm->purchasingProcess->details->count() > 0 &&
-  ($requestForm->subtype == 'bienes ejecución inmediata' || $requestForm->subtype == 'servicios ejecución inmediata'))
-<div class="row">
-    <div class="col-sm">
-        <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> Detalle de la Compra</h6>
-
-            <!-- ITEM
-            TIPO DE COMPRA
-            ID OC
-            ESPECIFICACIONES TECNICAS
-            ESPECIFICACIONES DEL PROVEEDOR
-            CANT
-            UM
-            VALOR UNITARIO
-            IMPUESTO
-            TOTAL ITEM
-            DATOS ADQUISICION -->
-
-            <table class="table table-sm table-hover table-bordered small">
-                <thead class="text-center">
-                    <tr>
-                        <th>Item</th>
-                        <th>Fecha</th>
-                        <!-- <th>Mecanismo de Compra</th> -->
-                        <th>Tipo de compra</th>
-                        <th>ID O.C.</th>
-                        <th>Especificaciones Técnicas</th>
-                        <!-- <th>Especificaciones Del Proveedor</th> -->
-                        <th>Cantidad</th>
-                        <th>UM</th>
-                        <th>Valor U.</th>
-                        <th>Impto.</th>
-                        <th>Total Item</th>
-                        <th>Datos Adquisición</th>
-                        <!-- <th></th>  -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
-                    <tr>
-                        <td>{{ $key+1 }}</td>
-<td>{{ $requestForm->purchasingProcess->start_date }}</td>
-<td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
-<td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
-<td>{{ $detail->specification }}</td>
-<td></td>
-
-</tr>
-@endforeach
-</tbody>
-<tfoot>
-    <tr>
-        <th colspan="11" class="text-right">Valor Total</td>
-        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-    </tr>
-    <tr>
-        <th colspan="11" class="text-right">Saldo disponible Requerimiento</td>
-        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-    </tr>
-</tfoot>
-</table>
-</div>
-</div>
-</div>
-@endif --}}
-
 @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
-{{--<div class="row">
-    <div class="col-sm">
-        <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
-
-
-            <table class="table table-sm table-hover table-bordered small">
-                <thead class="text-center">
-                    <tr>
-                        <th>#</th>
-                        <th>Fecha</th>
-                        <!-- <th>Mecanismo de Compra</th> -->
-                        <th>Tipo de compra</th>
-                        <th>Cod.Presup.</th>
-                        <th>Datos Adicionales</th>
-                        <th>Artículo</th>
-                        <th>UM</th>
-                        <th>Especificaciones Técnicas</th>
-                        <th>Archivo</th>
-                        <th>Cantidad</th>
-                        <th>Valor U.</th>
-                        <th>Impto.</th>
-                        <th>Total Item</th>
-                        <th></th>
-                        <!-- <th></th>  -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
-                    <tr>
-                        <td>{{ $key+1 }}</td>
-                        <td>{{ $requestForm->purchasingProcess->start_date }}</td>
-                        <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
-                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
-                        <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
-                        <td>
-                        @if($detail->pivot->internalPurchaseOrder)
-                            Prov:{{ $detail->pivot->internalPurchaseOrder->supplier->name}}
-                        @elseif($detail->pivot->tender)
-                            Id Lic:{{ $detail->pivot->tender->tender_number }}<br><br>
-                            Prov:{{ $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->name : '' }}<br><br>
-                            Plazo vig en días:{{ $detail->pivot->tender->duration ?? '' }}
-                        @elseif($detail->pivot->directDeal)
-                            Nº Resol:{{ $detail->pivot->directDeal->resol_direct_deal}} <br><br>
-                            Prov:{{ $detail->pivot->directDeal->supplier->name }}
-                        @elseif($detail->pivot->immediatePurchase)
-                            ID OC:{{ $detail->pivot->immediatePurchase->po_id }} <br><br>
-                            Prov: {{ $detail->pivot->immediatePurchase->supplier->name }}
-                        @else
-                            -
-                        @endif
-                        </td>
-                        <td>{{ $detail->article }}</td>
-                        <td>{{ $detail->unit_of_measurement }}</td>
-                        <td>{{ $detail->specification }}</td>
-                        <td align="center">
-                            @if($detail->article_file)
-                            <a href="{{ route('request_forms.show_item_file', $detail) }}" target="_blank">
-                                <i class="fas fa-file"></i></a>
-                            @endif
-                        </td>
-                        <td align="right">{{ $detail->pivot->quantity }}</td>
-                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
-                        <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
-                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
-                        <!-- <td align="center">
-                            <fieldset class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
-                                      id="for_item_id" value="{{ $item->id }}">
-                                </div>
-                            </fieldset>
-                        </td> -->
-                        <td>
-                            @if(env('APP_ENV') == 'local')
-                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}" class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
-                            @endif
-                            <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
-                                <i class="fas fa-receipt"></i>
-                            </button>
-                            @include('request_form.purchase.modals.detail_purchase')
-
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="12" class="text-right">Valor Total</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="12" class="text-right">Saldo disponible Requerimiento</td>
-                        <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>--}}
-<br>
 </main> <!-- close div container -->
-
 <!-- nueva tabla -->
 <div class="container-fluid">
     <div class="col-sm">
@@ -699,9 +518,8 @@
         </div>
     </div>
 </div>
-@endif
 <main class="container pt-3"><!-- open div container again -->
-<br>
+@endif
 
 @if(Str::contains($requestForm->subtype, 'tiempo'))
 <div class="row">
