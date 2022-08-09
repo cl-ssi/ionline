@@ -284,7 +284,7 @@ class RequestFormCreate extends Component
                 'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
                 'request_user_id'       =>  $this->editRF ? $this->requestForm->request_user_id : Auth()->user()->id,
                 'request_user_ou_id'    =>  $this->editRF ? $this->requestForm->request_user_ou_id : Auth()->user()->organizationalUnit->id,
-                'estimated_expense'     =>  $this->totalForm(),
+                'estimated_expense'     =>  $this->requestForm->has_increased_expense ? $this->requestForm->estimated_expense : $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
                 'program'               =>  $this->program,
