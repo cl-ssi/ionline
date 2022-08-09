@@ -187,8 +187,10 @@ class RequestReplacementStaff extends Model
     }
 
     public function getCurrentContinuity($requestReplacementStaff) {
-        if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
-            return  $currentContinuity = 'no current';
+        if($requestReplacementStaff->requestChilds->count() > 0){
+            if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
+                return  $currentContinuity = 'no current';
+            }
         }
     }
 
