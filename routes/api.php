@@ -22,5 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 /** RUTAS API HETG **/
 Route::prefix('service_request')->name('service_request.')->middleware('client')->group(function (){
-    Route::get('/existing_contracts/{user_id}', [ServiceRequestController::class, 'existing_contracts']);
+    Route::get('/existing_contracts_by_prof/{user_id}', [ServiceRequestController::class, 'existing_contracts_by_prof']);
+    Route::get('/existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts']);
 });
