@@ -118,6 +118,10 @@
                           </span>
                         @endif
                     @endforeach
+                    </br>
+                    @if($requestReplacementStaff->request_id != NULL)
+                        <span class="badge badge-info">Continuidad</span>
+                    @endif
                 </td>
                 <td>
                   @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
@@ -192,7 +196,7 @@
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
                 <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                 <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
@@ -228,6 +232,10 @@
                           </span>
                         @endif
                     @endforeach
+                    </br>
+                    @if($requestReplacementStaff->request_id != NULL)
+                        <span class="badge badge-info">Continuidad</span>
+                    @endif
                 </td>
                 <td>
                     <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
