@@ -361,78 +361,95 @@
     @endif
 
     @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
-        <div class="row">
-            <div class="col-sm">
-                <div class="table-responsive">
-                    <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
-
-
-                    <table class="table table-sm table-hover table-bordered small">
-                        <thead class="text-center">
+    </main> <!-- close div container -->
+    <!-- nueva tabla -->
+    <div class="container-fluid">
+        <div class="col-sm">
+            <div class="table-responsive">
+                <h6><i class="fas fa-shopping-cart"></i> Información de la Compra</h6>
+                <table class="table table-sm table-hover table-bordered small">
+                    <thead class="text-center">
                         <tr>
-                            <th>Item</th>
-                            <th>Fecha</th>
-                            <th>Tipo de compra</th>
-                            <th>Item Pres.</th>
-                            <th>Artículo</th>
-                            <th>UM</th>
-                            <th>Especificaciones Técnicas</th>
-                            <th>Archivo</th>
+                            <th>#</th>
+                            <th>Tipo compra</th>
+                            <th>ID Licitación</th>
+                            <th>Fechas</th>
+                            <th>Orden de compra</th>
+                            <th>Proveedor RUT - nombre</th>
+                            <th>Cotización</th>
+                            <th>N° res.</th>
+                            <th>Especificaciones Técnicas (COMPRADOR/PROVEEDOR)</th>
                             <th>Cantidad</th>
-                            <th>Valor U.</th>
-                            <th>Impuestos</th>
-                            <th>Total Item</th>
+                            <th>Unidad de medida</th>
+                            <th>Moneda</th>
+                            <th>Precio neto</th>
+                            <th>Total cargos</th>
+                            <th>Total descuentos</th>
+                            <th>Total impuesto</th>
+                            <th>MONTO TOTAL</th>
                             <th></th>
-                            <!-- <th></th>  -->
                         </tr>
-                        </thead>
-                        <tbody>
+                    </thead>
+                    <tbody>
                         @foreach($requestForm->purchasingProcess->details as $key => $detail)
-                            <tr>
-                                <td>{{ $key+1 }}</td>
-                                <td>{{ $requestForm->purchasingProcess->start_date }}</td>
-                                <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
-                                <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
-                                <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
-                                <td>{{ $detail->article }}</td>
-                                <td>{{ $detail->unit_of_measurement }}</td>
-                                <td>{{ $detail->specification }}</td>
-                                <td align="center">
-                                    @if($detail->article_file)
-                                        <a href="{{ route('request_forms.show_item_file', $detail) }}" target="_blank">
-                                            <i class="fas fa-file"></i></a>
-                                    @endif
-                                </td>
-                                <td align="right">{{ $detail->pivot->quantity }}</td>
-                                <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
-                                <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
-                                <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
-                                <td>
-                                    <button type="button" id="btn_items_{{$key}}" class="btn btn-link btn-sm"
-                                            data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
-                                        <i class="fas fa-receipt"></i>
-                                    </button>
-                                    @include('request_form.purchase.modals.detail_purchase')
-
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+                            <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
+                            <td align="center">@if($detail->pivot->tender)
+                                <button type="button" class="badge badge-pill badge-dark popover-item" id="detail-{{$detail->id}}" rel="popover"><i class="fas fa-info"></i></button>
+                                <div class="popover-list-content" style="display:none;">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha creación <span class="badge badge-light">{{ $detail->pivot->tender->creation_date ? $detail->pivot->tender->creation_date->format('d-m-Y H:i') : '-' }}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha cierre <span class="badge badge-light">{{$detail->pivot->tender->closing_date ? $detail->pivot->tender->closing_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha inicio <span class="badge badge-light">{{$detail->pivot->tender->initial_date ? $detail->pivot->tender->initial_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha final <span class="badge badge-light">{{$detail->pivot->tender->final_date ? $detail->pivot->tender->final_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación respuestas <span class="badge badge-light">{{$detail->pivot->tender->pub_answers_date ? $detail->pivot->tender->pub_answers_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha acto apertura <span class="badge badge-light">{{$detail->pivot->tender->opening_act_date ? $detail->pivot->tender->opening_act_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación <span class="badge badge-light">{{$detail->pivot->tender->pub_date ? $detail->pivot->tender->pub_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha adjudicación <span class="badge badge-light">{{$detail->pivot->tender->grant_date ? $detail->pivot->tender->grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha estimada adjudicación <span class="badge badge-light">{{$detail->pivot->tender->estimated_grant_date ? $detail->pivot->tender->estimated_grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">Fecha visita terreno <span class="badge badge-light">{{$detail->pivot->tender->field_visit_date ? $detail->pivot->tender->field_visit_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    </ul>
+                                </div>
+                                @endif</td>
+                            <td>{{ $detail->pivot->tender && $detail->pivot->tender->oc ? $detail->pivot->tender->oc->po_id : ($detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->po_id : '-') }}</td>
+                            <td>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
+                            <td>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
+                            <td>{{ $detail->pivot->directDeal ? $detail->pivot->directDeal->resol_direct_deal : '-'}}</td>
+                            <td>Comprador: {{ $detail->specification }} // proveedor: {{ $detail->pivot->supplier_specifications }}</td>
+                            <td align="right">{{ $detail->pivot->quantity }}</td>
+                            <td>{{ $detail->unit_of_measurement }}</td>
+                            <td>{{ $detail->pivot->tender ? $detail->pivot->tender->currency : '' }}</td>
+                            <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                            <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->charges,$requestForm->precision_currency,",",".") }}</td>
+                            <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->discounts,$requestForm->precision_currency,",",".") }}</td>
+                            <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
+                            <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
+                            <td>
+                                <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
+                                    <i class="fas fa-receipt"></i>
+                                </button>
+                                @include('request_form.purchase.modals.detail_purchase')
+                            </td>
+                        </tr>
                         @endforeach
-                        </tbody>
-                        <tfoot>
+                    </tbody>
+                    <tfoot>
                         <tr>
-                            <th colspan="11" class="text-right">Valor Total
-                            </th>
-                            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</th>
+                            <th colspan="16" class="text-right">Valor Total</td>
+                            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                         </tr>
                         <tr>
-                            <th colspan="11" class="text-right">Saldo disponible Requerimiento</th>
-                            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</th>
+                            <th colspan="16" class="text-right">Saldo disponible Requerimiento</td>
+                            <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                         </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    </tfoot>
+                </table>
             </div>
         </div>
+    </div>
+    <main class="container pt-3"><!-- open div container again -->
     @endif
 
     <br>
@@ -754,6 +771,15 @@
 
 @endsection
 @section('custom_js')
-@endsection
-@section('custom_js_head')
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.popover-item').popover({
+        html: true,
+        trigger: 'hover',
+        content: function() {
+            return $(this).next('.popover-list-content').html();
+        }
+    });
+});
+</script>
 @endsection
