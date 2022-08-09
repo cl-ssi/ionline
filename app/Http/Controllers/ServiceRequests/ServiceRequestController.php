@@ -1452,7 +1452,7 @@ class ServiceRequestController extends Controller
     //        }
   }
 
-  public function existing_contracts($user_id){
+  public function existing_contracts_by_prof($user_id){
     $date = Carbon::today();
     $serviceRequests = ServiceRequest::where('user_id',$user_id)
                                       ->where('start_date','<=',$date)
@@ -1460,5 +1460,42 @@ class ServiceRequestController extends Controller
                                       ->get()
                                       ->toJson();
     return $serviceRequests;
+  }
+
+  public function existing_active_contracts($start_date, $end_date){
+    $date = Carbon::today();
+    $serviceRequests = ServiceRequest::where('end_date','>=',$start_date)
+                                      ->where('end_date','<=',$end_date)
+                                      ->whereDoesntHave("fulfillments", function ($subQuery) {
+                                        $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                                          $subQuery->where('type', 'Renuncia voluntaria');
+                                        });
+                                      })
+                                      ->whereDoesntHave("fulfillments", function ($subQuery) {
+                                        $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                                          $subQuery->where('type', 'Abandono de funciones');
+                                        });
+                                      })
+                                      ->whereDoesntHave("fulfillments", function ($subQuery) {
+                                        $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                                          $subQuery->where('type', 'Término de contrato anticipado');
+                                        });
+                                      })
+                                      ->orderBy('start_date')
+                                      ->get();
+
+    $array = array();
+    foreach($serviceRequests as $key => $serviceRequest)
+    {
+      $array[$key]['employee']['run'] = $serviceRequest->employee->runFormat();
+      $array[$key]['employee']['name'] = $serviceRequest->employee->getFullNameAttribute();
+      $array[$key]['employee']['email'] = $serviceRequest->email;
+      $array[$key]['employee']['phone'] = $serviceRequest->phone_number;
+
+      $array[$key]['contract']['number'] = $serviceRequest->contract_number;
+      $array[$key]['contract']['type'] = $serviceRequest->contract_type;
+      $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
+    }
+    return json_encode($array);
   }
 }
