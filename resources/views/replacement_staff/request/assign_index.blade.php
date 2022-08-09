@@ -173,7 +173,7 @@
         </thead>
         <tbody class="small">
             @foreach($requests as $requestReplacementStaff)
-            <tr>
+            <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':'' }}">
                 <td>
                     {{ $requestReplacementStaff->id }} <br>
                     @switch($requestReplacementStaff->request_status)
@@ -192,6 +192,10 @@
                         @default
                             Default case...
                     @endswitch
+                    <br>
+                    @if($requestReplacementStaff->sirh_contract)
+                        <i class="fas fa-file-signature"></i>
+                    @endif
                 </td>
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
