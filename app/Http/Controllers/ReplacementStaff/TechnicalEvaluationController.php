@@ -96,10 +96,9 @@ class TechnicalEvaluationController extends Controller
      * @param  \App\Models\TechnicalEvaluation  $technicalEvaluation
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, TechnicalEvaluation $technicalEvaluation)
+    public function edit(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        //$users = User::orderBy('name', 'ASC')->get();
 
         $users = User::where('external', 0)
           ->orderBy('name', 'ASC')
@@ -107,12 +106,8 @@ class TechnicalEvaluationController extends Controller
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
-        $requestChilds = RequestReplacementStaff::
-            where('request_id', $technicalEvaluation->requestReplacementStaff->id)
-            ->get();
-
         return view('replacement_staff.request.technical_evaluation.edit',
-            compact('technicalEvaluation', 'users', 'request', 'users_rys', 'ouRoots', 'requestChilds'));
+            compact('requestReplacementStaff', 'users', 'request', 'users_rys', 'ouRoots'));
     }
 
     /**

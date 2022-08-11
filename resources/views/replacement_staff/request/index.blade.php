@@ -138,7 +138,7 @@
 
                         @elseif($requestReplacementStaff->technicalEvaluation)
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                   class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                             </span>
                         @else
@@ -252,7 +252,7 @@
                     </td>
                     <td>
                       @if($requestReplacementStaff->technicalEvaluation)
-                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                       @else
                         <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"

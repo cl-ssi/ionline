@@ -191,8 +191,6 @@
   @endif
 @endif
 
-{{-- dd(App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff)) --}}
-
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation &&

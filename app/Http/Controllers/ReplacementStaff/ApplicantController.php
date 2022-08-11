@@ -44,7 +44,7 @@ class ApplicantController extends Controller
     {
         if ($request->missing('replacement_staff_id')) {
             return redirect()
-              ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
+              ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#applicant')
               ->with('message-danger-without-applicants', 'Estimado usuario, primero debe seleccionar postulante(s) al cargo');
         }
         else{
@@ -61,7 +61,7 @@ class ApplicantController extends Controller
                 }
             }
             return redirect()
-                ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
+                ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#applicant')
                 ->with('message-success-applicants', 'El postulante ha sido correctamente ingresado/s.');
         }
     }
@@ -110,7 +110,7 @@ class ApplicantController extends Controller
         }
         else{
             return redirect()
-              ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
+              ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
               ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
         }
     }
@@ -136,7 +136,7 @@ class ApplicantController extends Controller
             $applicant_evaluated = Applicant::where('id', $app_id)->first();
             if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
                 return redirect()
-                  ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+                  ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
                   ->with('message-danger-aplicant-no-evaluated', 'Estimado usuario, favor ingresar evaluacion de postulante(s) seleccionado(s).');
             }
         }
@@ -182,7 +182,7 @@ class ApplicantController extends Controller
           ->send(new EndSelectionNotification($technicalEvaluation));
 
         return redirect()
-          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
           ->with('message-success-aplicant-finish', 'Estimado usuario, ha completado el proceso de selección');
     }
 
@@ -218,7 +218,7 @@ class ApplicantController extends Controller
             $applicant->technicalEvaluation->requestReplacementStaff->save();
         }
         return redirect()
-            ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')
             ->with('message-danger-aplicant-desist', 'Estimado usuario, se ha registrado el postulante ha desestimado el proceso de selección');
 
     }

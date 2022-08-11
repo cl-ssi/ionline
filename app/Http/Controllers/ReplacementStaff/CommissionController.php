@@ -57,7 +57,7 @@ class CommissionController extends Controller
         //}
 
         return redirect()
-          ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#commission')
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#commission')
           ->with('message-success-commission', 'Integrante(s) de Comisión ha/n sido correctamente ingresado/s.');
     }
 
