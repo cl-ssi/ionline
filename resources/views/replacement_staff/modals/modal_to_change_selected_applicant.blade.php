@@ -18,7 +18,7 @@
                               <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
                               <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                               <th style="width: 22%">Observaciones</th>
-                              @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                              @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                                   Auth::user()->hasRole('Replacement Staff: admin'))
                               <th>Ingreso Efectivo</th>
                               <th>Fin</th>

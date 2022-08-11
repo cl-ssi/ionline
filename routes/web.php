@@ -359,7 +359,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
-            Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/{requestReplacementStaff}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
