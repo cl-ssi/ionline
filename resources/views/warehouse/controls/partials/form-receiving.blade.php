@@ -202,7 +202,37 @@
 @endif
 
 <div class="form-row">
-    <fieldset class="form-group col-md-12">
+    <fieldset class="form-group col-md-4">
+        <label for="signer-id" class="form-label">Firmante</label>
+        @if($mode == 'create')
+            @livewire('users.search-user', [
+                'placeholder' => 'Ingrese un nombre',
+                'eventName' => 'signerId',
+                'tagId' => 'signer-id',
+            ])
+
+            <input
+                class="form-control @error('signer_id') is-invalid @enderror"
+                type="hidden"
+            >
+
+            @error('signer_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        @else
+            <input
+                type="text"
+                id="signer-id"
+                class="form-control"
+                value="{{ optional($control->signer)->full_name }}"
+                readonly
+            >
+        @endif
+    </fieldset>
+
+    <fieldset class="form-group col-md-8">
         <label for="note">Nota</label>
         <input
             type="text"
