@@ -8,6 +8,7 @@ use App\Models\RequestForms\Invoice;
 use App\Models\RequestForms\PurchaseOrder;
 use App\Models\RequestForms\RequestForm;
 use App\Rrhh\OrganizationalUnit;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -41,6 +42,7 @@ class Control extends Model
         'po_id',
         'request_form_id',
         'organizational_unit_id',
+        'signer_id',
     ];
 
     protected $dates = [
@@ -115,6 +117,11 @@ class Control extends Model
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class);
+    }
+
+    public function signer()
+    {
+        return $this->belongsTo(User::class, 'signer_id');
     }
 
     public function isReceiving()
