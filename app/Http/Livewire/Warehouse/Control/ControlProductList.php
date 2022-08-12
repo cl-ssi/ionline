@@ -6,6 +6,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
+use App\Services\SignatureService;
 use Livewire\Component;
 
 class ControlProductList extends Component
@@ -134,6 +135,9 @@ class ControlProductList extends Component
         $this->control->update([
             'status' => false
         ]);
+
+        if($this->control->isReceiving())
+            new SignatureService($this->control);
 
         session()->flash('success', 'El ' . $this->control->type_format . ' fue cargado exitosamente.');
 
