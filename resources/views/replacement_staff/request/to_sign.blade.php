@@ -99,21 +99,25 @@
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>
                     <td class="text-center">
-                      @foreach($requestReplacementStaff->RequestSign as $sign)
-                        @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                          <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        @foreach($requestReplacementStaff->RequestSign as $sign)
+                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                            <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                            @endif
+                            @if($sign->request_status == 'accepted')
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                </span>
+                            @endif
+                            @if($sign->request_status == 'rejected')
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                </span>
+                            @endif
+                        @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
                         @endif
-                        @if($sign->request_status == 'accepted')
-                            <span style="color: green;">
-                                <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
-                            </span>
-                        @endif
-                        @if($sign->request_status == 'rejected')
-                            <span style="color: Tomato;">
-                                <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
-                            </span>
-                        @endif
-                      @endforeach
                     </td>
                     <td>
                         <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
@@ -156,7 +160,7 @@
             </thead>
             <tbody class="small">
                 @foreach($requests_to_sign as $requestReplacementStaff)
-                <tr>
+                <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':'' }}" >
                     <td>{{ $requestReplacementStaff->id }}<br>
                         @switch($requestReplacementStaff->request_status)
                             @case('pending')
@@ -174,6 +178,10 @@
                             @default
                                 Default case...
                         @endswitch
+                        <br>
+                        @if($requestReplacementStaff->sirh_contract)
+                            <i class="fas fa-file-signature"></i>
+                        @endif
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
@@ -194,21 +202,25 @@
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>
                     <td class="text-center">
-                      @foreach($requestReplacementStaff->RequestSign as $sign)
-                        @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                          <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        @foreach($requestReplacementStaff->RequestSign as $sign)
+                            @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                            <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                            @endif
+                            @if($sign->request_status == 'accepted')
+                                <span style="color: green;">
+                                    <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                </span>
+                            @endif
+                            @if($sign->request_status == 'rejected')
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                </span>
+                            @endif
+                        @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
                         @endif
-                        @if($sign->request_status == 'accepted')
-                            <span style="color: green;">
-                                <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
-                            </span>
-                        @endif
-                        @if($sign->request_status == 'rejected')
-                            <span style="color: Tomato;">
-                                <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
-                            </span>
-                        @endif
-                      @endforeach
                     </td>
                     <td>
                         <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"

@@ -137,7 +137,7 @@
                 @endcan
 
 
-                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
+                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id != 1)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -346,7 +346,7 @@
                         @endcan
 
                         @canany(['Shift Management: view'])
-                        <a class="dropdown-item {{ active('rrhh.users.index') }}"
+                        <a class="dropdown-item {{ active('rrhh.shiftManag.index') }}"
                             href="{{ route('rrhh.shiftManag.index') }}">
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>

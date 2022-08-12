@@ -119,6 +119,10 @@
                               </span>
                             @endif
                         @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
+                        @endif
                     </td>
                     <td>
                         @if($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
@@ -134,7 +138,7 @@
 
                         @elseif($requestReplacementStaff->technicalEvaluation)
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                   class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                             </span>
                         @else
@@ -177,7 +181,7 @@
             </thead>
             <tbody class="small">
                 @foreach($requests as $requestReplacementStaff)
-                <tr>
+                <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':'' }}">
                     <td>
                         {{ $requestReplacementStaff->id }} <br>
                         @switch($requestReplacementStaff->request_status)
@@ -196,6 +200,10 @@
                             @default
                                 Default case...
                         @endswitch
+                        <br>
+                        @if($requestReplacementStaff->sirh_contract)
+                            <i class="fas fa-file-signature"></i>
+                        @endif
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
@@ -237,10 +245,14 @@
                               </span>
                             @endif
                         @endforeach
+                        </br>
+                        @if($requestReplacementStaff->request_id != NULL)
+                            <span class="badge badge-info">Continuidad</span>
+                        @endif
                     </td>
                     <td>
                       @if($requestReplacementStaff->technicalEvaluation)
-                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                       @else
                         <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"

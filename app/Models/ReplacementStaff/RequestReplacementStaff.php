@@ -186,6 +186,14 @@ class RequestReplacementStaff extends Model
         return $numberDays;
     }
 
+    public function getCurrentContinuity($requestReplacementStaff) {
+        if($requestReplacementStaff->requestChilds->count() > 0){
+            if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
+                return  $currentContinuity = 'no current';
+            }
+        }
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
