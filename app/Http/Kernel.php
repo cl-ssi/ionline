@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'ensure.product' => \App\Http\Middleware\Warehouse\EnsureProduct::class,
         'ensure.category' => \App\Http\Middleware\Warehouse\EnsureCategory::class,
         'ensure.destination' => \App\Http\Middleware\Warehouse\EnsureDestination::class,
+        'ensure.edit.control' => \App\Http\Middleware\Warehouse\EnsureEditControl::class,
         'ensure.origin' => \App\Http\Middleware\Warehouse\EnsureOrigin::class,
         'ensure.inventory' => \App\Http\Middleware\Inventory\EnsureInventory::class,
         'ensure.movement' => \App\Http\Middleware\Inventory\EnsureMovement::class,
