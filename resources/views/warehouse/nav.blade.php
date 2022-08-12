@@ -109,7 +109,7 @@
                 aria-current="page"
                 href="{{ route('warehouse.invoice-management') }}"
             >
-                <i class="fas fa-dollar-sign"></i> Facturas
+                <i class="fas fa-file-invoice-dollar"></i> Facturas
             </a>
         </li>
     @endcan
