@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class ControlController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('ensure.edit.control')->only('edit');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,7 +85,7 @@ class ControlController extends Controller
     public function pdf(Store $store, Control $control)
     {
         $type = '/';
-        
+
         if($control->isReceiving())
             return view('warehouse.pdf.report-reception', compact('store', 'control', 'type'));
         else
