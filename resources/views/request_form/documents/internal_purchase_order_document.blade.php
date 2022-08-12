@@ -218,13 +218,17 @@
           @foreach($details as $key => $detail)
           <tr>
               <td width="">{{ $key+1 }}</td>
-              <td>{{ $detail->itemRequestForm->article }}</td>
-              <td></td>
-              <td align="right">{{ $detail->quantity }}</td>
-              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->unit_value,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
-              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->expense,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
+              <td>@if($detail->product_id)
+                      {{ optional($detail->product)->name }}
+                  @else
+                      {{ $detail->article }}
+                  @endif</td>
+              <td>{{ $detail->unit_of_measurement }}</td>
+              <td align="right">{{$detail->pivot->quantity}}</td>
+              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
+              <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>
-          @php( $total += $detail->expense)
+          @php( $total += $detail->pivot->expense)
           @endforeach
           <tr align="right">
               <td colspan="4"></td>
