@@ -57,9 +57,10 @@ class SearchUser extends Component
         $this->emit($this->eventName, $this->user_id);
     }
 
-    public function clearSearch()
+    public function clearSearch($emitEvent = true)
     {
-        $this->emit($this->eventName, null);
+        if($emitEvent)
+            $this->emit($this->eventName, null);
 
         $this->showResult = false;
         $this->users = collect([]);
