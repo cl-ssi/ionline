@@ -6,11 +6,11 @@
 
 <br>
 
-<!-- @if($replacementStaff->status == 'selected')
+@if($replacementStaff->status == 'selected')
 <div class="alert alert-info" role="alert">
-    Estimado Usuario: Ud. actualmente se encuentra seleccionado en un proceso de Reemplazo, con fecha de termino {{ $replacementStaff->appl }}
+    <b>Estimado Usuario</b>: Ud. actualmente se encuentra seleccionado en un proceso de Reemplazo, con fecha de termino <b>{{ $replacementStaff->applicants->last()->end_date->format('d-m-Y') }}</b>
 </div>
-@endif -->
+@endif
 
 @if($replacementStaff->profiles->count() == 0)
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
