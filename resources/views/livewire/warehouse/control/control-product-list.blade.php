@@ -86,8 +86,26 @@
                     <button
                         class="btn btn-success"
                         wire:click="finish"
+                        wire:loading.attr="disabled"
+                        wire:target="finish"
+                        @if($control->items->count() == 0)
+                            disabled
+                        @endif
                     >
-                        <i class="fas fa-check"></i> Terminar
+                        <span
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            wire:loading
+                            wire:target="finish"
+                            aria-hidden="true"
+                        >
+                        </span>
+
+                        <span wire:loading.remove wire:target="finish">
+                            <i class="fas fa-check"></i>
+                        </span>
+
+                        Terminar
                     </button>
                 @else
                     <a

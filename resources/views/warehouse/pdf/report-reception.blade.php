@@ -120,15 +120,4 @@
     </tbody>
 </table>
 
-<br>
-
-<div id="firmas">
-    <div class="center" style="width: 49%">
-        <span class="uppercase">Encargado de bodega</span>
-    </div>
-    <div class="center" style="width: 49%">
-        <span class="uppercase">Funcionario que recibe</span>
-    </div>
-</div>
-
 @endsection

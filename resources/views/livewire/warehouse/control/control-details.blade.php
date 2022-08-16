@@ -192,12 +192,24 @@
                     readonly
                 >
             </fieldset>
-
         </div>
     @endif
 
     <div class="form-row">
-        <fieldset class="form-group col-md-12">
+        @if($control->isReceiving())
+            <fieldset class="form-group col-md-4">
+                <label for="signer-id">Firmante</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    value="{{ $control->signer->full_name }}"
+                    id="signer-id"
+                    readonly
+                >
+            </fieldset>
+        @endif
+
+        <fieldset class="form-group col-md-8">
             <label for="note">Nota</label>
             <input
                 type="text"
