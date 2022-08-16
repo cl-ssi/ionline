@@ -125,10 +125,17 @@
                 </td>
                 <td>
                   @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
-                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                      <!-- <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
                       <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                             class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
+                      </span> -->
+
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
+                            class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                       </span>
+
+                      
                   @endif
                 </td>
             </tr>
@@ -242,7 +249,7 @@
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                 class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>

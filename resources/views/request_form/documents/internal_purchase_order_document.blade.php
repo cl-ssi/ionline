@@ -218,9 +218,13 @@
           @foreach($details as $key => $detail)
           <tr>
               <td width="">{{ $key+1 }}</td>
-              <td>{{ $detail->itemRequestForm->article }}</td>
-              <td></td>
-              <td align="right">{{ $detail->quantity }}</td>
+              <td>@if($detail->itemRequestForm->product_id)
+                      {{ optional($detail->itemRequestForm->product)->name }}
+                  @else
+                      {{ $detail->itemRequestForm->article }}
+                  @endif</td>
+              <td>{{ $detail->itemRequestForm->unit_of_measurement }}</td>
+              <td align="right">{{$detail->quantity}}</td>
               <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->unit_value,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
               <td align="right">{{$purchasingProcessDetail->purchasingProcess->RequestForm->symbol_currency}}{{ number_format($detail->expense,$purchasingProcessDetail->purchasingProcess->RequestForm->precision_currency,",",".") }}</td>
           </tr>

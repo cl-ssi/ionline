@@ -57,7 +57,7 @@ class TechnicalEvaluationFileController extends Controller
         }
 
         return redirect()
-            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#file')
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation->requestReplacementStaff).'#file')
             ->with('message-success-file', 'Estimado usuario, archivo(s) correctamente ingresado(s).');
     }
 
@@ -107,7 +107,7 @@ class TechnicalEvaluationFileController extends Controller
         Storage::disk('gcs')->delete($technicalEvaluationFile->file);
 
         return redirect()
-            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluationFile->technicalEvaluation).'#file')
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluationFile->technicalEvaluation->requestReplacementStaff).'#file')
             ->with('message-danger-file', 'El archivo ha sido eliminado.');
     }
 

@@ -22,6 +22,7 @@ class ControlCreate extends Component
     public $store_origin_id;
     public $store_destination_id;
     public $organizational_unit_id;
+    public $signer_id;
     public $type_destination;
     public $stores;
     public $programs;
@@ -29,7 +30,8 @@ class ControlCreate extends Component
     public $typeReceptions;
 
     protected $listeners = [
-        'organizationalId'
+        'organizationalId',
+        'signerId'
     ];
 
     public $rulesReceiving = [
@@ -37,6 +39,7 @@ class ControlCreate extends Component
         'note'              => 'nullable|string|min:2|max:255',
         'program_id'        => 'nullable|exists:cfg_programs,id',
         'origin_id'         => 'required|integer|exists:wre_origins,id',
+        'signer_id'         => 'required|integer|exists:users,id'
     ];
 
     public $rulesDispatch = [
@@ -119,5 +122,10 @@ class ControlCreate extends Component
     public function organizationalId($value)
     {
         $this->organizational_unit_id = $value;
+    }
+
+    public function signerId($value)
+    {
+        $this->signer_id = $value;
     }
 }

@@ -10,12 +10,15 @@ use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PurchasingProcessDetail;
+use App\Models\RequestForms\RequestForm;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
+use App\Rrhh\Authority;
+use App\Services\SignatureService;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -32,6 +35,8 @@ class GenerateReception extends Component
     public $note;
     public $program_id;
     public $request_form_id;
+    public $signer_id;
+    public $signer;
     public $disabled_program;
     public $po_code;
     public $po_date;
@@ -63,6 +68,10 @@ class GenerateReception extends Component
 
     public $type_product;
     public $wre_products;
+
+    protected $listeners = [
+        'signerId'
+    ];
 
     public function render()
     {
@@ -106,16 +115,6 @@ class GenerateReception extends Component
 
         if(!$this->error)
         {
-            $this->purchaseOrder = $purchaseOrder;
-            $this->date = now()->format('Y-m-d');
-            $this->error = false;
-            $this->po_code = $purchaseOrder->code;
-            $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
-            $this->supplier_name = $purchaseOrder->supplier_name;
-            $this->program_id = $this->getProgramId($this->po_search);
-            $this->disabled_program = $this->program_id ? true : false;
-            $this->request_form_id = $this->getRequestFormId($this->po_search);
-
             foreach($purchaseOrder->items as $item)
             {
                 $quantity = $this->getMaxQuantity($this->po_search, $item->Correlativo, $item->Cantidad);
@@ -140,6 +139,17 @@ class GenerateReception extends Component
                     $this->po_items[] = $infoItem;
                 }
             }
+
+            $this->purchaseOrder = $purchaseOrder;
+            $this->date = now()->format('Y-m-d');
+            $this->error = false;
+            $this->po_code = $purchaseOrder->code;
+            $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
+            $this->supplier_name = $purchaseOrder->supplier_name;
+            $this->program_id = $this->getProgramId($this->po_search);
+            $this->disabled_program = $this->program_id ? true : false;
+            $this->request_form_id = $this->getRequestFormId($this->po_search);
+            $this->signer_id = $this->getSignerId();
 
             if(count($this->po_items) == 0)
             {
@@ -279,6 +289,29 @@ class GenerateReception extends Component
         return $request_form_id;
     }
 
+    public function getSignerId()
+    {
+        $this->signer = null;
+        $signer_id = null;
+        $authority = null;
+        $requestForm = ($this->request_form_id) ? RequestForm::find($this->request_form_id) : null;
+
+        if($requestForm && $requestForm->userOrganizationalUnit)
+            $authority = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, now()->format('Y-m-d'), 'manager');
+
+        if($authority)
+        {
+            $this->signer = $authority->user;
+            $signer_id = $this->signer->id;
+        }
+        elseif(count($this->po_items) != 0)
+        {
+            session()->flash('danger', 'La orden de compra no posee FR. Debe ingresar un firmante.');
+        }
+
+        return $signer_id;
+    }
+
     public function editProduct($index)
     {
         $this->index_selected = $index;
@@ -357,6 +390,11 @@ class GenerateReception extends Component
         return in_array($barcode, array_column($newArray, 'barcode'));
     }
 
+    public function signerId($value)
+    {
+        $this->signer_id = $value;
+    }
+
     public function resetInputProduct()
     {
         $this->index_selected = null;
@@ -384,8 +422,10 @@ class GenerateReception extends Component
         $this->guide_date = null;
         $this->program_id = null;
         $this->note = null;
-        $this->disabled_program = false;
         $this->request_form_id = null;
+        $this->signer_id = null;
+        $this->signer = null;
+        $this->disabled_program = false;
     }
 
     public function finish()
@@ -410,6 +450,7 @@ class GenerateReception extends Component
             'supplier_id' => $supplier->id,
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
+            'signer_id' => $this->signer_id,
         ]);
 
         foreach($this->po_items as $item)
@@ -444,10 +485,13 @@ class GenerateReception extends Component
             }
         }
 
-        $this->po_search = null;
-        $this->po_items = [];
+        new SignatureService($control);
+
+        $this->emit('clearSearchUser', false);
         $this->resetInputProduct();
         $this->resetInputReception();
+        $this->po_search = null;
+        $this->po_items = [];
 
         session()->flash('success', 'El nuevo ingreso fue guardado exitosamente.');
     }

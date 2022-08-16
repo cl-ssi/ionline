@@ -215,6 +215,36 @@
                 </span>
             @enderror
         </fieldset>
+
+        <fieldset class="form-group col-md-4">
+            <label for="signer-id" class="form-label">Firmante</label>
+            @if($signer)
+                <input
+                    type="text"
+                    class="form-control"
+                    value="{{ $signer->full_name }}"
+                    readonly
+                >
+            @else
+                @livewire('users.search-user', [
+                    'smallInput' => true,
+                    'placeholder' => 'Ingrese un nombre',
+                    'eventName' => 'signerId',
+                    'tagId' => 'signer-id',
+                ])
+
+                <input
+                    class="form-control @error('signer_id') is-invalid @enderror"
+                    type="hidden"
+                >
+
+                @error('signer_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            @endif
+        </fieldset>
     </div>
 
     <div class="my-2">
