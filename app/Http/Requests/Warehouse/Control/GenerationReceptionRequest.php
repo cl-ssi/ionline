@@ -32,6 +32,7 @@ class GenerationReceptionRequest extends FormRequest
             'guide_date'        => 'nullable|date_format:Y-m-d',
             'note'              => 'nullable|string|min:1|max:255',
             'program_id'        => 'nullable|exists:cfg_programs,id',
+            'signer_id'         => 'required|integer|exists:users,id'
         ];
     }
 }

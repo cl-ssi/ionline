@@ -99,11 +99,19 @@
                 <tr>
                     <td class="text-center">
                         <a
-                            href="{{ route('warehouse.controls.edit', [
-                                'store' => $store,
-                                'control' => $control,
-                                'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
-                            ]) }}"
+                            @if($control->isClose())
+                                href="{{ route('warehouse.control.add-product', [
+                                    'store' => $store,
+                                    'control' => $control,
+                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                                ]) }}"
+                            @else
+                                href="{{ route('warehouse.controls.edit', [
+                                    'store' => $store,
+                                    'control' => $control,
+                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                                ]) }}"
+                            @endif
                             class="btn btn-sm btn-outline-secondary"
                         >
                             <i class="fas fa-edit"></i> {{ $control->id }}
@@ -177,9 +185,6 @@
                                 <i class="fas fa-file-pdf"></i>
                             </a>
                         @endif
-                        {{-- <button class="btn btn-sm btn-success" wire:click="sendSignature({{ $control }})">
-                            <i class="fas fa-plus"></i>
-                        </button> --}}
                     </td>
                 </tr>
                 @empty

@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\Control;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
