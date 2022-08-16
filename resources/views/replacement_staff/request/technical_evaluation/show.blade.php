@@ -191,16 +191,15 @@
   @endif
 @endif
 
-{{-- dd(App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff)) --}}
-
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation &&
-          $requestReplacementStaff->end_date < now()->toDateString() &&
-            $requestReplacementStaff->technicalEvaluation->date_end != null &&
-              ($requestReplacementStaff->user_id == Auth::user()->id || 
-                $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id) &&
-                    App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no current')
+            $requestReplacementStaff->end_date < now()->toDateString() &&
+                $requestReplacementStaff->technicalEvaluation->date_end != null &&
+                    ($requestReplacementStaff->user_id == Auth::user()->id || 
+                        $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id) &&
+                            (App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no current' || 
+                                App\Models\ReplacementStaff\RequestReplacementStaff::getCurrentContinuity($requestReplacementStaff) == 'no childs'))
             <a class="btn btn-success float-right btn-sm" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
                 <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
         @endif
@@ -391,11 +390,11 @@
             </tr>
         </thead>
         <tbody class="small">
-            @foreach($requestReplacementStaff->requestChilds as $requestReplacementStaff)
+            @foreach($requestReplacementStaff->requestChilds as $requestChild)
             <tr>
                 <td>
-                    {{ $requestReplacementStaff->id }} <br>
-                    @switch($requestReplacementStaff->request_status)
+                    {{ $requestChild->id }} <br>
+                    @switch($requestChild->request_status)
                         @case('pending')
                             <i class="fas fa-clock"></i>
                             @break
@@ -416,33 +415,33 @@
                             Default case...
                     @endswitch
                 </td>
-                <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
-                <td>{{ $requestReplacementStaff->name }}</td>
-                <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                <td style="width: 8%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
-                    {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
+                <td>{{ $requestChild->created_at->format('d-m-Y H:i:s') }}</td>
+                <td>{{ $requestChild->name }}</td>
+                <td class="text-center">{{ $requestChild->degree }}</td>
+                <td>{{ $requestChild->legalQualityManage->NameValue }}</td>
+                <td style="width: 8%">{{ $requestChild->start_date->format('d-m-Y') }} <br>
+                    {{ $requestChild->end_date->format('d-m-Y') }}
                 </td>
-                <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
-                    @if($requestReplacementStaff->getNumberOfDays() > 1)
+                <td class="text-center">{{ $requestChild->getNumberOfDays() }}
+                    @if($requestChild->getNumberOfDays() > 1)
                         días
                     @else
                         dia
                     @endif
                 </td>
                 <td>
-                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
-                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                    {{ $requestChild->fundamentManage->NameValue }}<br>
+                    {{ $requestChild->fundamentDetailManage->NameValue }}
                 </td>
                 <td>
-                    {{ $requestReplacementStaff->WorkDayValue }}
+                    {{ $requestChild->WorkDayValue }}
                 </td>
-                <td>{{ $requestReplacementStaff->user->FullName }}<br>
-                    {{ $requestReplacementStaff->organizationalUnit->name }}
+                <td>{{ $requestChild->user->FullName }}<br>
+                    {{ $requestChild->organizationalUnit->name }}
                 </td>
                 <td>
-                  @if($requestReplacementStaff->technicalEvaluation)
-                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff)}}"
+                  @if($requestChild->technicalEvaluation)
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestChild)}}"
                                 class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                   @endif
                 </td>

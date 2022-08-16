@@ -171,9 +171,18 @@
                                 class="dropdown-item {{ active('warehouse.invoice-management') }}"
                                 href="{{ route('warehouse.invoice-management') }}"
                             >
-                                <i class="fas fa-dollar-sign"></i> Facturas
+                                <i class="fas fa-file-invoice-dollar"></i> Facturas
                             </a>
-                        @endcan('')
+                        @endcan
+
+                        @can('Store: maintainer programs')
+                            <a
+                                class="dropdown-item"
+                                href="{{ route('parameters.programs.index')}}"
+                            >
+                                <i class="fas fa-box-open"></i> Programas
+                            </a>
+                        @endcan
 
                         @hasanyrole('Store: admin|Store: user|Store: Super admin')
                             @forelse(Auth::user()->stores as $store)

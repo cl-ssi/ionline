@@ -13,9 +13,9 @@
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
             </div>
 
-                @yield('content')
+            @yield('content')
 
-            <div class="pie_pagina seis center">
+            <div class="pie_pagina seis center" style="height: 20px;">
                 <span class="uppercase">{{ env('APP_SS') }}</span><br>
                 {{ env('APP_SS_ADDRESS') }} -
                 Fono: {{ env('APP_SS_TELEPHONE') }} -

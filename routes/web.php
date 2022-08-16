@@ -359,7 +359,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
-            Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/{requestReplacementStaff}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
@@ -623,7 +623,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
             Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
         });
-    
+
 
         Route::get('/next', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToNextMonth'])->name('shiftManag.nextMonth')->middleware('auth');
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
@@ -1584,6 +1584,10 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 */
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
+    Route::get('/info/info_circular_n2_2022', function () {
+        return Storage::disk('gcs')->response('ionline/request_forms/info/circular_n2_2022.pdf');
+    })->name('info_circular_n2_2022');
+
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
     Route::get('/all_forms', [RequestFormController::class, 'all_forms'])->name('all_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
