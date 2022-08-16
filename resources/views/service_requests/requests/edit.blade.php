@@ -265,7 +265,7 @@
 				<option value="DIURNO PASADO A TURNO" @if($serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') selected @endif >DIURNO PASADO A TURNO</option>
 				<option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
 				<option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
-				<!-- <option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option> -->
+				<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
 
 				<option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
 
@@ -1052,7 +1052,7 @@
 			$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 			$("#working_day_type option[value='HORA MÉDICA']").show();
 			$("#working_day_type option[value='HORA EXTRA']").show();
-			// $("#working_day_type option[value='TURNO EXTRA']").show();
+			$("#working_day_type option[value='TURNO EXTRA']").show();
 
 			$("#contractual_condition").prop('required',true);
 
@@ -1072,7 +1072,7 @@
 			$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 			$("#working_day_type option[value='HORA MÉDICA']").hide();
 			$("#working_day_type option[value='HORA EXTRA']").hide();
-			// $("#working_day_type option[value='TURNO EXTRA']").hide();
+			$("#working_day_type option[value='TURNO EXTRA']").hide();
 
 			$("#contractual_condition").prop('required',false);
 		}
