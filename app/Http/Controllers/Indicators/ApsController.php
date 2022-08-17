@@ -74,6 +74,13 @@ class ApsController extends Controller
                     }
                 }
 
+                //Ruta rem con división incluída / num
+                $dividedBy = 1;
+                if(Str::contains($factor_source, '/')){
+                    $findNum = array_map('trim', explode('/',$factor_source));
+                    $dividedBy = 1 / $findNum[1];
+                }
+                
                 $establishment_cods = null;
 
                 if($establishment_type == 'aps'){
@@ -124,7 +131,7 @@ class ApsController extends Controller
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
                         foreach($result as $item){
-                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
+                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor * $dividedBy]);
                             if($establishment_type == 'aps') {
                                 $value->commune = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->comuna;
                                 $value->establishment = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->alias_estab;
@@ -160,7 +167,7 @@ class ApsController extends Controller
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
                         foreach($result as $item){
-                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor]);
+                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor * $dividedBy]);
                             if($establishment_type == 'aps') {
                                 $value->commune = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->comuna;
                                 $value->establishment = $iaps->establishments->firstWhere('Codigo', $item->IdEstablecimiento)->alias_estab;
