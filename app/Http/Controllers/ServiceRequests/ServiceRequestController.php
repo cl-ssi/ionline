@@ -754,6 +754,9 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
+    set_time_limit(7200);
+    ini_set('memory_limit', '2048M');
+
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
 
