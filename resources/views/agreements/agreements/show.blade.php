@@ -478,7 +478,7 @@
                             {{--@if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)--}}
                             @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
                                 @if($addendum->file)
-                                <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
+                                @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)<a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a>@endif
                                 <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord'.($agreement->program_id == 3 ? 'Withdrawal' : ''), [$addendum, 'res'] )}}">
                                     <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
                                 </span>
