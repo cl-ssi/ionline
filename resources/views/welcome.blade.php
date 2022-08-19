@@ -145,9 +145,6 @@
                         <a class="btn btn-outline-primary btn-block" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Sirmx</a>
                     </li>
                     <li class="list-group-item list-group-item-action">
-                        <a class="btn btn-outline-primary btn-block" href="http://intranet.saludiquique.cl">Intranet</a>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
                         <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">iOnline</a>
                     </li>
                     <hr class="">
