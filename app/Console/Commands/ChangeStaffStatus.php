@@ -40,7 +40,7 @@ class ChangeStaffStatus extends Command
     public function handle()
     {
         $applicants = Applicant::where('selected', 1)
-            ->lastests()
+            ->latest()
             ->whereDate('end_date', '=', Carbon::now()->subDays(1)->toDateString())
             ->get();
 
