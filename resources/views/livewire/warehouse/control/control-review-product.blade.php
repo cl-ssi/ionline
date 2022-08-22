@@ -44,7 +44,9 @@
                         @if($index === $indexEdit)
                             @if($can_edit)
                                 <div class="form-group">
-                                    <label class="my-0" for="type-product">Tipo de Producto</label>
+                                    <label class="my-0" for="type-product">
+                                        Tipo de Producto
+                                    </label>
                                     <select
                                         wire:model.debounce.1500ms="type_wre_product"
                                         id="type-product"
@@ -86,7 +88,9 @@
                             @else
 
                                 <fieldset class="form-group">
-                                    <label class="my-0" for="search-product">Buscar Producto o Servicio</label>
+                                    <label class="my-0" for="search-product">
+                                        Buscar Producto o Servicio
+                                    </label>
                                     <input
                                         class="form-control form-control-sm"
                                         type="text"
@@ -96,7 +100,9 @@
                                 </fieldset>
 
                                 <fieldset class="form-group">
-                                    <label class="my-0" for="product-id">Selecciona Producto o Servicio</label>
+                                    <label class="my-0" for="product-id">
+                                        Selecciona Producto o Servicio
+                                    </label>
                                     <input
                                         class="form-control form-control-sm @error('unspsc_product_id') is-invalid @enderror"
                                         type="hidden"
@@ -145,7 +151,7 @@
                                         </span>
                                             @break
                                         @case(2)
-                                            Selecciono un Producto existente
+                                            Seleccionado un Producto existente
                                             @break
                                         @default
                                     @endswitch
