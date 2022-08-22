@@ -4,7 +4,10 @@
             <h5>Categorías: {{ $store->name }}</h5>
         </div>
         <div class="col text-right">
-            <a href="{{ route('warehouse.categories.create', $store) }}" class="btn btn-sm btn-primary">
+            <a
+                href="{{ route('warehouse.categories.create', ['store' => $store, 'nav' => $nav]) }}"
+                class="btn btn-sm btn-primary"
+            >
                 <i class="fa fa-plus"></i> Crear Categoría
             </a>
         </div>
@@ -40,7 +43,7 @@
                 @forelse($categories as $category)
                 <tr wire:loading.remove wire:target="search">
                     <td class="text-center">
-                        <a href="{{ route('warehouse.categories.edit', ['store' => $store, 'category' => $category]) }}"
+                        <a href="{{ route('warehouse.categories.edit', ['store' => $store, 'category' => $category, 'nav' => $nav]) }}"
                             class="btn btn-sm btn-outline-secondary">
                             <i class="fas fa-edit"></i>
                             {{ $category->id }}

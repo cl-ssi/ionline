@@ -4,7 +4,10 @@
             <h5>Destinos: {{ $store->name }}</h5>
         </div>
         <div class="col text-right">
-            <a href="{{ route('warehouse.destinations.create', $store) }}" class="btn btn-sm btn-primary">
+            <a
+                href="{{ route('warehouse.destinations.create', ['store' => $store, 'nav' => $nav]) }}"
+                class="btn btn-sm btn-primary"
+            >
                 <i class="fa fa-plus"></i> Crear Destino
             </a>
         </div>
@@ -47,7 +50,8 @@
                         <a
                             href="{{ route('warehouse.destinations.edit', [
                                 'store' => $store,
-                                'destination' => $destination
+                                'destination' => $destination,
+                                'nav' => $nav,
                             ]) }}"
                             class="btn btn-sm btn-outline-secondary"
                         >

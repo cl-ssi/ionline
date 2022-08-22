@@ -3,9 +3,14 @@
 
     @include('warehouse.destinations.partials.form', [
         'store' => $store,
-        'destination' => $destination
+        'destination' => $destination,
     ])
 
     <button wire:click="updateDestination" class="btn btn-primary">Actualizar</button>
-    <a href="{{ route('warehouse.destinations.index', $store) }}" class="btn btn-outline-primary">Cancelar</a>
+    <a
+        href="{{ route('warehouse.destinations.index', ['store' => $store, 'nav' => $nav]) }}"
+        class="btn btn-outline-primary"
+    >
+        Cancelar
+    </a>
 </div>
