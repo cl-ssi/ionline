@@ -10,6 +10,15 @@
 
 <br>
 
+@if($replacementStaff->status == 'selected')
+<div class="alert alert-info" role="alert">
+    Staff actualmente se encuentra seleccionado en un proceso de Reemplazo N°
+    <a target="_blank" href="{{ route('replacement_staff.request.technical_evaluation.show', $replacementStaff->applicants->last()->technicalEvaluation->requestReplacementStaff) }}">
+    {{$replacementStaff->applicants->last()->technicalEvaluation->requestReplacementStaff->id }} - {{ $replacementStaff->applicants->last()->technicalEvaluation->requestReplacementStaff->name}}</a>, 
+    con fecha de termino <b>{{ $replacementStaff->applicants->last()->end_date->format('d-m-Y') }}</b>
+</div>
+@endif
+
 <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.update', $replacementStaff) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
@@ -85,6 +94,7 @@
               <option value="">Seleccione...</option>
               <option value="immediate_availability" {{ ($replacementStaff->status == 'immediate_availability')?'selected':'' }}>Inmediata</option>
               <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
+              <option value="selected" {{ ($replacementStaff->status == 'selected')?'selected':'' }}>Seleccionado</option>
           </select>
       </fieldset>
       <div class="col">
