@@ -380,7 +380,16 @@
 
     @livewire('inventory.add-discharge-date', ['inventory' => $inventory])
 
-    <h5 class="mt-3">Historial del ítem</h5>
+    <div class="row">
+        <div class="col">
+            <h5 class="mt-3">Historial del ítem</h5>
+            @livewire('inventory.movement-index', ['inventory' => $inventory])
+        </div>
+        <div class="col">
+        <h5 class="mt-3">Facturas</h5>
+            @livewire('warehouse.invoices.list-invoices', ['control' => $inventory->control])
+        </div>
+    </div>
 
-    @livewire('inventory.movement-index', ['inventory' => $inventory])
+
 </div>
