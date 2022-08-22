@@ -17,7 +17,8 @@ class StoreUser extends Pivot
         'user_id',
         'store_id',
         'role_id',
-        'status'
+        'status',
+        'is_visator',
     ];
 
     public function user()
@@ -33,5 +34,10 @@ class StoreUser extends Pivot
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function isVisator()
+    {
+        return ($this->is_visator == 1);
     }
 }
