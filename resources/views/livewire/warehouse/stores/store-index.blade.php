@@ -38,31 +38,34 @@
                 @forelse($stores as $store)
                 <tr wire:loading.remove wire:target="search">
                     <td class="text-center">
-                        <a href="{{ route('warehouse.stores.edit', $store) }}" class="btn btn-sm btn-outline-secondary">
+                        <a
+                            href="{{ route('warehouse.stores.edit', $store) }}"
+                            class="btn btn-sm btn-outline-secondary"
+                        >
                             <i class="fas fa-edit"></i>
                             {{ $store->id }}
                         </a>
                     </td>
                     <td>{{ $store->name }}</td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.stores.users', $store) }}">
+                        <a href="{{ route('warehouse.stores.users', ['store' => $store, 'nav' => 'nav-admin']) }}">
                             {{ $store->users->count() }} usuarios
                         </a>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.categories.index', $store) }}">
+                        <a href="{{ route('warehouse.categories.index', ['store' => $store, 'nav' => 'nav-admin']) }}">
                             {{ $store->categories->count() }} categorías
                         </a>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.products.index', $store) }}">
+                        <a href="{{ route('warehouse.products.index', ['store' => $store, 'nav' => 'nav-admin']) }}">
                             {{ $store->products->count() }} productos
                         </a>
                     </td>
                     <td class="text-center">
                         <a
                             class="btn btn-sm btn-outline-secondary"
-                            href="{{ route('warehouse.store.report', ['store' => $store])}}"
+                            href="{{ route('warehouse.store.report', ['store' => $store, 'nav' => 'nav-admin'])}}"
                             title="Reporte Bincard"
                         >
                             <i class="fas fa-file-alt"></i>
@@ -70,14 +73,14 @@
                         <div class="btn-group" role="group">
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.origins.index', ['store' => $store]) }}"
+                                href="{{ route('warehouse.origins.index', ['store' => $store, 'nav' => 'nav-admin']) }}"
                                 title="Origenes"
                             >
                                 <i class="fas fa-download"></i>
                             </a>
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.destinations.index', ['store' => $store]) }}"
+                                href="{{ route('warehouse.destinations.index', ['store' => $store, 'nav' => 'nav-admin']) }}"
                                 title="Destinos"
                             >
                                 <i class="fas fa-upload"></i>
@@ -87,14 +90,22 @@
                         <div class="btn-group" role="group">
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => 'receiving']) }}"
+                                href="{{ route('warehouse.controls.index', [
+                                    'store' => $store,
+                                    'type' => 'receiving',
+                                    'nav' => 'nav-admin',
+                                ]) }}"
                                 title="Ingresos"
                             >
                                 <i class="fas fa-shopping-basket"></i>
                             </a>
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => 'dispatch']) }}"
+                                href="{{ route('warehouse.controls.index', [
+                                    'store' => $store,
+                                    'type' => 'dispatch',
+                                    'nav' => 'nav-admin',
+                                ]) }}"
                                 title="Egresos"
                             >
                                 <i class="fas fa-shipping-fast"></i>

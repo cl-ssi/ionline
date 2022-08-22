@@ -32,7 +32,8 @@
                                         class="dropdown-item"
                                         href="{{ route('warehouse.controls.create', [
                                             'store' => $store,
-                                            'type' => 'receiving'
+                                            'type' => 'receiving',
+                                            'nav' => $nav,
                                         ]) }}"
                                     >
                                         <i class="fas fa-download"></i> Ingreso Normal
@@ -43,6 +44,7 @@
                                         class="dropdown-item"
                                         href="{{ route('warehouse.generate-reception', [
                                             'store' => $store,
+                                            'nav' => $nav,
                                         ]) }}"
                                     >
                                         <i class="fas fa-shopping-cart"></i> Ingreso Orden de Compra
@@ -59,7 +61,8 @@
                             class="btn btn-primary"
                             href="{{ route('warehouse.controls.create', [
                                 'store' => $store,
-                                'type' => 'dispatch'
+                                'type' => 'dispatch',
+                                'nav' => $nav,
                             ]) }}"
                         >
                             <i class="fas fa-plus"></i> Nuevo Egreso
@@ -103,13 +106,15 @@
                                 href="{{ route('warehouse.control.add-product', [
                                     'store' => $store,
                                     'control' => $control,
-                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch',
+                                    'nav' => $nav,
                                 ]) }}"
                             @else
                                 href="{{ route('warehouse.controls.edit', [
                                     'store' => $store,
                                     'control' => $control,
-                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                                    'type' => $control->isReceiving() ? 'receiving' : 'dispatch',
+                                    'nav' => $nav,
                                 ]) }}"
                             @endif
                             class="btn btn-sm btn-outline-secondary"
@@ -121,14 +126,13 @@
                     <td>
                         @if($control->isDispatch())
                             @switch($control->type_dispatch_id)
-                                @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-                                    @if($control->isDestinationExternal())
-                                        {{ optional($control->destination)->name }}
-                                    @else
-                                        {{ optional($control->organizationalUnit)->establishment->name }}
-                                        <br>
-                                        {{ optional($control->organizationalUnit)->name }}
-                                    @endif
+                                @case(\App\Models\Warehouse\TypeDispatch::internal())
+                                    {{ optional($control->organizationalUnit)->establishment->name }}
+                                    <br>
+                                    {{ optional($control->organizationalUnit)->name }}
+                                    @break
+                                @case(\App\Models\Warehouse\TypeDispatch::external())
+                                    {{ optional($control->destination)->name }}
                                     @break
                                 @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
                                     {{ optional($control->typeDispatch)->name }}
@@ -140,9 +144,6 @@
                             <br>
                             <small>
                                 {{ optional($control->typeDispatch)->name }}
-                                @if($control->isDestinationExternal() || $control->isDestinationInternal())
-                                    - Destino {{ $control->type_destination_format }}
-                                @endif
                             </small>
                         @else
                             @switch($control->type_reception_id)

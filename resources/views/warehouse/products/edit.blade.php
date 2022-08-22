@@ -4,11 +4,12 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 @livewire('warehouse.products.product-edit', [
     'store' => $store,
-    'product' => $product
+    'product' => $product,
+    'nav' => $nav,
 ])
 
 @endsection
