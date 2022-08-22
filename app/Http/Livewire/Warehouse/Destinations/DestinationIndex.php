@@ -13,6 +13,7 @@ class DestinationIndex extends Component
 
     public $store;
     public $search;
+    public $nav;
 
     public function render()
     {

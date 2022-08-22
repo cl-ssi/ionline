@@ -17,6 +17,7 @@ class ProductCreate extends Component
     public $category_id;
     public $unspsc_product_id;
     public $search_unspsc_product;
+    public $nav;
 
     protected $listeners = [
         'myProductId'
@@ -43,7 +44,10 @@ class ProductCreate extends Component
         $dataValidated['store_id'] = $this->store->id;
 
         Product::create($dataValidated);
-        return redirect()->route('warehouse.products.index', $this->store);
+        return redirect()->route('warehouse.products.index', [
+            'store' => $this->store,
+            'nav' => $this->nav,
+        ]);
     }
 
     public function delete(Product $product)
