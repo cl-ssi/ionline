@@ -14,19 +14,6 @@
                 readonly
             >
         </fieldset>
-
-        @if($control->isDestinationInternal() || $control->isDestinationExternal() )
-            <fieldset class="form-group col-md-4">
-                <label for="type-destination">Tipo Destino</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ $control->type_destination_format }}"
-                    id="type-destination"
-                    readonly
-                >
-            </fieldset>
-        @endif
     </div>
 
     <div class="form-row">
@@ -53,19 +40,39 @@
         </fieldset>
 
         @switch($control->type_dispatch_id)
-            @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-                @if($control->isDestinationExternal())
-                    <fieldset class="form-group col-md-4">
-                        <label for="destination-id">Destino</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            value="{{ optional($control->destination)->name }}"
-                            id="destination-id"
-                            readonly
-                        >
-                    </fieldset>
-                @endif
+            @case(\App\Models\Warehouse\TypeDispatch::internal())
+                <fieldset class="form-group col-md-5">
+                    <label for="establishment-id">Establecimiento</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ optional($control->organizationalUnit)->establishment->name }}"
+                        id="establishment-id"
+                        readonly
+                    >
+                </fieldset>
+                <fieldset class="form-group col-md-7">
+                    <label for="organizational-unit-id">Unidad Organizacional</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ optional($control->organizationalUnit)->name }}"
+                        id="organizational-unit-id"
+                        readonly
+                    >
+                </fieldset>
+            @break
+            @case(\App\Models\Warehouse\TypeDispatch::external())
+                <fieldset class="form-group col-md-4">
+                    <label for="destination-id">Destino</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ optional($control->destination)->name }}"
+                        id="destination-id"
+                        readonly
+                    >
+                </fieldset>
                 @break
             @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
                 <fieldset class="form-group col-md-4">
@@ -120,31 +127,6 @@
                 @break
         @endswitch
     </div>
-
-    @if($control->isDestinationInternal())
-        <div class="form-row">
-            <fieldset class="form-group col-md-5">
-                <label for="establishment-id">Establecimiento</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ optional($control->organizationalUnit)->establishment->name }}"
-                    id="establishment-id"
-                    readonly
-                >
-            </fieldset>
-            <fieldset class="form-group col-md-7">
-                <label for="organizational-unit-id">Unidad Organizacional</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ optional($control->organizationalUnit)->name }}"
-                    id="organizational-unit-id"
-                    readonly
-                >
-            </fieldset>
-        </div>
-    @endif
 
     @if($control->isPurchaseOrder())
         <div class="form-row">
@@ -202,7 +184,7 @@
                 <input
                     type="text"
                     class="form-control"
-                    value="{{ $control->signer->full_name }}"
+                    value="{{ optional($control->signer)->full_name }}"
                     id="signer-id"
                     readonly
                 >

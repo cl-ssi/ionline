@@ -112,7 +112,8 @@
                         class="btn btn-primary"
                         href="{{ route('warehouse.controls.index', [
                             'store' => $store,
-                            'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+                            'type' => $control->isReceiving() ? 'receiving' : 'dispatch',
+                            'nav' => $nav,
                         ]) }}"
                     >
                         <i class="fas fa-arrow-circle-left"></i> Salir
