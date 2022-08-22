@@ -111,7 +111,7 @@
 				<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
 				<option value="HORA EXTRA">HORA EXTRA</option>
-				<option value="TURNO EXTRA">TURNO EXTRA</option>
+				<!-- <option value="TURNO EXTRA">TURNO EXTRA</option> -->
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 				<option value="QUIRURGICO">QUIRÚRGICO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
@@ -546,7 +546,7 @@
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 				$("#working_day_type option[value='HORA MÉDICA']").show();
 				$("#working_day_type option[value='HORA EXTRA']").show();
-				$("#working_day_type option[value='TURNO EXTRA']").show();
+				// $("#working_day_type option[value='TURNO EXTRA']").show();
 
 				$("#contractual_condition").prop('required', true);
 
@@ -567,7 +567,7 @@
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 				$("#working_day_type option[value='HORA MÉDICA']").hide();
 				$("#working_day_type option[value='HORA EXTRA']").hide();
-				$("#working_day_type option[value='TURNO EXTRA']").hide();
+				// $("#working_day_type option[value='TURNO EXTRA']").hide();
 
 				$("#contractual_condition").prop('required', false);
 			}

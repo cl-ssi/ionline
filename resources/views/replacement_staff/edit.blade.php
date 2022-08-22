@@ -6,6 +6,12 @@
 
 <br>
 
+@if($replacementStaff->status == 'selected')
+<div class="alert alert-info" role="alert">
+    <b>Estimado Usuario</b>: Ud. actualmente se encuentra seleccionado en un proceso de Reemplazo, con fecha de termino <b>{{ $replacementStaff->applicants->last()->end_date->format('d-m-Y') }}</b>
+</div>
+@endif
+
 @if($replacementStaff->profiles->count() == 0)
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         Estimado Usuario: Para una correcta postulación, favor completar su <b>Perfil Profesional</b>.
@@ -100,7 +106,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-6">
                     <label for="for_status">Disponibilidad</label>
-                    <select name="status" id="for_status" class="form-control" required>
+                    <select name="status" id="for_status" class="form-control" {{ ($replacementStaff->status == 'selected')?'disabled':'' }} required>
                         <option value="">Seleccione...</option>
                         <option value="immediate_availability" {{ ($replacementStaff->status == 'immediate_availability')?'selected':'' }}>Inmediata</option>
                         <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>

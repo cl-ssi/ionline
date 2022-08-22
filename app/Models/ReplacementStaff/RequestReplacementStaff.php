@@ -188,9 +188,13 @@ class RequestReplacementStaff extends Model
 
     public function getCurrentContinuity($requestReplacementStaff) {
         if($requestReplacementStaff->requestChilds->count() > 0){
-            if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
+            if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString() &&
+                $requestReplacementStaff->requestChilds->last()->request_status != 'pending'){
                 return  $currentContinuity = 'no current';
             }
+        }
+        else{
+            return  $currentContinuity = 'no childs';
         }
     }
 

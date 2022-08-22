@@ -754,6 +754,9 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
+    set_time_limit(7200);
+    ini_set('memory_limit', '2048M');
+
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
 
@@ -761,15 +764,18 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-        return $q->where('establishment_id', $establishment_id);
-      })
-      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-        return $q->whereNotIn('establishment_id', [1, 12]);
-      })
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-      ->orderBy('request_date', 'asc')
-      ->get();
+    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+      return $q->where('establishment_id', $establishment_id);
+    })
+    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+      return $q->whereNotIn('establishment_id', [1, 12]);
+    })
+    // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+    ->where('start_date','>=','2022-01-01 00:00')
+    ->orderBy('request_date', 'asc')
+    ->get();
+
+
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
@@ -784,13 +790,14 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-        return $q->where('establishment_id', $establishment_id);
-      })
-      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-        return $q->whereNotIn('establishment_id', [1, 12]);
-      })
-      ->orderBy('request_date', 'asc')->get();
+    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+      return $q->where('establishment_id', $establishment_id);
+    })
+    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+      return $q->whereNotIn('establishment_id', [1, 12]);
+    })
+    ->where('start_date','>=','2022-01-01 00:00')
+    ->orderBy('request_date', 'asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
