@@ -17,7 +17,7 @@ class TypeDispatch extends Model
         'active',
     ];
 
-    public static function dispatch()
+    public static function internal()
     {
         return 1;
     }
@@ -30,5 +30,10 @@ class TypeDispatch extends Model
     public static function sendToStore()
     {
         return 3;
+    }
+
+    public static function external()
+    {
+        return 4;
     }
 }
