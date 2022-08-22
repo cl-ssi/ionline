@@ -4,11 +4,12 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 @livewire('warehouse.origins.origin-edit', [
     'store' => $store,
-    'origin' => $origin
+    'origin' => $origin,
+    'nav' => $nav,
 ])
 
 @endsection

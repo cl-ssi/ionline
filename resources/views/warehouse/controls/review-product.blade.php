@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 <h4>{{ $control->type_format }} {{ $control->id }}: {{ $store->name }}</h4>
 
@@ -17,6 +17,7 @@
 @livewire('warehouse.control.control-review-product', [
     'store' => $store,
     'control' => $control,
+    'nav' => $nav,
 ])
 
 @endsection
