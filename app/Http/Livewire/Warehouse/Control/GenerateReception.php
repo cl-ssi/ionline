@@ -390,6 +390,16 @@ class GenerateReception extends Component
         return in_array($barcode, array_column($newArray, 'barcode'));
     }
 
+    public function quantityIsEqualToZero()
+    {
+        $newArray = array_filter($this->po_items, function($item) {
+            if($item['quantity'] >= 1)
+                return $item;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        return (count($newArray) == 0) ? true : false;
+    }
+
     public function signerId($value)
     {
         $this->signer_id = $value;
@@ -431,6 +441,15 @@ class GenerateReception extends Component
     public function finish()
     {
         $dataValidated = $this->validate($this->getRulesReception());
+        if($this->quantityIsEqualToZero())
+            throw ValidationException::withMessages(['po_items' => 'Todos los productos de la orden de compra tienen cantidad en cero.']);
+
+        if($this->store->visator == null)
+        {
+            session()->flash('danger', 'Disculpe, la Bodega no tiene visador. Por favor agregue uno.');
+            return;
+        }
+
         $supplier = $this->getSupplier($this->purchaseOrder->supplier_rut);
         $program = Program::find($dataValidated['program_id']);
 
