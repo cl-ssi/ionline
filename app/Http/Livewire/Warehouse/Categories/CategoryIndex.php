@@ -14,10 +14,13 @@ class CategoryIndex extends Component
 
     public $store;
     public $search;
+    public $nav;
 
     public function render()
     {
-        return view('livewire.warehouse.categories.category-index', ['categories' => $this->getCategories()]);
+        return view('livewire.warehouse.categories.category-index', [
+            'categories' => $this->getCategories()
+        ]);
     }
 
     public function getCategories()
