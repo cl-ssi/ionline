@@ -48,8 +48,8 @@ class Product extends Model
     public static function lastBalance(Product $product, Program $program = null)
     {
         $controlItem = ControlItem::query()
-            ->whereHas('control', function($query) {
-                $query->whereConfirm(true);
+            ->whereHas('control', function($query) use($product) {
+                $query->whereConfirm(true)->whereStoreId($product->store->id);
             })
             ->when($program, function ($query) use($program) {
                 $query->whereProgramId($program->id);
