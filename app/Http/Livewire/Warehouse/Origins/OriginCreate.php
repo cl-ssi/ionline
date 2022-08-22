@@ -9,6 +9,7 @@ class OriginCreate extends Component
 {
     public $store;
     public $name;
+    public $nav;
 
     public $rules = [
         'name'  => 'required|string|min:2|max:255',
@@ -28,7 +29,8 @@ class OriginCreate extends Component
         session()->flash('success', "El origen se ha creado exitosamente.");
 
         return redirect()->route('warehouse.origins.index', [
-            'store' => $this->store
+            'store' => $this->store,
+            'nav' => $this->nav,
         ]);
     }
 }

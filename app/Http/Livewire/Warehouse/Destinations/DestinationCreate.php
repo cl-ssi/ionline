@@ -9,6 +9,7 @@ class DestinationCreate extends Component
 {
     public $store;
     public $name;
+    public $nav;
 
     public $rules = [
         'name'  => 'required|string|min:2|max:255',
@@ -28,7 +29,8 @@ class DestinationCreate extends Component
         session()->flash('success', "El destino se ha creado exitosamente.");
 
         return redirect()->route('warehouse.destinations.index', [
-            'store' => $this->store
+            'store' => $this->store,
+            'nav' => $this->nav,
         ]);
     }
 }
