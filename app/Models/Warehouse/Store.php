@@ -53,4 +53,18 @@ class Store extends Model
             ->withPivot(['role_id', 'status'])
             ->withTimestamps();
     }
+
+    public function getVisatorAttribute()
+    {
+        $visator = null;
+
+        $storeUser = StoreUser::query()
+            ->whereIsVisator(true)
+            ->whereStoreId($this->id);
+
+        if($storeUser->exists())
+            $visator = $storeUser->first()->user;
+
+        return $visator;
+    }
 }
