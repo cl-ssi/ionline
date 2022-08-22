@@ -9,6 +9,7 @@ class DestinationEdit extends Component
     public $store;
     public $destination;
     public $name;
+    public $nav;
 
     public $rules = [
         'name'  => 'required|string|min:2|max:255',
@@ -32,7 +33,8 @@ class DestinationEdit extends Component
         session()->flash('success', "El destino fue actualizado el exitosamente.");
 
         return redirect()->route('warehouse.destinations.index', [
-            'store' => $this->store
+            'store' => $this->store,
+            'nav' => $this->nav,
         ]);
     }
 }
