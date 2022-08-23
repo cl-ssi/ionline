@@ -16,7 +16,7 @@
           <option value="Término de contrato anticipado">TÉRMINO DE CONTRATO ANTICIPADO (EFECTIVA DESDE)</option>
           <option value="Atraso">ATRASO</option>
           <!-- <option value="Fuero maternal">FUERO MATERNAL</option> -->
-          <option value="Permiso Parental">PERMISO PARENTAL</option>
+          <!-- <option value="Permiso Parental">PERMISO PARENTAL</option> -->
           <option value="Permiso Excepcional">PERMISO EXCEPCIONAL</option>
         </select>
       </fieldset>
