@@ -7,5 +7,10 @@
     ])
 
     <button wire:click="updateOrigin" class="btn btn-primary">Actualizar</button>
-    <a href="{{ route('warehouse.origins.index', $store)}}" class="btn btn-outline-primary">Cancelar</a>
+    <a
+        href="{{ route('warehouse.origins.index', ['store' => $store, 'nav' => $nav]) }}"
+        class="btn btn-outline-primary"
+    >
+        Cancelar
+    </a>
 </div>

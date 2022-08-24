@@ -7,6 +7,11 @@
     ])
 
     <button wire:click="updateCategory" class="btn btn-primary">Actualizar</button>
-    <a href="{{ route('warehouse.categories.index', $store)}}" class="btn btn-outline-primary">Cancelar</a>
+    <a
+        href="{{ route('warehouse.categories.index', ['store' => $store, 'nav' => $nav]) }}"
+        class="btn btn-outline-primary"
+    >
+        Cancelar
+    </a>
 
 </div>

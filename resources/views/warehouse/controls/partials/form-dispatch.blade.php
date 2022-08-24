@@ -7,7 +7,7 @@
                 <input
                     class="form-check-input"
                     type="radio"
-                    wire:model.debounce.1000ms="type_dispatch_id"
+                    wire:model.debounce.800ms="type_dispatch_id"
                     id="option-{{ $type->id }}"
                     value="{{ $type->id }}"
                 >
@@ -83,84 +83,60 @@
             >
         @endif
     </fieldset>
+</div>
 
-    @if($type_dispatch_id == \App\Models\Warehouse\TypeDispatch::dispatch())
-        <fieldset class="form-group col-md-5">
-            <label for="tpye-destination">Tipo Destino</label>
-            <select
-                class="form-control @error('type_destination') is-invalid @enderror"
-                wire:model.debounce.1000ms="type_destination"
-                id="tpye-destination"
+@if($type_dispatch_id == \App\Models\Warehouse\TypeDispatch::internal())
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label for="establishment-id">Establecimiento</label>
+            @livewire('establishment-search', [
+                'tagId'         => 'establishment-id',
+                'placeholder'   => 'Ingrese un establecimiento',
+            ])
+        </div>
+
+        <div class="form-group col-md-7">
+            <label for="organizational-unit-id">Unidad Organizacional</label>
+            @livewire('organizational-unit-search', [
+                'tagId'         => 'organizational-unit-id',
+                'placeholder'   => 'Ingrese una unidad organizacional',
+                'component'     => ($mode == 'create') ? 'warehouse.control.control-create' : 'warehouse.control.control-edit',
+                'event'         => 'organizationalId',
+            ])
+            <input
+                class="form-control @error('organizational_unit_id') is-invalid @enderror"
+                type="hidden"
             >
-                <option value="">Seleccione un tipo de destino</option>
-                <option value="1">Interno</option>
-                <option value="0">Externo</option>
-            </select>
-            @error('type_destination')
+            @error('organizational_unit_id')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-        </fieldset>
-    @endif
-</div>
-
-@if($type_destination == 1)
-    @if($type_dispatch_id == \App\Models\Warehouse\TypeDispatch::dispatch())
-        <div class="form-row">
-            <div class="form-group col-md-5">
-                <label for="establishment-id">Establecimiento</label>
-                @livewire('establishment-search', [
-                    'tagId'         => 'establishment-id',
-                    'placeholder'   => 'Ingrese un establecimiento',
-                ])
-            </div>
-
-            <div class="form-group col-md-7">
-                <label for="organizational-unit-id">Unidad Organizacional</label>
-                @livewire('organizational-unit-search', [
-                    'tagId'         => 'organizational-unit-id',
-                    'placeholder'   => 'Ingrese una unidad organizacional',
-                    'component'     => ($mode == 'create') ? 'warehouse.control.control-create' : 'warehouse.control.control-edit',
-                    'event'         => 'organizationalId',
-                ])
-                <input
-                    class="form-control @error('organizational_unit_id') is-invalid @enderror"
-                    type="hidden"
-                >
-                @error('organizational_unit_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
         </div>
-    @endif
+    </div>
 @endif
 
 <div class="form-row">
     @switch($type_dispatch_id)
-        @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-            @if($type_destination == 0)
-                <fieldset class="form-group col-md-4">
-                    <label for="destination-id">Destino</label>
-                    <select
-                        class="form-control @error('destination_id') is-invalid @enderror"
-                        wire:model.debounce.1500ms="destination_id"
-                        id="destination-id"
-                    >
-                        <option value="">Selecciona un destino</option>
-                        @foreach($store->destinations as $destination)
-                            <option value="{{ $destination->id }}">{{ $destination->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('destination_id')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </fieldset>
-            @endif
+        @case(\App\Models\Warehouse\TypeDispatch::external())
+            <fieldset class="form-group col-md-4">
+                <label for="destination-id">Destino</label>
+                <select
+                    class="form-control @error('destination_id') is-invalid @enderror"
+                    wire:model.debounce.1500ms="destination_id"
+                    id="destination-id"
+                >
+                    <option value="">Selecciona un destino</option>
+                    @foreach($store->destinations as $destination)
+                        <option value="{{ $destination->id }}">{{ $destination->name }}</option>
+                    @endforeach
+                </select>
+                @error('destination_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
             @break
         @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
             <fieldset class="form-group col-md-4">

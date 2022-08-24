@@ -22,12 +22,18 @@
                                         @endif
                                     </span>
                                     <span class="input-group-text" wire:loading wire:target="search">
-                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        <span
+                                            class="spinner-border spinner-border-sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                        >
+                                        </span>
                                         <span class="sr-only">...</span>
                                     </span>
                                 </div>
 
-                                <input type="text"
+                                <input
+                                    type="text"
                                     id="search"
                                     class="form-control form-control-sm @error('user_id') is-invalid @enderror"
                                     wire:model.debounce.500ms="search"
@@ -52,20 +58,20 @@
                             <ul class="list-group col-12" style="z-index: 3; position: absolute;">
                                 @if($search)
                                     @forelse($users as $user)
-                                    <a wire:click.prevent="addSearchedUser({{ $user }})"
-                                        class="list-group-item list-group-item-action py-1">
-                                        <small>{{ $user->full_name }}</small>
-                                    </a>
+                                        <a wire:click.prevent="addSearchedUser({{ $user }})"
+                                            class="list-group-item list-group-item-action py-1">
+                                            <small>{{ $user->full_name }}</small>
+                                        </a>
                                     @empty
-                                    <div class="list-group-item list-group-item-danger py-1">
-                                        <small>No hay resultados</small>
-                                    </div>
+                                        <div class="list-group-item list-group-item-danger py-1">
+                                            <small>No hay resultados</small>
+                                        </div>
                                     @endforelse
                                 @endif
                             </ul>
                         </fieldset>
 
-                        <fieldset class="form-group col-md-12">
+                        <fieldset class="form-group col-md-6">
                             <label for="role-id">Rol</label>
                             <select
                                 class="form-control form-control-sm @error('role_id') is-invalid @enderror"
@@ -80,10 +86,28 @@
                                 @endforeach
                             </select>
                             @error('role_id')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
+                        </fieldset>
+
+                        <fieldset class="form-group col-md-6">
+                            <label for="visator-id">Indique si es visador</label>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input @error('is_visator') is-invalid @enderror"
+                                    wire:model="is_visator"
+                                    id="yes"
+                                    type="checkbox"
+                                >
+                                <label class="form-check-label" for="yes">Es Visador</label>
+                                @error('is_visator')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </fieldset>
 
                         <fieldset class="form-group col-md-12">
@@ -135,26 +159,31 @@
                             </td>
                         </tr>
                         @forelse($addedUsers as $itemUser)
-                        <tr wire:loading.remove wire:target="search_user">
-                            <td>
-                                <small>{{ $itemUser->user->short_name }}</small>
-                            </td>
-                            <td>
-                                <small>{{ __($itemUser->role->name) }}</small>
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-outline-danger"
-                                    wire:click="deleteUser({{ $itemUser->user }})">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                            <tr wire:loading.remove wire:target="search_user">
+                                <td>
+                                    <small>{{ $itemUser->user->short_name }}</small>
+                                    @if($itemUser->isVisator())
+                                        <span class="badge badge-secondary">
+                                            Visador
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <small>{{ __($itemUser->role->name) }}</small>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        wire:click="deleteUser({{ $itemUser->user }})">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         @empty
-                        <tr wire:loading.remove wire:target="search_user">
-                            <td class="text-center" colspan="3">
-                                <em>No hay resultados</em>
-                            </td>
-                        </tr>
+                            <tr wire:loading.remove wire:target="search_user">
+                                <td class="text-center" colspan="3">
+                                    <em>No hay resultados</em>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                     <caption>

@@ -13,6 +13,7 @@ class ControlIndex extends Component
 
     public $store;
     public $type;
+    public $nav;
 
     public function render()
     {

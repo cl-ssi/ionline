@@ -231,7 +231,6 @@ Route::get('/home', [HomeController::class,'index'])->name('home');
 
 
 
-
 Route::get('corrige_firmas',[ServiceRequestController::class,'corrige_firmas'])->middleware('auth');
 
 Route::get('/open-notification/{notification}',[UserController::class,'openNotification'])->middleware('auth')->name('openNotification');
@@ -314,6 +313,10 @@ Route::post('/firma', [DigitalSignatureController::class,'signPdf'])->name('sign
 Route::get('/validador', [SignatureController::class,'verify'])->name('verifyDocument');
 Route::get('/test-firma/{otp}', [DigitalSignatureController::class,'test']);
 
+
+Route::prefix('profile')->as('profile.')->middleware('auth')->group(function(){
+    Route::get('/subrogations', App\Http\Livewire\Profile\Subrogations::class)->name('subrogations');
+});
 
 /* Replacepent Staff */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){

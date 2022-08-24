@@ -6,6 +6,7 @@ use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Warehouse\Control;
+use App\Models\Warehouse\StoreUser;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,7 +20,7 @@ class SignatureService
     {
         $this->control = $control;
 
-        $this->getVisator(16966444); // TODO: Parametrizar
+        $this->getVisator();
         $this->getSigner();
         $this->sendSignatureRequest();
     }
@@ -41,7 +42,7 @@ class SignatureService
             'subject' => 'Acta de recepción #' . $control->id,
             'description' => " Acta de recepción #" . $control->id,
             'endorse_type' => 'Visación en cadena de responsabilidad',
-            'visatorAsSignature' => false,
+            'visatorAsSignature' => true,
         ]);
 
         $signature->update([
@@ -56,7 +57,7 @@ class SignatureService
 
         $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
         $signaturesFile->update(['file' => $filePath]);
-        Storage::disk('gcs')->put($filePath, $pdf);
+        Storage::disk('public')->put($filePath, $pdf);
 
         // Visator
         $signaturesFlow = new SignaturesFlow();
@@ -78,12 +79,11 @@ class SignatureService
         $signaturesFlow->user_id = $this->signer->id;
         $signaturesFlow->ou_id = $this->signer->organizational_unit_id;
         $signaturesFlow->save();
-
     }
 
-    public function getVisator($run_manager)
+    public function getVisator()
     {
-        $this->visator = User::find($run_manager);
+        $this->visator = $this->control->store->visator;
     }
 
     public function getSigner()

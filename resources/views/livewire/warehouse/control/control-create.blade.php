@@ -29,7 +29,7 @@
     </button>
     <a
         class="btn btn-outline-primary"
-        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type]) }}">
+        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type, 'nav' => $nav]) }}">
         Cancelar
     </a>
 </div>

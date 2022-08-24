@@ -16,6 +16,7 @@ class ProductEdit extends Component
     public $category_id;
     public $unspsc_product_id;
     public $search_unspsc_product;
+    public $nav;
 
     protected $listeners = [
         'myProductId'
@@ -58,6 +59,9 @@ class ProductEdit extends Component
         $dataValidated = $this->validate();
         $this->product->update($dataValidated);
 
-        return redirect()->route('warehouse.products.index', $this->store);
+        return redirect()->route('warehouse.products.index', [
+            'store' => $this->store,
+            'nav' => $this->nav,
+        ]);
     }
 }

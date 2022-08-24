@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 @livewire('warehouse.stores.manage-store-users', [
     'store' => $store

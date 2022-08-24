@@ -18,7 +18,11 @@
                 <a
                     class="nav-link {{ request()->query('type') === 'receiving' ? 'active' : '' }} {{ active('warehouse.generate-reception') }}"
                     aria-current="page"
-                    href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'receiving']) }}"
+                    href="{{ route('warehouse.controls.index', [
+                        'store' => Auth::user()->active_store,
+                        'type' => 'receiving',
+                        'nav' => 'nav',
+                    ]) }}"
                 >
                     <i class="fas fa-shopping-basket"></i> Ingreso
                 </a>
@@ -29,7 +33,11 @@
                 <a
                     class="nav-link {{ request()->query('type') === 'dispatch' ? 'active' : '' }}"
                     aria-current="page"
-                    href="{{ route('warehouse.controls.index', ['store' => Auth::user()->active_store, 'type' => 'dispatch']) }}"
+                    href="{{ route('warehouse.controls.index', [
+                        'store' => Auth::user()->active_store,
+                        'type' => 'dispatch',
+                        'nav' => 'nav',
+                    ]) }}"
                 >
                     <i class="fas fa-shipping-fast"></i> Egreso
                 </a>
@@ -49,7 +57,7 @@
                 <div class="dropdown-menu">
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.store.report', Auth::user()->active_store) }}"
+                        href="{{ route('warehouse.store.report', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
                     >
                         <i class="fas fa-file-alt"></i> Reporte Bincard
                     </a>
@@ -75,25 +83,25 @@
                 <div class="dropdown-menu">
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.products.index', Auth::user()->active_store) }}"
+                        href="{{ route('warehouse.products.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
                     >
                         <i class="fas fa-boxes"></i> Productos
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.categories.index', Auth::user()->active_store) }}"
+                        href="{{ route('warehouse.categories.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
                     >
                         <i class="fas fa-flag"></i> Categorías
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.origins.index', Auth::user()->active_store) }}"
+                        href="{{ route('warehouse.origins.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
                     >
                         <i class="fas fa-download"></i> Origenes
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.destinations.index', Auth::user()->active_store) }}"
+                        href="{{ route('warehouse.destinations.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
                     >
                         <i class="fas fa-upload"></i> Destinos
                     </a>
