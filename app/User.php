@@ -436,7 +436,7 @@ class User extends Authenticatable implements Auditable
 			->orwhere('id','LIKE', '%'.$word.'%');
 			});
 		}
-		return $suery;
+		return $query;
     }
 
 	public function subrogations()
