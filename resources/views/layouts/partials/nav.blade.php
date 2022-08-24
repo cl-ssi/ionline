@@ -466,12 +466,18 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->firstName }} <span class="caret"></span>
+                            @if(auth()->user()->absent) 
+                                <i class="fas text-warning fa-cocktail"></i>
+                            @endif
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
 							<a class="dropdown-item" href="{{ route('profile.subrogations') }}">
-								<i class="fas fa-chess"></i> Subrogancia
+								<i class="fas fa-chess"></i> Subrogancia 
+                                @if(auth()->user()->absent) 
+                                <i class="fas text-danger fa-cocktail"></i>
+                                @endif
 							</a>
 
                             @if(session()->has('god'))
