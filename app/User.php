@@ -447,7 +447,7 @@ class User extends Authenticatable implements Auditable
 	public function getSubrogantAttribute()
 	{
 		if($this->absent) {
-			return $this->subrogations->where('subrogant.absent','false')->first()->subrogant;
+			return $this->subrogations->where('subrogant.absent','false')->first()->subrogant ?? collect();
 		}
 		else {
 			return $this;
