@@ -6,7 +6,7 @@
     </fieldset>
 
     <fieldset class="col-md-2">
-        <label for="for-date">Nivel</label>
+        <label for="for-date">Nivel jerárquico</label>
         <select class="form-control" wire:model="level" required>
             <option value=""></option>
             <option>1</option>

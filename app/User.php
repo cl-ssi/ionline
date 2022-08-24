@@ -14,6 +14,7 @@ use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Profile\Subrogation;
 
 class User extends Authenticatable implements Auditable
 {
@@ -425,19 +426,35 @@ class User extends Authenticatable implements Auditable
 
     public function scopeFindByUser($query, $searchText)
     {
-      $array_search = explode(' ', $searchText);
-      foreach($array_search as $word)
-      {
-        $query->where(function($q) use($word){
-            $q->where('name', 'LIKE', '%'.$word.'%')
-            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-            ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-            ->orwhere('id','LIKE', '%'.$word.'%');
-          });
-      }
-      return $query;
+		$array_search = explode(' ', $searchText);
+		foreach($array_search as $word)
+		{
+		$query->where(function($q) use($word){
+			$q->where('name', 'LIKE', '%'.$word.'%')
+			->orwhere('fathers_family','LIKE', '%'.$word.'%')
+			->orwhere('mothers_family','LIKE', '%'.$word.'%')
+			->orwhere('id','LIKE', '%'.$word.'%');
+			});
+		}
+		return $suery;
     }
-    /**computers
+
+	public function subrogations()
+	{
+		return $this->hasMany(Subrogation::class)->orderBy('level');
+	}
+	
+	public function getSubrogantAttribute()
+	{
+		if($this->absent) {
+			return $this->subrogations->where('subrogant.absent','false')->first()->subrogant;
+		}
+		else {
+			return $this;
+		}
+	}
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
