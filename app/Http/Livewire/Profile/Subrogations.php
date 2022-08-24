@@ -13,6 +13,8 @@ class Subrogations extends Component
     public $subrogation;
     public $user_id, $subrogant_id, $level;
 
+    public $absent;
+
     protected $listeners = ['searchedUser'];
 
     public function searchedUser($searchedUser)
@@ -40,6 +42,7 @@ class Subrogations extends Component
         $this->user_id = auth()->id();
         $this->subrogations = Subrogation::where('user_id',$this->user_id)->orderBy('level')->get();
         $this->view = 'index';
+        $this->absent = auth()->user()->absent;
     }
 
     public function index()
@@ -84,6 +87,13 @@ class Subrogations extends Component
     {
         $subrogation->delete();
         $this->mount();
+    }
+
+    public function toggleAbsent()
+    {
+        $this->absent = !$this->absent;
+        auth()->user()->absent = $this->absent;
+        auth()->user()->save();
     }
 
     public function render()
