@@ -148,9 +148,10 @@ return [
             '4' => 'Orden de Compra',
         ],
         'type_dispatch_id' => [
-            '1' => 'Egreso Normal',
+            '1' => 'Egreso Interno',
             '2' => 'Ajuste de Inventario',
             '3' => 'Enviar a Bodega',
+            '4' => 'Egreso Externo',
         ],
         'generate_return' => [
             '1' => 'Si'
@@ -159,10 +160,6 @@ return [
             '1' => 'Crear producto',
             '2' => 'Seleccionar producto'
         ],
-        'type_destination' => [
-            '1' => 'interno',
-            '0' => 'externo',
-        ]
     ],
     /*
     |--------------------------------------------------------------------------
@@ -261,7 +258,6 @@ return [
         'time'                  => 'hora',
         'title'                 => 'título',
         'type'                  => 'tipo',
-        'type_destination'      => 'tipo destino',
         'type_dispatch_id'      => 'tipo de egreso',
         'type_reception_id'     => 'tipo de ingreso',
         'type_wre_product'      => 'tipo de producto',

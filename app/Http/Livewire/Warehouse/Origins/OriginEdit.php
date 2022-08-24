@@ -9,6 +9,7 @@ class OriginEdit extends Component
     public $store;
     public $origin;
     public $name;
+    public $nav;
 
     public $rules = [
         'name'  => 'required|string|min:2|max:255',
@@ -32,7 +33,8 @@ class OriginEdit extends Component
         session()->flash('success', "El origen fue actualizado el exitosamente.");
 
         return redirect()->route('warehouse.origins.index', [
-            'store' => $this->store
+            'store' => $this->store,
+            'nav' => $this->nav,
         ]);
     }
 }

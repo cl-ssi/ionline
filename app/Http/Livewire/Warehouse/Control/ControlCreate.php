@@ -23,11 +23,11 @@ class ControlCreate extends Component
     public $store_destination_id;
     public $organizational_unit_id;
     public $signer_id;
-    public $type_destination;
     public $stores;
     public $programs;
     public $typeDispatches;
     public $typeReceptions;
+    public $nav;
 
     protected $listeners = [
         'organizationalId',
@@ -45,12 +45,11 @@ class ControlCreate extends Component
     public $rulesDispatch = [
         'date'                  => 'required|date_format:Y-m-d',
         'note'                  => 'nullable|string|min:2|max:255',
-        'type_destination'      => 'nullable|required_if:type_dispatch,1',
         'type_dispatch_id'      => 'required|exists:wre_type_dispatches,id',
         'program_id'            => 'nullable|exists:cfg_programs,id',
-        'destination_id'        => 'nullable|required_if:type_destination,0|exists:wre_destinations,id',
+        'destination_id'        => 'nullable|required_if:type_dispatch_id,4|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
-        'organizational_unit_id' => 'nullable|required_if:type_destination,1|exists:organizational_units,id',
+        'organizational_unit_id' => 'nullable|required_if:type_dispatch_id,1|exists:organizational_units,id',
     ];
 
     public function mount()
@@ -58,7 +57,7 @@ class ControlCreate extends Component
         $this->destination_id = null;
         $this->store_destination_id = null;
         $this->type_dispatch_id = 1;
-        $this->typeDispatches = TypeDispatch::all();
+        $this->typeDispatches = TypeDispatch::orderByRaw("FIELD(id, '1', '4', '2', '3') ASC")->get();
         $this->typeReceptions = TypeReception::all();
         $this->programs = Program::orderBy('name', 'asc')->get();
         $this->stores = Store::whereNotIn('id', [$this->store->id])->get();
@@ -88,17 +87,17 @@ class ControlCreate extends Component
         return redirect()->route('warehouse.control.add-product', [
             'store' => $this->store,
             'control' => $control,
-            'type' => $control->isReceiving() ? 'receiving' : 'dispatch'
+            'type' => $control->isReceiving() ? 'receiving' : 'dispatch',
+            'nav' => $this->nav,
         ]);
     }
 
     public function getConfirm()
     {
-        if($this->type == 'receiving')
+        if ($this->type == 'receiving')
             $confirm = true;
-        else
-        {
-            if($this->type_dispatch_id == TypeDispatch::sendToStore())
+        else {
+            if ($this->type_dispatch_id == TypeDispatch::sendToStore())
                 $confirm = false;
             else
                 $confirm = true;
@@ -111,7 +110,6 @@ class ControlCreate extends Component
         $this->reset([
             'date',
             'note',
-            'type_destination',
             'destination_id',
             'store_destination_id',
             'program_id',

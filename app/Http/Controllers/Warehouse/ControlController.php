@@ -26,7 +26,8 @@ class ControlController extends Controller
         if($request->type == 'receiving' || $request->type == 'dispatch')
         {
             $type = $request->type;
-            return view('warehouse.controls.index', compact('store', 'type'));
+            $nav = $request->nav;
+            return view('warehouse.controls.index', compact('store', 'type', 'nav'));
         }
         return redirect()->route('home');
     }
@@ -43,7 +44,8 @@ class ControlController extends Controller
         if($request->type == 'receiving' || $request->type == 'dispatch')
         {
             $type = $request->type;
-            return view('warehouse.controls.create', compact('store', 'type'));
+            $nav = $request->nav;
+            return view('warehouse.controls.create', compact('store', 'type', 'nav'));
         }
         return redirect()->route('home');
     }
@@ -53,26 +55,30 @@ class ControlController extends Controller
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit(Store $store, Control $control)
+    public function edit(Store $store, Control $control, Request $request)
     {
+        $nav = $request->nav;
         if($control->isReceiveFromStore() && !$control->isConfirmed())
-            return view('warehouse.controls.review-product', compact('store', 'control'));
+            return view('warehouse.controls.review-product', compact('store', 'control', 'nav'));
         else
-            return view('warehouse.controls.edit', compact('store', 'control'));
+            return view('warehouse.controls.edit', compact('store', 'control', 'nav'));
     }
 
-    /**s
+    /**
      * Add product to Control
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function addProduct(Store $store, Control $control)
+    public function addProduct(Store $store, Control $control, Request $request)
     {
-        return view('warehouse.controls.add-product', compact('store', 'control'));
+        $nav = $request->nav;
+        return view('warehouse.controls.add-product', compact('store', 'control', 'nav'));
     }
 
     /**
@@ -96,10 +102,12 @@ class ControlController extends Controller
      * Generate Reception
      *
      * @param  \App\Models\Warehouse\Store  $store
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generateReception(Store $store)
+    public function generateReception(Store $store, Request $request)
     {
-        return view('warehouse.stores.generate-reception', compact('store'));
+        $nav = $request->nav;
+        return view('warehouse.stores.generate-reception', compact('store', 'nav'));
     }
 }

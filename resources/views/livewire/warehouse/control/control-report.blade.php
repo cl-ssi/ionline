@@ -74,14 +74,13 @@
                         @if($controlItem->control)
                             @if($controlItem->control->isDispatch())
                                 @switch($controlItem->control->type_dispatch_id)
-                                    @case(\App\Models\Warehouse\TypeDispatch::dispatch())
-                                        @if($controlItem->control->isDestinationExternal())
-                                            {{ optional($controlItem->control->destination)->name }}
-                                        @else
-                                            {{ optional($controlItem->control->organizationalUnit)->establishment->name }}
-                                            <br>
-                                            {{ optional($controlItem->control->organizationalUnit)->name }}
-                                        @endif
+                                    @case(\App\Models\Warehouse\TypeDispatch::internal())
+                                        {{ optional($controlItem->control->organizationalUnit)->establishment->name }}
+                                        <br>
+                                        {{ optional($controlItem->control->organizationalUnit)->name }}
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeDispatch::external())
+                                        {{ optional($controlItem->control->destination)->name }}
                                         @break
                                     @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
                                         {{ optional($controlItem->control->typeDispatch)->name }}
@@ -93,9 +92,6 @@
                                 <br>
                                 <small>
                                     {{ optional($controlItem->control->typeDispatch)->name }}
-                                    @if($controlItem->control->isDestinationExternal() || $controlItem->control->isDestinationInternal())
-                                        - Destino {{ $controlItem->control->type_destination_format }}
-                                    @endif
                                 </small>
                             @else
                                 @switch($controlItem->control->type_reception_id)

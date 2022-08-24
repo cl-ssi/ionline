@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Warehouse;
 use App\Http\Controllers\Controller;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
@@ -44,11 +45,13 @@ class StoreController extends Controller
      * Manage store users.
      *
      * @param  \App\Models\Warehouse\Store  $store
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function users(Store $store)
+    public function users(Store $store, Request $request)
     {
-        return view('warehouse.stores.manage-users', compact('store'));
+        $nav = $request->nav;
+        return view('warehouse.stores.manage-users', compact('store', 'nav'));
     }
 
     public function welcome()
@@ -79,10 +82,12 @@ class StoreController extends Controller
      * Bincard Report
      *
      * @param  \App\Models\Warehouse\Store  $store
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function report(Store $store)
+    public function report(Store $store, Request $request)
     {
-        return view('warehouse.stores.report', compact('store'));
+        $nav = $request->nav;
+        return view('warehouse.stores.report', compact('store', 'nav'));
     }
 }

@@ -26,7 +26,10 @@
 
         Guardar
     </button>
-    <a href="{{ route('warehouse.products.index', $store) }}" class="btn btn-outline-primary">
+    <a
+        href="{{ route('warehouse.products.index', ['store' => $store, 'nav' => $nav]) }}"
+        class="btn btn-outline-primary"
+    >
         Cancelar
     </a>
 </div>
