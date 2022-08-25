@@ -454,7 +454,7 @@ class User extends Authenticatable implements Auditable
 		}
 	}
 
-    public function getIamSubrogantOfAttribute()
+    public function getIAmSubrogantOfAttribute()
     {
         $users = collect();
 
