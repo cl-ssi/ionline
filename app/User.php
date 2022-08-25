@@ -454,6 +454,24 @@ class User extends Authenticatable implements Auditable
 		}
 	}
 
+    public function getIamSubrogantOfAttribute()
+    {
+        $users = collect();
+
+        $subrogations = Subrogation::with('user')
+                        ->where('subrogant_id',$this->id)
+                        ->whereRelation('user','absent',true)
+                        ->get();
+        foreach($subrogations as $subrogation)
+        {
+            if($subrogation->user->subrogant == $this) {
+                unset($subrogation->user->subrogations);
+                $users[] = $subrogation->user;
+            }
+        }
+        return $users;
+    }
+
     /**
      * The attributes that should be cast to native types.
      *
