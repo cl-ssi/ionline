@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Profile;
 
 use Livewire\Component;
 use App\Models\Profile\Subrogation;
+use Illuminate\Support\Facades\Auth;
 
 class Subrogations extends Component
 {
@@ -11,7 +12,7 @@ class Subrogations extends Component
     public $view;
 
     public $subrogation;
-    public $user_id, $subrogant_id, $level;
+    public $user_id, $subrogant_id;
 
     public $absent;
 
@@ -27,14 +28,12 @@ class Subrogations extends Component
         return [
             'user_id' => 'required',
             'subrogant_id' => 'required',
-            'level' => 'required',
         ];
     }
 
     protected $messages = [
         'user_id.required' => 'El usuario es requerido.',
         'subrogant_id.required' => 'El subrogante es requerido.',
-        'level.required' => 'El nivel es requerido.',
     ];
 
     public function mount()
@@ -54,14 +53,15 @@ class Subrogations extends Component
     {
         $this->view = 'create';
         $this->subrogation = null;
-        
+
         $this->subrogant_id = null;
-        $this->level = null;
     }
 
     public function store()
     {
-        Subrogation::create($this->validate());
+        $dataValidated = $this->validate();
+        $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
+        Subrogation::create($dataValidated);
         $this->mount();
         $this->view = 'index';
     }
@@ -70,9 +70,8 @@ class Subrogations extends Component
     {
         $this->view = 'edit';
         $this->subrogation = $subrogation;
-        
+
         $this->subrogant_id = $subrogation->subrogant->id;
-        $this->level = $subrogation->level;
     }
 
     public function update(Subrogation $subrogation)
@@ -85,6 +84,17 @@ class Subrogations extends Component
 
     public function delete(Subrogation $subrogation)
     {
+        $subrogations = Subrogation::query()
+            ->where('level', '>', $subrogation->level)
+            ->get();
+
+        foreach($subrogations as $itemSubrogation)
+        {
+            $itemSubrogation->update([
+                'level' => $itemSubrogation->level - 1
+            ]);
+        }
+
         $subrogation->delete();
         $this->mount();
     }
@@ -94,6 +104,42 @@ class Subrogations extends Component
         $this->absent = !$this->absent;
         auth()->user()->absent = $this->absent;
         auth()->user()->save();
+    }
+
+    public function up(Subrogation $subrogation)
+    {
+        $subrogationUp = Subrogation::query()
+            ->whereUserId(Auth::id())
+            ->whereLevel($subrogation->level - 1)
+            ->first();
+
+        $subrogation->update([
+            'level' => $subrogation->level - 1,
+        ]);
+
+        $subrogationUp->update([
+            'level' => $subrogationUp->level + 1,
+        ]);
+
+        $this->mount();
+    }
+
+    public function down(Subrogation $subrogation)
+    {
+        $subrogationDown = Subrogation::query()
+            ->whereUserId(Auth::id())
+            ->whereLevel($subrogation->level + 1)
+            ->first();
+
+        $subrogation->update([
+            'level' => $subrogation->level + 1,
+        ]);
+
+        $subrogationDown->update([
+            'level' => $subrogationDown->level - 1,
+        ]);
+
+        $this->mount();
     }
 
     public function render()
