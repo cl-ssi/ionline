@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 <div class="row">
     <div class="col">
@@ -23,7 +23,6 @@
         @endif
     </div>
 </div>
-
 
 @livewire('warehouse.control.control-details', [
     'control' => $control
@@ -52,6 +51,7 @@
 @livewire('warehouse.control.control-product-list', [
     'control' => $control,
     'store' => $store,
+    'nav' => $nav,
 ])
 
 @endsection

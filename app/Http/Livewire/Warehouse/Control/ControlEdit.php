@@ -16,7 +16,6 @@ class ControlEdit extends Component
     public $guide_number;
     public $invoice_date;
     public $invoice_number;
-    public $type_destination;
     public $type_dispatch_id;
     public $type_reception_id;
     public $origin_id;
@@ -24,6 +23,7 @@ class ControlEdit extends Component
     public $store_origin_id;
     public $store_destination_id;
     public $stores;
+    public $nav;
 
     public $organizational_unit_id;
     public $establishment_id;
@@ -44,10 +44,9 @@ class ControlEdit extends Component
     public $rulesDispatch = [
         'date'                  => 'required|date_format:Y-m-d',
         'note'                  => 'nullable|string|min:2|max:255',
-        'type_destination'      => 'nullable|required_if:type_dispatch,1',
-        'destination_id'        => 'nullable|required_if:type_destination,0|exists:wre_destinations,id',
+        'destination_id'        => 'nullable|required_if:type_dispatch_id,4|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
-        'organizational_unit_id' => 'nullable|required_if:type_destination,1|exists:organizational_units,id',
+        'organizational_unit_id' => 'nullable|required_if:type_dispatch_id,1|exists:organizational_units,id',
     ];
 
     public function mount()
@@ -58,7 +57,6 @@ class ControlEdit extends Component
         $this->guide_number = $this->control->guide_number;
         $this->invoice_date = $this->control->invoice_date;
         $this->invoice_number = $this->control->invoice_number;
-        $this->type_destination = $this->control->type_destination;
 
         $this->origin_id = $this->control->origin_id;
         $this->destination_id = $this->control->destination_id;
@@ -92,7 +90,8 @@ class ControlEdit extends Component
         return redirect()->route('warehouse.control.add-product', [
             'store' => $this->store,
             'control'  => $this->control,
-            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch'
+            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch',
+            'nav' => $this->nav,
         ]);
     }
 
@@ -101,7 +100,6 @@ class ControlEdit extends Component
         $this->reset([
             'date',
             'note',
-            'type_destination',
             'destination_id',
             'store_destination_id',
             'program_id',

@@ -10,6 +10,7 @@ class CategoryEdit extends Component
     public $store;
     public $category;
     public $name;
+    public $nav;
 
     public $rules = [
         'name' => 'required'
@@ -30,6 +31,6 @@ class CategoryEdit extends Component
         $dataValidated = $this->validate();
         $this->category->update($dataValidated);
 
-        return redirect()->route('warehouse.categories.index', $this->store);
+        return redirect()->route('warehouse.categories.index', ['store' => $this->store, 'nav' => $this->nav]);
     }
 }

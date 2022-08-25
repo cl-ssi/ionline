@@ -108,7 +108,7 @@
 				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO">CUARTO TURNO</option>
 				<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
-				<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
+				<!-- <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option> -->
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<!-- <option value="TURNO EXTRA">TURNO EXTRA</option> -->

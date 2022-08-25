@@ -7,5 +7,10 @@
     ])
 
     <button wire:click="createDestination" class="btn btn-primary">Crear</button>
-    <a href="{{ route('warehouse.destinations.index', $store) }}" class="btn btn-outline-primary">Cancelar</a>
+    <a
+        href="{{ route('warehouse.destinations.index', ['store' => $store, 'nav' => $nav]) }}"
+        class="btn btn-outline-primary"
+    >
+        Cancelar
+    </a>
 </div>
