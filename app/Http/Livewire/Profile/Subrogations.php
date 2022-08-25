@@ -12,7 +12,7 @@ class Subrogations extends Component
     public $view;
 
     public $subrogation;
-    public $user_id, $subrogant_id, $level;
+    public $user_id, $subrogant_id;
 
     public $absent;
 
@@ -55,7 +55,6 @@ class Subrogations extends Component
         $this->subrogation = null;
 
         $this->subrogant_id = null;
-        $this->level = null;
     }
 
     public function store()
@@ -73,7 +72,6 @@ class Subrogations extends Component
         $this->subrogation = $subrogation;
 
         $this->subrogant_id = $subrogation->subrogant->id;
-        $this->level = $subrogation->level;
     }
 
     public function update(Subrogation $subrogation)
