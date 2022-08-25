@@ -17,6 +17,7 @@
             <li>
                 {{ $inventory->purchaseOrder->date->format('Y-m-d') }}
                 - Orden de compra <b>{{ $inventory->purchaseOrder->code }}</b>
+                (Ingreso #{{ $inventory->control->id }})
             </li>
         @endif
 

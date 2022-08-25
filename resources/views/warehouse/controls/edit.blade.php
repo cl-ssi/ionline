@@ -4,12 +4,13 @@
 
 @section('content')
 
-@include('warehouse.nav')
+@include('warehouse.' . $nav)
 
 @livewire('warehouse.control.control-edit', [
     'store' => $store,
     'control' => $control,
-    'type'  => $control->isReceiving() ? 'receiving' : 'dispatch'
+    'type'  => $control->isReceiving() ? 'receiving' : 'dispatch',
+    'nav' => $nav,
 ])
 
 @if($control->isOpen())
@@ -35,6 +36,7 @@
 @livewire('warehouse.control.control-product-list', [
     'control' => $control,
     'store' => $store,
+    'nav' => $nav,
 ])
 
 @endsection

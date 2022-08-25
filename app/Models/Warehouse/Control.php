@@ -21,7 +21,6 @@ class Control extends Model
 
     protected $fillable = [
         'type',
-        'type_destination',
         'date',
         'note',
         'confirm',
@@ -134,9 +133,9 @@ class Control extends Model
         return $this->type == 0;
     }
 
-    public function isDispatchNormal()
+    public function isInternalDispatch()
     {
-        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::dispatch());
+        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::internal());
     }
 
     public function isAdjustInventory()
@@ -147,6 +146,11 @@ class Control extends Model
     public function isSendToStore()
     {
         return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::sendToStore());
+    }
+
+    public function isExternalDispatch()
+    {
+        return $this->isDispatch() && ($this->type_dispatch_id == TypeDispatch::external());
     }
 
     public function isReceptionNormal()
@@ -162,16 +166,6 @@ class Control extends Model
     public function isPurchaseOrder()
     {
         return $this->isReceiving() && ($this->type_reception_id == TypeReception::purchaseOrder());
-    }
-
-    public function isDestinationInternal()
-    {
-        return $this->isDispatch() && ($this->type_destination === 1);
-    }
-
-    public function isDestinationExternal()
-    {
-        return $this->isDispatch() && ($this->type_destination ===  0);
     }
 
     public function isConfirmed()
@@ -192,14 +186,6 @@ class Control extends Model
     public function getTypeFormatAttribute()
     {
         return ($this->type) ? 'Ingreso' : 'Egreso';
-    }
-
-    public function getTypeDestinationFormatAttribute()
-    {
-        $typeDestination = null;
-        if($this->isDispatch())
-            $typeDestination = $this->isDestinationInternal() ? 'Interno' : 'Externo';
-        return $typeDestination;
     }
 
     public function getDateFormatAttribute()

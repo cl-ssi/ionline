@@ -34,6 +34,7 @@ class ControlReviewProduct extends Component
     public $type_wre_product;
     public $wre_products;
     public $items;
+    public $nav;
 
     protected $listeners = [
         'myProductId'
@@ -88,8 +89,8 @@ class ControlReviewProduct extends Component
             $item['program_name'] = $controlItem->program_name;
             $item['program_id'] = $controlItem->program_id;
             $item['barcode'] = $controlItem->product->barcode;
-            $item['type_wre_product'] = $controlItem->product->barcode == null ? 1 : null; // 1:nuevo 2:seleccionar
-            $item['can_edit'] = $controlItem->product->barcode == null ? true : false;
+            $item['type_wre_product'] = ($controlItem->product->barcode == null) ? 1 : null; // 1:nuevo 2:seleccionar
+            $item['can_edit'] = ($controlItem->product->barcode == null) ? true : false;
             $item['selected_wre_product_id'] = null;
             $item['selected_wre_product_name'] = null;
             $item['selected_unspsc_product_name'] = null;
@@ -310,7 +311,8 @@ class ControlReviewProduct extends Component
         return redirect()->route('warehouse.controls.index', [
             'store' => $this->store,
             'control' => $this->control,
-            'type' => 'receiving'
+            'type' => 'receiving',
+            'nav' => $this->nav,
         ]);
     }
 
@@ -343,7 +345,7 @@ class ControlReviewProduct extends Component
 
     public function updateProductId(ControlItem $controlItem, Product $localProduct, $type_wre_product)
     {
-        if($type_wre_product == 2)
+        if($type_wre_product == 2 || $type_wre_product == 1)
         {
             $controlItem->update([
                 'product_id' => $localProduct->id,

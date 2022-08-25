@@ -14,6 +14,7 @@ class ControlProductList extends Component
     public $store;
     public $control;
     public $controlItems;
+    public $nav;
 
     protected $listeners = [
         'refreshControlProductList' => 'mount'
@@ -89,8 +90,8 @@ class ControlProductList extends Component
                 if($item->product->barcode != null)
                 {
                     $existsProduct = Product::query()
-                    ->whereStoreId($controlDispatch->store_id)
-                    ->whereBarcode($item->product->barcode);
+                        ->whereStoreId($controlDispatch->store_id)
+                        ->whereBarcode($item->product->barcode);
 
                     if($existsProduct->exists())
                         $product = clone $existsProduct->first();
@@ -126,14 +127,15 @@ class ControlProductList extends Component
         return redirect()->route('warehouse.controls.index', [
             'store' => $this->store,
             'control' => $this->control,
-            'type' => 'dispatch'
+            'type' => 'dispatch',
+            'nav' => $this->nav,
         ]);
     }
 
     public function finish()
     {
         $this->control->update([
-            'status' => false
+            'status' => false,
         ]);
 
         if($this->control->isReceiving())
@@ -143,7 +145,8 @@ class ControlProductList extends Component
 
         return redirect()->route('warehouse.controls.index', [
             'store' => $this->store,
-            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch'
+            'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch',
+            'nav' => $this->nav,
         ]);
     }
 }

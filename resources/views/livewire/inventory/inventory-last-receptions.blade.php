@@ -7,12 +7,38 @@
         Últimos ingresos a bodega
     </h3>
 
+    <div class="form-row">
+        <fieldset class="form-group col-md-3">
+            <label for="type-reception-id">Tipo de Ingreso</label>
+            <select wire:model="type_reception_id" id="type-reception-id" class="form-control">
+                <option value="">Todos</option>
+                <option value="{{ App\Models\Warehouse\TypeReception::receiving() }}">
+                    Ingreso Normal
+                </option>
+                <option value="{{ App\Models\Warehouse\TypeReception::purchaseOrder() }}">
+                    Orden de Compra
+                </option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-md-9">
+            <label for="search">Buscar</label>
+            <input
+                class="form-control"
+                type="text"
+                id="search"
+                placeholder="Ingresa la orden de compra, origen, producto o descripción técnica"
+                wire:model.debounce.1500ms="search"
+            >
+        </fieldset>
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th class="text-center">Ingreso a bodega</th>
-                    <th>Proveedor/OC</th>
+                    <th>Origen/OC</th>
                     <th class="text-center">Cantidad</th>
                     <th>Producto</th>
                     <th class="text-center">Valor</th>
@@ -24,7 +50,7 @@
                 <tr
                     class="d-none"
                     wire:loading.class.remove="d-none"
-                    wire:target="createInventory, discardInventory"
+                    wire:target="createInventory, discardInventory, search"
                 >
                     <td class="text-center" colspan="7">
                         @include('layouts.partials.spinner')
@@ -43,6 +69,10 @@
                             @else
                                 {{ $controlItem->control->origin->name }}
                             @endif
+                            <br>
+                            <small>
+                                {{ optional($controlItem->control->typeReception)->name }}
+                            </small>
                         </td>
                         <td class="text-center">
                             {{ $controlItem->quantity }}

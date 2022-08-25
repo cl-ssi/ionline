@@ -28,7 +28,12 @@
         Actualizar
     </button>
 
-    <a href="{{ route('warehouse.categories.index', $store)}}" class="btn btn-outline-primary">Cancelar</a>
+    <a
+        href="{{ route('warehouse.products.index', ['store' => $store, 'nav' => $nav])}}"
+        class="btn btn-outline-primary"
+    >
+        Cancelar
+    </a>
 </div>
 
 @section('custom_js')
