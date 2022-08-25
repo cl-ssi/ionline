@@ -132,6 +132,10 @@
             <i class="fas fa-cog"></i> Parámetros
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {{ active(['parameters.cutoffdates.*']) }}" href="{{ route('parameters.cutoffdates.index') }}">
+            <i class="fas fa-calendar-alt"></i> Fechas de corte (COMGES)</a>
+    </li>
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">
