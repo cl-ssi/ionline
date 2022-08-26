@@ -215,8 +215,8 @@
                         Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature?
                         $signedSignaturesFlow->signature->responsable->getTinnyNameAttribute():'' }}
-                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$pendingSignaturesFlow->signerName }}</small><br>
-                        @if($pendingSignaturesFlow->userSigner->absent == 1)
+                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$signedSignaturesFlow->signerName }}</small><br>
+                        @if($signedSignaturesFlow->userSigner->absent == 1)
                             <small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small>
                         @endif
                     </td>
