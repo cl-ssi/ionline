@@ -10,6 +10,7 @@ use App\User;
 use App\Indicators\Indicator;
 use App\Indicators\Rem;
 use App\Indicators\Value;
+use App\Models\Parameters\CutOffDate;
 use Illuminate\Support\Facades\DB;
 
 class ComgesController extends Controller
@@ -134,7 +135,8 @@ class ComgesController extends Controller
             'denominator_cods' => $request->has('denominator_cods') ? $request->get('denominator_cods') : null,
             'denominator_cols' => $request->has('denominator_cols') ? $request->get('denominator_cols') : null,
             'weighting' => $request->get('weighting'),
-            'section_id' => $corte->id
+            'section_id' => $corte->id,
+            'is_accum' => $request->has('is_accum') ?? 0
         ]);
 
         //$months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
@@ -215,6 +217,7 @@ class ComgesController extends Controller
         $action->weighting = $request->get('weighting');
         $action->verification_means = $request->get('verification_means');
         $action->target_type = $request->get('target_type');
+        $action->is_accum = $request->has('is_accum') ?? 0;
         $action->numerator = $request->get('numerator');
         $action->numerator_source = $request->has('numerator_source') ? $request->get('numerator_source') : null;
         $action->numerator_cods = $request->has('numerator_cods') ? $request->get('numerator_cods') : null;
@@ -361,10 +364,16 @@ class ComgesController extends Controller
     private function loadValuesWithRemSource($year, $section, $indicators)
     {
         // Último mes según corte
-        $last_month_section = [1 => 3, 2 => 6, 3 => 9, 4 => 12];
+        $last_month_section = [0 => 0, 1 => 3, 2 => 6, 3 => 9, 4 => 12];
+        $cut_off_date = null;
 
         foreach($indicators as $indicator){
             foreach($indicator->actions as $action){
+                // REM mensual acumulado? extraer fecha a considerar según corte
+                if(!$action->is_accum){
+                    $cut_off_date = CutOffDate::where('year', $year)->where('number', $section)->first();
+                }
+
                 foreach(array('numerador', 'denominador') as $factor){
                     $factor_cods = $factor == 'numerador' ? $action->numerator_cods : $action->denominator_cods;
                     $factor_cols = $factor == 'numerador' ? $action->numerator_cols : $action->denominator_cols;
@@ -384,6 +393,12 @@ class ComgesController extends Controller
                             $raws .= ' AS valor, Mes';
             
                             $result = Rem::year($year)->selectRaw($raws)
+                                        ->when(!$action->is_accum, function($q) use ($last_month_section, $section, $cut_off_date){
+                                            return $q->where('Mes', '>=', $last_month_section[$section - 1] + 1)
+                                                     ->when($cut_off_date, function($q2) use ($cut_off_date){ 
+                                                        return $q2->where('fechaIngreso', '<=', $cut_off_date->date->endOfDay());
+                                                    });
+                                        })
                                         ->where('Mes', '<=', $last_month_section[$section])->where('IdEstablecimiento', 102100)
                                         ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
             

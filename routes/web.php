@@ -566,10 +566,11 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 /** Programación Númerica APS */
 Route::resource('programmings', ProgrammingController::class)->middleware('auth');
 Route::put('programmingStatus/{id}', [ProgrammingController::class,'updateStatus'])->middleware('auth')->name('programmingStatus.update');
-// Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class,'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
+Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class,'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
 
 Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
 Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class,'clone'])->name('programmingitems.clone');
+Route::delete('/programmingitems/{programmingitem}/pivot/{id}', [ProgrammingItemController::class,'destroyProfessionalHour'])->name('programmingitems.destroyProfessionalHour');
 
 Route::resource('communefiles', CommuneFileController::class)->middleware('auth');
 Route::get('/downloadFileA/{file}', [CommuneFileController::class,'download'])->name('programmingFile.download');
@@ -994,6 +995,14 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', [App\Http\Controllers\Parameters\SupplierController::class,'store'])->name('store');
         Route::get('/edit/{supplier}', [App\Http\Controllers\Parameters\SupplierController::class,'edit'])->name('edit');
         Route::put('/update/{supplier}', [App\Http\Controllers\Parameters\SupplierController::class,'update'])->name('update');
+    });
+
+    Route::prefix('cutoffdates')->as('cutoffdates.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Parameters\CutOffDateController::class,'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Parameters\CutOffDateController::class,'create'])->name('create');
+        Route::post('/store', [App\Http\Controllers\Parameters\CutOffDateController::class,'store'])->name('store');
+        Route::get('/edit/{cut_off_date}', [App\Http\Controllers\Parameters\CutOffDateController::class,'edit'])->name('edit');
+        Route::put('/update/{cut_off_date}', [App\Http\Controllers\Parameters\CutOffDateController::class,'update'])->name('update');
     });
 
     Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {

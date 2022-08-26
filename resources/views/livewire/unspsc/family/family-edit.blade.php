@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
-
-    <h5>Editar Familia</h5>
+    
+    <h3>Editar Familia</h3>
 
     @include('unspsc.bread-crumbs', [
         'type' => 'families.edit',
