@@ -321,6 +321,7 @@
 				<option value="DFL" @if($serviceRequest->programm_name == 'DFL') selected @endif>DFL</option>
 				<option value="TURNOS VACANTES" @if($serviceRequest->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
 				<option value="OTROS PROGRAMAS HETG" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
+				<option value="LEQ Fonasa" @if($serviceRequest->programm_name == 'LEQ Fonasa') selected @endif>LEQ Fonasa</option>
 				<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
 				<option value="CONTINGENCIA RESPIRATORIA" @if($serviceRequest->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
 				<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
@@ -1236,6 +1237,7 @@
   				$("#programm_name option[value='DFL']").show();
   				$("#programm_name option[value='TURNOS VACANTES']").show();
   				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
+				$("#programm_name option[value='LEQ Fonasa']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
 				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").show();
   				$("#programm_name option[value='PABELLON TARDE']").show();
@@ -1265,6 +1267,7 @@
 				$("#programm_name option[value='DFL']").hide();
 				$("#programm_name option[value='TURNOS VACANTES']").hide();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+				$("#programm_name option[value='LEQ Fonasa']").hide();
 				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 				$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
 				$("#programm_name option[value='PABELLON TARDE']").hide();
@@ -1303,6 +1306,7 @@
   			$("#programm_name option[value='DFL']").hide();
   			$("#programm_name option[value='TURNOS VACANTES']").hide();
   			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+			$("#programm_name option[value='LEQ Fonasa']").hide();
   			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 			$("#programm_name option[value='CONTINGENCIA RESPIRATORIA']").hide();
   			$("#programm_name option[value='PABELLON TARDE']").hide();
@@ -1320,7 +1324,7 @@
   		}
 
       // 04/04/2022: solicitado por nataly (agregar grado)
-      if (value == "OTROS PROGRAMAS HETG") {
+      if (value == "OTROS PROGRAMAS HETG" || value == "LEQ Fonasa") {
   			$('#grade').removeAttr('disabled');
   			$("#grade").prop('required',true);
   		} else {
