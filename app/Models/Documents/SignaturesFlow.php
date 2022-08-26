@@ -21,7 +21,7 @@ class SignaturesFlow extends Model Implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation', 'visator_type',
+        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation', 'visator_type', 'real_signer_id',
     ];
 
     public function signaturesFile(){
@@ -40,6 +40,10 @@ class SignaturesFlow extends Model Implements Auditable
     public function getSignerNameAttribute()
     {
         return User::find($this->user_id)->fullName;
+    }
+    
+    public function getRealSignerNameAttribute(){
+        return User::find($this->real_signer_id)->fullName;
     }
 
     public function getValidationMessagesAttribute(): array
