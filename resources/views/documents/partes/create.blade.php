@@ -15,7 +15,7 @@
     <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_entered_at">Fecha Ingreso*</label>
-            <input type="datetime-local" class="form-control" id="for_entered_at"
+            <input type="datetime-local" class="form-control" id="for_entered_at" value = "{{Carbon\Carbon::now()}}"
                 name="entered_at" required>
         </fieldset>
 
