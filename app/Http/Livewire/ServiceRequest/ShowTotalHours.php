@@ -277,7 +277,7 @@ class ShowTotalHours extends Component
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
                 }
 
-                if ($this->fulfillment->serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') {
+                if ($this->fulfillment->serviceRequest->programm_name == 'OTROS PROGRAMAS HETG' or $this->fulfillment->serviceRequest->programm_name == 'LEQ Fonasa') {
                   $totalAmountDayRefund = floor($this->totalHoursDay) * $value;
                   $totalAmountNight = floor($this->totalHoursNight) * $value * 1.2;
                   $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);

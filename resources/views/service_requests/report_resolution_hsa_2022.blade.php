@@ -380,7 +380,7 @@
         <p class="justify">
             <strong>OCTAVO:</strong>
 
-            @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
+            @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
 
                 En el desempeño de sus funciones, el prestador cumplió con
                 @livewire('service-request.show-total-hours', ['fulfillment' => $ServiceRequest->fulfillments->first(),'forResolution' => true]);
