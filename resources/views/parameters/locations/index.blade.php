@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <div class="row">
     <div class="col">
         <h3 class="mb-3">Ubicaciones</h3>

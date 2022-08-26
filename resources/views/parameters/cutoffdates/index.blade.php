@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <h3 class="mb-3">Mantenedor de fechas de corte (COMGES)
 <form class="form-inline float-right" method="GET" action="{{ route('parameters.cutoffdates.index') }}">
     <select name="year" class="form-control" onchange="this.form.submit()">
