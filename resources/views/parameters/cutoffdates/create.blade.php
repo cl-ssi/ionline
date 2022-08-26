@@ -24,7 +24,7 @@
 
         <fieldset class="form-group col-sm-3">
             <label for="for_date">Fecha</label>
-            <input type="date" min='{{$year}}-01-01' max='{{$year}}-12-31' class="form-control" id="for_date" name="date" value="{{old('date')}}" required>
+            <input type="date" min='{{$year}}-01-01' max='{{$year + 1}}-12-31' class="form-control" id="for_date" name="date" value="{{old('date')}}" required>
         </fieldset>
     </div>
 
