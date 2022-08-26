@@ -4,14 +4,12 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <h3 class="mb-3">Crear nueva fecha de corte</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.cutoffdates.store') }}">
     @csrf
     @method('POST')
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-sm-2">
             <label for="for_year">Año</label>
             <input type="number" class="form-control" id="for_year" name="year" value="{{$year}}" required @if($year) readonly @endif>
@@ -28,7 +26,9 @@
         </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.cutoffdates.index') }}">Volver</a>
+
 </form>
 
 

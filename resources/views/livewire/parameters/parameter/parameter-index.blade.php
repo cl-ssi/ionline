@@ -1,8 +1,6 @@
 <div>
     @section('title', 'Parámetros')
 
-    @include('parameters.nav')
-
     <div class="row my-3">
         <div class="col">
             <h3>Parámetros</h3>
@@ -74,7 +72,7 @@
                     </td>
                     <td class="text-center">
                         <a
-                            class="btn btn-sm btn-outline-secondary"
+                            class="btn btn-sm btn-outline-primary"
                             href="{{ route('parameters.edit', $parameter)}}"
                             title="Editar párametro"
                         >

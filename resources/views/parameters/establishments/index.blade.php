@@ -4,11 +4,9 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Establecimientos</h3>
 
-<table class="table table-responsive">
+<table class="table table-bordered table-sm">
     <thead>
         <tr>
             <th>Id</th>
@@ -30,7 +28,7 @@
                 <td>{{ $establishment->sirh_code }}</td>
                 <td>{{ $establishment->commune->name }}</td>
                 <td>
-                    <button class="btn btn-default" data-toggle="modal"
+                    <button class="btn btn-outline-primary" data-toggle="modal"
                         data-target="#editModal"
                         data-name="{{ $establishment->name }}"
                         data-sirh="{{ $establishment->sirh_code }}"
