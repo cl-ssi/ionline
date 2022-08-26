@@ -31,7 +31,7 @@
 </div><br />
 @endif
 
-@if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id()))
+@if(auth()->user()->hasAnyPermission(['Indicators: manager']) || $comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id()))
 <form method="post" action="{{ route('indicators.comges.action.store', [$comges->year, $comges, isset($corte) ? $corte->number : $section, $indicator]) }}">
     @csrf
     <div class="form-row">
