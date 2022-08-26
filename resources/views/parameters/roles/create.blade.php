@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Crear nuevo Rol</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.roles.store') }}">
@@ -31,11 +29,17 @@
     	<div class="form-check">
       		<input class="form-check-input" type="checkbox" id="{{$permission->name}}"
                 name="permissions[]" value="{{ $permission->name }}">
-      		<label class="form-check-label" for="{{$permission->name}}">{{$permission->name}}</label>
+      		<label class="form-check-label" for="{{$permission->name}}">{{ $permission->name }}</label>
+            <br>
+            <small class="text-secondary">{{ $permission->description }}</small>
     	</div>
     @endforeach
 
-    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+
+        <a class="btn btn-outline-secondary" href="{{ route('parameters.roles.index') }}">Volver</a>
+    </div>
 </form>
 
 @endsection

@@ -4,7 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
 
 <h3 class="mb-3">Crear Frase del día</h3>
 
@@ -18,6 +17,8 @@
         </fieldset>
     </div>
     <button type="submit" class="btn btn-primary">Actualizar</button>
+
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.phrases.index') }}">Volver</a>
 
 </form>
 
