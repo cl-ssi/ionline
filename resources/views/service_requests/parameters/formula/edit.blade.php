@@ -4,9 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
-
 <h3 class="mb-3">Editar Horarios de Cirujanos y Anestecistas por Nivel</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.parameters.formula.update', $denominationFormula) }}">

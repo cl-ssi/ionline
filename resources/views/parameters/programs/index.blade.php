@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 @livewire('parameters.program.program-index')
 
 @endsection
