@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Editar Rol</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.roles.update', $role->id) }}">
@@ -28,23 +26,29 @@
 
     </div>
 
-    @foreach($permissions as $name => $id)
+    @foreach($permissions as $permission)
     	<div class="form-check">
-      		<input class="form-check-input" type="checkbox" id="{{ $name }}"
-                name="permissions[]" value="{{ $name }}"
-                {{ $role->hasPermissionTo($name) ? 'checked':'' }} >
-      		<label class="form-check-label" for="{{ $name }}">{{ $name }}</label>
+      		<input class="form-check-input" type="checkbox" id="{{ $permission->name }}"
+                name="permissions[]" value="{{ $permission->name }}"
+                {{ $role->hasPermissionTo($permission->name) ? 'checked':'' }} >
+      		<label class="form-check-label" for="{{ $permission->name }}">{{ $permission->name }}</label>
+            <br>
+            <small class="text-secondary">{{ $permission->description }}</small>
     	</div>
     @endforeach
 
-    <button type="submit" class="btn btn-primary mt-3 float-left">Guardar</button>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
 
+        <a class="btn btn-outline-secondary" href="{{ route('parameters.roles.index') }}">Volver</a>
+    </div>
+    
 </form>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.roles.destroy', $role) }}">
     @csrf
     @method('DELETE')
-    <button type="submit" class="btn btn-danger mt-3 float-right">Eliminar</button>
+    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
 </form><br><br>
 
 @endsection

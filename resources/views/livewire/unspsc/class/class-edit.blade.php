@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
 
-    <h5>Editar Clase</h5>
+    <h3>Editar Clase</h3>
 
     @include('unspsc.bread-crumbs', [
         'type' => 'class.edit',
