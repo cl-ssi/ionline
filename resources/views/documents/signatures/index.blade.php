@@ -51,7 +51,7 @@
     </button>
 
     <div class="table-responsive">
-        <table class="table table-striped table-sm table-bordered">
+        <table class="table table-striped table-sm table-bordered small">
             <thead>
                 <tr>
                     <th scope="col">Sel.</th>
@@ -83,10 +83,12 @@
                     </td>
                     <td>{{ $pendingSignaturesFlow->signature->id}}</td>
                     <td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>
-                    <td>{{ $pendingSignaturesFlow->signature->responsable->getTinnyNameAttribute() }} <br>
-                        @if($pendingSignaturesFlow->signature->responsable->id != Auth::user()->id)
-                            <p class="font-weight-light"><small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small></p>
+                    <td>{{ $pendingSignaturesFlow->signature->responsable->getTinnyNameAttribute() }}
+                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$pendingSignaturesFlow->signerName }}</small><br>
+                        @if($pendingSignaturesFlow->userSigner->absent == 1)
+                            <small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small>
                         @endif
+                        </p>
                     </td>
                     <td>{{ $pendingSignaturesFlow->type }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
@@ -187,12 +189,12 @@
     <h4>Firmados/Rechazados</h4>
     
     <div class="table-responsive">
-        <table class="table table-striped table-sm table-bordered">
+        <table class="table table-striped table-sm table-bordered small">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Fecha de Solicitud</th>
-                    <th scope="col">Responsable</th>
+                    <th scope="col">Creador</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
@@ -212,7 +214,12 @@
                     <td>{{ $signedSignaturesFlow->signature?
                         Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature?
-                        $signedSignaturesFlow->signature->responsable->getTinnyNameAttribute():'' }}</td>
+                        $signedSignaturesFlow->signature->responsable->getTinnyNameAttribute():'' }}
+                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$pendingSignaturesFlow->signerName }}</small><br>
+                        @if($pendingSignaturesFlow->userSigner->absent == 1)
+                            <small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small>
+                        @endif
+                    </td>
                     <td>{{$signedSignaturesFlow->signature? $signedSignaturesFlow->type :''}}</td>
                     <td>{{ $signedSignaturesFlow->signature->subject??'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature->description??'' }}</td>

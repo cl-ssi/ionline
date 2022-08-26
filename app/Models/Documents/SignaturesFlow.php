@@ -39,7 +39,7 @@ class SignaturesFlow extends Model Implements Auditable
 
     public function getSignerNameAttribute()
     {
-        return User::find($this->user_id)->fullName;
+        return User::find($this->user_id)->TinnyName;
     }
     
     public function getRealSignerNameAttribute(){
