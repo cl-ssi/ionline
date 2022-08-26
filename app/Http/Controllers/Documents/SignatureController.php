@@ -49,6 +49,12 @@ class SignatureController extends Controller
         $pendingSignaturesFlows = null;
         $users[0] = Auth::user()->id;
 
+        if(Auth::user()->getIAmSubrogantOfAttribute()->count() > 0){
+            foreach(Auth::user()->getIAmSubrogantOfAttribute() as $surrogacy){
+                array_push($users, $surrogacy->id);
+            }
+        }
+
         $myAuthorities = collect();
         $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
@@ -96,7 +102,6 @@ class SignatureController extends Controller
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
-
 
             //Firmas del usuario y del manager actual de ou
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
