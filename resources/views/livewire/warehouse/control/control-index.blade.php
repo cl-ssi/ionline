@@ -15,43 +15,28 @@
         <div class="col text-right">
             @if($type == 'receiving')
                 @if($store)
-                    @canany(['Store: create reception by donation', 'Store: create reception by purcharse order'])
-                        <div class="dropdown">
-                            <button
-                                class="btn btn-primary dropdown-toggle"
-                                type="button"
-                                id="control-reception"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                <i class="fas fa-plus"></i> Nuevo Ingreso
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="control-reception">
-                                @can('Store: create reception by donation')
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route('warehouse.controls.create', [
-                                            'store' => $store,
-                                            'type' => 'receiving',
-                                            'nav' => $nav,
-                                        ]) }}"
-                                    >
-                                        <i class="fas fa-download"></i> Ingreso Normal
-                                    </a>
-                                @endcan
-                                @can('Store: create reception by purcharse order')
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route('warehouse.generate-reception', [
-                                            'store' => $store,
-                                            'nav' => $nav,
-                                        ]) }}"
-                                    >
-                                        <i class="fas fa-shopping-cart"></i> Ingreso Orden de Compra
-                                    </a>
-                                @endcan
-                            </div>
-                        </div>
+                    @can('Store: create reception by donation')
+                        <a
+                            class="btn btn-sm btn-outline-primary"
+                            href="{{ route('warehouse.controls.create', [
+                                'store' => $store,
+                                'type' => 'receiving',
+                                'nav' => $nav,
+                            ]) }}"
+                        >
+                            <i class="fas fa-download"></i> Ingreso Sin Orden de Compra
+                        </a>
+                    @endcan
+                    @can('Store: create reception by purcharse order')
+                        <a
+                            class="btn btn-sm btn-primary"
+                            href="{{ route('warehouse.generate-reception', [
+                                'store' => $store,
+                                'nav' => $nav,
+                            ]) }}"
+                        >
+                            <i class="fas fa-shopping-cart"></i> Ingreso Con Orden de Compra
+                        </a>
                     @endcan
                 @endif
             @else
