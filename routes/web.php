@@ -1094,7 +1094,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{file}', [RNIdbController::class,'download'])->middleware('auth')->name('download');
     });
 
-    Route::prefix('comges')->as('comges.')->group(function () {
+    Route::prefix('comges')->as('comges.')->middleware('auth')->group(function () {
         Route::get('/', [ComgesController::class,'index'])->name('index');
         Route::get('/{year}', [ComgesController::class,'list'])->name('list');
         Route::post('/{year}', [ComgesController::class,'store'])->name('store');
