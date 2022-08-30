@@ -262,10 +262,10 @@
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation->reason == NULL)
             @if(($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-              Auth::user()->hasRole('Replacement Staff: admin')) && $requestReplacementStaff->technical_evaluation_status == 'pending')
+              Auth::user()->hasRole('Replacement Staff: admin')) && $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'pending')
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal"
-                  data-target="#exampleModal-reject-{{ $id }}">
+                  data-target="#exampleModal-reject-{{ $requestReplacementStaff->technicalEvaluation->id }}">
                     <i class="fas fa-window-close"></i> Finalizar Proceso Selección
                 </button>
 

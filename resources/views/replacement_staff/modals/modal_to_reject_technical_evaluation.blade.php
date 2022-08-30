@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal-reject-{{$technicalEvaluation->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal-reject-{{$requestReplacementStaff->technicalEvaluation->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,17 +10,17 @@
       </div>
       <div class="modal-body">
           <form method="POST" class="form-horizontal"
-            action="{{ route('replacement_staff.request.technical_evaluation.finalize_selection_process', $technicalEvaluation) }}"/>
+            action="{{ route('replacement_staff.request.technical_evaluation.finalize_selection_process', $requestReplacementStaff->technicalEvaluation) }}"/>
               @csrf
               @method('POST')
               <fieldset class="form-group col mt">
                   <label for="for_reason">Motivo</label>
                   <select name="reason" class="form-control" required>
                       <option value="">Seleccione</option>
-                      @if($technicalEvaluation->applicants->count() == 0)
+                      @if($requestReplacementStaff->technicalEvaluation->applicants->count() == 0)
                       <option value="falta oferta laboral">Falta de oferta laboral</option>
                       @endif
-                      @if($technicalEvaluation->applicants->count() > 0)
+                      @if($requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
                       <option value="rechazo oferta laboral">Rechazo de oferta laboral</option>
                       @endif
                       <option value="other">Otra</option>
