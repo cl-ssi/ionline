@@ -57,6 +57,7 @@ class ShowTotalHours extends Component
 
         switch ($this->fulfillment->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
+            case 'TURNO DE REEMPLAZO':
 
                 if (!$this->fulfillment) {
                     return view('livewire.service-request.show-total-hours');
@@ -176,7 +177,7 @@ class ShowTotalHours extends Component
             case 'DIURNO':
             case 'TERCER TURNO - MODIFICADO':
             case 'CUARTO TURNO - MODIFICADO':
-            case 'TURNO DE REEMPLAZO':
+            // case 'TURNO DE REEMPLAZO':
             case ($this->fulfillment->serviceRequest->working_day_type == 'HORA EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) < Carbon::parse('01-10-2021 00:00'))):
             case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' && (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) < Carbon::parse('01-10-2021 00:00'))):
             case 'OTRO':
