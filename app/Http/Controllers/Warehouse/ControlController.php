@@ -86,14 +86,16 @@ class ControlController extends Controller
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
+     * @param  \Iluminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function pdf(Store $store, Control $control)
+    public function pdf(Store $store, Control $control, Request $request)
     {
         $type = '/';
+        $act_type = $request->act_type;
 
         if($control->isReceiving())
-            return view('warehouse.pdf.report-reception', compact('store', 'control', 'type'));
+            return view('warehouse.pdf.report-reception', compact('store', 'control', 'type', 'act_type'));
         else
             return view('warehouse.pdf.report-dispatch', compact('store', 'control', 'type'));
     }
