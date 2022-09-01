@@ -2,6 +2,7 @@
 
 namespace App\Models\Warehouse;
 
+use App\Models\Documents\Signature;
 use App\Models\Parameters\Program;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\Invoice;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+
 class Control extends Model
 {
     use HasFactory, SoftDeletes;
@@ -42,6 +44,8 @@ class Control extends Model
         'request_form_id',
         'organizational_unit_id',
         'signer_id',
+        'technical_signature_id',
+        'reception_signature_id',
     ];
 
     protected $dates = [
@@ -121,6 +125,16 @@ class Control extends Model
     public function signer()
     {
         return $this->belongsTo(User::class, 'signer_id');
+    }
+
+    public function technicalSignature()
+    {
+        return $this->belongsTo(Signature::class);
+    }
+
+    public function receptionSignature()
+    {
+        return $this->belongsTo(Signature::class);
     }
 
     public function isReceiving()
