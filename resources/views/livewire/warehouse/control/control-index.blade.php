@@ -74,12 +74,14 @@
                     <th>Programa</th>
                     <th class="text-center"># Productos</th>
                     <th class="text-center">Estado</th>
-                    <th></th>
+                    <th class="text-center">Ingreso a Bodega</th>
+                    <th class="text-center">Recepción Técnica</th>
+                    <th>Facturas</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="d-none" wire:loading.class.remove="d-none" wire:target="search">
-                    <td class="text-center" colspan="8">
+                    <td class="text-center" colspan="9">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
@@ -159,26 +161,74 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        @if($control->isConfirmed())
+                        @if($control->receptionSignature && $control->receptionSignature->signaturesFlows->first()->isSigned())
+                            <a
+                                href="https://storage.googleapis.com/{{ $control->receptionSignature->signaturesFlows->first()->signaturesFile->file }}"
+                                class="btn btn-sm btn-outline-success"
+                                target="_blank"
+                                title="Acta de Recepción en Bodega Firmada"
+                            >
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        @elseif($control->isConfirmed())
                             <a
                                 href="{{ route('warehouse.control.pdf', [
                                     'store' => $store,
-                                    'control' => $control
+                                    'control' => $control,
+                                    'act_type' => 'reception'
                                 ]) }}"
                                 class="btn btn-sm btn-outline-secondary"
                                 target="_blank"
+                                title="Acta de Recepción en Bodega"
                             >
                                 <i class="fas fa-file-pdf"></i>
                             </a>
                         @endif
                     </td>
-                </tr>
-                @empty
-                <tr class="text-center">
-                    <td colspan="8">
-                        <em>No hay resultados</em>
+                    <td class="text-center">
+                        @if($control->technicalSignature && $control->technicalSignature->signaturesFlows->first()->isSigned())
+                            <a
+                                href="https://storage.googleapis.com/{{ $control->technicalSignature->signaturesFlows->first()->signaturesFile->file }}"
+                                class="btn btn-sm btn-outline-success"
+                                target="_blank"
+                                title="Acta de Recepción Técnica Firmada"
+                            >
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        @elseif($control->isConfirmed())
+                            <a
+                                href="{{ route('warehouse.control.pdf', [
+                                    'store' => $store,
+                                    'control' => $control,
+                                    'act_type' => 'technical'
+                                ]) }}"
+                                class="btn btn-sm btn-outline-secondary"
+                                target="_blank"
+                                title="Acta de Recepción Técnica"
+                            >
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        @endif
+                    </td>
+                    <td>
+                        @foreach($control->invoices as $invoice)
+                            <a
+                                href="https://storage.googleapis.com/{{ $invoice->url }}"
+                                class="btn btn-sm btn-danger"
+                                target="_blank"
+                                title="Ver Factura {{ $invoice->number }}"
+                            >
+                                <span class="fas fa-file-invoice-dollar" aria-hidden="true"></span>
+                            </a>
+                        @endforeach
                     </td>
                 </tr>
+                @empty
+                    <tr class="text-center">
+                        <td colspan="9">
+                            <em>No hay resultados</em>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
             <caption>
