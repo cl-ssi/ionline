@@ -21,6 +21,14 @@
     ACTA DE INGRESO N° {{ $control->id }}
 </div>
 
+<div class="center">
+    @if($act_type == 'technical')
+        <strong class="seis">Recepción Técnica</strong>
+    @else
+        <strong class="seis">Recepción en Bodega</strong>
+    @endif
+</div>
+
 <div style="padding-bottom: 8px;">
     <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
     <strong>Programa:</strong> {{ $control->program_name }}<br>
