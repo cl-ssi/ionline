@@ -67,7 +67,7 @@
 					     {{ $user->FullName }}<br>
 					@endforeach
 				</td>
-        <td>{{ $computer->place ? $computer->place->name : '' }}</td>
+        <td>{{ $computer->place ? $computer->place->name : 'Asignar Lugar' }}</td>
 				<td>
 					<a href="{{ route('resources.computer.edit', $computer) }}" class="btn btn-outline-secondary btn-sm">
 					<span class="fas fa-edit" aria-hidden="true"></span></a>

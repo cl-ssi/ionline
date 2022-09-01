@@ -5,10 +5,13 @@ namespace App\Resources;
 use App\Models\Parameters\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Computer extends Model
+class Computer extends Model implements Auditable
 {
     //
+    use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
         'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'ip_group', 'rack', 'vlan',
         'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment', 
