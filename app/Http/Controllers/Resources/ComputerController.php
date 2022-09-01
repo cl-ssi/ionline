@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resources\StoreComputerRequest;
 use App\Http\Requests\Resources\UpdateComputerRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ComputersExport;
 
 class ComputerController extends Controller
 {
@@ -102,6 +104,10 @@ class ComputerController extends Controller
       $computer->delete();
       session()->flash('success', 'El computador '.$computer->brand.' ha sido eliminado');
       return redirect()->route('resources.computer.index');
+    }
+
+    public function export(){
+      return Excel::download(new ComputersExport, 'recursos-computadores-listado.xlsx');
     }
 
 }
