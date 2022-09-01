@@ -42,7 +42,7 @@ class ComputersExport implements FromCollection,WithHeadings, WithMapping, Shoul
         }
         return [
             $computer->id,
-            $computer->type,
+            $computer->tipo(),
             $computer->model,
             $computer->serial,
             $computer->hostname,
@@ -59,7 +59,7 @@ class ComputersExport implements FromCollection,WithHeadings, WithMapping, Shoul
             $computer->inventory_number,
             $computer->intesis_id,
             $computer->comment,
-            $computer->active_type,
+            $computer->tipoActivo(),
             $computer->status,
             $computer->office_serial,
             $computer->windows_serial,
