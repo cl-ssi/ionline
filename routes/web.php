@@ -477,6 +477,7 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::get('{computer}/edit', [ComputerController::class,'edit'])->name('edit');
         Route::put('{computer}/update', [ComputerController::class,'update'])->name('update');
         Route::delete('{computer}/destroy', [ComputerController::class,'destroy'])->name('destroy');
+        Route::get('export', [ComputerController::class,'export'])->name('export');
     });
     Route::prefix('printers')->name('printer.')->group(function () {
         Route::get('/', [PrinterController::class,'index'])->name('index');
