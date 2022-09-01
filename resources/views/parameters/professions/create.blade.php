@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <h3 class="mb-3">Crear Nueva Profesión</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.professions.store') }}">
@@ -67,6 +65,8 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.professions.index') }}">Volver</a>
+
 
 </form>
 

@@ -73,6 +73,33 @@
 
 	<div class="row">
 		<fieldset class="form-group col">
+			<label for="for_ip_group">Grupo IP</label>
+            <select name="ip_group" id="for_ip_group" class="form-control" required>
+            	<option value="">Seleccione...</option>
+                <option value="standard">Estándar</option>
+				<option value="journalist">Periodista</option>
+				<option value="server">Servidor</option>
+            </select>
+        </fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_rack<">Rack</label>
+			<input type="text" class="form-control" id="for_rack" name="rack">
+		</fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_vlan">VLAN</label>
+			<input type="IP" class="form-control" id="for_vlan" placeholder="" name="vlan">
+		</fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_network_segment">Segmento de Red</label>
+			<input type="text" class="form-control" id="for_network_segment" placeholder="x.x.x.0" name="network_segment">
+		</fieldset>
+	</div>
+
+	<div class="row">
+		<fieldset class="form-group col">
 			<label for="for_operating_system">Sistema Operativo</label>
 			<input type="text" class="form-control" id="for_operating_system" placeholder="Ej: Windows 7, Windows 10, Linux, etc." name="operating_system" required="required">
 		</fieldset>

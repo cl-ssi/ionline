@@ -9,7 +9,7 @@ class Action extends Model
     protected $table = 'ind_actions';
     protected $fillable = ['number', 'name', 'verification_means', 'numerator', 'numerator_source',
                            'denominator', 'denominator_source', 'weighting', 'section_id', 'target_type',
-                           'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_cols'];
+                           'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_cols', 'is_accum'];
 
     public function section()
     {

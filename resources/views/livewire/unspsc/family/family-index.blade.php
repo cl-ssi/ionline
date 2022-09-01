@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
 
-    <h5>Familias</h5>
+    <h3>Familias</h3>
 
     @include('unspsc.bread-crumbs', [
         'type' => 'families.index',

@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Crear nuevo Permisos</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.permissions.store') }}">
@@ -33,6 +31,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.permissions.index', 'web') }}">Volver</a>
 
 </form>
 

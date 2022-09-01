@@ -36,23 +36,20 @@
 <h3 class="mb-3">Indicadores</h3>
 
 <div class="row">
-
-    <div class="col">
+    @auth
+    <div class="col-sm-4">
         @include('indicators.comges.partials.card')
     </div>
+    @endauth
 
-    <div class="col">
+    <div class="col-sm-4">
         @include('indicators.program_aps.partials.card')
     </div>
 
-    <div class="col">
+    <div class="col-sm-4">
         @include('indicators.iaaps.partials.card')
     </div>
-</div>
 
-<br>
-
-<div class="row">
     <div class="col-sm-4">
         @include('indicators.aps.partials.card')
     </div>

@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Roles del sistema</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('parameters.roles.create') }}">Crear</a>

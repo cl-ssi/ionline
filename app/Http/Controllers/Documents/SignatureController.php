@@ -49,6 +49,12 @@ class SignatureController extends Controller
         $pendingSignaturesFlows = null;
         $users[0] = Auth::user()->id;
 
+        if(Auth::user()->getIAmSubrogantOfAttribute()->count() > 0){
+            foreach(Auth::user()->getIAmSubrogantOfAttribute() as $surrogacy){
+                array_push($users, $surrogacy->id);
+            }
+        }
+
         $myAuthorities = collect();
         $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
@@ -96,7 +102,6 @@ class SignatureController extends Controller
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
-
 
             //Firmas del usuario y del manager actual de ou
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
@@ -561,7 +566,12 @@ class SignatureController extends Controller
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
         $signatureFlow = SignaturesFlow::find($idSignatureFlow);
-        $signatureFlow->update(['status' => 0, 'observation' => $request->observacion]);
+        $user_signer_id = $signatureFlow->user_id;
+        $signatureFlow->update([
+            'status' => 0,
+            'observation' => $request->observacion,
+            'real_signer_id' => (Auth::user()->id == $user_signer_id) ? null : Auth::user()->id,
+        ]);
         $signatureFlow->signature()->update(['rejected_at' => now()]);
 
         session()->flash('success', "La solicitud ha sido rechazada");

@@ -4,11 +4,9 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Comunas</h3>
 
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>Id</th>
@@ -22,7 +20,7 @@
                 <td>{{ $commune->id }}</td>
                 <td>{{ $commune->name }}</td>
                 <td>
-                    <button class="btn btn-default" data-toggle="modal"
+                    <button class="btn btn-sm btn-outline-primary" data-toggle="modal"
                         data-target="#editModal"
                         data-name="{{ $commune->name }}"
                         data-formaction="{{ route('parameters.communes.update', $commune->id)}}">

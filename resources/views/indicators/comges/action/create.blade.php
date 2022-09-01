@@ -31,7 +31,7 @@
 </div><br />
 @endif
 
-@if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id()))
+@if(auth()->user()->hasAnyPermission(['Indicators: manager']) || $comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id()))
 <form method="post" action="{{ route('indicators.comges.action.store', [$comges->year, $comges, isset($corte) ? $corte->number : $section, $indicator]) }}">
     @csrf
     <div class="form-row">
@@ -64,10 +64,16 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="isRem">
+        <label class="form-check-label" for="isRem">
             Fuente Rem?
+        </label>
+        </div>
+        <div class="form-check form-check-inline source" style="display: none">
+        <input class="form-check-input" name="is_accum" type="checkbox" id="is_accum">
+        <label class="form-check-label" for="is_accum">
+            Mensual acumulado?
         </label>
         </div>
     </div>
@@ -197,7 +203,7 @@
 @section('custom_js')
 <script type="text/javascript"> 
     $(document).ready(function() {
-        $('input[type="checkbox"]').click(function() {
+        $('#isRem').click(function() {
             if($(this).prop('checked') == true){
                 $(".source").show();
                 $('#numerator_source, #denominator_source, #numerator_cods, #numerator_cols, #denominator_cods, #denominator_cols').prop('disabled', false);

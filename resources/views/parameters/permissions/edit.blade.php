@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 <h3 class="mb-3">Editar Permiso</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.permissions.update', $permission->id) }}">
@@ -33,7 +31,8 @@
         </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary float-left">Actualizar</button>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.permissions.index', $permission->guard_name) }}">Volver</a>
 
 </form>
 

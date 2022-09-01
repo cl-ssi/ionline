@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <h3 class="mb-3">Crear Item Presupuestrio</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.budgetitems.store') }}">

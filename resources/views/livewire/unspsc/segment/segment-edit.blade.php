@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
 
-    <h5>Editar Segmento</h5>
+    <h3>Editar Segmento</h3>
 
     @include('unspsc.bread-crumbs', [
         'type' => 'segments.edit',

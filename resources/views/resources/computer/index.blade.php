@@ -6,26 +6,35 @@
 
 <h3 class="mb-3">Computadores</h3>
 
-<form class="form d-print-none" method="GET" action="{{ route('resources.computer.index') }}">
-<fieldset class="form-group">
-    <div class="input-group">
+<div class="row">
+    <div class="col-sm-9">
+		<form class="form d-print-none" method="GET" action="{{ route('resources.computer.index') }}">
+			<fieldset class="form-group">
+				<div class="input-group">
 
-        <div class="input-group-prepend">
-        	<a class="btn btn-primary" href="{{ route('resources.computer.create') }}">
-                <i class="fas fa-plus"></i> Agregar nuevo</a>
-        </div>
+					<div class="input-group-prepend">
+						<a class="btn btn-primary" href="{{ route('resources.computer.create') }}">
+							<i class="fas fa-plus"></i> Agregar nuevo</a>
+					</div>
 
-        <input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
-            placeholder="Busqueda por: Marca o Modelo o IP o Serial o Número de Inventario - Filtro por: Serial"
-            name="search">
+					<input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
+						placeholder="Marca o Modelo o IP o Serial o Número de Inventario - Filtro por: Serial"
+						name="search">
 
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fas fa-search" aria-hidden="true"></i></button>
-        </div>
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" type="submit">
+							<i class="fas fa-search" aria-hidden="true"></i></button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
     </div>
-</fieldset>
-</form>
+    <div class="col-sm-3">
+		<a class="btn btn-success float-right" href="{{ route('resources.computer.export') }}">
+			<i class="fas fa-file-excel"></i> Exportar Listado
+		</a>
+    </div>
+</div>
 
 <div class="table-responsive">
 	<table class="table table-striped table-sm" id="TableFilter">

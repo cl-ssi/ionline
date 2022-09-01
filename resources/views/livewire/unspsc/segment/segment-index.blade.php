@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
 
-    <h5>Segmentos</h5>
+    <h3>Segmentos</h3>
 
     @include('unspsc.bread-crumbs', ['type' => 'segments.index'])
 

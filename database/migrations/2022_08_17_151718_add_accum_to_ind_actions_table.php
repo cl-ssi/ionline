@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Spatie\Permission\Models\Permission;
 
-class AddPermissionsOfStore extends Migration
+class AddAccumToIndActionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +13,9 @@ class AddPermissionsOfStore extends Migration
      */
     public function up()
     {
-		Permission::create(['name' => 'Store: maintainer programs']);
+        Schema::table('ind_actions', function (Blueprint $table) {
+            $table->boolean('is_accum')->nullable()->after('target_type');
+        });
     }
 
     /**
@@ -24,6 +25,8 @@ class AddPermissionsOfStore extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('ind_actions', function (Blueprint $table) {
+            $table->dropColumn('is_accum');
+        });
     }
 }
