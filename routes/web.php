@@ -1471,7 +1471,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
     Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
 
-    Route::prefix('/store')->group(function () {
+    Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 
         Route::prefix('{store}')->middleware('ensure.store')->group(function () {
@@ -1501,7 +1501,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
         Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
         Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
         Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
-        Route::get('/places', InventoryMaintainerPlaces::class)->name('places');
+        Route::get('places', InventoryMaintainerPlaces::class)->name('places');
     });
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
