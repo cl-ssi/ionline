@@ -86,6 +86,7 @@
     				<option value="DFL" @if($request->programm_name == 'DFL') selected @endif>DFL</option>
     				<option value="TURNOS VACANTES" @if($request->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
     				<option value="OTROS PROGRAMAS HETG" @if($request->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
+                    <option value="LEQ Fonasa" @if($request->programm_name == 'LEQ Fonasa') selected @endif>LEQ Fonasa</option>
     				<option value="CAMPAÑA INVIERNO" @if($request->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
     				<option value="CONTINGENCIA RESPIRATORIA" @if($request->programm_name == 'CONTINGENCIA RESPIRATORIA') selected @endif>CONTINGENCIA RESPIRATORIA</option>
                     <option value="PABELLON TARDE" @if($request->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>

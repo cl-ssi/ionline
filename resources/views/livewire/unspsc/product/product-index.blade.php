@@ -1,7 +1,6 @@
 <div>
-    @include('parameters.nav')
 
-    <h5>Productos</h5>
+    <h3>Productos</h3>
 
     @include('unspsc.bread-crumbs',[
         'type' => 'products.index',

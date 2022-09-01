@@ -81,6 +81,33 @@
 
 	<div class="row">
 		<fieldset class="form-group col">
+			<label for="for_ip_group">Grupo IP</label>
+            <select name="ip_group" id="for_ip_group" class="form-control" required>
+            	<option value="">Seleccione...</option>
+                <option value="standard" {{ $computer->ip_group == "standard" ? 'selected' : '' }}>Estándar</option>
+				<option value="journalist" {{ $computer->ip_group == "journalist" ? 'selected' : '' }}>Periodista</option>
+				<option value="server" {{ $computer->ip_group == "server" ? 'selected' : '' }}>Servidor</option>
+            </select>
+        </fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_rack<">Rack</label>
+			<input type="text" class="form-control" id="for_rack" name="rack" value="{{$computer->rack}}">
+		</fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_vlan">VLAN</label>
+			<input type="IP" class="form-control" id="for_vlan" placeholder="" name="vlan" value="{{$computer->vlan}}">
+		</fieldset>
+
+		<fieldset class="form-group col">
+			<label for="for_network_segment">Segmento de Red</label>
+			<input type="text" class="form-control" id="for_network_segment" placeholder="x.x.x.0" name="network_segment" value="{{$computer->network_segment}}">
+		</fieldset>
+	</div>
+
+	<div class="row">
+		<fieldset class="form-group col">
 			<label for="for_operating_system">Sistema Operativo</label>
 			<input type="text" class="form-control" id="for_operating_system" placeholder="Ej: Windows 7, Windows 10, Linux, etc." name="operating_system" required="required" value="{{$computer->operating_system}}">
 		</fieldset>

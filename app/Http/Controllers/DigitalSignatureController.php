@@ -152,6 +152,10 @@ class DigitalSignatureController extends Controller
 
             $signaturesFlow->status = 1;
             $signaturesFlow->signature_date = now();
+            
+            if($signaturesFlow->user_id != Auth::id())
+                $signaturesFlow->real_signer_id = Auth::id();
+            
             $signaturesFlow->save();
 
             if ($signaturesFlow->signaturesFile->signed_file) {

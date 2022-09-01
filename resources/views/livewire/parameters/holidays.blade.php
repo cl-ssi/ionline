@@ -1,13 +1,12 @@
 <div>
-    @section('title', 'Lista de Feriados')
 
-    @include('parameters.nav')
+    @section('title', 'Lista de Feriados')
 
     @switch($view)
 
         @case('index')
             <h3 class="mb-3">
-                <i class="fas fa-syringe"></i> Listado de feriados
+                <i class="fas fa-suitcase"></i> Listado de feriados
                 <button class="btn btn-success float-right"
                     wire:click="create"><i class="fas fa-plus"></i> Crear nuevo</button>
             </h3>

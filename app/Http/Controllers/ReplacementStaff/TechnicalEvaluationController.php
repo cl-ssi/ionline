@@ -160,7 +160,7 @@ class TechnicalEvaluationController extends Controller
           ->cc(env('APP_RYS_MAIL'))
           ->send(new EndSelectionNotification($technicalEvaluation));
 
-        return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]);
+        return redirect()->route('replacement_staff.request.technical_evaluation.edit',['requestReplacementStaff' => $technicalEvaluation->requestReplacementStaff]);
     }
 
     public function create_document(RequestReplacementStaff $requestReplacementStaff){

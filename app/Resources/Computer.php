@@ -10,8 +10,9 @@ class Computer extends Model
 {
     //
     protected $fillable = [
-        'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'operating_system', 'processor', 'ram', 'hard_disk',
-        'inventory_number', 'active_type', 'intesis_id', 'comment', 'status', 'office_serial', 'windows_serial', 'place_id'
+        'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'ip_group', 'rack', 'vlan',
+        'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment', 
+        'status', 'office_serial', 'windows_serial', 'place_id'
     ];
 
     public function users() {

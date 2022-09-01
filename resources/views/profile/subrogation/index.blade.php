@@ -1,10 +1,10 @@
-<table class="table table-sm table-bordered">
-    <thead>
+<table class="table table-sm table-bordered small">
+    <thead class="thead-light">
         <tr>
             <th width="120"></th>
             <th>Estado</th>
             <th>Nombre</th>
-            <th width="100">Órden jerárquico</th>
+            <th>Órden jerárquico</th>
             <th></th>
         </tr>
     </thead>
@@ -79,3 +79,30 @@
         @endforeach
     </tbody>
 </table>
+
+<br>
+
+<h4><i class="fas fa-chess"></i> Mis subrrogancias</h4>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered small table-stripped">
+        <thead class="thead-light">
+            <tr>
+                <th width="120"></th>
+                <th>Nombre</th>
+                <th>Unidad Organizacional</th>
+                <th>Órden jerárquico</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(Auth::user()->getIAmSubrogantOfAttribute() as $key => $user)
+                <tr>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ $user->TinnyName }}</td>
+                    <td>{{ $user->organizationalUnit->name }}</td>
+                    <td>{{ $user->subrogations->first()->level }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>

@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <h3 class="mb-3">Denominación 1121</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('rrhh.service-request.parameters.1121.create') }}">

@@ -1,8 +1,7 @@
 @extends('layouts.app')
 @php
     $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec');
-    $fmonth = [1 => 3, 2 => 6, 3 => 9, 4 => 12];
-    $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
+    $fmonth = [0 => 0, 1 => 3, 2 => 6, 3 => 9, 4 => 12];
     $romans = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
     $title2 = $comges->name.' - '.$romans[isset($corte) ? $corte->number : $section].' Corte';
 @endphp
@@ -41,7 +40,7 @@
     <hr>
     @foreach($indicators as $indicator)
         <p><a href="" class="dropdown-toggle" data-toggle="collapse" data-target="#ind{{ $indicator->number }}">{{ $comges->number }}.{{$indicator->number}} {{$indicator->name}}</a>
-        @if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif
+        @if(auth()->user()->hasAnyPermission(['Indicators: manager']) || $comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif
         <br>
         @php($referente = $comges->getReferrer(1) ?? $indicator->getReferrer(1) )
         @if($referente)<span class="badge badge-pill badge-light">Referente titular: {{$referente->tinnyName}}</span> @endif
@@ -79,14 +78,12 @@
                 <table class="table table-sm table-bordered small mb-4">
                     <thead>
                         <tr class="text-center">
-                            <th colspan="100%">ACCIÓN {{$action->number}} @if($comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.edit', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator, $action])}}"><span class="fa fa-edit"></span></a>@endif</th>
+                            <th colspan="100%">ACCIÓN {{$action->number}} @if(auth()->user()->hasAnyPermission(['Indicators: manager']) || $comges->users->contains('id', Auth::id()) || $indicator->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.edit', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator, $action])}}"><span class="fa fa-edit"></span></a>@endif</th>
                         </tr>
                         <tr class="text-center">
                             <th class="label">Indicador</th>
-                            {{--@foreach($months_by_section[$corte->number] as $index)
-                                <th>{{$months[$index]}}</th>
-                            @endforeach--}}
-                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
+                            @php($result = $action->is_accum ? 1 : $fmonth[$corte->number - 1] + 1)
+                            @for($i = $result; $i <= $fmonth[$corte->number]; $i++)
                             <th>{{$months[$i]}}</th>
                             @endfor
                             <th>Acum</th>
@@ -100,7 +97,7 @@
                         <tr class="text-center">
                             <td class="text-left glosa">{{$action->numerator}}</td>
                             @if(!$action->values->isEmpty())
-                                @php($count = 1)
+                                @php($count = $result)
                                 @foreach($action->values as $value)
                                     @if($value->factor == "numerador")
                                     <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
@@ -111,7 +108,7 @@
                                     <td class="text-right"></td>
                                 @endfor
                             @else
-                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
+                            @for($i = $result; $i <= $fmonth[$corte->number]; $i++)
                                 <td class="text-right">0</td>
                             @endfor
                             @endif
@@ -126,7 +123,7 @@
                         <tr class="text-center">
                             <td class="text-left glosa">{{$action->denominator}}</td>
                             @if(!$action->values->isEmpty())
-                                @php($count = 1)
+                                @php($count = $result)
                                 @foreach($action->values as $value)
                                     @if($value->factor == "denominador")
                                     <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
@@ -137,7 +134,7 @@
                                     <td class="text-right"></td>
                                 @endfor
                             @else
-                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
+                            @for($i = $result; $i <= $fmonth[$corte->number]; $i++)
                                 <td class="text-right">0</td>
                             @endfor
                             @endif

@@ -157,7 +157,9 @@ class ReplacementStaffController extends Controller
     public function replacement_staff_historical(Request $request){
         $replacementStaff = ReplacementStaff::where('run', $request->run)->first();
         if($replacementStaff){
-            $applicants = Applicant::where('replacement_staff_id', $replacementStaff->id)->get();
+            $applicants = Applicant::where('replacement_staff_id', $replacementStaff->id)
+                ->where('selected', 1)
+                ->get();
             return view('replacement_staff.reports.replacement_staff_historical', compact('request', 'replacementStaff', 'applicants'));
         }
         return view('replacement_staff.reports.replacement_staff_historical', compact('request', 'replacementStaff'));
