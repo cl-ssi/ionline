@@ -114,8 +114,7 @@
                         </td>
                         <td>
                             @foreach($control->invoices as $invoice)
-                                {{ $invoice->number }}
-                                <br>
+                                <li>{{ $invoice->number }}</li>
                             @endforeach
                         </td>
                     </tr>
