@@ -73,6 +73,10 @@ class SignaturesFlow extends Model Implements Auditable
         return $arrayMessages;
     }
 
+    public function isSigned()
+    {
+        return $this->status == 1;
+    }
 
     protected $table = 'doc_signatures_flows';
 
