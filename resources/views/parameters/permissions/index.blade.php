@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters/nav')
-
 @if ($guard == 'web')
 <h3 class="mb-3">Permisos Internos</h3>
 @else
@@ -15,7 +13,7 @@
 
 <a class="btn btn-primary mb-3" href="{{ route('parameters.permissions.create', $guard) }}">Crear</a>
 
-<table class="table table-responsive table-sm">
+<table class="table table-sm">
     <thead>
         <tr>
             <th>ID</th>

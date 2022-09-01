@@ -157,52 +157,44 @@
                             <h6 class="dropdown-header">Bodegas</h6>
                         @endcan
 
-                        @role('Store: Super admin')
-                            <a
-                                class="dropdown-item {{ active('warehouse.stores.index') }}"
-                                href="{{ route('warehouse.stores.index') }}"
-                            >
-                                <i class="fas fa-list"></i> Administrar Bodegas
-                            </a>
-                        @endrole
+						@hasanyrole('Store: admin|Store: user|Store: Super admin')
+							@forelse(Auth::user()->stores as $store)
+								<a
+									class="dropdown-item"
+									href="{{ route('warehouse.store.active', $store) }}"
+								>
+									@if($store->id == optional(Auth::user()->active_store)->id)
+										<i class="fas fa-fw fa-box-open"></i>
+									@else
+										<i class="fas fa-fw fa-circle"></i>
+									@endif
+									{{ $store->name }}
+								</a>
+							@empty
+								<a class="dropdown-item" href="#">
+									No tiene bodegas asignadas
+								</a>
+							@endforelse
+						@endhasanyrole
 
                         @can('Store: add invoice')
                             <a
                                 class="dropdown-item {{ active('warehouse.invoice-management') }}"
                                 href="{{ route('warehouse.invoice-management') }}"
                             >
-                                <i class="fas fa-file-invoice-dollar"></i> Facturas
+                                <i class="fas fa-fw fa-file-invoice-dollar"></i> Ingreso facturas
                             </a>
                         @endcan
 
-                        @can('Store: maintainer programs')
+						@role('Store: Super admin')
                             <a
-                                class="dropdown-item"
-                                href="{{ route('parameters.programs.index')}}"
+                                class="dropdown-item {{ active('warehouse.stores.index') }}"
+                                href="{{ route('warehouse.stores.index') }}"
                             >
-                                <i class="fas fa-box-open"></i> Programas
+                                <i class="fas fa-fw fa-cog"></i> Administrar bodegas
                             </a>
-                        @endcan
+                        @endrole
 
-                        @hasanyrole('Store: admin|Store: user|Store: Super admin')
-                            @forelse(Auth::user()->stores as $store)
-                                <a
-                                    class="dropdown-item"
-                                    href="{{ route('warehouse.store.active', $store) }}"
-                                >
-                                    @if($store->id == optional(Auth::user()->active_store)->id)
-                                        <i class="fas fa-check"></i>
-                                    @else
-                                        <i class="fas fa-circle"></i>
-                                    @endif
-                                    {{ $store->name }}
-                                </a>
-                            @empty
-                                <a class="dropdown-item" href="#">
-                                    No tiene bodegas asignadas
-                                </a>
-                            @endforelse
-                        @endhasanyrole
 
                         @can('Inventory')
                             <div class="dropdown-divider"></div>
@@ -445,6 +437,136 @@
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                     </li>
                 @else
+					
+					@canany([
+						'be god',
+						'Parameters: programs',
+						'Parameters: professions',
+						'Parameters: locations',
+						'Parameters: places',
+						'Parameters: holidays',
+						'Parameters: UNSPSC',
+					])	
+					<li class="nav-item dropdown {{ active(['parameters.*']) }}">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+							<i class="fas fa-cog" title="Mantenedores"></i>
+						</a>
+
+						<ul class="dropdown-menu">
+
+						@canany(['be god'])
+							<a class="dropdown-item {{ active(['parameters.index', 'parameters.create', 'parameters.edit']) }}"
+								href="{{ route('parameters.index') }}">
+								<i class="fas fa-cog"></i> Parámetros
+							</a>
+
+							<li><hr class="dropdown-divider"></li>
+
+							<a class="dropdown-item {{ active(['parameters.permissions.web']) }}" 
+								href="{{ route('parameters.permissions.index', 'web') }}">
+								<i class="fas fa-fw fa-user-tag"></i> Permisos internos
+							</a>
+
+							<a class="dropdown-item {{ active(['parameters.permissions.external']) }}"
+								href="{{ route('parameters.permissions.index', 'external') }}">
+								<i class="fas fa-fw fa-user-lock"></i> Permisos externos
+							</a>
+
+							<a class="dropdown-item {{ active(['parameters.roles.*']) }}"
+								href="{{ route('parameters.roles.index') }}">
+								<i class="fas fa-fw fa-users-cog"></i> Roles
+							</a>
+
+							<li><hr class="dropdown-divider"></li>
+
+							<a class="dropdown-item {{ active('parameters.communes.*') }}"
+								href="{{ route('parameters.communes.index') }}">
+								<i class="fas fa-fw fa-map"></i> Comunas
+							</a>
+
+							<a class="dropdown-item {{ active('parameters.establishments.index') }}"
+								href="{{ route('parameters.establishments.index') }}">
+								<i class="fas fa-fw fa-hospital"></i> Establecimientos
+							</a>
+
+							<li><hr class="dropdown-divider"></li>
+						@endcanany
+
+
+						@canany(['be god','Parameters: programs'])
+							<a class="dropdown-item {{ active(['parameters.programs.*']) }}" 
+								href="{{ route('parameters.programs.index')}}">
+								<i class="fas fa-fw fa-list"></i> Programas
+							</a>
+
+						@endcanany
+
+						@canany(['be god','Parameters: professions'])
+							<a class="dropdown-item {{ active('parameters.professions.index') }}"
+								href="{{ route('parameters.professions.index') }}">
+								<i class="fas fa-fw fa-user-md"></i> Profesiones
+							</a>
+						@endcanany
+
+						@canany(['be god','Parameters: COMGES cutoffdates'])
+							<a class="dropdown-item {{ active(['parameters.cutoffdates.*']) }}" 
+								href="{{ route('parameters.cutoffdates.index') }}">
+								<i class="fas fa-fw fa-calendar-alt"></i> COMGES - Fechas de corte
+							</a>
+						@endcanany
+
+						<li><hr class="dropdown-divider"></li>
+
+						@canany(['be god','Parameters: locations'])
+							<a class="dropdown-item {{ active(['parameters.locations.*']) }}"
+								href="{{ route('parameters.locations.index') }}">
+								<i class="fas fa-fw fa-building"></i> Ubicaciones (edificios)
+							</a>
+						@endcanany
+					
+						@canany(['be god','Parameters: places'])
+							<a class="dropdown-item {{ active(['parameters.places.*']) }}"
+								href="{{ route('parameters.places.index') }}">
+								<i class="fas fa-fw fa-map-marker-alt"></i> Lugares (oficinas)
+							</a>
+						@endcanany
+
+						@canany(['be god','Parameters: holidays'])
+        					<a class="dropdown-item {{active('parameters.holidays.*')}}"
+            					href="{{ route('parameters.holidays') }}">
+            					<i class="fas fa-fw fa-suitcase"></i> Feriados
+							</a>
+						@endcanany
+						
+						@canany(['be god','Parameters: UNSPSC'])
+							<li><hr class="dropdown-divider"></li>
+							
+							<a class="dropdown-item {{ active('segments.index') }}" 
+								href="{{ route('segments.index') }}">
+								<i class="fas fa-fw fa-cubes"></i> UNSPSC Segmentos
+							</a>
+
+							<a class="dropdown-item {{ active('products.all') }}" 
+								href="{{ route('products.all') }}">
+								<i class="fas fa-fw fa-cube"></i> UNSPSC Productos
+							</a>
+						@endcanany
+						
+						@canany(['be god'])
+							<li><hr class="dropdown-divider"></li>
+
+							<a class="dropdown-item {{active('parameters.phrases.index')}}"
+								href="{{ route('parameters.phrases.index') }}">
+								<i class="fas fa-smile-beam"></i> Frases del día
+							</a>
+						@endcanany
+
+						</ul>
+					</li>
+					@endcanany
+
+
+
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             <i class="fas fa-bell" title="Notificaciones"></i>
@@ -463,6 +585,7 @@
                         </div>
                         @endif
                     </li>
+
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->firstName }} <span class="caret"></span>
@@ -472,33 +595,34 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-
-							<a class="dropdown-item" href="{{ route('profile.subrogations') }}">
-								<i class="fas fa-chess"></i> Subrogancia 
-                                @if(auth()->user()->absent) 
-                                <i class="fas text-danger fa-cocktail"></i>
-                                @endif
-							</a>
-
+                            
                             @if(session()->has('god'))
                                 <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
                                     <i class="fas fa-eye text-danger"></i> God Like
                                 </a>
+
+								<div class="dropdown-divider"></div>
                             @endif
 
+							<a class="dropdown-item" href="{{ route('profile.subrogations') }}">
+								@if(auth()->user()->absent) 
+                                <i class="fas fa-fw fa-cocktail text-danger"></i>
+                                @else
+								<i class="fas fa-fw fa-chess"></i>
+								@endif
+								Subrogancia 
+							</a>
+
                             <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
-                                <i class="fas fa-clock"></i> {{ __('Inventarios Pendientes') }}
+                                <i class="fas fa-fw fa-clock"></i> {{ __('Inventario') }}
                             </a>
 
                             @role('god')
-                            <a class="dropdown-item"
-                               href="{{ route('parameters.welcome') }}">
-                                <i class="fas fa-cog fa-fw"></i> Mantenedores
-                            </a>
+							<div class="dropdown-divider"></div>
 
                             <a class="dropdown-item"
                                href="{{ route('parameters.logs.index') }}">
-                                <i class="fas fa-bomb fa-fw"></i> Log de errores
+                                <i class="fas fa-cog fa-bomb"></i> Log de errores
                             </a>
                             @endrole
 
@@ -506,7 +630,7 @@
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item" href="{{ route('logout') }}">
-                                <i class="fas fa-sign-out-alt fa-fw"></i> {{ __('Cerrar sesión') }}
+                                <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}
                             </a>
 
                         </div>
