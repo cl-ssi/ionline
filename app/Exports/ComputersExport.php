@@ -63,7 +63,8 @@ class ComputersExport implements FromCollection,WithHeadings, WithMapping, Shoul
             $computer->status,
             $computer->office_serial,
             $computer->windows_serial,
-            $assigned_user
+            $assigned_user,
+            ($computer->place) ? $computer->place->name : ''
         ];
     }
 }
