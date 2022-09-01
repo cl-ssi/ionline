@@ -135,6 +135,9 @@ return [
         'password' => [
             'min' => 'La :attribute debe contener más de :min caracteres',
         ],
+        'po_items.*.unspsc_product_code' => [
+            'required' => 'El código de la ONU es obligatorio',
+        ]
     ],
 
     'values' => [
