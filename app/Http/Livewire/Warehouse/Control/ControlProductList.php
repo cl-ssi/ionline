@@ -139,7 +139,10 @@ class ControlProductList extends Component
         ]);
 
         if($this->control->isReceiving())
-            new SignatureService($this->control);
+        {
+            $this->sendReceptionRequest($this->control);
+            $this->sendTechnicalRequest($this->control);
+        }
 
         session()->flash('success', 'El ' . $this->control->type_format . ' fue cargado exitosamente.');
 
@@ -148,5 +151,53 @@ class ControlProductList extends Component
             'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch',
             'nav' => $this->nav,
         ]);
+    }
+
+    public function sendReceptionRequest(Control $control)
+    {
+        $signatureTechnical = new SignatureService();
+        $signatureTechnical->addResponsible($this->store->visator);
+        $signatureTechnical->addSignature(
+            'Acta',
+            "Acta de Recepción en Bodega #$control->id",
+            "Recepción #$control->id",
+            'Visación en cadena de responsabilidad',
+            true
+        );
+        $signatureTechnical->addView('warehouse.pdf.report-reception', [
+            'type' => '',
+            'control' => $control,
+            'store' => $control->store,
+            'act_type' => 'reception'
+        ]);
+        $signatureTechnical->addVisators(collect([$this->store->visator]));
+        $signatureTechnical->addSignatures(collect([]));
+        $signatureTechnical = $signatureTechnical->sendRequest();
+        $control->receptionSignature()->associate($signatureTechnical);
+        $control->save();
+    }
+
+    public function sendTechnicalRequest(Control $control)
+    {
+        $signatureReception = new SignatureService();
+        $signatureReception->addResponsible($this->store->visator);
+        $signatureReception->addSignature(
+            'Acta',
+            "Acta de Recepción Técnica #$control->id",
+            "Recepción #$control->id",
+            'Visación en cadena de responsabilidad',
+            true
+        );
+        $signatureReception->addView('warehouse.pdf.report-reception', [
+            'type' => '',
+            'control' => $control,
+            'store' => $control->store,
+            'act_type' => 'technical'
+        ]);
+        $signatureReception->addVisators(collect([]));
+        $signatureReception->addSignatures(collect([$control->signer]));
+        $signatureReception = $signatureReception->sendRequest();
+        $control->technicalSignature()->associate($signatureReception);
+        $control->save();
     }
 }
