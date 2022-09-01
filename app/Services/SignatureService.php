@@ -5,50 +5,72 @@ namespace App\Services;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
-use App\Models\Warehouse\Control;
-use App\Models\Warehouse\StoreUser;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 
 class SignatureService
 {
-    public $control;
-    public $visator = null;
-    public $signer = null;
+    public $responsible;
+    public $documentType;
+    public $subject;
+    public $description;
+    public $endorseType;
+    public $visatorAsSignature;
+    public $view;
+    public $dataView;
+    public $signatures;
+    public $visators;
 
-    public function __construct(Control $control)
+    public function addResponsible(User $responsible)
     {
-        $this->control = $control;
-
-        $this->getVisator();
-        $this->getSigner();
-        $this->sendSignatureRequest();
+        $this->responsible = $responsible;
     }
 
-    public function sendSignatureRequest()
+    public function addSignature($documentType, $subject, $description, $endorseType, $visatorAsSignature)
     {
-        $type = '';
-        $control = $this->control;
-        $store = $control->store;
-        $pdf = \PDF::loadView('warehouse.pdf.report-reception', compact('store', 'control', 'type'));
+        $this->documentType = $documentType;
+        $this->subject = $subject;
+        $this->description = $description;
+        $this->endorseType = $endorseType;
+        $this->visatorAsSignature = $visatorAsSignature;
+    }
+
+    public function addView($view, $dataView)
+    {
+        $this->view = $view;
+        $this->dataView = $dataView;
+    }
+
+    public function addVisators($visators)
+    {
+        $this->visators = $visators;
+    }
+
+    public function addSignatures($signatures)
+    {
+        $this->signatures = $signatures;
+    }
+
+    public function sendRequest()
+    {
+        // TODO: View or document
+        $pdf = \PDF::loadView($this->view, $this->dataView);
         $pdf = $pdf->download('filename.pdf');
 
+        // Signature
         $signature = Signature::create([
-            'user_id' => $this->visator->id,
-            'responsable_id' => $this->visator->id,
-            'ou_id' => $this->visator->organizational_unit_id,
+            'user_id' => $this->responsible->id,
+            'responsable_id' => $this->responsible->id,
+            'ou_id' => $this->responsible->organizational_unit_id,
             'request_date' => now(),
-            'document_type' => 'Acta',
-            'subject' => 'Acta de recepción #' . $control->id,
-            'description' => " Acta de recepción #" . $control->id,
-            'endorse_type' => 'Visación en cadena de responsabilidad',
-            'visatorAsSignature' => true,
+            'document_type' => $this->documentType,
+            'subject' => $this->subject,
+            'description' => $this->description,
+            'endorse_type' => $this->endorseType,
+            'visatorAsSignature' => $this->visatorAsSignature,
         ]);
 
-        $signature->update([
-            'distribution' => $this->visator->email,
-        ]);
-
+        // Signature File
         $signaturesFile = new SignaturesFile();
         $signaturesFile->md5_file = md5($pdf);
         $signaturesFile->file_type = 'documento';
@@ -59,35 +81,36 @@ class SignatureService
         $signaturesFile->update(['file' => $filePath]);
         Storage::disk('public')->put($filePath, $pdf);
 
-        // Visator
-        $signaturesFlow = new SignaturesFlow();
-        $signaturesFlow->signatures_file_id = $signaturesFile->id;
-        $signaturesFlow->type = 'visador';
-        $signaturesFlow->user_id = $this->visator->id;
-        $signaturesFlow->ou_id = $this->visator->organizational_unit_id;
-        $signaturesFlow->save();
+        // Visators
+        foreach($this->visators as $index => $visator)
+        {
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFile->id;
+            $signaturesFlow->type = 'visador';
+            $signaturesFlow->user_id = $visator->id;
+            $signaturesFlow->ou_id = $visator->organizational_unit_id;
+            $signaturesFlow->save();
 
+            $signature->update([
+                'distribution' => ($index == 0) ? $visator->email : $signature->distribution . ',' . $visator->email,
+            ]);
+        }
 
-        $signature->update([
-            'distribution' => $signature->distribution . ',' . $this->signer->email,
-        ]);
+        // Signers
+        foreach($this->signatures as $index => $signer)
+        {
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFile->id;
+            $signaturesFlow->type = 'firmante';
+            $signaturesFlow->user_id = $signer->id;
+            $signaturesFlow->ou_id = $signer->organizational_unit_id;
+            $signaturesFlow->save();
 
-        // Signer
-        $signaturesFlow = new SignaturesFlow();
-        $signaturesFlow->signatures_file_id = $signaturesFile->id;
-        $signaturesFlow->type = 'firmante';
-        $signaturesFlow->user_id = $this->signer->id;
-        $signaturesFlow->ou_id = $this->signer->organizational_unit_id;
-        $signaturesFlow->save();
-    }
+            $signature->update([
+                'distribution' => ($index == 0) ? $signer->email : $signature->distribution . ',' . $signer->email,
+            ]);
+        }
 
-    public function getVisator()
-    {
-        $this->visator = $this->control->store->visator;
-    }
-
-    public function getSigner()
-    {
-        $this->signer = $this->control->signer;
+        return $signature;
     }
 }
