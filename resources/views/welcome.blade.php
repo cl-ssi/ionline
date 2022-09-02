@@ -67,16 +67,84 @@
                 </tr>
             </table>
         </div>
-        <p class="text-muted mt-4">Bienvenido al portal de sistemas del Servicio de Salud de Iquique.</p>
+        <p class="text-muted mt-4">Bienvenido a la intranet del Servicio de Salud de Iquique.</p>
 
     </div>
 
     <div class="container">
         <div class="card-deck mb-3 text-center">
 
+
+		<div class="card shadow-sm">
+				<div class="card-header">
+					<h4 class="my-0 font-weight-normal text-center">Ingreso al iOnline</h4>
+				</div>
+				<div class="card-body">
+					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+					<a class="btn-cu btn-m btn-color-estandar m-auto" 
+						href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
+						title="Este es el botón Iniciar sesión de ClaveÚnica">
+						<span class="cl-claveunica"></span>
+						<span class="texto">Iniciar sesión</span>
+					</a>
+					<!--./ fin botón-->
+
+				
+				<hr>
+				
+				<form method="POST" action="{{ route('login') }}">
+					@csrf
+					<div class="form-group row">
+						<label for="id" class="col-md-4 form-label">{{ __('RUN') }}</label>
+						<div class="col-md-8">
+							<input id="id" type="text" class="form-control @error('id') is-invalid @enderror"
+								name="id" value="{{ old('id') }}" required autofocus>
+							@error('id')
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+							@enderror
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="password" class="col-md-4 form-label">{{ __('Clave') }}</label>
+						<div class="col-md-8">
+						<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+								name="password" required autocomplete="current-password">
+							@error('password')
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-4 offset-md-4">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
+								<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-12 m-auto">
+							<button type="submit" class="btn btn-secondary pr-4 pl-4">
+								{{ __('Iniciar sesión') }}
+							</button>
+						</div>
+					</div>
+				</form>
+
+
+				</div>
+			</div>
+
+
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Resultado exámenes</h4>
+                    <h4 class="my-0 font-weight-normal">Resultado exámenes PCR</h4>
                 </div>
                 <div class="card-body">
 
@@ -101,53 +169,33 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Estado de urgencias (No disponible Temporalmente)</h4>
-                </div>
-                <div class="card-body">
-                <br>
-                <br>
-                <br>
-                <i class="fas fa-clock fa-2x"></i>
-                </div>
-<!-- 
-                @php($array = json_decode(file_get_contents('status.json'),true))
 
-                <p class="text-muted mt-2 mb-2">Ultima actualización: {{ $array['updated'] }}</p>
-
-                <table class="table table-sm">
-                    <tr>
-                        <th>Establecimiento</th>
-                        <th>En espera</th>
-                        <th>En box</th>
-                    </tr>
-                    @foreach($array['data'] as $nombre => $element)
-                        <tr>
-                            <td>{{ $nombre }}</td>
-                            <td>{{ $element['En espera'] }}</td>
-                            <td>{{ $element['En box'] }}</td>
-                        </tr>
-                    @endforeach
-                </table> -->
-
-            </div>
 
             <div class="card shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Nuestros sistemas</h4>
+				<div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+						<a href="https://portal.saludtarapaca.gob.cl" class="btn btn-secondary btn-block">Portal de sistemas</a>
+					</h4>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item-action">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}/external">Portal Externos</a>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Sirmx</a>
-                    </li>
-                    <li class="list-group-item list-group-item-action">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">iOnline</a>
-                    </li>
-                    <hr class="">
+					<li class="list-group-item">
+						<a href="https://i.saludiquique.cl" class="btn btn-info btn-block disabled">iOnline</a>
+					</li>
+					<li class="list-group-item">
+						<a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
+					</li>
+					<li class="list-group-item">
+						<a href="https://neo.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">NeoSalud</a>
+					</li>
+					<li class="list-group-item">
+						<a href="https://uni.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Unisalud</a>
+					</li>
+					<li class="list-group-item">
+						<a href="https://esmeralda.saludtarapaca.org" class="btn btn-outline-info btn-block">Esmeralda</a>
+					</li>
+					<li class="list-group-item">
+						<a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Sirmx</a>
+					</li>
                 </ul>
             </div>
 
@@ -159,39 +207,23 @@
                     <img class="mb-2" src="{{ asset('images/logo_ssi_100px.png') }}" alt="Logo Servicio de Salud Iquique">
                 </div>
                 <div class="col-6 col-md">
-                    <h5>Portales del estado</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="http://www.gob.cl">Gobierno de Chile</a></li>
-                        <li><a class="text-muted" href="http://www.minsal.cl">Ministerio de Salud</a></li>
-                        <li><a class="text-muted" href="http://www.saludiquique.cl">Servicio de Salud Iquique</a> </li>
-                    </ul>
+
                 </div>
                 <div class="col-6 col-md">
-                    <h5>Relacionados</h5>
-                    <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="https://www.gob.cl/coronavirus/">Coronavirus</a></li>
-                        <li><a class="text-muted" href="https://www.gob.cl/coronavirus/cifrasoficiales/">Cifras oficiales coronavirus</a> </li>
-                        <li><a class="text-muted" href="https://www.gob.cl/plannacionaldecancer/">Plan nacional de cancer</a></li>
 
-                    </ul>
                 </div>
                 <div class="col-6 col-md">
                     <h5>Desarrollado por</h5>
                     <ul class="list-unstyled text-small">
-                        <li>Departamento TIC SSI</li>
+                        <li>Departamento TIC del SSI</li>
                         <li><a class="text-muted" href="mailto:sistemas.ssi@redsalud.gobc.">sistemas.ssi@redsalud.gob.cl</a></li>
-                        <small class="d-block mb-3 text-muted">&copy; 2021</small>
+                        <small class="d-block mb-3 text-muted"> 2021</small>
                     </ul>
                 </div>
             </div>
         </footer>
     </div>
-    <!-- <div class="text-center">
-        Sistema de Mamografias
-        <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">
-            <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
-        </a>
-    </div> -->
+
 
 </body>
 
