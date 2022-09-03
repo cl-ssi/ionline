@@ -153,9 +153,9 @@
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal text-center">Resultado exámenes</h4>
                 </div>
-                <div class="card-body text-center">
+                <div class="card-body">
 
-                    <ul class="list-unstyled mt-3 mb-4">
+                    <ul class="list-unstyled mt-3 mb-4 text-center">
                         <p>Si perteneces a la región de Tarapacá, puedes revisar
                             el resultado de tu exámen de Covid-19 utilizando tu
                             clave única del estado, haciendo click en el botón
@@ -172,6 +172,22 @@
                     <!--./ fin botón-->
                     </div>
 
+
+                    <hr>
+
+					<h6 class="mb-3">Otros links de interés</h6>
+					
+                    <a class="card-link" href="{{ route('rrhh.users.directory') }}">
+                        <i class="fas fa-fw fa-address-book"></i>
+                        Directorio telefónico
+                    </a>
+
+                    <br>
+                    
+                    <a class="card-link" href="{{ route('indicators.index') }}">
+                        <i class="fas fa-fw fa-chart-pie"></i>
+                        Metas sanitarias
+                    </a>
 
                 </div>
             </div>
