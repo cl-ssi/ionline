@@ -122,11 +122,10 @@ class SuitabilityController extends Controller
         return view('external.suitability.create', compact('school'));
     }
 
-    public function listOwn($school)
-    {
+    public function listOwn(School $school)    {
 
-        $psirequests = PsiRequest::where('school_id', $school)->get();
-        return view('external.suitability.index', compact('psirequests'));
+        
+        return view('external.suitability.index', compact('school'));
     }
 
 
