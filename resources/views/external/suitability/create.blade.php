@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="mb-3">Nueva Solicitud de Evaluación de Idoneidad Psicológica para el colegio </h3>
+<h3 class="mb-3">Nueva Solicitud de Evaluación de Idoneidad Psicológica para {{ $school->name ?? ''}}</h3>
 <h6 class="mb-3"><strong>Recordar revisar el Historico de Solicitudes en "Mis Solitudes" antes de generar una nueva</strong></h6>
 <h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2009 NO se le debe generar solicitud de idoneidad</strong></h6>
 

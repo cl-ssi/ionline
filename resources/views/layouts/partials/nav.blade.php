@@ -628,6 +628,11 @@
 
 
                             <div class="dropdown-divider"></div>
+							
+							<a class="dropdown-item"
+                               href="{{ route('rrhh.users.password.edit') }}">
+                                <i class="fas fa-cog fa-key"></i> Cambio de clave
+                            </a>
 
                             <a class="dropdown-item" href="{{ route('logout') }}">
                                 <i class="fas fa-fw fa-sign-out-alt"></i> {{ __('Cerrar sesión') }}
