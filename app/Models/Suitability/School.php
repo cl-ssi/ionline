@@ -33,5 +33,10 @@ class School extends Model
         return $this->belongsTo('App\Models\Commune', 'commune_id');
     }
 
+    public function psirequests()
+    {
+        return $this->hasMany('App\Models\Suitability\PsiRequest');
+    }
+
 
 }

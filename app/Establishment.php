@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Establishment extends Model
+class Establishment extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
 
     public function commune() {
         return $this->belongsTo('\App\Models\Commune');

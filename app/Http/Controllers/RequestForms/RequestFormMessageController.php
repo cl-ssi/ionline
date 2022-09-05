@@ -55,10 +55,10 @@ class RequestFormMessageController extends Controller
         }
 
         $message->save();
-
-        Mail::to($message)
+        /*  TODO Pasar a parametro el APP_RF_MAIL */
+        Mail::to($message->requestForm->user->email)
             ->cc(env('APP_RF_MAIL'))
-            ->send(new NewRequestFormMessage($message->requestForm->user->email));
+            ->send(new NewRequestFormMessage($message));
 
 
         if ($from == 'signature') {

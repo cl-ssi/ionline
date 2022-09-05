@@ -15,7 +15,7 @@
         </div>
 
 
-		<form method="POST" action="{{ route('password.update') }}">
+		<form method="POST" action="{{ route('rrhh.users.password.update') }}">
 			{{ method_field('PUT') }} {{ csrf_field() }}
 
 			<div class="form-group">
