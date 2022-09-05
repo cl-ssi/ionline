@@ -852,6 +852,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou')->middleware('auth');
+        
+        Route::get('password', [UserController::class,'editPassword'])->name('password.edit')->middleware('auth');
+        Route::put('password', [UserController::class,'updatePassword'])->name('password.update')->middleware('auth');
+        
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch')->middleware('auth');
         Route::get('directory', [UserController::class,'directory'])->name('directory');
