@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="mb-3">Listado de Solicitudes para el Colegio {{$psirequests->first()->school->name}}</h3>
+<h3 class="mb-3">Listado de Solicitudes para el Colegio {{$school->name}}</h3>
 
 <table class="table">
     <thead>
@@ -17,7 +17,7 @@
         </tr>
     </thead>
     <tbody>
-        @forelse($psirequests as $psirequest)
+        @forelse($school->psirequests as $psirequest)
         <tr>
             <td>{{$psirequest->id}}</td>
             <td>{{$psirequest->user_external_id}}</td>
