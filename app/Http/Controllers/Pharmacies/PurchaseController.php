@@ -132,6 +132,8 @@ class PurchaseController extends Controller
         $product = Product::find($purchaseItem->product_id);
         $product->stock = $product->stock - $purchaseItem->amount;
         $product->save();
+
+        $purchaseItem->delete();
       }
 
       //se elimina la cabecera y detalles

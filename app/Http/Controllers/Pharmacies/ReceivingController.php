@@ -125,6 +125,8 @@ class ReceivingController extends Controller
           $product = Product::find($receivingItem->product_id);
           $product->stock = $product->stock - $receivingItem->amount;
           $product->save();
+
+          $receivingItem->delete();
         }
 
         //se elimina la cabecera y detalles
