@@ -477,6 +477,7 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::get('{computer}/edit', [ComputerController::class,'edit'])->name('edit');
         Route::put('{computer}/update', [ComputerController::class,'update'])->name('update');
         Route::delete('{computer}/destroy', [ComputerController::class,'destroy'])->name('destroy');
+        Route::get('export', [ComputerController::class,'export'])->name('export');
     });
     Route::prefix('printers')->name('printer.')->group(function () {
         Route::get('/', [PrinterController::class,'index'])->name('index');
@@ -851,6 +852,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou')->middleware('auth');
+        
+        Route::get('password', [UserController::class,'editPassword'])->name('password.edit')->middleware('auth');
+        Route::put('password', [UserController::class,'updatePassword'])->name('password.update')->middleware('auth');
+        
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch')->middleware('auth');
         Route::get('directory', [UserController::class,'directory'])->name('directory');
@@ -1470,7 +1475,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
     Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
 
-    Route::prefix('/store')->group(function () {
+    Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 
         Route::prefix('{store}')->middleware('ensure.store')->group(function () {
@@ -1500,7 +1505,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
         Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
         Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
         Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
-        Route::get('/places', InventoryMaintainerPlaces::class)->name('places');
+        Route::get('places', InventoryMaintainerPlaces::class)->name('places');
     });
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');

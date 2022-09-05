@@ -265,7 +265,7 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">Código</th>
+                    <th class="text-center" max-width="100px">Código</th>
                     <th class="text-center" width="150px">Cant. Recibida</th>
                     <th>Producto</th>
                     <th class="text-center">Código Barra</th>
@@ -276,15 +276,49 @@
                 @forelse($po_items as $index => $po_item)
                 <tr>
                     <td class="text-center">
-                        <small class="text-monospace">
-                            {{ $po_item['unspsc_product_code'] }}
-                        </small>
+                        @if($index_selected === $index && $po_item['can_edit'] && $request_form)
+                            <label class="col-form-label-sm text-left my-0" for="rf-product-id">
+                                Productos ONU
+                            </label>
+                            <select
+                                wire:model="unspsc_product_code"
+                                id="rf-product-id"
+                                class="form-control form-control-sm @error('unspsc_product_code') is-invalid @enderror"
+                            >
+                                <option value="">Seleccione un Producto</option>
+                                @foreach($request_form->itemRequestForms as $rf_product)
+                                    <option value="{{ $rf_product->product->code }}">
+                                        {{ $rf_product->product->code }}
+                                        - {{ $rf_product->product->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @else
+                            @if($po_item['unspsc_product_code'])
+                                <small class="text-monospace">
+                                    {{ $po_item['unspsc_product_code'] }}
+                                </small>
+                            @else
+                                <small class="text-monospace">
+                                    Sin Código ONU
+                                </small>
+                            @endif
+
+                            @if ($errors->has('po_items.' . $index . '.unspsc_product_code'))
+                                <br>
+                                <small class="text-danger">
+                                    <strong>{{ $errors->first('po_items.' . $index . '.unspsc_product_code') }}</strong>
+                                </small>
+                            @endif
+                        @endif
                     </td>
                     <td>
-                        @if($index_selected === $index )
+                        @if($index_selected === $index)
                             <div class="form-row">
                                 <fieldset class="form-group col-sm-12">
-                                    <label class="col-form-label-sm text-left my-0" for="quantity">Cantidad Recibida</label>
+                                    <label class="col-form-label-sm text-left my-0" for="quantity">
+                                        Cantidad Recibida
+                                    </label>
                                     <input
                                         class="form-control form-control-sm @error('quantity') is-invalid @enderror"
                                         id="quantity"
@@ -307,14 +341,16 @@
                                 {{ $po_item['quantity'] }} / {{ $po_item['max_quantity'] }}
                                 <br>
                                 <small class="text-muted">
-                                    Cantidad OC: {{ $po_item['po_quantity'] }}
+                                    Cantidad Total: {{ $po_item['po_quantity'] }}
                                 </small>
                             </div>
                         @endif
                     </td>
                     <td>
                         @if($index_selected === $index && $po_item['disabled_wre_product'] == false)
-                            <label class="col-form-label-sm text-left my-0" for="unspsc-name">Producto</label>
+                            <label class="col-form-label-sm text-left my-0" for="unspsc-name">
+                                Producto
+                            </label>
                             <input
                                 class="form-control form-control-sm"
                                 id="unspsc-name"
@@ -323,7 +359,9 @@
                                 readonly
                             >
                             <div class="mt-1"></div>
-                            <label class="col-form-label-sm text-left my-0" for="description">Descripción</label>
+                            <label class="col-form-label-sm text-left my-0" for="description">
+                                Descripción
+                            </label>
                             <input
                                 class="form-control form-control-sm @error('description') is-invalid @enderror"
                                 id="description"
@@ -339,7 +377,11 @@
                             {{ $po_item['unspsc_product_name'] }}
                             <br>
                             <small>
-                                {{ $po_item['description'] }}
+                                @if($po_item['wre_product_id'])
+                                    {{ $po_item['wre_product_name'] }}
+                                @else
+                                    {{ $po_item['description'] }}
+                                @endif
                             </small>
                         @endif
                     </td>
@@ -419,7 +461,7 @@
                                 <br>
                                 <span class="badge badge-secondary">
                                     @if($po_item['wre_product_id'])
-                                        Producto: {{ $po_item['wre_product_name'] }}
+                                        Producto seleccionado
                                     @else
                                         Crear Producto
                                     @endif

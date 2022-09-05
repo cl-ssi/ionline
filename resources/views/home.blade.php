@@ -67,7 +67,7 @@
     <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
-            Solicitar a Yeannett Valdivia (yeannett.valdivia@redsalud.gob.cl) o 
+            Solicitar a Yeannett del Departamento Tic (tic.ssi@redsalud.gob.cl) o 
             Pamela Villagrán la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
         </li>
         <ul>
@@ -81,7 +81,9 @@
             usando su clave única y obtener un certificado de "propósito general".
         </li>
         <li>
-        Contactar al ministro de fe Paula Tapia o José Donoso para solicitar la aprobación por parte del ministro de fe.
+        Contactar al ministro de fe Paula Tapia (paula.tapia@redsalud.gob.cl) o 
+        Pamela Villagrán (sdga.ssi@redsalud.gob.cl) o 
+        José Donoso (jose.donosoc@redsalud.gob.cl) para solicitar la aprobación por parte del ministro de fe.
         </li>
         <li>
         Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> 
