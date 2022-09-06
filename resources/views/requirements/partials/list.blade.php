@@ -94,7 +94,13 @@
 					<b>de </b>{{ $req->events->last()->from_user->tinnyName }}
 					@break
 				@endswitch
+                <br>
+
+                @if($req->unreadedEvents)
+                <i class="fas fa-eye text-success"></i>
+                {{ $req->unreadedEvents  }}
 				</td>
+                @endif
 
 				<td class="{{ $copia }}">
 					@if($req->limit_at)
