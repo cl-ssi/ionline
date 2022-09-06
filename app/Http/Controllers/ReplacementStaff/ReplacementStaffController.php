@@ -66,35 +66,41 @@ class ReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
-        //SE GUARDA STAFF
-        $replacementStaff = new ReplacementStaff($request->All());
-        $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file_name = $now.'_cv_'.$replacementStaff->run;
-        $file = $request->file('cv_file');
-        $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
-        $replacementStaff->save();
+        if($request->hasFile('cv_file') && $request->hasFile('file')){
+            //SE GUARDA STAFF
+            $replacementStaff = new ReplacementStaff($request->All());
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $file_name = $now.'_cv_'.$replacementStaff->run;
+            $file = $request->file('cv_file');
+            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $replacementStaff->save();
 
-        //SE GUARDA PERFIL OBLIGATORIO
-        $profile = new Profile();
-        $profile->degree_date = $request->degree_date;
-        $profile->profile_manage_id = $request->profile;
-        $profile->profession_manage_id = $request->profession;
-        if($request->profile == 3 or $request->profile == 4){
-            $profile->experience = $request->experience;
+            //SE GUARDA PERFIL OBLIGATORIO
+            $profile = new Profile();
+            $profile->degree_date = $request->degree_date;
+            $profile->profile_manage_id = $request->profile;
+            $profile->profession_manage_id = $request->profession;
+            if($request->profile == 3 or $request->profile == 4){
+                $profile->experience = $request->experience;
+            }
+            $profile->replacement_staff()->associate($replacementStaff);
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $file = $request->file('file');
+            $file_name = $now.'_'.$replacementStaff->run;
+            $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $profile->save();
+
+            Mail::to($replacementStaff->email)
+                ->cc(env('APP_RYS_MAIL'))
+                ->send(new NewStaffNotificationUser($replacementStaff));
+
+            session()->flash('success', 'Se ha creado el postulante exitosamente');
+            return redirect()->route('replacement_staff.edit', $replacementStaff);
         }
-        $profile->replacement_staff()->associate($replacementStaff);
-        $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file = $request->file('file');
-        $file_name = $now.'_'.$replacementStaff->run;
-        $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
-        $profile->save();
-
-        Mail::to($replacementStaff->email)
-            ->cc(env('APP_RYS_MAIL'))
-            ->send(new NewStaffNotificationUser($replacementStaff));
-
-        session()->flash('success', 'Se ha creado el postulante exitosamente');
-        return redirect()->route('replacement_staff.edit', $replacementStaff);
+        else{
+            session()->flash('danger', 'Error al cargar los archivos');
+            return redirect()->back()->withInput(Input::all());
+        }
     }
 
     public function edit(ReplacementStaff $replacementStaff)
