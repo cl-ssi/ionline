@@ -70,7 +70,7 @@ class RequirementController extends Controller
         /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
-            ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived','categories','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
