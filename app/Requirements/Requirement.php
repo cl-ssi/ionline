@@ -31,6 +31,10 @@ class Requirement extends Model implements Auditable
         return $this->hasMany('App\Requirements\Event');
     }
 
+    public function eventsWithoutCC() {
+        return $this->hasMany('App\Requirements\Event')->where('status','<>','en copia');
+    }
+
     public function ccEvents() {
         return $this->hasMany('App\Requirements\Event')->where('status','en copia');
     }
@@ -47,11 +51,13 @@ class Requirement extends Model implements Auditable
         return $this->belongsToMany('App\Requirements\Category','req_requirements_categories');//->withPivot('requirement_id','category_id');;
     }
 
-    /** FIX no debería llamarse RequirementStatus, status directamente 
-     * sin embargo esa popiedad ya existe
-     */
-    public function requirementStatus() {
-        return $this->hasMany('App\Requirements\RequirementStatus');
+    public function eventsViewed() {
+        return $this->hasMany('App\Requirements\EventStatus')->where('user_id',auth()->id());
+    }
+
+    public function getUnreadedEventsAttribute(){
+        $ct = $this->eventsWithoutCC->count() - $this->eventsViewed->count();
+        return ($ct > 0) ? $ct : null;
     }
 
     /** FIX viewed hace referencia a los archivados y no a los vistos
@@ -69,6 +75,13 @@ class Requirement extends Model implements Auditable
         }
 
         return $query;
+    }
+
+    /** FIX no debería llamarse RequirementStatus, status directamente 
+     * sin embargo esa popiedad ya existe
+     */
+    public function requirementStatus() {
+        return $this->hasMany('App\Requirements\RequirementStatus');
     }
 
     /**
