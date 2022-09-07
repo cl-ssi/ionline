@@ -88,11 +88,11 @@ class EventController extends Controller
             $requirementEvent->to_authority = $isManager;
             $requirementEvent->save();
 
-            //asocia evento con documentos
-            if ($request->documents <> null) {
-                foreach ($request->documents as $key => $document_aux) {
-                    $document = Document::find($document_aux);
-                    $requirementEvent->documents()->attach($document);
+            /* Asocia documentos al evento */
+            if ($request->has('documents')) {
+                $array_documents = explode(',', $request->input('documents'));
+                foreach($array_documents as $doc_id) {
+                    $requirementEvent->documents()->attach(Document::find($doc_id));
                 }
             }
 
@@ -175,11 +175,11 @@ class EventController extends Controller
                     $requirementEvent->save();
                     $requirementEvent->requirement()->update(['to_authority' => $isAnyManager]);
 
-                    //asocia evento con documentos
-                    if ($request->documents <> null) {
-                        foreach ($request->documents as $key => $document_aux) {
-                            $document = Document::find($document_aux);
-                            $requirementEvent->documents()->attach($document);
+                    /* Asocia documentos al evento */
+                    if ($request->has('documents')) {
+                        $array_documents = explode(',', $request->input('documents'));
+                        foreach($array_documents as $doc_id) {
+                            $requirementEvent->documents()->attach(Document::find($doc_id));
                         }
                     }
 
