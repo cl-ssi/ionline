@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Requirements\EventStatus;
 
 
 class Requirement extends Model implements Auditable
@@ -53,6 +54,24 @@ class Requirement extends Model implements Auditable
 
     public function eventsViewed() {
         return $this->hasMany('App\Requirements\EventStatus')->where('user_id',auth()->id());
+    }
+
+    public function getSetEventsAsViewedAttribute() {
+        $eventsWithoutCC = $this->eventsWithoutCC->pluck('id')->toArray();
+        $eventsViewed = $this->eventsViewed->pluck('id')->toArray();
+
+        foreach($eventsWithoutCC as $event)
+        {
+            if(!in_array($event,$eventsViewed))
+            {
+                $eventStatus = EventStatus::create([
+                    'event_id' => $event,
+                    'user_id' => auth()->id(),
+                    'requirement_id' => $this->id,
+                    'status' => 'viewed'
+                ]);
+            }
+        }
     }
 
     public function getUnreadedEventsAttribute(){
