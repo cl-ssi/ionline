@@ -5,7 +5,7 @@
 
 
         <div class="form-row">
-            <fieldset class="form-group col-12 col-md-4" id="div_tipo">
+            <fieldset class="form-group col-12 col-md-3" id="div_tipo">
                 <label for="for_date">Tipo</label>
                 <select name="status" id="status" class="form-control">
                     @if($requirement->status == "cerrado")
@@ -19,7 +19,7 @@
             </fieldset>
 
 
-            <fieldset class="form-group col-12 col-md-4" id="div_ou">
+            <fieldset class="form-group col-12 col-md-5" id="div_ou">
                 <label for="ou">Unidad Organizacional</label>
                 <select id="ou" name="to_ou_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
                     @foreach($ouRoots as $ouRoot)
@@ -94,33 +94,18 @@
         </div>
 
         <div class="form-row">
-            <fieldset class="form-group col-12 col-md-4">
-                <label for="forFile">Adjuntar archivos</label>
-                <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
-            </fieldset>
-
-            <fieldset class="form-group col-12 col-md-4">
-                <label for="for_document">Asociar documentos</label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="for_document" name="document">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-primary add-row">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-4" id="div_limit_at">
+            <fieldset class="form-group col-12 col-md-3" id="div_limit_at">
                 <label for="for_limit_at">Fecha Límite Evento</label>
                 <input type="datetime-local" class="form-control" id="for_subject" name="limit_at">
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-4">
-                <label for="for_tabla_documents"></br></label></br>
-                <table id="tabla_documents" style="display: none">
-                    <tr></tr>
-                </table>
+                <label for="forFile">Adjuntar archivos</label>
+                <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
             </fieldset>
+
+            @livewire('requirements.events.associate-document')
+
         </div>
 
         <div class="row">
