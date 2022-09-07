@@ -17,11 +17,6 @@
             <i class="fas fa-plus-circle"></i> Nuevo</a>
     </li>
 
-    <!-- <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('vaccination.report') }}">
-            <i class="fas fa-chart-line"></i> Reporte</a>
-    </li> -->
 
     <li class="nav-item">
         <a class="nav-link"
