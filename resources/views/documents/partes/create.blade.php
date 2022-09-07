@@ -16,12 +16,12 @@
         <fieldset class="form-group col-3">
             <label for="for_entered_at">Fecha Ingreso*</label>
             <input type="datetime-local" class="form-control" id="for_entered_at"
-                name="entered_at" required>
+                name="entered_at" value="{{ date('Y-m-d\TH:i') }}" required>
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_date">Fecha Documento</label>
-            <input type="date" class="form-control" id="for_date"name="date">
+            <label for="for_date">Fecha Documento*</label>
+            <input type="date" class="form-control" id="for_date"name="date" required>
         </fieldset>
 
         <fieldset class="form-group col">
