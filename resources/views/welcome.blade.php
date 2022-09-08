@@ -164,7 +164,7 @@
                     </ul>
                     <div class="row justify-content-center">
                     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-                    <a class="btn-cu btn-m  btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L21vbml0b3IvbGFiL2xvZ2lu"
+                    <a class="btn-cu btn-m  btn-color-estandar" href="https://esmeralda.saludtarapaca.gob.cl/examenes/autenticar"
                         title="Este es el botón Iniciar sesión de ClaveÚnica">
                         <span class="cl-claveunica"></span>
                         <span class="texto">Iniciar sesión</span>
