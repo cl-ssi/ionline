@@ -198,6 +198,42 @@ class RequestReplacementStaff extends Model
         }
     }
 
+    public function scopeSearch($query, $status_search, $id_search, $start_date_search, $end_date_search, $name_search, $fundament_search, $fundament_detail_search)
+    {
+        if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR $fundament_search OR $fundament_detail_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('request_status', $status_search);
+                });
+            }
+            if($id_search != ''){
+                $query->where(function($q) use($id_search){
+                    $q->where('id', 'LIKE', '%'.$id_search.'%');
+                });
+            }
+            if($start_date_search != '' && $end_date_search != ''){
+                $query->where(function($q) use($start_date_search, $end_date_search){
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search." 23:59:59"])->get();
+                });
+            }
+            if($name_search != ''){
+                $query->where(function($q) use($name_search){
+                    $q->where('name', 'LIKE', '%'.$name_search.'%');
+                });
+            }
+            if($fundament_search != 0){
+                $query->whereHas('fundamentManage', function($q) use ($fundament_search){
+                    $q->Where('fundament_manage_id', $fundament_search);
+                });
+            }
+            if($fundament_detail_search != 0){
+                $query->whereHas('fundamentDetailManage', function($q) use ($fundament_detail_search){
+                    $q->Where('fundament_detail_manage_id', $fundament_detail_search);
+                });
+            }
+        }
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

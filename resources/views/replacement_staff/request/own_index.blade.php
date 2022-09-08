@@ -8,37 +8,24 @@
 
 <div class="row">
   <div class="col-sm-3">
-      <h4 class="mb-3">Mis Solicitudes: </h4>
+      <h4 class="mb-3"><i class="fas fa-inbox"></i> Mis Solicitudes: </h4>
   </div>
 
   <div class="col-sm-3">
     <p>
-        <a class="btn btn-primary" href="{{ route('replacement_staff.request.create') }}">
+        <a class="btn btn-primary btn-sm" href="{{ route('replacement_staff.request.create') }}">
             <i class="fas fa-plus"></i> Nueva</a>
-        <a class="btn btn-primary disabled" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <i class="fas fa-filter"></i> Filtros
-        </a>
     </p>
   </div>
 </div>
 
-<div class="collapse" id="collapseSearch">
-  <br>
-  <div class="card card-body">
-      <form method="GET" class="form-horizontal" action="{{ route('replacement_staff.index') }}">
-          <div class="form-row">
-              En Desarrollo
-          </div>
-      </form>
-  </div>
 </div>
 
+<div class="col-sm">
+    @livewire('replacement-staff.search-requests')
 </div>
-<br>
 
-<div class="col">
-    <h5><i class="fas fa-inbox"></i> Solicitudes Pendientes</h5>
-</div>
+{{--
 
 <div class="col">
     <div class="table-responsive">
@@ -140,7 +127,6 @@
             </tbody>
         </table>
     </div>
-    {{-- dd($requestReplacementStaff->first()->requestSign->first()) --}}
 </div>
 
 <div class="col">
@@ -251,6 +237,8 @@
         {{ $my_request->links() }}
     </div>
 </div>
+
+--}}
 
 @endsection
 
