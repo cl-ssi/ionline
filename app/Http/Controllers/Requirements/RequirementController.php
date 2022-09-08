@@ -70,7 +70,7 @@ class RequirementController extends Controller
         /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
-            ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived','categories','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
@@ -742,6 +742,8 @@ class RequirementController extends Controller
                     ->send(new RequirementNotification($requirement));
             }
 
+             /** Marca los eventos como vistos */
+            $requirement->setEventsAsViewed;
 
             session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
         } else {
@@ -795,6 +797,9 @@ class RequirementController extends Controller
                 $requirement->group_number = $group_number;
                 $requirement->to_authority = $isAnyManager;
                 $requirement->save();
+
+				/** Marca los eventos como vistos */
+				$requirement->setEventsAsViewed;
 
                 //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
                 if ($users_enCopia <> null) {
@@ -914,19 +919,9 @@ class RequirementController extends Controller
     public function show(Requirement $requirement)
     {
 
-        $documents = Document::all()->sortBy('id');
         $ous = OrganizationalUnit::all()->sortBy('name');
-        //$ous = OrganizationalUnit::all()->sortBy('name');
-        //$organizationalUnit = OrganizationalUnit::where('level', 1)->get();
-//    $organizationalUnit = OrganizationalUnit::Find(1);
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
 
-
-        $requirement = Requirement::find($requirement->id);
-        //$requirement=$requirement->events()->orderBy('id','DESC')->get();
-        //dd($requirement);
-        $requirementCategories = RequirementCategory::where('requirement_id', $requirement->id)->get();
-        $categories = Category::where('user_id', Auth::user()->id)->get();
         $lastEvent = Event::where('requirement_id', $requirement->id)
             ->where('from_user_id', '<>', Auth::user()->id)->get()->last();
         //dd($lastEvent);
@@ -939,27 +934,7 @@ class RequirementController extends Controller
             //->where('from_user_id','<>',Auth::user()->id)->get()
             ->First();
 
-        //dd($lastEvent);
-
-        //se verifica si evento ya se "vió", de lo contrario, se deja como visto.
-        $events_status = EventStatus::where('user_id', Auth::user()->id)->get();
-        foreach ($requirement->events as $key => $event) {
-            $flag = 0;
-            foreach ($events_status as $key => $event_status) {
-                if ($event_status->event_id == $event->id) {
-                    $flag = 1;
-                }
-            }
-            if ($flag == 0) {
-                $eventStatus = new EventStatus();
-                $eventStatus->event_id = $event->id;
-                $eventStatus->user_id = Auth::user()->id;
-                $eventStatus->status = "viewed";
-                $eventStatus->save();
-            }
-        }
-
-        //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.
+       //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.
         $groupedRequirements = null;
         if ($requirement->group_number != null) {
             $groupedRequirements = Requirement::query()
@@ -968,8 +943,10 @@ class RequirementController extends Controller
                 ->get();
         }
 
+        /** Marca como visto todos los eventos */
+        $requirement->setEventsAsViewed;
 
-        return view('requirements.show', compact('ous', 'ouRoots', 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
+        return view('requirements.show', compact('ous', 'ouRoots', 'requirement', 'lastEvent', 'firstEvent', 'groupedRequirements'));
     }
 
     public function report1(Request $request)
