@@ -1,6 +1,6 @@
 <div>
     <div class="card card-body">
-        <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5> {{ $selectedName }}
+        <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
 
         <div class="form-row">
             <fieldset class="form-group col-sm">
