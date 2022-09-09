@@ -15,7 +15,7 @@
             aria-current="page"
             href="{{ route('inventories.assigned-products') }}"
         >
-            <i class="fas fa-list-alt"></i> Mis Productos Asignados
+            <i class="fas fa-list-alt"></i> Productos Asignados
         </a>
     </li>
 </ul>
