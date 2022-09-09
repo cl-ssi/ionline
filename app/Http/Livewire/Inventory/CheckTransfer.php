@@ -45,6 +45,7 @@ class CheckTransfer extends Component
             'deliver_date' => $this->movement->created_at,
             'place_id' => $this->movement->place_id,
             'user_responsible_id' => $this->movement->user_responsible_id,
+            'user_using_id' => $this->movement->user_using_id,
         ]);
 
         session()->flash('success', 'El item del inventario fue recibido exitosamente.');
