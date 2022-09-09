@@ -1,12 +1,12 @@
 <div>
-    @section('title', 'Productos Asignados')
+    @section('title', 'Mi inventario')
 
     @include('inventory.nav-user')
 
     <div class="row">
         <div class="col">
             <h4 class="mb-3">
-                Productos Asignados
+                Mi inventario
             </h4>
         </div>
         <div class="col text-right">
