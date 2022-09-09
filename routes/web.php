@@ -134,6 +134,8 @@ use App\Http\Controllers\Programmings\ProgrammingReportController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\ProgrammingActivityItemController;
+use App\Http\Controllers\Programmings\ParticipationController;
+use App\Http\Controllers\Programmings\EmergenciesController;
 
 use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
@@ -584,6 +586,24 @@ Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
 Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
 
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
+
+Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
+    Route::get('/{programming}', [ParticipationController::class,'show'])->name('show');
+    Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class,'create'])->name('create');
+    Route::post('/{programming}', [ParticipationController::class,'store'])->name('store');
+    Route::get('/{value}/{programming}/edit', [ParticipationController::class,'edit'])->name('edit');
+    Route::put('/{value}', [ParticipationController::class,'update'])->name('update');
+    Route::delete('/{value}', [ParticipationController::class,'destroy'])->name('destroy');
+});
+
+Route::prefix('emergencies')->as('emergencies.')->middleware('auth')->group(function () {
+    Route::get('/{programming}', [EmergenciesController::class,'show'])->name('show');
+    Route::get('/create/{programming}', [EmergenciesController::class,'create'])->name('create');
+    Route::post('/{programming}', [EmergenciesController::class,'store'])->name('store');
+    Route::get('/{emergency}/edit', [EmergenciesController::class,'edit'])->name('edit');
+    Route::put('/{emergency}', [EmergenciesController::class,'update'])->name('update');
+    Route::delete('/{emergency}', [EmergenciesController::class,'destroy'])->name('destroy');
+});
 
 Route::resource('professionals', ProfessionalController::class)->middleware('auth');
 Route::resource('actiontypes', ActionTypeController::class)->middleware('auth');

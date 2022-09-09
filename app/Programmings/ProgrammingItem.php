@@ -4,10 +4,12 @@ namespace App\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProgrammingItem extends Model
+class ProgrammingItem extends Model implements Auditable
 {
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'pro_programming_items';
 
     //protected $fillable = ['_token'];
@@ -15,7 +17,8 @@ class ProgrammingItem extends Model
                            'cant_target_population', 'prevalence_rate', 'source_prevalence','coverture', 'population_attend', 'concentration',
                            'activity_group','workshop_number', 'workshop_session_number', 'workshop_session_time',
                            'activity_total', 'professional', 'activity_performance','hours_required_year', 'hours_required_day', 'direct_work_year',
-                           'direct_work_hour', 'information_source', 'prap_financed','observation','workshop','active', 'user_id', 'programming_id'];
+                           'direct_work_hour', 'information_source', 'prap_financed','observation','workshop','active', 'user_id', 'programming_id', 
+                           'activity_subtype', 'activity_category', 'times_month', 'months_year', 'work_area', 'another_work_area', 'work_area_specs'];
 
     
     public function reviewItems()
@@ -45,5 +48,13 @@ class ProgrammingItem extends Model
 
     public function professionalHour(){
         return $this->belongsTo('App\Programmings\ProfessionalHour', 'professional');
+    }
+
+    public function professionalHours(){
+        return $this->belongsToMany('App\Programmings\ProfessionalHour', 'pro_programming_item_pro_hour')->withPivot('id', 'activity_performance', 'designated_hours_weeks', 'hours_required_year', 'hours_required_day', 'direct_work_year', 'direct_work_hour')->withTimestamps()->using(ProItemProHour::class);
+    }
+
+    public function rowspan(){
+        return $this->professionalHours->count() > 0 ? $this->professionalHours->count() : 1;
     }
 }
