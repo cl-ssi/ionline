@@ -35,8 +35,18 @@
                         </small>
                     </td>
                     <td>
-                        {{ $movement->inventory->product->product->name }} -
-                        {{ $movement->inventory->product->name }}
+                        {{ optional($movement->inventory->unspscProduct)->name }}
+                        <br>
+                        <small>
+                            @if($movement->inventory->product)
+                                {{ $movement->inventory->product->name }}
+                            @else
+                                {{ $movement->inventory->description }}
+                            @endif
+                        </small>
+
+                        {{-- {{ $movement->inventory->product->product->name }} - --}}
+                        {{-- {{ $movement->inventory->product->name }} --}}
                     </td>
                     <td nowrap>
                         <a
