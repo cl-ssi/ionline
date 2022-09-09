@@ -1,14 +1,11 @@
 <div>
-    @section('title', 'Inventarios pendientes')
+    @section('title', 'Movimientos pendientes')
 
     @include('inventory.nav-user')
 
     <h4 class="mb-3">
-        Inventarios pendientes
+        Movimientos pendientes por revisar
     </h4>
-    <p class="text-muted">
-        Listado de inventarios pendientes por revisar.
-    </p>
 
     <table class="table table-bordered">
         <thead>
