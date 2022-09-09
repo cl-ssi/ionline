@@ -1,9 +1,9 @@
 <div>
-    <div class="card card-body">
+    <div class="card card-body small">
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
 
         <div class="form-row">
-            <fieldset class="form-group col-sm">
+            <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estado</label>
                 <select name="status_search" class="form-control" wire:model="selectedStatus">
                     <option value="">Seleccione...</option>
@@ -13,7 +13,7 @@
                 </select>
             </fieldset>
 
-            <fieldset class="form-group col-sm">
+            <fieldset class="form-group col-12 col-md-1">
                 <label for="for_name">ID</label>
                 <input class="form-control" type="number" name="id_search" autocomplete="off" 
                     placeholder="001" wire:model="selectedId">
@@ -28,7 +28,7 @@
             </fieldset>
 
             <fieldset class="form-group col-sm">
-                <label for="for_name">Nombre</label>
+                <label for="for_name">Nombre de Solicitud</label>
                 <input class="form-control" type="text" autocomplete="off"
                     name="name_search" wire:model="selectedName">
             </fieldset>
@@ -59,6 +59,14 @@
 
                     </select>
                 </div>
+            </fieldset>
+        </div>
+        
+        <div class="form-row">
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_name">Funcionario a Reemplazar</label>
+                <input class="form-control" type="text" autocomplete="off" placeholder="RUN o NOMBRE"
+                    name="name_to_replace_search" wire:model="selectedNameToReplace">
             </fieldset>
         </div>
     </div>
