@@ -185,6 +185,7 @@ use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\PendingMovements;
+use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
@@ -1509,6 +1510,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')->middleware('ensure.inventory');
+    Route::get('register', RegisterInventory::class)->name('register');
 });
 
 /* Bodega de Farmacia */

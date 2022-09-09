@@ -11,8 +11,7 @@ class UnspscService
     public $sizeTitle;
 
     /**
-     *
-     * @param  $sizeTile
+     * @param  int  $sizeTile
      */
     public function __construct($sizeTitle = 90)
     {
@@ -22,7 +21,8 @@ class UnspscService
     /**
      * Obtiene todos los productos que coinciden con la búsqueda
      *
-     * @param  $search
+     * @param  string  $search
+     * @return  \Illuminate\Support\Collection
      */
     public function getProducts($search)
     {
@@ -62,7 +62,8 @@ class UnspscService
     /**
      * Obtiene el segmento, la familia y la clase de un producto
      *
-     * @param  $product
+     * @param  \App\Models\Unspsc\Product  $product
+     * @return  string
      */
     public function getTitle($product)
     {
@@ -74,7 +75,8 @@ class UnspscService
     /**
      * Retorna el resultado de la búsqueda bajo la estructura de Mercado Público de Chile.
      *
-     * @param  $search
+     * @param  string  $search
+     * @return  \Illuminate\Support\Collection
      */
     public function search($search)
     {

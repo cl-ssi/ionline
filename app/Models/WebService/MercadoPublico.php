@@ -30,7 +30,7 @@ class MercadoPublico extends Model
             $purchaseOrder = $purchaseOrder->first();
         else
         {
-            $purchaseOrder = null;
+            $purchaseOrder = 4;
 
             $response = Http::get('https://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json', [
                 'codigo' => $code,
@@ -42,9 +42,9 @@ class MercadoPublico extends Model
                 $objOC = json_decode($response);
 
                 if($objOC->Cantidad == 0) // OC No Valida, Eliminada o No Aceptada
-                    $purchaseOrder = -1;
+                    $purchaseOrder = 2;
                 elseif($objOC->Listado[0]->Estado == 'Cancelada') // OC Cancelada
-                    $purchaseOrder = 0;
+                    $purchaseOrder = 3;
 
                 if(($objOC->Cantidad > 0) && ($objOC->Listado[0]->Estado != 'Cancelada')) // OC Bien
                 {
@@ -56,9 +56,31 @@ class MercadoPublico extends Model
                 }
             }
             else
-                $purchaseOrder = -2; // Codigo de la OC invalida
+                $purchaseOrder = 1; // Codigo de la OC invalida
         }
 
         return $purchaseOrder;
+    }
+
+    public static function getPurchaseOrderError($purchaseOrder)
+    {
+        $error = false;
+        if($purchaseOrder === 1 || $purchaseOrder === 2 || $purchaseOrder === 3 || $purchaseOrder === 4)
+            $error = true;
+        return $error;
+    }
+
+    public static function getPurchaseOrderErrorMessage($purchaseOrder)
+    {
+        $msg = null;
+        if($purchaseOrder === 1) // 1
+            $msg = 'El número de orden de compra es errado.';
+        elseif($purchaseOrder === 2) // 2
+            $msg = 'La orden de compra está eliminada, no aceptada o es inválida.';
+        elseif($purchaseOrder === 3) // 3
+            $msg = 'La orden de compra esta cancelada.';
+        elseif($purchaseOrder === 4) // 4
+            $msg = 'Disculpe, no pudimos obtener los datos de la orden de compra, intente nuevamente.';
+        return $msg;
     }
 }

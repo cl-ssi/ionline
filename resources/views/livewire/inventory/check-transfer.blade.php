@@ -16,7 +16,7 @@
                 type="text"
                 class="form-control"
                 id="product"
-                value="{{ $movement->inventory->product->product->name }}"
+                value="{{ $movement->inventory->unspscProduct->name }}"
                 readonly
             >
         </fieldset>
@@ -29,7 +29,7 @@
                 type="text"
                 class="form-control"
                 id="description"
-                value="{{ $movement->inventory->product->name }}"
+                value="{{ $movement->inventory->product ? $movement->inventory->product->name : $movement->inventory->description }}"
                 readonly
             >
         </fieldset>

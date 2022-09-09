@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($control->invoices as $invoice)
+                @forelse($control->invoices as $invoice)
                     <tr>
                         <td>
                             {{ $invoice->number }}
@@ -28,7 +28,13 @@
                             </a>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td class="text-center" colspan="3">
+                            <em>No hay resultados</em>
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

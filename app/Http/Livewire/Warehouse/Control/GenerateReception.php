@@ -113,7 +113,8 @@ class GenerateReception extends Component
         ]);
 
         $purchaseOrder = MercadoPublico::getPurchaseOrder($this->po_search);
-        $this->getError($purchaseOrder);
+        $this->error = MercadoPublico::getPurchaseOrderError($purchaseOrder);
+        $this->msg = MercadoPublico::getPurchaseOrderErrorMessage($purchaseOrder);
 
         if(!$this->error)
         {
@@ -163,30 +164,6 @@ class GenerateReception extends Component
                 $this->msg = 'Todos los productos de la orden de compra fueron recibidos.';
                 $this->resetInputReception();
             }
-        }
-    }
-
-    public function getError($purchaseOrder)
-    {
-        if($purchaseOrder === -2)
-        {
-            $this->msg = 'El número de orden de compra es errado.';
-            $this->error = true;
-        }
-        elseif($purchaseOrder === -1)
-        {
-            $this->msg = 'La orden de compra está eliminada, no aceptada o es inválida.';
-            $this->error = true;
-        }
-        elseif($purchaseOrder === 0)
-        {
-            $this->msg = 'La orden de compra esta cancelada.';
-            $this->error = true;
-        }
-        elseif($purchaseOrder === null)
-        {
-            $this->msg = 'Disculpe, no pudimos obtener los datos de la orden de compra, intente nuevamente.';
-            $this->error = true;
         }
     }
 
@@ -520,7 +497,6 @@ class GenerateReception extends Component
 
         session()->flash('success', 'El nuevo ingreso fue guardado exitosamente.');
     }
-
 
     public function sendTechnicalRequest(Control $control)
     {
