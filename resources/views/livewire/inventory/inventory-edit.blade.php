@@ -25,7 +25,7 @@
                 type="text"
                 class="form-control"
                 id="code"
-                value="{{ $inventory->product->product->code }}"
+                value="{{ $inventory->unspscProduct->code }}"
                 disabled
                 readonly
             >
@@ -39,7 +39,7 @@
                 type="text"
                 class="form-control"
                 id="product"
-                value="{{ $inventory->product->product->name }}"
+                value="{{ $inventory->unspscProduct->name }}"
                 disabled
                 readonly
             >
@@ -53,7 +53,7 @@
                 type="text"
                 class="form-control"
                 id="description"
-                value="{{ $inventory->product->name }}"
+                value="{{ $inventory->product ? $inventory->product->name : $inventory->description }}"
                 disabled
                 readonly
             >
@@ -185,10 +185,9 @@
                 </span>
             @enderror
         </fieldset>
-    </div>
 
-    <div class="form-row mb-3">
-        @if($inventory->control->isPurchaseOrder())
+
+        @if($inventory->po_id)
             <fieldset class="col-md-2">
                 <label for="oc" class="form-label">
                     OC
@@ -260,19 +259,21 @@
             >
         </fieldset>
 
-        <fieldset class="col-md-2">
-            <label for="date-reception" class="form-label">
-                Ingreso bodega
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="date-reception"
-                value="{{ $inventory->control->date->format('Y-m-d') }}"
-                disabled
-                readonly
-             >
-        </fieldset>
+        @if($inventory->control)
+            <fieldset class="col-md-2">
+                <label for="date-reception" class="form-label">
+                    Ingreso bodega
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="date-reception"
+                    value="{{ $inventory->control->date->format('Y-m-d') }}"
+                    disabled
+                    readonly
+                >
+            </fieldset>
+        @endif
 
         <fieldset class="col-md-3">
             <label for="financing" class="form-label">
@@ -287,28 +288,30 @@
             >
         </fieldset>
 
-        <fieldset class="col-md-4">
-            <label for="supplier" class="form-label">
-                @if($inventory->control->isPurchaseOrder())
-                    Proveedor
-                @else
-                    Origen
-                @endif
-            </label>
-            <input
-                type="text"
-                class="form-control"
-                id="supplier"
-                @if($inventory->control->isPurchaseOrder())
-                    value="{{ $inventory->purchaseOrder->supplier_name }}"
-                @else
-                    value="{{ $inventory->control->origin->name }}"
-                @endif
-                disabled
-            >
-        </fieldset>
+        @if($inventory->control)
+            <fieldset class="col-md-4">
+                <label for="supplier" class="form-label">
+                    @if($inventory->control->isPurchaseOrder())
+                        Proveedor
+                    @else
+                        Origen
+                    @endif
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="supplier"
+                    @if($inventory->control->isPurchaseOrder())
+                        value="{{ $inventory->purchaseOrder->supplier_name }}"
+                    @else
+                        value="{{ $inventory->control->origin->name }}"
+                    @endif
+                    disabled
+                >
+            </fieldset>
+        @endif
 
-        @if($inventory->control->invoice_url)
+        @if($inventory->control && $inventory->control->invoice_url)
             <fieldset class="col-md-2">
                 <label for="date-reception" class="form-label">
                     Factura
@@ -324,19 +327,19 @@
             </fieldset>
         @endif
 
-        @if($inventory->control->requestForm)
+        @if($inventory->control && $inventory->control->requestForm)
             <fieldset class="col-md-3">
                 <label for="date-reception" class="form-label">
                     Formulario Requerimiento
                 </label>
                 <br>
                 <a
-                class="btn btn-primary btn-block"
-                href="{{ route('request_forms.show', $inventory->control->requestForm) }}"
-                target="_blank"
-            >
-                <i class="fas fa-file-alt"></i> #{{ $inventory->control->requestForm->id }}
-            </a>
+                    class="btn btn-primary btn-block"
+                    href="{{ route('request_forms.show', $inventory->control->requestForm) }}"
+                    target="_blank"
+                >
+                    <i class="fas fa-file-alt"></i> #{{ $inventory->control->requestForm->id }}
+                </a>
             </fieldset>
         @endif
     </div>
@@ -385,11 +388,12 @@
             <h5 class="mt-3">Historial del ítem</h5>
             @livewire('inventory.movement-index', ['inventory' => $inventory])
         </div>
-        <div class="col">
-        <h5 class="mt-3">Facturas</h5>
-            @livewire('warehouse.invoices.list-invoices', ['control' => $inventory->control])
-        </div>
+        @if($inventory->control)
+            <div class="col">
+                <h5 class="mt-3">Facturas</h5>
+                @livewire('warehouse.invoices.list-invoices', ['control' => $inventory->control])
+            </div>
+        @endif
     </div>
-
 
 </div>
