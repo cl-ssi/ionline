@@ -1,14 +1,11 @@
 <div>
-    @section('title', 'Inventarios pendientes')
+    @section('title', 'Movimientos pendientes')
 
     @include('inventory.nav-user')
 
     <h4 class="mb-3">
-        Inventarios pendientes
+        Movimientos pendientes por revisar
     </h4>
-    <p class="text-muted">
-        Listado de inventarios pendientes por revisar.
-    </p>
 
     <table class="table table-bordered">
         <thead>
@@ -35,8 +32,18 @@
                         </small>
                     </td>
                     <td>
-                        {{ $movement->inventory->product->product->name }} -
-                        {{ $movement->inventory->product->name }}
+                        {{ optional($movement->inventory->unspscProduct)->name }}
+                        <br>
+                        <small>
+                            @if($movement->inventory->product)
+                                {{ $movement->inventory->product->name }}
+                            @else
+                                {{ $movement->inventory->description }}
+                            @endif
+                        </small>
+
+                        {{-- {{ $movement->inventory->product->product->name }} - --}}
+                        {{-- {{ $movement->inventory->product->name }} --}}
                     </td>
                     <td nowrap>
                         <a

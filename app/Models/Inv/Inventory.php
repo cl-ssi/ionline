@@ -9,6 +9,7 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\Store;
 use App\Models\Parameters\Place;
+use App\Models\Unspsc\Product as UnspscProduct;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,11 +37,14 @@ class Inventory extends Model
         'act_number',
         'depreciation',
         'deliver_date',
+        'description',
         'request_user_ou_id',
         'request_user_id',
         'user_responsible_id',
+        'user_using_id',
         'place_id',
         'product_id',
+        'unspsc_product_id',
         'control_id',
         'store_id',
         'po_id',
@@ -67,6 +71,11 @@ class Inventory extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function unspscProduct()
+    {
+        return $this->belongsTo(UnspscProduct::class);
     }
 
     public function control()
@@ -102,6 +111,11 @@ class Inventory extends Model
     public function responsible()
     {
         return $this->belongsTo(User::class, 'user_responsible_id');
+    }
+
+    public function using()
+    {
+        return $this->belongsTo(User::class, 'user_using_id');
     }
 
     public function place()
