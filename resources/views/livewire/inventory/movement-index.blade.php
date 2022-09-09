@@ -17,21 +17,25 @@
             <li>
                 {{ $inventory->purchaseOrder->date->format('Y-m-d') }}
                 - Orden de compra <b>{{ $inventory->purchaseOrder->code }}</b>
-                (Ingreso #{{ $inventory->control->id }})
+                @if($inventory->control)
+                    (Ingreso #{{ $inventory->control->id }})
+                @endif
             </li>
         @endif
 
-        <li>
-            {{ $inventory->control->date->format('Y-m-d') }}
-            -
-            <a href="{{ route('warehouse.controls.edit', [
-                    'store' => $inventory->control->store,
-                    'control' => $inventory->control
-                ]) }}"
-            >
-                Recepción en bodega
-            </a>
-        </li>
+        @if($inventory->control)
+            <li>
+                {{ $inventory->control->date->format('Y-m-d') }}
+                -
+                <a href="{{ route('warehouse.controls.edit', [
+                        'store' => $inventory->control->store,
+                        'control' => $inventory->control
+                    ]) }}"
+                >
+                    Recepción en bodega
+                </a>
+            </li>
+        @endif
 
         <li>
             {{ $inventory->created_at->format('Y-m-d')}} - Ingreso a inventario
