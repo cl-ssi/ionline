@@ -619,17 +619,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', [RoleController::class,'index'])->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', [RoleController::class,'attach'])->name('roles.attach')->middleware('auth');
 
+    Route::prefix('integrity')->as('integrity.')->group(function(){
+        Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
+        Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
+        Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
+    });
 
     /** TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */
     Route::prefix('shift-management')->group(function () {
-
-        Route::prefix('integrity')->as('integrity.')->group(function(){
-            Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
-            Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
-            Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
-        });
-
 
         Route::get('/next', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToNextMonth'])->name('shiftManag.nextMonth')->middleware('auth');
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
@@ -853,6 +851,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou')->middleware('auth');
+        
+        Route::get('password', [UserController::class,'editPassword'])->name('password.edit')->middleware('auth');
+        Route::put('password', [UserController::class,'updatePassword'])->name('password.update')->middleware('auth');
+        
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch')->middleware('auth');
         Route::get('directory', [UserController::class,'directory'])->name('directory');

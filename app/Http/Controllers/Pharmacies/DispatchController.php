@@ -307,6 +307,8 @@ class DispatchController extends Controller
             $product->establishments()->attach($establishment_id, ['stock' => -$dispatchItem->amount]);
           }
         }
+
+        $dispatchItem->delete();
       }
 
       //se elimina la cabecera y detalles

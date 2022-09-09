@@ -14,12 +14,7 @@
 
 			@switch($req->status)
 				@case('creado')
-					@if($req->user_id == auth()->id())
-						<tr class="alert-info">
-					@else
-						<tr class="alert-light">
-					@endif
-					@break
+                    <tr class="alert-light"> @break
 				@case('respondido') 
 					<tr class="alert-warning"> @break
 				@case('cerrado') 
@@ -31,15 +26,20 @@
 			@endswitch
 			
 			@php
-			$copia = ($req->events->where('to_user_id',$user->id)->count() == $req->ccEvents->where('to_user_id',$user->id)->count())?'alert-secondary':'';
+			$copia = ($req->user_id != $user->id AND $req->events->where('to_user_id',$user->id)->count() == $req->ccEvents->where('to_user_id',$user->id)->count()) ? 'alert-secondary':'';
 			@endphp
 
-				<td class="{{ $copia }}">
+				<td class="{{ $copia }} text-center">
 					{{ $req->id }}
 					<br>
-					<a href="{{ route('requirements.show',$req->id) }}" class="btn btn-sm btn-outline-primary">
+					<a href="{{ route('requirements.show',$req->id) }}" class="btn btn-sm {{ $req->unreadedEvents ? 'btn-success':'btn-outline-primary' }}">
+                        @if($req->unreadedEvents)
+                        <i class="fas fa-eye"></i> <span class='badge badge-secondary'>{{ $req->unreadedEvents  }}</span>
+                        @else
 						<i class="fas fa-edit"></i>
+                        @endif
 					</a>
+
 				</td>
 
 				<td class="{{ $copia }}">
@@ -94,7 +94,9 @@
 					<b>de </b>{{ $req->events->last()->from_user->tinnyName }}
 					@break
 				@endswitch
-				</td>
+                
+                
+                </td>
 
 				<td class="{{ $copia }}">
 					@if($req->limit_at)
