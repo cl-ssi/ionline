@@ -22,7 +22,7 @@ class PendingMovements extends Component
     public function getMovements()
     {
         $movements = InventoryMovement::query()
-            ->whereNull('reception_date')
+            ->whereReceptionConfirmation(false)
             ->whereUserResponsibleId(Auth::id())
             ->orderBy('id')
             ->paginate(10);
