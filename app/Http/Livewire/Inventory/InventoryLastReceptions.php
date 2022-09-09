@@ -91,6 +91,7 @@ class InventoryLastReceptions extends Component
                 'po_code' => $controlItem->control->po_code,
                 'po_date' => $controlItem->control->po_date,
                 'product_id' => $controlItem->product_id,
+                'unspsc_product_id' => $controlItem->product->product->id,
                 'control_id' => $controlItem->control_id,
                 'store_id' => $controlItem->control->store_id,
                 'po_id' => $controlItem->control->po_id,
