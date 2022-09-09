@@ -198,9 +198,12 @@ class RequestReplacementStaff extends Model
         }
     }
 
-    public function scopeSearch($query, $status_search, $id_search, $start_date_search, $end_date_search, $name_search, $fundament_search, $fundament_detail_search)
+    public function scopeSearch($query, $status_search, $id_search, $start_date_search, 
+        $end_date_search, $name_search, $fundament_search, $fundament_detail_search, $name_to_replace_search)
     {
-        if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR $fundament_search OR $fundament_detail_search) {
+        if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
+            $fundament_search OR $fundament_detail_search OR $name_to_replace_search) {
+
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('request_status', $status_search);
@@ -229,6 +232,12 @@ class RequestReplacementStaff extends Model
             if($fundament_detail_search != 0){
                 $query->whereHas('fundamentDetailManage', function($q) use ($fundament_detail_search){
                     $q->Where('fundament_detail_manage_id', $fundament_detail_search);
+                });
+            }
+            if($name_to_replace_search != ''){
+                $query->where(function($q) use($name_to_replace_search){
+                    $q->where('name_to_replace', 'LIKE', '%'.$name_to_replace_search.'%')
+                    ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
                 });
             }
         }

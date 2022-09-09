@@ -17,6 +17,7 @@ class SearchRequests extends Component
     public $selectedName = null;
     public $selectedFundament = null;
     public $selectedFundamentDetail = null;
+    public $selectedNameToReplace = null;
 
     public $fundamentsDetail;
 
@@ -32,7 +33,8 @@ class SearchRequests extends Component
                     $this->selectedEndDate,
                     $this->selectedName,
                     $this->selectedFundament,
-                    $this->selectedFundamentDetail
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace
                 )
                 ->take(50)
                 ->get()
@@ -42,10 +44,6 @@ class SearchRequests extends Component
     public function updatedselectedFundament($fundament_id)
     {
         $this->fundamentsDetail = RstDetailFundament::where('fundament_manage_id', $fundament_id)->get();
-        // dd($this->fundamentDetails);
-        // if($fundament_id == 4){
-        //     $this->otherFundamentInput = '';
-        // }
     }
 
     
