@@ -27,8 +27,12 @@
 </div>
 @endif
 
+</div> <!-- close main div -->
+
+<div class="container-fluid">
+
 <div class="table-responsive">
-    <table class="table table-sm">
+    <table class="table table-sm table-hover">
         <thead>
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
@@ -38,8 +42,11 @@
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
+                @if($request->year >= 2022 || $year >= 2022)
+                <th class="text-left align-middle table-dark" ></th>
+                @endif
                 <th class="text-left align-middle table-dark" >Año</th>
-                <th class="text-center align-middle table-dark">Opciones</th>
+                <th class="text-center align-middle table-dark">Productos de Programación</th>
             </tr>
         </thead>
         <tbody>
@@ -74,6 +81,14 @@
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
                 <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
+                @if($request->year >= 2022 || $year >= 2022)
+                <!-- Falta especificar los permisos para qienes pueden tener acceso a RRHH -->
+                <td>
+                    <a href="{{ route('programming.show_total_rrhh', $programming->id) }}" class="btn btb-flat btn-sm btn-success">
+                        <span class="small d-none d-sm-none d-md-inline">Total RRHH</span> 
+                    </a>
+                </td>
+                @endif
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
@@ -90,20 +105,80 @@
                         <span class="small d-none d-sm-none d-md-inline">Días a Programar</span> 
                     </a>
                 @endcan
+
+                <!-- Planificación a partir del 2023 -->
+                @if($request->year >= 2022 || $year >= 2022)
+                    @can('ProgrammingItem: view')
+                    <a href="{{ route('participation.show', $programming) }}" class="btn btb-flat btn-sm btn-primary" >
+                        <i class="fas fa-tasks small"></i>
+                        <span class="small d-none d-sm-none d-md-inline">Participación</span> 
+                    </a>
+                    @endcan
+                    <!-- falta consultar por algun permiso para ver esta nueva seccion -->
+                    <a href="{{ route('emergencies.show', $programming) }}" class="btn btb-flat btn-sm btn-warning" >
+                        <i class="fas fa-exclamation-triangle small"></i>
+                        <span class="small d-none d-sm-none d-md-inline">Emergencias-Desastres y Epidemiología</span> 
+                    </a>
+                @endif
+
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso -->
+                @if($request->year >= 2022 || $year >= 2022)
+                <!-- Permiso para gestionar actividades en la programación númerica en proceso a partir del 2023 -->
+                @can('ProgrammingItem: view')
+                    <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Directa']) }}" class="btn btb-flat btn-sm btn-info" >
+                        <i class="fas fa-tasks small"></i>
+                        <span class="small d-none d-sm-none d-md-inline">Actividades directas</span> 
+                    </a>
+                @endcan
+
+                @can('ProgrammingItem: view')
+                    <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Indirecta']) }}" class="btn btb-flat btn-sm btn-info" >
+                        <i class="fas fa-tasks small"></i>
+                        <span class="small d-none d-sm-none d-md-inline">Actividades indirectas</span> 
+                    </a>
+                @endcan
+                @else
                 @can('ProgrammingItem: view')
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Actividades</span> 
                     </a>
                 @endcan
-            
+                @endif
                 </td> 
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+</div> <!-- close main div -->
+
+<div class="container">
+@can('TrainingItem: view')
+<div class="table-responsive">
+    <table class="table table-sm table-hover mx-auto w-auto">
+        <thead>
+            <tr class="small">
+                <th class="text-left align-middle table-dark" >Comuna</th> 
+                <th class="text-left align-middle table-dark" ></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach($communeFiles as $communeFile)
+        <tr class="small">
+            <td class="align-middle">{{$communeFile->commune->name}}</td>
+            <td>
+                <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
+                    <i class="fas fa-chalkboard-teacher small"></i> 
+                    <span class="small">Capacitaciones</span> 
+                </a>
+            </td>
+        </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
+@endcan
 
 @include('programmings/programmings/modal_status_programming')
 @endsection

@@ -32,7 +32,7 @@ class ReviewItemController extends Controller
         }
         else $professional = null;
 
-        return view('programmings/reviewItems/index', compact('programmingItem', 'reviewItems', 'programmingDay', 'professional'));
+        return view('programmings.reviewItems.index', compact('programmingItem', 'reviewItems', 'programmingDay', 'professional'));
     }
 
     public function store(Request $request)

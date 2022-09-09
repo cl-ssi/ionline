@@ -11,6 +11,7 @@ use App\Programmings\ProgrammingDay;
 use App\Programmings\ActivityItem;
 use App\Models\Programmings\ReviewItem;
 use App\Programmings\ActivityProgram;
+use Illuminate\Support\Arr;
 
 class ProgrammingItemController extends Controller
 {
@@ -19,10 +20,20 @@ class ProgrammingItemController extends Controller
         $listTracer = $request->tracer_number;
         $activityFilter = $request->activity;
         $cycleFilter = $request->cycle;
+        $activityType = $request->activity_type;
 
         $programming = Programming::whereId($request->programming_id)
-            ->when(!$listTracer && !$activityFilter && !$cycleFilter, function ($q){
-                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'establishment', 'pendingItems');
+            // busqueda de actividades sin filtro pero con tipo de actividad
+            ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType, function ($q) use ($activityType){
+                return $q->whereHas('items', $filter = function($q2) use ($activityType) {
+                    return $q2->when($activityType != null, function($q3) use ($activityType){
+                                return $q3->where('activity_type', $activityType)->with('activityItem');
+                            });
+                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
+            })
+            // busqueda de actividades sin filtro ni tipo de actividad
+            ->when(!$listTracer && !$activityFilter && !$cycleFilter && !$activityType, function ($q){
+                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user');
             })
             ->when($listTracer || $activityFilter || $cycleFilter, function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
                 return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter, $cycleFilter) {
@@ -33,14 +44,16 @@ class ProgrammingItemController extends Controller
                             })->when($cycleFilter != null, function($q3) use ($cycleFilter){
                                 return $q3->where('vital_cycle', $cycleFilter);
                             });
-                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'establishment', 'pendingItems'])->get();
+                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
              })
             ->first();
 
         if(!$programming){
             $programming = Programming::find($request->programming_id);
             $programming->items = collect();
-        } 
+        }
+
+        // return $programming;
 
         // $tracerNumbers = ActivityItem::whereHas('program', function($q) use ($programming) {
         //     return $q->where('year', $programming->year);
@@ -63,7 +76,7 @@ class ProgrammingItemController extends Controller
         $tracerNumbers = $q->whereNotNull('int_code')->orderByRaw('LENGTH(int_code) ASC')->orderBy('int_code', 'ASC')
         ->distinct()->pluck('int_code');
 
-        return view('programmings/programmingItems/index', compact('programming', 'tracerNumbers', 'pendingActivities'));
+        return view('programmings.programmingItems.index', compact('programming', 'tracerNumbers', 'pendingActivities'));
     }
 
     public function create(Request $request)
@@ -90,11 +103,12 @@ class ProgrammingItemController extends Controller
         ->orderBy('T1.alias','ASC')
         ->get();
 
-        return view('programmings/programmingItems/create', compact('activityItemsSelect', 'activityItems', 'programmingDays', 'professionalHours'));
+        return view('programmings.programmingItems.create', compact('activityItemsSelect', 'activityItems', 'programmingDays', 'professionalHours', 'year'));
     }
 
     public function show(Request $request, ProgrammingItem $programmingitem)
     {
+        $programmingitem->load('professionalHours');
         $year = Programming::find($programmingitem->programming_id)->year;
         $activityItems = ActivityItem::whereHas('program', function($q) use ($year){
                             return $q->where('year', $year);
@@ -130,13 +144,13 @@ class ProgrammingItemController extends Controller
 
 
 
-        return view('programmings/programmingItems/show', compact('programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems'))->withProgrammingItem($programmingitem);
+        return view('programmings.programmingItems.show', compact('programmingitem', 'programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems'))->withProgrammingItem($programmingitem);
 
      }
 
     public function store(Request $request)
     {
-        //dd($request->All());
+        // dd($request->All());
         $programmingItems = new ProgrammingItem($request->All());
         //$programming->year = date('Y', strtotime($request->date));
         //$programming->description = $request->description;
@@ -144,7 +158,18 @@ class ProgrammingItemController extends Controller
         $programmingItems->programming_id = $request->programming_id;
        
         $programmingItems->save();
-
+        
+        if($request->has('professionals')){
+            foreach($request->get('professionals') as $professional){
+                $programmingItems->professionalHours()->attach($professional['professional_hour_id'], 
+                    ['activity_performance' => $professional['activity_performance'] ?? null, 
+                     'designated_hours_weeks' => $professional['designated_hours_weeks'] ?? null,
+                     'hours_required_year' => $professional['hours_required_year'], 
+                     'hours_required_day' => $professional['hours_required_day'], 
+                     'direct_work_year' => $professional['direct_work_year'], 
+                     'direct_work_hour' => $professional['direct_work_hour']]);
+            }
+        }
         session()->flash('info', 'Se ha creado una nueva actividad de Programación Operativa');
 
         return redirect()->back();
@@ -160,23 +185,62 @@ class ProgrammingItemController extends Controller
         $programmingItem = ProgrammingItem::where('id',$id)->first();
         $programmingItem->delete();
 
+        // $programmingItem->professionalHours()->detach();
+
         session()->flash('success', 'El registro ha sido eliminado de este listado');
-        return redirect('/programmingitems?programming_id='.$programmingItem->programming_id);
+        return redirect()->back();
+    }
+    
+    public function destroyProfessionalHour(ProgrammingItem $programmingitem, $id)
+    {
+        $programmingitem->professionalHours()->wherePivot('id', $id)->detach();
+        session()->flash('success', 'El item ha sido eliminado de este listado');
+        return redirect()->back();
     }
 
     public function update(Request $request, ProgrammingItem $programmingitem)
     {
-        $programmingitem->update($request->all());
+        // return $request;
+        $programmingitem->load('professionalHours');
+        $programmingitem->fill($request->all());
+        $programmingitem->prevalence_rate = $request->has('prevalence_rate') ? $request->prevalence_rate : null;
+        $programmingitem->save();
+
+        $programmingitem->professionalHours()->detach();
+
+        if($request->has('professionals')){
+            foreach($request->get('professionals') as $professional){
+                $programmingitem->professionalHours()->attach($professional['professional_hour_id'], 
+                    ['activity_performance' => $professional['activity_performance'] ?? null, 
+                     'designated_hours_weeks' => $professional['designated_hours_weeks'] ?? null,
+                     'hours_required_year' => $professional['hours_required_year'], 
+                     'hours_required_day' => $professional['hours_required_day'], 
+                     'direct_work_year' => $professional['direct_work_year'], 
+                     'direct_work_hour' => $professional['direct_work_hour']]);
+            }
+        }
+
         session()->flash('success', 'El registro se ha editado correctamente');
         return redirect()->back();
     }
 
     public function clone($id)
     {
-        $programmingItemOriginal = ProgrammingItem::where('id',$id)->first();
+        $programmingItemOriginal = ProgrammingItem::with('professionalHours')->find($id);
         $programmingItemsClone = $programmingItemOriginal->replicate();
         $programmingItemsClone->user_id = Auth()->user()->id;
         $programmingItemsClone->save();
+
+        foreach($programmingItemOriginal->getRelations() as $relation => $items){
+            if($relation == 'professionalHours'){
+                foreach($items as $item){
+                    unset($item->id);
+                    $item->programming_item_id = $programmingItemsClone->id;
+                    $extra_attributes = Arr::except($item->pivot->getAttributes(), $item->pivot->getForeignKey());
+                    $programmingItemsClone->{$relation}()->attach($item, $extra_attributes);
+                }
+            }
+        }
         session()->flash('success', 'El registro se ha duplicado correctamente');
         return redirect()->back();
     }

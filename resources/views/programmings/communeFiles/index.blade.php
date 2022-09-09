@@ -90,12 +90,14 @@
                 @endcan
             
             <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
+            @if($year < 2022)
             @can('TrainingItem: view')
                 <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
                     <i class="fas fa-chalkboard-teacher small"></i> 
                     <span class="small">Capacitaciones</span> 
                 </a>
-            @endcan   
+            @endcan
+            @endif
 
             @can('Reviews: view')
                 <a href="{{ request()->anio > 2021 || $year > 2021 ? route( 'reviews.show', ['review' => $communeFile->id]) : route( 'reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">

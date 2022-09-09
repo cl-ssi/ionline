@@ -9,7 +9,10 @@
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
-<h4 class="mb-3"> Informe de Observaciones en Programación Númerica</h4>
+<h4 class="mb-3"><a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+                    <i class="fas fa-arrow-left small"></i> 
+                    <span class="small">Volver</span> 
+    </a> Informe de Observaciones en Programación Númerica</h4>
 
 <!-- {{$reviewItems}} -->
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">

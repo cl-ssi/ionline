@@ -6,7 +6,7 @@
 
 @include('programmings/nav')
 <a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-<h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}}</h4>
+<h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}} - {{$trainingItems->first()->communeFile->commune->name ?? ''}}</h4>
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
 
