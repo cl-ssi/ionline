@@ -47,10 +47,14 @@
                         </small>
                     </td>
                     <td>
-                        {{ $inventory->product->product->name }}
+                        {{ optional($inventory->unspscProduct)->name }}
                         <br>
                         <small>
-                            {{ $inventory->product->name }}
+                            @if($inventory->product)
+                                {{ $inventory->product->name }}
+                            @else
+                                {{ $inventory->description }}
+                            @endif
                         </small>
                     </td>
                     <td>
@@ -67,7 +71,7 @@
                         @endif
                     </td>
                     <td>
-                        {{ optional($inventory->responsible)->full_name }}
+                        {{ optional($inventory->using)->full_name }}
                     </td>
                     <td class="text-center">
                         ${{ $inventory->price }}
