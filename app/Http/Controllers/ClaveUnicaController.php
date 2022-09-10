@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\UserExternal;
+use App\Jobs\StoreUserCU;
 
 /* No se si son necesarias, las puse para el try catch */
 use GuzzleHttp\Exception\ConnectException;
@@ -123,6 +124,7 @@ class ClaveUnicaController extends Controller
                     if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
+                    $this->storeUserClaveUnica('access_token');
 		        }
 		        else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
@@ -221,6 +223,12 @@ class ClaveUnicaController extends Controller
         }        
 
         return redirect()->to($url)->send();
+    }
+
+    public function storeUserClaveUnica($access_token)
+    {
+        dispatch(new StoreUserCU($access_token));
+        //dd('dispatch StoreUserCU');
     }
 
 }
