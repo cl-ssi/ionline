@@ -15,6 +15,7 @@ class CreateUsersClaveUnicaTable extends Migration
     {
         Schema::create('users_clave_unica', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrainde('users');
             $table->string('access_token');
             $table->text('response');
             $table->timestamps();
