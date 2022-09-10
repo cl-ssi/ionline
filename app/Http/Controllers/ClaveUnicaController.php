@@ -124,8 +124,9 @@ class ClaveUnicaController extends Controller
                     if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
-                    $this->storeUserClaveUnica($access_token);
-                    //dd($access_token);
+
+					/** Es para almacenar el json del usuario de CU, ya no ocupa */
+                    //$this->storeUserClaveUnica($access_token);
 		        }
 		        else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
@@ -226,10 +227,11 @@ class ClaveUnicaController extends Controller
         return redirect()->to($url)->send();
     }
 
-    public function storeUserClaveUnica($access_token)
-    {
-        /** Store clave unica information */
-        dispatch(new StoreUserCU($access_token));
-    }
+	/** Sirve para almacenar el json de un usuario, ya no se ocupa */
+	public function storeUserClaveUnica($access_token)
+	{
+		/** Store clave unica information */
+		dispatch(new StoreUserCU($access_token));
+	}
 
 }
