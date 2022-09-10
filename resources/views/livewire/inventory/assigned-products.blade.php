@@ -23,10 +23,14 @@
     <div class="form-row">
         <fieldset class="form-group col-md-3">
             <label for="product-type">Productos donde</label>
-            <select wire:model.debounce.1500ms="product_type" id="product-type" class="form-control">
+            <select
+                wire:model.debounce.1500ms="product_type"
+                id="product-type"
+                class="form-control"
+            >
+                <option value="">Todos</option>
                 <option value="using">Soy Usuario</option>
                 <option value="responsible">Soy Responsable</option>
-                <option value="using&responsible">Soy Usuario y Responsable</option>
             </select>
         </fieldset>
 
@@ -46,15 +50,14 @@
         <thead>
             <th>Nro. Inventario</th>
             <th>Producto</th>
-            <th>Fecha de Recepción</th>
+            <th>Usuario</th>
+            <th>Responsable</th>
+            <th>Ubicación</th>
             <th></th>
         </thead>
         <tbody>
-            <tr
-                class="d-none"
-                wire:loading.class.remove="d-none"
-            >
-                <td class="text-center" colspan="4">
+            <tr class="d-none" wire:loading.class.remove="d-none">
+                <td class="text-center" colspan="6">
                     @include('layouts.partials.spinner')
                 </td>
             </tr>
@@ -68,42 +71,49 @@
                     <td>
                         {{ optional($inventory->unspscProduct)->name }}
                         <br>
-                        @if($inventory->product)
-                            {{ $inventory->product->name }}
-                        @else
-                            {{ $inventory->description }}
-                        @endif
+                        <small>
+                            @if($inventory->product)
+                                {{ $inventory->product->name }}
+                            @else
+                                {{ $inventory->description }}
+                            @endif
+                        </small>
                         <br>
-                        @if($inventory->user_responsible_id == auth()->user()->id && $inventory->user_using_id == auth()->user()->id)
-                            <span class="badge badge-secondary">
-                                Usuario y Responsable
-                            </span>
-                        @elseif($inventory->user_using_id == auth()->user()->id)
+
+                        @if($inventory->user_using_id == auth()->user()->id)
                             <span class="badge badge-secondary">
                                 Usuario
                             </span>
-                        @elseif($inventory->user_responsible_id == auth()->user()->id)
+                        @endif
+
+                        @if($inventory->user_responsible_id == auth()->user()->id)
                             <span class="badge badge-secondary">
                                 Responsable
                             </span>
                         @endif
                     </td>
                     <td>
-                        {{ optional($inventory->lastMovement)->reception_date }}
+                        {{ optional($inventory->using)->tinny_name }}
                     </td>
-                    <td class="text-center">
+                    <td>
+                        {{ optional($inventory->responsible)->tinny_name }}
+                    </td>
+                    <td>
+                        {{ $inventory->location }}
+                    </td>
+                    <td class="text-center" nowrap>
                         <a
                             class="btn btn-sm btn-outline-primary"
                             href="{{ route('inventories.create-transfer', $inventory)}}"
                         >
                             <i class="fas fa-sync-alt"></i>
-                            Generar Traspaso
+                            Traspaso
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr class="text-center" wire:loading.remove>
-                    <td colspan="4">
+                    <td colspan="6">
                         <em>No hay registros</em>
                     </td>
                 </tr>
