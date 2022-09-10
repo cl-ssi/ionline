@@ -223,7 +223,7 @@ Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->na
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
 Route::get('/claveunica/login/{access_token}', [ClaveUnicaController::class,'login'])->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::class,'loginExternal']);
-Route::get('/claveunica/store/{access_token}', [ClaveUnicaController::class,'storeUserClaveUnica']);
+// Route::get('/claveunica/store/{access_token}', [ClaveUnicaController::class,'storeUserClaveUnica']);
 
 Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
 
