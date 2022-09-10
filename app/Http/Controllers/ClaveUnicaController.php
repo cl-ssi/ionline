@@ -228,8 +228,8 @@ class ClaveUnicaController extends Controller
 
     public function storeUserClaveUnica($access_token)
     {
+        /** Store clave unica information */
         dispatch(new StoreUserCU($access_token));
-        //dd('dispatch StoreUserCU');
     }
 
 }
