@@ -16,4 +16,12 @@ class ClaveUnica extends Model
     protected $fillable = [
         'access_token','response',
     ];
+
+    /**
+    * The primary key associated with the table.
+    *
+    * @var string
+    */
+    protected $table = 'users_clave_unica';
+    
 }
