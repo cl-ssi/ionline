@@ -46,6 +46,7 @@ class StoreUserCU implements ShouldQueue
 			$json = json_decode($response);
 			
 			ClaveUnica::create([
+				'user_id' => $json->RolUnico->numero,
 				'access_token' => $this->access_token,
 				'response' => json_encode($json)
 			]);

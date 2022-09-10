@@ -14,7 +14,7 @@ class ClaveUnica extends Model
     * @var array
     */
     protected $fillable = [
-        'access_token','response',
+        'user_id','access_token','response',
     ];
 
     /**
