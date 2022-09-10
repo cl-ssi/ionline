@@ -124,7 +124,8 @@ class ClaveUnicaController extends Controller
                     if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
-                    $this->storeUserClaveUnica('access_token');
+                    $this->storeUserClaveUnica($access_token);
+                    dd($access_token);
 		        }
 		        else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
