@@ -178,6 +178,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $requests->links() }}
     </div>
     @else
     <div class="alert alert-info" role="alert">

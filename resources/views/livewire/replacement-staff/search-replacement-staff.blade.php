@@ -121,5 +121,6 @@
               @endforeach
           </tbody>
       </table>
+      {{ $replacementStaff->links() }}
     </div>
 </div>
