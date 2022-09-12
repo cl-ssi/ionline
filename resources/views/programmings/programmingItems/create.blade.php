@@ -9,7 +9,7 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ route('programmingitems.index', ['programming_id' => Request::get('programming_id')]) }}" class="btn btb-flat btn-sm btn-dark" >
+    <a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -17,7 +17,7 @@ Nuevo Item Programación Operativa </h4>
 
 
 
-
+@if(!Request::get('activity_type') || Request::get('activity_type') == 'Directa')
 <form method="GET" class="form-horizontal small" action="{{ route('programmingitems.create') }}" enctype="multipart/form-data">
 
     <input type="hidden" class="form-control" id="forreferente" name="programming_id" value="{{Request::get('programming_id')}}">
@@ -146,12 +146,19 @@ Nuevo Item Programación Operativa </h4>
             <input type="number" class="form-control " id="cant_target_population" name="cant_target_population"  required="">
         </div>
         <div class="form-group col-md-2">
-            <label for="forprogram">Prevalencia o Tasa (%)</label>
+            <label for="forprogram">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="prevalence_option" id="prevalence_option">
+                <label class="form-check-label" for="prevalence_option">
+                Prevalencia o Tasa (%)
+                </label>
+            </div>
+            </label>
             <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
             title="Prevalencia o Tasa (%)" 
             data-content="Utilizar este dato cuando se desconoce el número de usuarios con el fin de estimar una población que podría percibir en el año a programar Ej: 50%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" step="any" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
+            <input type="number" step="any" class="form-control" id="prevalence_rate" name="prevalence_rate" disabled>
         </div>
 
         <div class="form-group col-md-4">
@@ -215,10 +222,93 @@ Nuevo Item Programación Operativa </h4>
             <input type="input" class="form-control" id="activity_total" name="activity_total" value="" required="" readonly>
         </div>
 
-        
+    </div>
+    @if($year >= 2022)
+    <!-- hidden dynamic element to clone -->
+    <div class="form-group dynamic-element" style="display:none">
+    <hr>
+    <div class="form-row">
+    
+        <div class="form-group col-md-6">
+            <label for="forprogram">Profesional/Funcionario <span class="text-danger">{{ $activityItemsSelect ? '- Rec. '.$activityItemsSelect->professional : '' }}</span></label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Profesional/Funcionario" 
+            data-content="Funcionario que otorga la prestación, Si es más de un funcionario para la actividad programada se debe repetir en otro registro">
+            <i class="fas fa-info-circle"></i></a>
+            <select name="professionals[0][professional_hour_id]" id="formprogram" class="form-control">
+                @foreach($professionalHours as $professionalHour)
+                    <option value="{{ $professionalHour->id }}">{{ $professionalHour->professional->alias ?? '' }}</option>
+                @endforeach
+            </select>
+        </div>
 
+        <div class="form-group col-md-3">
+            <label for="forprogram">Rendimiento de la Actividad</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Rendimiento de la Actividad" 
+            data-content="Número de veces que se realiza un tipo de actividad durante una hora cronológica por parte de un funcionario 
+            (EJ: Rendimiento de 45 minutos es 60/45=1.3).
+             Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="number" step="any" class="form-control calculate-performance" id="activity_performance" name="professionals[0][activity_performance]" >
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="forprogram">Total Día Habiles</label>
+            <input type="number" class="form-control" id="habil_days" value="{{ $programmingDays ? $programmingDays->days_programming : '' }}" name="professionals[0][habil_days]" readonly>
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="forprogram">Hora Laboral</label>
+            <input type="number" class="form-control" id="work_valid_hour_day" value="{{ $programmingDays ? $programmingDays->day_work_hours : '' }}" name="professionals[0][work_valid_hour_day]" readonly>
+        </div>
         
     </div>
+
+    <div class="form-row">
+
+        <div class="form-group col-md-3">
+            <label for="forprogram">Horas Años Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas Años Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="hours_required_year" name="professionals[0][hours_required_year]" readonly>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="forprogram">Horas días Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas días Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en un dia del año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="hours_required_day" name="professionals[0][hours_required_day]" readonly>
+        </div>
+    
+        <div class="form-group col-md-s">
+            <label for="forprogram">Jornadas Directas Año</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Directas Año" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="direct_work_year" name="professionals[0][direct_work_year]" readonly>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="forprogram">Jornadas Horas Directas Diarias</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Horas Directas Diarias" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="direct_work_hour" name="professionals[0][direct_work_hour]" readonly>
+        </div>
+    </div>
+    </div>
+    <!-- end hidden dynamic element to clone -->
+    <div class="dynamic-stuff"></div>
+    <button type="button" class="btn btn-link mx-auto d-block add-one">+ Añadir otro profesional</button>
+    <hr>
+    @else
 
     <div class="form-row">
     
@@ -296,42 +386,208 @@ Nuevo Item Programación Operativa </h4>
             <input type="input" class="form-control" id="direct_work_hour" name="direct_work_hour" required="" readonly>
         </div>
     </div>
-
+    
+    @endif
     <div class="form-row">
-
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
             <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" readonly>
         </div>
-
         <div class="form-group col-md-3">
             <label for="forprogram">Financiada por Prap</label>
             <select name="prap_financed" id="prap_financed" class="form-control">
                     <option value="NO">No</option>
                     <option value="SI">SI</option>
-               
             </select>
         </div>
-
-        
-        
     </div>
 
-
-
     <div class="form-row">
-        
         <div class="form-group col-md-12">
             <label for="forprogram">Observación</label>
             <input type="input" class="form-control" id="observation" name="observation" >
-        </div>
-        
+        </div>    
     </div>
-
-    
     <button type="submit" class="btn btn-info mb-4">Crear</button>
 
 </form>
+@else
+<!-- Actividad indirecta esporadica o por designación -->
+<form method="POST" class="form-horizontal small" action="{{ route('programmingitems.store') }}">
+@csrf   
+    <input type="hidden" class="form-control" id="programming_id" name="programming_id" value="{{Request::get('programming_id')}}">
+    <input type="hidden" class="form-control" id="activity_type" name="activity_type" value="Indirecta">
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="forprogram">Subtipo de actividad indirecta</label>
+            <select name="activity_subtype" id="activity_subtype"  class="form-control" required>
+                <option value="Esporádicas">Actividades Esporádicas</option>
+                <option value="Designación">Designación de horas funcionarios por rol</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3" id="activity_category_div">
+            <label for="forprogram">Categoría</label>
+            <select name="activity_category" id="activity_category" class="form-control" required>
+                <option value="">Seleccione opción</option>
+                <option value="Reunión">Reunión</option>
+                <option value="Jornada">Jornada</option>
+                <option value="Consultoría">Consultoría</option>
+                <option value="Supervisión Interna">Supervisión Interna</option>
+                <option value="Plan de Intervención (N° familias)">Plan de Intervención (N° familias)</option>
+                <option value="Trabajo administrativo">Trabajo administrativo</option>
+                <option value="Viaje de ronda">Viaje de ronda</option>
+                <option value="Tele interconsulta">Tele interconsulta</option>
+                <option value="Tele consultoría">Tele consultoría</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3" id="work_area_div" style="display: none">
+            <label for="forprogram">Área de trabajo</label>
+            <select name="work_area" id="work_area" class="form-control">
+                <option value="">Seleccione opción</option>
+                <option value="Dirección">Dirección</option>
+                <option value="SOME">SOME</option>
+                <option value="Esterilización">Esterilización</option>
+                <option value="Interconsulta">Interconsulta</option>
+                <option value="Epidemiología">Epidemiología</option>
+                <option value="SIGGES">SIGGES</option>
+                <option value="OIRS">OIRS</option>
+                <option value="Informática">Informática</option>
+                <option value="Estadísticas">Estadísticas</option>
+                <option value="Sala de Tratamiento">Sala de Tratamiento</option>
+                <option value="Farmacia">Farmacia</option>
+                <option value="Bodega de Leche">Bodega de Leche</option>
+                <option value="Dental">Dental</option>
+                <option value="Referencia de programa">Referencia de programa</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6" id="activity_name_div">
+            <label for="forprogram">Nombre de la actividad</label>
+            <input type="input" class="form-control" id="activity_name" name="activity_name" required>
+        </div>
+        <div class="form-group col-md-3" id="another_work_area_div" style="display: none">
+            <label for="forprogram">Otro, ¿Cúal?</label>
+            <input type="input" class="form-control" id="another_work_area" name="another_work_area" readonly>
+        </div>
+        <div class="form-group col-md-3" id="work_area_specs_div" style="display: none">
+            <label for="forprogram">Especificaciones área de trabajo</label>
+            <input type="input" class="form-control" id="work_area_specs" name="work_area_specs">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2" id="times_month_div">
+            <label for="forprogram">N° veces al mes</label>
+            <input type="number" class="form-control" id="times_month" name="times_month" required>
+        </div>
+        <div class="form-group col-md-2" id="months_year_div">
+            <label for="forprogram">N° meses del año</label>
+            <input type="number" class="form-control" id="months_year" name="months_year" required>
+        </div>
+        <div class="form-group col-md-2" id="activity_total_div">
+            <label for="forprogram">Total Actividad</label>
+            <input type="input" class="form-control" id="activity_total" name="activity_total" value="" required="" readonly>
+        </div>
+    </div>
+    <!-- hidden dynamic element to clone -->
+    <div class="form-group dynamic-element" style="display:none">
+    <hr>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="forprogram">Profesional/Funcionario</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Profesional/Funcionario" 
+            data-content="Funcionario que otorga la prestación, Si es más de un funcionario para la actividad programada se debe repetir en otro registro">
+            <i class="fas fa-info-circle"></i></a>
+            <select name="professionals[0][professional_hour_id]" id="formprogram" class="form-control">
+                @foreach($professionalHours as $professionalHour)
+                    <option value="{{ $professionalHour->id }}">{{ $professionalHour->professional->alias ?? '' }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-md-3" id="activity_performance_div">
+            <label for="forprogram">Rendimiento de la Actividad</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Rendimiento de la Actividad" 
+            data-content="Número de veces que se realiza un tipo de actividad durante una hora cronológica por parte de un funcionario 
+            (EJ: Rendimiento de 45 minutos es 60/45=1.3).
+             Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="number" step="any" class="form-control calculate-performance" id="activity_performance" name="professionals[0][activity_performance]" >
+        </div>
+        <div class="form-group col-md-3" id="designated_hours_weeks_div" style="display: none">
+            <label for="forprogram">Horas/semanas designadas</label>
+            <input type="number" setp="any" class="form-control calculate-designated" id="designated_hours_weeks" name="professionals[0][designated_hours_weeks]">
+        </div>
+        <div class="form-group col-md-2">
+            <label for="forprogram">Total Día Habiles</label>
+            <input type="number" class="form-control" id="habil_days" value="{{ $programmingDays ? $programmingDays->days_programming : '' }}" name="professionals[0][habil_days]" readonly>
+        </div>
+        <div class="form-group col-md-1">
+            <label for="forprogram">Hora Laboral</label>
+            <input type="number" class="form-control" id="work_valid_hour_day" value="{{ $programmingDays ? $programmingDays->day_work_hours : '' }}" name="professionals[0][work_valid_hour_day]" readonly>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="forprogram">Horas Años Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas Años Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="hours_required_year" name="professionals[0][hours_required_year]" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="forprogram">Horas días Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas días Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en un dia del año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="hours_required_day" name="professionals[0][hours_required_day]" readonly>
+        </div>
+        <div class="form-group col-md-s">
+            <label for="forprogram">Jornadas Directas Año</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Directas Año" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="direct_work_year" name="professionals[0][direct_work_year]" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="forprogram">Jornadas Horas Directas Diarias</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Horas Directas Diarias" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
+            <i class="fas fa-info-circle"></i></a>
+            <input type="input" class="form-control" id="direct_work_hour" name="professionals[0][direct_work_hour]" readonly>
+        </div>
+    </div>
+    </div>
+    <!-- end hidden dynamic element to clone -->
+    <div class="dynamic-stuff"></div>
+    <button type="button" class="btn btn-link mx-auto d-block add-one">+ Añadir otro profesional</button>
+    <hr>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="forprogram">Fuente Información</label>
+            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="forprogram">Financiada por Prap</label>
+            <select name="prap_financed" id="prap_financed" class="form-control">
+                    <option value="NO">No</option>
+                    <option value="SI">SI</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="forprogram">Observación</label>
+            <input type="input" class="form-control" id="observation" name="observation" >
+        </div>    
+    </div>
+    <button type="submit" class="btn btn-info mb-4">Crear</button>
+</form>
+@endif
 
 @endsection
 
@@ -362,11 +618,38 @@ Nuevo Item Programación Operativa </h4>
             document.getElementById("workshop_session_number").required = false;
             document.getElementById("workshop_number").required = false;
             document.getElementById("activity_group").required = false;
-            
-
+            document.getElementById("prevalence_rate").disabled = false;
+            document.getElementById("source_prevalence").disabled = false;
             document.getElementById("concentration").disabled = false;
         }
     }
+
+    $('#activity_subtype').change(function() {
+        if($(this).find('option:selected').val() == 'Designación'){
+            $('#work_area_div,#another_work_area_div,#designated_hours_weeks_div,#work_area_specs_div').show();
+            $('#work_area').prop('required', true);
+            $('#activity_category_div,#activity_name_div,#times_month_div,#months_year_div,#activity_total_div,#activity_performance_div').hide();
+            $('#activity_category,#activity_name,#times_month,#months_year,#activity_total,#activity_performance').prop('required', false).val('');
+        }else{
+            $('#work_area_div,#another_work_area_div,#designated_hours_weeks_div,#work_area_specs_div').hide();
+            $('#work_area,#another_work_area,#designated_hours_weeks,#work_area_specs').prop('required', false).val('');
+            $('#activity_category_div,#activity_name_div,#times_month_div,#months_year_div,#activity_total_div,#activity_performance_div').show();
+            $('#activity_category,#activity_name,#times_month,#months_year,#activity_total,#activity_performance').prop('required', true);
+        }
+    });
+
+    $('#work_area').change(function() {
+        if($(this).find('option:selected').val() == 'Otro'){
+            $('#another_work_area').prop('required', true).prop('readonly', false);
+        }else{
+            $('#another_work_area').prop('required', false).prop('readonly', true).val('');
+        }
+    });
+
+    $('#times_month,#months_year').keyup(function() {
+        var calc = $('#times_month').val() * $('#months_year').val();
+        $('#activity_total').val(Math.round(calc));
+    });
 
     $(function () {
         $('[data-toggle="popover"]').popover()
@@ -375,43 +658,27 @@ Nuevo Item Programación Operativa </h4>
         trigger: 'focus'
     }) 
 
-    var select = document.getElementById('activity_search_id');
-        select.onchange = function(){
-            this.form.submit();
-     };
+    $('#activity_search_id').change(function() {
+        this.form.submit();
+    });
+
+    $('#prevalence_option').click(function() {
+        var result = $('#prevalence_option').is(":checked");
+        $("#prevalence_rate").prop('disabled', !result);
+        $("#prevalence_rate").prop('required', result);
+        $("#prevalence_rate").val('').keyup();
+    });
 
 
     $('#prevalence_rate, #cant_target_population, #coverture').keyup(function() {
-        
-        var prevalence_rate = $('#prevalence_rate').val();
-        var coverture       = $('#coverture').val();
-        console.log("rate "+prevalence_rate+" coverture "+coverture);
 
-        if(prevalence_rate == 0 && coverture == 0)
-        {
-            var calc = $('#cant_target_population').val();
-            console.log("prevalence_rate == 0 && coverture == 0");
-        }
-        
-        else if(prevalence_rate > 0 && coverture == 0)
-        {
-            var calc = $('#cant_target_population').val() * (prevalence_rate/100);
-            console.log("prevalence_rate > 0 && coverture == 0");
-            
-        }
-        else if(prevalence_rate == 0 && coverture > 0 )
-        {
-            var calc = $('#cant_target_population').val() * (coverture/100);
-            console.log("prevalence_rate == 0 && coverture > 0");
-        }
-        else {
-            var calc = $('#cant_target_population').val() * (prevalence_rate/100) * (coverture/100);
-            console.log("ELSE");
-            
-        }
+        var prevalence_rate = $('#prevalence_rate').val() ? $('#prevalence_rate').val() : 100;
+        var coverture       = $('#coverture').val() ? $('#coverture').val() : 100;
+
+        var calc = $('#cant_target_population').val() * (prevalence_rate/100) * (coverture/100);
     
         $('#population_attend').val(Math.round(calc));
-        
+        $('#concentration').keyup();
     });
 
     $('#activity_group').keyup(function() {
@@ -462,29 +729,11 @@ Nuevo Item Programación Operativa </h4>
 
     $('#concentration').keyup(function() {
         
-        var concentration       = $('#concentration').val();
-        var population_attend   = $('#population_attend').val();
+        var concentration = $('#concentration').val() ? $('#concentration').val() : 1;
 
-        if(concentration == 0)
-        {
-            var calc2 = $('#population_attend').val();
-            console.log("concentration == 0");
-        }
-        
-        else if(concentration > 0)
-        {
-            var calc2 = $('#population_attend').val() * concentration;
-            console.log("concentration > 0");
-            
-        }
-        else {
-            var calc2 = $('#population_attend').val() * concentration;
-            console.log("ELSE");
-            
-        }
-    
-        $('#activity_total').val(Math.round(calc2));
-        
+        var calc = $('#population_attend').val() * concentration;
+        $('#activity_total').val(Math.round(calc));
+
     });
 
     $('#activity_performance').keyup(function() {
@@ -530,8 +779,89 @@ Nuevo Item Programación Operativa </h4>
         
     });
 
-    
+    $(document).on('keyup', '.calculate-performance', function() {
 
+        var div = $(this).closest('.dynamic-element');
+        var activity_performance = div.find('#activity_performance').val();
+        var activity_total = $('#activity_total').val();
+        var habil_days = div.find('#habil_days').val();
+        var work_valid_hour_day = div.find('#work_valid_hour_day').val();        
+
+        if(activity_total == 0 || activity_performance == 0)
+        {
+            div.find('#hours_required_year').val('');
+            div.find('#hours_required_day').val('');
+            div.find('#direct_work_year').val('');
+            div.find('#direct_work_hour').val('');
+            return;
+        }
+        
+        else if(activity_total > 0)
+        {
+            var hours_required_year = activity_total / activity_performance;
+            var hours_required_day  = activity_total / activity_performance / habil_days;
+            var direct_work_year    = hours_required_day/ work_valid_hour_day ;
+            var direct_work_hour    =  direct_work_year/work_valid_hour_day;
+            
+            console.log("concentration > 0");
+        }
+        else {
+            var hours_required_year = activity_total / activity_performance;
+            var hours_required_day  = activity_total / activity_performance;
+            var direct_work_year    = activity_total / activity_performance;
+            var direct_work_hour    = activity_total / activity_performance;
+            console.log("ELSE");
+        }
+    
+        div.find('#hours_required_year').val(Math.round(hours_required_year));
+        div.find('#hours_required_day').val(hours_required_day.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
+    });
+
+    $(document).on('keyup', '.calculate-designated', function() {
+
+        var div = $(this).closest('.dynamic-element');
+        var designated_hours_weeks = div.find('#designated_hours_weeks').val();
+        var habil_days = div.find('#habil_days').val();
+        var work_valid_hour_day = div.find('#work_valid_hour_day').val();
+
+        if(designated_hours_weeks == 0)
+        {
+            div.find('#hours_required_year').val('');
+            div.find('#hours_required_day').val('');
+            div.find('#direct_work_year').val('');
+            div.find('#direct_work_hour').val('');
+            return;
+        }
+
+        var hours_required_year = designated_hours_weeks * (habil_days/5);
+        var hours_required_day  = designated_hours_weeks/5;
+        var direct_work_year    = hours_required_day/work_valid_hour_day;
+        var direct_work_hour    = direct_work_year/work_valid_hour_day;
+    
+        div.find('#hours_required_year').val(Math.round(hours_required_year));
+        div.find('#hours_required_day').val(hours_required_day.toFixed(2));
+        div.find('#direct_work_year').val(direct_work_year.toFixed(2));
+        div.find('#direct_work_hour').val(direct_work_hour.toFixed(5));
+    });
+
+    //Clone the hidden element and shows it
+    $('.add-one').click(function(){
+        var newElement = $('.dynamic-element').first().clone();
+        var num = $('.dynamic-element').length - 2;
+        var newNum = num + 1;
+        newElement.find('input,select').each(function(i){
+            $(this).attr('name', $(this).attr('name').replace($(this).attr("name").match(/\[[0-9]+\]/), "["+(newNum)+"]"));
+            $(this).prop('disabled', false);
+            $(this).prop('required', true);
+        });
+        newElement.find(':hidden').each(function(i){
+            $(this).find('input:first').prop('required', false);
+        });
+        newElement.appendTo('.dynamic-stuff').show();
+    });
+    $('.add-one').click();
     
 </script>
 

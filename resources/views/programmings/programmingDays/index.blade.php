@@ -99,16 +99,43 @@
   <div class="form-group row">
     <div class="col-sm-10">
     @if($programmingDays)
-    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <button type="submit" class="btn btn-primary">Actualizar</button> 
     @else
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">Guardar</button> 
     @endif
+
+    <a class="btn btn-outline-secondary" href="{{ url()->previous() }}">Volver</a>
 
       
     </div>
   </div>
 </form>
 
+@can('Programming: audit')
+<hr/>
+
+        <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
+
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Días habiles a programar
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="card-body">
+                        @include('partials.audit', ['audits' => $programmingDays->audits ?? null])
+                    </div>
+                </div>
+            </div>
+        </div>
+@endcan
 
 @endsection
 

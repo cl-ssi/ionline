@@ -60,7 +60,7 @@ class CreateSignaturesTable extends Migration
             $table->foreignId('signatures_file_id');
             $table->enum('type', ['visador', 'firmante'])->nullable();
             $table->foreignId('ou_id');
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('user_id');
             $table->tinyInteger('sign_position')->nullable(); //sólo para type Visador
 
             $table->boolean('status')->nullable(); // Signed 1 Unsigned 0

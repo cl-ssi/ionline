@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Evaluación de Activividad</h4>
 <h6 class="mb-3">{{$programmingItem->programming->description ?? ''}}</h6>
-<a href="{{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
+<a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -28,7 +28,44 @@
 {{$programmingItem }} -->
 <div class="card mt-3 small">
     <div class="card-body">
-
+        @if($programmingItem->activity_type == 'Indirecta' && $programmingItem->activity_subtype)
+        <table class="table-sm table  table-bordered">
+            <thead  style="font-size:75%;">
+                <tr>
+                    <th class="text-center align-middle table-secondary">N° REG.</th>
+                    <th class="text-center align-middle table-secondary">TIPO ACTIVIDAD</th>
+                    <th class="text-center align-middle table-secondary">SUBTIPO ACTIVIDAD</th>
+                    @if($programmingItem->activity_subtype == 'Esporádicas')
+                    <th class="text-center align-middle table-secondary">CATEGORÍA</th>
+                    <th class="text-center align-middle table-secondary">ACTIVIDAD</th>
+                    <th class="text-center align-middle table-secondary">N° MESES AL MES</th>
+                    <th class="text-center align-middle table-secondary">N° MESES DEL AÑO</th>
+                    <th class="text-center align-middle table-secondary">TOTAL ACTIVIDAD</th>
+                    @else <!-- Designación -->
+                    <th class="text-center align-middle table-secondary">ÁREA DE TRABAJO</th>
+                    <th class="text-center align-middle table-secondary">ESPECIFICACIONES ÁREA DE TRABAJO</th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody  style="font-size:75%;">
+                <tr>
+                    <td class="text-center align-middle">{{$programmingItem->id}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activity_type}}</td>
+                    <td class="text-center align-middle font-weight-bold">{{$programmingItem->activity_subtype}}</td>
+                    @if($programmingItem->activity_subtype == 'Esporádicas')
+                    <td class="text-center align-middle">{{ $programmingItem->activity_category}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activity_name}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->times_month}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->months_year}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activity_total}}</td>
+                    @else <!-- Designación -->
+                    <td class="text-center align-middle">{{ $programmingItem->work_area == 'Otro' ? $programmingItem->another_work_area : $programmingItem->work_area }}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->work_area_specs }}</td>
+                    @endif
+                </tr>
+            </tbody>
+        </table>
+        @else
         <table class="table-sm table  table-bordered  ">
             <thead  style="font-size:75%;">
                 <tr>
@@ -80,12 +117,16 @@
                 </tr>
             </tbody>
         </table>
+        @endif
         
         <table class="table-sm table  table-bordered  ">
             <thead  style="font-size:75%;">
                 <tr>
                     <th class="text-center align-middle table-secondary">PROFESIONAL</th>
                     <th class="text-center align-middle table-secondary">RENDIMIENTO</th>
+                    @if($programmingItem->professionalHours->count() > 0)
+                    <th class="text-center align-middle table-secondary">HORAS/SEMANAS DESIGNADAS</th>
+                    @endif
                     <th class="text-center align-middle table-secondary">T. DÍAS HAB.</th>
                     <th class="text-center align-middle table-secondary">HORA LABORAL</th>
                     <th class="text-center align-middle table-secondary">HORAS AÑO REQUERIDAS</th>
@@ -95,6 +136,21 @@
                 </tr>
             </thead>
             <tbody  style="font-size:75%;">
+                @if($programmingItem->professionalHours->count() > 0)
+                    @foreach($programmingItem->professionalHours as $professionalHour)
+                    <tr>
+                        <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->designated_hours_weeks }}</td>
+                        <td class="text-center align-middle">{{number_format($programmingDay->days_programming,0, ",", ".")}}</td>
+                        <td class="text-center align-middle">{{number_format($programmingDay->day_work_hours,0, ",", ".")}}</td>
+                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->hours_required_year,2, ",", ".") }}</td>
+                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->hours_required_day,2, ",", ".") }}</td>
+                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->direct_work_year,2, ",", ".") }}</td>
+                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->direct_work_hour,4, ",", ".") }}</td>
+                    </tr>
+                    @endforeach
+                @else
                 <tr>
                     <td class="text-center align-middle">{{$professional}}</td>
                     <td class="text-center align-middle">{{$programmingItem->activity_performance}}</td>
@@ -105,6 +161,7 @@
                     <td class="text-center align-middle">{{number_format($programmingItem->direct_work_year,2, ",", ".")}}</td>
                     <td class="text-center align-middle">{{number_format($programmingItem->direct_work_hour,4, ",", ".")}}</td>
                 </tr>
+                @endif
             </tbody>
         </table>
 
@@ -252,19 +309,28 @@
                     <div class="form-group col-md-12">
                         <label for="forprogram">Evaluar</label>
                         <select name="review" id="review"  class="form-control">
-                                <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada</option>
-                                <option value="1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?">1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?</option>
-                                <option value="2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?">2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?</option>
-                                <option value="3. ¿Se acepta el número de población definido y fuente utilizada?">3. ¿Se acepta el número de población definido y fuente utilizada?</option>
-                                <option value="4. ¿Se acepta la incidencia/prevalencia utilizada y su fuente?">4. ¿Se acepta la incidencia/prevalencia utilizada y su fuente?</option>
-                                <option value="5. ¿Se acepta la cobertura definida">5. ¿Se acepta la cobertura definida?</option>
-                                <option value="6. ¿Se acepta la concentración definida?">6. ¿Se acepta la concentración definida?</option>
-                                <option value="7. ¿Se acepta el rendimiento definido?">7. ¿Se acepta el rendimiento definido?</option>
-                                <option value="8. ¿Se acepta el profesional a quien se programa?">8. ¿Se acepta el profesional a quien se programa?</option>
-                                <option value="9. ¿El total de actividades programadas está de acuerdo a la capacidad productiva de la comuna?">9. ¿El total de actividades programadas está de acuerdo a la capacidad productiva de la comuna?</option>
-                                <option value="10. ¿Ruta REM definida corresponde para evaluación posterior?">10. ¿Ruta REM definida corresponde para evaluación posterior?</option>
-                                <option value="11. Otra variable a observar">11. Otra variable a observar. </option>
-                        
+                            @if($programmingItem->professionalHours->count() > 0)
+                            <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada.</option>
+                            <option value="Actividad bien programada">Actividad bien programada.</option>
+                            <option value="El profesional asignado está bien programado">El profesional asignado está bien programado.</option>
+                            <option value="El rendimiento de la actividad se acepta">El rendimiento de la actividad se acepta.</option>
+                            <option value="Las horas designadas se aceptan">Las horas designadas se aceptan.</option>
+                            <option value="El total de actividades se acepta">El total de actividades se acepta.</option>
+                            <option value="Otra observación">Otra observación.</option>
+                            @else
+                            <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada</option>
+                            <option value="1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?">1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?</option>
+                            <option value="2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?">2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?</option>
+                            <option value="3. ¿Se acepta el número de población definido y fuente utilizada?">3. ¿Se acepta el número de población definido y fuente utilizada?</option>
+                            <option value="4. ¿Se acepta la incidencia/prevalencia utilizada y su fuente?">4. ¿Se acepta la incidencia/prevalencia utilizada y su fuente?</option>
+                            <option value="5. ¿Se acepta la cobertura definida">5. ¿Se acepta la cobertura definida?</option>
+                            <option value="6. ¿Se acepta la concentración definida?">6. ¿Se acepta la concentración definida?</option>
+                            <option value="7. ¿Se acepta el rendimiento definido?">7. ¿Se acepta el rendimiento definido?</option>
+                            <option value="8. ¿Se acepta el profesional a quien se programa?">8. ¿Se acepta el profesional a quien se programa?</option>
+                            <option value="9. ¿El total de actividades programadas está de acuerdo a la capacidad productiva de la comuna?">9. ¿El total de actividades programadas está de acuerdo a la capacidad productiva de la comuna?</option>
+                            <option value="10. ¿Ruta REM definida corresponde para evaluación posterior?">10. ¿Ruta REM definida corresponde para evaluación posterior?</option>
+                            <option value="11. Otra variable a observar">11. Otra variable a observar. </option>
+                            @endif           
                         </select>
                     </div>
 
@@ -286,11 +352,68 @@
 
         
     </div>
-</div>
 
     @include('programmings/reviewItems/modal_edit_eval')
     @include('programmings/reviewItems/modal_edit_confirm')
     @include('programmings/reviewItems/modal_edit_eval_rect')
+
+    @can('Programming: audit')
+    <hr/>
+
+        <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
+
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Observaciones
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="card-body">
+                    <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                        <div class="table-responsive-md">
+                            <table class="table table-sm small text-muted mt-3">
+                                <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Modificaciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($reviewItems as $reviewItem)
+                                    @if($reviewItem->audits->count() > 0)
+                                        @foreach($reviewItem->audits->sortByDesc('updated_at') as $audit)
+                                            <tr>
+                                                <td nowrap>{{ $audit->created_at }}</td>
+                                                <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                                <td>
+                                                    @foreach($audit->getModified() as $attribute => $modified)
+                                                        @if(isset($modified['old']) OR isset($modified['new']))
+                                                            <strong>{{ $attribute }}</strong>
+                                                            :  {{ isset($modified['old']) ? $modified['old'] : '' }}
+                                                            => {{ $modified['new'] }};
+                                                        @endif
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endcan
 
 @endsection
 
