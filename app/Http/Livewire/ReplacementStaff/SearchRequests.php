@@ -7,9 +7,13 @@ use App\Models\ReplacementStaff\RstFundamentManage;
 use App\Models\ReplacementStaff\RstDetailFundament;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class SearchRequests extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $selectedStatus = null;
     public $selectedId = null;
     public $selectedStartDate = null;
@@ -36,8 +40,7 @@ class SearchRequests extends Component
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace
                 )
-                ->take(50)
-                ->get()
+                ->paginate(50)
         ]);
     }
 
