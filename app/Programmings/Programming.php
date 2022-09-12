@@ -4,12 +4,14 @@ namespace App\Programmings;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Programming extends Model
+class Programming extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'pro_programmings';
     protected $fillable = [
-        'id','year', 'description'
+        'id','year', 'description', 'access'
     ];
 
     public function user() {
@@ -22,6 +24,10 @@ class Programming extends Model
 
     public function days(){
         return $this->hasMany('App\Programmings\ProgrammingDay');
+    }
+
+    public function emergencies(){
+        return $this->hasMany('App\Programmings\Emergency');
     }
 
     public function professionalHours(){
@@ -66,6 +72,27 @@ class Programming extends Model
                 return $item->activityItem;
             });
         });
+    }
+
+    public function itemsIndirectBy($subtype)
+    {
+        return $this->items->where('activity_type','Indirecta')->where('activity_subtype', $subtype);
+    }
+
+    public function getValueAcumSinceScheduled($type, $professional_hour_id)
+    {
+        $total = 0;
+        foreach($this->items as $item) $total += $item->professionalHours->where('id', $professional_hour_id)->sum('pivot.'.$type);
+        return $total;
+    }
+
+    public function getCountActivitiesByPrapFinanced($answer, $professional_hour_id)
+    {
+        $total = 0;
+        foreach($this->items as $item)
+            if($item->prap_financed == $answer)
+                $total += $item->professionalHours->where('id', $professional_hour_id)->count();
+        return $total;
     }
 
     protected $casts = [
