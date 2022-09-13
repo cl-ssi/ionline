@@ -26,6 +26,15 @@ Nuevo Item de Capacitación </h4>
         <div class="form-group col-md-6">
             <label for="forprogram">Lineamientos Estrategicos</label>
             <select name="linieamiento_estrategico" id="linieamiento_estrategico" class="form-control">
+                @if($year >= 2023)
+                    <option value="EJE ESTRATÉGICO 1: Medio ambiente y entornos saludables">EJE ESTRATÉGICO 1: Medio ambiente y entornos saludables</option>
+                    <option value="EJE ESTRATÉGICO 2: Estilos de vida">EJE ESTRATÉGICO 2: Estilos de vida</option>
+                    <option value="EJE ESTRATÉGICO 3: Enfermedades transmisibles">EJE ESTRATÉGICO 3: Enfermedades transmisibles</option>
+                    <option value="EJE ESTRATÉGICO 4: Enfermedades crónicas no transmisibles y violencia">EJE ESTRATÉGICO 4: Enfermedades crónicas no transmisibles y violencia</option>
+                    <option value="EJE ESTRATÉGICO 5: Funcionamiento y discapacidad">EJE ESTRATÉGICO 5: Funcionamiento y discapacidad</option>
+                    <option value="EJE ESTRATÉGICO 6: Emergencias y desastres">EJE ESTRATÉGICO 6: Emergencias y desastres</option>
+                    <option value="EJE ESTRATÉGICO 7: Gestión, calidad e innovación">EJE ESTRATÉGICO 7: Gestión, calidad e innovación</option>
+                @else
                     <option value="EJE ESTRATEGICO 1: Enfermedades Transminisibles">EJE ESTRATEGICO 1: Enfermedades Transminisibles</option>
                     <option value="EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad">EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad</option>
                     <option value="EJE ESTRATEGICO 3: Hábitos de vida">EJE ESTRATEGICO 3: Hábitos de vida</option>
@@ -35,7 +44,7 @@ Nuevo Item de Capacitación </h4>
                     <option value="EJE ESTRATEGICO 7: Institucionalidad del Sector Salud">EJE ESTRATEGICO 7: Institucionalidad del Sector Salud</option>
                     <option value="EJE ESTRATEGICO 8: Calidad de la atenció">EJE ESTRATEGICO 8: Calidad de la atención</option>
                     <option value="EJE ESTRATEGICO 9: Emergencias, desastres y epidemias">EJE ESTRATEGICO 9: Emergencias, desastres y epidemias</option>
-               
+                @endif
             </select>
         </div>
         <div class="form-group col-md-6">
@@ -48,7 +57,7 @@ Nuevo Item de Capacitación </h4>
     <div class="form-row">
 
         <div class="form-group col-md-12">
-            <label for="forprogram">Resultados Esperados</label>
+            <label for="forprogram">Objetivos Educativos</label>
             <textarea class="form-control rounded-1" name="objetivos_educativos" id="objetivos_educativos" rows="3"></textarea>
         </div>
     </div>
