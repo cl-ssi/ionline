@@ -137,7 +137,7 @@ class RegisterInventory extends Component
             $this->po_id = $purchaseOrder->id;
             $this->po_code = $purchaseOrder->code;
             $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
-            /* Tambien se puede usar como un metodo estatico */
+            /* Tambien se puede usar como un metodo estático */
             $this->request_form = (new PurchaseOrderService())->getRequestForm($this->po_search);
             $this->request_form_id = $this->request_form ? $this->request_form->id : null;
         }
@@ -176,6 +176,9 @@ class RegisterInventory extends Component
         $this->reset(['po_search']);
         $this->clearInputProduct();
         $this->clearInputAdvantage(true);
+
+        session()->flash('success', 'El inventario fue registrado exitosamente.');
+        return redirect()->route('inventories.assigned-products');
     }
 
     public function clearInputProduct()
