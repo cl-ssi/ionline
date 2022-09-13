@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
+use App\Models\Programmings\CommuneFile;
 use Illuminate\Http\Request;
 use App\Programmings\Programming;
 use App\Programmings\TrainingItem;
@@ -12,14 +13,13 @@ class TrainingsItemController extends Controller
     public function index(Request $request)
     {
         $trainingItems = TrainingItem::where('programming_id',$request->commune_file_id)->OrderBy('linieamiento_estrategico')->get();
-        return view('programmings/trainingItems/index')->withtrainingItems($trainingItems);
+        return view('programmings.trainingItems.index')->withtrainingItems($trainingItems);
     }
 
     public function create(Request $request)
     {
-        
-        $trainingItems = TrainingItem::All()->SortBy('name');
-        return view('programmings/trainingItems/create')->withEstablishments($trainingItems);
+        $year = CommuneFile::find($request->commune_file_id)->year;
+        return view('programmings.trainingItems.create', compact('year'));
     }
 
     public function store(Request $request)
@@ -41,9 +41,9 @@ class TrainingsItemController extends Controller
 
     public function show(Request $request,$id)
     {
-        $trainingItems = TrainingItem::where('id',$id)->first();
-        //dd($trainingItems);
-        return view('programmings/trainingItems/show')->withtrainingItems($trainingItems);
+        $trainingItems = TrainingItem::with('communeFile')->find($id);
+        // return $trainingItems;
+        return view('programmings.trainingItems.show')->withtrainingItems($trainingItems);
     }
 
     public function destroy($id)
