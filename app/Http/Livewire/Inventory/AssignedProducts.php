@@ -17,7 +17,7 @@ class AssignedProducts extends Component
 
     public function mount()
     {
-        $this->product_type = 'using';
+        $this->product_type = '';
     }
 
     public function render()
@@ -38,9 +38,11 @@ class AssignedProducts extends Component
             ->when($this->product_type == 'responsible', function ($query) {
                 $query->whereUserResponsibleId(Auth::id());
             })
-            ->when($this->product_type == 'using&responsible', function($query) {
-                $query->where('user_responsible_id', Auth::id())
-                    ->where('user_using_id', Auth::id());
+            ->when($this->product_type == '', function($query) {
+                $query->where(function($query) {
+                    $query->where('user_responsible_id', Auth::id())
+                      ->orWhere('user_using_id', Auth::id());
+                });
             })
             ->when($this->search, function ($query)  use($search) {
                 $query->where('number', 'like', $search);

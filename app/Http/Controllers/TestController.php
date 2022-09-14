@@ -27,6 +27,7 @@ class TestController extends Controller
 
         if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
             // Check IP from internet.
+			// 'ip' => request()->getClientIp(),
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
             // Check IP is passed from proxy.
@@ -36,6 +37,7 @@ class TestController extends Controller
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
+		logger()->info($ip);
         //Storage::disk('local')->prepend('log_ips.txt', $ip);
 
         return $ip;

@@ -223,7 +223,7 @@ Nuevo Item Programación Operativa </h4>
         </div>
 
     </div>
-    @if($year >= 2022)
+    @if($year >= 2023)
     <!-- hidden dynamic element to clone -->
     <div class="form-group dynamic-element" style="display:none">
     <hr>
