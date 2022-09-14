@@ -220,6 +220,20 @@
                     Soy Usuario y Responsable
                 </label>
             </div>
+            @can('Inventory: manager')
+            <div class="form-check form-check-inline">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    wire:model="type"
+                    id="option-type-4"
+                    value="4"
+                >
+                <label class="form-check-label" for="option-type-4">
+                    Soy Encargada de Inventario
+                </label>
+            </div>
+            @endcan
         </div>
     </div>
 
@@ -243,6 +257,25 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+            
+            @elseif($type == 4)
+                @livewire('users.search-user', [
+                    'placeholder' => 'Ingrese un nombre',
+                    'eventName' => 'myUserUsingId',
+                    'tagId' => 'user-using-id',
+                ])
+
+                <input
+                    class="form-control @error('user_using_id') is-invalid @enderror"
+                    type="hidden"
+                >
+
+                @error('user_using_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            
             @else
                 <input
                     type="text"
@@ -252,6 +285,7 @@
                     readonly
                 >
             @endif
+            
         </fieldset>
 
         <fieldset class="col-md-4">
@@ -273,6 +307,25 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
+            
+            @elseif($type == 4)
+                @livewire('users.search-user', [
+                    'placeholder' => 'Ingrese un nombre',
+                    'eventName' => 'myUserResponsibleId',
+                    'tagId' => 'user-responsible-id',
+                ])
+
+                <input
+                    class="form-control @error('user_responsible_id') is-invalid @enderror"
+                    type="hidden"
+                >
+
+                @error('user_responsible_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+
             @else
                 <input
                     type="text"
