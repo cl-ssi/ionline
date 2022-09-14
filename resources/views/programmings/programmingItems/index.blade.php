@@ -192,7 +192,7 @@
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Directa')<a class="nav-link active" id="nav-direct-tab" data-toggle="tab" href="#nav-direct" role="tab" aria-controls="nav-direct" aria-selected="true"><h6>Horas Directas</h6></a>@endif
     @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Indirecta')
-        @if($programming->year >= 2022)
+        @if($programming->year >= 2023)
         <a class="nav-link active" id="nav-indirect-Esporádicas-tab" data-toggle="tab" href="#nav-indirect-Esporádicas" role="tab" aria-controls="nav-indirect-Esporádicas" aria-selected="true"><h6>Horas Indirectas - Actividades esporádicas</h6></a>
         <a class="nav-link" id="nav-indirect-Designación-tab" data-toggle="tab" href="#nav-indirect-Designación" role="tab" aria-controls="nav-indirect-Designación" aria-selected="false"><h6>Horas Indirectas - Designación de horas funcionarios/rol</h6></a>
         @else
@@ -353,7 +353,7 @@
 </table>
 </div>
 
-@if($programming->year >= 2022)
+@if($programming->year >= 2023)
 @foreach(array('Esporádicas', 'Designación') as $activity_subtype)
 <div class="tab-pane fade {{Request::get('activity_type') == 'Indirecta' && $loop->first ? 'show active' : ''}}" id="nav-indirect-{{$activity_subtype}}" role="tabpanel" aria-labelledby="nav-indirect-{{$activity_subtype}}-tab">
 <ul class="list-inline">

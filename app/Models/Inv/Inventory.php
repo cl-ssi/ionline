@@ -16,8 +16,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-class Inventory extends Model
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Inventory extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory, SoftDeletes;
 
     protected $table = 'inv_inventories';
@@ -126,6 +129,11 @@ class Inventory extends Model
     public function budgetItem()
     {
         return $this->belongsTo(BudgetItem::class);
+    }
+
+    public function getLocationAttribute()
+    {
+        return $this->place->name . ", " . $this->place->location->name;
     }
 
     public function getSubtitleAttribute()

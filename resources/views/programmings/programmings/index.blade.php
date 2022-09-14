@@ -42,7 +42,7 @@
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
-                @if($request->year >= 2022 || $year >= 2022)
+                @if($request->year >= 2023 || $year >= 2023)
                 <th class="text-left align-middle table-dark" ></th>
                 @endif
                 <th class="text-left align-middle table-dark" >Año</th>
@@ -81,7 +81,7 @@
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
                 <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
-                @if($request->year >= 2022 || $year >= 2022)
+                @if($request->year >= 2023 || $year >= 2023)
                 <!-- Falta especificar los permisos para qienes pueden tener acceso a RRHH -->
                 <td>
                     <a href="{{ route('programming.show_total_rrhh', $programming->id) }}" class="btn btb-flat btn-sm btn-success">
@@ -107,7 +107,7 @@
                 @endcan
 
                 <!-- Planificación a partir del 2023 -->
-                @if($request->year >= 2022 || $year >= 2022)
+                @if($request->year >= 2023 || $year >= 2023)
                     @can('ProgrammingItem: view')
                     <a href="{{ route('participation.show', $programming) }}" class="btn btb-flat btn-sm btn-primary" >
                         <i class="fas fa-tasks small"></i>
@@ -122,7 +122,7 @@
                 @endif
 
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso -->
-                @if($request->year >= 2022 || $year >= 2022)
+                @if($request->year >= 2023 || $year >= 2023)
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso a partir del 2023 -->
                 @can('ProgrammingItem: view')
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Directa']) }}" class="btn btb-flat btn-sm btn-info" >
