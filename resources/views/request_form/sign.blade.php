@@ -220,7 +220,7 @@
           @endif
           <td>
             @if($itemRequestForm->product_id)
-              {{ optional($itemRequestForm->product)->name }}
+              {{ optional($itemRequestForm->product)->code}} {{ optional($itemRequestForm->product)->name }}
             @else
               {{ $itemRequestForm->article }}
             @endif
