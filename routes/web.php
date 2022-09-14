@@ -1675,6 +1675,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
+        Route::delete('/{detail}/release_item', [PurchasingProcessController::class, 'release_item'])->name('release_item');
+        Route::delete('/{detail}/release_all_items', [PurchasingProcessController::class, 'release_all_items'])->name('release_all_items');
         Route::get('/mercado-publico-api/{type}/{code}', function($type, $code){
             return MercadoPublico::getTender($code, $type);
         });

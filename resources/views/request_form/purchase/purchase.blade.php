@@ -277,7 +277,12 @@
                                                                 <td>{{ $key+1 }}</td>
                                                                 <!-- <td>{{ $item->status }}</td> -->
                                                                 <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                                                                <td>{{ $item->article }}</td>
+                                                                <td>@if($item->product_id)
+                                                                    {{ optional($item->product)->code}} {{ optional($item->product)->name }}
+                                                                    @else
+                                                                    {{ $item->article }}
+                                                                    @endif
+                                                                </td>
                                                                 <td>{{ $item->unit_of_measurement }}</td>
                                                                 <td>{{ $item->specification }}</td>
                                                                 <td align="center">
@@ -437,6 +442,7 @@
                 <thead class="text-center">
                     <tr>
                         <th>#</th>
+                        <th>ID</th>
                         <th>Tipo compra</th>
                         <th>ID Licitación</th>
                         <th>Fechas</th>
@@ -458,8 +464,17 @@
                 </thead>
                 <tbody>
                     @foreach($requestForm->purchasingProcess->details as $key => $detail)
-                    <tr>
+                    <tr @if($detail->pivot->status != 'total') class="text-muted" @endif>
                         <td>{{ $key+1 }}</td>
+                        <td>{{ $detail->pivot->id}}<br>
+                            @if($detail->pivot->status != 'total')
+                            <a href="">
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-times-circle" title="{!! $detail->pivot->release_observation !!}"></i>
+                                </span>
+                            </a>
+                            @endif
+                        </td>
                         <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                         <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
                         <td align="center">@if($detail->pivot->tender)
@@ -493,24 +508,30 @@
                         <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
                         <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
                         <td>
-                            @if(env('APP_ENV') == 'local')
-                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}" class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
-                            @endif
                             <button type="button" id="btn_items_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                                 <i class="fas fa-receipt"></i>
                             </button>
                             @include('request_form.purchase.modals.detail_purchase')
+                            @if(env('APP_ENV') == 'local')
+                            <a href="{{ route('request_forms.supply.edit', [$requestForm->id, $detail->pivot->id]) }}" class="btn btn-link btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                            @endif
+                            @if($detail->pivot->status == 'total')
+                            <button type="button" id="btn_delete_{{$key}}" title="Ver" class="btn btn-link btn-sm" data-toggle="modal" data-target="#releaseitem-{{$detail->pivot->id}}">
+                                <i class="fas fa-window-close" style="color: red"></i>
+                            </button>
+                            @include('request_form.purchase.modals.reason_item_release')
+                            @endif
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="16" class="text-right">Valor Total</td>
+                        <th colspan="17" class="text-right">Valor Total</td>
                         <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                     <tr>
-                        <th colspan="16" class="text-right">Saldo disponible Requerimiento</td>
+                        <th colspan="17" class="text-right">Saldo disponible Requerimiento</td>
                         <th class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),$requestForm->precision_currency,",",".") }}</td>
                     </tr>
                 </tfoot>

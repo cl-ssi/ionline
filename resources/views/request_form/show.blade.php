@@ -265,7 +265,7 @@
                         <td>{{ $itemRequestForm->budgetItem ? $itemRequestForm->budgetItem->fullName() : '' }}</td>
                         <td>
                             @if($itemRequestForm->product_id)
-                                {{ optional($itemRequestForm->product)->name }}
+                                {{ optional($itemRequestForm->product)->code}} {{optional($itemRequestForm->product)->name }}
                             @else
                                 {{ $itemRequestForm->article }}
                             @endif
