@@ -81,13 +81,19 @@ class RegisterInventory extends Component
                 $this->user_using_id = Auth::id();
                 $this->user_responsible_id = null;
                 break;
-                case 2:
-                    $this->user_responsible_id = Auth::id();
-                    $this->user_using_id = null;
+            case 2:
+                $this->user_responsible_id = Auth::id();
+                $this->user_using_id = null;
                 break;
+            
             case 3:
                 $this->user_using_id = Auth::id();
                 $this->user_responsible_id = Auth::id();
+                break;
+            
+            case 4:
+                $this->user_using_id = null;
+                $this->user_responsible_id = null;
                 break;
         }
     }
