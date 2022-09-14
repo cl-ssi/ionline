@@ -225,10 +225,10 @@ class DeliverController extends Controller
 
     public function restore(Deliver $deliver)
     {
-        if(Auth::user()->can('Pharmacy: transfer view ortesis')){
-            session()->flash('warning', 'Ud. no tiene permiso para reestablecer ayudas técnicas al establecimiento origen.');
-            return redirect()->route('pharmacies.products.deliver.index');
-        }
+        // if(Auth::user()->can('Pharmacy: transfer view ortesis')){
+        //     session()->flash('warning', 'Ud. no tiene permiso para reestablecer ayudas técnicas al establecimiento origen.');
+        //     return redirect()->route('pharmacies.products.deliver.index');
+        // }
 
         $product = Product::with('establishments')->find($deliver->product_id);
         $pass = false;
