@@ -129,7 +129,7 @@
                       <td class="align-middle">{{ $item->budgetItem()->first()->fullName() }}</td>
                       <td class="align-middle">
                         @if($item->product_id)
-                          {{ optional($item->product)->name }}
+                          {{ optional($itemRequestForm->product)->code}} {{ optional($item->product)->name }}
                         @else
                           {{ $item->article }}
                         @endif

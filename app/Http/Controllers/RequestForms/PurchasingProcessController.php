@@ -605,4 +605,12 @@ class PurchasingProcessController extends Controller
         session()->flash('success', 'El trato directo ha sido modificado exitosamente');
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
+
+    public function release_item(PurchasingProcessDetail $detail, Request $request)
+    {
+        $detail->update(['status' => 'desert', 'release_observation' => $request->release_observation]);
+        PurchasingProcess::find($detail->purchasing_process_id)->update(['status' => 'in_process']);
+        session()->flash('success', 'El item ha sido anulado exitosamente');
+        return redirect()->back();
+    }
 }

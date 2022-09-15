@@ -64,7 +64,7 @@ class PurchasingProcess extends Model implements Auditable
     }
 
     public function getExpense(){
-        return $this->details->sum('pivot.expense');
+        return $this->details->where('pivot.status', 'total')->sum('pivot.expense');
     }
 
     public function requestForm(){
