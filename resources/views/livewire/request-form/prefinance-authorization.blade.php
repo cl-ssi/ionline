@@ -36,7 +36,7 @@
                   </td>
                   <td>
                     @if($item->product_id)
-                        {{ optional($item->product)->name }}
+                      {{ optional($itemRequestForm->product)->code}} {{ optional($item->product)->name }}
                     @else
                         {{ $item->article }}
                     @endif
