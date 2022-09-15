@@ -3,6 +3,109 @@
 
     @include('inventory.nav-user')
 
+    <p >
+        <i class="fas fa-info-circle"></i> Revisa el listado con los productos más comunes en oficinas
+        <a class="btn btn-primary btn-sm small" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Ocultar
+        </a>
+    </p>
+
+    <div class="collapse show" id="collapseExample">
+        <!-- <div class="card card-body">
+            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div> -->
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Código ONU</th>
+                        <th>Descripción del Bien</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-center">56101504</th>
+                        <td>Silla visita</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56101703</th>
+                        <td>Escritorio</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56112102</th>
+                        <td>Silla trabajo</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">43211507</th>
+                        <td>Computador</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">43191504</th>
+                        <td>Teléfono</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56121702</th>
+                        <td>Librero</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56121701</th>
+                        <td>Estante</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56101702</th>
+                        <td>Kardex</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56112003</th>
+                        <td>Cajonera</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">44111510</th>
+                        <td>Mueble colgante</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">56121805</th>
+                        <td>Repisa</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">44111905</th>
+                        <td>Pizarra</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">52141523</th>
+                        <td>Hervidor</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">48101714</th>
+                        <td>Termo</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">52141526</th>
+                        <td>Cafetera</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">48101711</th>
+                        <td>Dispensador de agua</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">52141510</th>
+                        <td>Ventilador</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">52141802</th>
+                        <td>Calefactor</td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">44101603</th>
+                        <td>Trituradora papel</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr>
+    
     <h4 class="mb-3">
         Registrar Inventario
     </h4>
