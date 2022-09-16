@@ -25,14 +25,13 @@ class ClaveUnicaController extends Controller
         $redirect = $request->input('redirect');
         //die($redirect);
 
-		//$url_base	= "https://accounts.claveunica.gob.cl/openid/authorize/";
-        $url_base 	= "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
+		$url_base	= "https://accounts.claveunica.gob.cl/openid/authorize/";
+        //$url_base 	= "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
         $client_id 	= env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
 
         $state = base64_encode(csrf_token().$redirect);
         $scope = self::SCOPE;
-		die($scope);
 
 		$params     = '?client_id='.$client_id.
 						'&redirect_uri='.$redirect_uri.
