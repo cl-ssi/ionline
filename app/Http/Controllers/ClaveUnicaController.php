@@ -25,7 +25,7 @@ class ClaveUnicaController extends Controller
         //die($redirect);
 
         $url_base 	= self::URL_BASE_CLAVE_UNICA."/authorize/";
-		die($url_base);
+		//die($url_base);
         $client_id 	= env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
         $state = base64_encode(csrf_token().$redirect);
