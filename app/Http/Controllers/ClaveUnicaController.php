@@ -16,7 +16,11 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
+	const URL_BASE = 'login';
+
     public function autenticar(Request $request){
+		echo self::URL_BASE;
+		die();
         /* Primer paso, redireccionar al login de clave única */
         //$redirect = '../monitor/lab/login';
         $redirect = $request->input('redirect');
