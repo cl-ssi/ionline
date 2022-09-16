@@ -30,7 +30,7 @@ class ClaveUnicaController extends Controller
         $client_id 	= env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
 
-        $state = base64_enconde(csrf_token().$redirect);
+        $state = base64_encode(csrf_token().$redirect);
         $scope = self::SCOPE;
 
 		$params     = '?client_id='.$client_id.
