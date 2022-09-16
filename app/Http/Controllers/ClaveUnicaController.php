@@ -24,9 +24,8 @@ class ClaveUnicaController extends Controller
         $redirect = $request->input('redirect');
         //die($redirect);
 
-        $url_base 	= self::URL_BASE_CLAVE_UNICA."/authorize/";
-		die($url_base);
-        $client_id 	= env("CLAVEUNICA_CLIENT_ID");
+        $url_base = "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
+        $client_id = env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
         $state = base64_encode(csrf_token().$redirect);
         $scope = env("CLAVEUNICA_SCOPE");
@@ -41,7 +40,7 @@ class ClaveUnicaController extends Controller
         $code = $request->input('code');
         $state = $request->input('state'); // token
 
-        $url_base = self::URL_BASE_CLAVE_UNICA."/token/";
+        $url_base = "https://accounts.claveunica.gob.cl/openid/token/";
         $client_id = env("CLAVEUNICA_CLIENT_ID");
         $client_secret = env("CLAVEUNICA_SECRET_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
@@ -112,7 +111,7 @@ class ClaveUnicaController extends Controller
             //dd($access_token);
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
-                $url_base = self::URL_BASE_CLAVE_UNICA."/userinfo/";
+                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
                
 		        if($response->getStatusCode() == 200) {
