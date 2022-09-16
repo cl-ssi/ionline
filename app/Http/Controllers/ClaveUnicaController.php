@@ -32,6 +32,7 @@ class ClaveUnicaController extends Controller
 
         $state = base64_encode(csrf_token().$redirect);
         $scope = self::SCOPE;
+		die($scope);
 
 		$params     = '?client_id='.$client_id.
 						'&redirect_uri='.$redirect_uri.
