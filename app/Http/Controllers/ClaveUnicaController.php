@@ -16,24 +16,23 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
-	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid';
+	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
 	const SCOPE = 'openid+run+name+email';
 
     public function autenticar(Request $request){
         /* Primer paso, redireccionar al login de clave única */
         //$redirect = '../monitor/lab/login';
-        $redirect = $request->input('redirect');
+        $redirect 		= $request->input('redirect');
         //die($redirect);
 
-		$url_base	= "https://accounts.claveunica.gob.cl/openid/authorize/";
-        //$url_base 	= "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
-        $client_id 	= env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
+		$url_base		= self::URL_BASE_CLAVE_UNICA."authorize/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
-        $state = base64_encode(csrf_token().$redirect);
-        $scope = self::SCOPE;
+        $state 			= base64_encode(csrf_token().$redirect);
+        $scope 			= self::SCOPE;
 
-		$params     = '?client_id='.$client_id.
+		$params     	= '?client_id='.$client_id.
 						'&redirect_uri='.$redirect_uri.
 						'&scope='.$scope.
 						'&response_type=code'.
