@@ -42,15 +42,13 @@ class ClaveUnicaController extends Controller
     }
 
     public function callback(Request $request) {
-        $code = $request->input('code');
-        $state = $request->input('state'); // token
+        $code 			= $request->input('code');
+        $state 			= $request->input('state'); // token
 
-        $url_base = "https://accounts.claveunica.gob.cl/openid/token/";
-        $client_id = env("CLAVEUNICA_CLIENT_ID");
-        $client_secret = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
-        //$state = csrf_token();
-        //$scope = 'openid+run+name+email';
+        $url_base		= self::URL_BASE_CLAVE_UNICA."token/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $client_secret 	= env("CLAVEUNICA_SECRET_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
         try {
             $response = Http::asForm()->post($url_base, [
