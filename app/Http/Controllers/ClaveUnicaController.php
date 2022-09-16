@@ -16,7 +16,7 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
-	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
+	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid';
 
     public function autenticar(Request $request){
         /* Primer paso, redireccionar al login de clave única */
