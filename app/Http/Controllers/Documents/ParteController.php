@@ -156,17 +156,26 @@ class ParteController extends Controller
      */
     public function destroy(Parte $parte)
     {
-        foreach($parte->events as $event) {
-            $event->forceDelete();
+        if($parte->requirements->count() == 0)
+        {
+            foreach($parte->events as $event) {
+                $event->forceDelete();
+            }
+            foreach($parte->files as $file) {
+                Storage::disk('gcs')->delete($file->file);
+                //$file->delete();
+                $file->forceDelete();
+            }
+
+            $parte->forceDelete();
+            return redirect()->route('documents.partes.index');
         }
-        foreach($parte->files as $file) {
-            Storage::disk('gcs')->delete($file->file);
-            //$file->delete();
-            $file->forceDelete();
+        else
+        {
+            session()->flash('danger', 'El parte no puede ser eliminado, existen requerimientos asociados.');
+            return redirect()->route('documents.partes.edit', $parte);
         }
 
-        $parte->forceDelete();
-        return redirect()->route('documents.partes.index');
     }
 
     public function inbox()
@@ -189,7 +198,7 @@ class ParteController extends Controller
 
     public function download(ParteFile $file)
     {
-        
+
         if(Storage::disk('gcs')->exists($file->file))
         {
             return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
