@@ -563,4 +563,61 @@ class RequestFormController extends Controller {
     {
         return Excel::download(new RequestFormsExport($request), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
+
+    public function copy(RequestForm $requestForm)
+    {
+        $requestForm->load('itemRequestForms', 'requestFormFiles', 'passengers');
+        $newRequestForm = $requestForm->replicate();
+        $newRequestForm->folio = $this->createFolio();
+        $newRequestForm->request_form_id = null;
+        // $newRequestForm->estimated_expense = 0;
+        $newRequestForm->has_increased_expense = null;
+        $newRequestForm->sigfe = null;
+        $newRequestForm->status = 'saved';
+        $newRequestForm->signatures_file_id = null;
+        $newRequestForm->old_signatures_file_id = null;
+        $newRequestForm->push();
+
+        // $total = 0;
+        foreach($requestForm->getRelations() as $relation => $items){
+            if($relation == 'itemRequestForms'){ 
+                foreach($items as $item){
+                    unset($item->id);
+                    $item->request_form_id = $newRequestForm->id;
+                    // $item->expense = $this->totalValueWithTaxes($item->tax, $item->unit_value);
+                    // $total += $item->expense;
+                    $newRequestForm->{$relation}()->create($item->toArray());
+                }
+            }
+            if($relation == 'passengers'){
+                foreach($items as $passenger){
+                    unset($passenger->id);
+                    $passenger->request_form_id = $newRequestForm->id;
+                    // $total += $passenger->unit_value;
+                    $newRequestForm->{$relation}()->create($passenger->toArray());
+                }
+            }
+            if($relation == 'requestFormFiles'){
+                foreach($items as $requestFormFile){
+                    unset($requestFormFile->id);
+                    $requestFormFile->request_form_id = $newRequestForm->id;
+                    $newRequestForm->{$relation}()->create($requestFormFile->toArray());
+                }
+            }
+        }
+        // $newRequestForm->update(['estimated_expense' => $total]);
+
+        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->folio.' fue creado con éxito. <br>
+                                  Recuerde que es un formulario copiado a partir de otro formulario N° '.$requestForm->folio.'. <br>
+                                  Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento. <br>
+                                  Guarde y envíe su formulario cuando esté listo para su tramitación en los departamentos correspondientes.');
+        return redirect()->route('request_forms.edit', $newRequestForm);
+    }
+
+    private function createFolio(){
+        $startOfYear = Carbon::now()->startOfYear();
+        $endOfYear = Carbon::now()->endOfYear();
+        $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count();
+        return Carbon::now()->year.'-'.$counter++;
+    }
 }
