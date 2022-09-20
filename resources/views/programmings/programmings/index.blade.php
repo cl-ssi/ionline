@@ -113,12 +113,12 @@
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Participación</span> 
                     </a>
-                    @endcan
                     <!-- falta consultar por algun permiso para ver esta nueva seccion -->
                     <a href="{{ route('emergencies.show', $programming) }}" class="btn btb-flat btn-sm btn-warning" >
                         <i class="fas fa-exclamation-triangle small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Emergencias-Desastres y Epidemiología</span> 
                     </a>
+                    @endcan
                 @endif
 
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso -->

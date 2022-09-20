@@ -22,7 +22,7 @@ class ProgrammingController extends Controller
         $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune', 'pendingItems')
             ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
-                $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
+                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
             ->get();
 
