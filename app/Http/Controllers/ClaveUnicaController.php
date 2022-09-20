@@ -16,34 +16,39 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
+	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
+	const SCOPE = 'openid+run+name+email';
+
     public function autenticar(Request $request){
         /* Primer paso, redireccionar al login de clave única */
         //$redirect = '../monitor/lab/login';
-        $redirect = $request->input('redirect');
+        $redirect 		= $request->input('redirect');
         //die($redirect);
 
-        $url_base = "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
-        $client_id = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
-        $state = base64_encode(csrf_token().$redirect);
-        $scope = env("CLAVEUNICA_SCOPE");
-        //'openid+run+name+email';
+		$url_base		= self::URL_BASE_CLAVE_UNICA."authorize/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
-        $url=$url_base.urlencode('?client_id='.$client_id.'&redirect_uri='.$redirect_uri.'&scope='.$scope.'&response_type=code&state='.$state);
+        $state 			= base64_encode(csrf_token().$redirect);
+        $scope 			= self::SCOPE;
 
-        return redirect()->to($url)->send();
+		$params     	= '?client_id='.$client_id.
+						'&redirect_uri='.$redirect_uri.
+						'&scope='.$scope.
+						'&response_type=code'.
+						'&state='.$state;
+
+		return redirect()->to($url_base.$params)->send();
     }
 
     public function callback(Request $request) {
-        $code = $request->input('code');
-        $state = $request->input('state'); // token
+        $code 			= $request->input('code');
+        $state 			= $request->input('state'); // token
 
-        $url_base = "https://accounts.claveunica.gob.cl/openid/token/";
-        $client_id = env("CLAVEUNICA_CLIENT_ID");
-        $client_secret = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
-        //$state = csrf_token();
-        //$scope = 'openid+run+name+email';
+        $url_base		= self::URL_BASE_CLAVE_UNICA."token/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $client_secret 	= env("CLAVEUNICA_SECRET_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
         try {
             $response = Http::asForm()->post($url_base, [
