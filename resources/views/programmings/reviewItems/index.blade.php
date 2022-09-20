@@ -12,18 +12,18 @@
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
-@can('ProgrammingItem: edit')
+@if(Auth::user()->can('ProgrammingItem: edit') && $programmingItem->programming->status == 'active')
 <a target="_blank" href="{{ route('programmingitems.show', $programmingItem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
-@endcan
+@endif
 
-@can('ProgrammingItem: delete')
+@if(Auth::user()->can('ProgrammingItem: delete') && $programmingItem->programming->status == 'active')
     <form method="POST" action="{{ route('programmingitems.destroy', $programmingItem->id) }}" class="small d-inline">
         {{ method_field('DELETE') }} {{ csrf_field() }}
         <button class="btn btn-sm btn-outline-danger float-right " onclick="return confirm('¿Desea eliminar el registro realmente?')">
         <span class="fas fa-trash-alt " aria-hidden="true"></span> Eliminar
         </button>
     </form>
-@endcan
+@endif
 <!-- 
 {{$programmingItem }} -->
 <div class="card mt-3 small">
