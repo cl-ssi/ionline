@@ -8,14 +8,14 @@
 
             <div class="dropdown-menu">
               @can('Replacement Staff: list rrhh')
-                <a class="dropdown-item" href="{{ route('replacement_staff.index') }}"><i class="fas fa-user"></i> Listado Staff</a>
+                    <a class="dropdown-item" href="{{ route('replacement_staff.index') }}"><i class="fas fa-user"></i> Listado Staff</a>
               @endcan
               @can('Replacement Staff: staff manage')
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('replacement_staff.staff_manage.index') }}"><i class="fas fa-cog fa-fw"></i> Gestión de Staff</a>
-                @foreach(App\Models\ReplacementStaff\StaffManage::getStaffByOu() as $staff)
-                    <a class="dropdown-item" href="{{-- route('replacement_staff.staff_manage.index') --}}"><i class="fas fa-home"></i> {{ $staff->organizationalUnit->name }}</a>
-                @endforeach
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ route('replacement_staff.staff_manage.index') }}"><i class="fas fa-cog fa-fw"></i> Gestión de Staff</a>
+                    @foreach(App\Models\ReplacementStaff\StaffManage::getStaffByOu() as $staff)
+                        <a class="dropdown-item" href="{{ route('replacement_staff.staff_manage.edit', ['id' => $staff->organizationalUnit]) }}"><i class="fas fa-home"></i> {{ $staff->organizationalUnit->name }}</a>
+                    @endforeach
               @endcan
            </div>
         </li>
