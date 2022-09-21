@@ -13,6 +13,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store') }}" enctype="multipart/form-data"/>
     @csrf
     @method('POST')
+    
     <div class="form-row">
         <fieldset class="form-group col-12 col-sm-6">
             <label for="for_requester_name">Creador de Solicitud</label>
@@ -24,6 +25,7 @@
             @livewire('search-select-user')
         </fieldset>
     </div>
+
     <div class="form-row">
         <fieldset class="form-group col-sm">
             <label for="for_name">Nombre de Cargo</label>
