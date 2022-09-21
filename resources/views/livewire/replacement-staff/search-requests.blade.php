@@ -5,7 +5,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estado</label>
-                <select name="status_search" class="form-control" wire:model="selectedStatus">
+                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
                     <option value="complete">Finalizada</option>
@@ -16,27 +16,27 @@
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_name">ID</label>
                 <input class="form-control" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model="selectedId">
+                    placeholder="001" wire:model.debounce.500ms="selectedId">
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="regiones">Periodo de Creación</label>
                 <div class="input-group">
-                    <input type="date" class="form-control" name="start_date_search" wire:model="selectedStartDate" required>
-                    <input type="date" class="form-control" name="end_date_search" wire:model="selectedEndDate" required>
+                    <input type="date" class="form-control" name="start_date_search" wire:model.debounce.500ms="selectedStartDate" required>
+                    <input type="date" class="form-control" name="end_date_search" wire:model.debounce.500ms="selectedEndDate" required>
                 </div>
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="for_name">Nombre de Solicitud</label>
                 <input class="form-control" type="text" autocomplete="off"
-                    name="name_search" wire:model="selectedName">
+                    name="name_search" wire:model.debounce.500ms="selectedName">
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="for_legal_quality_manage_id" >Fundamento / Detalle Fundamento</label>
                 <div class="input-group">
-                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model="selectedFundament" required>
+                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundament" required>
                         <option value="">Seleccione...</option>
                         @foreach($fundaments as $fundament)
                             <option value="{{ $fundament->id }}"
@@ -46,7 +46,7 @@
                         @endforeach
                     </select>
 
-                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()">
+                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundamentDetail" onchange="remoteWorking()">
                         <option value="">Seleccione...</option>
                         @if(!is_null($fundamentsDetail))
                         @foreach($fundamentsDetail as $fundamentDetail)
@@ -86,7 +86,7 @@
                     <th colspan="2">Periodo</th>
                     <th>Fundamento</th>
                     <th>Jornada</th>
-                    <th>Solicitante</th>
+                    <th>Creador / Solicitante</th>
                     <th>Estado</th>
                     <th style="width: 2%"></th>
                 </tr>
@@ -137,8 +137,12 @@
                     <td>
                         {{ $requestReplacementStaff->WorkDayValue }}
                     </td>
-                    <td>{{ $requestReplacementStaff->user->FullName }}<br>
-                        {{ $requestReplacementStaff->organizationalUnit->name }}
+                    <td>
+                        <p>
+                            <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                            ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
+                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                        </p>
                     </td>
                     <td class="text-center">
                         @foreach($requestReplacementStaff->RequestSign as $sign)
@@ -162,16 +166,41 @@
                         @endif
                     </td>
                     <td>
-                        <!-- <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                            class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a> -->
                         @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
-                        @if($requestReplacementStaff->requestSign->first()->request_status == 'pending')
-                            <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @else
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
-                        @endif
+                            <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
+                            @if(($requestReplacementStaff->user->id == Auth::user()->id || 
+                                    ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
+                                        $requestReplacementStaff->requestSign->first()->request_status == 'pending')
+
+                                <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                            
+                            <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
+                            @elseif($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
+                                    !$requestReplacementStaff->technicalEvaluation &&
+                                        Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+                                
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                    data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}">
+                                    <i class="fas fa-user-tag"></i>
+                                </button>
+                                @if($users_rys)
+                                    @include('replacement_staff.modals.modal_to_assign')
+                                @endif
+                            <!-- ACCESO A EVALUACIÓN TÉCNICA -->
+                            @else
+                                <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
+                                @if($typeIndex == 'assign' && $requestReplacementStaff->technicalEvaluation)
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                                        <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
+                                            class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
+                                    </span>
+                                <!-- BOTÓN PARA SEGUIMIENTO DE EVALUACIÓN TÉCNICA -->
+                                @else
+                                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                                @endif
+                            @endif
                         @endif
                     </td>
                 </tr>
@@ -180,9 +209,12 @@
         </table>
         {{ $requests->links() }}
     </div>
+
     @else
+
     <div class="alert alert-info" role="alert">
         <b>Estimado usuario</b>: No se encuentran solicitudes bajo los parámetros consultados.
     </div>
+
     @endif
 </div>

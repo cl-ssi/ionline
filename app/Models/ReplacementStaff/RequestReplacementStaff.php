@@ -8,18 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class RequestReplacementStaff extends Model
+class RequestReplacementStaff extends Model implements Auditable
 {
     use HasFactory;
     use softDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
         'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
         'name_to_replace', 'run', 'dv', 'other_fundament', 'work_day', 'other_work_day',
         'charges_number','job_profile_file', 'request_verification_file',
-        'ou_of_performance_id', 'replacement_staff_id'
+        'ou_of_performance_id', 'replacement_staff_id', 'user_id'
     ];
 
     public function requestFather() {
@@ -44,13 +46,18 @@ class RequestReplacementStaff extends Model
     public function fundamentDetailManage() {
         return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage');
     }
-
+    
+    //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
     public function user() {
         return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function organizationalUnit() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+    }
+
+    public function requesterUser() {
+        return $this->belongsTo('App\User', 'requester_id')->withTrashed();
     }
 
     public function ouPerformance() {
