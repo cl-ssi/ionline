@@ -128,7 +128,15 @@
     </table>
 </div>
 
-<br />
+@if($requestReplacementStaff->request_status != "pending")
+    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+        class="btn btn-info btn-sm float-right" 
+        title="Selección" 
+        target="_blank">
+        Exportar Resumen <i class="fas fa-file"></i>
+    </a>
+<br /> <br /> 
+@endif
 
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
