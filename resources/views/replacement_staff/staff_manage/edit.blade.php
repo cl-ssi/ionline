@@ -20,7 +20,8 @@
 
 <br>
 
-<div class="row">
+</div>
+
     <div class="col">
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
@@ -74,7 +75,6 @@
             </table>
         </div>
     </div>
-</div>
 
 @endsection
 
