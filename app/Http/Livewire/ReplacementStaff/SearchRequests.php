@@ -8,6 +8,7 @@ use App\Models\ReplacementStaff\RstDetailFundament;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
+use App\User;
 
 class SearchRequests extends Component
 {
@@ -25,12 +26,14 @@ class SearchRequests extends Component
 
     public $fundamentsDetail;
 
+    public $typeIndex;
+    public $request;
+
     public function render()
-    {
-        return view('livewire.replacement-staff.search-requests',[
-            'fundaments' => RstFundamentManage::all(),
-            'requests' => RequestReplacementStaff::latest()
-                ->where('user_id', Auth::user()->id)
+    {   
+        if($this->typeIndex == 'assign'){
+            
+            $requests = RequestReplacementStaff::latest()
                 ->search($this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
@@ -40,7 +43,40 @@ class SearchRequests extends Component
                     $this->selectedFundamentDetail,
                     $this->selectedNameToReplace
                 )
-                ->paginate(50)
+                ->paginate(50);
+
+            // $pending_requests = RequestReplacementStaff::latest()
+            //     ->where('request_status', 'pending')
+            //     ->where(function ($q){
+            //         $q->doesntHave('technicalEvaluation')
+            //     ->orWhereHas('technicalEvaluation', function( $query ) {
+            //       $query->where('technical_evaluation_status','pending');
+            //     });
+            // })
+            // ->get();
+        }
+
+        if($this->typeIndex == 'own'){
+
+            $requests = RequestReplacementStaff::latest()
+                ->where('user_id', Auth::user()->id)
+                ->orWhere('requester_id', Auth::user()->id)
+                ->search($this->selectedStatus,
+                    $this->selectedId,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedName,
+                    $this->selectedFundament,
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace
+                )
+                ->paginate(50);
+        }
+
+        return view('livewire.replacement-staff.search-requests',[
+            'fundaments' => RstFundamentManage::all(),
+            'requests' => $requests,
+            'users_rys' => User::where('organizational_unit_id', 48)->get()
         ]);
     }
 

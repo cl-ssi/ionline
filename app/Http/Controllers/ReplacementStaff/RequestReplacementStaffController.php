@@ -28,32 +28,8 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-        $pending_requests = RequestReplacementStaff::latest()
-            ->where('request_status', 'pending')
-            ->where(function ($q){
-                $q->doesntHave('technicalEvaluation')
-                ->orWhereHas('technicalEvaluation', function( $query ) {
-                  $query->where('technical_evaluation_status','pending');
-                });
-            })
-            ->get();
 
-        $requests = RequestReplacementStaff::latest()
-            ->where('request_status', 'complete')
-            ->orWhere(function ($q){
-                $q->whereHas('requestSign', function($j) {
-                    $j->Where('request_status', 'rejected');
-                })
-                ->orWhereHas('technicalEvaluation', function($y){
-                    $y->Where('technical_evaluation_status', 'complete')
-                    ->OrWhere('technical_evaluation_status', 'rejected');
-                });
-            })
-            ->paginate(10);
-
-        $users_rys = User::where('organizational_unit_id', 48)->get();
-
-        return view('replacement_staff.request.index', compact('pending_requests', 'requests', 'users_rys'));
+        return view('replacement_staff.request.index');
     }
 
     public function assign_index()
@@ -232,10 +208,10 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $request_replacement = new RequestReplacementStaff($request->All());
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $request_replacement->requesterUser()->associate($request->user_id);
 
         if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
             $request_replacement->request_status = 'pending';
@@ -298,7 +274,7 @@ class RequestReplacementStaffController extends Controller
                           $request_sing->ou_alias = 'sub_rrhh';
                           $request_sing->organizational_unit_id = 44;
                           $request_sing->request_status = 'pending';
-
+                        
                           //manager
                           $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
                           //secretary
@@ -417,7 +393,7 @@ class RequestReplacementStaffController extends Controller
                           $request_sing->ou_alias = 'sub';
                           $request_sing->organizational_unit_id = $uo_request->father->id;
                           $request_sing->request_status = 'pending';
-
+                            
                           // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
 
                           //manager
@@ -452,7 +428,6 @@ class RequestReplacementStaffController extends Controller
                             $request_sing->ou_alias = 'leadership';
                             $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
                             $request_sing->request_status = 'pending';
-
                             //manager
                             $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
                             //secretary
@@ -481,7 +456,6 @@ class RequestReplacementStaffController extends Controller
                         }
                     }
                     $request_sing->request_replacement_staff_id = $request_replacement->id;
-                    //dd($request_sing);
                     $request_sing->save();
                 }
             }
