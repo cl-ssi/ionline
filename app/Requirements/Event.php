@@ -53,6 +53,9 @@ class Event extends Model
         return $this->hasMany('App\Requirements\EventStatus');
     }
 
+    public function viewed() {
+        return $this->hasOne('App\Requirements\EventStatus')->where('user_id',auth()->id());
+    }
     // public function documents() {
     //     return $this->belongsToMany('App\Requirements\EventDocument');
     // }

@@ -34,8 +34,9 @@
 
 @include('programmings/nav')
 
-
-<a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
+@if($programming->status == 'active')
+<a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id'), 'activity_type' => Request::get('activity_type')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
+@endif
 <h4 class="mb-3"> Programación {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} - <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 btn-sm">
         Observaciones 
             <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count()}}</span>
@@ -158,7 +159,7 @@
     </div>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
-
+    <input type="hidden" name="activity_type" value="{{Request::get('activity_type')}}">
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="activity" class="sr-only">Nombre actividad</label>
@@ -190,42 +191,37 @@
 
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-link active" id="nav-direct-tab" data-toggle="tab" href="#nav-direct" role="tab" aria-controls="nav-direct" aria-selected="true"><h6>Horas Directas</h6></a>
-    <a class="nav-link" id="nav-indirect-tab" data-toggle="tab" href="#nav-indirect" role="tab" aria-controls="nav-indirect" aria-selected="false"><h6>Horas Indirectas</h6></a>
-    <a class="nav-link" id="nav-workshop-tab" data-toggle="tab" href="#nav-workshop" role="tab" aria-controls="nav-workshop" aria-selected="false"><h6>Horas Directas Talleres</h6></a>
+    @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Directa')<a class="nav-link active" id="nav-direct-tab" data-toggle="tab" href="#nav-direct" role="tab" aria-controls="nav-direct" aria-selected="true"><h6>Horas Directas</h6></a>@endif
+    @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Indirecta')
+        @if($programming->year >= 2023)
+        <a class="nav-link active" id="nav-indirect-Esporádicas-tab" data-toggle="tab" href="#nav-indirect-Esporádicas" role="tab" aria-controls="nav-indirect-Esporádicas" aria-selected="true"><h6>Horas Indirectas - Actividades esporádicas</h6></a>
+        <a class="nav-link" id="nav-indirect-Designación-tab" data-toggle="tab" href="#nav-indirect-Designación" role="tab" aria-controls="nav-indirect-Designación" aria-selected="false"><h6>Horas Indirectas - Designación de horas funcionarios/rol</h6></a>
+        @else
+        <a class="nav-link {{Request::get('activity_type') == 'Indirecta' ? 'active' : ''}}" id="nav-indirect-tab" data-toggle="tab" href="#nav-indirect" role="tab" aria-controls="nav-indirect" aria-selected="{{Request::get('activity_type') == 'Indirecta' ? 'true' : 'false'}}"><h6>Horas Indirectas</h6></a>
+        @endif
+    @endif
+    @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Directa')<a class="nav-link" id="nav-workshop-tab" data-toggle="tab" href="#nav-workshop" role="tab" aria-controls="nav-workshop" aria-selected="false"><h6>Horas Directas Talleres</h6></a>@endif
   </div>
 </nav>  
-
-<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="direct-tab" data-toggle="tab" href="#direct" role="tab" aria-controls="direct" aria-selected="true"><h6>Horas Directas</h6></a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="indirect-tab" data-toggle="tab" href="#indirect" role="tab" aria-controls="indirect" aria-selected="false"><h6>Horas Indirectas</h6></a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="workshop-tab" data-toggle="tab" href="#workshop" role="tab" aria-controls="workshop" aria-selected="false"><h6>Horas Directas Talleres</h6></a>
-    </li>
-</ul> -->
 </div> <!-- close div container -->
 <br>
 <div class="container-fluid">
 <div class="tab-content" id="nav-tabContent">
     
-<div class="tab-pane fade show active" id="nav-direct" role="tabpanel" aria-labelledby="nav-direct-tab">
+<div class="tab-pane fade {{Request::get('activity_type') == NULL || Request::get('activity_type') == 'Directa' ? 'show active' : ''}}" id="nav-direct" role="tabpanel" aria-labelledby="nav-direct-tab">
 <ul class="list-inline">
     <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
     <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
     <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
     <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
-    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasDirectas')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
 <!-- ACTIVIDADES DIRECTAS -->
-<table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
+<table id="HorasDirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>
         <tr class="small " style="font-size:50%;">
             @can('ProgrammingItem: evaluate')<th class="text-center align-middle" > Evaluación</th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-center align-middle" >Editar</th>@endcan
+            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -249,8 +245,9 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
+            <th class="text-center align-middle">Registrado por</th>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -259,7 +256,7 @@
         @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" >
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->reviewItems->count() != 0)
                         <i class="fas fa-clipboard-check text-secondary"></i>
@@ -282,33 +279,43 @@
                 </a>
             </td>
         @endcan
-        @can('ProgrammingItem: edit')
-            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endcan
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : ($programmingitem->activityItem->vital_cycle ?? $programmingitem->cycle) }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->action_type : ($programmingitem->activityItem->activityItem->action_type ?? $programmingitem->action_type) }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->activity_name ?? $programmingitem->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->def_target_population : ($programmingitem->activityItem->def_target_population ?? $programmingitem->def_target_population) }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->source_population }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->cant_target_population }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->prevalence_rate }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->source_prevalence }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->coverture }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->population_attend }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->concentration }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->prap_financed }}</td>
-            @can('ProgrammingItem: duplicate')
-            <td class="text-center align-middle">
+        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+        @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : ($programmingitem->activityItem->vital_cycle ?? $programmingitem->cycle) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->action_type : ($programmingitem->activityItem->activityItem->action_type ?? $programmingitem->action_type) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->activity_name ?? $programmingitem->activity_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->def_target_population : ($programmingitem->activityItem->def_target_population ?? $programmingitem->def_target_population) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->source_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->cant_target_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prevalence_rate ?? 'No aplica' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->source_prevalence }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->coverture }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->population_attend }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->concentration }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activity_total }}</td>
+            @if($programmingitem->professionalHours->count() > 0)
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_hour }}</td>
+            @else
+                <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
+            @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->user->tinny_name }}</td>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -316,9 +323,9 @@
                     </button>
                 </form>
             </td>
-            @endcan
-            @can('ProgrammingItem: delete')
-            <td class="text-center align-middle">
+            @endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -326,27 +333,171 @@
                     </button>
                 </form>
             </td>
-            @endcan
+            @endif
         </tr>
+        @if($programmingitem->professionalHours->count() > 0)
+            @foreach($programmingitem->professionalHours as $professionalHour)
+                @if(!$loop->first)
+                <tr class="small">
+                    <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                </tr>
+                @endif
+            @endforeach
+        @endif
         @endforeach
     </tbody>
 </table>
 </div>
 
-<div class="tab-pane fade" id="nav-indirect" role="tabpanel" aria-labelledby="nav-indirect-tab">
+@if($programming->year >= 2023)
+@foreach(array('Esporádicas', 'Designación') as $activity_subtype)
+<div class="tab-pane fade {{Request::get('activity_type') == 'Indirecta' && $loop->first ? 'show active' : ''}}" id="nav-indirect-{{$activity_subtype}}" role="tabpanel" aria-labelledby="nav-indirect-{{$activity_subtype}}-tab">
 <ul class="list-inline">
     <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
     <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
     <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
     <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
-    <li class="list-inline-item" style="float:right;"><button onclick="tableExcelIndirect('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasIndirectas{{$activity_subtype}}')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
 
-<table id="tblDataIndirect" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
+<table id="HorasIndirectas{{$activity_subtype}}" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
             @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" >Editar</th>@endcan
+            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
+            <th class="text-center align-middle">CATEGORÍA</th>
+            <th class="text-center align-middle">NOMBRE DE ACTIVIDAD</th>
+            <th class="text-center align-middle">N° VECES AL MES</th>
+            <th class="text-center align-middle">N° MESES DEL AÑO</th>
+            <th class="text-center align-middle">TOTAL ACTIVIDADES</th>
+            <th class="text-center align-middle">ÁREA DE TRABAJO</th>
+            <th class="text-center align-middle">ESPECIFICACIONES ÁREA DE TRABAJO</th>
+            <th class="text-center align-middle">FUNCIONARIO QUE OTORGA LA PRESTACIÓN</th>
+            <th class="text-center align-middle">Rendimiento de la Actividad</th>
+            <th class="text-center align-middle">Horas/semanas designadas</th>
+            <th class="text-center align-middle">Horas Año Requeridas</th>
+            <th class="text-center align-middle">Horas Dia requeridas</th>
+            <th class="text-center align-middle">Jornadas Directas Año</th>
+            <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
+            <th class="text-center align-middle">Fuente Informacion </th>
+            <th class="text-center align-middle">FINANCIADA POR PRAP</th>
+            <th class="text-center align-middle">Registrado por</th>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+
+        </tr>
+    </thead>
+    <tbody style="font-size:65%;">
+    @php($indirectProgrammingItems = $programming->itemsIndirectBy($activity_subtype))
+        @foreach($indirectProgrammingItems as $programmingitemsIndirect)
+        <tr class="small">
+        @can('ProgrammingItem: evaluate')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+                <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
+                    @if($programmingitemsIndirect->reviewItems->count() != 0)
+                        <i class="fas fa-clipboard-check text-secondary"></i>
+                        @if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
+                        <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Not rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Rectified') > 0)
+                        <span class="badge badge-success ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Regularly rectified') > 0)
+                        <span class="badge badge-warning ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Regularly rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Accepted rectified') > 0)
+                        <span class="badge badge-primary ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Accepted rectified')}}</span>
+                        @endif
+                    @else
+                    <i class="fas fa-clipboard-check "></i>
+                    <span class="badge badge-secondary ml-2 ">0</span>
+                    @endif
+                </a>
+            </td>
+        @endcan
+        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+        @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_category }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->times_month }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->months_year }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_total }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->work_area == 'Otro' ? $programmingitemsIndirect->another_work_area : $programmingitemsIndirect->work_area }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->work_area_specs }}</td>
+            @if($programmingitemsIndirect->professionalHours->count() > 0)
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->designated_hours_weeks }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour }}</td>
+            @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->information_source }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+                <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
+                    {{ method_field('POST') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
+                    <span class="fas fa-copy " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+                <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
+                    {{ method_field('DELETE') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
+                    <span class="fas fa-trash-alt " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endif
+        </tr>
+        @if($programmingitemsIndirect->professionalHours->count() > 0)
+            @foreach($programmingitemsIndirect->professionalHours as $professionalHour)
+                @if(!$loop->first)
+                <tr class="small">
+                    <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->designated_hours_weeks }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                </tr>
+                @endif
+            @endforeach
+        @endif
+        @endforeach
+    </tbody>
+</table>
+</div>
+@endforeach
+@else
+<div class="tab-pane fade {{Request::get('activity_type') == 'Indirecta' ? 'show active' : ''}}" id="nav-indirect" role="tabpanel" aria-labelledby="nav-indirect-tab">
+<ul class="list-inline">
+    <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasIndirectas')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+</ul>
+
+<table id="HorasIndirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
+    <thead>
+        <tr class="small " style="font-size:50%;">
+            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
+            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -369,8 +520,9 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
+            <th class="text-center align-middle">Registrado por</th>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -379,7 +531,7 @@
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" >
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
@@ -409,33 +561,43 @@
                 </a>
             </td>
         @endcan
-        @can('ProgrammingItem: edit')
-            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endcan
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : ($programmingitemsIndirect->activityItem->vital_cycle ?? $programmingitemsIndirect->cycle) }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->action_type : ($programmingitemsIndirect->activityItem->activityItem->action_type ?? $programmingitemsIndirect->action_type) }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->activity_name ?? $programmingitemsIndirect->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->def_target_population : ($programmingitemsIndirect->activityItem->def_target_population ?? $programmingitemsIndirect->def_target_population) }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->source_population }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->cant_target_population }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->prevalence_rate }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->source_prevalence }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->coverture }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->population_attend }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->concentration }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->prap_financed }}</td>
-            @can('ProgrammingItem: duplicate')
-            <td class="text-center align-middle">
+        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+        @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : ($programmingitemsIndirect->activityItem->vital_cycle ?? $programmingitemsIndirect->cycle) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->action_type : ($programmingitemsIndirect->activityItem->activityItem->action_type ?? $programmingitemsIndirect->action_type) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->activity_name ?? $programmingitemsIndirect->activity_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->def_target_population : ($programmingitemsIndirect->activityItem->def_target_population ?? $programmingitemsIndirect->def_target_population) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->source_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->cant_target_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prevalence_rate ?? 'No aplica' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->source_prevalence }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->coverture }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->population_attend }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->concentration }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_total }}</td>
+            @if($programmingitemsIndirect->professionalHours->count() > 0)
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour }}</td>
+            @else
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
+            @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -443,9 +605,9 @@
                     </button>
                 </form>
             </td>
-            @endcan
-            @can('ProgrammingItem: delete')
-            <td class="text-center align-middle">
+            @endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -453,12 +615,27 @@
                     </button>
                 </form>
             </td>
-            @endcan
+            @endif
         </tr>
+        @if($programmingitemsIndirect->professionalHours->count() > 0)
+            @foreach($programmingitemsIndirect->professionalHours as $professionalHour)
+                @if(!$loop->first)
+                <tr class="small">
+                    <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                </tr>
+                @endif
+            @endforeach
+        @endif
         @endforeach
     </tbody>
 </table>
 </div>
+@endif
 
 <div class="tab-pane fade" id="nav-workshop" role="tabpanel" aria-labelledby="nav-workshop-tab">
 <ul class="list-inline">
@@ -466,10 +643,10 @@
     <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
     <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
     <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
-    <li class="list-inline-item" style="float:right;"><button onclick="tableExcelTaller('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasDirectasTaller')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
 
-<table id="tblDataTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
+<table id="HorasDirectasTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:55%;">
 
@@ -499,8 +676,9 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
+            <th class="text-center align-middle">Registrado por</th>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -509,7 +687,7 @@
         @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" >
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
@@ -539,34 +717,41 @@
                 </a>
             </td>
         @endcan
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">TALLER</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : ($programmingItemworkshop->activityItem->vital_cycle ?? $programmingItemworkshop->cycle) }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? $programmingItemworkshop->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : ($programmingItemworkshop->activityItem->def_target_population ?? $programmingItemworkshop->def_target_population) }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->source_population }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->cant_target_population }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->coverture }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->population_attend }}</td>
-
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activity_group }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->workshop_number }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->workshop_session_number }}</td>
-
-
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->prap_financed }}</td>
-            @can('ProgrammingItem: duplicate')
-            <td class="text-center align-middle">
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">TALLER</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : ($programmingItemworkshop->activityItem->vital_cycle ?? $programmingItemworkshop->cycle) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->activity_name ?? $programmingItemworkshop->activity_name }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : ($programmingItemworkshop->activityItem->def_target_population ?? $programmingItemworkshop->def_target_population) }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->source_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->cant_target_population }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->coverture }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->population_attend }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activity_group }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->workshop_number }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->workshop_session_number }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activity_total }}</td>
+            @if($programmingItemworkshop->professionalHours->count() > 0)
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour }}</td>
+            @else
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
+            @endif
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->user->tinny_name }}</td>
+            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
@@ -574,9 +759,9 @@
                     </button>
                 </form>
             </td>
-            @endcan
-            @can('ProgrammingItem: delete')
-            <td class="text-center align-middle">
+            @endif
+            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -584,8 +769,22 @@
                     </button>
                 </form>
             </td>
-            @endcan
+            @endif
         </tr>
+        @if($programmingItemworkshop->professionalHours->count() > 0)
+            @foreach($programmingItemworkshop->professionalHours as $professionalHour)
+                @if(!$loop->first)
+                <tr class="small">
+                    <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                </tr>
+                @endif
+            @endforeach
+        @endif
         @endforeach
     </tbody>
 </table>
@@ -595,34 +794,15 @@
 @endsection
 
 @section('custom_js')
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.18.0/dist/xlsx.full.min.js"></script>  
 <script>
-    function tableExcel(type, fn, dl) {
-          var elt = document.getElementById('tblData');
-          const filename = 'Informe_HorasDirectas'
-          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
-          return dl ?
-            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
-            XLSX.writeFile(wb, `${filename}.xlsx`)
-        }
-    
-    function tableExcelIndirect(type, fn, dl) {
-          var elt = document.getElementById('tblDataIndirect');
-          const filename = 'Informe_HorasIndirectas'
-          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
-          return dl ?
-            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
-            XLSX.writeFile(wb, `${filename}.xlsx`)
-     }
-    
-    function tableExcelTaller(type, fn, dl) {
-          var elt = document.getElementById('tblDataTaller');
-          const filename = 'Informe_Taller'
-          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
-          return dl ?
-            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
-            XLSX.writeFile(wb, `${filename}.xlsx`)
-        }
+    function tableExcel(table, type, fn, dl) {
+        var elt = document.getElementById(`${table}`);
+        var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+        return dl ?
+        XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+        XLSX.writeFile(wb, `${table}.xlsx`)
+    }
     
     $(document).ready(function(){
         $('.editable-form').hide();

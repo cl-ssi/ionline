@@ -68,7 +68,7 @@
 			<form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
 				@csrf
 				@method('DELETE')
-				<button type="submit" class="btn btn-sm btn-outline-danger" 
+				<button type="submit" class="btn btn-outline-danger" 
 					onclick="return confirm('¿Desea eliminar este requerimiento?')">
 					<i class="fas fa-trash"></i><span>
 				</button>
@@ -78,35 +78,7 @@
     </div>
 
     <div class="col">
-        <form name="form" id="form" method="GET" class="form-inline"
-            action="{{ route('requirements.asocia_categorias',$requirement) }}">
-            @csrf
-            @method('GET')
-            <input type="hidden" value="{{ $requirement->id }}" name="requirement_id">
-            <!-- <div class="form-group mb-2">
-                <label for="asignarCategoria" class="sr-only"></label>
-                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-            </div> -->
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="category_id">Asignar categoría:</label>
-                <select name="category_id[]" id="category_id" class="selectpicker input-md"
-                    multiple title="Elige tus categorías" >
-                    @foreach($categories as $key => $category)
-                        {{$flag = 0}}
-                        @foreach($requirementCategories as $key => $requirementCategory)
-                            @if($category->id == $requirementCategory->category_id)
-                                {{$flag = 1}}
-                            @endif
-                        @endforeach
-
-                        <option value="{{$category->id}}"
-                            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>"
-                            {{ ($flag == 1)?'selected':'' }}>
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-        </form>
+        @livewire('requirements.set-category',['req' => $requirement])
     </div>
 </div>
 
@@ -284,31 +256,8 @@
        // document.getElementById("add_destinatario_cc").disabled  = true;
 
        //preloader
-       $('#category_id').on('change', function() {
-          $('#page-loader').fadeIn(500);
-          document.forms['form'].submit();
-       });
 
-       //función para agregar documentos
-       $(".add-row").click(function(){
-         $("#tabla_documents").fadeIn(2000);
-           var doc_id = $("#for_document").val();
-           var flag = 0;
-           //validación si existe documento
-           @foreach($documents as $document)
-            if ({{$document->id}} == doc_id) {
-              flag = 1;
-            }
-           @endforeach
-           if (flag == 1) {
-             var markup = "<input type='hidden' name='documents[]' value=" + doc_id + ">" +
-                          "<td align='left'>" + doc_id + ", </td>";
-             $("#tabla_documents").append(markup);
-             $("#for_document").val("");
-             $("#for_document").focus();
-           }else{alert("No existe documento, favor intente otro.");}
 
-       });
 
        $(".add_destinatario").click(function(){
          //se valida si existen datos en el array (solo permite ingresar un solo deruivado)
