@@ -473,6 +473,7 @@ class RequestReplacementStaffController extends Controller
         $newRequestReplacementStaff->request_id = $requestReplacementStaff->id;
         $newRequestReplacementStaff->user()->associate(Auth::user());
         $newRequestReplacementStaff->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $newRequestReplacementStaff->requesterUser()->associate($request->user_id);
 
         if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
             $newRequestReplacementStaff->request_status = 'pending';
@@ -565,6 +566,7 @@ class RequestReplacementStaffController extends Controller
     public function update(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
         $requestReplacementStaff->fill($request->all());
+        $requestReplacementStaff->requesterUser()->associate($request->user_id);
         $now = Carbon::now()->format('Y_m_d_H_i_s');
 
         if($request->hasFile('job_profile_file')){
