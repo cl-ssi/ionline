@@ -532,6 +532,7 @@
             <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
         </p>
 
+        {{$ServiceRequest->programm_name}}
         <p class="">
             @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA")
                 <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Requerimiento Contingencia Respiratoria Unidad demandante COVID-19.
@@ -556,7 +557,7 @@
                         21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
                     @elseif($ServiceRequest->programm_name == "SUBT.31")
                         El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
-                    @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
+                    @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
                         @if($ServiceRequest->profession->category == "A")
                             21-03-001-001-03 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
                         @else
