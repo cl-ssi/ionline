@@ -21,11 +21,23 @@ class SignatureService
     public $signatures;
     public $visators;
 
+    /**
+     * @param  \App\User  $responsible
+     */
     public function addResponsible(User $responsible)
     {
         $this->responsible = $responsible;
     }
 
+    /**
+     * @param  string  $documentType
+     * @param  string  $subject
+     * @param  string  $description
+     * @param  string  $endorseType
+     * @param  bool   $visatorAsSignature
+     *
+     * @return void
+     */
     public function addSignature($documentType, $subject, $description, $endorseType, $visatorAsSignature)
     {
         $this->documentType = $documentType;
@@ -35,22 +47,38 @@ class SignatureService
         $this->visatorAsSignature = $visatorAsSignature;
     }
 
+    /**
+     * @param  string  $view
+     * @param  array  $dataView
+     * @return void
+     */
     public function addView($view, $dataView)
     {
         $this->view = $view;
         $this->dataView = $dataView;
     }
 
+    /**
+     * @param  \Illuminate\Support\Collection  $visators
+     * @return  void
+     */
     public function addVisators($visators)
     {
         $this->visators = $visators;
     }
 
+    /**
+     * @param  \Illuminate\Support\Collection  $signatures
+     * @return  void
+     */
     public function addSignatures($signatures)
     {
         $this->signatures = $signatures;
     }
 
+    /**
+     * @return  \App\Models\Documents\Signature
+     */
     public function sendRequest()
     {
         // TODO: View or document
@@ -79,7 +107,7 @@ class SignatureService
 
         $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
         $signaturesFile->update(['file' => $filePath]);
-        Storage::disk('public')->put($filePath, $pdf);
+        Storage::disk('gcs')->put($filePath, $pdf);
 
         // Visators
         foreach($this->visators as $index => $visator)

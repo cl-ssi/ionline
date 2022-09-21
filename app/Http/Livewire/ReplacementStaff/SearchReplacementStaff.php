@@ -7,9 +7,13 @@ use Livewire\Component;
 use App\Models\ReplacementStaff\ProfessionManage;
 use App\Models\ReplacementStaff\ProfileManage;
 use App\Models\ReplacementStaff\ReplacementStaff;
+use Livewire\WithPagination;
 
 class SearchReplacementStaff extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $professionManage = null;
 
     public $selectedProfile = null;
@@ -24,8 +28,7 @@ class SearchReplacementStaff extends Component
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
             'replacementStaff' => ReplacementStaff::latest()
                 ->search($this->selectedSearch, $this->selectedProfile, $this->selectedProfession, $this->selectedStaff, $this->selectedStatus)
-                ->take(50)
-                ->get()
+                ->paginate(50)
         ]);
     }
 

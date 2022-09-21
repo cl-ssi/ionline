@@ -15,6 +15,18 @@
     @method('PUT')
 
     <div class="form-row">
+        <fieldset class="form-group col-12 col-sm-6">
+            <label for="for_requester_name">Creador de Solicitud</label>
+            <input type="text" class="form-control" name="requester_name" id="for_requester_name" value="{{ Auth::user()->TinnyName }}" disabled>
+        </fieldset>
+
+        <fieldset class="form-group col-6">
+            <label for="for_user_id">Funcionario Solicitante</label>
+            @livewire('search-select-user', ['user' => $requestReplacementStaff->requesterUser])
+        </fieldset>
+    </div>
+
+    <div class="form-row">
         <fieldset class="form-group col-sm">
             <label for="for_name">Nombre de Cargo</label>
             <input type="text" class="form-control" name="name" id="for_name" value="{{ $requestReplacementStaff->name }}" required>

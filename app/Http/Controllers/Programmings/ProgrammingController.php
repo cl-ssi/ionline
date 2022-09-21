@@ -8,7 +8,10 @@ use Carbon\Carbon;
 use App\Programmings\Programming;
 use App\Establishment;
 use App\Models\Commune;
+use App\Models\Programmings\CommuneFile;
 use App\Programmings\ActivityItem;
+use App\Programmings\ProfessionalHour;
+use App\Programmings\ProgrammingItem;
 use App\User;
 
 class ProgrammingController extends Controller
@@ -19,7 +22,7 @@ class ProgrammingController extends Controller
         $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune', 'pendingItems')
             ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
-                $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
+                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
             ->get();
 
@@ -27,7 +30,13 @@ class ProgrammingController extends Controller
             return $q->where('year', $year);
         })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
 
-        return view('programmings/programmings/index', compact('programmings', 'request', 'year', 'total_tracers'));
+        $communeFiles = CommuneFile::with('commune')->where('year', $year)
+            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
+                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+            })
+            ->get();
+
+        return view('programmings.programmings.index', compact('programmings', 'request', 'year', 'total_tracers', 'communeFiles'));
     }
 
     public function create() 
@@ -35,7 +44,7 @@ class ProgrammingController extends Controller
         $establishments = Establishment::whereIn('type',['CESFAM','CGR']) // Solo centros de salud familiar
                                        ->OrderBy('name')->get(); 
         $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo funcionario Programación
-        return view('programmings/programmings/create', compact('establishments', 'users'));
+        return view('programmings.programmings.create', compact('establishments', 'users'));
     }
 
     public function store(Request $request)
@@ -73,7 +82,7 @@ class ProgrammingController extends Controller
         $access_list = unserialize($programming->access);
         $user = $programming->user;
 
-        return view('programmings/programmings/show', compact('programming', 'access_list', 'user', 'establishments', 'communes', 'users'));
+        return view('programmings.programmings.show', compact('programming', 'access_list', 'user', 'establishments', 'communes', 'users'));
     }
 
     public function update(Request $request, Programming $programming)
@@ -98,5 +107,25 @@ class ProgrammingController extends Controller
         $programming->save();
 
         return redirect()->back();
+    }
+
+    public function show_total_rrhh(Programming $programming)
+    {
+        $professionalHours = ProfessionalHour::select(  
+            'pro_professional_hours.id'
+            ,'pro_professional_hours.professional_id'
+            ,'pro_professional_hours.programming_id'
+            ,'pro_professional_hours.value'
+            ,'T1.alias')
+        ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
+        ->Where('programming_id',$programming->id)
+        ->orderBy('T1.alias','ASC')
+        ->get();
+
+        $programming->load('items.professionalHours');
+
+        // return $programming;
+
+        return view('programmings.programmings.show_total_rrhh', compact('programming', 'professionalHours'));
     }
 }

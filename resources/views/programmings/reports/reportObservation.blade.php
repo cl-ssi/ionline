@@ -9,7 +9,10 @@
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
-<h4 class="mb-3"> Informe de Observaciones en Programación Númerica</h4>
+<h4 class="mb-3"><a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+                    <i class="fas fa-arrow-left small"></i> 
+                    <span class="small">Volver</span> 
+    </a> Informe de Observaciones en Programación Númerica</h4>
 
 <!-- {{$reviewItems}} -->
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
@@ -44,7 +47,7 @@
             <td class="text-center align-middle"></td>
             <td class="text-center align-middle">{{ $pendingItem->observation }}</td>
             <td class="text-center align-middle">{{ $pendingItem->requestedBy->fullName ?? '' }}</td>
-            <td class="text-center align-middle"><a href="{{ route('programmingitems.create', ['programming_id' => $pendingItem->programming_id, 'activity_search_id' => $pendingItem->activity_item_id]) }}" class="btn btb-flat btn-sm btn-light" title="Agregar item a la programación"><i class="fas fa-plus"></i></a></td>
+            <td class="text-center align-middle">@if($pendingItem->programming->status == 'active')<a href="{{ route('programmingitems.create', ['programming_id' => $pendingItem->programming_id, 'activity_search_id' => $pendingItem->activity_item_id]) }}" class="btn btb-flat btn-sm btn-light" title="Agregar item a la programación"><i class="fas fa-plus"></i></a>@endif</td>
         </tr>
     @endforeach
     @foreach($reviewItems as $reviewItem)

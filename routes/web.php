@@ -134,6 +134,8 @@ use App\Http\Controllers\Programmings\ProgrammingReportController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\ProgrammingActivityItemController;
+use App\Http\Controllers\Programmings\ParticipationController;
+use App\Http\Controllers\Programmings\EmergenciesController;
 
 use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
@@ -185,6 +187,7 @@ use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\PendingMovements;
+use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
@@ -220,6 +223,7 @@ Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->na
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
 Route::get('/claveunica/login/{access_token}', [ClaveUnicaController::class,'login'])->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::class,'loginExternal']);
+// Route::get('/claveunica/store/{access_token}', [ClaveUnicaController::class,'storeUserClaveUnica']);
 
 Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
 
@@ -583,6 +587,24 @@ Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
 Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
 
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
+
+Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
+    Route::get('/{programming}', [ParticipationController::class,'show'])->name('show');
+    Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class,'create'])->name('create');
+    Route::post('/{programming}', [ParticipationController::class,'store'])->name('store');
+    Route::get('/{value}/{programming}/edit', [ParticipationController::class,'edit'])->name('edit');
+    Route::put('/{value}', [ParticipationController::class,'update'])->name('update');
+    Route::delete('/{value}', [ParticipationController::class,'destroy'])->name('destroy');
+});
+
+Route::prefix('emergencies')->as('emergencies.')->middleware('auth')->group(function () {
+    Route::get('/{programming}', [EmergenciesController::class,'show'])->name('show');
+    Route::get('/create/{programming}', [EmergenciesController::class,'create'])->name('create');
+    Route::post('/{programming}', [EmergenciesController::class,'store'])->name('store');
+    Route::get('/{emergency}/edit', [EmergenciesController::class,'edit'])->name('edit');
+    Route::put('/{emergency}', [EmergenciesController::class,'update'])->name('update');
+    Route::delete('/{emergency}', [EmergenciesController::class,'destroy'])->name('destroy');
+});
 
 Route::resource('professionals', ProfessionalController::class)->middleware('auth');
 Route::resource('actiontypes', ActionTypeController::class)->middleware('auth');
@@ -1509,6 +1531,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
     Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')->middleware('ensure.inventory');
+    Route::get('register', RegisterInventory::class)->name('register');
 });
 
 /* Bodega de Farmacia */
@@ -1615,6 +1638,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/signed-request-form-pdf/{requestForm}/{original}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
     Route::get('/export', [RequestFormController::class, 'export'])->name('export');
+    Route::get('/{requestForm}/copy', [RequestFormController::class, 'copy'])->name('copy');
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
@@ -1652,6 +1676,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
         Route::get('/attached_file/{attachedFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
+        Route::delete('/{detail}/release_item', [PurchasingProcessController::class, 'release_item'])->name('release_item');
+        Route::delete('/{detail}/release_all_items', [PurchasingProcessController::class, 'release_all_items'])->name('release_all_items');
         Route::get('/mercado-publico-api/{type}/{code}', function($type, $code){
             return MercadoPublico::getTender($code, $type);
         });
@@ -1875,7 +1901,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 Route::view('/some', 'some');
 
-Route::get('/test-getip',[TestController::class,'getIp']);
+Route::get('/dev/get-ip',[TestController::class,'getIp']);
 Route::get('/log',[TestController::class,'log']);
 Route::get('/ous',[TestController::class,'ous']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);

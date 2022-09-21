@@ -8,18 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class RequestReplacementStaff extends Model
+class RequestReplacementStaff extends Model implements Auditable
 {
     use HasFactory;
     use softDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
         'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
         'name_to_replace', 'run', 'dv', 'other_fundament', 'work_day', 'other_work_day',
         'charges_number','job_profile_file', 'request_verification_file',
-        'ou_of_performance_id', 'replacement_staff_id'
+        'ou_of_performance_id', 'replacement_staff_id', 'user_id'
     ];
 
     public function requestFather() {
@@ -44,13 +46,18 @@ class RequestReplacementStaff extends Model
     public function fundamentDetailManage() {
         return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage');
     }
-
+    
+    //user_id ORIGINALMENTE QUIEN REGISTRA SOLICITUD
     public function user() {
         return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function organizationalUnit() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+    }
+
+    public function requesterUser() {
+        return $this->belongsTo('App\User', 'requester_id')->withTrashed();
     }
 
     public function ouPerformance() {
@@ -195,6 +202,51 @@ class RequestReplacementStaff extends Model
         }
         else{
             return  $currentContinuity = 'no childs';
+        }
+    }
+
+    public function scopeSearch($query, $status_search, $id_search, $start_date_search, 
+        $end_date_search, $name_search, $fundament_search, $fundament_detail_search, $name_to_replace_search)
+    {
+        if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
+            $fundament_search OR $fundament_detail_search OR $name_to_replace_search) {
+
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('request_status', $status_search);
+                });
+            }
+            if($id_search != ''){
+                $query->where(function($q) use($id_search){
+                    $q->where('id', 'LIKE', '%'.$id_search.'%');
+                });
+            }
+            if($start_date_search != '' && $end_date_search != ''){
+                $query->where(function($q) use($start_date_search, $end_date_search){
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search." 23:59:59"])->get();
+                });
+            }
+            if($name_search != ''){
+                $query->where(function($q) use($name_search){
+                    $q->where('name', 'LIKE', '%'.$name_search.'%');
+                });
+            }
+            if($fundament_search != 0){
+                $query->whereHas('fundamentManage', function($q) use ($fundament_search){
+                    $q->Where('fundament_manage_id', $fundament_search);
+                });
+            }
+            if($fundament_detail_search != 0){
+                $query->whereHas('fundamentDetailManage', function($q) use ($fundament_detail_search){
+                    $q->Where('fundament_detail_manage_id', $fundament_detail_search);
+                });
+            }
+            if($name_to_replace_search != ''){
+                $query->where(function($q) use($name_to_replace_search){
+                    $q->where('name_to_replace', 'LIKE', '%'.$name_to_replace_search.'%')
+                    ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
+                });
+            }
         }
     }
 

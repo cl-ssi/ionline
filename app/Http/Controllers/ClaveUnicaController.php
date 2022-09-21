@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\UserExternal;
+use App\Jobs\StoreUserCU;
 
 /* No se si son necesarias, las puse para el try catch */
 use GuzzleHttp\Exception\ConnectException;
@@ -15,34 +16,39 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
+	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
+	const SCOPE = 'openid+run+name+email';
+
     public function autenticar(Request $request){
         /* Primer paso, redireccionar al login de clave única */
         //$redirect = '../monitor/lab/login';
-        $redirect = $request->input('redirect');
+        $redirect 		= $request->input('redirect');
         //die($redirect);
 
-        $url_base = "https://accounts.claveunica.gob.cl/accounts/login/?next=/openid/authorize";
-        $client_id = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
-        $state = base64_encode(csrf_token().$redirect);
-        $scope = env("CLAVEUNICA_SCOPE");
-        //'openid+run+name+email';
+		$url_base		= self::URL_BASE_CLAVE_UNICA."authorize/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
-        $url=$url_base.urlencode('?client_id='.$client_id.'&redirect_uri='.$redirect_uri.'&scope='.$scope.'&response_type=code&state='.$state);
+        $state 			= base64_encode(csrf_token().$redirect);
+        $scope 			= self::SCOPE;
 
-        return redirect()->to($url)->send();
+		$params     	= '?client_id='.$client_id.
+						'&redirect_uri='.$redirect_uri.
+						'&scope='.$scope.
+						'&response_type=code'.
+						'&state='.$state;
+
+		return redirect()->to($url_base.$params)->send();
     }
 
     public function callback(Request $request) {
-        $code = $request->input('code');
-        $state = $request->input('state'); // token
+        $code 			= $request->input('code');
+        $state 			= $request->input('state'); // token
 
-        $url_base = "https://accounts.claveunica.gob.cl/openid/token/";
-        $client_id = env("CLAVEUNICA_CLIENT_ID");
-        $client_secret = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
-        //$state = csrf_token();
-        //$scope = 'openid+run+name+email';
+        $url_base		= self::URL_BASE_CLAVE_UNICA."token/";
+        $client_id 		= env("CLAVEUNICA_CLIENT_ID");
+        $client_secret 	= env("CLAVEUNICA_SECRET_ID");
+        $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
         try {
             $response = Http::asForm()->post($url_base, [
@@ -123,6 +129,9 @@ class ClaveUnicaController extends Controller
                     if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
+
+					/** Es para almacenar el json del usuario de CU, ya no ocupa */
+                    //$this->storeUserClaveUnica($access_token);
 		        }
 		        else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
@@ -222,5 +231,12 @@ class ClaveUnicaController extends Controller
 
         return redirect()->to($url)->send();
     }
+
+	/** Sirve para almacenar el json de un usuario, ya no se ocupa */
+	public function storeUserClaveUnica($access_token)
+	{
+		/** Store clave unica information */
+		dispatch(new StoreUserCU($access_token));
+	}
 
 }

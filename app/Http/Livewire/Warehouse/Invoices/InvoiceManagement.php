@@ -62,11 +62,7 @@ class InvoiceManagement extends Component
         $filename = 'invoice-' . $invoice->number . '-date-' . $invoice->date->format('Y-m-d');
         $url = $filename.'.pdf';
 
-        $this->file->storeAs(
-            $this->folder,
-            $url,
-            'gcs',
-        );
+        $this->file->storeAs($this->folder, $url, 'gcs');
 
         $invoice->update([
             'url'   => Storage::url($this->folder . $url)

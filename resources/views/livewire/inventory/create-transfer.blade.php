@@ -7,6 +7,8 @@
         Generar Traspaso
     </h4>
 
+    {{-- dd($inventory) --}}
+
     <div class="form-row g-2 mb-2">
         <fieldset class="col-md-4">
             <label for="number" class="form-label">
@@ -29,7 +31,7 @@
                 type="text"
                 class="form-control form-control-sm"
                 id="product"
-                value="{{ $inventory->product->product->name }}"
+                value="{{ optional($inventory->unspscProduct)->name }}"
                 readonly
             >
         </fieldset>
@@ -42,7 +44,7 @@
                 type="text"
                 class="form-control form-control-sm"
                 id="description"
-                value="{{ $inventory->product->name }}"
+                value="{{-- $inventory->product->name --}}"
                 readonly
             >
         </fieldset>

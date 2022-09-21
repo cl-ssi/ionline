@@ -5,8 +5,10 @@
 @section('content')
 
 @include('programmings/nav')
+@can('TrainingItem: edit')
 <a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-<h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}}</h4>
+@endcan
+<h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}} - {{$trainingItems->first()->communeFile->commune->name ?? ''}}</h4>
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
 
@@ -24,7 +26,7 @@
         </tr>
         <tr style="font-size:45%;">
             <th class="text-center align-middle">LINEAMIENTOS ESTRATEGICOS</th>
-            <th class="text-center align-middle">RESULTADOS ESPERADOS</th>
+            <th class="text-center align-middle">OBJETIVOS EDUCATIVOS</th>
             <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
             <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
             <th class="text-center align-middle">B (Otros Profesio-nales)</th>

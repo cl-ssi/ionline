@@ -6,7 +6,7 @@
 
 @include('suitability.nav')
 
-<h3 class="mb-3">Listado de Todas las Solicitudes de Idoneidad</h3>
+<h3 class="mb-3">Listado de Todas las Solicitudes de Idoneidad ({{ $psirequests_count }})</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('suitability.own') }}">
 

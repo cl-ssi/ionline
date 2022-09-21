@@ -3,9 +3,11 @@
 namespace App\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ProgrammingDay extends Model
+class ProgrammingDay extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'pro_programming_days';
 
     protected $fillable = [

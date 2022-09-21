@@ -7,7 +7,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label for="forRut">Nombre de Formulario:</label>
-                    <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" value="">
+                    <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" placeholder="EJ: ADIQUISICIÓN DE MOBILIARIO PARA OFICINA..." value="">
                     @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
