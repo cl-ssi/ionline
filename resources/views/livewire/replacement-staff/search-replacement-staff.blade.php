@@ -4,12 +4,12 @@
             <fieldset class="form-group col-sm">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;"
-                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model="selectedSearch">
+                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model.debounce.500ms="selectedSearch">
             </fieldset>
 
             <fieldset class="form-group col-sm">
                 <label for="for_profile_search">Estamento</label>
-                <select name="profile_search" class="form-control" wire:model="selectedProfile">
+                <select name="profile_search" class="form-control" wire:model.debounce.500ms="selectedProfile">
                     <option value="0">Seleccione...</option>
                     @foreach($profileManage as $profile)
                         <option value="{{ $profile->id }}">{{ $profile->name }}</option>
@@ -19,7 +19,7 @@
 
             <fieldset class="form-group col-sm">
                 <label for="for_profession_search">Profesión</label>
-                <select name="profession_search" class="form-control" wire:model="selectedProfession">
+                <select name="profession_search" class="form-control" wire:model.debounce.500ms="selectedProfession">
                     <option value="0">Seleccione...</option>
                     @if(!is_null($professionManage))
                     @foreach($professionManage as $profession)
@@ -31,7 +31,7 @@
 
             <fieldset class="form-group col-sm">
                 <label for="for_staff_search">Staff de Unidad Organizacional</label>
-                <select name="staff_search" class="form-control" wire:model="selectedStaff">
+                <select name="staff_search" class="form-control" wire:model.debounce.500ms="selectedStaff">
                     <option value="0">Seleccione...</option>
                     @foreach(App\Models\ReplacementStaff\StaffManage::getStaffByOu() as $staff)
                         <option value="{{ $staff->organizationalUnit->id }}">{{ $staff->organizationalUnit->name }}</option>
@@ -41,7 +41,7 @@
 
             <fieldset class="form-group col-sm">
                 <label for="for_status_search">Estado</label>
-                <select name="status_search" class="form-control" wire:model="selectedStatus">
+                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
                     <option value="0">Seleccione...</option>
                     <option value="immediate_availability">Disponibilidad Inmediata</option>
                     <option value="working_external">Trabajando</option>
