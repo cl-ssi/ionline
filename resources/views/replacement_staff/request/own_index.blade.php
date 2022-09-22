@@ -11,12 +11,14 @@
       <h4 class="mb-3"><i class="fas fa-inbox"></i> Mis Solicitudes: </h4>
   </div>
 
-  <div class="col-sm-3">
-    <p>
-        <a class="btn btn-primary btn-sm" href="{{ route('replacement_staff.request.create') }}">
-            <i class="fas fa-plus"></i> Nueva</a>
-    </p>
-  </div>
+  @if(Auth::user()->organizationalUnit->level <= 3) 
+    <div class="col-sm-3">
+      <p>
+          <a class="btn btn-primary btn-sm" href="{{ route('replacement_staff.request.create') }}">
+              <i class="fas fa-plus"></i> Nueva</a>
+      </p>
+    </div>
+  @endif
 </div>
 
 </div>
