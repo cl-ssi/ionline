@@ -13,16 +13,33 @@ use App\Programmings\ActivityItem;
 use App\Programmings\ProfessionalHour;
 use App\Programmings\ProgrammingItem;
 use App\User;
+use Illuminate\Support\Str;
 
 class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
         $year = $request->year ?? Carbon::now()->year + 1;
+        $accessByCommune = null;
+        $accessByEstablishments = null;
+        if(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False){
+            $last_year = Programming::latest()->first()->year;
+            $accessByCommune = collect();
+            $accessByEstablishments = collect();
+            $last_programmings = Programming::with('establishment')->where('year', $last_year)->get();
+            //El usuario tiene acceso por comunas y/o establecimientos?
+            foreach($last_programmings as $programming){
+                if(Str::contains($programming->access, Auth()->user()->id)){
+                    $accessByCommune->push($programming->establishment->commune_id);
+                    $accessByEstablishments->push($programming->establishment_id);
+                }
+            }
+        }
+
         $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune', 'pendingItems')
             ->where('year', $year)
-            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
-                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+            ->when($accessByEstablishments != null, function($q) use($accessByEstablishments){
+                 $q->whereIn('establishment_id', $accessByEstablishments);
             })
             ->get();
 
@@ -31,8 +48,8 @@ class ProgrammingController extends Controller
         })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
 
         $communeFiles = CommuneFile::with('commune')->where('year', $year)
-            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
-                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+            ->when($accessByCommune != null, function($q) use($accessByCommune){
+                $q->whereIn('commune_id', $accessByCommune);
             })
             ->get();
 
