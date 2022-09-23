@@ -7,21 +7,42 @@ use Illuminate\Http\Request;
 
 use App\Models\Programmings\CommuneFile;
 use App\Models\Commune;
+use App\Programmings\Programming;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommuneFileController extends Controller
 {
     public function index(Request $request)
     {
         $year = $request->year ?? Carbon::now()->year + 1;
-        $communeFiles = CommuneFile::with('commune', 'user')
-            ->where('year', $year)
-            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
-                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+        $accessByCommune = null;
+        if(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False){
+            $last_year = Programming::latest()->first()->year;
+            $accessByCommune = collect();
+            $last_programmings = Programming::with('establishment')->where('year', $last_year)->get();
+            //El usuario tiene acceso por comuna(s)?
+            foreach($last_programmings as $programming){
+                if(Str::contains($programming->access, Auth()->user()->id)){
+                    $accessByCommune->push($programming->establishment->commune_id);
+                }
+            }
+        }
+
+        $communeFiles = CommuneFile::with('commune', 'user')->where('year', $year)
+            ->when($accessByCommune != null, function($q) use($accessByCommune){
+                $q->whereIn('commune_id', $accessByCommune);
             })
             ->get();
+
+        // $communeFiles = CommuneFile::with('commune', 'user')
+        //     ->where('year', $year)
+        //     ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
+        //         $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+        //     })
+        //     ->get();
 
         return view('programmings/communeFiles/index', compact('communeFiles', 'request', 'year'));
     }
