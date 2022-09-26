@@ -11,6 +11,7 @@ use App\Programmings\ProgrammingDay;
 use App\Programmings\ActivityItem;
 use App\Models\Programmings\ReviewItem;
 use App\Programmings\ActivityProgram;
+use App\Programmings\Professional;
 use Illuminate\Support\Arr;
 
 class ProgrammingItemController extends Controller
@@ -21,10 +22,13 @@ class ProgrammingItemController extends Controller
         $activityFilter = $request->activity;
         $cycleFilter = $request->cycle;
         $activityType = $request->activity_type;
+        $categoryFilter = $request->category;
+        $workAreaFilter = $request->work_area;
+        $proFilter = $request->professional;
 
         $programming = Programming::whereId($request->programming_id)
             // busqueda de actividades sin filtro pero con tipo de actividad
-            ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType, function ($q) use ($activityType){
+            ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType == 'Directa', function ($q) use ($activityType){
                 return $q->whereHas('items', $filter = function($q2) use ($activityType) {
                     return $q2->when($activityType != null, function($q3) use ($activityType){
                                 return $q3->where('activity_type', $activityType)->with('activityItem');
@@ -46,6 +50,19 @@ class ProgrammingItemController extends Controller
                             });
                 })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
              })
+            ->when($activityType == 'Indirecta' && ($categoryFilter || $workAreaFilter || $proFilter), function($q) use ($categoryFilter, $workAreaFilter, $proFilter) {
+                return $q->whereHas('items', $filter = function($q2) use ($categoryFilter, $workAreaFilter, $proFilter) {
+                    return $q2->when($categoryFilter != null, function($q3) use ($categoryFilter){
+                                return $q3->where('activity_category', $categoryFilter);
+                            })->when($workAreaFilter != null, function($q3) use ($workAreaFilter){
+                                return $q3->where('work_area', $workAreaFilter);
+                            });
+                            // TODO: búsqueda por tipo de profesional
+                            // ->when($cycleFilter != null, function($q3) use ($cycleFilter){
+                            //     return $q3->where('vital_cycle', $cycleFilter);
+                            // });
+                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'items.user'])->get();
+            })
             ->first();
 
         if(!$programming){
@@ -76,7 +93,9 @@ class ProgrammingItemController extends Controller
         $tracerNumbers = $q->whereNotNull('int_code')->orderByRaw('LENGTH(int_code) ASC')->orderBy('int_code', 'ASC')
         ->distinct()->pluck('int_code');
 
-        return view('programmings.programmingItems.index', compact('programming', 'tracerNumbers', 'pendingActivities'));
+        $professionals = Professional::all();
+
+        return view('programmings.programmingItems.index', compact('programming', 'tracerNumbers', 'pendingActivities', 'professionals'));
     }
 
     public function create(Request $request)
@@ -226,16 +245,18 @@ class ProgrammingItemController extends Controller
 
     public function clone($id)
     {
-        $programmingItemOriginal = ProgrammingItem::with('professionalHours')->find($id);
+        $programmingItemOriginal = ProgrammingItem::find($id);
         $programmingItemsClone = $programmingItemOriginal->replicate();
         $programmingItemsClone->user_id = Auth()->user()->id;
-        $programmingItemsClone->save();
+        $programmingItemsClone->push();
+
+        $programmingItemOriginal->load('professionalHours');
 
         foreach($programmingItemOriginal->getRelations() as $relation => $items){
             if($relation == 'professionalHours'){
                 foreach($items as $item){
-                    unset($item->id);
-                    $item->programming_item_id = $programmingItemsClone->id;
+                    unset($item->pivot->id);
+                    $item->pivot->programming_item_id = $programmingItemsClone->id;
                     $extra_attributes = Arr::except($item->pivot->getAttributes(), $item->pivot->getForeignKey());
                     $programmingItemsClone->{$relation}()->attach($item, $extra_attributes);
                 }
