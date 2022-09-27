@@ -293,6 +293,8 @@
                                 <th rowspan="2">#</th>
                                 <th rowspan="2" class="label">Actividad</th>
                                 <th rowspan="2" class="label">Total programadas</th>
+                                <th rowspan="2" class="label">Total Cump.</th>
+                                <th rowspan="2" class="label">% Cump.</th>
                                 <th colspan="12">Frecuencia</th>
                             </tr>
                             <tr class="text-center">
@@ -304,13 +306,15 @@
                         <tbody>
                         @php($key = 1)
                         @forelse($values as $value)
-                            
                             <tr class="text-center">
-                                <td class="text-left glosa" style="width:20px;">{{$key}}</td>
-                                <td class="text-left glosa">{{$value->activity_name}}.</td>
-                                <td>{{$value->value}}</td>
+                                <td class="text-left glosa align-middle" style="width:20px;">{{$key}}</td>
+                                <td class="text-left glosa align-middle">{{$value->activity_name}}.</td>
+                                @php($result = $indicator->getValuesAcumByActivityName('numerador', $value->activity_name, $commune, null))
+                                <td class="align-middle">{{$value->value}}</td>
+                                <td class="align-middle">{{$result}}</td>
+                                <td class="align-middle">{{number_format($result != 0 ? $result/$value->value * 100 : 0, 1, ',', '.')}}%</td>
                                 @foreach($months as $number => $month)
-                                <td>
+                                <td class="align-middle">
                                 @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
                                     <!-- Button trigger modal -->
                                     <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
@@ -420,6 +424,8 @@
                                     <th rowspan="2">#</th>
                                     <th rowspan="2" class="label">Actividad</th>
                                     <th rowspan="2" class="label">Total programadas</th>
+                                    <th rowspan="2" class="label">Total Cump.</th>
+                                    <th rowspan="2" class="label">% Cump.</th>
                                     <th colspan="12">Frecuencia</th>
                                 </tr>
                                 <tr class="text-center">
@@ -432,11 +438,14 @@
                             @php($key = 1)
                             @forelse($values as $value)                              
                                 <tr class="text-center">
-                                    <td class="text-left glosa" style="width:20px;">{{$key}}</td>
-                                    <td class="text-left glosa">{{$value->activity_name}}.</td>
-                                    <td>{{$value->value}}</td>
+                                    <td class="text-left glosa align-middle" style="width:20px;">{{$key}}</td>
+                                    <td class="text-left glosa align-middle">{{$value->activity_name}}.</td>
+                                    @php($result = $indicator->getValuesAcumByActivityName('numerador', $value->activity_name, $commune, $establishment->alias_estab))
+                                    <td class="align-middle">{{$value->value}}</td>
+                                    <td class="align-middle">{{$result}}</td>
+                                    <td class="align-middle">{{number_format($result != 0 ? $result/$value->value * 100 : 0, 1, ',', '.')}}%</td>
                                     @foreach($months as $number => $month)
-                                    <td>
+                                    <td class="align-middle">
                                     @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
                                         <!-- Button trigger modal -->
                                         <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
@@ -520,6 +529,17 @@
                             </tr>
                             @endforelse
                             </tbody>
+                            @if($values)
+                            <tfoot style="font-weight:bold">
+                                <tr>
+                                    <td></td>
+                                    <td class="text-right">TOTAL</td>
+                                    <td class="text-center">{{number_format($indicator->getValuesAcum2('denominador', $commune, $establishment->alias_estab), 0, ',', '.')}}</td>
+                                    <td class="text-center">{{number_format($indicator->getValuesAcum2('numerador', $commune, $establishment->alias_estab), 0, ',', '.')}}</td>
+                                    <td class="text-center">{{number_format($indicator->getCompliance2($commune, $establishment->alias_estab), 1, ',', '.')}}%</td>
+                                </tr>
+                            </tfoot>
+                            @endif
                         </table>
                     </div>
                     @endif
