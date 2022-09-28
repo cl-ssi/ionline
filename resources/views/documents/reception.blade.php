@@ -84,7 +84,7 @@
                 {!! $document->content !!}
             </div>
 
-            <table style="height: 36px; width: 100%; border-collapse: collapse; margin-top: 60px" border="0">
+            <!-- <table style="height: 36px; width: 100%; border-collapse: collapse; margin-top: 60px" border="0">
                 <tbody>
                     <tr>
                         <td style="width: 50%; height: 18px; text-align: center;">__________________________</td>
@@ -106,7 +106,7 @@
                         <td style="width: 50%; height: 38px; text-align: center;"><br>_____/_____/_____________</td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
 
             <p>Obs:&nbsp;</p>
 
