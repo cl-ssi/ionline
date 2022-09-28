@@ -17,9 +17,7 @@
 
 <br><br>
 <hr>
-
-<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-<script src="{{ asset('js/create_doc.js') }}"></script>
+<x-head.tinymce-config/>
 
 <form method="post" name="form" action="{{ route('documents.store') }}" onsubmit="return validate_form()">
     @csrf
@@ -100,7 +98,7 @@
     <div class="form-row">
         <div class="form-group col">
             <label for="forDistribution">Distribución (separado por salto de línea)</label>
-            <textarea class="form-control" id="forDistribution" rows="6" name="distribution">{!! $document->distribution ?? '' !!}</textarea>
+            <textarea class="form-control" id="forDistribution" rows="6" name="distribution" required>{!! $document->distribution ?? '' !!}</textarea>
         </div>
 
         <div class="form-group col">
@@ -165,7 +163,7 @@ $('#formType').change(
             $("#collapse").hide();
         }
         if("Acta de recepción" === this.value) {
-            var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE ENTREGA</h1> <p><strong>Datos de ubicación</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Establecimiento</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Dirección</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Unidad Organizacional</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Ubicación (oficina)</td> <td></td> </tr> </tbody> </table> <p><strong>Características de la especie</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Inventario SSI</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Tipo de equipo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Marca</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Modelo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Número de serie</td> <td></td> </tr> </tbody> </table> <p><strong>Responsable</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Nombre completo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Función / cargo</td> <td></td> </tr> </tbody> </table>';
+            var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE ENTREGA</h1> <p><strong>Datos de ubicación</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Establecimiento</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Dirección</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Unidad Organizacional</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Ubicación (oficina)</td> <td></td> </tr> </tbody> </table> <p><strong>Características de la especie</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Inventario SSI</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Tipo de equipo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Marca</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Modelo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Número de serie</td> <td></td> </tr> </tbody> </table> <p><strong>Responsable</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Nombre completo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Función / cargo</td> <td></td> </tr>  </tbody> </table> <table style="height: 36px; width: 100%; border-collapse: collapse; margin-top: 60px" border="0"><tbody><tr><td style="width: 50%; height: 18px; text-align: center;">__________________________</td><td style="width:50%; height: 18px; text-align: center;">__________________________</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;">{{Auth::user()->TinnyName}}</td><td style="width: 50%; height: 18px; text-align: center;">SSI</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien entrega</strong></td><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien recibe</strong></td></tr><tr><td></td><td style="width: 50%; height: 38px; text-align: center;"><br>_____/_____/_____________</td></tr></tbody></table>';
             tinyMCE.activeEditor.setContent(contenido);
         }
         if("Resolución" === this.value) {
