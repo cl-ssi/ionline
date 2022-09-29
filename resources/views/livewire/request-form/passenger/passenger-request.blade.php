@@ -88,12 +88,12 @@
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_origin">Origen</label>
-                        <input wire:model="origin" name="origin" class="form-control form-control-sm" type="text">
+                        <input wire:model.defer="origin" name="origin" class="form-control form-control-sm" type="text">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_destination">Destino</label>
-                        <input wire:model="destination" name="destination" class="form-control form-control-sm" type="text">
+                        <input wire:model.defer="destination" name="destination" class="form-control form-control-sm" type="text">
                     </fieldset>
                 </div>
 
