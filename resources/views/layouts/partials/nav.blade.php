@@ -579,7 +579,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             @foreach(auth()->user()->unreadNotifications as $notification)
                             <a class="dropdown-item" href="{{ route('openNotification',$notification) }}">
-                                {{ substr($notification->data['subject'],0,100) }} ...
+                                {{ substr($notification->data['subject'],0,100) }}
                             </a>
                             @endforeach
                         </div>
