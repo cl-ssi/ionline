@@ -99,6 +99,7 @@ class DispatchController extends Controller
      */
     public function show(Dispatch $dispatch)
     {
+      
       //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
       $products = Product::with(['purchaseItems','receivingItems'])
           ->where('pharmacy_id',session('pharmacy_id'))
@@ -128,8 +129,14 @@ class DispatchController extends Controller
           $cont = $cont + 1;
         }
       }
-      $matrix_due_date=array_unique($matrix_due_date);
-      $matrix_batch=array_unique($matrix_batch);
+      if($matrix_due_date){
+        $matrix_due_date=array_unique();
+      }
+      
+      if($matrix_batch){
+        $matrix_batch=array_unique();
+      }
+      
 
       $establishment = Establishment::find($dispatch->establishment_id);
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
