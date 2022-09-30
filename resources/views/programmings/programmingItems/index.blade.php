@@ -157,18 +157,17 @@
             </div>
         </div>
     </div>
-
+<!-- form filter -->
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
     <input type="hidden" name="activity_type" value="{{Request::get('activity_type')}}">
+    <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}">
+    @if(Request::get('activity_type') == NULL || Request::get('activity_type') == 'Directa')
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="activity" class="sr-only">Nombre actividad</label>
             <input type="text" class="form-control" id="activity" name="activity" placeholder="Por nombre actividad" value="{{Request::get('activity')}}">
         </div>
         <div class="form-group col-md-2">
-            <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}">
-            <!-- <input type="number" class="form-control" id="tracer" name="tracer_number" value="" placeholder="Nro. Trazadora" > -->
-      
             <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple title="Por N° trazadora">
                 @foreach($tracerNumbers as $tracer)
                     <option value="{{ $tracer }}">{{$tracer}}</option>
@@ -186,6 +185,41 @@
         </div>
         <button type="submit" class="btn btn-light mb-4">Filtrar</button>
     </div>
+    @endif
+
+    @if(Request::get('activity_type') == 'Indirecta')
+    <div class="form-row">
+        <div id="category_div" class="form-group col-md-3">
+            <select name="category" id="category" class="form-control selectpicker " title="Por categoría">
+            @php($categories = array('Reunión', 'Jornada', 'Consultoría', 'Supervisión Interna', 'Plan de Intervención (N° familias)', 
+                                    'Trabajo administrativo', 'Viaje de ronda', 'Tele interconsulta', 'Tele consultoría'))
+            <option value=""></option>
+            @foreach($categories as $category)
+            <option value="{{$category}}" @if($category == Request::get('category')) selected @endif>{{$category}}</option>
+            @endforeach
+            </select>
+        </div>
+        <div id="work_area_div" class="form-group col-md-3">
+            <select name="work_area" id="work_area" class="form-control selectpicker " title="Por área de trabajo">
+            @php($work_areas = array('Dirección', 'SOME', 'Esterilización', 'Interconsulta', 'Epidemiología', 'SIGGES', 'OIRS', 'Informática',
+                                        'Estadísticas', 'Sala de Tratamiento', 'Farmacia', 'Bodega de Leche', 'Dental', 'Referencia de programa', 'Otro'))
+            <option value=""></option>
+            @foreach($work_areas as $work_area)
+            <option value="{{$work_area}}" @if($work_area == Request::get('work_area')) selected @endif>{{$work_area}}</option>
+            @endforeach
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <select name="professional" id="professional" class="form-control selectpicker" data-live-search="true" title="Por profesional">
+                <option value=""></option>
+                @foreach($professionals as $professional)
+                <option value="{{$professional->id}}" @if($professional->id == Request::get('professional')) selected @endif>{{$professional->alias}}</option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="btn btn-light mb-4">Filtrar</button>
+    </div>
+    @endif
 
 </form>
 
@@ -245,7 +279,12 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">Registrado por</th>
+            <th class="text-center align-middle">Registrado por 
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                title="Tip: Búsqueda por usuario" 
+                data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
+                <i class="fas fa-info-circle fa-lg"></i></a>
+            </th>
             @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
             @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
@@ -386,7 +425,12 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">Registrado por</th>
+            <th class="text-center align-middle">Registrado por 
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                title="Tip: Búsqueda por usuario" 
+                data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
+                <i class="fas fa-info-circle fa-lg"></i></a>
+            </th>
             @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
             @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
@@ -520,7 +564,12 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">Registrado por</th>
+            <th class="text-center align-middle">Registrado por 
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                title="Tip: Búsqueda por usuario" 
+                data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
+                <i class="fas fa-info-circle fa-lg"></i></a>
+            </th>
             @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
             @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
@@ -676,7 +725,12 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">Registrado por</th>
+            <th class="text-center align-middle">Registrado por 
+                <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                title="Tip: Búsqueda por usuario" 
+                data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
+                <i class="fas fa-info-circle fa-lg"></i></a>
+            </th>
             @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
             @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
@@ -809,7 +863,32 @@
         $('.edit-btn').click(function() {
             $(this).closest('td').find('.editable-form').toggle();
             $(this).closest('td').find('.editable-txt').toggle();
-        });  
-    });  
+        });
+    });
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    })
+
+    $('#nav-indirect-Designación-tab').click(function(){
+        $('#work_area_div').show();
+        $('#category_div').hide();
+        $('#category').val('').change();
+    });
+    $('#nav-indirect-Esporádicas-tab').click(function(){
+        $('#category_div').show();
+        $('#work_area_div').hide();
+        $('#work_area').val('').change();
+    });
+
+    @if(Request::get('work_area'))
+        $('#nav-indirect-Designación-tab').click();
+    @else
+        $('#work_area_div').hide(); //por defecto se deja filtro por actividades indirectas esporadicas
+    @endif
+
 </script>
 @endsection

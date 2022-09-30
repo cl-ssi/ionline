@@ -213,7 +213,7 @@
 						<a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
 					</li>
 					<li class="list-group-item">
-						<a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Sirmx</a>
+						<a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a>
 					</li>
                 </ul>
             </div>

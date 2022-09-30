@@ -20,7 +20,7 @@ class EnsureInventory
     {
         $inventory = Inventory::find($request->route('inventory'));
 
-        if($inventory->responsible->id == Auth::id())
+        if($inventory->responsible->id == Auth::id() || $inventory->using->id == Auth::id())
             return $next($request);
 
         session()->flash('danger', 'Ud. no posee los permisos para ver los detalles del inventario.');

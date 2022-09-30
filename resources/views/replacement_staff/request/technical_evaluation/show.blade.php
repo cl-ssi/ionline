@@ -130,6 +130,16 @@
     </table>
 </div>
 
+@if($requestReplacementStaff->request_status != "pending")
+    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+        class="btn btn-info btn-sm float-right" 
+        title="Selección" 
+        target="_blank">
+        Exportar Resumen <i class="fas fa-file"></i>
+    </a>
+<br />
+@endif
+
 <br />
 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>

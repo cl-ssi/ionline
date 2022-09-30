@@ -6,20 +6,25 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Requirements\Requirement;
 
-class NewSgr extends Notification
+class TestNotification extends Notification
 {
     use Queueable;
+
+	/**
+	 *  
+	 * $user->notify(new App\Notifications\TestNotification($param));
+	 * 
+	 */
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Requirement $sgr)
+    public function __construct($param)
     {
-        $this->sgr = $sgr;
+        $this->param = $param;
     }
 
     /**
@@ -55,9 +60,11 @@ class NewSgr extends Notification
      */
     public function toArray($notifiable)
     {
+		// puedo usar aca $this->param
+		$id = 34;
         return [
-            'subject' => $this->sgr->subject,
-            'action' => route('requirements.show',$this->sgr->id),
+			'subject' => 'Staff: Nueva solciitud id:'.$id,
+            'action' => route('resources.computer.edit',15),
         ];
     }
 }

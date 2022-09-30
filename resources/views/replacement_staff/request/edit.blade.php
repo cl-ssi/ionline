@@ -159,6 +159,16 @@
 
 <br><br>
 
+@if(Auth::user()->hasRole('Replacement Staff: admin'))
+<br/>
+
+<hr/>
+<div style="height: 300px; overflow-y: scroll;">
+    @include('partials.audit', ['audits' => $requestReplacementStaff->audits] )
+</div>
+
+@endif
+
 @endsection
 
 @section('custom_js')

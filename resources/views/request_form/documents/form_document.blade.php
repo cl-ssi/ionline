@@ -274,7 +274,7 @@
               <tr>
                   <td>{{ $key+1 }}</td>
                   <td>{{ $item->budgetItem->code }}</td>
-                  <td>{{ $item->product->name ? $item->product->code.' '.$item->product->name : $item->article }}</td>
+                  <td>{{ $item->product ? $item->product->code.' '.$item->product->name : $item->article }}</td>
                   <td>{{ $item->specification }}</td>
                   <td align="right">{{ $item->quantity }}</td>
                   <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->unit_value,$requestForm->precision_currency,",",".") }}</td>
