@@ -617,7 +617,7 @@ class RequestFormController extends Controller {
     private function createFolio(){
         $startOfYear = Carbon::now()->startOfYear();
         $endOfYear = Carbon::now()->endOfYear();
-        $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count();
-        return Carbon::now()->year.'-'.$counter++;
+        $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count() + 1;
+        return Carbon::now()->year.'-'.$counter;
     }
 }

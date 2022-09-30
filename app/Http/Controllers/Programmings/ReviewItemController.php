@@ -21,7 +21,7 @@ class ReviewItemController extends Controller
                              ->where('programming_item_id', $request->programmingItem_id)
                              ->get();
 
-        $programmingItem = ProgrammingItem::with('activityItem', 'programming:id,description')->find($request->programmingItem_id);
+        $programmingItem = ProgrammingItem::with('activityItem', 'programming')->find($request->programmingItem_id);
         
         $programmingDay = ProgrammingDay::where('programming_id',$programmingItem->programming_id)->first();
 

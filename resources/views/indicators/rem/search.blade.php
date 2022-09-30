@@ -29,7 +29,6 @@
 
 <div class="form-group">
     <form method="GET" action="{{ route('indicators.rem.show', [$year, $prestacion->serie, $prestacion->Nserie, $unique]) }}">
-        {{ csrf_field() }}
         <div class="row">
             <div class="col-sm-2">
                 <label>* Establecimiento: </label>
