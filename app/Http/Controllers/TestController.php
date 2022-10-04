@@ -64,5 +64,6 @@ class TestController extends Controller
 	public function storeRequestInputs(Request $request)
 	{
 		Log::info($request->all());
+		var_dump($request->all());
 	}
 }

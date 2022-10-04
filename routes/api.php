@@ -27,5 +27,5 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
     Route::get('/existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts']);
 });
 
-Route::get('/store-request-inputs',[TestController::class,'storeRequestInputs']);
 Route::post('/store-request-inputs',[TestController::class,'storeRequestInputs']);
+Route::get('/store-request-inputs',[TestController::class,'storeRequestInputs']);
