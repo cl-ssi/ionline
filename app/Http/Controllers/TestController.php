@@ -53,11 +53,16 @@ class TestController extends Controller
         dd($tenders);
     }
 
-    public function log()
-    {
-        $user = \App\User::find(1528758);
-        echo $user->name;
-        Log::info('primer log');
-        echo "Primer log";
-    }
+	public function log()
+	{
+		$user = \App\User::find(1528758);
+		echo $user->name;
+		Log::info('primer log');
+		echo "Primer log";
+	}
+
+	public function storeRequestInputs(Request $request)
+	{
+		Log::info($request->all());
+	}
 }
