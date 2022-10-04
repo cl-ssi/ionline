@@ -91,6 +91,7 @@ class ComplaintController extends Controller
      */
     public function download(Complaint $complaint)
     {
+		/** TODO: #91 Mover a google storage */
         return Storage::download($complaint->file);
     }
 
