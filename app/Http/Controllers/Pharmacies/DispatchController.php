@@ -99,50 +99,50 @@ class DispatchController extends Controller
      */
     public function show(Dispatch $dispatch)
     {
-      
-      //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
-      $products = Product::with(['purchaseItems','receivingItems'])
-          ->where('pharmacy_id',session('pharmacy_id'))
-          ->orderBy('name', 'ASC')->get();
+      // 04/10: Esteban comenta este codigo puesto que ya se incorporó en livewire hace tiempo atrás.
+      // //obtiene fechas de vencimiento y lotes de todos los ingresos y compras de todos los productos.
+      // $products = Product::with(['purchaseItems','receivingItems'])
+      //     ->where('pharmacy_id',session('pharmacy_id'))
+      //     ->orderBy('name', 'ASC')->get();
           
-      $matrix_due_date = null;
-      $cont = 0;
-      foreach ($products as $key1 => $product) {
-        foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-          $matrix_due_date[$cont] = $purchaseItem->due_date;
-          $cont = $cont + 1;
-        }
-        foreach ($product->receivingItems as $key1 => $receivingItems) {
-          $matrix_due_date[$cont] = $receivingItems->due_date;
-          $cont = $cont + 1;
-        }
-      }
-      $matrix_batch = null;
-      $cont = 0;
-      foreach ($products as $key1 => $product) {
-        foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-          $matrix_batch[$cont] = $purchaseItem->batch;
-          $cont = $cont + 1;
-        }
-        foreach ($product->receivingItems as $key1 => $receivingItems) {
-          $matrix_batch[$cont] = $receivingItems->batch;
-          $cont = $cont + 1;
-        }
-      }
-      if($matrix_due_date){
-        $matrix_due_date=array_unique();
-      }
+      // $matrix_due_date = null;
+      // $cont = 0;
+      // foreach ($products as $key1 => $product) {
+      //   foreach ($product->purchaseItems as $key1 => $purchaseItem) {
+      //     $matrix_due_date[$cont] = $purchaseItem->due_date;
+      //     $cont = $cont + 1;
+      //   }
+      //   foreach ($product->receivingItems as $key1 => $receivingItems) {
+      //     $matrix_due_date[$cont] = $receivingItems->due_date;
+      //     $cont = $cont + 1;
+      //   }
+      // }
+      // $matrix_batch = null;
+      // $cont = 0;
+      // foreach ($products as $key1 => $product) {
+      //   foreach ($product->purchaseItems as $key1 => $purchaseItem) {
+      //     $matrix_batch[$cont] = $purchaseItem->batch;
+      //     $cont = $cont + 1;
+      //   }
+      //   foreach ($product->receivingItems as $key1 => $receivingItems) {
+      //     $matrix_batch[$cont] = $receivingItems->batch;
+      //     $cont = $cont + 1;
+      //   }
+      // }
+      // if($matrix_due_date){
+      //   $matrix_due_date=array_unique();
+      // }
       
-      if($matrix_batch){
-        $matrix_batch=array_unique();
-      }
+      // if($matrix_batch){
+      //   $matrix_batch=array_unique();
+      // }
       
 
       $establishment = Establishment::find($dispatch->establishment_id);
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->orderBy('name','ASC')->get();
-      //return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products'));//,'matrix_due_date','matrix_batch'));
-      return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products','matrix_due_date','matrix_batch'));
+      return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products'));
+      // return view('pharmacies.products.dispatch.show', compact('establishment','dispatch','products','matrix_due_date','matrix_batch'));
     }
 
     public function getFromProduct_due_date($product_id){
