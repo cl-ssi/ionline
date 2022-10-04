@@ -1,5 +1,5 @@
 ### Post-based search for Patients
-POST https://35.208.136.84/api/store-request-inputs?run=1
+POST https://35.208.136.84/api/store-request-inputs HTTP/1.1
 Content-Type: application/json
 
 {
