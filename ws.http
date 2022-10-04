@@ -1,5 +1,5 @@
 ### Post-based search for Patients
-POST https://35.208.136.84/api/store-request-inputs HTTP/1.1
+POST https://i.saludiquique.gob.cl/api/post-request-inputs
 Content-Type: application/json
 
 {
