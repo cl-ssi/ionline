@@ -6,7 +6,9 @@
     @endif
 
     @if($parametroMes != null)
-      {{$array_valores_mensualizados[$parametroMes]}}
+      @if($array_valores_mensualizados != null)
+        {{$array_valores_mensualizados[$parametroMes]}}
+      @endif
     @else
       @if($resultadoEnNumero)
           @php $total = 0;
