@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,6 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
     Route::get('/existing_contracts_by_prof/{user_id}', [ServiceRequestController::class, 'existing_contracts_by_prof']);
     Route::get('/existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts']);
 });
+
+// Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
+// Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
