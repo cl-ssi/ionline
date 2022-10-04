@@ -1,0 +1,10 @@
+### Post-based search for Patients
+POST https://i.saludiquique.gob.cl/api/store-request-inputs
+Accept: application/fhir+json
+Content-Type: application/x-www-form-urlencoded
+
+{
+	"email" : "test@gmail.com",
+	"name" : "Test user",
+	"password" : "testpassword",
+}
