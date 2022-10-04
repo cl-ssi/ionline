@@ -2,7 +2,7 @@
     <div class="input-group">
         <input
             type="text"
-            class="form-control"
+            class="form-control {{ $small_option ? 'form-control-sm' : '' }}"
             placeholder="Nombre Funcionario"
             aria-label="Nombre"
             wire:keydown.escape="resetx"
@@ -16,7 +16,7 @@
         />
 
         <div class="input-group-append">
-            <a class="btn btn-outline-secondary" wire:click="resetx">
+            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="resetx">
                 <i class="fas fa-eraser"></i> Limpiar</a>
         </div>
     </div>

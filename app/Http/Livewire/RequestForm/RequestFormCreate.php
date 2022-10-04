@@ -29,7 +29,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
 
-    public $name, $contractManagerId, $superiorChief, $purchaseMechanism, $messagePM,
+    public $name, $contractManagerId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM,
             $program, $fileRequests = [], $justify, $totalDocument;
 
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF, $savedFiles;
@@ -41,7 +41,7 @@ class RequestFormCreate extends Component
 
     public $form_status;
 
-    protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers'];
+    protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers', 'searchedContractManager'];
 
     protected function rules(){
       return [
@@ -114,6 +114,7 @@ class RequestFormCreate extends Component
       $this->subtype            =   $this->requestForm->subtype;
       $this->name               =   $this->requestForm->name;
       $this->contractManagerId  =   $this->requestForm->contract_manager_id;
+      $this->contractManager    =   $this->requestForm->contractManager;
       $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
@@ -228,6 +229,7 @@ class RequestFormCreate extends Component
     }
 
     public function saveRequestForm($form_status){
+      // dd($this->contractManagerId);
       $this->form_status = $form_status;
 
       $this->withValidator(function (Validator $validator) {
@@ -248,11 +250,11 @@ class RequestFormCreate extends Component
               ],
               [
                 'subtype'               =>  $this->subtype,
-                'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
+                'contract_manager_id'   =>  $this->contractManagerId,
                 //contractManagerId
                 //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
                 //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-                'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
                 'name'                  =>  $this->name,
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
@@ -273,11 +275,11 @@ class RequestFormCreate extends Component
               ],
               [
                 'subtype'               =>  $this->subtype,
-                'contract_manager_id'   =>  $this->editRF ? $this->requestForm->contract_manager_id : $this->contractManagerId,
+                'contract_manager_id'   =>  $this->contractManagerId,
                 //contractManagerId
                 //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
                 //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-                'contract_manager_ou_id' => $this->editRF ? $this->requestForm->contract_manager_ou_id : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
                 'name'                  =>  $this->name,
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,
@@ -492,4 +494,8 @@ class RequestFormCreate extends Component
     public function updatedTypeOfCurrency($value){
       $this->emit('savedTypeOfCurrency', $value);
     }
+
+    public function searchedContractManager(User $user){
+      $this->contractManagerId = $user->id;
+  }
 }

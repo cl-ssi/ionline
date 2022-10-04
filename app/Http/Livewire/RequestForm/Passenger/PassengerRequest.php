@@ -20,7 +20,7 @@ class PassengerRequest extends Component
     //        $telephoneNumber, $email, $trip, $origin, $destiny, $departureDate, $fromDate,
     //        $baggage, $passengerType;
 
-    public $searchedUser;
+    public $searchedPassenger;
 
     public $passengerType, $run, $dv, $name, $fathers_family, $mothers_family,
           $birthday, $phone_number, $email, $round_trip, $origin, $destination,
@@ -32,7 +32,7 @@ class PassengerRequest extends Component
 
     public $totalValue = 0 , $precision_currency;
 
-    protected $listeners = ['searchedUser', 'savedTypeOfCurrency'];
+    protected $listeners = ['searchedPassenger', 'savedTypeOfCurrency'];
 
     //Para Validar
 
@@ -228,17 +228,17 @@ class PassengerRequest extends Component
         }
     }
 
-    public function searchedUser(User $user){
-        $this->searchedUser = $user;
+    public function searchedPassenger(User $user){
+        $this->searchedPassenger = $user;
 
-        $this->run = $this->searchedUser->id;
-        $this->dv = $this->searchedUser->dv;
-        $this->name = $this->searchedUser->name;
-        $this->fathers_family = $this->searchedUser->fathers_family;
-        $this->mothers_family = $this->searchedUser->mothers_family;
-        $this->birthday = $this->searchedUser->birthday;
-        $this->phone_number = $this->searchedUser->phone_number;
-        $this->email = $this->searchedUser->email;
+        $this->run = $this->searchedPassenger->id;
+        $this->dv = $this->searchedPassenger->dv;
+        $this->name = $this->searchedPassenger->name;
+        $this->fathers_family = $this->searchedPassenger->fathers_family;
+        $this->mothers_family = $this->searchedPassenger->mothers_family;
+        $this->birthday = $this->searchedPassenger->birthday;
+        $this->phone_number = $this->searchedPassenger->phone_number;
+        $this->email = $this->searchedPassenger->email;
     }
 
     public function render()

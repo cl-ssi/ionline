@@ -305,9 +305,12 @@
                 <thead class="text-center small">
                 <tr>
                     <th>#</th>
-                    <th>RUT</th>
+                    <th width="70">RUT</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
+                    <th>Fecha Nac.</th>
+                    <th>Teléfono</th>
+                    <th>E-mail</th>
                     <th>Item Pres.</th>
                     <th>Tipo viaje</th>
                     <th>Origen</th>
@@ -325,6 +328,9 @@
                         <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
                         <td>{{ $passenger->name }}</td>
                         <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                        <td>{{ $passenger->birthday ? $passenger->birthday->format('d-m-Y') : '' }}</td>
+                        <td>{{ $passenger->phone_number }}</td>
+                        <td>{{ $passenger->email }}</td>
                         <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
                         <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
                         <td>{{ $passenger->origin }}</td>
@@ -338,7 +344,7 @@
                 </tbody>
                 <tfoot class="text-right small">
                 <tr>
-                    <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'budget_event']) ? 11 : 10 }}">
+                    <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'budget_event']) ? 14 : 13 }}">
                         Valor Total
                     </td>
                     <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</td>
