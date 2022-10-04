@@ -11,7 +11,7 @@
                     @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
+                {{--<fieldset class="form-group col-sm-4">
                     <label>Administrador de Contrato:</label><br>
                     <div wire:ignore id="for-bootstrap-select">
                       <select wire:model.defer="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
@@ -23,6 +23,15 @@
                       </select>
                     </div>
                     @error('contractManagerId') <span class="text-danger small">{{ $message }}</span> @enderror
+                </fieldset>--}}
+                
+                <fieldset class="form-group col-12 col-md-4">
+                    <label for="for_requester_id">Administrador de Contrato:</label>
+                    @livewire('search-select-user', [
+                        'emit_name' => 'searchedContractManager',
+                        'small_option' => true,
+                        'user' => $contractManager,
+                    ])
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
@@ -73,7 +82,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                     <div class="mt-1 ml-4">
-                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if($editRF) disabled @endif>
+                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if(optional($requestForm)->status != 'saved' && $editRF) disabled @endif>
                         <label class="form-check-label" for="flexCheckDefault">
                             Sí
                         </label>
