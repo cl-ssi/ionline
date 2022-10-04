@@ -28,6 +28,9 @@ class SearchSelectUser extends Component
     public $msg_too_many;
     public $required = '';
 
+    public $emit_name;
+    public $small_option = false;
+
     public function resetx()
     {
         $this->query = '';
@@ -69,7 +72,7 @@ class SearchSelectUser extends Component
 
     public function addSearchedUser($userId){
         $this->searchedUser= $userId;
-        $this->emit('searchedUser', $this->searchedUser);
+        $this->emit($this->emit_name ?? 'searchedUser', $this->searchedUser);
     }
 
     public function render()
