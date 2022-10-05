@@ -49,9 +49,9 @@ class PassengerRequest extends Component
         'email'             =>  'required|email',
         'round_trip'        =>  'required',
         'origin'            =>  'required',
-        //'destination'       =>  'required',
+        'destination'       =>  'required',
         'departure_date'    =>  'required',
-        'return_date'       =>  'required',
+        'return_date'       =>  'exclude_if:round_trip,one-way only|required',
         'baggage'           =>  'required',
         'unitValue'         =>  'required',
 
@@ -75,7 +75,7 @@ class PassengerRequest extends Component
         'email.email'               => 'E-mail debe contener formato adecuado.',
         'round_trip.required'       => 'Seleccione un tipo de viaje.',
         'origin.required'           => 'Campo Origen es requerido.',
-        //'destination.required'      => 'Campo Destino es requerido.',
+        'destination.required'      => 'Campo Destino es requerido.',
         'departure_date.required'   => 'Campo Fecha de Ida es requerido.',
         'return_date.required'      => 'Campo Fecha de Regreso es requerido.',
         'baggage.required'          => 'Seleccione tipo de equipaje.',
@@ -141,14 +141,14 @@ class PassengerRequest extends Component
       $this->name           = $this->passengers[$key]['name'];
       $this->fathers_family = $this->passengers[$key]['fathers_family'];
       $this->mothers_family = $this->passengers[$key]['mothers_family'];
-      $this->birthday       = $this->passengers[$key]['birthday'];
+      $this->birthday       = Carbon::parse($this->passengers[$key]['birthday'])->format('Y-m-d');
       $this->phone_number   = $this->passengers[$key]['phone_number'];
       $this->email          = $this->passengers[$key]['email'];
       $this->round_trip     = $this->passengers[$key]['round_trip'];
       $this->origin         = $this->passengers[$key]['origin'];
       $this->destination    = $this->passengers[$key]['destination'];
-      $this->departure_date = Carbon::parse($this->passengers[$key]['departure_date'])->format('Y-m-d\TH:i:s');
-      $this->return_date    = Carbon::parse($this->passengers[$key]['return_date'])->format('Y-m-d\TH:i:s');
+      $this->departure_date = Carbon::parse($this->passengers[$key]['departure_date'])->format('Y-m-d\TH:i');
+      $this->return_date    = $this->passengers[$key]['return_date'] ? Carbon::parse($this->passengers[$key]['return_date'])->format('Y-m-d\TH:i') : null;
       $this->baggage        = $this->passengers[$key]['baggage'];
       $this->unitValue      = $this->passengers[$key]['unitValue'];
 
