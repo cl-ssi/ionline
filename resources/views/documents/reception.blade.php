@@ -67,7 +67,11 @@
     <body>
 
         <div class="content">
-            <img src="data:image/png;base64,{{ $image }}" width="120" alt=""><br>            
+            @if(isset($image))
+            <img src="data:image/png;base64,{{ $image }}" width="120" alt=""><br>
+            @else
+            <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt=""><br>
+            @endif
             <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
             <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
 
