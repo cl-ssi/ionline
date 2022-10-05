@@ -69,7 +69,11 @@
 
         <div class="content">
             <div class="left" style="float: left;">
+                @if(isset($image))
                 <img src="data:image/png;base64,{{ $image }}" width="120" alt="Logo servicio de salud"><br>
+                @else
+                <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
+                @endif
                 <div class="siete" style="padding-bottom: 4px;">
                 {{ env('APP_SS') }}<br>
                 {{ $document->user->organizationalUnit->name }}
