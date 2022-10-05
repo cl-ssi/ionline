@@ -69,7 +69,7 @@
 
         <div class="content">
             <div class="left" style="float: left;">
-                <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
+                <img src="{{ base_path() }}/public/images/logo_rgb.png" width="120" alt="Logo servicio de salud"><br>
                 <div class="siete" style="padding-bottom: 4px;">
                 {{ env('APP_SS') }}<br>
                 {{ $document->user->organizationalUnit->name }}
