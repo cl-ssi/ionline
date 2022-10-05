@@ -67,8 +67,7 @@
     <body>
 
         <div class="content">
-            
-            <img src="{{ base_path() }}/public/images/logo_pluma.jpg" width="120" alt=""><br>            
+            <img src="data:image/png;base64,{{ $image }}" width="120" alt=""><br>            
             <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
             <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
 
