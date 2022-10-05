@@ -40,9 +40,9 @@
                 @if(Auth::user()->organizationalUnit->level <= 3) 
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">Crear Solicitudes</h6>
-                    <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
-                    {{-- <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a> --}}
-                    {{-- <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a> --}}
+                    {{-- <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a> --}}
+                    <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a> 
+                    <a class="dropdown-item disabled"><i class="fas fa-plus"></i> Formulario de Convocatorias <span class="badge badge-secondary">Próximamente</span></a>
                 @endif
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign') }}">
