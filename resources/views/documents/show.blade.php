@@ -69,7 +69,7 @@
 
         <div class="content">
             <div class="left" style="float: left;">
-                <img src="{{ base_path() }}/public/images/logo_rgb.png" width="120" alt="Logo servicio de salud"><br>
+                <img src="data:image/png;base64,{{ $image }}" width="120" alt="Logo servicio de salud"><br>
                 <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
