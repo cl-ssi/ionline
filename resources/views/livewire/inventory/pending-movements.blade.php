@@ -47,10 +47,11 @@
                     </td>
                     <td nowrap>
                         <a
-                            class="btn btn-sm btn-primary"
+                            class="btn btn-outline-primary"
                             href="{{ route('inventories.check-transfer', $movement) }}"
                             >
-                            Revisar traspaso
+							<i class="fas fa-eye"></i> 
+                            Completar el traspaso
                         </a>
                     </td>
                 </tr>
