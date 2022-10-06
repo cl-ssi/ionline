@@ -398,31 +398,100 @@ class RequestForm extends Model implements Auditable
         return $this->purchasers->where('id', Auth::id())->count() > 0;
     }
 
-    public function scopeSearch($query, Request $request)
+    // public function scopeSearch($query, Request $request)
+    // {
+    //     if ($request->input('id') != "") {
+    //         $query->where('id', $request->input('id'));
+    //     }
+    //     if ($request->input('name') != "") {
+    //         $query->where('name', 'LIKE', '%' . $request->input('name') . '%');
+    //     }
+    //     if ($request->input('folio') != "") {
+    //         $query->where('folio', $request->input('folio'));
+    //     }
+    //     if ($request->input('request_user_id') != "") {
+    //         $query->where('request_user_id', $request->input('request_user_id'));
+    //     }
+    //     if ($request->input('contract_manager_id') != "") {
+    //         $query->where('contract_manager_id', $request->input('contract_manager_id'));
+    //     }
+
+    //     if ($request->input('purchaser_user_id') != "") {
+    //         $query->whereHas('purchasers', function ($q) use ($request) {
+    //             $q->Where('purchaser_user_id', $request->input('purchaser_user_id'));
+    //         });
+    //     }
+
+    //     return $query;
+    // }
+
+    public function scopeSearch($query, $status_search, $status_purchase_search, $id_search, $folio_search, $name_search,
+    $start_date_search, $end_date_search, $requester_search, $admin_search, $purchaser_search, $program_search)
     {
-        if ($request->input('id') != "") {
-            $query->where('id', $request->input('id'));
+        if ($status_search OR $status_purchase_search OR $id_search OR $folio_search OR $name_search 
+        OR $start_date_search OR $end_date_search OR $requester_search OR $admin_search OR $purchaser_search OR $program_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('status', $status_search);
+                });
+            }
+            if($status_purchase_search != ''){
+                $query->whereHas('purchasingProcess', function($q) use ($status_purchase_search){
+                    $q->Where('status', $status_purchase_search);
+                });
+            }
+            if($id_search != ''){
+                $query->where(function($q) use($id_search){
+                    $q->where('id', $id_search);
+                });
+            }
+            if($folio_search != ''){
+                $query->where(function($q) use($folio_search){
+                    $q->where('folio', 'LIKE', '%'.$folio_search.'%');
+                });
+            }
+            if($name_search != ''){
+                $query->where(function($q) use($name_search){
+                    $q->where('name', 'LIKE', '%'.$name_search.'%');
+                });
+            }
+            if($start_date_search != '' && $end_date_search != ''){
+                $query->where(function($q) use($start_date_search, $end_date_search){
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search." 23:59:59"])->get();
+                });
+            }
+            $array_requester_search = explode(' ', $requester_search);
+            foreach($array_requester_search as $word){
+                $query->whereHas('user' ,function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+            $array_admin_search = explode(' ', $admin_search);
+            foreach($array_admin_search as $word){
+                $query->whereHas('contractManager' ,function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+            if($purchaser_search != null){
+                $array_purchaser_search = explode(' ', $purchaser_search);
+                foreach($array_purchaser_search as $word){
+                    $query->whereHas('purchasers' ,function($query) use($word){
+                        $query->where('name', 'LIKE', '%'.$word.'%')
+                            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                            ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                    });
+                }
+            }
+            if($program_search != ''){
+                $query->where(function($q) use($program_search){
+                    $q->where('program', 'LIKE', '%'.$program_search.'%');
+                });
+            }
         }
-        if ($request->input('name') != "") {
-            $query->where('name', 'LIKE', '%' . $request->input('name') . '%');
-        }
-        if ($request->input('folio') != "") {
-            $query->where('folio', $request->input('folio'));
-        }
-        if ($request->input('request_user_id') != "") {
-            $query->where('request_user_id', $request->input('request_user_id'));
-        }
-        if ($request->input('contract_manager_id') != "") {
-            $query->where('contract_manager_id', $request->input('contract_manager_id'));
-        }
-
-        if ($request->input('purchaser_user_id') != "") {
-            $query->whereHas('purchasers', function ($q) use ($request) {
-                $q->Where('purchaser_user_id', $request->input('purchaser_user_id'));
-            });
-        }
-
-        return $query;
     }
 
     /**
