@@ -579,8 +579,9 @@
                             @if(count(auth()->user()->unreadNotifications))
                                 @foreach(auth()->user()->unreadNotifications as $notification)
                                 <a class="dropdown-item small" href="{{ route('openNotification',$notification) }}">
-                                    {!! $notification->data['icon'] !!} <b>{{ $notification->data['module'] }}</b> </br>
-                                        {{ $notification->data['subject'] }} - {{ substr($notification->data['message'],0,100) }}
+                                    {!! $notification->data['icon'] ?? null !!}
+									<b>{{ $notification->data['module'] ?? '' }}</b>
+									{{ substr($notification->data['subject'],0,100) }}
                                 </a>
                                 @endforeach
                             @else

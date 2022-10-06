@@ -8,6 +8,7 @@ use App\Models\Inv\InventoryMovement;
 use App\Models\WebService\MercadoPublico;
 use App\Services\PurchaseOrderService;
 use App\User;
+use App\Notifications\InventoryNewItem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -126,7 +127,6 @@ class RegisterInventory extends Component
         if($this->type == 2 || $this->type == 3)
 		{
 			$reception_confirmation = true;
-			/** Todo: Enviar notificación al responsable */
 		}
         else
 		{
@@ -170,7 +170,7 @@ class RegisterInventory extends Component
         $usingUser =  User::find($dataValidated['user_using_id']);
         $inventory = Inventory::create($dataValidated);
 
-        InventoryMovement::create([
+        $movement = InventoryMovement::create([
             'observations' => $dataValidated['observations'],
             'inventory_id' => $inventory->id,
             'place_id' => $dataValidated['place_id'],
@@ -180,6 +180,12 @@ class RegisterInventory extends Component
             'user_using_id' => $dataValidated['user_using_id'],
             'reception_confirmation' => $this->getReceptionConfirmation()
         ]);
+
+		/** Enviar notificación al responsable, sólo si necesita confimación */
+		if($this->getReceptionConfirmation())
+		{
+			$movement->responsibleUser->notify(new InventoryNewItem($movement));
+		}
 
         $this->collapse = false;
         $this->emit('clearSearchUser');
