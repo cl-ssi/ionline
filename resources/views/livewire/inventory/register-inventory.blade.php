@@ -151,7 +151,7 @@
     </div>
 
     <hr>
-    
+
     <h4 class="mb-3">
         Registrar Inventario
     </h4>
@@ -164,7 +164,9 @@
 
     <div class="form-row g-2">
         <fieldset class="form-group col-sm-4">
-            <label for="description">Buscar Producto o Servicio</label>
+            <label for="description">
+                Buscar Producto o Servicio
+            </label>
             <input
                 wire:model.debounce.500ms="search_product"
                 id="product-search"
@@ -175,7 +177,9 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-8">
-            <label for="product-id">Debe Seleccionar un Producto o Servicio del listado (obligatorio)</label>
+            <label for="product-id">
+                *Debe Seleccionar un Producto o Servicio del listado (obligatorio)
+            </label>
             @livewire('unspsc.product-search', ['showCode' => true])
             <input
                 class="form-control @error('unspsc_product_id') is-invalid @enderror"
@@ -212,7 +216,7 @@
     <div class="form-row g-2 mb-2">
         <fieldset class="col-md-3">
             <label for="number-inventory" class="form-label">
-                Nro. de Inventario
+                *Nro. de Inventario
             </label>
             <input
                 wire:model.debounce.500ms="number_inventory"
@@ -292,7 +296,7 @@
     <div class="form-row g-2 mb-2">
         <fieldset class="col-md-3">
             <label for="status" class="form-label">
-                Estado
+                *Estado
             </label>
             <select
                 class="form-control @error('status') is-invalid @enderror"
@@ -388,7 +392,9 @@
 
     <div class="form-row g-2">
         <fieldset class="col-md-4">
-            <label for="user-using-id" class="form-label">Usuario</label>
+            <label for="user-using-id" class="form-label">
+                *Usuario
+            </label>
             @if($type == 2)
                 @livewire('users.search-user', [
                     'placeholder' => 'Ingrese un nombre',
@@ -406,7 +412,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-            
+
             @elseif($type == 4)
                 @livewire('users.search-user', [
                     'placeholder' => 'Ingrese un nombre',
@@ -424,7 +430,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-            
+
             @else
                 <input
                     type="text"
@@ -434,11 +440,13 @@
                     readonly
                 >
             @endif
-            
+
         </fieldset>
 
         <fieldset class="col-md-4">
-            <label for="user-responsible-id" class="form-label">Responsable</label>
+            <label for="user-responsible-id" class="form-label">
+                *Responsable
+            </label>
             @if($type == 1)
                 @livewire('users.search-user', [
                     'placeholder' => 'Ingrese un nombre',
@@ -456,7 +464,7 @@
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-            
+
             @elseif($type == 4)
                 @livewire('users.search-user', [
                     'placeholder' => 'Ingrese un nombre',
@@ -488,7 +496,7 @@
 
         <fieldset class="col-md-4">
             <label for="place-id" class="form-label">
-                Ubicación
+                *Ubicación
             </label>
 
             @livewire('places.find-place', [
