@@ -8,8 +8,8 @@
                     <option value="">Seleccione...</option>
                     <option value="saved">Guardado</option>
                     <option value="pending">Pendiente</option>
-                    <option value="Approved">Finalizado</option>
-                    <option value="rejected">Rechazada</option>
+                    <option value="Approved">Aprobado</option>
+                    <option value="rejected">Rechazado</option>
                 </select>
             </fieldset>  
 
@@ -95,7 +95,7 @@
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right disabled" href="{{ route('request_forms.export') }}"><i class="fas fa-file-excel"></i> Exportar todos los formularios</a></h6>
+                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar todos los formularios</a></h6>
             </div>
         </div>
 
@@ -202,7 +202,7 @@
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#exampleModal-{{ $requestForm->id }}" title="Reasignar comprador">
                             <i class="fas fa-redo"></i>
                             </button>
-                            {{-- @include('request_form.purchase.modals.reasign_purchaser') --}}
+                            @include('request_form.purchase.modals.reasign_purchaser')
                             @endif
                             
                             @if($requestForm->signatures_file_id)

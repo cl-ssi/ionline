@@ -200,7 +200,10 @@ class RequestForm extends Model implements Auditable
                 return 'Aprobado';
                 break;
             case "closed":
-                return 'Cerado';
+                return 'Cerrado';
+                break;
+            case "saved":
+                return 'Guardado';
                 break;
         }
     }
