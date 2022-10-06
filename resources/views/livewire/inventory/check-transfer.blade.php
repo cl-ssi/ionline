@@ -4,7 +4,7 @@
     @include('inventory.nav-user')
 
     <h4 class="mb-3">
-        Revisar Traspaso
+        Completar el traspaso
     </h4>
 
     <div class="form-row g-2 mb-2">
@@ -95,7 +95,7 @@
                 class="btn btn-primary"
                 wire:click="finish"
             >
-                <i class="fas fa-save"></i> Actualizar
+                <i class="fas fa-check"></i> Recepcionar
             </button>
         </div>
     </div>

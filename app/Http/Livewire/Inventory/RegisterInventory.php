@@ -77,15 +77,17 @@ class RegisterInventory extends Component
     {
         switch ($type)
         {
+			/** Soy Usuario */
             case 1:
                 $this->user_using_id = Auth::id();
                 $this->user_responsible_id = null;
                 break;
-            case 2:
+			/** Soy Responsable */
+			case 2:
                 $this->user_responsible_id = Auth::id();
                 $this->user_using_id = null;
                 break;
-            
+            /** Soy usuario y responsable */
             case 3:
                 $this->user_using_id = Auth::id();
                 $this->user_responsible_id = Auth::id();
@@ -120,10 +122,16 @@ class RegisterInventory extends Component
 
     public function getReceptionConfirmation()
     {
+		/** Si es responsable o (usuario y responsable) */
         if($this->type == 2 || $this->type == 3)
-            $reception_confirmation = true;
+		{
+			$reception_confirmation = true;
+			/** Todo: Enviar notificación al responsable */
+		}
         else
+		{
             $reception_confirmation = false;
+		}
         return $reception_confirmation;
     }
 
