@@ -70,8 +70,7 @@
             </fieldset>
         </div>
     </div>
-
-    <br>
+    <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>
 
     @if($requests->count() > 0)
     <div class="table-responsive">
@@ -95,6 +94,7 @@
                 @foreach($requests as $requestReplacementStaff)
                 <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':'' }}" >
                     <td>{{ $requestReplacementStaff->id }} <br>
+                        <span class="badge badge-info">{{ $requestReplacementStaff->FormTypeValue }}</span> <br>
                         @switch($requestReplacementStaff->request_status)
                             @case('pending')
                                 <span class="badge badge-warning">Pendiente</span>
@@ -171,10 +171,10 @@
                             @if(($requestReplacementStaff->user->id == Auth::user()->id || 
                                     ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
                                         $requestReplacementStaff->requestSign->first()->request_status == 'pending')
-
-                                <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                            
+                                @if($requestReplacementStaff->form_type == 'replacement')
+                                    <a href="{{ route('replacement_staff.request.edit_replacement', $requestReplacementStaff) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                                @endif
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
                             @elseif($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
                                     !$requestReplacementStaff->technicalEvaluation &&

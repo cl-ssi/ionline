@@ -17,7 +17,7 @@ class RequestReplacementStaff extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
+        'form_type', 'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
         'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
         'name_to_replace', 'run', 'dv', 'other_fundament', 'work_day', 'other_work_day',
         'charges_number','job_profile_file', 'request_verification_file',
@@ -144,6 +144,17 @@ class RequestReplacementStaff extends Model implements Auditable
             break;
           case 'rejected':
             return 'Rechazada';
+            break;
+        }
+    }
+
+    public function getFormTypeValueAttribute() {
+        switch($this->form_type) {
+          case 'replacement':
+            return 'Reemplazo';
+            break;
+          case 'announcement':
+            return 'Convocatoria';
             break;
         }
     }

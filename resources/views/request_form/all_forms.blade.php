@@ -7,7 +7,13 @@
 
 @include('request_form.partials.nav')
 
-@include('request_form.purchase.partials.search')
+</div>
+
+<div class="col-sm">
+    @livewire('request-form.search-requests')
+</div>
+
+{{-- @include('request_form.purchase.partials.search')
 
 
 @if(count($request_forms) > 0)
@@ -168,6 +174,8 @@
   </div>
 </div>
 @endif
+
+--}}
 
 @endsection
 

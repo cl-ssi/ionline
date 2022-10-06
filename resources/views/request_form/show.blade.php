@@ -336,7 +336,7 @@
                         <td>{{ $passenger->origin }}</td>
                         <td>{{ $passenger->destination }}</td>
                         <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
-                        <td>{{ $passenger->return_date->format('d-m-Y H:i') }}</td>
+                        <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y H:i') : '' }}</td>
                         <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
                         <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
                     </tr>

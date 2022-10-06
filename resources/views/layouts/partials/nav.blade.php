@@ -575,15 +575,25 @@
                             @endif
                         </a>
 
-                        @if(count(auth()->user()->unreadNotifications))
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            @foreach(auth()->user()->unreadNotifications as $notification)
-                            <a class="dropdown-item" href="{{ route('openNotification',$notification) }}">
-                                {{ substr($notification->data['subject'],0,100) }}
+                            @if(count(auth()->user()->unreadNotifications))
+                                @foreach(auth()->user()->unreadNotifications as $notification)
+                                <a class="dropdown-item small" href="{{ route('openNotification',$notification) }}">
+                                    {!! $notification->data['icon'] ?? null !!}
+									<b>{{ $notification->data['module'] ?? '' }}</b>
+									{{ substr($notification->data['subject'],0,100) }}
+                                </a>
+                                @endforeach
+                            @else
+                                <div class="dropdown-item small">
+                                    <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
+                                </div>
+                            @endif
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item small" href="{{ route('allNotifications') }}">
+                                <i class="fas fa-bell" title="Notificaciones"></i> Todas mis notificaciones
                             </a>
-                            @endforeach
                         </div>
-                        @endif
                     </li>
 
                     <li class="nav-item dropdown">
@@ -614,7 +624,7 @@
 							</a>
 
                             <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
-                                <i class="fas fa-fw fa-clock"></i> {{ __('Inventario') }}
+                                <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                             </a>
 
                             @role('god')
