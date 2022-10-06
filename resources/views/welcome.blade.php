@@ -86,12 +86,25 @@
                     <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
 					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+					@if(env('APP_ENV') == 'production')
 					<a class="btn-cu btn-m btn-color-estandar m-auto" 
 						href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
 						title="Este es el botón Iniciar sesión de ClaveÚnica">
 						<span class="cl-claveunica"></span>
 						<span class="texto">Iniciar sesión</span>
 					</a>
+					@endif
+					<!--./ fin botón-->
+
+					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+					@if(env('APP_ENV') == 'testing' OR env('APP_ENV') == 'local')
+					<a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
+						href="https://uni.saludiquique.gob.cl/claveunica/i"
+						title="Este es el botón Iniciar sesión de ClaveÚnica">
+						<span class="cl-claveunica"></span>
+						<span class="texto">Iniciar sesión</span>
+					</a>
+					@endif
 					<!--./ fin botón-->
 
 				
