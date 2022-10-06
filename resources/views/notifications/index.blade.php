@@ -23,18 +23,16 @@
                 <th>Fecha</th>
                 <th>Módulo iOnline</th>
                 <th>Asunto</th>
-                <th>Mensaje</th>
                 <th>Leído / Fecha</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach(Auth()->user()->notifications()->paginate(20) as $notification)
-            <tr>
+            <tr class="{{ $notification->read_at ? 'table-success' : '' }}">
                 <td>{{ $notification->created_at->format('d-m-Y H:i:s') }}</td>
-                <td>{{ $notification->data['module'] }}</td>
+                <td>{!! $notification->data['icon'] ?? null !!} {{ $notification->data['module'] ?? '' }}</td>
                 <td>{{ $notification->data['subject'] }}</td>
-                <td>{{ $notification->data['message'] }}</td>
                 <td>
                     {{ $notification->read_at ? $notification->read_at->format('d-m-Y H:i:s') : '' }}
                 </td>
