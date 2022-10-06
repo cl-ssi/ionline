@@ -49,11 +49,11 @@
 @section('custom_js')
 
 <script>
-  $(document).ready(function(){
-    anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
-    anElement = new AutoNumeric('#price_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
-    anElement.clear();
-  })
+  // $(document).ready(function(){
+  //   anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+  //   anElement = new AutoNumeric('#price_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+  //   anElement.clear();
+  // })
 
   // function disableButton(form) {
   //   form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Guardando...';

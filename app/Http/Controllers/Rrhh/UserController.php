@@ -469,4 +469,10 @@ class UserController extends Controller
         $notification->markAsRead();
 		return redirect($route);
 	}
+
+    public function allNotifications() 
+	{
+        // $notifications = auth()->user()->notifications;
+        return view('notifications.index');
+	}
 }

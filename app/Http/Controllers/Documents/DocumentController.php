@@ -305,13 +305,17 @@ class DocumentController extends Controller
 
 
             if ($document->type == 'Acta de recepción') {
+                $image = base64_encode(file_get_contents(public_path('/images/logo_pluma.jpg')));
                 $documentFile = \PDF::loadView('documents.reception', compact('document'));
             } else if ($document->type == 'Resolución') {
-                $documentFile = \PDF::loadView('documents.resolution', compact('document'));
+                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+                $documentFile = \PDF::loadView('documents.resolution', compact('document','image'));
             } else if ($document->type == 'Circular') {
-                $documentFile = \PDF::loadView('documents.circular', compact('document'));
+                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+                $documentFile = \PDF::loadView('documents.circular', compact('document','image'));
             } else {
-                $documentFile = \PDF::loadView('documents.show', compact('document'));
+                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+                $documentFile = \PDF::loadView('documents.show', compact('document','image'));
             }
 
         $signaturesFile = new SignaturesFile();

@@ -28,17 +28,6 @@ class OuStaffSelect extends Component
 
             $this->selectedReplacementStaff = $this->requestReplacementStaff->replacement_staff_id;
         }
-
-        // $this->selectedOu = $request->ou_of_performance_id;
-        // $this->selectedReplacementStaff = $request->replacement_staff_id;
-
-        // if($request->type != null){
-        //   $this->establishments = Establecimiento::year($this->selectedYear)
-        //     ->where('tablero_poblacion', 1)
-        //     ->orderBy('comuna')
-        //     ->get();
-        // }
-
     }
 
     public function render()

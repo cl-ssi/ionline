@@ -76,6 +76,7 @@ class RequestFormController extends Controller {
             return redirect()->route('request_forms.my_forms');
         }
 
+        /*
         // $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers', 'father:id,folio,has_increased_expense')->latest('id')->paginate(30);
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')->Search($request)->latest('id')->paginate(30);
         //$users = User::where('establishment_id', Auth::user()->organizationalUnit->establishment->id);
@@ -87,8 +88,11 @@ class RequestFormController extends Controller {
         // dd($users);
 
         $request->flash();
-
+    
         return view('request_form.all_forms', compact('request_forms','users'));
+        */
+
+        return view('request_form.all_forms');
     }
 
     public function get_events_type_user()

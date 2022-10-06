@@ -4,6 +4,9 @@
         <select class="form-control" id="for_ou_of_performance_id" name="ou_of_performance_id" wire:model="selectedOu" required>
         <option value="">Seleccione...</option>
         @foreach($organizationalUnits as $organizationalUnit)
+          @if($organizationalUnit->father && $organizationalUnit->father->level >= 3 )
+            <option value="{{ $organizationalUnit->father->id }}">{{ $organizationalUnit->father->name }}</option>
+          @endif
           <option value="{{ $organizationalUnit->id }}">{{ $organizationalUnit->name }}</option>
           @foreach($organizationalUnit->childs as $child)
             <option value="{{ $child->id }}">{{ $child->name }}</option>

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EndSelectionNotification;
+use App\Notifications\ReplacementStaff\NotificationEndSelection;
 
 class ApplicantController extends Controller
 {
@@ -165,7 +166,8 @@ class ApplicantController extends Controller
         $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
         $technicalEvaluation->requestReplacementStaff->save();
 
-        //Request
+        
+        //NOTIFICACIÓN VÍA CORREO ELECTRONICO
         $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
         //Manager
         $type = 'manager';
@@ -180,6 +182,19 @@ class ApplicantController extends Controller
         Mail::to($emails)
           ->cc(env('APP_RYS_MAIL'))
           ->send(new EndSelectionNotification($technicalEvaluation));
+
+        //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
+        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, $now, 'manager');
+        $notification_reclutamiento_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'reclutamiento'));
+        //SE NOTIFICA A USUARIO QUE CREA  
+        $technicalEvaluation->requestReplacementStaff->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'user'));
+        //SE NOTIFICA A USUARIO QUE SOLICITA
+        if($technicalEvaluation->requestReplacementStaff->requesterUser){
+            $technicalEvaluation->requestReplacementStaff->requesterUser->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'requester'));
+        }
+        //SE NOTIFICA A UNIDAD DE PERSONAL
+        $notification_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
+        $notification_personal_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'personal'));
 
         return redirect()
           ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff).'#applicant')

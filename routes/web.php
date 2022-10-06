@@ -238,6 +238,7 @@ Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::get('corrige_firmas',[ServiceRequestController::class,'corrige_firmas'])->middleware('auth');
 
 Route::get('/open-notification/{notification}',[UserController::class,'openNotification'])->middleware('auth')->name('openNotification');
+Route::get('/all-notifications',[UserController::class,'allNotifications'])->middleware('auth')->name('allNotifications');
 
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', [WebserviceController::class,'fonasa'])->middleware('auth')->name('fonasa');
@@ -350,11 +351,18 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
         Route::get('/pending_personal_index', [RequestReplacementStaffController::class, 'pending_personal_index'])->name('pending_personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
+
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
+        Route::get('/create_replacement', [RequestReplacementStaffController::class, 'create_replacement'])->name('create_replacement');
+        Route::get('/create_announcement', [RequestReplacementStaffController::class, 'create_announcement'])->name('create_announcement');
+
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
-        Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
-        Route::post('/{requestReplacementStaff}/store_extension', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
+        Route::post('/{formType}/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::post('/{requestReplacementStaff}/store_extension/{formType}', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
+        
         Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
+        Route::get('/{requestReplacementStaff}/edit_replacement', [RequestReplacementStaffController::class, 'edit_replacement'])->name('edit_replacement');
+        
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');

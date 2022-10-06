@@ -106,7 +106,7 @@
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_return_date">Fecha/Hora Vuelta</label>
-                        <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local">
+                        <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local" {{$round_trip == 'one-way only' ? 'disabled' : ''}}>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-3">
@@ -205,8 +205,8 @@
                           </td>
                           <td>{{$item['origin']}}</td>
                           <td>{{$item['destination']}}</td>
-                          <td>{{ Carbon\Carbon::parse($item['departure_date'])->format('d-m-Y H:i') }} <br>
-                              {{ Carbon\Carbon::parse($item['return_date'])->format('d-m-Y H:i') }}
+                          <td>{{ Carbon\Carbon::parse($item['departure_date'])->format('d-m-Y H:i') }} /<br>
+                              {{ $item['return_date'] ? Carbon\Carbon::parse($item['return_date'])->format('d-m-Y H:i') : 'sin retorno' }}
                           </td>
                           <td>
                             @switch($item['baggage'])
