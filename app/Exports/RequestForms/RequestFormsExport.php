@@ -3,11 +3,13 @@
 namespace App\Exports\RequestForms;
 
 use App\Models\RequestForms\RequestForm;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Http\Request;
+use Livewire\Component;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -16,15 +18,15 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
 {
     use Exportable;
 
-    public function __construct(Request $request)
+    public function __construct(Collection $resultSearch)
     {
-        $this->request = $request;
+        // dd($resultSearch);
+        $this->resultSearch = $resultSearch;
     }
 
     public function collection()
     {
-        return RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
-                          ->Search($this->request)->get();
+        return $this->resultSearch;
     }
 
     public function headings(): array
@@ -37,6 +39,7 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
           'Fecha Creación',
           'Tipo / Mecanismo de Compra',
           'Descripción',
+          'Programa',
           'Usuario Gestor',
           'Comprador',
           'Items',
@@ -56,6 +59,7 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
             $requestForm->created_at->format('d-m-Y H:i'),
             ($requestForm->purchaseMechanism ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '').' '.$requestForm->SubtypeValue,
             $requestForm->name,
+            $requestForm->program,
             ($requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado').' '.($requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'UO eliminado'),
             $requestForm->purchasers->first()->FullName ?? 'No asignado',
             $requestForm->quantityOfItems(),

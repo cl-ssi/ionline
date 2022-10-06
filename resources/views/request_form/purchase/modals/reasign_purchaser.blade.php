@@ -10,14 +10,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="new-budget-form" action="{{ route('request_forms.supply.reasign_purchaser', $requestForm )}}">
+                <form method="post" id="reasign-purchaser-form" action="{{ route('request_forms.supply.reasign_purchaser', $requestForm )}}">
                     @csrf
                     <div>
                         <div class="form-row">
                             <fieldset class="form-group col-sm">
                                 <label>Comprador Actual:</label><br>
                                 <select name="" class="form-control form-control-sm" disabled>
-                                    @foreach($users->where('organizational_unit_id', 37) as $user)
+                                    @foreach($users as $user)
                                     <option value="{{ $user->id }}" {{ ($requestForm->purchasers->first()->id==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
                                     @endforeach
                                 </select>
@@ -25,16 +25,16 @@
 
                             <fieldset class="form-group col-sm">
                                 <label>Nuevo Comprador:</label><br>
-                                <select name="new_purchaser_user_id" class="form-control form-control-sm selectpicker show-tick" data-live-search="true" required>
+                                <select name="new_purchaser_user_id" class="form-control form-control-sm" required>
                                     <option value="">Seleccione...</option>
-                                    @foreach($users->where('organizational_unit_id', 37) as $user)
-                                    <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
+                                    @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ ucfirst(trans($user->TinnyName)) }}</option>
                                     @endforeach
                                 </select>
                             </fieldset>
                         </div>
 
-                        <button wire:click="savePurchaseMechanism" type="submit" class="btn btn-primary btn-sm float-right"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="submit" class="btn btn-primary btn-sm float-right"><i class="fas fa-save"></i> Guardar</button>
 
                     </div>
                 </form>
