@@ -45,12 +45,12 @@
                         {{-- {{ $movement->inventory->product->product->name }} - --}}
                         {{-- {{ $movement->inventory->product->name }} --}}
                     </td>
-                    <td nowrap>
+                    <td class="text-center" nowrap>
                         <a
                             class="btn btn-outline-primary"
                             href="{{ route('inventories.check-transfer', $movement) }}"
-                            >
-							<i class="fas fa-eye"></i> 
+                        >
+							<i class="fas fa-eye"></i>
                             Completar el traspaso
                         </a>
                     </td>
