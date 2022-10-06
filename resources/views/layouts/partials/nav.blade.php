@@ -624,7 +624,7 @@
 							</a>
 
                             <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
-                                <i class="fas fa-fw fa-clock"></i> {{ __('Inventario') }}
+                                <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                             </a>
 
                             @role('god')
