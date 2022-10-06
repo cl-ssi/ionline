@@ -57,10 +57,9 @@ class NotificationEndSigningProcess extends Notification
     public function toArray($notifiable)
     {
         return [
-            'module'  => 'Solicitudes de Contratación',
+            'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Fin proceso de firmas',
-            'message' => 'Solicitud ID: '.$this->requestReplacementStaff->id,
+            'subject' => 'Fin proceso de firmas solicitud ID: '.$this->requestReplacementStaff->id,
             'action'  => route('replacement_staff.request.index'),
         ];
     }

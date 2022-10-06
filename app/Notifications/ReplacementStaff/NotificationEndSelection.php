@@ -65,10 +65,9 @@ class NotificationEndSelection extends Notification
         }
 
         return [
-            'module'  => 'Solicitudes de Contratación',
+            'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Fin proceso de selección',
-            'message' => 'Solicitud ID: '.$this->requestReplacementStaff->id,
+            'subject' => 'Fin proceso de selección solicitud ID: '.$this->requestReplacementStaff->id,
             'action'  => route($action, $this->requestReplacementStaff->id)
         ];
     }

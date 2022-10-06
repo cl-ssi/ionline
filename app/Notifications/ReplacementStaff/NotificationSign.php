@@ -57,10 +57,9 @@ class NotificationSign extends Notification
     public function toArray($notifiable)
     {
         return [
-            'module'  => 'Solicitudes de Contratación',
+            'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
-            'subject' => 'Nueva Solicitud para Aprobación',
-            'message' => 'Ud. tiene una nueva solicitud ID: '.$this->requestReplacementStaff->id,
+            'subject' => 'Nueva Solicitud para Aprobación ID: '.$this->requestReplacementStaff->id,
             'action'  => route('replacement_staff.request.to_sign'),
         ];
     }
