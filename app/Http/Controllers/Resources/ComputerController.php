@@ -19,11 +19,30 @@ class ComputerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-      $computers = Computer::Search($request->get('search'))->paginate(50);
-      return view('resources.computer.index', compact('computers'));
-    }
+	public function index(Request $request)
+	{
+		$totales['desktop']['leased'] = Computer::where('type','desktop')->where('active_type','leased')->count();
+		$totales['desktop']['own'] = Computer::where('type','desktop')->where('active_type','own')->count();
+		$totales['desktop']['user'] = Computer::where('type','desktop')->where('active_type','user')->count();
+
+		$totales['notebook']['leased'] = Computer::where('type','notebook')->where('active_type','leased')->count();
+		$totales['notebook']['own'] = Computer::where('type','notebook')->where('active_type','own')->count();
+		$totales['notebook']['user'] = Computer::where('type','notebook')->where('active_type','user')->count();
+
+		$totales['all-in-one']['leased'] = Computer::where('type','all-in-one')->where('active_type','leased')->count();
+		$totales['all-in-one']['own'] = Computer::where('type','all-in-one')->where('active_type','own')->count();
+		$totales['all-in-one']['user'] = Computer::where('type','all-in-one')->where('active_type','user')->count();
+		
+		$totales['other']['leased'] = Computer::where('type','other')->where('active_type','leased')->count();
+		$totales['other']['own'] = Computer::where('type','other')->where('active_type','own')->count();
+		$totales['other']['user'] = Computer::where('type','other')->where('active_type','user')->count();
+
+
+		$computers = Computer::Search($request->get('search'))
+			->with('users','place')
+			->paginate(50);
+		return view('resources.computer.index', compact('computers','totales'));
+	}
 
     /**
      * Show the form for creating a new resource.
@@ -71,10 +90,13 @@ class ComputerController extends Controller
      */
     public function edit(Computer $computer)
     {
-      $users = User::OrderBy('name')->get();
-      $places = Place::All();
-      //$computer = new Computer;
-      return view('resources.computer.edit', compact('computer', 'users','places'));
+		$users = User::with('computers')
+			->orderBy('name')
+			->get();
+		$places = Place::with('location')
+			->get();
+		//$computer = new Computer;
+		return view('resources.computer.edit', compact('computer', 'users','places'));
     }
 
     /**
