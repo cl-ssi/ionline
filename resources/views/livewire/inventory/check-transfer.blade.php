@@ -1,5 +1,5 @@
 <div>
-    @section('title', 'Revisar Traspaso')
+    @section('title', 'Completar el traspaso')
 
     @include('inventory.nav-user')
 
@@ -43,6 +43,33 @@
                 class="form-control"
                 id="number-inventory"
                 value="{{ $movement->inventory->number }}"
+                readonly
+            >
+        </fieldset>
+    </div>
+
+    <div class="form-row g-2 mb-2">
+        <fieldset class="col-md-6">
+            <label for="user" class="form-label">
+                Usuario
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="user"
+                value="{{ optional($movement->inventory->using)->full_name }}"
+                readonly
+            >
+        </fieldset>
+        <fieldset class="col-md-6">
+            <label for="responsible" class="form-label">
+                Responsable
+            </label>
+            <input
+                type="text"
+                class="form-control"
+                id="responsible"
+                value="{{ optional($movement->inventory->responsible)->full_name }}"
                 readonly
             >
         </fieldset>
