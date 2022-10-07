@@ -29,6 +29,7 @@
                 <option value="Circular">Circular</option>
                 <option value="Acta de recepción">Acta de recepción</option>
                 <option value="Resolución">Resolución</option>
+                <option value="Acta de Recepción Obras Menores">Acta de Recepción Obras Menores</option>
             </select>
         </fieldset>
 
