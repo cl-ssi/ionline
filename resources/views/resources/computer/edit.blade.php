@@ -39,7 +39,7 @@
         </div>
     </fieldset>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="forBrand">Marca</label>
 			<input type="text" class="form-control" id="forBrand" name="brand" value="{{ $computer->brand }}">
@@ -57,7 +57,7 @@
 		</fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_hostname">Hostname</label>
 			<input type="text" class="form-control" id="for_hostname" name="hostname" value="{{$computer->hostname}}">
@@ -79,7 +79,7 @@
 		</fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_ip_group">Grupo IP</label>
             <select name="ip_group" id="for_ip_group" class="form-control" required>
@@ -106,7 +106,7 @@
 		</fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_operating_system">Sistema Operativo</label>
 			<input type="text" class="form-control" id="for_operating_system" placeholder="Ej: Windows 7, Windows 10, Linux, etc." name="operating_system" required="required" value="{{$computer->operating_system}}">
@@ -128,7 +128,7 @@
 		</fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_inventory_number">Número de Inventario</label>
 			<input type="integer" class="form-control" id="for_inventory_number" name="inventory_number" value="{{$computer->inventory_number}}">
@@ -154,7 +154,7 @@
 		</fieldset>
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_office_serial">Licencia Office</label>
 			<input type="text" class="form-control" id="for_office_serial" name="office_serial" value="{{$computer->office_serial}}">
@@ -176,7 +176,7 @@
 
 	<hr class="mt-4">
 
-	<div class="row">
+	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="forUsers">Asignar a persona:</label>
 			<select size="9" multiple class="custom-select" id="forUsers" name="users[]">

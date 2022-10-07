@@ -28,7 +28,7 @@ class SearchRequests extends Component
     public $selectedProgram = null;
     public $result = null;
 
-    public function querySearch($isPaginated)
+    public function querySearch($isPaginated = true)
     {
         $query = RequestForm::query();
         $query->search($this->selectedStatus,
@@ -43,6 +43,7 @@ class SearchRequests extends Component
         $this->selectedPurchaser,
         $this->selectedProgram
         )
+        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
 
         return ($isPaginated) ? $query->paginate(50) : $query->get();
@@ -50,16 +51,15 @@ class SearchRequests extends Component
 
     public function render()
     {
-        // dd($this->querySearch(true));
+        // dd($this->querySearch());
         return view('livewire.request-form.search-requests', [
-            'request_forms' => $this->querySearch(true),
+            'request_forms' => $this->querySearch(),
             'users' => User::where('organizational_unit_id', 37)->orderBy('name','asc')->get(),
         ]);
     }
 
     public function export()
     {
-        // dd($this->querySearch(false));
         return Excel::download(new RequestFormsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
 }
