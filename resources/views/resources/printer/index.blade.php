@@ -6,6 +6,68 @@
 
 <h3 class="mb-3">Impresoras</h3>
 
+<table class="table table-sm table-bordered text-center">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Arrendado</th>
+			<th>Propio</th>
+			<th>Usuario</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>Impresoras</th>
+			<td>{{ $totales['printer']['leased'] }}</td>
+			<td>{{ $totales['printer']['own'] }}</td>
+			<td>{{ $totales['printer']['user'] }}</td>
+			<td>{{ array_sum($totales['printer']) }}</td>
+		</tr>
+		<tr>
+			<th>Scanners</th>
+			<td>{{ $totales['scanner']['leased'] }}</td>
+			<td>{{ $totales['scanner']['own'] }}</td>
+			<td>{{ $totales['scanner']['user'] }}</td>
+			<td>{{ array_sum($totales['scanner']) }}</td>
+		</tr>
+		<tr>
+			<th>Plotters</th>
+			<td>{{ $totales['plotter']['leased'] }}</td>
+			<td>{{ $totales['plotter']['own'] }}</td>
+			<td>{{ $totales['plotter']['user'] }}</td>
+			<td>{{ array_sum($totales['plotter']) }}</td>
+		</tr>
+
+		<tr>
+			<th></th>
+			<th>
+				{{ 
+				$totales['printer']['leased'] + 
+				$totales['scanner']['leased'] + 
+				$totales['plotter']['leased'] 
+				}}
+			</th>
+			<th>
+				{{ 
+				$totales['printer']['own'] + 
+				$totales['scanner']['own'] + 
+				$totales['plotter']['own'] 
+				}}
+			</th>
+			<th>
+				{{ 
+				$totales['printer']['user'] + 
+				$totales['scanner']['user'] + 
+				$totales['plotter']['user']
+				}}
+			</th>
+			<th>{{ $printers->total() }}</th>
+		</tr>
+	</tbody>
+</table>
+
+
 <form class="form d-print-none" method="GET" action="{{ route('resources.printer.index') }}">
 <fieldset class="form-group">
     <div class="input-group">
