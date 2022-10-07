@@ -31,7 +31,7 @@
         </div>
   </fieldset>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col">
       <label for="forBrand">Marca</label>
       <input type="text" class="form-control" id="forBrand" placeholder="Marca" name="brand" required="required" value="{{$printer->brand}}">
@@ -48,7 +48,7 @@
     </fieldset>
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col">
       <label for="forIP">Número IP</label>
       <input type="IP" class="form-control" id="forIP" placeholder="10.x.x.x" name="ip" required="required" value="{{$printer->ip}}">
@@ -60,7 +60,7 @@
     </fieldset>
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col">
       <label for="forComment">Comentario</label>
       <input type="text" class="form-control" id="forComment" name="comment" value="{{$printer->comment}}">
@@ -86,7 +86,7 @@
 
   <hr class="mt-4">
 
-  <div class="row">
+  <div class="form-row">
 		<fieldset class="form-group col">
 			<label for="forUsers">Asignar a persona:</label>
 			<select size="9" multiple class="custom-select" id="forUsers" name="users[]">

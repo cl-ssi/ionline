@@ -188,7 +188,8 @@
                                 <i class="fas fa-save fa-2x"></i>
                             @endif
                         </td>
-                        <td>{{ $requestForm->eventRequestForms->where('signer_user_id', Auth::user()->id)->last()->signature_date??'No se ha firmado Documento' }}</td>
+                        @php($dateSupplyEvent = $requestForm->eventRequestForms->where('event_type', 'supply_event')->where('status', 'approved')->last())
+                        <td>{{ $dateSupplyEvent ? $dateSupplyEvent->signature_date->format('d-m-Y H:i') : 'No se ha firmado Documento' }}</td>
 
                         <td>
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
@@ -222,7 +223,7 @@
                             </a>
                             @endif
 
-                            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->PurchasingProcess)
+                            @if(Auth()->user()->hasPermissionTo('Request Forms: all') && $requestForm->purchasingProcess)
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                             <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
                             </span>

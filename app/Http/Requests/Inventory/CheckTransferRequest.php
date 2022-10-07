@@ -25,7 +25,7 @@ class CheckTransferRequest extends FormRequest
     {
         return [
             'status'        => 'required',
-            'observations'  => 'required|string|min:2|max:255'
+            'observations'  => 'nullable|string|max:255'
         ];
     }
 }

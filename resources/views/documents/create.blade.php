@@ -17,16 +17,16 @@
 
 <br><br>
 <hr>
-<x-head.tinymce-config/>
+<x-head.tinymce-config />
 
 <form method="post" name="form" action="{{ route('documents.store') }}" onsubmit="return validate_form()">
     @csrf
+    
 
     <div class="form-row">
         <div class="form-group col-2">
             <label for="forNumber">Número</label>
-            <input type="text" class="form-control" id="forNumber" name="number"
-                placeholder="Asignado automático">
+            <input type="text" class="form-control" id="forNumber" name="number" placeholder="Asignado automático">
         </div>
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
@@ -37,58 +37,51 @@
             <select name="type" id="formType" class="form-control" required>
                 <option value="">Seleccione tipo</option>
                 <option value="Memo" @if($document->type == 'Memo') selected @endif>Memo</option>
-                <option value="Oficio" @if($document->type == 'Oficio') selected @endif>Oficio</option>             
+                <option value="Oficio" @if($document->type == 'Oficio') selected @endif>Oficio</option>
                 <!-- <option value="Ordinario" @if($document->type == 'Ordinario') selected @endif>Ordinario</option> -->
                 <option value="Reservado" @if($document->type == 'Reservado') selected @endif>Reservado</option>
                 <option value="Circular" @if($document->type == 'Circular') selected @endif>Circular</option>
                 <option value="Acta de recepción" @if($document->type == 'Acta de recepción') selected @endif>Acta de recepción</option>
                 <option value="Resolución" @if($document->type == 'Resolución') selected @endif>Resolución</option>
+                <option value="Acta de Recepción Obras Menores" @if($document->type == 'Acta de Recepción Obras Menores') selected @endif>Acta de Recepción Obras Menores</option>
             </select>
         </div>
         <div class="form-group col">
             <label for="for_antecedent">Antecedente</label>
-            <input type="text" class="form-control" id="for_antecedent" name="antecedent"
-                placeholder="[opcional]"
-                {!! $document->antecedent ? 'value="' . $document->antecedent .'"' : '' !!}>
+            <input type="text" class="form-control" id="for_antecedent" name="antecedent" placeholder="[opcional]" {!! $document->antecedent ? 'value="' . $document->antecedent .'"' : '' !!}>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col">
             <label for="forSubject">Materia*</label>
-            <input type="text" class="form-control" id="forSubject" name="subject"
-                placeholder="Descripción del contenido del documento" required maxlength="255"
-                {!! $document->subject ? 'value="' . $document->subject .'"' : '' !!}>
+            <input type="text" class="form-control" id="forSubject" name="subject" placeholder="Descripción del contenido del documento" required maxlength="255" {!! $document->subject ? 'value="' . $document->subject .'"' : '' !!}>
         </div>
     </div>
-<div id="collapse">
-    <div class="form-row">
-        <div class="form-group col-7">
-            <div class="form-group ">
-                <label for="forFrom">De:*</label>
-                <input type="text" class="form-control" id="forFrom" name="from"                    
-                    placeholder="Nombre/Funcion" required
-                    {!! $document->from ? 'value="' . $document->from .'"' : '' !!}>
-            </div>
-            <div class="form-group ">
-                <label for="forFor">Para:*</label>
-                <input type="text" class="form-control" id="forFor" name="for"
-                    placeholder="Nombre/Funcion" required
-                    {!! $document->for ? 'value="' . $document->for .'"' : '' !!}>
-            </div>
-            <div class="form-group">
-                Mayor jerarquía:
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFrom" value="from" checked>
-                    <label class="form-check-label" for="forHierarchyFrom">DE:</label>
+    <div id="collapse">
+        <div class="form-row">
+            <div class="form-group col-7">
+                <div class="form-group ">
+                    <label for="forFrom">De:*</label>
+                    <input type="text" class="form-control" id="forFrom" name="from" placeholder="Nombre/Funcion" required {!! $document->from ? 'value="' . $document->from .'"' : '' !!}>
                 </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFor" value="for">
-                    <label class="form-check-label" for="forHierarchyFor">PARA:</label>
+                <div class="form-group ">
+                    <label for="forFor">Para:*</label>
+                    <input type="text" class="form-control" id="forFor" name="for" placeholder="Nombre/Funcion" required {!! $document->for ? 'value="' . $document->for .'"' : '' !!}>
+                </div>
+                <div class="form-group">
+                    Mayor jerarquía:
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFrom" value="from" checked>
+                        <label class="form-check-label" for="forHierarchyFrom">DE:</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="greater_hierarchy" id="forHierarchyFor" value="for">
+                        <label class="form-check-label" for="forHierarchyFor">PARA:</label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
@@ -103,17 +96,13 @@
 
         <div class="form-group col">
             <label for="forResponsible">Responsables (separado por salto de línea)</label>
-            <textarea class="form-control" id="forResponsible" rows="6"
-                name="responsible">{!! $document->responsible ? $document->responsible : '' !!}</textarea>
+            <textarea class="form-control" id="forResponsible" rows="6" name="responsible">{!! $document->responsible ? $document->responsible : '' !!}</textarea>
         </div>
     </div>
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary mr-4">Guardar</button>
-        <button type="button" class="btn btn-outline-primary"
-            data-toggle="tooltip" data-placement="top"
-            title="¡ Tampoco me pongas el mouse encima !"
-            onclick="alert('Noooo, si pones Aceptar se borrará todo.');">No apretar</button>
+        <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="¡ Tampoco me pongas el mouse encima !" onclick="alert('Noooo, si pones Aceptar se borrará todo.');">No apretar</button>
     </div>
 </form>
 
@@ -123,59 +112,63 @@
 @section('custom_js')
 
 <script type="text/javascript">
+    function validate_form() {
+        tinymce.triggerSave();
+        validity = true;
+        if (document.forms["form"]["content"].value.length == 0) {
+            validity = false;
+            alert('El "Contenido" no puede estar vacío');
+        }
+        return validity;
+    };
 
-function validate_form()
-{
-    tinymce.triggerSave();
-    validity = true;
-    if (document.forms["form"]["content"].value.length == 0)
-        { validity = false; alert('El "Contenido" no puede estar vacío'); }
-    return validity;
-};
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
+    $('#formType').change(
+        function() {
+            $("#collapse").show();
+            if ("Memo" === this.value) {
+                $("#forNumber").prop('disabled', false);
+            }
+            if ("Oficio" === this.value) {
+                $("#forNumber").prop('disabled', true);
+                $("#forNumber").val(null);
+            }
+            if ("Ordinario" === this.value) {
+                $("#forNumber").prop('disabled', true);
+                $("#forNumber").val(null);
+            }
+            if ("Reservado" === this.value) {
+                $("#forNumber").prop('disabled', true);
+                $("#forNumber").val(null);
+            }
+            if ("Circular" === this.value) {
+                $("#forNumber").prop('disabled', false);
+                $("#forFrom").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#forNumber").prop('disabled', true);
+                $("#collapse").hide();
+            }
+            if ("Acta de recepción" === this.value) {
+                var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE ENTREGA</h1> <p><strong>Datos de ubicación</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Establecimiento</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Dirección</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Unidad Organizacional</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Ubicación (oficina)</td> <td></td> </tr> </tbody> </table> <p><strong>Características de la especie</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Inventario SSI</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Tipo de equipo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Marca</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Modelo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Número de serie</td> <td></td> </tr> </tbody> </table> <p><strong>Responsable</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Nombre completo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Función / cargo</td> <td></td> </tr>  </tbody> </table> <table style="height: 36px; width: 100%; border-collapse: collapse; margin-top: 60px" border="0"><tbody><tr><td style="width: 50%; height: 18px; text-align: center;">__________________________</td><td style="width:50%; height: 18px; text-align: center;">__________________________</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;">{{Auth::user()->TinnyName}}</td><td style="width: 50%; height: 18px; text-align: center;">SSI</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien entrega</strong></td><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien recibe</strong></td></tr><tr><td></td><td style="width: 50%; height: 38px; text-align: center;"><br>_____/_____/_____________</td></tr></tbody></table>';
+                tinyMCE.activeEditor.setContent(contenido);
+            }
+            if ("Acta de Recepción Obras Menores" === this.value) {
+                var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE RECEPCION CONFORME</h1><br><h1 style="text-align: center; text-decoration: underline;">OBRAS MENORES Nº{{$correlative_acta_menor->correlative}} /2022</h1><p>En Iquique, a dìa de mes 202x se emite el "Acta Recepción", que corresponde a:</p> <table border="1" cellspacing="0"  cellpadding="0"> <tbody> <tr> <td width="151"valign="top"> <p>Servicio</p> </td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Unidad Requirente</p></td> <td width="438"valign="top"></td></tr><tr><td width="151"valign="top"><p>FR</p></td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Proveedor</p></td> <td width="438"valign="top"></td></tr><tr><td width="151"valign="top"><p>Cotización</p></td> <td width="438"valign="top"> </td></tr><tr><td width="151"valign="top"> <p>Fuente Financiamiento</p></td> <td width="438"valign="top"> </td> </tr> </tbody> </table><br><br><table border="1"cellspacing="0" cellpadding="0"width="586"><tbody><tr><td width="85"rowspan="2"><p align="center"><strong>DISPOSITIVO</strong></p></td><td width="170"rowspan="2"><p align="center"><strong>TRABAJOS SOLICITADOS</strong></p></td><td width="331"colspan="3"valign="top"><p align="center"><strong>TRABAJOS REALIZADOS</strong></p></td></tr><tr><td width="66"valign="top"><p align="center"><strong>Realizado</strong></p></td><td width="66"valign="top"><p align="center"><strong>No Realizado</strong></p></td><td width="198"><p align="center"><strong>Observaciones</strong></p></td></tr><tr><td width="85"rowspan="7"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"><p align="center"></p></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"><p align="center"></p></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="586"colspan="5"><p><strong>OTROS</strong></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr><tr><td width="85"></td><td width="170"></td><td width="66"valign="top"></td><td width="66"valign="top"><p align="right"></p></td><td width="198"><p align="right"></p></td></tr></tbody></table><br><br><br><p>NOTA:<br/>Se deja constancia que se recepcionan conforme<br/>Para constancia firman:</p>';
+                tinyMCE.activeEditor.setContent(contenido);
+            }
 
-$('#formType').change(
-    function() {
-        $("#collapse").show();
-        if("Memo" === this.value) {
-            $("#forNumber").prop('disabled', false);
+            if ("Resolución" === this.value) {
+                $("#forFrom").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#forNumber").prop('disabled', true);
+                $("#collapse").hide();
+                $("#forSubject").val('Exenta');
+            }
         }
-        if("Oficio" === this.value) {
-            $("#forNumber").prop('disabled', true);
-            $("#forNumber").val(null);
-        }
-        if("Ordinario" === this.value) {
-            $("#forNumber").prop('disabled', true);
-            $("#forNumber").val(null);
-        }
-        if("Reservado" === this.value) {
-            $("#forNumber").prop('disabled', true);
-            $("#forNumber").val(null);
-        }
-        if("Circular" === this.value) {
-            $("#forNumber").prop('disabled', false);
-            $("#forFrom").removeAttr( "required" );
-            $("#forFor").removeAttr( "required" );
-            $("#forNumber").prop('disabled', true);
-            $("#collapse").hide();
-        }
-        if("Acta de recepción" === this.value) {
-            var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE ENTREGA</h1> <p><strong>Datos de ubicación</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Establecimiento</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Dirección</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Unidad Organizacional</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Ubicación (oficina)</td> <td></td> </tr> </tbody> </table> <p><strong>Características de la especie</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Inventario SSI</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Tipo de equipo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Marca</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Modelo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Número de serie</td> <td></td> </tr> </tbody> </table> <p><strong>Responsable</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Nombre completo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Función / cargo</td> <td></td> </tr>  </tbody> </table> <table style="height: 36px; width: 100%; border-collapse: collapse; margin-top: 60px" border="0"><tbody><tr><td style="width: 50%; height: 18px; text-align: center;">__________________________</td><td style="width:50%; height: 18px; text-align: center;">__________________________</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;">{{Auth::user()->TinnyName}}</td><td style="width: 50%; height: 18px; text-align: center;">SSI</td></tr><tr><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien entrega</strong></td><td style="width: 50%; height: 18px; text-align: center;"><strong>Quien recibe</strong></td></tr><tr><td></td><td style="width: 50%; height: 38px; text-align: center;"><br>_____/_____/_____________</td></tr></tbody></table>';
-            tinyMCE.activeEditor.setContent(contenido);
-        }
-        if("Resolución" === this.value) {
-            $("#forFrom").removeAttr( "required" );
-            $("#forFor").removeAttr( "required" );
-            $("#forNumber").prop('disabled', true);
-            $("#collapse").hide();
-            $("#forSubject").val('Exenta');
-        }
-    }
-);
-
+    );
 </script>
 
 @endsection

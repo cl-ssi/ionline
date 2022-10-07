@@ -19,8 +19,20 @@ class PrinterController extends Controller
      */
     public function index(Request $request)
     {
-      $printers = Printer::Search($request->get('search'))->paginate(50);
-      return view('resources.printer.index', compact('printers'));
+		$totales['printer']['leased'] = Printer::where('type','printer')->where('active_type','leased')->count();
+		$totales['printer']['own'] = Printer::where('type','printer')->where('active_type','own')->count();
+		$totales['printer']['user'] = Printer::where('type','printer')->where('active_type','user')->count();
+
+		$totales['scanner']['leased'] = Printer::where('type','scanner')->where('active_type','leased')->count();
+		$totales['scanner']['own'] = Printer::where('type','scanner')->where('active_type','own')->count();
+		$totales['scanner']['user'] = Printer::where('type','scanner')->where('active_type','user')->count();
+
+		$totales['plotter']['leased'] = Printer::where('type','plotter')->where('active_type','leased')->count();
+		$totales['plotter']['own'] = Printer::where('type','plotter')->where('active_type','own')->count();
+		$totales['plotter']['user'] = Printer::where('type','plotter')->where('active_type','user')->count();
+
+		$printers = Printer::Search($request->get('search'))->paginate(50);
+		return view('resources.printer.index', compact('printers','totales'));
     }
 
     /**
@@ -69,9 +81,12 @@ class PrinterController extends Controller
      */
     public function edit(Printer $printer)
     {
-      $users = User::OrderBy('name')->get();
-      $places = Place::All();
-      return view('resources.printer.edit', compact('printer', 'users','places'));
+		$users = User::with('printers')
+			->OrderBy('name')
+			->get();
+		$places = Place::with('location')
+			->get();
+		return view('resources.printer.edit', compact('printer', 'users','places'));
     }
 
     /**
