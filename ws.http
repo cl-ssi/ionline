@@ -1,9 +1,0 @@
-### Post-based search for Patients
-POST https://i.saludiquique.gob.cl/api/post-request-inputs
-Content-Type: application/json
-
-{
-	"email" : "test@gmail.com",
-	"name" : "Test user",
-	"password" : "testpassword",
-}
