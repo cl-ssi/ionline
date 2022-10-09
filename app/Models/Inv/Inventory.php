@@ -148,4 +148,14 @@ class Inventory extends Model implements Auditable
     {
         return money($this->po_price);
     }
+
+	public function getEstadoAttribute()
+	{
+		switch($this->status)
+		{
+			case 1: return 'Bueno'; break;
+			case 0: return 'Regular'; break;
+			case -1: return 'Malo'; break;
+		}
+	}
 }
