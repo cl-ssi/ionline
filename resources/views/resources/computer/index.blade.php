@@ -39,6 +39,7 @@
                 <td>{{ $inventory->place->name }}</td>
                 <td>{{ $inventory->estado }}</td>
                 <td>
+                    <!-- TODO: #109 Agregar action, permitir editar inventory + computer -->
                     <!-- <a href="" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-edit" aria-hidden="true"></span></a> -->
                 </td>
