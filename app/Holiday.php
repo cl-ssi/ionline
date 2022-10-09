@@ -5,7 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-/** TODO mover a directorio models */
+/** TODO #106 mover a directorio models */
 class Holiday extends Model
 {
     /**
