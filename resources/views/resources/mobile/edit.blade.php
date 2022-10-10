@@ -51,7 +51,6 @@
                 <span class="fas fa-trash" aria-hidden="true"></span> Eliminar
             </button>
 		</form>
-
 	</fieldset>
 
 @endsection
