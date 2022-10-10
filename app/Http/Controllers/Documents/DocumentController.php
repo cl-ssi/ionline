@@ -67,7 +67,10 @@ class DocumentController extends Controller
     public function create()
     {
         $document = new Document();
-        return view('documents.create', compact('document'));
+        $correlative_acta_menor = Correlative::where('type','Acta de Recepción Obras Menores')->first();
+        //dd($correlative_acta_menor);
+        //$correlative = new Document();
+        return view('documents.create', compact('document','correlative_acta_menor'));
     }
 
     /**
@@ -87,7 +90,8 @@ class DocumentController extends Controller
             if (
                 $request->type == 'Memo' or
                 $request->type == 'Acta de recepción' or
-                $request->type == 'Circular'
+                $request->type == 'Circular' or
+                $request->type == 'Acta de Recepción Obras Menores'
             ) {
 
                 $document->number = Correlative::getCorrelativeFromType($request->type);
