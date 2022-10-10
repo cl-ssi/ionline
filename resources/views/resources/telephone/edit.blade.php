@@ -4,9 +4,9 @@
 
 @section('content')
 
-<h3 class="mb-3">Editar Teléfono</h3>
+<h3 class="mb-3">Editar Teléfono Fijo</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('resources.telephone.update',$telephone) }}">
+<form method="POST" class="form-horizontal" action="{{ route('resources.telephone.update', $telephone) }}">
 	@method('PUT')
 	@csrf
 
@@ -38,15 +38,10 @@
 	</fieldset>
 
 	<fieldset class="form-group">
-		<label for="forUsers">Asignar a persona:</label>
-		<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
-			@foreach($users as $user)
-			  <option value="{{ $user->id }}" {{$user->telephones->contains($telephone->id)?'selected':''}}> {{$user->FullName}} </option>
-			@endforeach
-		</select>
-		<small class="form-text text-muted">
-			Ctrl + Click para deseleccionar un usuario o seleccionar más de uno
-		</small>
+		@livewire('multiple-user-search',[
+            'myUsers' => $telephone->users->pluck('id'),
+            'nameInput' => 'users'
+        ])
 	</fieldset>
 
 	<fieldset class="form-group">
