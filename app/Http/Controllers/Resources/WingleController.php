@@ -15,8 +15,8 @@ class WingleController extends Controller
      */
     public function index()
     {
-      $wingles = Wingle::all();
-      return view('resources.wingle.index', compact('wingles'));
+        $wingles = Wingle::all();
+        return view('resources.wingle.index', compact('wingles'));
     }
 
     /**
@@ -26,7 +26,7 @@ class WingleController extends Controller
      */
     public function create()
     {
-      return view('resources.wingle.create');
+        return view('resources.wingle.create');
     }
 
     /**
@@ -37,10 +37,10 @@ class WingleController extends Controller
      */
     public function store(Request $request)
     {
-      $wingle = new Wingle($request->All());
-      $wingle->save();
-      session()->flash('info', 'El Wingle '.$wingle->brand.' ha sido creado.');
-      return redirect()->route('resources.wingle.index');
+        $wingle = new Wingle($request->All());
+        $wingle->save();
+        session()->flash('info', 'El Wingle ' . $wingle->brand . ' ha sido creado.');
+        return redirect()->route('resources.wingle.index');
     }
 
     /**
@@ -74,10 +74,10 @@ class WingleController extends Controller
      */
     public function update(Request $request, Wingle $wingle)
     {
-      $wingle->fill($request->all());
-      $wingle->save();
-      session()->flash('success', 'El Wingle '.$wingle->brand.' ha sido actualizado.');
-      return redirect()->route('resources.wingle.index');
+        $wingle->fill($request->all());
+        $wingle->save();
+        session()->flash('success', 'El Wingle ' . $wingle->brand . ' ha sido actualizado.');
+        return redirect()->route('resources.wingle.index');
     }
 
     /**
@@ -88,8 +88,8 @@ class WingleController extends Controller
      */
     public function destroy(Wingle $wingle)
     {
-      $wingle->delete();
-      session()->flash('success', 'La Banda Ancha Móvil '.$wingle->brand.' ha sido eliminada.');
-      return redirect()->route('resources.wingle.index');
+        $wingle->delete();
+        session()->flash('success', 'La Banda Ancha Móvil ' . $wingle->brand . ' ha sido eliminada.');
+        return redirect()->route('resources.wingle.index');
     }
 }
