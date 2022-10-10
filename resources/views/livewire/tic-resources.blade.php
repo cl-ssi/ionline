@@ -2,7 +2,7 @@
 
 @section('title', 'Lista de Computadores')
 
-<h3 class="mb-3">Computadores</h3>
+<h3 class="mb-3">Recursos TIC</h3>
 
 <h4>Desde nuevo módulo de inventario</h4>
 
