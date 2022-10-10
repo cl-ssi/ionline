@@ -45,12 +45,15 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
           'Items',
           '',
           'Presupuesto',
-          'Estado Proceso compra'
+          'Estado Proceso compra',
+          'Fecha de Aprobación Depto Abastecimiento'
         ];
     }
 
     public function map($requestForm): array
     {
+        $dateSupplyEvent = $requestForm->eventRequestForms->where('event_type', 'supply_event')->where('status', 'approved')->last();
+
         return [
             $requestForm->id,
             $requestForm->getStatus(),
@@ -66,6 +69,7 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
             $requestForm->symbol_currency,
             number_format($requestForm->estimated_expense,$requestForm->precision_currency,".",""),
             $requestForm->getStatus() == 'Aprobado' ? ($requestForm->purchasingProcess ? $requestForm->purchasingProcess->getStatus() : 'En espera') : '',
+            $dateSupplyEvent ? $dateSupplyEvent->signature_date->format('d-m-Y H:i') : 'No se ha firmado Documento'
         ];
     }
 }
