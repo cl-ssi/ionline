@@ -500,7 +500,13 @@ class ReportController extends Controller
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
         $ServiceRequest->programm_name == "Covid 2022"
       ) {
-        $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+        //07/10: nataly monardez manda nuevo formato de contrato covid mensual
+        if($ServiceRequest->program_contract_type == "Mensual"){
+          $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_oct_2022', compact('ServiceRequest'));
+        }else{
+          $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+        }
+        
       } else if (
         $ServiceRequest->responsabilityCenter->establishment_id == 38 and
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
