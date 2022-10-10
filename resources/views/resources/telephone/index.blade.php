@@ -48,25 +48,25 @@
 				<td>{{ $telephones->firstItem() + $key }} </td>
 				<td>{{ $telephone->number }} </td>
 				<td>{{ $telephone->minsal }}</td>
-        <td><small> {{ $telephone->mac }}</small></td>
-				<td>
-            @if($telephone->users->count() > 0)
-                @foreach($telephone->users as $user)
-                    {{ $user->FullName }} <br>
-                @endforeach
-            @endif
-        </td>
-        <td>
-            {{ ($telephone->place)? $telephone->place->location->name:'' }}
-        </td>
-        <td>
-            <small>{{ ($telephone->place)? $telephone->place->name:'' }}</small>
-        </td>
-				<td>
-					  <a href="{{ route('resources.telephone.edit', $telephone->id) }}" class="btn btn-outline-secondary btn-sm">
-					     <span class="fas fa-edit" aria-hidden="true"></span>
-            </a>
-				</td>
+                <td><small> {{ $telephone->mac }}</small></td>
+                <td>
+                    @if($telephone->users->count() > 0)
+                        @foreach($telephone->users as $user)
+                            {{ $user->FullName }} <br>
+                        @endforeach
+                    @endif
+                </td>
+                <td>
+                    {{ ($telephone->place) ? $telephone->place->location->name : '' }}
+                </td>
+                <td>
+                    <small>{{ ($telephone->place) ? $telephone->place->name : '' }}</small>
+                </td>
+                <td>
+                    <a href="{{ route('resources.telephone.edit', $telephone->id) }}" class="btn btn-outline-secondary btn-sm">
+                        <span class="fas fa-edit" aria-hidden="true"></span>
+                    </a>
+                </td>
 			</tr>
 			@endforeach
 		</tbody>
