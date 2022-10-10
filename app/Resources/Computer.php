@@ -9,73 +9,80 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Computer extends Model implements Auditable
 {
-    //
+    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'ip_group', 'rack', 'vlan',
-        'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment', 
+        'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment',
         'status', 'office_serial', 'windows_serial', 'place_id'
     ];
 
-    public function users() {
-    	return $this->belongsToMany('\App\User','res_computer_user')->withTimestamps();
+    public function users()
+    {
+        return $this->belongsToMany('\App\User', 'res_computer_user')->withTimestamps();
     }
 
-    public function place() {
+    public function place()
+    {
         return $this->belongsTo(Place::class);
     }
 
-    public function scopeSearch($query, $search) {
-        if($search != "") {
-            return $query->where('brand', 'LIKE', '%'.$search.'%')
-                         ->orWhere('model', 'LIKE', '%'.$search.'%')
-                         ->orWhere('ip', 'LIKE', '%'.$search.'%')
-                         ->orWhere('serial', 'LIKE', '%'.$search.'%')
-                         ->orWhere('inventory_number', 'LIKE', '%'.$search.'%');
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "")
+        {
+            return $query->where('brand', 'LIKE', '%' . $search . '%')
+                ->orWhere('model', 'LIKE', '%' . $search . '%')
+                ->orWhere('ip', 'LIKE', '%' . $search . '%')
+                ->orWhere('serial', 'LIKE', '%' . $search . '%')
+                ->orWhere('inventory_number', 'LIKE', '%' . $search . '%');
         }
     }
 
-    public function tipo(){
-          switch ($this->type) {
+    public function tipo()
+    {
+        switch ($this->type)
+        {
             case 'desktop':
-              $valor='PC Escritorio';
-              break;
+                $valor = 'PC Escritorio';
+                break;
             case 'all-in-one':
-              $valor='PC all-in-one';
-              break;
+                $valor = 'PC all-in-one';
+                break;
             case 'notebook':
-              $valor='PC Notebook';
-              break;
+                $valor = 'PC Notebook';
+                break;
             case 'other':
-              $valor='PC Otro';
-              break;
+                $valor = 'PC Otro';
+                break;
             default:
-              $valor='';
-              break;
-          }
-          return $valor;
+                $valor = '';
+                break;
         }
+        return $valor;
+    }
 
-        public function tipoActivo(){
-              switch ($this->active_type) {
-                case 'leased':
-                  $valor='Arrendado';
-                  break;
-                case 'own':
-                  $valor='Propio';
-                  break;
-                case 'user':
-                  $valor='Usuario';
-                  break;
-                default:
-                  $valor='';
-                  break;
-              }
-              return $valor;
-            }
+    public function tipoActivo()
+    {
+        switch ($this->active_type)
+        {
+            case 'leased':
+                $valor = 'Arrendado';
+                break;
+            case 'own':
+                $valor = 'Propio';
+                break;
+            case 'user':
+                $valor = 'Usuario';
+                break;
+            default:
+                $valor = '';
+                break;
+        }
+        return $valor;
+    }
 
-    use SoftDeletes;
     /**
      * The attributes that should be mutated to dates.
      *

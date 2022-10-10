@@ -84,15 +84,10 @@
 
 	<div class="row">
 		<fieldset class="form-group col">
-			<label for="forUsers">Asignar a persona:</label>
-			<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
-				@foreach($users as $user)
-					<option value="{{ $user->id }}">{{ $user->FullName }}</option>
-				@endforeach
-			</select>
-			<small class="form-text text-muted">
-				Ctrl + Click para deseleccionar un usuario o seleccionar más de uno
-			</small>
+			@livewire('multiple-user-search',[
+                'myUsers' => [],
+                'nameInput' => 'users'
+            ])
 		</fieldset>
 
 		<fieldset class="form-group col">

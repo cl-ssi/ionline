@@ -9,15 +9,15 @@
 <form method="POST" class="form-horizontal" action="{{ route('resources.mobile.store') }}">
 	{{ csrf_field() }}
 
-	<fieldset class="form-group">
-		<label for="forNumero">Número</label>
-		<input type="integer" class="form-control" id="forNumero" placeholder="Número" name="number" required="required">
-	</fieldset>
+    <fieldset class="form-group">
+        <label for="forNumero">Número</label>
+        <input type="integer" class="form-control" id="forNumero" placeholder="Número" name="number" required="required">
+    </fieldset>
 
-	<fieldset class="form-group">
-		<label for="forBrand">Marca</label>
-		<input type="text" class="form-control" id="forBrand" name="brand" required="required">
-	</fieldset>
+    <fieldset class="form-group">
+        <label for="forBrand">Marca</label>
+        <input type="text" class="form-control" id="forBrand" name="brand" required="required">
+    </fieldset>
 
     <fieldset class="form-group">
         <label for="forModel">Modelo</label>

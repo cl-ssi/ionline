@@ -96,25 +96,25 @@
         <tr>
             <th></th>
             <th>
-                {{ 
-                $totales['desktop']['leased'] + 
-                $totales['all-in-one']['leased'] + 
+                {{
+                $totales['desktop']['leased'] +
+                $totales['all-in-one']['leased'] +
                 $totales['notebook']['leased'] +
                 $totales['other']['leased']
                 }}
             </th>
             <th>
-                {{ 
-                $totales['desktop']['own'] + 
-                $totales['all-in-one']['own'] + 
+                {{
+                $totales['desktop']['own'] +
+                $totales['all-in-one']['own'] +
                 $totales['notebook']['own'] +
                 $totales['other']['own']
                 }}
             </th>
             <th>
-                {{ 
-                $totales['desktop']['user'] + 
-                $totales['all-in-one']['user'] + 
+                {{
+                $totales['desktop']['user'] +
+                $totales['all-in-one']['user'] +
                 $totales['notebook']['user'] +
                 $totales['other']['user']
                 }}

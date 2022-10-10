@@ -12,7 +12,8 @@
 
         <div class="input-group-prepend">
             <a class="btn btn-primary" href="{{ route('resources.mobile.create') }}">
-                <i class="fas fa-plus"></i> Agregar nuevo</a>
+                <i class="fas fa-plus"></i> Agregar nuevo
+            </a>
         </div>
 
         <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)"
@@ -20,7 +21,8 @@
 
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">
-                <i class="fas fa-search" aria-hidden="true"></i></button>
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
         </div>
 
     </div>
@@ -35,7 +37,7 @@
 				<th scope="col">Número</th>
 				<th scope="col">Marca</th>
                 <th scope="col">Modelo</th>
-				<th scope="col">Asociado a</th>
+				<th scope="col">Asociado a.</th>
 				<th scope="col">Accion</th>
 			</tr>
 		</thead>
@@ -46,7 +48,7 @@
 				<td>{{ $mobile->number }}</td>
 				<td>{{ $mobile->brand }}</td>
                 <td>{{ $mobile->model }}</td>
-				<td>{{ @$mobile->user->FullName ?: '' }}</td>
+				<td>{{ @$mobile->user->FullName ? : '' }}</td>
 				<td>
 					<a href="{{ route('resources.mobile.edit', $mobile->id) }}" class="btn btn-outline-secondary btn-sm">
 					<span class="fas fa-edit" aria-hidden="true"></span></a>
