@@ -11,7 +11,6 @@ use App\Http\Requests\Resources\StoreComputerRequest;
 use App\Http\Requests\Resources\UpdateComputerRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComputersExport;
-use App\Models\Inv\Inventory;
 
 class ComputerController extends Controller
 {
@@ -22,11 +21,6 @@ class ComputerController extends Controller
      */
     public function index(Request $request)
     {
-        $inventories = Inventory::with('unspscProduct', 'using', 'responsible', 'place')
-            ->whereRelation('unspscProduct', 'code', '>=', '43000000')
-            ->whereRelation('unspscProduct', 'code', '<=', '44000000')
-            ->paginate(50);
-
         $totales['notebook']['leased'] = Computer::where('type', 'notebook')->where('active_type', 'leased')->count();
         $totales['notebook']['own'] = Computer::where('type', 'notebook')->where('active_type', 'own')->count();
         $totales['notebook']['user'] = Computer::where('type', 'notebook')->where('active_type', 'user')->count();
@@ -46,7 +40,7 @@ class ComputerController extends Controller
         $computers = Computer::Search($request->get('search'))
             ->with('users', 'place')
             ->paginate(50);
-        return view('resources.computer.index', compact('computers', 'totales', 'inventories'));
+        return view('resources.computer.index', compact('computers', 'totales'));
     }
 
     /**

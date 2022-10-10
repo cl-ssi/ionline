@@ -236,6 +236,11 @@
 
                         <h6 class="dropdown-header">Recursos informáticos</h6>
 
+                        <a class="dropdown-item {{ active('resources.tic') }}"
+                            href="{{ route('resources.tic') }}">
+                            <i class="fas fa-boxes fa-fw"></i> Bandeja de inventario
+                        </a>
+
                         <a class="dropdown-item {{ active('resources.computer.*') }}"
                             href="{{ route('resources.computer.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Computadores

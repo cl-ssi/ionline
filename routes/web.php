@@ -63,6 +63,7 @@ use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Documents\SignatureController;
 use App\Http\Controllers\Documents\ParteFileController;
 
+use App\Http\Livewire\TicResources;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\MobileController;
 use App\Http\Controllers\Resources\PrinterController;
@@ -188,6 +189,7 @@ use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\PendingMovements;
 use App\Http\Livewire\Inventory\RegisterInventory;
+
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
@@ -470,9 +472,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 
 
 /** Inicio Recursos */
-Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function () {
+Route::prefix('resources')->name('resources.')->middleware('auth')->group(function () {
 
     Route::get('report', [App\Http\Controllers\Resources\ReportController::class,'report'])->name('report');
+	Route::get('tic', TicResources::class)->name('tic');
 
     Route::prefix('telephones')->name('telephone.')->group(function () {
         Route::get('/', [TelephoneController::class,'index'])->name('index');
