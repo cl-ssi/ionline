@@ -31,39 +31,39 @@
         </div>
   </fieldset>
 
-  <div class="form-row">
+<div class="form-row">
     <fieldset class="form-group col">
-      <label for="forBrand">Marca</label>
-      <input type="text" class="form-control" id="forBrand" placeholder="Marca" name="brand" required="required" value="{{$printer->brand}}">
+        <label for="forBrand">Marca</label>
+        <input type="text" class="form-control" id="forBrand" placeholder="Marca" name="brand" required="required" value="{{$printer->brand}}">
     </fieldset>
 
     <fieldset class="form-group col">
-      <label for="forModel">Modelo</label>
-      <input type="text" class="form-control" id="forModel" placeholder="Modelo del equipo" name="model" required="required" value="{{$printer->model}}">
+        <label for="forModel">Modelo</label>
+        <input type="text" class="form-control" id="forModel" placeholder="Modelo del equipo" name="model" required="required" value="{{$printer->model}}">
     </fieldset>
 
     <fieldset class="form-group col">
-      <label for="forSerial">Serial</label>
-      <input type="text" class="form-control" id="forSerial" placeholder="Serial del equuipo" name="serial" required="required" value="{{$printer->serial}}">
+        <label for="forSerial">Serial</label>
+        <input type="text" class="form-control" id="forSerial" placeholder="Serial del equuipo" name="serial" required="required" value="{{$printer->serial}}">
     </fieldset>
-  </div>
+</div>
 
-  <div class="form-row">
+<div class="form-row">
     <fieldset class="form-group col">
-      <label for="forIP">Número IP</label>
-      <input type="IP" class="form-control" id="forIP" placeholder="10.x.x.x" name="ip" required="required" value="{{$printer->ip}}">
+        <label for="forIP">Número IP</label>
+        <input type="IP" class="form-control" id="forIP" placeholder="10.x.x.x" name="ip" required="required" value="{{$printer->ip}}">
     </fieldset>
 
     <fieldset class="form-group col">
-      <label for="for_mac_address">Dirección MAC</label>
-      <input type="text" class="form-control" id="for_mac_address" placeholder="00:1B:2C:3D:xx:xx" name="mac_address" required="required" value="{{$printer->mac_address}}">
+        <label for="for_mac_address">Dirección MAC</label>
+        <input type="text" class="form-control" id="for_mac_address" placeholder="00:1B:2C:3D:xx:xx" name="mac_address" required="required" value="{{$printer->mac_address}}">
     </fieldset>
-  </div>
+</div>
 
-  <div class="form-row">
+<div class="form-row">
     <fieldset class="form-group col">
-      <label for="forComment">Comentario</label>
-      <input type="text" class="form-control" id="forComment" name="comment" value="{{$printer->comment}}">
+        <label for="forComment">Comentario</label>
+        <input type="text" class="form-control" id="forComment" name="comment" value="{{$printer->comment}}">
     </fieldset>
 
     <fieldset class="form-group col">
@@ -88,15 +88,10 @@
 
   <div class="form-row">
 		<fieldset class="form-group col">
-			<label for="forUsers">Asignar a persona:</label>
-			<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
-				@foreach($users as $user)
-          <option value="{{ $user->id }}" {{ $user->printers->contains($printer->id) ? 'selected': ''}}>{{ $user->FullName }}</option>
-				@endforeach
-			</select>
-			<small class="form-text text-muted">
-				Ctrl + Click para deseleccionar un usuario o seleccionar más de uno
-			</small>
+			@livewire('multiple-user-search',[
+                'myUsers' => $printer->users,
+                'nameInput' => 'users'
+            ])
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -113,20 +108,21 @@
 		</fieldset>
 	</div>
 
-	 <fieldset class="form-group">
-      <button type="submit" class="btn btn-primary">
-        <span class="fas fa-save" aria-hidden="true"></span>Actualizar
-      </button>
+    <fieldset class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <span class="fas fa-save" aria-hidden="true"></span> Actualizar
+        </button>
 
-  </form>
-      <a href="{{ route('resources.printer.index') }}" class="btn btn-outline-dark">Cancelar</a>
+    </form>
+        <a href="{{ route('resources.printer.index') }}" class="btn btn-outline-dark">Cancelar</a>
 
-      <form method="POST" action="{{ route('resources.printer.destroy', $printer) }}" class="d-inline">
-          @csrf
-          @method('DELETE')
-          <button class="btn btn-danger float-right"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
-      </form>
-   </fieldset>
-
+        <form method="POST" action="{{ route('resources.printer.destroy', $printer) }}" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-danger float-right">
+                <span class="fas fa-trash" aria-hidden="true"></span> Eliminar
+            </button>
+        </form>
+    </fieldset>
 
 @endsection
