@@ -37,7 +37,8 @@
 
 	<fieldset class="form-group">
 		<button type="submit" class="btn btn-primary">
-			<span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
+			<span class="fas fa-save" aria-hidden="true"></span> Actualizar
+        </button>
 
 		</form>
 
@@ -46,7 +47,9 @@
 		<form method="POST" action="{{ route('resources.mobile.destroy', $mobile) }}" class="d-inline">
 			@csrf
             @method('DELETE')
-			<button class="btn btn-danger float-right"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
+			<button class="btn btn-danger float-right">
+                <span class="fas fa-trash" aria-hidden="true"></span> Eliminar
+            </button>
 		</form>
 
 	</fieldset>

@@ -48,25 +48,25 @@
 		<tr>
 			<th></th>
 			<th>
-				{{ 
-				$totales['desktop']['leased'] + 
-				$totales['all-in-one']['leased'] + 
+				{{
+				$totales['desktop']['leased'] +
+				$totales['all-in-one']['leased'] +
 				$totales['notebook']['leased'] +
 				$totales['other']['leased']
 				}}
 			</th>
 			<th>
-				{{ 
-				$totales['desktop']['own'] + 
-				$totales['all-in-one']['own'] + 
+				{{
+				$totales['desktop']['own'] +
+				$totales['all-in-one']['own'] +
 				$totales['notebook']['own'] +
 				$totales['other']['own']
 				}}
 			</th>
 			<th>
-				{{ 
-				$totales['desktop']['user'] + 
-				$totales['all-in-one']['user'] + 
+				{{
+				$totales['desktop']['user'] +
+				$totales['all-in-one']['user'] +
 				$totales['notebook']['user'] +
 				$totales['other']['user']
 				}}
@@ -85,7 +85,8 @@
 
 					<div class="input-group-prepend">
 						<a class="btn btn-primary" href="{{ route('resources.computer.create') }}">
-							<i class="fas fa-plus"></i> Agregar nuevo</a>
+							<i class="fas fa-plus"></i> Agregar nuevo
+                        </a>
 					</div>
 
 					<input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
@@ -94,7 +95,8 @@
 
 					<div class="input-group-append">
 						<button class="btn btn-outline-secondary" type="submit">
-							<i class="fas fa-search" aria-hidden="true"></i></button>
+							<i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
 					</div>
 				</div>
 			</fieldset>
@@ -131,17 +133,18 @@
 				<td>{{ $computer->model }}</td>
 				<td>{{ $computer->serial }}</td>
 				<td>{{ $computer->ip }}</td>
-        <td>{{ $computer->inventory_number }}</td>
+                <td>{{ $computer->inventory_number }}</td>
 				<!-- <td>{{ $computer->comment }}</td> -->
 				<td>
-          @foreach($computer->users as $user)
-					     {{ $user->FullName }}<br>
+                    @foreach($computer->users as $user)
+                        {{ $user->FullName }}<br>
 					@endforeach
 				</td>
-        <td>{{ $computer->place ? $computer->place->name : 'Asignar Lugar' }}</td>
+                <td>{{ $computer->place ? $computer->place->name : 'Asignar Lugar' }}</td>
 				<td>
 					<a href="{{ route('resources.computer.edit', $computer) }}" class="btn btn-outline-secondary btn-sm">
-					<span class="fas fa-edit" aria-hidden="true"></span></a>
+					    <span class="fas fa-edit" aria-hidden="true"></span>
+                    </a>
 				</td>
 			</tr>
 			@endforeach
