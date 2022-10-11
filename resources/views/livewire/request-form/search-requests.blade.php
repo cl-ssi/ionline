@@ -95,7 +95,7 @@
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar todos los formularios</a></h6>
+                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
             </div>
         </div>
 
