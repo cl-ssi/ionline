@@ -53,7 +53,7 @@ class ComputerCreate extends Component
 
     public function render()
     {
-        return view('livewire.resource.computer-create')->extends('layouts.app');
+        return view('livewire.resources.computer-create')->extends('layouts.app');
     }
 
     public function create()
@@ -79,7 +79,7 @@ class ComputerCreate extends Component
 
         Computer::create($dataComputer);
 
-        session()->flash('success', 'El computador fue creado exitosamente.');
+        session()->flash('success', 'El recurso TIC fue creado exitosamente.');
         return redirect()->route('resources.tic');
     }
 }
