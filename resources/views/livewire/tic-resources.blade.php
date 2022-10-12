@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($inventories as $inventory)
+            @forelse($inventories as $inventory)
             <tr>
                 <td scope="row">{{ $inventory->number }} </td>
                 <!-- <td>{{ $inventory->unspscProduct->name }}</td> -->
@@ -36,14 +36,43 @@
                 <td>{{ $inventory->responsible->tinnyName }}</td>
                 <td>{{ $inventory->place->name }}</td>
                 <td>{{ $inventory->estado }}</td>
-                <td>
+                <td class="text-center" nowrap>
                     <!-- TODO: #109 Agregar action, permitir editar inventory + computer -->
 					<!-- Si tiene existe un Computer con el numero de inventario -->
-                    <a href="" class="btn btn-outline-primary btn-sm">
-                    <span class="fas fa-fire" aria-hidden="true"></span> Fusionar</a>
+                    @if($inventory->computer)
+                        @json($inventory->computer->id)
+                    @endif
+
+                    @if($inventory->isComputer())
+                        <a
+                            href="{{ route('resources.computer.fusion', [
+                                'computer' => $inventory->my_computer,
+                                'inventory' => $inventory
+                            ]) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                        >
+                            <span class="fas fa-fire" aria-hidden="true"></span>
+                            Fusionar
+                        </a>
+                    @else
+                        <a
+                            href="{{ route('resources.computer.new', [
+                                'inventory' => $inventory
+                            ]) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                        >
+                            <span class="fas fa-fire" aria-hidden="true"></span> Crear
+                        </a>
+                    @endif
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td class="text-center" colspan="9">
+                    <em>No hay registros</em>
+                </td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
