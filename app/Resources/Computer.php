@@ -2,6 +2,7 @@
 
 namespace App\Resources;
 
+use App\Models\Inv\Inventory;
 use App\Models\Parameters\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +16,7 @@ class Computer extends Model implements Auditable
     protected $fillable = [
         'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'ip_group', 'rack', 'vlan',
         'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment',
-        'status', 'office_serial', 'windows_serial', 'place_id'
+        'status', 'office_serial', 'windows_serial', 'fusion_at', 'place_id', 'inventory_id',
     ];
 
     public function users()
@@ -26,6 +27,16 @@ class Computer extends Model implements Auditable
     public function place()
     {
         return $this->belongsTo(Place::class);
+    }
+
+    public function inventory()
+    {
+        return $this->belongsTo(Inventory::class);
+    }
+
+    public function isMerged()
+    {
+        return $this->fusion_at != null;
     }
 
     public function scopeSearch($query, $search)
