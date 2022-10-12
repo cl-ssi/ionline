@@ -39,9 +39,6 @@
                 <td class="text-center" nowrap>
                     <!-- TODO: #109 Agregar action, permitir editar inventory + computer -->
 					<!-- Si tiene existe un Computer con el numero de inventario -->
-                    @if($inventory->computer)
-                        @json($inventory->computer->id)
-                    @endif
 
                     @if($inventory->isComputer())
                         <a
