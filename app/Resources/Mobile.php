@@ -10,6 +10,20 @@ class Mobile extends Model
     use SoftDeletes;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'res_mobiles';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -31,18 +45,4 @@ class Mobile extends Model
                 ->orWhere('brand', 'LIKE', '%' . $search . '%');
         }
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'res_mobiles';
 }

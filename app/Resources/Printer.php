@@ -10,6 +10,20 @@ class Printer extends Model
 {
     use SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'res_printers';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     protected $fillable = [
         'id', 'serial', 'type', 'brand', 'model', 'ip', 'mac_address', 'active_type', 'comment', 'status', 'place_id'
     ];
@@ -79,18 +93,4 @@ class Printer extends Model
         }
         return $valor;
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'res_printers';
 }

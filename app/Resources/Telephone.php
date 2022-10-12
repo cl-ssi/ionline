@@ -11,6 +11,20 @@ class Telephone extends Model
     use SoftDeletes;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'res_telephones';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -37,18 +51,4 @@ class Telephone extends Model
     {
         return $this->belongsTo(Place::class);
     }
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'res_telephones';
 }
