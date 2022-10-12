@@ -138,8 +138,20 @@
                 </td>
                 <td>{{ $computer->place ? $computer->place->name : 'Asignar Lugar' }}</td>
                 <td>
-                    <a href="{{ route('resources.computer.edit', $computer) }}" class="btn btn-outline-secondary btn-sm">
-                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+                    <a
+                        @if($computer->inventory != null)
+                            class="btn btn-outline-primary btn-sm"
+                            href="{{ route('resources.computer.fusion', [
+                                'computer' => $computer,
+                                'inventory' => $computer->inventory
+                            ]) }}"
+                        @else
+                            class="btn btn-outline-secondary btn-sm"
+                            href="{{ route('resources.computer.edit', $computer) }}"
+                        @endif
+                    >
+                        <span class="fas fa-edit" aria-hidden="true"></span>
+                    </a>
                 </td>
             </tr>
             @endforeach
