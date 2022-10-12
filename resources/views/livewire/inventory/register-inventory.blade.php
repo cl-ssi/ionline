@@ -350,7 +350,7 @@
                 type="text"
                 class="form-control @error('observations') is-invalid @enderror"
                 id="observations"
-                placeholder="Ej: Tiene una puerta dañada"
+                placeholder="Ej: La computadora tiene un boton dañado"
             >
             @error('observations')
                 <span class="invalid-feedback" role="alert">
