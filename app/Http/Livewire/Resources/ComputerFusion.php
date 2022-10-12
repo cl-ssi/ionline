@@ -74,7 +74,7 @@ class ComputerFusion extends Component
 
     public function render()
     {
-        return view('livewire.resource.inventory-fusion')->extends('layouts.app');
+        return view('livewire.resources.computer-fusion')->extends('layouts.app');
     }
 
     public function update()
@@ -96,12 +96,12 @@ class ComputerFusion extends Component
         {
             $dataComputer['fusion_at'] = now();
             $dataComputer['inventory_id'] = $this->inventory->id;
-            $message = "La fusion del computador fue realizada exitosamente.";
+            $message = "La fusion del recurso TIC fue realizada exitosamente.";
             $route = "resources.tic";
         }
         else
         {
-            $message = "La actualización del computador fue realizada exitosamente.";
+            $message = "La actualización del recurso TIC fue realizada exitosamente.";
             $route = "resources.computer.index";
         }
 
