@@ -17,11 +17,13 @@ class TicResources extends Component
 	*/
 	public function mount()
 	{
-		$this->inventories = Inventory::with('unspscProduct', 'using', 'responsible', 'place')
+		$this->inventories = Inventory::query()
 			->whereRelation('unspscProduct', 'code', '>=', '43000000')
 			->whereRelation('unspscProduct', 'code', '<=', '44000000')
+            ->doesntHave('computer')
 			->get();
 	}
+
     public function render()
     {
         return view('livewire.tic-resources')->extends('layouts.app');
