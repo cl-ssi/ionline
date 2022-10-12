@@ -58,21 +58,31 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
                     name="requester_search" wire:model.debounce.500ms="selectedRequester">
             </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_ou_requester">U.O. Usuario Gestor</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="ou_requester_search"  disabled>
+            <fieldset class="form-group col-12 col-md-4">
+                    <label for="for_requester_ou_id">U.O. Usuario Gestor</label>
+                    @livewire('search-select-organizational-unit', [
+                        'emit_name'            => 'searchedRequesterOu',
+                        'selected_id'          => 'requester_ou_id',
+                        'small_option'         => true,
+                        'organizationalUnit'   => $organizationalUnit
+                    ])
             </fieldset>
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_requester">Administrador Contrato</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
                     name="admin_search" wire:model.debounce.500ms="selectedAdmin">
             </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_ou_requester">U.O. Administrador Contrato</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="ou_admin_search" disabled>
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
+                    @livewire('search-select-organizational-unit', [
+                        'emit_name'          => 'searchedAdminOu',
+                        'selected_id'        => 'admin_ou_id',
+                        'small_option'       => true,
+                        'organizationalUnit' => $organizationalUnit
+                    ])
             </fieldset>
+        </div>
+        <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">Comprador</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
@@ -84,7 +94,6 @@
                     name="program_search" wire:model.debounce.500ms="selectedProgram">
             </fieldset>
         </div>
-        
     </div>
 
     <br>

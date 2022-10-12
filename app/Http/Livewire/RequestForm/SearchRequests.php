@@ -9,6 +9,7 @@ use App\User;
 use Carbon\Carbon;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Rrhh\OrganizationalUnit;
 
 class SearchRequests extends Component
 {
@@ -23,10 +24,16 @@ class SearchRequests extends Component
     public $selectedStartDate = null;
     public $selectedEndDate = null;
     public $selectedRequester = null;
+    public $selectedRequesterOuName = null;
     public $selectedAdmin = null;
+    public $selectedAdminOuName = null;
     public $selectedPurchaser = null;
     public $selectedProgram = null;
     public $result = null;
+
+    public $organizationalUnit;
+
+    protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
     public function querySearch($isPaginated = true)
     {
@@ -39,7 +46,9 @@ class SearchRequests extends Component
         $this->selectedStartDate,
         $this->selectedEndDate,
         $this->selectedRequester,
+        $this->selectedRequesterOuName,
         $this->selectedAdmin,
+        $this->selectedAdminOuName,
         $this->selectedPurchaser,
         $this->selectedProgram
         )
@@ -50,8 +59,7 @@ class SearchRequests extends Component
     }
 
     public function render()
-    {
-        // dd($this->querySearch());
+    {   
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
             'users' => User::where('organizational_unit_id', 37)->orderBy('name','asc')->get(),
@@ -61,5 +69,21 @@ class SearchRequests extends Component
     public function export()
     {
         return Excel::download(new RequestFormsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
+    }
+
+    public function searchedRequesterOu(OrganizationalUnit $organizationalUnit){
+        $this->selectedRequesterOuName = $organizationalUnit->id;
+    }
+
+    public function clearRequesterOu(){
+        $this->selectedRequesterOuName = null;
+    }
+
+    public function searchedAdminOu(OrganizationalUnit $organizationalUnit){
+        $this->selectedAdminOuName = $organizationalUnit->id;
+    }
+
+    public function clearAdminOu(){
+        $this->selectedAdminOuName = null;
     }
 }
