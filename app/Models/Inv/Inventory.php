@@ -10,6 +10,7 @@ use App\Models\Warehouse\Product;
 use App\Models\Warehouse\Store;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
+use App\Resources\Computer;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -129,6 +130,24 @@ class Inventory extends Model implements Auditable
     public function budgetItem()
     {
         return $this->belongsTo(BudgetItem::class);
+    }
+
+    public function computer()
+    {
+        return $this->hasOne(Computer::class);
+    }
+
+    public function isComputer()
+    {
+        return Computer::whereInventoryNumber($this->number)->exists();
+    }
+
+    public function getMyComputerAttribute()
+    {
+        $computer = null;
+        if($this->isComputer())
+            $computer = Computer::whereInventoryNumber($this->number)->first();
+        return $computer;
     }
 
     public function getLocationAttribute()
