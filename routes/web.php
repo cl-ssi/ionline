@@ -194,6 +194,8 @@ use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
+use App\Http\Livewire\Resources\ComputerCreate;
+use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 
 /*
@@ -361,10 +363,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
         Route::post('/{formType}/store', [RequestReplacementStaffController::class, 'store'])->name('store');
         Route::post('/{requestReplacementStaff}/store_extension/{formType}', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
-        
+
         Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
         Route::get('/{requestReplacementStaff}/edit_replacement', [RequestReplacementStaffController::class, 'edit_replacement'])->name('edit_replacement');
-        
+
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
@@ -493,6 +495,8 @@ Route::prefix('resources')->name('resources.')->middleware('auth')->group(functi
         Route::put('{computer}/update', [ComputerController::class,'update'])->name('update');
         Route::delete('{computer}/destroy', [ComputerController::class,'destroy'])->name('destroy');
         Route::get('export', [ComputerController::class,'export'])->name('export');
+        Route::get('{computer}/inventory/{inventory}/fusion', ComputerFusion::class)->name('fusion');
+        Route::get('inventory/{inventory}/create', ComputerCreate::class)->name('new');
     });
     Route::prefix('printers')->name('printer.')->group(function () {
         Route::get('/', [PrinterController::class,'index'])->name('index');
@@ -883,10 +887,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou')->middleware('auth');
-        
+
         Route::get('password', [UserController::class,'editPassword'])->name('password.edit')->middleware('auth');
         Route::put('password', [UserController::class,'updatePassword'])->name('password.update')->middleware('auth');
-        
+
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch')->middleware('auth');
         Route::get('directory', [UserController::class,'directory'])->name('directory');
