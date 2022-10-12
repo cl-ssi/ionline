@@ -429,10 +429,12 @@ class RequestForm extends Model implements Auditable
     // }
 
     public function scopeSearch($query, $status_search, $status_purchase_search, $id_search, $folio_search, $name_search,
-    $start_date_search, $end_date_search, $requester_search, $admin_search, $purchaser_search, $program_search)
+        $start_date_search, $end_date_search, $requester_search, $requester_ou_id, $admin_search, $admin_ou_id, $purchaser_search, 
+        $program_search)
     {
         if ($status_search OR $status_purchase_search OR $id_search OR $folio_search OR $name_search 
-        OR $start_date_search OR $end_date_search OR $requester_search OR $admin_search OR $purchaser_search OR $program_search) {
+            OR $start_date_search OR $end_date_search OR $requester_search OR $requester_ou_id OR $admin_search 
+            OR $admin_ou_id OR $purchaser_search OR $program_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -471,12 +473,22 @@ class RequestForm extends Model implements Auditable
                         ->orwhere('mothers_family','LIKE', '%'.$word.'%');
                 });
             }
+            if($requester_ou_id != ''){
+                $query->where(function($q) use($requester_ou_id){
+                    $q->where('request_user_ou_id', $requester_ou_id);
+                });
+            }
             $array_admin_search = explode(' ', $admin_search);
             foreach($array_admin_search as $word){
                 $query->whereHas('contractManager' ,function($query) use($word){
                     $query->where('name', 'LIKE', '%'.$word.'%')
                         ->orwhere('fathers_family','LIKE', '%'.$word.'%')
                         ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+            if($admin_ou_id != ''){
+                $query->where(function($q) use($admin_ou_id){
+                    $q->where('contract_manager_ou_id', $admin_ou_id);
                 });
             }
             if($purchaser_search != null){
