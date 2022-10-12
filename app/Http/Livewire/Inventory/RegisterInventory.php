@@ -93,7 +93,7 @@ class RegisterInventory extends Component
                 $this->user_using_id = Auth::id();
                 $this->user_responsible_id = Auth::id();
                 break;
-            
+
             case 4:
                 $this->user_using_id = null;
                 $this->user_responsible_id = null;
@@ -174,9 +174,9 @@ class RegisterInventory extends Component
             'observations' => $dataValidated['observations'],
             'inventory_id' => $inventory->id,
             'place_id' => $dataValidated['place_id'],
-            'user_responsible_ou_id' => $responsibleUser->organizationalUnit->id,
+            'user_responsible_ou_id' => optional($responsibleUser->organizationalUnit)->id,
             'user_responsible_id' => $dataValidated['user_responsible_id'],
-            'user_using_ou_id' => $usingUser->organizationalUnit->id,
+            'user_using_ou_id' => optional($usingUser->organizationalUnit)->id,
             'user_using_id' => $dataValidated['user_using_id'],
             'reception_confirmation' => $this->getReceptionConfirmation()
         ]);
