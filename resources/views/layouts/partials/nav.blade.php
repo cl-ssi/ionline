@@ -560,6 +560,13 @@
 						@canany(['be god'])
 							<li><hr class="dropdown-divider"></li>
 
+
+                            
+                            <a class="dropdown-item {{active('parameters.phrases.index')}}"
+								href="{{ route('parameters.labels.index','computadores') }}">
+								<i class="fas fa-tag"></i> Etiqueta Computadores
+							</a>
+
 							<a class="dropdown-item {{active('parameters.phrases.index')}}"
 								href="{{ route('parameters.phrases.index') }}">
 								<i class="fas fa-smile-beam"></i> Frases del día
