@@ -52,11 +52,20 @@ class RegisterInventory extends Component
     public function mount()
     {
         $this->collapse = false;
-        $this->type = 1;
         $this->status = 1;
-        $this->user_using_id = Auth::id();
-        $this->user_responsible_id = null;
         $this->po_code = null;
+        if (Auth::user()->can('Inventory: manager'))
+        {
+            $this->type = 4;
+            $this->user_using_id = null;
+            $this->user_responsible_id = null;
+        }
+        else
+        {
+            $this->type = 1;
+            $this->user_using_id = Auth::id();
+            $this->user_responsible_id = null;
+        }
     }
 
     public function rules()
