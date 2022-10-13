@@ -83,6 +83,7 @@ use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Parameters\PurchaseTypeController;
 use App\Http\Controllers\Parameters\PurchaseUnitController;
 use App\Http\Controllers\Parameters\EstablishmentController;
+use App\Http\Controllers\Parameters\InventoryLabelController;
 
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
@@ -197,6 +198,7 @@ use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Resources\ComputerCreate;
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1054,6 +1056,13 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
     Route::resource('programs', ParametersProgramController::class)->only(['index', 'create', 'edit']);
+
+    Route::prefix('labels')->as('labels.')->group(function () {
+            Route::get('/{module}', [InventoryLabelController::class,'index'])->name('index');
+            Route::get('/create/{module}', [InventoryLabelController::class,'create'])->name('create');
+            Route::post('/store', [InventoryLabelController::class,'store'])->name('store');
+    });
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1089,6 +1098,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class,'signModal'])->name('signatures.signModal');
     Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class,'massSignModal'])->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class,'callbackFirma'])->name('callbackFirma');
+    
 });
 Route::resource('documents', DocumentController::class)->middleware('auth');
 
