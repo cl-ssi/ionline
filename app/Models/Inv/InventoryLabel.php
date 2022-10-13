@@ -14,6 +14,5 @@ class InventoryLabel extends Model
         'name',
         'module',
         'color'
-
     ];
 }
