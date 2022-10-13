@@ -51,7 +51,11 @@
         </div>
     </div>
 
-    <br>
+    <div class="row">
+        <div class="col">
+            <p class="font-weight-lighter">Total de Registros: <b>{{ $replacementStaff->total() }}</b></p>
+        </div>
+    </div>
 
     <div class="table-responsive">
       <table class="table table-sm table-striped table-bordered">
