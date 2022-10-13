@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\ReplacementStaff\Applicant;
+use App\Models\ReplacementStaff\ReplacementStaff;
 use Carbon\Carbon;
 
 class ChangeStaffStatus extends Command
@@ -39,13 +39,12 @@ class ChangeStaffStatus extends Command
      */
     public function handle()
     {
-        $applicants = Applicant::where('selected', 1)
-            ->latest()
-            ->whereDate('end_date', '=', Carbon::now()->subDays(1)->toDateString())
-            ->get();
+        $replacementsStaff = ReplacementStaff::where('status', 'selected')->latest()->get();
 
-        foreach ($applicants as $key => $applicant) {
-            $applicant->replacementStaff->update(['status' => 'immediate_availability']);
+        foreach($replacementsStaff as $replacementStaff){
+            if($replacementStaff->applicants->last()->end_date <= Carbon::now()->subDays(1)->toDateString()){
+                $replacementStaff->update(['status' => 'immediate_availability']);
+            }
         }
     }
 }

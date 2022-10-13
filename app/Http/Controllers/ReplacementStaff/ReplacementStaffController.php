@@ -26,16 +26,6 @@ class ReplacementStaffController extends Controller
      */
     public function index(Request $request)
     {
-        // $replacementStaff = ReplacementStaff::latest()
-        //     ->search($request->input('search'),
-        //               $request->input('profile_search'),
-        //               $request->input('profession_search'),
-        //               null)
-        //     ->paginate(15);
-        //
-        // $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-        // $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
-
         return view('replacement_staff.index');
     }
 
