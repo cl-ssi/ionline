@@ -71,6 +71,8 @@ class InventoryLabelController extends Controller
     public function edit(InventoryLabel $inventoryLabel)
     {
         //
+        //dd($inventoryLabel);
+        return view('parameters.labels.edit', compact('inventoryLabel'));
     }
 
     /**
@@ -80,9 +82,18 @@ class InventoryLabelController extends Controller
      * @param  \App\Models\Inv\InventoryLabel  $inventoryLabel
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInventoryLabelRequest $request, InventoryLabel $inventoryLabel)
+    public function update(Request $request, InventoryLabel $inventoryLabel)
     {
         //
+        
+    {
+        $inventoryLabel->fill($request->all());
+        $inventoryLabel->save();
+        $module=$request->module;
+
+      session()->flash('info', 'La etiqueta ha sido editada.');
+      return redirect()->route('parameters.labels.index',$module);
+    }
     }
 
     /**

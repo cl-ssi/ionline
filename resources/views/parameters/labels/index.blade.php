@@ -28,7 +28,7 @@
             <td>{{ $label->name??'' }}</td>
             <td><span class="badge badge-primary" style="background-color: #{{$label->color}};">&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
             <td>
-							<a href="#">
+							<a href="{{ route('parameters.labels.edit',$label) }}">
 									<i class="fas fa-edit"></i>
 							</a>
 						</td>
