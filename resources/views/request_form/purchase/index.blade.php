@@ -17,12 +17,12 @@
                 <tr class="text-center">
                     <th>ID</th>
                     <th>Folio</th>
+                    <th style="width: 7%">Fecha Creación</th>
                     <th>Tipo / Mecanismo de Compra</th>
                     <th>Descripción</th>
                     <th>Usuario Gestor</th>
                     <th>Items</th>
                     <th>Presupuesto</th>
-                    <th>Espera</th>
                     <th>Vencimiento</th>
                     <th></th>
                 </tr>
@@ -38,6 +38,10 @@
                         @endif
                     </td>
                     <td>{{ $requestForm->folio }}</td>
+                    <td>
+                        {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                        {{ $requestForm->created_at->diffForHumans() }}
+                    </td>
                     <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                         {{ $requestForm->SubtypeValue }}
                     </td>
@@ -47,7 +51,6 @@
                     </td>
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                    <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                     <td title="Aprobación: {{$requestForm->approvedAt}}" >
                         {{ $requestForm->expireAt }}
                         <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>

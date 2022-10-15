@@ -121,7 +121,6 @@
                         <th>Comprador</th>
                         <th>Items</th>
                         <th>Presupuesto</th>
-                        <th>Espera</th>
                         <th>Etapas de aprobación</th>
                         <th style="width: 7%">Fecha de Aprobación Depto de Gestión de Abastecimiento</th>
                         <th></th>
@@ -161,7 +160,10 @@
                                 <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
                                 @endif
                         </td>
-                        <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>          
+                        <td>
+                            {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                            {{ $requestForm->created_at->diffForHumans() }}
+                        </td>          
                         <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                             {{ $requestForm->SubtypeValue }}
                         </td>
@@ -172,7 +174,6 @@
                         <td>{{ $requestForm->purchasers->first()->FullName?? 'No asignado' }}</td>
                         <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                         <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                        <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                         <td class="text-center">
                             @if($requestForm->eventRequestForms->count() > 0)
                                 @foreach($requestForm->eventRequestForms as $sign)
