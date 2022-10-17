@@ -7,6 +7,14 @@
 
 @include('request_form.partials.nav')
 
+</div>
+
+<div class="col-sm">
+    @livewire('request-form.search-requests', [
+      'inbox' => 'purchase'])
+</div>
+
+{{-- 
 @if(!$my_request_forms->isEmpty())
 </div>
 <div class="col">
@@ -185,7 +193,7 @@
     </div>
 </div>
 @endif
-
+--}}
 
 @endsection
 

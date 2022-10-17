@@ -10,7 +10,9 @@
 </div>
 
 <div class="col-sm">
-    @livewire('request-form.search-requests')
+    @livewire('request-form.search-requests', [
+      'inbox' => 'all'
+    ])
 </div>
 
 {{-- @include('request_form.purchase.partials.search')

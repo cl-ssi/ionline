@@ -430,11 +430,11 @@ class RequestForm extends Model implements Auditable
 
     public function scopeSearch($query, $status_search, $status_purchase_search, $id_search, $folio_search, $name_search,
         $start_date_search, $end_date_search, $requester_search, $requester_ou_id, $admin_search, $admin_ou_id, $purchaser_search, 
-        $program_search)
+        $program_search, $purchase_order_search)
     {
         if ($status_search OR $status_purchase_search OR $id_search OR $folio_search OR $name_search 
             OR $start_date_search OR $end_date_search OR $requester_search OR $requester_ou_id OR $admin_search 
-            OR $admin_ou_id OR $purchaser_search OR $program_search) {
+            OR $admin_ou_id OR $purchaser_search OR $program_search OR $purchase_order_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -452,7 +452,7 @@ class RequestForm extends Model implements Auditable
             }
             if($folio_search != ''){
                 $query->where(function($q) use($folio_search){
-                    $q->where('folio', 'LIKE', '%'.$folio_search.'%');
+                    $q->where('folio', $folio_search);
                 });
             }
             if($name_search != ''){
@@ -506,6 +506,17 @@ class RequestForm extends Model implements Auditable
                     $q->where('program', 'LIKE', '%'.$program_search.'%');
                 });
             }
+            // if($purchase_order_search != ''){
+            //     $query->whereHas('purchasingProcess', function($q) use ($purchase_order_search){
+            //         $q->whereHas('detailsWithPo', function($q) use ($purchase_order_search){
+            //             // $q->whereHas('tender.oc', function($q) use ($purchase_order_search){
+            //                 $q->Where('po_id', $status_purchase_search);
+            //             // });
+            //         });
+            //         // $q->Where('arq_purchasing_process_detail.tender_id', $purchase_order_search);
+            //     });
+                
+            // }
         }
     }
 
