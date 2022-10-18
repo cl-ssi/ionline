@@ -539,3 +539,16 @@
         @enderror
     </fieldset>
 </div>
+
+<div class="form-row">
+    <fieldset class="form-group col-md-6">
+        <label for="label-id">Etiquetas</label>
+        @livewire('inventory.search-labels', [
+            'placeholder' => 'Ingrese el nombre de una etiqueta',
+            'eventName' => 'myLabelId',
+            'tagId' => 'label-id',
+            'module' => 'computers',
+            'selectedLabels' => $computer ? $computer->labels : null
+        ])
+    </fieldset>
+</div>
