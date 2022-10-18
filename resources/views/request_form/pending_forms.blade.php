@@ -37,7 +37,6 @@
                       <th>Usuario Gestor</th>
                       <th>Items</th>
                       <th>Presupuesto</th>
-                      <th>Espera</th>
                       <th>Etapas de aprobación</th>
                       <th></th>
                     </tr>
@@ -65,7 +64,10 @@
                                   <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
                                   @endif
                                 </td>
-                                <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>
+                                    {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                                    {{ $requestForm->created_at->diffForHumans() }}
+                                </td>
                                 <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
                                 </td>
@@ -137,7 +139,6 @@
                       <th>Comprador</th>
                       <th>Items</th>
                       <th>Presupuesto</th>
-                      <th>Espera</th>
                       <th>Etapas de aprobación</th>
                       <th style="width: 7%">Fecha de Aprobación</th>
                       <th></th>
@@ -153,7 +154,10 @@
                                   <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
                                   @endif
                                 </td>
-                                <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>
+                                    {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                                    {{ $requestForm->created_at->diffForHumans() }}
+                                </td>
                                 <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
                                 </td>
@@ -227,7 +231,6 @@
                   <th>Comprador</th>
                   <th>Items</th>
                   <th>Presupuesto</th>
-                  <th>Espera</th>
                   <th>Etapas de aprobación</th>
                   <th style="width: 7%">Fecha de Aprobación</th>
                   <th></th>
@@ -264,7 +267,10 @@
                                 <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
                                 @endif
                             </td>
-                            <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                            <td>
+                                {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                                {{ $requestForm->created_at->diffForHumans() }}
+                            </td>
                             <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                     {{ $requestForm->SubtypeValue }}
                                 </td>

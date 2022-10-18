@@ -37,6 +37,8 @@ class PurchasingProcessController extends Controller
             return redirect()->route('request_forms.my_forms');
         }
 
+        /*
+
         $my_request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')
             ->whereHas('purchasers', function ($q) {
@@ -45,8 +47,10 @@ class PurchasingProcessController extends Controller
 
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15, ['*'], 'p2');
+        
+        */
 
-        return view('request_form.purchase.index', compact('my_request_forms', 'request_forms'));
+        return view('request_form.purchase.index');
     }
 
     public function purchase(RequestForm $requestForm)

@@ -1061,6 +1061,8 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
             Route::get('/{module}', [InventoryLabelController::class,'index'])->name('index');
             Route::get('/create/{module}', [InventoryLabelController::class,'create'])->name('create');
             Route::post('/store', [InventoryLabelController::class,'store'])->name('store');
+            Route::get('/edit/{inventoryLabel}', [InventoryLabelController::class,'edit'])->name('edit');
+            Route::put('/{inventoryLabel}/label', [InventoryLabelController::class,'update'])->name('update');
     });
 
 });
