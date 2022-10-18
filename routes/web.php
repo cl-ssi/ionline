@@ -190,7 +190,7 @@ use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
 use App\Http\Livewire\Inventory\PendingMovements;
 use App\Http\Livewire\Inventory\RegisterInventory;
-
+use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
@@ -1058,11 +1058,11 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::resource('programs', ParametersProgramController::class)->only(['index', 'create', 'edit']);
 
     Route::prefix('labels')->as('labels.')->group(function () {
-            Route::get('/{module}', [InventoryLabelController::class,'index'])->name('index');
-            Route::get('/create/{module}', [InventoryLabelController::class,'create'])->name('create');
-            Route::post('/store', [InventoryLabelController::class,'store'])->name('store');
-            Route::get('/edit/{inventoryLabel}', [InventoryLabelController::class,'edit'])->name('edit');
-            Route::put('/{inventoryLabel}/label', [InventoryLabelController::class,'update'])->name('update');
+        Route::get('/{module}', InventoryLabelIndex::class)->name('index');
+        Route::get('/create/{module}', [InventoryLabelController::class,'create'])->name('create');
+        Route::post('/store', [InventoryLabelController::class,'store'])->name('store');
+        Route::get('/edit/{inventoryLabel}', [InventoryLabelController::class,'edit'])->name('edit');
+        Route::put('/{inventoryLabel}/label', [InventoryLabelController::class,'update'])->name('update');
     });
 
 });
@@ -1100,7 +1100,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class,'signModal'])->name('signatures.signModal');
     Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class,'massSignModal'])->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class,'callbackFirma'])->name('callbackFirma');
-    
+
 });
 Route::resource('documents', DocumentController::class)->middleware('auth');
 
