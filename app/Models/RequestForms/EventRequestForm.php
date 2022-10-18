@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Parameters\Parameter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
@@ -108,8 +109,9 @@ class EventRequestForm extends Model
     }
 
     public static function createPreFinanceEvent(RequestForm $requestForm){
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   40;
+        $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 3 : 2;
         $event->status              =   'pending';
         $event->event_type          =   'pre_finance_event';
@@ -119,8 +121,9 @@ class EventRequestForm extends Model
     }
 
     public static function createFinanceEvent(RequestForm $requestForm){
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   40;
+        $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 4 : 3;
         $event->status              =   'pending';
         $event->event_type          =   'finance_event';
@@ -130,8 +133,9 @@ class EventRequestForm extends Model
     }
 
     public static function createSupplyEvent(RequestForm $requestForm){
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   37;
+        $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
         $event->status              =   'pending';
         $event->event_type          =   'supply_event';
@@ -142,8 +146,9 @@ class EventRequestForm extends Model
 
     public static function createNewBudgetEvent(RequestForm $requestForm)
     {
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         $event = new EventRequestForm();
-        $event->ou_signer_user      =   37; // Abastecimiento
+        $event->ou_signer_user      =   $ouSearch; // Abastecimiento
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
         $event->event_type          =   'pre_budget_event';
@@ -155,8 +160,9 @@ class EventRequestForm extends Model
 
         self::createFile($event);
 
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
         $event = new EventRequestForm();
-        $event->ou_signer_user      =   40; //Finanzas
+        $event->ou_signer_user      =   $ouSearch; //Finanzas
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 7 : 6;
         $event->status              =   'pending';
         $event->event_type          =   'budget_event';

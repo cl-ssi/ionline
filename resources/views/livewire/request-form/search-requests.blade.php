@@ -93,7 +93,7 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
                     name="program_search" wire:model.debounce.500ms="selectedProgram">
             </fieldset>
-            {{--
+            @if($inbox == 'purchase')
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° O.C.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
@@ -102,9 +102,9 @@
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_purchaser">N° Licitación.</label>
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="bidding_search" wire:model.debounce.500ms="selectedBidding">
+                    name="tender_search" wire:model.debounce.500ms="selectedTender">
             </fieldset>
-            --}}
+            @endif
         </div>
     </div>
 
