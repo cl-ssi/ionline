@@ -3,7 +3,9 @@
 namespace App\Resources;
 
 use App\Models\Inv\Inventory;
+use App\Models\Inv\InventoryLabel;
 use App\Models\Parameters\Place;
+use App\Models\Resources\ComputerLabel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -46,6 +48,14 @@ class Computer extends Model implements Auditable
     public function inventory()
     {
         return $this->belongsTo(Inventory::class);
+    }
+
+    public function labels()
+    {
+        return $this->belongsToMany(InventoryLabel::class, 'res_computer_label', 'computer_id', 'label_id')
+            ->using(ComputerLabel::class)
+            ->withPivot(['computer_id', 'label_id'])
+            ->withTimestamps();
     }
 
     public function isMerged()
