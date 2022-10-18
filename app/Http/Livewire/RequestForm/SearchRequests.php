@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\RequestForm;
 
 use App\Exports\RequestForms\RequestFormsExport;
+use App\Models\Parameters\Parameter;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\User;
@@ -30,6 +31,7 @@ class SearchRequests extends Component
     public $selectedPurchaser = null;
     public $selectedProgram = null;
     public $selectedPo = null;
+    public $selectedTender = null;
     public $result = null;
     public $inbox;
 
@@ -65,7 +67,8 @@ class SearchRequests extends Component
         $this->selectedAdminOuName,
         $this->selectedPurchaser,
         $this->selectedProgram,
-        $this->selectedPo
+        $this->selectedPo,
+        $this->selectedTender
         )
         ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
@@ -75,9 +78,10 @@ class SearchRequests extends Component
 
     public function render()
     {   
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
-            'users' => User::where('organizational_unit_id', 37)->orderBy('name','asc')->get(),
+            'users' => User::where('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
         ]);
     }
 
