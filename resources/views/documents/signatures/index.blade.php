@@ -243,10 +243,17 @@
                                     <span class="fas fa-file" aria-hidden="true"></span>
                                 </a> -->
 
-                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signedSignaturesFlow->signaturesFile->signed_file ?? $signedSignaturesFlow->signaturesFile->file}}"
-                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+
+                        <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
+                           class="btn btn-sm btn-outline-secondary" target="_blank"
+                           title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+
+{{--                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signedSignaturesFlow->signaturesFile->signed_file ?? $signedSignaturesFlow->signaturesFile->file}}"--}}
+{{--                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">--}}
+{{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+{{--                        </a>--}}
                     </td>
                     <td>@if($signedSignaturesFlow->signature)
                         @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
