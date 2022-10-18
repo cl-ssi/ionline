@@ -45,7 +45,7 @@
 
     <h4>Pendientes por firmar</h4>
 
-    <button class="btn btn-primary mb-2" id="massSign" onclick="getMassSignModalContent()" 
+    <button class="btn btn-primary mb-2" id="massSign" onclick="getMassSignModalContent()"
         disabled title="Seleccione solicitudes pendientes para firmar de forma masiva.">
         <i class="fas fa-file-signature"></i>Firmar
     </button>
@@ -112,20 +112,16 @@
                         </button>
                     </td>
                     <td>
-                        {{-- <a href="{{ route('documents.signatures.showPdf',--}}
-
-        {{--                            [$pendingSignaturesFlow->signaturesFile->id, time()]--}}
-
-
-        {{--                        ) }}" --}} {{-- class="btn btn-sm btn-outline-secondary" target="_blank"
-                            title="Ver documento">--}}
-                            {{-- <span class="fas fa-file" aria-hidden="true"></span>--}}
-                            {{-- </a>--}}
-
-                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingSignaturesFlow->signaturesFile->signed_file ?? $pendingSignaturesFlow->signaturesFile->file }}"
-                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+                        <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
+                           class="btn btn-sm btn-outline-secondary" target="_blank"
+                           title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+
+                        {{--                        <a href="https://storage.googleapis.com/{{env('app_env') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingsignaturesflow->signaturesfile->signed_file ?? $pendingsignaturesflow->signaturesfile->file }}"--}}
+                        {{--                           class="btn btn-sm btn-outline-secondary" target="_blank" title="ver documento">--}}
+                        {{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+                        {{--                        </a>--}}
 
                     </td>
                     <td>
@@ -187,7 +183,7 @@
     <br />
 
     <h4>Firmados/Rechazados</h4>
-    
+
     <div class="table-responsive">
         <table class="table table-striped table-sm table-bordered small">
             <thead>
