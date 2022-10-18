@@ -3,16 +3,19 @@
 namespace App\Http\Requests\Resources;
 
 use App\Models\Inv\Inventory;
+use App\Resources\Computer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ComputerFusionRequest extends FormRequest
 {
     public $inventory;
+    public $computer;
 
-    public function __construct(Inventory $inventory)
+    public function __construct(Inventory $inventory, Computer $computer)
     {
         $this->inventory = $inventory;
+        $this->computer = $computer;
     }
 
     /**
@@ -40,18 +43,23 @@ class ComputerFusionRequest extends FormRequest
                 'max:255',
                 Rule::unique('inv_inventories', 'number')->ignore($this->inventory)
             ],
-            'status'            => 'required',
-            'observations'      => 'nullable|string|max:5000',
+            'mac_address'       => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('res_computers', 'mac_address')->ignore($this->computer)
+            ],
             'inventory_brand'           => 'required|string|max:255',
             'inventory_model'           => 'required|string|max:255',
             'inventory_serial_number'   => 'required|string|max:255',
             'computer_brand'            => 'required|string|max:255',
             'computer_model'            => 'required|string|max:255',
             'computer_serial_number'    => 'required|string|max:255',
+            'status'            => 'required',
+            'observations'      => 'nullable|string|max:5000',
             'hostname'          => 'nullable|string|max:255',
             'domain'            => 'nullable|string|max:255',
             'ip'                => 'required|string|ip',
-            'mac_address'       => 'required|string|max:255',
             'ip_group'          => 'required|string|max:255',
             'rack'              => 'nullable|string|max:255',
             'vlan'              => 'nullable|string|max:255',
