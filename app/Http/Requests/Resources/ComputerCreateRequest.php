@@ -40,15 +40,20 @@ class ComputerCreateRequest extends FormRequest
                 'max:255',
                 Rule::unique('inv_inventories', 'number')->ignore($this->inventory)
             ],
-            'status'            => 'required',
-            'observations'      => 'nullable|string|max:5000',
+            'mac_address'       => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('res_computers', 'mac_address')
+            ],
             'inventory_brand'           => 'required|string|max:255',
             'inventory_model'           => 'required|string|max:255',
             'inventory_serial_number'   => 'required|string|max:255',
+            'observations'      => 'nullable|string|max:5000',
+            'status'            => 'required',
             'hostname'          => 'nullable|string|max:255',
             'domain'            => 'nullable|string|max:255',
             'ip'                => 'required|string|ip',
-            'mac_address'       => 'required|string|max:255',
             'ip_group'          => 'required|string|max:255',
             'rack'              => 'nullable|string|max:255',
             'vlan'              => 'nullable|string|max:255',
