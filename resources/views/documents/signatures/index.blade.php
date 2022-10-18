@@ -311,10 +311,16 @@
                     </td>
                     <td>
 
-                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signature->signaturesFileDocument->signed_file ?? $signature->signaturesFileDocument->file}}"
-                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+                        <a href="{{ route('documents.signatures.showPdf',[$signature->signaturesFileDocument->id, time()])}}"
+                           class="btn btn-sm btn-outline-secondary" target="_blank"
+                           title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+
+{{--                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signature->signaturesFileDocument->signed_file ?? $signature->signaturesFileDocument->file}}"--}}
+{{--                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">--}}
+{{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+{{--                        </a>--}}
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
