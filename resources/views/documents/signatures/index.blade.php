@@ -244,7 +244,7 @@
                                 </a> -->
 
 
-                        <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
+                        <a href="{{ route('documents.signatures.showPdf',[$signedSignaturesFlow->signaturesFile->id, time()])}}"
                            class="btn btn-sm btn-outline-secondary" target="_blank"
                            title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
