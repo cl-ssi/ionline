@@ -35,6 +35,11 @@ class ComputerCreate extends Component
     public $active_type;
     public $office_serial;
     public $windows_serial;
+    public $labels;
+
+    protected $listeners = [
+        'myLabelId'
+    ];
 
     public function mount(Inventory $inventory)
     {
@@ -44,6 +49,7 @@ class ComputerCreate extends Component
         $this->inventory_brand = $inventory->brand;
         $this->inventory_model = $inventory->model;
         $this->inventory_serial_number = $inventory->serial_number;
+        $this->labels = collect([]);
     }
 
     public function rules()
@@ -77,9 +83,15 @@ class ComputerCreate extends Component
 
         $this->inventory->update($dataInventory);
 
-        Computer::create($dataComputer);
+        $computer = Computer::create($dataComputer);
+        $computer->labels()->sync($this->labels);
 
         session()->flash('success', 'El recurso TIC fue creado exitosamente.');
         return redirect()->route('resources.tic');
+    }
+
+    public function myLabelId($values)
+    {
+        $this->labels = $values;
     }
 }

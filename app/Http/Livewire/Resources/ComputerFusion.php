@@ -36,6 +36,11 @@ class ComputerFusion extends Component
     public $active_type;
     public $office_serial;
     public $windows_serial;
+    public $labels;
+
+    protected $listeners = [
+        'myLabelId'
+    ];
 
     public function mount(Computer $computer, Inventory $inventory)
     {
@@ -65,11 +70,12 @@ class ComputerFusion extends Component
         $this->active_type = $computer->active_type;
         $this->office_serial = $computer->office_serial;
         $this->windows_serial = $computer->windows_serial;
+        $this->labels = $computer->labels;
     }
 
     public function rules()
     {
-        return (new ComputerFusionRequest($this->inventory))->rules();
+        return (new ComputerFusionRequest($this->inventory, $this->computer))->rules();
     }
 
     public function render()
@@ -107,8 +113,14 @@ class ComputerFusion extends Component
 
         $this->inventory->update($dataInventory);
         $this->computer->update($dataComputer);
+        $this->computer->labels()->sync($this->labels);
 
         session()->flash('success', $message);
         return redirect()->route($route);
+    }
+
+    public function myLabelId($values)
+    {
+        $this->labels = $values;
     }
 }
