@@ -29,7 +29,9 @@ class SearchRequests extends Component
     public $selectedAdminOuName = null;
     public $selectedPurchaser = null;
     public $selectedProgram = null;
+    public $selectedPo = null;
     public $result = null;
+    public $inbox;
 
     public $organizationalUnit;
 
@@ -37,7 +39,19 @@ class SearchRequests extends Component
 
     public function querySearch($isPaginated = true)
     {
-        $query = RequestForm::query();
+        if($this->inbox == 'all'){
+            $query = RequestForm::query();
+        }
+        if($this->inbox == 'purchase'){
+            $query = RequestForm::query();
+            
+            $query->where('status', 'approved')->whereNotNull('signatures_file_id')
+                ->whereHas('purchasers', function ($q) {
+                    return $q->where('users.id', Auth()->user()->id);
+                })
+                ->latest('id');
+        }
+        //$query = RequestForm::query();
         $query->search($this->selectedStatus,
         $this->selectedStatusPurchase,
         $this->selectedId,
@@ -50,7 +64,8 @@ class SearchRequests extends Component
         $this->selectedAdmin,
         $this->selectedAdminOuName,
         $this->selectedPurchaser,
-        $this->selectedProgram
+        $this->selectedProgram,
+        $this->selectedPo
         )
         ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
