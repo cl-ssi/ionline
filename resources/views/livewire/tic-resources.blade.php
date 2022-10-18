@@ -20,7 +20,7 @@
                 <th scope="col">Responsable</th>
                 <th scope="col">Lugar</th>
                 <th scope="col">Estado</th>
-                <th scope="col">Accion</th>
+                <th class="text-center" scope="col">Accion</th>
             </tr>
         </thead>
         <tbody>
@@ -58,7 +58,7 @@
                             ]) }}"
                             class="btn btn-outline-secondary btn-sm"
                         >
-                            <span class="fas fa-fire" aria-hidden="true"></span> Crear
+                            <span class="fas fa-plus" aria-hidden="true"></span> Crear
                         </a>
                     @endif
                 </td>
