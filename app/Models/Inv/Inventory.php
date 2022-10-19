@@ -62,6 +62,10 @@ class Inventory extends Model implements Auditable
         'deliver_date',
     ];
 
+    protected $appends = [
+        'have_computer'
+    ];
+
     public function requestOrganizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
@@ -148,6 +152,11 @@ class Inventory extends Model implements Auditable
         if($this->isComputer())
             $computer = Computer::whereInventoryNumber($this->number)->first();
         return $computer;
+    }
+
+    public function getHaveComputerAttribute()
+    {
+        return $this->isComputer();
     }
 
     public function getLocationAttribute()
