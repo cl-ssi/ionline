@@ -37,10 +37,14 @@ class ComputerController extends Controller
         $totales['other']['own'] = Computer::where('type', 'other')->where('active_type', 'own')->count();
         $totales['other']['user'] = Computer::where('type', 'other')->where('active_type', 'user')->count();
 
+        $totalMerged["merged"] = Computer::whereNotNull('fusion_at')->count();
+        $totalMerged["not_merged"] = Computer::whereNull('fusion_at')->count();
+
         $computers = Computer::Search($request->get('search'))
             ->with('users', 'place')
             ->paginate(50);
-        return view('resources.computer.index', compact('computers', 'totales'));
+
+        return view('resources.computer.index', compact('computers', 'totales', 'totalMerged'));
     }
 
     /**
