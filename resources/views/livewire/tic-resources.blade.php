@@ -6,6 +6,35 @@
 
 <h4>Desde nuevo módulo de inventario</h4>
 
+<div class="form-row">
+    <fieldset class="form-group col-md-3">
+        <label for="type-resource">Tipo Recurso</label>
+        <select
+            wire:model.debounce.1500ms="type_resource"
+            id="type-resource"
+            class="form-control"
+        >
+            <option value="">Todos</option>
+            <option value="for-merge">
+                Mostrar por fusionar
+            </option>
+            <option value="for-creating">
+                Mostrar por crear
+            </option>
+        </select>
+    </fieldset>
+    <fieldset class="form-group col-md-9">
+        <label for="search">Buscador</label>
+        <input
+            type="text"
+            class="form-control"
+            id="search"
+            wire:model.debounce.1500ms="search"
+            placeholder="Ingrese una marca, modelo, número de inventario o serial"
+        >
+    </fieldset>
+</div>
+
 <div class="table-responsive">
     <table class="table table-striped table-sm" id="TableFilter">
         <thead>
@@ -20,12 +49,20 @@
                 <th scope="col">Responsable</th>
                 <th scope="col">Lugar</th>
                 <th scope="col">Estado</th>
-                <th class="text-center" scope="col">Accion</th>
+                <th class="text-center" scope="col">Acción</th>
             </tr>
         </thead>
         <tbody>
+            <tr
+                class="d-none"
+                wire:loading.class.remove="d-none"
+            >
+                <td class="text-center" colspan="9">
+                    @include('layouts.partials.spinner')
+                </td>
+            </tr>
             @forelse($inventories as $inventory)
-            <tr>
+            <tr wire:loading.remove>
                 <td scope="row">{{ $inventory->number }} </td>
                 <!-- <td>{{ $inventory->unspscProduct->name }}</td> -->
                 <td>{{ $inventory->brand }}</td>
@@ -64,15 +101,19 @@
                 </td>
             </tr>
             @empty
-            <tr>
+            <tr wire:loading.remove>
                 <td class="text-center" colspan="9">
                     <em>No hay registros</em>
                 </td>
             </tr>
             @endforelse
         </tbody>
+        <caption>
+            Total de resultados: {{ $inventories->total() }}
+        </caption>
     </table>
 </div>
 
-{{-- $inventories->links() --}}
+{{ $inventories->links() }}
+
 </div>
