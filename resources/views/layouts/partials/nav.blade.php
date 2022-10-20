@@ -43,6 +43,13 @@
                             <i class="fas fa-globe-americas"></i> Tablero de población
                         </a>
 
+                        @canany(['be god'])
+                        <a class="dropdown-item"
+                           href="{{ route('rem.users.index') }}">
+                            <i class="fas fa-users"></i> Usuarios REM
+                        </a>
+                        @endcan
+
                         @can('RNI Database: view')
                         <a class="dropdown-item"
                            href="{{ route('indicators.rni_db.index') }}">
