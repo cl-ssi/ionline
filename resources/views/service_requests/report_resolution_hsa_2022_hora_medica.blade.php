@@ -230,6 +230,7 @@
                 <th>Función</th>
                 <th>Desde</th>
                 <th>Hasta</th>
+                <th>H.Semanales</th>
                 <th>Monto Total</th>
             </tr>
             <tr>
@@ -238,6 +239,7 @@
                 <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
                 <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
                 <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
+                <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
                 <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
             </tr>
         </table>

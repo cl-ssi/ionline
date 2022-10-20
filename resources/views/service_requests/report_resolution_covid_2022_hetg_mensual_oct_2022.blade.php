@@ -224,6 +224,7 @@
           <th>Desde</th>
           <th>Hasta</th>
           <th>Lugar de Trabajo</th>
+          <th>H.Semanales</th>
           <th>Monto Total</th>
         </tr>
         <tr>
@@ -234,6 +235,7 @@
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+          <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
         </tr>
       </table>
