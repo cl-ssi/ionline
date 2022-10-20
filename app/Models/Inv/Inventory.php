@@ -10,6 +10,7 @@ use App\Models\Warehouse\Product;
 use App\Models\Warehouse\Store;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
+use App\Resources\Computer;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,6 +60,10 @@ class Inventory extends Model implements Auditable
         'po_date',
         'discharge_date',
         'deliver_date',
+    ];
+
+    protected $appends = [
+        'have_computer'
     ];
 
     public function requestOrganizationalUnit()
@@ -131,6 +136,29 @@ class Inventory extends Model implements Auditable
         return $this->belongsTo(BudgetItem::class);
     }
 
+    public function computer()
+    {
+        return $this->hasOne(Computer::class);
+    }
+
+    public function isComputer()
+    {
+        return Computer::whereInventoryNumber($this->number)->exists();
+    }
+
+    public function getMyComputerAttribute()
+    {
+        $computer = null;
+        if($this->isComputer())
+            $computer = Computer::whereInventoryNumber($this->number)->first();
+        return $computer;
+    }
+
+    public function getHaveComputerAttribute()
+    {
+        return $this->isComputer();
+    }
+
     public function getLocationAttribute()
     {
         return $this->place->name . ", " . $this->place->location->name;
@@ -148,4 +176,14 @@ class Inventory extends Model implements Auditable
     {
         return money($this->po_price);
     }
+
+	public function getEstadoAttribute()
+	{
+		switch($this->status)
+		{
+			case 1: return 'Bueno'; break;
+			case 0: return 'Regular'; break;
+			case -1: return 'Malo'; break;
+		}
+	}
 }

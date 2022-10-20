@@ -32,7 +32,7 @@ class TelephoneController extends Controller
     {
         $users = User::doesnthave('Telephones')->get();
         $places = Place::All();
-        return view('resources.telephone.create', compact('users','places'));
+        return view('resources.telephone.create', compact('users', 'places'));
     }
 
     /**
@@ -43,11 +43,11 @@ class TelephoneController extends Controller
      */
     public function store(StoreTelephoneRequest $request)
     {
-      $telephone = new Telephone($request->All());
-      $telephone->save();
-      $telephone->users()->sync($request->input('users'));
-      session()->flash('info', 'El telefono '.$telephone->number.' ha sido creado.');
-      return redirect()->route('resources.telephone.index');
+        $telephone = new Telephone($request->All());
+        $telephone->save();
+        $telephone->users()->sync($request->input('users'));
+        session()->flash('info', 'El telefono ' . $telephone->number . ' ha sido creado.');
+        return redirect()->route('resources.telephone.index');
     }
 
     /**
@@ -71,7 +71,7 @@ class TelephoneController extends Controller
     {
         $users = User::OrderBy('name')->get();
         $places = Place::All();
-        return view('resources.telephone.edit', compact('telephone','users','places'));
+        return view('resources.telephone.edit', compact('telephone', 'users', 'places'));
     }
 
     /**
@@ -86,7 +86,7 @@ class TelephoneController extends Controller
         $telephone->fill($request->all());
         $telephone->save();
         $telephone->users()->sync($request->input('users'));
-        session()->flash('success', 'El telefono '.$telephone->number.' ha sido actualizado.');
+        session()->flash('success', 'El telefono ' . $telephone->number . ' ha sido actualizado.');
         return redirect()->route('resources.telephone.index');
     }
 
@@ -98,8 +98,8 @@ class TelephoneController extends Controller
      */
     public function destroy(Telephone $telephone)
     {
-      $telephone->delete();
-      session()->flash('success', 'El telefono '.$telephone->number.' ha sido eliminado');
-      return redirect()->route('resources.telephone.index');
+        $telephone->delete();
+        session()->flash('success', 'El telefono ' . $telephone->number . ' ha sido eliminado.');
+        return redirect()->route('resources.telephone.index');
     }
 }

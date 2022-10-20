@@ -7,38 +7,42 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Mobile extends Model
 {
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-      'brand', 'model', 'number'
-  ];
+    use SoftDeletes;
 
-  public function user() {
-      return $this->belongsTo('\App\User');
-  }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'res_mobiles';
 
-  public function scopeSearch($query, $search) {
-      if($search != "") {
-          return $query->where('number', 'LIKE', '%'.$search.'%')
-                       ->orWhere('brand', 'LIKE', '%'.$search.'%');
-      }
-  }
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
-  use SoftDeletes;
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
-  protected $dates = ['deleted_at'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'brand', 'model', 'number'
+    ];
 
-  /**
-  * The table associated with the model.
-  *
-  * @var string
-  */
-  protected $table = 'res_mobiles';
+    public function user()
+    {
+        return $this->belongsTo('\App\User');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search != "")
+        {
+            return $query->where('number', 'LIKE', '%' . $search . '%')
+                ->orWhere('brand', 'LIKE', '%' . $search . '%');
+        }
+    }
 }

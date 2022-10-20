@@ -249,12 +249,14 @@ class DocumentController extends Controller
      */
     public function createFromPrevious(Request $request)
     {
+        $correlative_acta_menor = Correlative::where('type','Acta de Recepción Obras Menores')->first();
         $document = Document::findOrNew($request->document_id);
         $document->type = null;
         if ($document->user_id != Auth::id()) {
             $document = new Document();
         }
-        return view('documents.create', compact('document'));
+
+        return view('documents.create', compact('document','correlative_acta_menor'));
     }
 
     public function download(Document $document)

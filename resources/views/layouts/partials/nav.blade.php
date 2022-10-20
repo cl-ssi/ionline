@@ -236,6 +236,11 @@
 
                         <h6 class="dropdown-header">Recursos informáticos</h6>
 
+                        <a class="dropdown-item {{ active('resources.tic') }}"
+                            href="{{ route('resources.tic') }}">
+                            <i class="fas fa-boxes fa-fw"></i> Bandeja de inventario
+                        </a>
+
                         <a class="dropdown-item {{ active('resources.computer.*') }}"
                             href="{{ route('resources.computer.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Computadores
@@ -437,7 +442,7 @@
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                     </li>
                 @else
-					
+
 					@canany([
 						'be god',
 						'Parameters: programs',
@@ -446,7 +451,7 @@
 						'Parameters: places',
 						'Parameters: holidays',
 						'Parameters: UNSPSC',
-					])	
+					])
 					<li class="nav-item dropdown {{ active(['parameters.*']) }}">
 						<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
 							<i class="fas fa-cog" title="Mantenedores"></i>
@@ -462,7 +467,7 @@
 
 							<li><hr class="dropdown-divider"></li>
 
-							<a class="dropdown-item {{ active(['parameters.permissions.web']) }}" 
+							<a class="dropdown-item {{ active(['parameters.permissions.web']) }}"
 								href="{{ route('parameters.permissions.index', 'web') }}">
 								<i class="fas fa-fw fa-user-tag"></i> Permisos internos
 							</a>
@@ -494,7 +499,7 @@
 
 
 						@canany(['be god','Parameters: programs'])
-							<a class="dropdown-item {{ active(['parameters.programs.*']) }}" 
+							<a class="dropdown-item {{ active(['parameters.programs.*']) }}"
 								href="{{ route('parameters.programs.index')}}">
 								<i class="fas fa-fw fa-list"></i> Programas
 							</a>
@@ -509,7 +514,7 @@
 						@endcanany
 
 						@canany(['be god','Parameters: COMGES cutoffdates'])
-							<a class="dropdown-item {{ active(['parameters.cutoffdates.*']) }}" 
+							<a class="dropdown-item {{ active(['parameters.cutoffdates.*']) }}"
 								href="{{ route('parameters.cutoffdates.index') }}">
 								<i class="fas fa-fw fa-calendar-alt"></i> COMGES - Fechas de corte
 							</a>
@@ -523,7 +528,7 @@
 								<i class="fas fa-fw fa-building"></i> Ubicaciones (edificios)
 							</a>
 						@endcanany
-					
+
 						@canany(['be god','Parameters: places'])
 							<a class="dropdown-item {{ active(['parameters.places.*']) }}"
 								href="{{ route('parameters.places.index') }}">
@@ -537,26 +542,37 @@
             					<i class="fas fa-fw fa-suitcase"></i> Feriados
 							</a>
 						@endcanany
-						
+
 						@canany(['be god','Parameters: UNSPSC'])
 							<li><hr class="dropdown-divider"></li>
-							
-							<a class="dropdown-item {{ active('segments.index') }}" 
-								href="{{ route('segments.index') }}">
+
+							<a
+                                class="dropdown-item {{ active('segments.index') }}"
+								href="{{ route('segments.index') }}"
+                            >
 								<i class="fas fa-fw fa-cubes"></i> UNSPSC Segmentos
 							</a>
 
-							<a class="dropdown-item {{ active('products.all') }}" 
+							<a class="dropdown-item {{ active('products.all') }}"
 								href="{{ route('products.all') }}">
 								<i class="fas fa-fw fa-cube"></i> UNSPSC Productos
 							</a>
 						@endcanany
-						
+
 						@canany(['be god'])
 							<li><hr class="dropdown-divider"></li>
 
-							<a class="dropdown-item {{active('parameters.phrases.index')}}"
-								href="{{ route('parameters.phrases.index') }}">
+                            <a
+                                class="dropdown-item {{active('parameters.phrases.index')}}"
+								href="{{ route('parameters.labels.index', 'computers') }}"
+                            >
+								<i class="fas fa-tag"></i> Etiqueta Computadores
+							</a>
+
+							<a
+                                class="dropdown-item {{active('parameters.phrases.index')}}"
+								href="{{ route('parameters.phrases.index') }}"
+                            >
 								<i class="fas fa-smile-beam"></i> Frases del día
 							</a>
 						@endcanany
@@ -599,13 +615,13 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->firstName }} <span class="caret"></span>
-                            @if(auth()->user()->absent) 
+                            @if(auth()->user()->absent)
                                 <i class="fas text-warning fa-cocktail"></i>
                             @endif
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            
+
                             @if(session()->has('god'))
                                 <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
                                     <i class="fas fa-eye text-danger"></i> God Like
@@ -615,12 +631,12 @@
                             @endif
 
 							<a class="dropdown-item" href="{{ route('profile.subrogations') }}">
-								@if(auth()->user()->absent) 
+								@if(auth()->user()->absent)
                                 <i class="fas fa-fw fa-cocktail text-danger"></i>
                                 @else
 								<i class="fas fa-fw fa-chess"></i>
 								@endif
-								Subrogancia 
+								Subrogancia
 							</a>
 
                             <a class="dropdown-item" href="{{ route('inventories.pending-movements') }}">
@@ -638,7 +654,7 @@
 
 
                             <div class="dropdown-divider"></div>
-							
+
 							<a class="dropdown-item"
                                href="{{ route('rrhh.users.password.edit') }}">
                                 <i class="fas fa-cog fa-key"></i> Cambio de clave

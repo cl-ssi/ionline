@@ -60,22 +60,22 @@
 	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_hostname">Hostname</label>
-			<input type="text" class="form-control" id="for_hostname" name="hostname" value="{{$computer->hostname}}">
+			<input type="text" class="form-control" id="for_hostname" name="hostname" value="{{ $computer->hostname }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_domain">Dominio</label>
-			<input type="text" class="form-control" id="for_domain" name="domain" value="{{$computer->domain}}">
+			<input type="text" class="form-control" id="for_domain" name="domain" value="{{ $computer->domain }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="forIP">Número IP</label>
-			<input type="IP" class="form-control" id="forIP" placeholder="10.x.x.x" name="ip" required="required" value="{{$computer->ip}}">
+			<input type="IP" class="form-control" id="forIP" placeholder="10.x.x.x" name="ip" required="required" value="{{ $computer->ip }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_mac_address">Dirección MAC</label>
-			<input type="text" class="form-control" id="for_mac_address" placeholder="00:1B:2C:3D:xx:xx" name="mac_address" required="required" value="{{$computer->mac_address}}">
+			<input type="text" class="form-control" id="for_mac_address" placeholder="00:1B:2C:3D:xx:xx" name="mac_address" required="required" value="{{ $computer->mac_address }}">
 		</fieldset>
 	</div>
 
@@ -84,72 +84,84 @@
 			<label for="for_ip_group">Grupo IP</label>
             <select name="ip_group" id="for_ip_group" class="form-control" required>
             	<option value="">Seleccione...</option>
-                <option value="standard" {{ $computer->ip_group == "standard" ? 'selected' : '' }}>Estándar</option>
-				<option value="journalist" {{ $computer->ip_group == "journalist" ? 'selected' : '' }}>Periodista</option>
-				<option value="server" {{ $computer->ip_group == "server" ? 'selected' : '' }}>Servidor</option>
+                <option value="standard" {{ $computer->ip_group == "standard" ? 'selected' : '' }}>
+                    Estándar
+                </option>
+				<option value="journalist" {{ $computer->ip_group == "journalist" ? 'selected' : '' }}>
+                    Periodista
+                </option>
+				<option value="server" {{ $computer->ip_group == "server" ? 'selected' : '' }}>
+                    Servidor
+                </option>
             </select>
         </fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_rack<">Rack</label>
-			<input type="text" class="form-control" id="for_rack" name="rack" value="{{$computer->rack}}">
+			<input type="text" class="form-control" id="for_rack" name="rack" value="{{ $computer->rack }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_vlan">VLAN</label>
-			<input type="IP" class="form-control" id="for_vlan" placeholder="" name="vlan" value="{{$computer->vlan}}">
+			<input type="IP" class="form-control" id="for_vlan" placeholder="" name="vlan" value="{{ $computer->vlan }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_network_segment">Segmento de Red</label>
-			<input type="text" class="form-control" id="for_network_segment" placeholder="x.x.x.0" name="network_segment" value="{{$computer->network_segment}}">
+			<input type="text" class="form-control" id="for_network_segment" placeholder="x.x.x.0" name="network_segment" value="{{ $computer->network_segment }}">
 		</fieldset>
 	</div>
 
 	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_operating_system">Sistema Operativo</label>
-			<input type="text" class="form-control" id="for_operating_system" placeholder="Ej: Windows 7, Windows 10, Linux, etc." name="operating_system" required="required" value="{{$computer->operating_system}}">
+			<input type="text" class="form-control" id="for_operating_system" placeholder="Ej: Windows 7, Windows 10, Linux, etc." name="operating_system" required="required" value="{{ $computer->operating_system }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_processorr">Procesador</label>
-			<input type="integer" class="form-control" id="for_processor" name="processor" placeholder="Ej: I7 3.6GHz" required="required" value="{{$computer->processor}}">
+			<input type="integer" class="form-control" id="for_processor" name="processor" placeholder="Ej: I7 3.6GHz" required="required" value="{{ $computer->processor }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_ram">RAM</label>
-			<input type="text" class="form-control" id="for_ram" name="ram" placeholder="Ej: 8GB" required="required" value="{{$computer->ram}}">
+			<input type="text" class="form-control" id="for_ram" name="ram" placeholder="Ej: 8GB" required="required" value="{{ $computer->ram }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_hard_disk">Disco Duro</label>
-			<input type="text" class="form-control" id="for_hard_disk" name="hard_disk" placeholder="Ej: 1TB" required="required" value="{{$computer->hard_disk}}">
+			<input type="text" class="form-control" id="for_hard_disk" name="hard_disk" placeholder="Ej: 1TB" required="required" value="{{ $computer->hard_disk }}">
 		</fieldset>
 	</div>
 
 	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_inventory_number">Número de Inventario</label>
-			<input type="integer" class="form-control" id="for_inventory_number" name="inventory_number" value="{{$computer->inventory_number}}">
+			<input type="integer" class="form-control" id="for_inventory_number" name="inventory_number" value="{{ $computer->inventory_number }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_intesis_id">ID Intesis</label>
-			<input type="text" class="form-control" id="for_intesis_id" name="intesis_id" value="{{$computer->intesis_id}}">
+			<input type="text" class="form-control" id="for_intesis_id" name="intesis_id" value="{{ $computer->intesis_id }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="forComment">Comentario</label>
-			<input type="text" class="form-control" id="forComment" name="comment" value="{{$computer->comment}}">
+			<input type="text" class="form-control" id="forComment" name="comment" value="{{ $computer->comment }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_active_type">Tipo de Activo</label>
 			<select class="form-control" id="for_active_type" name="active_type">
-				<option value="leased" {{ $computer->active_type == "leased" ? 'selected' : '' }}>Arrendado</option>
-				<option value="own" {{ $computer->active_type == "own" ? 'selected' : '' }}>Propio</option>
-				<option value="user" {{ $computer->active_type == "user" ? 'selected' : '' }}>Usuario</option>
+				<option value="leased" {{ $computer->active_type == "leased" ? 'selected' : '' }}>
+                    Arrendado
+                </option>
+				<option value="own" {{ $computer->active_type == "own" ? 'selected' : '' }}>
+                    Propio
+                </option>
+				<option value="user" {{ $computer->active_type == "user" ? 'selected' : '' }}>
+                    Usuario
+                </option>
 			</select>
 		</fieldset>
 	</div>
@@ -157,19 +169,23 @@
 	<div class="form-row">
 		<fieldset class="form-group col">
 			<label for="for_office_serial">Licencia Office</label>
-			<input type="text" class="form-control" id="for_office_serial" name="office_serial" value="{{$computer->office_serial}}">
+			<input type="text" class="form-control" id="for_office_serial" name="office_serial" value="{{ $computer->office_serial }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_windows_serial">Licencia Windows</label>
-			<input type="text" class="form-control" id="for_windows_serial" name="windows_serial" value="{{$computer->windows_serial}}">
+			<input type="text" class="form-control" id="for_windows_serial" name="windows_serial" value="{{ $computer->windows_serial }}">
 		</fieldset>
 
 		<fieldset class="form-group col">
 			<label for="for_status">Estado</label>
 			<select class="form-control" id="for_status" name="status">
-				<option value="active" {{ $computer->status == "active" ? 'selected' : '' }}>Activo</option>
-				<option value="inactive" {{ $computer->status == "inactive" ? 'selected' : '' }}>Inactivo</option>
+				<option value="active" {{ $computer->status == "active" ? 'selected' : '' }}>
+                    Activo
+                </option>
+				<option value="inactive" {{ $computer->status == "inactive" ? 'selected' : '' }}>
+                    Inactivo
+                </option>
 			</select>
 		</fieldset>
 	</div>
@@ -178,15 +194,10 @@
 
 	<div class="form-row">
 		<fieldset class="form-group col">
-			<label for="forUsers">Asignar a persona:</label>
-			<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
-				@foreach($users as $user)
-          <option value="{{ $user->id }}" {{ $user->computers->contains($computer->id) ? 'selected': ''}}>{{ $user->FullName }}</option>
-				@endforeach
-			</select>
-			<small class="form-text text-muted">
-				Ctrl + Click para deseleccionar un usuario o seleccionar más de uno
-			</small>
+            @livewire('multiple-user-search', [
+                'myUsers' => $computer->users->pluck('id'),
+                'nameInput' => 'users'
+            ])
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -209,12 +220,16 @@
 
 		</form>
 
-		<a href="{{ route('resources.computer.index') }}" class="btn btn-outline-dark">Cancelar</a>
+		<a href="{{ route('resources.computer.index') }}" class="btn btn-outline-dark">
+            Cancelar
+        </a>
 
 		<form method="POST" action="{{ route('resources.computer.destroy', $computer) }}" class="d-inline">
-			  @csrf
-        @method('DELETE')
-			  <button class="btn btn-danger float-right"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
+			@csrf
+            @method('DELETE')
+			<button class="btn btn-danger float-right">
+                <span class="fas fa-trash" aria-hidden="true"></span> Eliminar
+            </button>
 		</form>
 
 	</fieldset>

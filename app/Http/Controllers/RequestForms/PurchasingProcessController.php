@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\RequestForms\RequestForm;
 use App\User;
 use App\Models\Parameters\Supplier;
+use App\Models\Parameters\Parameter;
 use App\Models\RequestForms\InternalPurchaseOrder;
 use App\Models\RequestForms\InternalPmItem;
 
@@ -32,10 +33,13 @@ class PurchasingProcessController extends Controller
 {
     public function index()
     {
-        if (Auth()->user()->organizational_unit_id != 37) {
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        if (Auth()->user()->organizational_unit_id != $ouSearch) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
+
+        /*
 
         $my_request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')
@@ -45,13 +49,16 @@ class PurchasingProcessController extends Controller
 
         $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers')
             ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15, ['*'], 'p2');
+        
+        */
 
-        return view('request_form.purchase.index', compact('my_request_forms', 'request_forms'));
+        return view('request_form.purchase.index');
     }
 
     public function purchase(RequestForm $requestForm)
     {
-        if (Auth()->user()->organizational_unit_id == 37) {
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        if (Auth()->user()->organizational_unit_id == $ouSearch) {
             $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
@@ -86,7 +93,8 @@ class PurchasingProcessController extends Controller
 
     public function edit(RequestForm $requestForm, PurchasingProcessDetail $purchasingProcessDetail)
     {
-        if (Auth()->user()->organizational_unit_id != 37) {
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        if (Auth()->user()->organizational_unit_id != $ouSearch) {
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
             return redirect()->route('request_forms.my_forms');
         }
