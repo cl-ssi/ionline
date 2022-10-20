@@ -39,6 +39,17 @@ class SearchRequests extends Component
 
     protected $listeners = ['searchedRequesterOu', 'clearRequesterOu','searchedAdminOu', 'clearAdminOu'];
 
+    protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
+        'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
+        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo'
+    ];
+
+    // public function mount() {
+    //     if (old('status_search')) {
+    //         $this->selectedStatus = old('status_search');
+    //     }
+    // }
+
     public function querySearch($isPaginated = true)
     {
         if($this->inbox == 'all'){
@@ -104,5 +115,62 @@ class SearchRequests extends Component
 
     public function clearAdminOu(){
         $this->selectedAdminOuName = null;
+    }
+
+    //RESET PAGE
+    public function updatingSelectedStatus(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedStatusPurchase(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedId(){
+        $this->resetPage();
+    }
+
+    public function updatingSelectedFolio(){
+        $this->resetPage();
+    }
+
+    public function updatingName(){
+        $this->resetPage();
+    }
+
+    public function updatingStartDate(){
+        $this->resetPage();
+    }
+
+    public function updatingEndDate(){
+        $this->resetPage();
+    }
+
+    public function updatingRequester(){
+        $this->resetPage();
+    }
+
+    public function updatingRequesterOuName(){
+        $this->resetPage();
+    }
+
+    public function updatingAdmin(){
+        $this->resetPage();
+    }
+
+    public function updatingAdminOuName(){
+        $this->resetPage();
+    }
+
+    public function updatingPurchaser(){
+        $this->resetPage();
+    }
+
+    public function updatingProgram(){
+        $this->resetPage();
+    }
+
+    public function updatingPo(){
+        $this->resetPage();
     }
 }

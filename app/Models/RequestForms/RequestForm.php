@@ -556,6 +556,12 @@ class RequestForm extends Model implements Auditable
         return $this->approvedAt->addDays($daysToExpire);
     }
 
+    // function getPurchasedOnTimeAttribute(){
+    //     dd($this->purchasingProcess->details)
+
+        // $this->approvedAt
+    // }
+
     /******************************************************/
     /*********** CODIGO  PACHA  **************************/
     /*****************************************************/
