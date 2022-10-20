@@ -10,6 +10,7 @@ use App\User;
 use App\Models\Parameters\Supplier;
 
 use App\Http\Controllers\Controller;
+use App\Models\Parameters\Parameter;
 
 class SupplyPurchaseController extends Controller
 {
@@ -21,7 +22,8 @@ class SupplyPurchaseController extends Controller
     public function index()
     {
         //By Purchaser
-        if(Auth()->user()->organizational_unit_id == 37){
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        if(Auth()->user()->organizational_unit_id == $ouSearch){
             $purchaser = User::with('requestForms')
                 ->latest()
                 ->whereHas('requestForms', function ($q){

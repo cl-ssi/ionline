@@ -36,7 +36,6 @@
                   <th>Usuario Gestor</th>
                   <th>Comprador</th>
                   <th>Items</th>
-                  <th>Espera</th>
                   <th>Etapas de aprobación</th>
                   <th></th>
                 </tr>
@@ -72,7 +71,10 @@
                                   <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
                                   @endif
                             </td>
-                            <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                            <td>
+                                {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                                {{ $requestForm->created_at->diffForHumans() }}
+                            </td>
                             <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
                                 {{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
@@ -81,7 +83,6 @@
                             </td>
                             <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
                             <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                            <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)

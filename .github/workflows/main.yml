@@ -1,0 +1,20 @@
+name: Adds all issues that don't include the 'needs-triage' labels to project board
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.3.0
+        with:
+          # You can target a repository in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/cl-ssi/projects/3
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          labeled: needs-triage
+          label-operator: NOT

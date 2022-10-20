@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3 class="mb-3">Crear nuevo Teléfono</h3>
+<h3 class="mb-3">Crear nuevo Teléfono Fijo</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('resources.telephone.store') }}">
 	@csrf
@@ -34,15 +34,10 @@
 	</fieldset>
 
 	<fieldset class="form-group">
-		<label for="forUsers">Asignar a persona:</label>
-		<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
-			@foreach($users as $user)
-				<option value="{{ $user->id }}">{{ $user->FullName }}</option>
-			@endforeach
-		</select>
-		<small class="form-text text-muted">
-			Ctrl + Click para deseleccionar un usuario o seleccionar más de uno
-		</small>
+		@livewire('multiple-user-search',[
+            'myUsers' => [],
+            'nameInput' => 'users'
+        ])
 	</fieldset>
 
     <button type="submit" class="btn btn-primary">Crear</button>

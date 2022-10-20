@@ -5,6 +5,7 @@
         <!-- <div wire:ignore id="for-bootstrap-select"> -->
           <select class="form-control selectpicker show-tick" id="for_year_id" name="year" wire:model="selectedYear" required>
               <option value="">Selección...</option>
+              <option value="2023">2023</option>
               <option value="2022">2022</option>
               <option value="2021">2021</option>
               <option value="2020">2020</option>

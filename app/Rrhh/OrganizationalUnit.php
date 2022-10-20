@@ -74,6 +74,18 @@ class OrganizationalUnit extends Model implements Auditable
         return $initials;
     }
 
+    public static function getOrganizationalUnitsBySearch($searchText){
+        $organizationalUnits = OrganizationalUnit::query();
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word){
+            $organizationalUnits->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%');
+            });
+        }
+        
+        return $organizationalUnits;
+    }
+
     protected $table = 'organizational_units';
 
     /**
