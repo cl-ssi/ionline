@@ -757,6 +757,8 @@ class FulfillmentController extends Controller
       $fulfillment->finances_approbation_date = null;
       $fulfillment->finances_approver_id = null;
 
+      $fulfillment->signatures_file_id = null;
+
       $fulfillment->save();
       session()->flash('success', 'Se ha borrado exitosamente el visto bueno de responsable.');
       return redirect()->back();
