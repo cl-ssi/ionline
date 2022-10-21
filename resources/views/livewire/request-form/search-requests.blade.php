@@ -109,7 +109,7 @@
     </div>
 
     <br>
-
+    <!-- TODOS LOS FORMULARIOS -->
     @if($request_forms->count() > 0 && $inbox == 'all')
         <div class="row">
             <div class="col">
@@ -258,7 +258,7 @@
         </div>
         {{ $request_forms->appends(request()->query())->links() }}
     @endif
-    
+    <!-- COMPRADORES -->
     @if($request_forms->count() > 0 && $inbox == 'purchase')
         <div class="row">
             <div class="col">
@@ -268,9 +268,8 @@
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
             </div>
         </div>
-                        
+        
         <div class="table-responsive">
-            <h6><i class="fas fa-inbox"></i> Mis Formularios asignados</h6>
             <table class="table table-sm table-hover table-bordered small">
                 <thead>
                     <tr class="text-center">
@@ -313,6 +312,7 @@
                         <td title="Aprobación: {{$requestForm->approvedAt}}" >
                             {{ $requestForm->expireAt }}
                             <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>
+                            
                         </td>
                         <td>
                             @if($requestForm->signatures_file_id)
