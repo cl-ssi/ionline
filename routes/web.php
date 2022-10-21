@@ -93,6 +93,9 @@ use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
+use App\Http\Controllers\Rem\UserRemController;
+
+
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\RNIdb\RNIdbController;
 
@@ -1922,7 +1925,15 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 });
 
+/* Nuevas rutas, Laravel 8.0. */
+Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
+        Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [UserRemController::class, 'index'])->name('index');
+        //Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        //Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+    });
 
+});
 
 
 
