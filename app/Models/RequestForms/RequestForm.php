@@ -56,7 +56,7 @@ class RequestForm extends Model implements Auditable
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'request_user_id');
+        return $this->belongsTo(User::class, 'request_user_id')->withTrashed();
     }
 
     public function messages()
@@ -71,7 +71,7 @@ class RequestForm extends Model implements Auditable
 
     public function contractManager()
     {
-        return $this->belongsTo(User::class, 'contract_manager_id');
+        return $this->belongsTo(User::class, 'contract_manager_id')->withTrashed();
     }
 
     public function purchasers()
@@ -82,7 +82,7 @@ class RequestForm extends Model implements Auditable
 
     public function supervisor()
     {
-        return $this->belongsTo(User::class, 'supervisor_user_id');
+        return $this->belongsTo(User::class, 'supervisor_user_id')->withTrashed();
     }
 
     public function purchaseUnit()
