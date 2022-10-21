@@ -32,7 +32,7 @@ class AddFusionAtToResComputers extends Migration
         Schema::table('res_computers', function (Blueprint $table) {
             //
             $table->dropColumn(['fusion_at']);
-            $table->dropindex(['inventory_id']);
+            $table->dropIndex(['inventory_id']);
             $table->dropColumn(['inventory_id']);
         });
     }
