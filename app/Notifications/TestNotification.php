@@ -11,11 +11,11 @@ class TestNotification extends Notification
 {
     use Queueable;
 
-	/**
-	 *  
-	 * $user->notify(new App\Notifications\TestNotification($param));
-	 * 
-	 */
+    /**
+     *  
+     * $user->notify(new App\Notifications\TestNotification($param));
+     * 
+     */
 
     /**
      * Create a new notification instance.
@@ -60,10 +60,10 @@ class TestNotification extends Notification
      */
     public function toArray($notifiable)
     {
-		// puedo usar aca $this->param
-		$id = 34;
+        // puedo usar aca $this->param
+        $id = 34;
         return [
-			'subject' => 'Staff: Nueva solciitud id:'.$id,
+            'subject' => 'Staff: Nueva solciitud id:'.$id,
             'action' => route('resources.computer.edit',15),
         ];
     }
