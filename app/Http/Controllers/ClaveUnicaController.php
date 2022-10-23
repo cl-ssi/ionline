@@ -16,8 +16,8 @@ use Exception;
 
 class ClaveUnicaController extends Controller
 {
-	const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
-	const SCOPE = 'openid+run+name+email';
+    const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
+    const SCOPE = 'openid+run+name+email';
 
     public function autenticar(Request $request){
         /* Primer paso, redireccionar al login de clave única */
@@ -25,20 +25,20 @@ class ClaveUnicaController extends Controller
         $redirect 		= $request->input('redirect');
         //die($redirect);
 
-		$url_base		= self::URL_BASE_CLAVE_UNICA."authorize/";
+        $url_base		= self::URL_BASE_CLAVE_UNICA."authorize/";
         $client_id 		= env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri 	= urlencode(env("CLAVEUNICA_CALLBACK"));
 
         $state 			= base64_encode(csrf_token().$redirect);
         $scope 			= self::SCOPE;
 
-		$params     	= '?client_id='.$client_id.
-						'&redirect_uri='.$redirect_uri.
-						'&scope='.$scope.
-						'&response_type=code'.
-						'&state='.$state;
+        $params     	= '?client_id='.$client_id.
+                        '&redirect_uri='.$redirect_uri.
+                        '&scope='.$scope.
+                        '&response_type=code'.
+                        '&state='.$state;
 
-		return redirect()->to($url_base.$params)->send();
+        return redirect()->to($url_base.$params)->send();
     }
 
     public function callback(Request $request) {
@@ -117,7 +117,7 @@ class ClaveUnicaController extends Controller
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
                
-		        if($response->getStatusCode() == 200) {
+                if($response->getStatusCode() == 200) {
                     $user_cu = json_decode($response);
                     
                     $user = new User();
@@ -130,13 +130,13 @@ class ClaveUnicaController extends Controller
                         $user->email = $user_cu->email;
                     }
 
-					/** Es para almacenar el json del usuario de CU, ya no ocupa */
+                    /** Es para almacenar el json del usuario de CU, ya no ocupa */
                     //$this->storeUserClaveUnica($access_token);
-		        }
-		        else {
+                }
+                else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-		            return redirect()->route('login');
-		        }
+                    return redirect()->route('login');
+                }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
                 $user->id = 12345678;
@@ -177,7 +177,7 @@ class ClaveUnicaController extends Controller
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
                 
-		        if($user_cu) {
+                if($user_cu) {
                     //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
 
                     $user = UserExternal::find($user_cu->RolUnico->numero);
@@ -197,11 +197,11 @@ class ClaveUnicaController extends Controller
                     }
                     
                     
-		        }
-		        else {
+                }
+                else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-		            return redirect()->route('login');
-		        }
+                    return redirect()->route('login');
+                }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
                 $user->id = 12345678;
@@ -232,11 +232,11 @@ class ClaveUnicaController extends Controller
         return redirect()->to($url)->send();
     }
 
-	/** Sirve para almacenar el json de un usuario, ya no se ocupa */
-	public function storeUserClaveUnica($access_token)
-	{
-		/** Store clave unica information */
-		dispatch(new StoreUserCU($access_token));
-	}
+    /** Sirve para almacenar el json de un usuario, ya no se ocupa */
+    public function storeUserClaveUnica($access_token)
+    {
+        /** Store clave unica information */
+        dispatch(new StoreUserCU($access_token));
+    }
 
 }

@@ -27,7 +27,7 @@ class TestController extends Controller
 
         if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
             // Check IP from internet.
-			// 'ip' => request()->getClientIp(),
+            // 'ip' => request()->getClientIp(),
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
             // Check IP is passed from proxy.
@@ -37,7 +37,7 @@ class TestController extends Controller
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
-		logger()->info($ip);
+        logger()->info($ip);
         //Storage::disk('local')->prepend('log_ips.txt', $ip);
 
         return $ip;
@@ -53,17 +53,17 @@ class TestController extends Controller
         dd($tenders);
     }
 
-	public function log()
-	{
-		$user = \App\User::find(1528758);
-		echo $user->name;
-		Log::info('primer log');
-		echo "Primer log";
-	}
+    public function log()
+    {
+        $user = \App\User::find(1528758);
+        echo $user->name;
+        Log::info('primer log');
+        echo "Primer log";
+    }
 
-	// public function storeRequestInputs(Request $request)
-	// {
-	// 	Log::info($request->all());
-	// 	var_dump($request->all());
-	// }
+    // public function storeRequestInputs(Request $request)
+    // {
+    // 	Log::info($request->all());
+    // 	var_dump($request->all());
+    // }
 }

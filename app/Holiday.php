@@ -16,11 +16,11 @@ class Holiday extends Model
     protected $fillable = [
         'date', 'name', 'region'
     ];
-    
+
     /** Retorna si es feriado o domingo */
     public static function checkDate($date)
     {
-        return (date('N', strtotime($date)) > 6) OR 
+        return (date('N', strtotime($date)) > 6) OR
             Holiday::whereDate('date',$date)->get()->isNotEmpty();
     }
 
@@ -39,7 +39,7 @@ class Holiday extends Model
     protected $dates = [
         'date',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *

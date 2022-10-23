@@ -251,12 +251,15 @@ class UserController extends Controller
     }
 
 
-    public function switch(User $user) {
-        if (session()->has('god')) {
+    public function switch(User $user) 
+    {
+        if (session()->has('god')) 
+        {
             /* Clean session var */
             session()->pull('god');
         }
-        else {
+        else 
+        {
             /* set god session var = user_id */
             session(['god' => Auth::id()]);
         }
@@ -463,16 +466,16 @@ class UserController extends Controller
     }
 
     public function openNotification($notification) 
-	{
+    {
         $notification = auth()->user()->notifications->find($notification);
-		$route = $notification->data['action'];
+        $route = $notification->data['action'];
         $notification->markAsRead();
-		return redirect($route);
-	}
+        return redirect($route);
+    }
 
     public function allNotifications() 
-	{
+    {
         // $notifications = auth()->user()->notifications;
         return view('notifications.index');
-	}
+    }
 }
