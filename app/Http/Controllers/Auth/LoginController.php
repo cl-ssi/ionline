@@ -55,7 +55,11 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             // Authentication passed...
-            return redirect()->intended('dashboard');
+            auth()->user()->checkGravatar;
+            return redirect()->route('home');
+
+            /** Estaba esto, no se que hace */
+            // return redirect()->intended('dashboard');
         }
     }
 
