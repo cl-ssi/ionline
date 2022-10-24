@@ -7,7 +7,7 @@
         <fieldset class="form-group col-md-3">
             <label for="products">Productos</label>
             <select
-                wire:model.debounce.1500ms="unspsc_product_id"
+                wire:model.defer="unspsc_product_id"
                 id="products"
                 class="form-control form-control-sm"
             >
@@ -23,7 +23,7 @@
         <fieldset class="form-group col-md-2">
             <label for="locations">Ubicaciones</label>
             <select
-                wire:model.debounce.1500ms="location_id"
+                wire:model.defer="location_id"
                 id="locations"
                 class="form-control form-control-sm"
             >
@@ -39,7 +39,7 @@
         <fieldset class="form-group col-md-2">
             <label for="places">Lugares</label>
             <select
-                wire:model.debounce.1500ms="place_id"
+                wire:model.defer="place_id"
                 id="places"
                 class="form-control form-control-sm"
             >
@@ -55,7 +55,7 @@
         <fieldset class="form-group col-md-2">
             <label for="responsibles">Responsables</label>
             <select
-                wire:model.debounce.1500ms="user_responsible_id"
+                wire:model.defer="user_responsible_id"
                 id="responsibles"
                 class="form-control form-control-sm"
             >
@@ -71,7 +71,7 @@
         <fieldset class="form-group col-md-2">
             <label for="users">Usuarios</label>
             <select
-                wire:model.debounce.1500ms="user_using_id"
+                wire:model.defer="user_using_id"
                 id="users"
                 class="form-control form-control-sm"
             >
