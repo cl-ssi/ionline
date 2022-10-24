@@ -20,6 +20,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
+use App\Models\Parameters\Program;
 use Illuminate\Contracts\Validation\Validator;
 
 class RequestFormCreate extends Component
@@ -39,7 +40,7 @@ class RequestFormCreate extends Component
 
     public $searchedUser, $isRFItems;
 
-    public $form_status;
+    public $form_status, $lstProgram, $program_id;
 
     protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers', 'searchedContractManager'];
 
@@ -49,7 +50,8 @@ class RequestFormCreate extends Component
         'contractManagerId'            =>  'required',
         'subtype'                      =>  'required',
         'purchaseMechanism'            =>  'required',
-        'program'                      =>  'required',
+        'program'                      =>  'exclude_unless:program_id,other|required',
+        'program_id'                   =>  'exclude_if:program_id,other|required',
         'justify'                      =>  'required',
         'typeOfCurrency'               =>  'required',
         'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
@@ -64,6 +66,7 @@ class RequestFormCreate extends Component
         'subtype.required'             =>  'Seleccione un "Tipo" para este formulario.',
         'purchaseMechanism.required'   =>  'Seleccione un "Mecanismo de Compra".',
         'program.required'             =>  'Ingrese un "Programa Asociado".',
+        'program_id.required'          =>  'Seleccione un "Programa Asociado".',
         'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
         'justify.required'             =>  'Debe agregar una "Justificación de Adquisición".',
         'typeOfCurrency.required'      =>  'Ingrese un "Tipo de Moneda"',
@@ -83,6 +86,7 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+      $this->lstProgram             = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
@@ -117,6 +121,7 @@ class RequestFormCreate extends Component
       $this->contractManager    =   $this->requestForm->contractManager;
       $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
+      $this->program_id         =   $this->program ? 'other' : $this->requestForm->program_id;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
       $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
@@ -241,8 +246,7 @@ class RequestFormCreate extends Component
       })->validate();
 
       $req = DB::transaction(function () {
-
-        //dd("chequear por jefatura");
+        // dd($this->program_id);
         if($this->form_status == 'sent'){
             $req = RequestForm::updateOrCreate(
               [
@@ -264,7 +268,8 @@ class RequestFormCreate extends Component
                 'estimated_expense'     =>  $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
-                'program'               =>  $this->program,
+                'program'               =>  $this->program_id == 'other' ? $this->program : null,
+                'program_id'            =>  $this->program_id != 'other' ? $this->program_id : null,
                 'status'                =>  'pending'
             ]);
         }
@@ -289,7 +294,8 @@ class RequestFormCreate extends Component
                 'estimated_expense'     =>  $this->editRF && $this->requestForm->has_increased_expense ? $this->requestForm->estimated_expense : $this->totalForm(),
                 'type_of_currency'      =>  $this->typeOfCurrency,
                 'purchase_mechanism_id' =>  $this->purchaseMechanism,
-                'program'               =>  $this->program,
+                'program'               =>  $this->program_id == 'other' ? $this->program : null,
+                'program_id'            =>  $this->program_id != 'other' ? $this->program_id : null,
                 'status'                =>  $this->editRF ? $this->requestForm->status : 'saved'
             ]);
         }

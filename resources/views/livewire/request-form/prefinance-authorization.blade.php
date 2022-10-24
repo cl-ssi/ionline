@@ -151,16 +151,37 @@
                     </fieldset>
                 </div>
                 <div class="form-row">
-                    <fieldset class="form-group col-sm-6">
+                    {{--<fieldset class="form-group col-sm-4">
                         <label for="forRut">Folio Requerimiento SIGFE:</label>
                         <input wire:model.defer="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
                         @error('sigfe') <span class="error text-danger">{{ $message }}</span> @enderror
                     </fieldset>
 
-                    <fieldset class="form-group col-sm-6">
+                    <fieldset class="form-group col-sm-4">
                       <label>Programa Asociado:</label><br>
                       <input wire:model.defer="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
                       @error('program') <span class="error text-danger">{{ $message }}</span> @enderror
+                    </fieldset>--}}
+
+                    <fieldset class="form-group col-sm-5">
+                      <label>Programa Asociado: @if($program) <span class="badge badge-secondary">{{$program}}</span> @endif</label><br>
+                      <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
+                          <option value="">Seleccione...</option>
+                          @foreach($lstProgram as $val)
+                              <option value="{{$val->id}}">{{$val->alias_finance}} - Subtítulo {{$val->Subtitle->name}}</option>
+                          @endforeach
+                      </select>
+                      @error('program_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                    </fieldset>
+
+                    <fieldset class="form-group col-sm-2">
+                        <label for="forRut">Folio SIGFE:</label>
+                        <input wire:model="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
+                    </fieldset>
+
+                    <fieldset class="form-group col-sm-2">
+                        <label for="forRut">Financiamiento</label>
+                        <input wire:model="financial_type" name="financial_type" wire:click="resetError" class="form-control form-control-sm" type="text" readonly>
                     </fieldset>
                 </div>
 

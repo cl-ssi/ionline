@@ -73,11 +73,15 @@
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Programa Asociado</th>
-                        <td>{{ $requestForm->program }}</td>
+                        <td>{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Folio SIGFE</th>
-                        <td>{{ $requestForm->sigfe }}</td>
+                        <td>{{ $requestForm->associateProgram->folio ?? $requestForm->sigfe }}</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active" scope="row">Financiamiento</th>
+                        <td>{{ $requestForm->associateProgram->financing ?? '' }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Justificación de Adquisición</th>

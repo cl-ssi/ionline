@@ -12,7 +12,8 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
-      @if(Auth::user()->hasPermissionTo('Request Forms: all') || Auth()->user()->organizational_unit_id == 40)
+      @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value)
+      @if(Auth::user()->hasPermissionTo('Request Forms: all') || Auth()->user()->organizational_unit_id == $ouSearch)
       <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
       @endif
       <a class="dropdown-item" href="{{ route('request_forms.pending_forms') }}"><i class="fas fa-inbox"></i>
@@ -28,7 +29,8 @@
     </div>
   </li>
 
-  @if(Auth()->user()->organizational_unit_id == 37)
+  @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value)
+  @if(Auth()->user()->organizational_unit_id == $ouSearch)
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-alt"></i> Abastecimiento
@@ -39,7 +41,8 @@
     </li>
   @endif
 
-	@if(in_array(Auth()->user()->organizational_unit_id, [37, 40]) || Auth::user()->hasPermissionTo('Request Forms: config'))
+  @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'FinanzasSSI'])->pluck('value')->toArray())
+	@if(in_array(Auth()->user()->organizational_unit_id, $ouSearch) || Auth::user()->hasPermissionTo('Request Forms: config'))
 	<li class="nav-item dropdown">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		<i class="fas fa-file-alt"></i> Parámetros

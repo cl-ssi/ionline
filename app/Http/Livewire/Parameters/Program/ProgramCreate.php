@@ -19,6 +19,7 @@ class ProgramCreate extends Component
     public $start_date;
     public $end_date;
     public $description;
+    public $is_program;
 
     public $subtitles;
 
@@ -46,6 +47,7 @@ class ProgramCreate extends Component
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',
+            'is_program'    => 'nullable',
         ];
     }
 

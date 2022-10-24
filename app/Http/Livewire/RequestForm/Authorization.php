@@ -15,12 +15,14 @@ use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
 use App\Mail\RfEndSignNotification;
+use App\Models\Parameters\Parameter;
+use App\Models\Parameters\Program;
 use Illuminate\Support\Facades\Auth;
 
 class Authorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment, $program;
-    public $lstSupervisorUser, $supervisorUser, $title, $route;
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment, $program, $program_id, $lstProgram;
+    public $lstSupervisorUser, $supervisorUser, $title, $route, $sigfe, $financial_type;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
     public $estimated_expense, $new_estimated_expense, $purchaser_observation, $files;
 
@@ -39,27 +41,32 @@ class Authorization extends Component
       $this->requestForm        = $requestForm;
       $this->comment            = '';
       $this->program            = $requestForm->program;
-
+      $this->program_id         = $requestForm->program_id;
+      
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
-
+      
       foreach ($authorities as $authority){
-          $iam_authorities_in[] = $authority->organizational_unit_id;
+        $iam_authorities_in[] = $authority->organizational_unit_id;
       }
-
+      
       $this->organizationalUnit = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->name;
-
+      
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->authorities->where('type', 'manager')->where('from', '<=',Carbon::now())->where('to', '>=',Carbon::now())->last()->position ?? auth()->user()->position;
       if($eventType=='supply_event'){
-          $this->lstSupervisorUser      = User::where('organizational_unit_id', 37)->get();
-          //$this->lstPurchaseType        = PurchaseType::all();
-          $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;
-          $this->lstPurchaseType        = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
-          $this->lstPurchaseUnit        = PurchaseUnit::all();
-          $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-          $this->title = 'Autorización Abastecimiento';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $this->lstSupervisorUser      = User::where('organizational_unit_id', $ouSearch)->get();
+        //$this->lstPurchaseType        = PurchaseType::all();
+        $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;
+        $this->lstPurchaseType        = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
+        $this->lstPurchaseUnit        = PurchaseUnit::all();
+        $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+        $this->title = 'Autorización Abastecimiento';
       }elseif($eventType=='finance_event'){
-          $this->title = 'Autorización Finanzas';
+        $this->title = 'Autorización Finanzas';
+        $this->lstProgram = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
+        $this->sigfe = $requestForm->associateProgram ? $requestForm->associateProgram->folio : $requestForm->sigfe;
+        $this->financial_type = $requestForm->associateProgram->financing ?? '';
       }elseif($eventType=='leader_ship_event'){
           $this->title = 'Autorización Jefatura';
       }elseif($eventType=='superior_leader_ship_event'){
@@ -97,6 +104,16 @@ class Authorization extends Component
 
     public function updatedProgram($value){
         $this->requestForm->update(['program' => $value]);
+    }
+
+    public function updatedProgramId($value){
+      $this->sigfe = $this->financial_type = null;
+      if($value){
+        $programTemp = $this->lstProgram->where('id', $value)->first();
+        $this->sigfe = $programTemp->folio;
+        $this->financial_type = $programTemp->financing;
+        $this->requestForm->update(['program_id' => $value]);
+      }
     }
 
     public function acceptRequestForm()

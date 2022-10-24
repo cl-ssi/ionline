@@ -49,6 +49,16 @@
         @enderror
     </fieldset>
 
+    <fieldset class="form-group col-md-2">
+        <label for="is_program">&nbsp;</label>
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" value="" id="is_program" wire:model="is_program">
+            <label class="form-check-label" for="is_program">
+                ¿Es programa?
+            </label>
+        </div>
+    </fieldset>
+
     <!--fieldset class="form-group col-md-2">
         <label for="start-date">Fecha Inicio</label>
         <input

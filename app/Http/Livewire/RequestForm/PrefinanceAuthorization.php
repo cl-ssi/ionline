@@ -10,11 +10,12 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RequestFormSignNotification;
+use App\Models\Parameters\Program;
 
 class PrefinanceAuthorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment,
-           $lstBudgetItem, $program, $sigfe, $codigo;
+           $lstBudgetItem, $program, $program_id, $lstProgram, $sigfe, $codigo, $financial_type;
     public $arrayItemRequest = [['budgetId' => '']];
     public $round_trips, $baggages;
 
@@ -37,11 +38,14 @@ class PrefinanceAuthorization extends Component
       $this->comment            = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
+      $this->lstProgram         = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
       $this->program            = $requestForm->program;
-      $this->sigfe              = $requestForm->sigfe;
+      $this->program_id         = $requestForm->program_id;
+      $this->sigfe              = $requestForm->associateProgram ? $requestForm->associateProgram->folio : $requestForm->sigfe;
+      $this->financial_type     = $requestForm->associateProgram->financing ?? '';
     }
 
 
@@ -54,13 +58,15 @@ class PrefinanceAuthorization extends Component
 
       $this->validate(
         [
-            'sigfe'                        =>  'required',
-            'program'                      =>  'required',
+            // 'sigfe'                        =>  'required',
+            // 'program'                      =>  'required',
+            'program_id'                   =>  'required',
             'arrayItemRequest'             =>  'required|min:'.(($this->requestForm->itemRequestForms->count() > 0 ? count($this->requestForm->itemRequestForms) : count($this->requestForm->passengers)) + 1)
         ],
         [
-            'sigfe.required'               =>  'Ingrese valor para  SIGFE.',
-            'program.required'             =>  'Ingrese un Programa Asociado.',
+            // 'sigfe.required'               =>  'Ingrese valor para  SIGFE.',
+            // 'program.required'             =>  'Ingrese un Programa Asociado.',
+            'program_id.required'          =>  'Ingrese un Programa Asociado.',
             'arrayItemRequest.min'         =>  'Debe seleccionar todos los items presupuestario.',
         ],
       );
@@ -82,8 +88,9 @@ class PrefinanceAuthorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           //  $this->requestForm->status = 'pending';
-          $this->requestForm->program = $this->program;
-          $this->requestForm->sigfe = $this->sigfe;
+          // $this->requestForm->program = $this->program;
+          $this->requestForm->program_id = $this->program_id;
+          // $this->requestForm->sigfe = $this->sigfe;
           $this->requestForm->save();
           $event->signature_date = Carbon::now();
           $event->position_signer_user = $this->position;
@@ -140,6 +147,14 @@ class PrefinanceAuthorization extends Component
       return redirect()->route('request_forms.pending_forms');
     }
 
+    public function updatedProgramId($value){
+      $this->sigfe = $this->financial_type = null;
+      if($value){
+        $programTemp = $this->lstProgram->where('id', $value)->first();
+        $this->sigfe = $programTemp->folio;
+        $this->financial_type = $programTemp->financing;
+      }
+    }
 
     public function render() {
         return view('livewire.request-form.prefinance-authorization');

@@ -118,6 +118,11 @@
                                 <i class="fas fa-file-contract"></i>
                                 </a>
                               @endif
+
+                              @if(Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
+                                <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+                                </a>
+                              @endif
                             </td>
                         </tr>
                   @endforeach
