@@ -155,6 +155,7 @@ class ClaveUnicaController extends Controller
                 $u->email_personal = $user->email;
                 $u->save();
                 Auth::login($u, true);
+                auth()->user()->checkGravatar;
                 $route = 'home';
             }
             else {

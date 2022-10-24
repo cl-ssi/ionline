@@ -13,12 +13,12 @@
 <form method="GET" class="form-horizontal" action="{{ route('documents.index') }}">
 
     <div class="form-row">
-        <fieldset class="form-group col-1">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_id">Cód Int</label>
             <input type="text" class="form-control" id="for_id" name="id">
         </fieldset>
 
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-8 col-md-2">
             <label for="for_type">Tipo</label>
             <select name="type" id="for_type" class="form-control">
                 <option></option>
@@ -33,42 +33,34 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_subject">Materia</label>
             <input type="text" class="form-control" id="for_subject" name="subject">
         </fieldset>
 
-        <fieldset class="form-group col-1">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_number">Número</label>
             <input type="text" class="form-control" id="for_number" name="number">
         </fieldset>
 
-        <!--fieldset class="form-group col">
-            <label for="for_number">Número</label>
-            <select class="form-control selectpicker" id="for_number" name="number">
-            </select>
-        </fieldset-->
-
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-8 col-md-4">
             <label for="for_user_id">Usuario</label>
-            <select name="user_id" id="for_user_id" class="form-control">
-                <option value=""></option>
-                @foreach($users as $user)
-                <option value="{{ $user->id }}">{{ $user->fullName }}</option>
-                @endforeach
-            </select>
+            @livewire('search-select-user')
         </fieldset>
 
-        <div class="form-check form-check-inline col-1">
-            <input class="form-check-input" name="file" type="checkbox" id="for_file">
-            <label class="form-check-label" for="for_file">Pendientes</label>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-4 mb-3"><i class="fas fa-search"></i></button>
-
+        <fieldset class="form-group col-1 col-md-1">
+            <label for="">&nbsp;</label>
+            <button type="submit" class="btn btn-primary form-control">
+                <i class="fas fa-search"></i>
+            </button>
+        </fieldset>
+        
     </div>
 
-
+    <fieldset class="form-check form-check-inline mb-3">
+        <input class="form-check-input" name="file" type="checkbox" id="for_file">
+        <label class="form-check-label" for="for_file">Pendiente</label>
+    </fieldset>
 
 </form>
 
@@ -87,7 +79,7 @@
             <th>Materia</th>
             <th>De</th>
             <th>Para</th>
-            <th class="small">Creador</th>
+            <th class="small" width="70">Creador</th>
             <th nowrap></th>
             <th nowrap></th>
             <th nowrap></th>
@@ -108,7 +100,17 @@
             <td>{{ $doc->subject }}</td>
             <td>{!! $doc->fromHtml !!}</td>
             <td>{!! $doc->forHtml !!}</td>
-            <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
+            <td class="small">
+                @if($doc->user)
+                    @if($doc->user->gravatar )
+                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="Avatar">
+                    @else
+                        {{ optional($doc->user)->tinnyName }}
+                    @endif
+                @endif
+                <br>
+                {{ $doc->created_at }}
+            </td>
             <td nowrap>
                 @if(!$doc->file)
                     <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
@@ -148,6 +150,7 @@
     </tbody>
 </table>
 
+
 <hr>
 
 <h3 class="mb-3">Documentos de la misma unidad organizacional</h3>
@@ -164,7 +167,7 @@
             <th>Materia</th>
             <th>De</th>
             <th>Para</th>
-            <th class="small">Creador</th>
+            <th class="small" width="70">Creador</th>
             <th nowrap></th>
             <th nowrap></th>
             <th nowrap></th>
@@ -184,7 +187,17 @@
             <td>{{ $doc->subject }}</td>
             <td>{!! $doc->fromHtml !!}</td>
             <td>{!! $doc->forHtml !!}</td>
-            <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
+            <td class="small">
+                @if($doc->user)
+                    @if($doc->user->gravatar )
+                        <img src="{{ $doc->user->gravatarUrl }}?s=40&d=mp&r=g" class="border rounded-circle" alt="Avatar">
+                    @else
+                        {{ optional($doc->user)->tinnyName }}
+                    @endif
+                @endif
+                <br>
+                {{ $doc->created_at }}
+            </td>
             <td nowrap>
                 <a href="{{ route('documents.show', $doc->id) }}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-file fa-lg"></i></a>
             </td>

@@ -33,8 +33,25 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'dv', 'name', 'fathers_family','mothers_family','gender','address','phone_number','email',
-        'password','birthday','position','active','external','country_id', 'organizational_unit_id', 'email_personal', 'email_verified_at'
+        'id', 
+        'dv', 
+        'name', 
+        'fathers_family',
+        'mothers_family',
+        'gender',
+        'address',
+        'phone_number',
+        'email',
+        'password',
+        'birthday',
+        'position',
+        'active',
+        'gravatar',
+        'external',
+        'country_id',
+        'organizational_unit_id',
+        'email_personal',
+        'email_verified_at'
     ];
 
     /**
@@ -470,6 +487,47 @@ class User extends Authenticatable implements Auditable
             }
         }
         return $users;
+    }
+
+    /**
+     * Get either a Gravatar URL for a specified email address.
+     *
+     * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param string $d Default imageset to use [ 404 | mp | identicon | monsterid | wavatar ]
+     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
+     * example:
+     * <img src="{{ auth()->user()->gravatarUrl }}" class="img-thumbnail rounded-circle" alt="Avatar">
+     * example with params:
+     * <img src="{{ auth()->user()->gravatarUrl }}?s=80&d=mp&r=g" class="img-thumbnail rounded-circle" alt="Avatar">
+     */
+    public function getGravatarUrlAttribute()
+    {
+        $hash = md5(strtolower(trim($this->attributes['email'])));
+        return "http://www.gravatar.com/avatar/$hash";
+    }
+
+    function getCheckGravatarAttribute()
+    {
+        $hash = md5($this->email);
+        $uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+        $headers = @get_headers($uri);
+
+        if ( preg_match("|200|", $headers[0]) )
+        {
+            if(!$this->gravatar)
+            {
+                $this->gravatar = true;
+                $this->save();
+            }
+        } 
+        else 
+        {
+            if($this->gravatar)
+            {
+                $this->gravatar = false;
+                $this->save();
+            }
+        }
     }
 
     /**

@@ -17,7 +17,7 @@
 
         <div class="input-group-append">
             <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="resetx">
-                <i class="fas fa-eraser"></i> Limpiar</a>
+                <i class="fas fa-eraser"></i></a>
         </div>
     </div>
     

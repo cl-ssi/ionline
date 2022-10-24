@@ -621,7 +621,12 @@
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->firstName }} <span class="caret"></span>
+                            @if(auth()->user()->gravatar)
+                                <img src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g" class="rounded-circle" alt="{{ Auth::user()->firstName }}">
+                            @else
+                                {{ Auth::user()->firstName }}
+                            @endif    
+                         <span class="caret"></span>
                             @if(auth()->user()->absent)
                                 <i class="fas text-warning fa-cocktail"></i>
                             @endif

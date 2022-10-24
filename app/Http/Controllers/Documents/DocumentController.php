@@ -30,29 +30,44 @@ class DocumentController extends Controller
     {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(30);
         //$documents = Document::Search($request)->latest()->paginate(50);
-        if (Auth()->user()->OrganizationalUnit) {
-            $childs = array(Auth()->user()->OrganizationalUnit->id);
+        if (Auth()->user()->organizational_unit_id) {
+            $childs = array(Auth()->user()->organizational_unit_id);
 
             $childs = array_merge($childs, Auth()->user()->OrganizationalUnit->childs->pluck('id')->toArray());
             foreach (Auth()->user()->OrganizationalUnit->childs as $child) {
                 $childs = array_merge($childs, $child->childs->pluck('id')->toArray());
             }
 
-            $ownDocuments = Document::Search($request)->latest()
+            $ownDocuments = Document::with(
+                'user',
+                'user.organizationalUnit',
+                'organizationalUnit',
+                'fileToSign',
+                'fileToSign.signaturesFlows'
+                )
+                ->Search($request)
+                ->latest()
                 ->where('user_id', Auth()->user()->id)
                 //->whereIn('organizational_unit_id',$childs)
                 // ->withTrashed()
                 ->paginate(100);
 
-            $otherDocuments = Document::Search($request)->latest()
+            $otherDocuments = Document::with(
+                'user',
+                'user.organizationalUnit',
+                'organizationalUnit',
+                'fileToSign',
+                'fileToSign.signaturesFlows'
+                )
+                ->Search($request)
+                ->latest()
                 ->where('user_id', '<>', Auth()->user()->id)
                 ->where('type', '<>', 'Reservado')
                 ->whereIn('organizational_unit_id', $childs)
                 // ->withTrashed()
                 ->paginate(100);
 
-            $users = User::orderBy('name')->orderBy('fathers_family')->withTrashed()->get();
-            return view('documents.index', compact('ownDocuments', 'otherDocuments', 'users'));
+            return view('documents.index', compact('ownDocuments', 'otherDocuments', ));
         } 
         else {
             return redirect()->back()->with('danger', 'Usted no posee asignada una unidad organizacional favor contactar a su administrador');

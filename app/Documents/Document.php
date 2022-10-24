@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use OwenIt\Auditing\Contracts\Auditable;
 
-
 class Document extends Model implements Auditable
 {
     /**
@@ -74,15 +73,6 @@ class Document extends Model implements Auditable
         return str_replace($chars, $htmlchar, $this->distribution);
     }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
     public function user() {
             return $this->belongsTo('App\User')->withTrashed();
     }
@@ -132,6 +122,14 @@ class Document extends Model implements Auditable
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
     }
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
 
     /**
      * The attributes that should be mutated to dates.
