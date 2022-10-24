@@ -4,22 +4,9 @@
 
 @section('content')
 
-<style>
-    .bg-cover {
-        background-attachment: static;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-    .jumbotron {
-        background-image: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0.9) 100%), 
-            url("{{ asset('images/new-year.webp') }}");
-        /* background-size: cover; */
-        /* opacity: 0.5; */
-    }
-</style>
 
-<div class="jumbotron mt-4 bg-cover">
+
+<div class="jumbotron mt-4">
     <div class="row">
         <div class="col-9">
             <h1 class="display-4">Intranet Online</h1>
@@ -31,27 +18,29 @@
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
 
-            @if($ct_notifications = count(auth()->user()->unreadNotifications))
-                <h4>{{ $ct_notifications }} notificaciones sin leer</h4>
-                <ul>
-                    @foreach(auth()->user()->unreadNotifications as $notification)
-                    <li>
-                        <a href="{{ route('openNotification',$notification) }}">
-                        {!! $notification->data['icon'] ?? null !!}
-                        <b>{{ $notification->data['module'] ?? '' }}</b>
-                        {{ $notification->data['subject'] }}</a> 
-                    </li>
-                    @endforeach
-                </ul>
-                <hr>
-            @endif
-
         </div>
         <div class="col-md-3 col-12">
             <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
             <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
         </div>
     </div>
+
+    @if($ct_notifications = count(auth()->user()->unreadNotifications))
+        <h4>{{ $ct_notifications }} notificaciones sin leer</h4>
+        <ul>
+            @foreach(auth()->user()->unreadNotifications as $notification)
+            <li>
+                <a href="{{ route('openNotification',$notification) }}">
+                    {{ $notification->created_at }} - 
+                    {!! $notification->data['icon'] ?? null !!} 
+                    <b>{{ $notification->data['module'] ?? '' }}</b>
+                    {{ $notification->data['subject'] }}
+                </a> 
+            </li>
+            @endforeach
+        </ul>
+        <hr>
+    @endif
 
     <div class="alert alert-light" style="display: none" role="alert" id="developers">
         Hola {{ auth()->user()->firstName }}, soy el sistema <i class="fas fa-cog fa-spin fa-2x" style="color:green"></i>
