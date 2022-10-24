@@ -72,12 +72,16 @@
           </tr>
           <tr>
             <th class="table-active" colspan="2" scope="row">Programa Asociado</th>
-            <td>{{ $requestForm->program }}</td>
+            <td>{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
           </tr>
           @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event']))
           <tr>
             <th class="table-active" colspan="2" scope="row">Folio SIGFE</th>
-            <td>{{ $requestForm->sigfe }}</td>
+            <td>{{ $requestForm->associateProgram->folio ?? $requestForm->sigfe }}</td>
+          </tr>
+          <tr>
+            <th class="table-active" colspan="2" scope="row">Financiamiento</th>
+            <td>{{ $requestForm->associateProgram->financing ?? '' }}</td>
           </tr>
           @endif
           <tr>

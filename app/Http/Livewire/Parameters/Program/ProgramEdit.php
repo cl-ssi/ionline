@@ -37,6 +37,7 @@ class ProgramEdit extends Component
             'start_date'    => 'nullable|date_format:Y-m-d',
             'end_date'      => 'nullable|date_format:Y-m-d',
             'description'   => 'nullable|string|min:2|max:255',
+            'is_program'    => 'nullable',
         ];
     }
 
@@ -58,6 +59,7 @@ class ProgramEdit extends Component
         $this->start_date = $this->program->start_date ? $this->program->start_date->format('Y-m-d') : null;
         $this->end_date = $this->program->end_date ? $this->program->end_date->format('Y-m-d') : null;
         $this->description = $this->program->description;
+        $this->is_program = $this->program->is_program;
 
         $this->subtitles = Subtitle::pluck('name','id');
     }

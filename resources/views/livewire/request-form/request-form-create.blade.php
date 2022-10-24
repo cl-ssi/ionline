@@ -34,19 +34,32 @@
                     ])
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
-                    <label for="forRut">Programa Asociado:</label>
-                    <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" value="">
+                
+                <fieldset class="form-group col-sm-{{$program_id == 'other' ? 1 : 4}}">
+                    <label>Programa @if($program_id != 'other')Asociado:@endif</label><br>
+                    <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
+                        <option value="">Seleccione...</option>
+                        @foreach($lstProgram as $val)
+                        <option value="{{$val->id}}">{{$val->alias_finance}} - Subtítulo {{$val->Subtitle->name}}</option>
+                        @endforeach
+                        <option value="other">Otro</option>
+                    </select>
+                    @error('program_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                </fieldset>
+                @if($program_id == 'other')
+                <fieldset class="form-group col-sm-3">
+                    <label for="forRut">&nbsp;</label>
+                    <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" placeholder="Nombre del programa asociado">
                     @error('program') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
-
+                @endif
             </div>
 
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
                     <label>Mecanismo de Compra:</label><br>
                     <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm " required>
-                        <option>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         @foreach($lstPurchaseMechanism as $val)
                             <option value="{{$val->id}}">{{$val->name}}</option>
                         @endforeach
@@ -57,7 +70,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label>Tipo:</label><br>
                     <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
-                        <option>Seleccione...</option>
+                        <option value="">Seleccione...</option>
                         <option value="bienes ejecución inmediata">Bienes Ejecución Inmediata</option>
                         <option value="bienes ejecución tiempo">Bienes Ejecución En Tiempo</option>
                         <option value="servicios ejecución inmediata">Servicios Ejecución Inmediata</option>

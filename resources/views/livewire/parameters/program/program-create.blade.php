@@ -6,7 +6,7 @@
     ])
 
     <button class="btn btn-primary" wire:click="createProgram">
-        Actualizar
+        Crear
     </button>
     <a
         class="btn btn-outline-primary"

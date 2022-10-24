@@ -210,7 +210,7 @@
           </tr>
           <tr>
               <th align="left">Programa Asociado</th>
-              <td colspan="2">{{ $requestForm->program }}</td>
+              <td colspan="2">{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
           </tr>
           <tr>
               <th align="left">Justificación</th>
@@ -383,15 +383,15 @@
           <tbody>
               <tr>
                   <th align="left" style="width: 50%">PROGRAMA ASOCIADO</th>
-                  <td>{{ $requestForm->program }}</td>
+                  <td>{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Folio Requerimiento - SIGFE</th>
-                  <td>{{ $requestForm->sigfe }}</td>
+                  <td>{{ $requestForm->associateProgram->folio ?? $requestForm->sigfe }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Folio Compromiso SIGFE </th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Financiamiento</th>
+                  <td>{{ $requestForm->associateProgram->financing ?? '' }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">Monto $</th>

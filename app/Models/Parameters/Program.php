@@ -25,6 +25,7 @@ class Program extends Model
         'start_date',
         'end_date',
         'description',
+        'is_program',
     ];
 
     protected $dates = [
@@ -51,5 +52,10 @@ class Program extends Model
         if($this->end_date != null)
             $date = $this->end_date->format('Y-m-d');
         return $date;
+    }
+
+    public function getFinancingAttribute()
+    {
+        return strtolower($this->financial_type) != 'extrapresupuestario' ? 'Presupuestario' : 'Extrapresupuestario';
     }
 }

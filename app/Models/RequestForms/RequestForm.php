@@ -28,7 +28,7 @@ class RequestForm extends Model implements Auditable
     protected $fillable = [
         'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
         'name', 'subtype', 'justification', 'superior_chief',
-        'type_form', 'bidding_number', 'request_user_id', //'program_id',
+        'type_form', 'bidding_number', 'request_user_id', 'program_id',
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
         'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
@@ -150,10 +150,10 @@ class RequestForm extends Model implements Auditable
         return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
     }
 
-    // public function associateProgram()
-    // {
-    //     return $this->belongsTo(Program::class, 'program_id');
-    // }
+    public function associateProgram()
+    {
+        return $this->belongsTo(Program::class, 'program_id');
+    }
 
     public function getTotalEstimatedExpense()
     {
