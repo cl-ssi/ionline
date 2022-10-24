@@ -31,6 +31,6 @@ class CreateRemUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_rem');
+        Schema::dropIfExists('rem_users');
     }
 }
