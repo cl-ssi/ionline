@@ -57,10 +57,10 @@
                     <th scope="col">Sel.</th>
                     <th scope="col">Id</th>
                     <th scope="col">Fecha de Solicitud</th>
-                    <th scope="col">Creador</th>
-                    <th scope="col">Tipo</th>
+                    <th scope="col">Firmante</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
+                    <th scope="col">Creador</th>
                     <th scope="col">Firmar</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -83,16 +83,19 @@
                     </td>
                     <td>{{ $pendingSignaturesFlow->signature->id}}</td>
                     <td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>
-                    <td>{{ $pendingSignaturesFlow->signature->responsable->getTinnyNameAttribute() }}
-                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$pendingSignaturesFlow->signerName }}</small><br>
+                    <td>
+                        <b>{{ $pendingSignaturesFlow->signerName }}</b>
                         @if($pendingSignaturesFlow->userSigner->absent == 1)
-                            <small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small>
+                        <br>    
+                        <b>Firma Subrrogada por</b>: 
+                        {{ Auth::user()->getTinnyNameAttribute() }}
                         @endif
-                        </p>
+                        <br>
+                        {{ $pendingSignaturesFlow->type }}
                     </td>
-                    <td>{{ $pendingSignaturesFlow->type }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignModalContent({{$pendingSignaturesFlow->id}})" title="Firmar documento">
@@ -190,10 +193,10 @@
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Fecha de Solicitud</th>
-                    <th scope="col">Creador</th>
-                    <th scope="col">Tipo</th>
+                    <th scope="col">Firmante</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
+                    <th scope="col">Creador</th>
                     <th scope="col">Estado Solicitud</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -206,19 +209,28 @@
             <tbody>
                 @foreach($signedSignaturesFlows as $signedSignaturesFlow)
                 <tr>
-                    <td>{{ $signedSignaturesFlow->signature->id ??'' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature?
-                        Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature?
-                        $signedSignaturesFlow->signature->responsable->getTinnyNameAttribute():'' }}
-                        <p class="font-weight-light"><small><b>Firmante Asignado: </b> {{$signedSignaturesFlow->signerName }}</small><br>
-                        @if($signedSignaturesFlow->userSigner->absent == 1)
-                            <small><b>Firma Subrrogada por</b>: {{ Auth::user()->getTinnyNameAttribute() }}</small>
-                        @endif
+                    <td>{{ $signedSignaturesFlow->signature->id ?? '' }}</td>
+                    <td>{{ $signedSignaturesFlow->signature ?
+                        $signedSignaturesFlow->signature->request_date->format('Y-m-d') : '' }}
                     </td>
-                    <td>{{$signedSignaturesFlow->signature? $signedSignaturesFlow->type :''}}</td>
+                    <td>
+                        <b>{{ $signedSignaturesFlow->signerName }}</b>
+                        
+                        @if($signedSignaturesFlow->userSigner->absent == 1)
+                        <br>
+                        <b>Firma Subrrogada por</b>: 
+                        {{ Auth::user()->tinnyName }}
+                        @endif
+                        <br>
+                        {{ $signedSignaturesFlow->signature ? $signedSignaturesFlow->type : '' }}
+                    </td>
                     <td>{{ $signedSignaturesFlow->signature->subject??'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature->description??'' }}</td>
+                    <td>
+                        @if($signedSignaturesFlow->signature)
+                            {{ $signedSignaturesFlow->signature->responsable->tinnyName }}
+                        @endif 
+                    </td>
                     <td>
                         @if($signedSignaturesFlow->status === 1)
                         <p class="text-success">Aceptada</p>
@@ -301,7 +313,7 @@
                     <td>{{ $signature->id }}</td>
                     <td>{{ $signature->subject }}</td>
                     <td>{{ $signature->description }}</td>
-                    <td>{{ Carbon\Carbon::parse($signature->request_date)->format('Y-m-d') }}</td>
+                    <td>{{ $signature->request_date->format('Y-m-d') }}</td>
                     <td>
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())
                         <p class="text-success">Aceptada</p>
