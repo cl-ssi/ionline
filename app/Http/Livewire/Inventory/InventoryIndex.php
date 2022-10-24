@@ -73,7 +73,7 @@ class InventoryIndex extends Component
             })
             ->whereNotNull('number')
             ->orderByDesc('id')
-            ->paginate(10);
+            ->paginate(25);
 
         return $inventories;
     }
