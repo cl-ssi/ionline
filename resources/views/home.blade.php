@@ -30,18 +30,22 @@
             <p>Contacto:
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
+
             @if($ct_notifications = count(auth()->user()->unreadNotifications))
-            <hr>
-            <h4>Notificaciones {{ $ct_notifications }}</h4>
-            <ul>
-                @foreach(auth()->user()->unreadNotifications as $notification)
-                <li>
-                    <a href="{{ route('openNotification',$notification) }}">{{ $notification->data['subject'] }}</a> 
-                </li>
-                @endforeach
-            </ul>
-            <hr>
+                <h4>{{ $ct_notifications }} notificaciones sin leer</h4>
+                <ul>
+                    @foreach(auth()->user()->unreadNotifications as $notification)
+                    <li>
+                        <a href="{{ route('openNotification',$notification) }}">
+                        {!! $notification->data['icon'] ?? null !!}
+                        <b>{{ $notification->data['module'] ?? '' }}</b>
+                        {{ $notification->data['subject'] }}</a> 
+                    </li>
+                    @endforeach
+                </ul>
+                <hr>
             @endif
+
         </div>
         <div class="col-md-3 col-12">
             <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
