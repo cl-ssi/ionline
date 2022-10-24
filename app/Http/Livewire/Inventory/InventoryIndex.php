@@ -158,6 +158,7 @@ class InventoryIndex extends Component
         $this->places = Place::query()
             ->whereIn('id', $this->placeIds)
             ->where('location_id', $location_id)
+            ->orderBy('name')
             ->get();
 
         $this->location = null;
