@@ -157,14 +157,13 @@
                     @foreach($parte->files as $file)
                     @if($file->signatureFile)
                     @if($file->signatureFile->HasAllFlowsSigned)                    
-                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$file->signatureFile->signed_file}}"  target="_blank" title="Documento Firmado">
+                        {{--<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$file->signatureFile->signed_file}}"  target="_blank" title="Documento Firmado">
                         <i class="fas fa-signature"></i>
-                        </a>
+                        </a>--}}
 
                         <a href="{{ route('documents.signatures.showPdf',[$file->signatureFile->id, time()])}}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank"
-                           title="Ver documento">
-                            <span class="fas fa-file" aria-hidden="true"></span>
+                            target="_blank" title="Documento firmado">
+                            <i class="fas fa-signature"></i>
                         </a>
 
                     @else
