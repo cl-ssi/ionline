@@ -22,4 +22,5 @@ yarn-error.log
 app.yaml
 docker-compose.yml
 .vscode
-.ws.http.env.save
+.ws.http
+.env.save
