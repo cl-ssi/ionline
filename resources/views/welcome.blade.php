@@ -71,6 +71,8 @@
             </table>
         </div>
         <p class="text-muted mt-4">Bienvenido a la intranet del Servicio de Salud de Iquique.</p>
+        @include('layouts.partials.errors')
+        @include('layouts.partials.flash_message')
 
     </div>
 
