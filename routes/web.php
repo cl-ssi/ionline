@@ -1929,8 +1929,9 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
-        //Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
-        //Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::get('/create', [UserRemController::class, 'create'])->name('create');
+        Route::post('/store', [UserRemController::class, 'store'])->name('store');
+        Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
 
 });

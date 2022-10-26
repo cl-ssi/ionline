@@ -12,4 +12,16 @@ class UserRem extends Model
     use SoftDeletes;
 
     public $table = 'rem_users';
+    protected $fillable = [
+        'establishment_id',
+        'user_id',        
+    ];
+
+    public function user() {
+        return $this->belongsTo('App\User','user_id');
+    }
+
+    public function establishment() {
+        return $this->belongsTo('App\Establishment');
+    }
 }
