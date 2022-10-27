@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="processClosureLabel">Seleccione periodo para el nuevo suministro</h5>
+                <h6 class="modal-title" id="processClosureLabel">Seleccione periodo para el nuevo suministro (opcional)</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -26,8 +26,8 @@
                             <label for="for_year">Año:</label>
                             <select name="year" class="form-control form-control-sm">
                                 <option value="">Seleccione...</option>
-                                @foreach(range($requestForm->created_at->year, $requestForm->created_at->year + 2) as $month)
-                                <option value="{{$month}}">{{$month}}</option>
+                                @foreach(range($requestForm->created_at->year, $requestForm->created_at->year + 2) as $year)
+                                <option value="{{$year}}">{{$year}}</option>
                                 @endforeach
                             </select>
                         </fieldset>
