@@ -203,6 +203,9 @@ use App\Http\Livewire\Resources\ComputerCreate;
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 
+use App\Http\Controllers\Allowances\AllowanceController;
+use App\Http\Controllers\Allowances\AllowanceFileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1782,6 +1785,21 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
+Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {
+
+    Route::get('/', [AllowanceController::class, 'index'])->name('index');
+    Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');
+    Route::get('create', [AllowanceController::class, 'create'])->name('create');
+    Route::post('store', [AllowanceController::class,'store'])->name('store');
+    Route::get('{allowance}/edit', [AllowanceController::class,'edit'])->name('edit');
+    Route::put('{allowance}/update', [AllowanceController::class,'update'])->name('update');
+    Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
+
+    Route::prefix('file')->as('file.')->group(function () {
+        Route::get('{allowanceFile}/show', [AllowanceFileController::class, 'show'])->name('show');
+        //Route::delete('{allowanceFile}/destroy', [AllowanceFileController::class, 'destroy'])->name('destroy');
+    });
+});
 
 /** Módulo de horas para vacunas. ya no se usa */
 // Route::get('/yomevacuno',[VaccinationController::class,'welcome']);

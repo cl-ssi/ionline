@@ -26,4 +26,16 @@ class ClCommune extends Model
     {
         return $this->belongsTo(ClRegion::class);
     }
+
+    public static function getCommunesBySearch($searchText){
+        $communes = ClCommune::query();
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word){
+            $communes->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%');
+            });
+        }
+        
+        return $communes;
+    }
 }

@@ -274,6 +274,13 @@
                         </a>
 
                         @endcan
+                        
+                        {{--
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
+                            <i class="fas fa-wallet"></i> Viáticos
+                        </a>
+                        --}}
 
                     </div>
                 </li>
