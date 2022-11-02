@@ -449,6 +449,8 @@ class RequestForm extends Model implements Auditable
             if($status_purchase_search != ''){
                 $query->whereHas('purchasingProcess', function($q) use ($status_purchase_search){
                     $q->Where('status', $status_purchase_search);
+                })->when($status_purchase_search == 'in_process', function($q){
+                    $q->orWhere('status', 'approved')->doesntHave('purchasingProcess');
                 });
             }
             if($id_search != ''){

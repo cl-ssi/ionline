@@ -4,11 +4,11 @@
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_status_search">Estado Formulario</label>
-                <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus">
+                <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus" @if($inbox == 'purchase') disabled @endif>
                     <option value="">Seleccione...</option>
                     <option value="saved">Guardado</option>
                     <option value="pending">Pendiente</option>
-                    <option value="Approved">Aprobado</option>
+                    <option value="approved">Aprobado</option>
                     <option value="rejected">Rechazado</option>
                 </select>
             </fieldset>  

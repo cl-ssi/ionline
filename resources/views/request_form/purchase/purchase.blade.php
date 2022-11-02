@@ -911,7 +911,8 @@
         var total = tr.find('input[name="item_total[]"]')
         var grand_total = $('#total_amount')
 
-        total.val((qty.val() * totalValueWithTaxes(price.val(), tax.val())).toFixed(2) - -charges.val() - discounts.val());
+        // total.val((qty.val() * totalValueWithTaxes(price.val(), tax.val())).toFixed(2) - -charges.val() - discounts.val());
+        total.val((totalValueWithTaxes(qty.val() * price.val() - -charges.val() - discounts.val(), tax.val())).toFixed(2));
 
         var grandTotal = 0;
         $('table').find('input[name="item_total[]"]').each(function() {
@@ -953,7 +954,10 @@
                 total += val;
         });
 
-        $(checked ? '#for_amount,#total_amount_selected' : '#total_amount').val(total.toFixed(2));
+        $(checked ? '#total_amount_selected' : '#total_amount').val(total.toFixed(2));
+        var for_po_discounts = $('#for_po_discounts').val() ?? 0;
+        var for_po_charges   = $('#for_po_charges').val() ?? 0;
+        if(checked && for_po_discounts == 0 && for_po_charges == 0) $('#for_amount').val(total.toFixed(2));
     }
 
     // Calcular fecha de entrega a partir de la suma de dias habiles o corridos con la fecha de la OC aceptada
@@ -1235,6 +1239,9 @@
                         // console.log(productos[i])
                     }
                 }
+
+                if($('#for_po_discounts').val() > 0 || $('#for_po_charges').val() > 0)
+                    $('#for_amount').val(response.data.Listado[0].Total);
             })
             .catch(function(error) {
                 // handle error
