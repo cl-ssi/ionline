@@ -50,7 +50,26 @@
 <br>
 
 @if($request->has('type') && $total_pob->count() > 0)
-		<h4>Total población: <b>{{ number_format($total_pob->sum('valor'),0,",",".") }}</b></h4>
+		<h4>Total población: <b>{{ number_format($total_pob->sum('valor'),0,",",".") }}</b>
+		@auth
+		<form method="POST" class="form-inline float-right" action="{{ route('indicators.population.export') }}" >
+			@csrf
+			@method('POST')
+			<input type="hidden" name="type" value="{{ $request->type }}">
+			<input type="hidden" name="year" value="{{ $request->year }}">
+			@foreach($request->gender_id as $gender_id)
+			<input type="hidden" name="gender_id[]" value="{{ $gender_id }}">
+			@endforeach
+			@foreach($request->etario_id as $etario_id)
+			<input type="hidden" name="etario_id[]" value="{{ $etario_id }}">
+			@endforeach
+			@foreach($request->establishment_id as $establishment_id)
+			<input type="hidden" name="establishment_id[]" value="{{ $establishment_id }}">
+			@endforeach
+			<button type="submit" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Exportar</button>
+		</form>
+		@endauth
+		</h4>
 
 		<div class="row">
 		    <div class="col-sm-12">

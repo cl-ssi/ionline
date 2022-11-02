@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Indicators;
 use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
 use App\Establishment;
+use App\Exports\PercapitaExport;
+use App\Exports\PercapitaOficialExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -14,6 +16,7 @@ use App\Indicators\PercapitaOficial;
 use App\Indicators\Establecimiento;
 use App\Models\Commune;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SingleParameterController extends Controller
 {
@@ -214,5 +217,10 @@ class SingleParameterController extends Controller
             'total_pob',
             'request'
         ));
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download($request->type == 'Definitivo' ? new PercapitaOficialExport($request) : new PercapitaExport($request), 'percapita_'.strtolower($request->type).'_'.Carbon::now()->format('Y_m_d_H_i_s').'.xlsx');
     }
 }
