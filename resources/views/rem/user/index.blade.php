@@ -2,32 +2,45 @@
 
 @section('content')
 
-<h3 class="mb-3">Asignar Usuario a Esblecimiento REM</h3>
-
-
-<form method="POST" class="form-horizontal" action="#">
-    @csrf
-    @method('POST')
-
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_school_id">Establecimiento</label>
-            <select name="establishment_id" id="for_establishment_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Establecimiento" required>
-                <option value="">Seleccionar Establecimiento</option>                
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_user_id">Usuarios </label>
-            <select name="user_id" id="for_user_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Usuario" required>
-                <option value="">Seleccionar Usuario</option>                
-            </select>
-        </fieldset>
-
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('rem.users.create') }}">
+            Agregar Usuario REM a Establecimiento
+        </a>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+</div>
 
-</form>
+
+<hr>
+<h3 class="mb-3">Listado de Usuarios con Establecimiento REM</h3>
+
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+        <th>Usuario</th>
+        <th>Establecimiento</th>
+        <th>Eliminar</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    @foreach($usersRem as $userRem)
+        <tr>
+        <td>{{ $userRem->user->fullname??'' }}</td>
+        <td>{{ $userRem->establishment->name??'' }}</td>
+        <td>
+                <form method="POST" class="form-horizontal" action="{{ route('rem.users.destroy', $userRem->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar a {{ $userRem->user->fullname }} como usuario REM del establecimiento {{ $userRem->establishment->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
+                </form>
+            </td>
+        </tr>
+     @endforeach   
+    </tbody>
+</table>
+
+
 
 
 @endsection

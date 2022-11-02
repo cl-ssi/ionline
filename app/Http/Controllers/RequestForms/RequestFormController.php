@@ -431,7 +431,7 @@ class RequestFormController extends Controller {
       return Storage::disk('gcs')->response($original ? $requestForm->signedRequestForm->signed_file : $requestForm->signedOldRequestForm->signed_file);
     }
 
-    public function create_provision(RequestForm $requestForm)
+    public function create_provision(RequestForm $requestForm, Request $request)
     {
         if($requestForm->isBlocked()){ // FR ids con restricción de No generar suministros
             session()->flash('danger', 'No se puede generar un nuevo suministro para el formulario de requerimiento N° '.$requestForm->folio.'.');
@@ -454,6 +454,7 @@ class RequestFormController extends Controller {
         $newRequestForm = $requestForm->replicate();
         $newRequestForm->folio = $requestForm->folio.'-'.($requestForm->children()->withTrashed()->count() + 1);
         $newRequestForm->request_form_id = $requestForm->id;
+        $newRequestForm->name = $newRequestForm->name . ($request->month ? ' MES '.$request->month : '') . ($request->year ? ' '.$request->year : '');
         // $newRequestForm->request_user_id = Auth::id();
         // $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
         $newRequestForm->estimated_expense = 0;

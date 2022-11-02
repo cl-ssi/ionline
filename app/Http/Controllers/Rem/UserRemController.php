@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Rem;
 
 use App\Models\Rem\UserRem;
 use App\Http\Controllers\Controller;
+use App\Establishment;
+use App\User;
+use Illuminate\Http\Request;
 
 class UserRemController extends Controller
 {
@@ -15,8 +18,8 @@ class UserRemController extends Controller
     public function index()
     {
         //
-        $userrem = UserRem::All();
-        return view('rem/user/index', compact('userrem'));
+        $usersRem = UserRem::All();
+        return view('rem.user.index', compact('usersRem'));
     }
 
     /**
@@ -27,6 +30,9 @@ class UserRemController extends Controller
     public function create()
     {
         //
+        $establishments = Establishment::orderBy('name', 'ASC')->get();
+        $users = User::orderBy('name', 'ASC')->get();
+        return view('rem.user.create', compact('establishments','users'));
     }
 
     /**
@@ -35,9 +41,12 @@ class UserRemController extends Controller
      * @param  \App\Http\Requests\StoreUserRemRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRem $request)
+    public function store(Request $request)
     {
-        //
+        $userRem = new UserRem($request->all());
+        $userRem->save();
+        session()->flash('info', 'El usuario ' . $userRem->fullname . ' ha sido creado como usuario REM');
+        return redirect()->route('rem.users.index');
     }
 
     /**
@@ -83,5 +92,8 @@ class UserRemController extends Controller
     public function destroy(UserRem $userRem)
     {
         //
+        $userRem->delete();
+        session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
+        return redirect()->route('rem.users.index');
     }
 }

@@ -61,7 +61,7 @@ class ClaveUnicaController extends Controller
             ]);
         } catch (ConnectException | RequestException | Exception $e) {
             //logger("Error en callback de clave unica, redirecionando al login ", ['e' => $e]);
-            return redirect()->route('login');
+            return redirect()->route('welcome');
         }
 
 
@@ -76,7 +76,10 @@ class ClaveUnicaController extends Controller
             return redirect()->to($url_redirect)->send();
         }
         else {
-            return redirect()->route('claveunica.autenticar');
+
+            session()->flash('danger','Error: clave única devolvió un estado: '.$response->getStatusCode());
+            return redirect()->route('welcome');
+            //return redirect()->route('claveunica.autenticar');
         }
 
         /*

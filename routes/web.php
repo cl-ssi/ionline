@@ -1661,7 +1661,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/contract_manager_forms', [RequestFormController::class, 'contract_manager_forms'])->name('contract_manager_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
-    Route::get('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
+    Route::post('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/callback-sign-new-budget/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSignNewBudget'])->name('callbackSignNewBudget');
@@ -1929,8 +1929,9 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
-        //Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
-        //Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::get('/create', [UserRemController::class, 'create'])->name('create');
+        Route::post('/store', [UserRemController::class, 'store'])->name('store');
+        Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
 
 });

@@ -23,3 +23,4 @@ app.yaml
 docker-compose.yml
 .vscode
 .ws.http
+.env.save
