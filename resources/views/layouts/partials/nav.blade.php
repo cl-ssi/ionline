@@ -45,6 +45,11 @@
 
                         @canany(['be god'])
                         <a class="dropdown-item"
+                           href="{{ route('rem.files.index') }}">
+                            <i class="fas fa-file-excel"></i> Subir Archivo
+                        </a>
+
+                        <a class="dropdown-item"
                            href="{{ route('rem.users.index') }}">
                             <i class="fas fa-users"></i> Usuarios REM
                         </a>

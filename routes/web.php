@@ -95,6 +95,7 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\Rem\UserRemController;
+use App\Http\Controllers\Rem\RemFileController;
 
 
 use App\Http\Controllers\HealthPlan\HealthPlanController;
@@ -1948,10 +1949,15 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
-        Route::get('/', [UserRemController::class, 'index'])->name('index');
-        Route::get('/create', [UserRemController::class, 'create'])->name('create');
-        Route::post('/store', [UserRemController::class, 'store'])->name('store');
-        Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
+            Route::get('/', [UserRemController::class, 'index'])->name('index');
+            Route::get('/create', [UserRemController::class, 'create'])->name('create');
+            Route::post('/store', [UserRemController::class, 'store'])->name('store');
+            Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
+    });
+
+        Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
+            Route::get('/', [RemFileController::class, 'index'])->name('index');
+            
     });
 
 });
