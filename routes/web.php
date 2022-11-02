@@ -1148,6 +1148,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
 
     Route::get('/population', [SingleParameterController::class,'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
+    Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
 
     Route::prefix('rni_db')->as('rni_db.')->group(function () {
         Route::get('/', [RNIdbController::class,'index'])->middleware('auth')->name('index');
