@@ -25,7 +25,7 @@ class Requirement extends Model implements Auditable
 
     protected $fillable = [
         'id', 'subject', 'priority', 'status', //'archived',
-        'limit_at', 'user_id','parte_id', 'to_authority'
+        'limit_at', 'user_id','parte_id', 'to_authority', 'label_id'
     ];
 
     public function events() {

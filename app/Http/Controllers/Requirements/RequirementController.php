@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Requirements;
 use App\Documents\Parte;
 use App\Documents\Document;
 use App\Mail\RequirementNotification;
+use App\Requirements\Label;
 use App\Requirements\Requirement;
 use App\Requirements\Event;
 use App\Requirements\EventStatus;
@@ -631,9 +632,10 @@ class RequirementController extends Controller
         //        $organizationalUnit = OrganizationalUnit::Find(1);
         $categories = Category::where('user_id', Auth::user()->id)->get();
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $labels = Label::all();
         // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
         // $categories = Category::where('user_id',Auth::user()->id)->get();
-        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories'));
+        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
     }
 
     public function create_requirement_sin_parte()
@@ -644,9 +646,10 @@ class RequirementController extends Controller
         //      $organizationalUnit = OrganizationalUnit::Find(1);
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $categories = Category::where('user_id', Auth::user()->id)->get();
+        $labels = Label::all();
         //equirementCategory::where('requirement_id',$requirement->id)->get();
 
-        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories'));
+        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
     }
 
     public function archive_requirement(Requirement $requirement)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Requirements\LabelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -1120,6 +1121,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     // Route::get('create_event/{req_id}',  [EventController::class,'create_event'])->name('create_event');
     Route::resource('categories', CategoryController::class);
     Route::resource('events', EventController::class);
+    Route::resource('labels', LabelController::class);
     Route::get('report1', [RequirementController::class,'report1'])->name('report1');
     // Route::get('report_reqs_by_org', [RequirementController::class,'report_reqs_by_org])->name('report_reqs_by_org');
 

@@ -217,6 +217,16 @@
                         <tr></tr>
                     </table>
                 </fieldset>
+
+                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-3 @endif">
+                    <label for="for_label_id">Etiqueta</label>
+                    <select class="form-control" name="label_id" id="for_label_id">
+                        <option></option>
+                        @foreach($labels as $label)
+                            <option value="{{ $label->id }}">{{ $label->name }}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
             </div>
 
 
