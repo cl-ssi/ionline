@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRemUsersTable extends Migration
+class CreateCfgAllowanceValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateRemUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('rem_users', function (Blueprint $table) {
+        Schema::create('cfg_allowance_values', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')                
-                ->constrained('users');            
-            $table->unsignedInteger('establishment_id');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
+
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->unsignedInteger('value');
+            $table->year('year');
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +33,6 @@ class CreateRemUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rem_users');
+        Schema::dropIfExists('cfg_allowance_values');
     }
 }

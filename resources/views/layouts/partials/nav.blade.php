@@ -45,6 +45,11 @@
 
                         @canany(['be god'])
                         <a class="dropdown-item"
+                           href="{{ route('rem.files.index') }}">
+                            <i class="fas fa-file-excel"></i> Subir Archivo
+                        </a>
+
+                        <a class="dropdown-item"
                            href="{{ route('rem.users.index') }}">
                             <i class="fas fa-users"></i> Usuarios REM
                         </a>
@@ -274,6 +279,13 @@
                         </a>
 
                         @endcan
+                        
+                        {{--
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
+                            <i class="fas fa-wallet"></i> Viáticos
+                        </a>
+                        --}}
 
                     </div>
                 </li>
