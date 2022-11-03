@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs mb-3">
+<ul class="nav nav-tabs mb-3 d-print-none">
     @can('Inventory: index')
         <li class="nav-item">
             <a

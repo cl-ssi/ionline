@@ -3,7 +3,7 @@
 
     @include('inventory.nav')
 
-    <div class="form-row g-2 my-3">
+    <div class="form-row g-2 my-3 d-print-none">
         <fieldset class="form-group col-md-3">
             <label for="products">Productos</label>
             <select
@@ -95,14 +95,14 @@
         </fieldset>
     </div>
 
-    <h5>
+    <h5 class="d-print-none">
         Resumen de Filtro
     </h5>
 
-    <div class="table-responsibe">
+    <div class="table-responsibe d-print-none">
         <table class="table table-bordered table-sm">
             <tr>
-                <th>Producto</th>
+                <th>Producto/Especie</th>
                 <th>Ubicación</th>
                 <th>Lugar</th>
                 <th>Responsable</th>
@@ -141,22 +141,73 @@
             </tr>
         </table>
     </div>
+    
 
-    <h5>
+    @if($place)
+    <table class="mb-3 d-none d-print-block" align="right">
+        <tr>
+            <td>Folio:</td>
+            <td class="font-weight-bold text-right" style="font-size: 24px;">
+                @if($place)
+                    {{ $place->id }}
+                @endif
+            </td>
+        </tr>
+        <tr>
+            <td>Fecha: &nbsp;</td>
+            <td class="font-weight-bold"> 
+            {{ now()->format('M Y') }}
+            </td>
+        </tr>
+    </table>
+    @endif
+
+    <h3 class="mt-3">
         Inventario
-    </h5>
+    </h3>
+    
+    @if($place)
+    <table class="table table-sm table-bordered">
+        <tr>
+            <td>Establecimiento:</td>
+            <th>
+                @if($location)
+                    {{ $location->name }}
+                @endif
+            </th>
+        </tr>
+        <tr>
+            <td>Dirección:</td>
+            <th>
+                @if($location)
+                    {{ $location->address }}
+                @endif
+            </th>
+        </tr>
+        <tr>
+            <td>Lugar o Dependencia:</td>
+            <th>
+                @if($place)
+                    {{ $place->name }}
+                @endif
+            </th>
+        </tr>
+    </table>
+    @endif
+
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">Nro. Inventario</th>
-                    <th>Producto</th>
+                    <th class="text-center">Nro. Inv.</th>
+                    <th>Producto/Especie</th>
+                    <th>Estado</th>
                     <th>Ubicación</th>
                     <th>Lugar</th>
                     <th>Responsable</th>
                     <th>Usuario</th>
-                    <th></th>
+                    <th class="d-print-none"></th>
                 </tr>
             </thead>
             <tbody>
@@ -187,6 +238,9 @@
                         </small>
                     </td>
                     <td>
+                        {{ $inventory->estado }}
+                    </td>
+                    <td>
                         @if($inventory->place)
                         {{ optional($inventory->place)->location->name }}
                         @endif
@@ -200,7 +254,7 @@
                     <td class="text-center">
                         {{ optional($inventory->using)->tinny_name }}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center d-print-none">
                         <a
                             class="btn btn-sm btn-primary"
                             href="{{ route('inventories.edit', $inventory) }}"
@@ -221,4 +275,11 @@
 
         {{ $inventories->links() }}
     </div>
+
+
+<div class="row text-center mt-3">
+    <div class="col d-none d-print-block">Responsable</div>
+    <div class="col d-none d-print-block">Control Inventario y Activo Fijo</div>
+</div>
+
 </div>
