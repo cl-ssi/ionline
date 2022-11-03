@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Rem;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
+use App\Models\Rem\UserRem;
 use Illuminate\Http\Request;
 use App\Establishment;
 use Carbon\Carbon;
@@ -30,11 +31,19 @@ class RemFileController extends Controller
                 'year' => $date->format('Y')
             ];
         });
+
+        $usersRem = UserRem::where('user_id', auth()->id())->get();
+
+        //dd($dates);
         
         //iterator_to_array($dates);
         //or
         //collect($dates)->toArray();
-        dd(iterator_to_array($dates));
+        //dd(iterator_to_array($dates));
+
+        return view('rem.file.index', compact('dates','usersRem'));
+
+
     }
 
     /**
