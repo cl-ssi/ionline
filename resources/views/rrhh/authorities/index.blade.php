@@ -141,19 +141,19 @@
             @foreach($ouTopLevel->childs as $child_level_1)
                 <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
                 <ul>
-                    @foreach($child_level_1->childs as $child_level_2)
-                        <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_2->id}}">{{ $child_level_2->name }}</a></li>
-                            <ul>
-                                @foreach($child_level_2->childs as $child_level_3)
-                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
-                                    @foreach($child_level_3->childs as $child_level_4)
-                                    <ul>
-                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>
-                                    </ul>
-                                    @endforeach
-                                @endforeach
-                            </ul>
+                @foreach($child_level_1->childs as $child_level_2)
+                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_2->id}}">{{ $child_level_2->name }}</a></li>
+                    <ul>
+                    @foreach($child_level_2->childs as $child_level_3)
+                        <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
+                        <ul>
+                        @foreach($child_level_3->childs as $child_level_4)
+                            <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>
+                        @endforeach
+                        </ul>
                     @endforeach
+                    </ul>
+                @endforeach
                 </ul>
             @endforeach
             </ul>

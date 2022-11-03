@@ -39,26 +39,31 @@
 </div>
 
 <div class="row">
-	<div class="col-md-6">
-		<b>+</b> <a href="{{ route('rrhh.users.directory') }}?ou={{$organizationalUnit->id}}">{{ $organizationalUnit->name }}</a>
-		<ul class="small">
-			@foreach($organizationalUnit->childs as $child_level_1)
-				@if($child_level_1->name != 'Externos')
-				<li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
-				<ul>
-					@foreach($child_level_1->childs as $child_level_2)
-						<li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_2->id}}">{{ $child_level_2->name }}</a></li>
-							<ul>
-								@foreach($child_level_2->childs as $child_level_3)
-									<li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
-								@endforeach
-							</ul>
-					@endforeach
-				</ul>
-				@endif
-			@endforeach
-		</ul>
-	</div>
+    <div class="col-md-6">
+        <b>+</b> <a href="{{ route('rrhh.users.directory') }}?ou={{$organizationalUnit->id}}">{{ $organizationalUnit->name }}</a>
+        <ul class="small">
+            @foreach($organizationalUnit->childs as $child_level_1)
+                @if($child_level_1->name != 'Externos')
+                    <li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
+                    <ul>
+                        @foreach($child_level_1->childs as $child_level_2)
+                            <li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_2->id}}">{{ $child_level_2->name }}</a></li>
+                            <ul>
+                                @foreach($child_level_2->childs as $child_level_3)
+                                    <li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
+                                    <ul>
+                                        @foreach($child_level_3->childs as $child_level_4)
+                                            <li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                    </ul>
+                @endif
+            @endforeach
+        </ul>
+    </div>
 
 
 	<div class="col-md-6">
