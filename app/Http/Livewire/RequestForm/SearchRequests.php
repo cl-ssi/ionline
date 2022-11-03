@@ -44,11 +44,11 @@ class SearchRequests extends Component
         'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo'
     ];
 
-    // public function mount() {
-    //     if (old('status_search')) {
-    //         $this->selectedStatus = old('status_search');
-    //     }
-    // }
+    public function mount() {
+        if ($this->inbox == 'purchase') {
+            $this->selectedStatusPurchase = 'in_process';
+        }
+    }
 
     public function querySearch($isPaginated = true)
     {
