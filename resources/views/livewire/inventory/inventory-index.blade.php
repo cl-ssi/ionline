@@ -90,7 +90,7 @@
                 class="btn btn-sm btn-primary btn-block"
                 wire:click="getInventories"
             >
-                <i class="fas fa-filter"></i> Filtrar
+                <i class="fas fa-filter"></i>
             </button>
         </fieldset>
     </div>
@@ -278,8 +278,22 @@
 
 
 <div class="row text-center mt-3">
-    <div class="col d-none d-print-block">Responsable</div>
-    <div class="col d-none d-print-block">Control Inventario y Activo Fijo</div>
+    <div class="col">
+        Responsable<br>
+        @if($userResponsible)
+            {{ $userResponsible->fullName }}
+        @else
+            No se ha seleccionado un responsable en el filtro.
+        @endif
+    </div>
+    <div class="col">
+        Control Inventario y Activo Fijo<br>
+        @if($managerInventory)
+            {{ $managerInventory->fullName }}
+        @else
+            No existe una autoridad para la "Inventario", revise el módulo de autoridades.
+        @endif
+    </div>
 </div>
 
 </div>

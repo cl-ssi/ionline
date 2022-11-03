@@ -7,6 +7,8 @@ use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\User;
+use App\Models\Parameters\Parameter;
+use App\Rrhh\Authority;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -34,6 +36,8 @@ class InventoryIndex extends Component
     public $place;
     public $location;
 
+    public $managerInventory;
+
     public function mount()
     {
         $this->getProducts();
@@ -41,6 +45,12 @@ class InventoryIndex extends Component
         $this->getResponsibles();
         $this->getLocations();
         $this->places = collect([]);
+
+        $param_ou_inventory_id = Parameter::get('inventory','ou_inventory_id')->value ?? null;
+        if($param_ou_inventory_id)
+        {
+            $this->managerInventory = Authority::getAuthorityFromDate($param_ou_inventory_id, now(), 'manager')->user ?? null;
+        }
     }
 
     public function render()

@@ -18,6 +18,7 @@ class Parameter extends Model
         'parameter',
         'value',
         'description',
+        /* TODO: #148 #147 Incoporar el id_establecimiento, podrían haber parametros iguales en dos establecimientos distintos */
     ];
 
     public static function get($module, $parameter)
