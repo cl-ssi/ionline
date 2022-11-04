@@ -45,7 +45,7 @@ class SearchRequests extends Component
     ];
 
     public function mount() {
-        if ($this->inbox == 'purchase') {
+        if ($this->inbox == 'purchase' && $this->selectedStatusPurchase == null) {
             $this->selectedStatusPurchase = 'in_process';
         }
     }
@@ -62,7 +62,7 @@ class SearchRequests extends Component
                 ->whereHas('purchasers', function ($q) {
                     return $q->where('users.id', Auth()->user()->id);
                 })
-                ->latest('id');
+                ->latest('approved_at');
         }
         //$query = RequestForm::query();
         $query->search($this->selectedStatus,
@@ -81,7 +81,7 @@ class SearchRequests extends Component
         $this->selectedPo,
         $this->selectedTender
         )
-        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
+        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
 
         return ($isPaginated) ? $query->paginate(50) : $query->get();
