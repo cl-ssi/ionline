@@ -281,13 +281,16 @@ class RequestForm extends Model implements Auditable
 
     public function getApprovedAtAttribute()
     {
-        if ($this->eventRequestForms()->count() === 0) {
+        if ($this->eventRequestForms->count() === 0) {
             return null;
         }
 
-        return $this->eventRequestForms()
-            ->orderBy('cardinal_number', 'desc')
-            ->first('signature_date')
+        return $this->eventRequestForms
+            // ->orderBy('cardinal_number', 'desc')
+            // ->first('signature_date')
+            ->where('event_type', 'supply_event')
+            ->where('status', 'approved')
+            ->first()
             ->signature_date;
     }
 
@@ -559,9 +562,20 @@ class RequestForm extends Model implements Auditable
     }
 
     // function getPurchasedOnTimeAttribute(){
-    //     dd($this->purchasingProcess->details)
+    //     $po_sent_dates = [];
+    //     foreach($this->purchasingProcess->details as $detail){
+    //         if($detail->pivot->tender && $detail->pivot->tender->oc) $po_sent_dates[] = $detail->pivot->tender->oc->po_sent_date;
+    //         if($detail->pivot->directDeal && $detail->pivot->directDeal->oc) $po_sent_dates[] = $detail->pivot->directDeal->oc->po_sent_date;
+    //         if($detail->pivot->immediatePurchase) $po_sent_dates[] = $detail->pivot->immediatePurchase->po_sent_date;
+    //     }
 
-        // $this->approvedAt
+    //     // return '['.implode(', ', $po_sent_dates).']';
+    //     if(count($po_sent_dates) == 0) return null;
+
+    //     $max = max(array_map('strtotime', $po_sent_dates));
+    //     return date('d-m-Y H:i', $max);
+
+    //     // $this->approvedAt
     // }
 
     /******************************************************/
