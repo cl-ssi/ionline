@@ -166,7 +166,7 @@
         <tbody>
         @foreach($communeFiles as $communeFile)
         <tr class="small">
-            <td class="align-middle">{{$communeFile->commune->name}}</td>
+            <td class="align-middle">{{Str::after($communeFile->description, '-')}}</td>
             <td>
                 <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
                     <i class="fas fa-chalkboard-teacher small"></i> 
