@@ -9,8 +9,8 @@
     <thead>
         <tr class="text-center">
             <th>#</th>
-            @foreach ($dates as $date)
-            <th scope="col">{{$date['month']}} - {{$date['year']}}</th>
+            @foreach ($dates as $month)
+            <th scope="col">{{ $month->format('Y-m')}}</th>
             @endforeach
         </tr>
 
@@ -18,6 +18,20 @@
         <td class="text-center font-weight-bold" >
         {{$user->establishment->name}}
         </td>
+            @foreach ($dates as $month)
+            <td scope="col">
+            @livewire('rem.upload-rem',[                
+                'year' => $month->format('Y'),
+                'month' => $month->format('m'),
+                'establishment_id' => $user->establishment->id,
+                ]
+                )
+            </td>
+            {{--  
+                <td scope="col">@livewire(cargarem,[$mes,$ano,$establecimiento])</td>
+            
+            --}}
+            @endforeach            
         </tr>
     </thead>
 </table>

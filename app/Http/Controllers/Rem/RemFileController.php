@@ -19,27 +19,18 @@ class RemFileController extends Controller
      */
     public function index()
     {
-        //
-        //dd('en el index');
-        $dates = CarbonPeriod::create(
-            Carbon::parse('next month')->startOfMonth()->subYear(),
-            '1 month',
-            Carbon::now()->startOfMonth()
-        )->map(function($date) {
-            return [
-                'month' => $date->format('M'),
-                'year' => $date->format('Y')
-            ];
-        });
-
-        $usersRem = UserRem::where('user_id', auth()->id())->get();
-
-        //dd($dates);
+               
+        $now = now()->startOfMonth();
         
-        //iterator_to_array($dates);
-        //or
-        //collect($dates)->toArray();
-        //dd(iterator_to_array($dates));
+        for($i=1; $i <=12; $i++)
+        {
+            $this->rango[] = $now->clone();
+            $now->subMonth('1');
+        }
+
+        $dates =$this->rango;
+
+        $usersRem = UserRem::where('user_id', auth()->id())->get();        
 
         return view('rem.file.index', compact('dates','usersRem'));
 

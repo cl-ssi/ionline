@@ -14,6 +14,13 @@ class RemFile extends Model
 
     public $table = 'rem_files';
 
+    protected $fillable = [
+        'name',
+        'month',
+        'year',
+        'establishment_id',
+    ];
+
     public function establishment() {
         return $this->belongsTo('App\Establishment');
     }
