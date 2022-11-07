@@ -15,7 +15,7 @@ class CreateRemFilesTable extends Migration
     {
         Schema::create('rem_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');           
+            $table->string('filename');
             $table->unsignedInteger('year');
             $table->unsignedInteger('month');
             $table->unsignedInteger('establishment_id');

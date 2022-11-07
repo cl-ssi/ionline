@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
 use App\Models\Rem\UserRem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Establishment;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -22,17 +23,16 @@ class RemFileController extends Controller
                
         $now = now()->startOfMonth();
         
-        for($i=1; $i <=12; $i++)
+        for($i=1; $i<=12; $i++)
         {
             $this->rango[] = $now->clone();
             $now->subMonth('1');
         }
 
-        $dates =$this->rango;
+        $dates = $this->rango;
+        $rem_establishments = auth()->user()->remEstablishments;
 
-        $usersRem = UserRem::where('user_id', auth()->id())->get();        
-
-        return view('rem.file.index', compact('dates','usersRem'));
+        return view('rem.file.index', compact('dates','rem_establishments'));
 
 
     }
