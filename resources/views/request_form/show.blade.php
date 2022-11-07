@@ -44,7 +44,7 @@
                     @endif
 
                     @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
-                    <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure" class="btn btn-link btn-sm float-right font-weight-bold align-top" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i> Crear suministro
+                    <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-link btn-sm float-right font-weight-bold align-top" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i> Crear suministro
                     </a>
                     @include('request_form.partials.modals.create_provision_period_select')
                     @endif

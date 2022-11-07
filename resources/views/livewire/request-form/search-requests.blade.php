@@ -241,7 +241,7 @@
                             @endif
 
                             @if(Auth()->user()->hasPermissionTo('Request Forms: all') && Str::contains($requestForm->subtype, 'tiempo') && !$requestForm->isBlocked() && $requestForm->status == 'approved')
-                            <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
+                            <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de ejecución inmediata?') || event.stopImmediatePropagation()" data-toggle="modal" data-target="#processClosure-{{$requestForm->id}}" class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de ejecución inmediata"><i class="fas fa-plus"></i>
                             </a>
                             @include('request_form.partials.modals.create_provision_period_select')
                             @endif
@@ -310,10 +310,12 @@
                         </td>
                         <td>{{ $requestForm->quantityOfItems() }}</td>
                         <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                        <td title="Aprobación: {{$requestForm->approvedAt}}" >
-                            {{ $requestForm->expireAt }}
+                        <td title="Aprobación: {{$requestForm->approvedAt->format('d-m-Y H:i')}}" >
+                            {{ $requestForm->expireAt->format('d-m-Y H:i') }}
                             <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>
-                            
+                            @if($requestForm->purchasingProcess && in_array($requestForm->purchasingProcess->status, ['purchased', 'finalized']))
+                                {{$requestForm->purchasedOnTime}}
+                            @endif
                         </td>
                         <td>
                             @if($requestForm->signatures_file_id)

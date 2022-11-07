@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="processClosure" tabindex="-1" aria-labelledby="processClosureLabel" aria-hidden="true">
+<div class="modal fade" id="processClosure-{{$requestForm->id}}" tabindex="-1" aria-labelledby="processClosureLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="new-budget-form" action="{{ route('request_forms.create_provision', $requestForm->id) }}">
+                <form method="post" id="form-{{$requestForm->id}}" action="{{ route('request_forms.create_provision', $requestForm->id) }}">
                     @csrf
                     <div class="form-row">
                         <fieldset class="form-group col-sm">
