@@ -360,7 +360,6 @@
           <td>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-          <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
           <td class="text-center">
             @foreach($requestForm->eventRequestForms as $sign)
             @if($sign->status == 'pending' || $sign->status == NULL)
