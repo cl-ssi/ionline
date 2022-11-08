@@ -281,7 +281,7 @@ class RequestForm extends Model implements Auditable
 
     public function getApprovedAtAttribute()
     {
-        if ($this->eventRequestForms->count() === 0) {
+        if ($this->eventRequestForms()->count() === 0) {
             return null;
         }
 
