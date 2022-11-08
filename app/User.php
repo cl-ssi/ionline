@@ -253,6 +253,10 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff');
     }
 
+    public function remEstablishments() {
+      return $this->hasMany('App\Models\Rem\UserRem');
+  }
+
     public function stores()
     {
         return $this->belongsToMany(Store::class, 'wre_store_user')

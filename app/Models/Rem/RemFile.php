@@ -19,6 +19,7 @@ class RemFile extends Model
         'month',
         'year',
         'establishment_id',
+        'is_locked',
     ];
 
     public function establishment() {
