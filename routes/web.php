@@ -1963,7 +1963,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
 });
 
-
+Route::get('/maintenance/{param?}', App\Http\Controllers\MaintenanceController::class);
 
 Route::view('/some', 'some');
 
