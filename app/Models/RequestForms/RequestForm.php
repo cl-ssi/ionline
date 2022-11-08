@@ -287,11 +287,11 @@ class RequestForm extends Model implements Auditable
 
         return $this->eventRequestForms()
             ->orderBy('cardinal_number', 'desc')
-            ->first('signature_date');
+            ->first('signature_date')
             // ->where('event_type', 'supply_event')
             // ->where('status', 'approved')
             // ->first()
-            // ->signature_date;
+            ->signature_date;
     }
 
     /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
