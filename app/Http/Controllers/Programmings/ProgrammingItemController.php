@@ -189,10 +189,10 @@ class ProgrammingItemController extends Controller
                      'direct_work_hour' => $professional['direct_work_hour']]);
             }
         }
-        session()->flash('info', 'Se ha creado una nueva actividad de Programación Operativa');
+        session()->flash('success', 'Se ha creado una nueva actividad de Programación Operativa');
 
-        return redirect()->back();
-        //return redirect()->route('programmingitems', ['programming_id' => 1]);
+        // return redirect()->back();
+        return redirect()->route('programmingitems.show', $programmingItems);
     }
 
     public function destroy($id)

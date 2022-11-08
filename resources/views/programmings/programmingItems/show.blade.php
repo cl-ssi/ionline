@@ -9,7 +9,7 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+    <a href="{{ Session::has('success') ? route('programmingitems.index', ['programming_id' => $programmingItem->programming_id, 'activity_type' => $programmingItem->professionalHours->count() == 0 ? '' : ($programmingItem->activity_subtype != null ? 'Indirecta' : 'Directa')]) : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -163,7 +163,7 @@ Editar Item Programación Operativa </h4>
     
         <div class="form-group col-md-8">
             <label for="forprogram">Def. Población Objetivo</label>
-            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{$programmingItem->activityItem->def_target_population ?? $programmingItem->def_target_population }}"  form="edit-form" required="" {{ $programmingItem->activityItem && $programmingItem->activityItem->tracer != 'NO' ? 'readonly' : '' }}>
+            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{$programmingItem->activityItem->def_target_population ?? $programmingItem->def_target_population }}"  form="edit-form" required="">
         </div>
 
         <div class="form-group col-md-4">
@@ -432,7 +432,7 @@ Editar Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->activityItem->verification_rem ?? $programmingItem->information_source }}" form="edit-form" disabled>
+            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->activityItem->verification_rem ?? $programmingItem->information_source }}" form="edit-form">
         </div>
 
         <div class="form-group col-md-3">
