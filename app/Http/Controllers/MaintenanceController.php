@@ -20,7 +20,7 @@ class MaintenanceController extends Controller
     {
         $maintenance = file_exists(storage_path('framework/down'));
 
-        echo "<H1>Maintenance Status:</h1>";
+        echo "<h1>System Status:</h1>";
 
         if(!env('MAINTENANCE_TOKEN',null))
         {
