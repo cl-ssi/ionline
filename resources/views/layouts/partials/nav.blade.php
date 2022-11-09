@@ -43,12 +43,14 @@
                             <i class="fas fa-globe-americas"></i> Tablero de población
                         </a>
 
-                        @canany(['be god'])
+                        @canany(['be god','Rem: admin','Rem: user'])
                         <a class="dropdown-item"
                            href="{{ route('rem.files.index') }}">
                             <i class="fas fa-file-excel"></i> Subir Archivo
                         </a>
+                        @endcan
 
+                        @canany(['be god','Rem: admin'])
                         <a class="dropdown-item"
                            href="{{ route('rem.users.index') }}">
                             <i class="fas fa-users"></i> Usuarios REM

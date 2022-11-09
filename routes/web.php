@@ -1958,6 +1958,8 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
         Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
             Route::get('/', [RemFileController::class, 'index'])->name('index');
+            Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
+            Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
             
     });
 
