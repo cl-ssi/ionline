@@ -9,6 +9,7 @@ class MaintenanceController extends Controller
 {
     public function __construct()
     {
+        /* TODO: no utilizar estos middleware ya que si caga la BD no se podría pasar a modo mantenimiento */
         $this->middleware('auth');
         $this->middleware('can:be god');
     }
@@ -50,6 +51,7 @@ class MaintenanceController extends Controller
             echo '<h2 style="color: green">UP</h2>';
             echo "<hr>";
             echo '<h3><a href="/maintenance/down">DOWN</a> - UP</h3>';
+            echo '<h3><a href="/home">Ir al home</a>';
         }
 
     }
