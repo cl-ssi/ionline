@@ -6,11 +6,10 @@
     <meta name="viewport" content="initial-scale=1.0">
     <title>En mantención</title>
     <style>
-        h1 {
+        h1, h2 {
             font-family: Sans-serif;
             font-weight: 200;
             color: #006fb3;
-            font-size: 2.4rem;
         }
         .gb_azul {
             color: #006fb3;
@@ -30,8 +29,8 @@
     <div>
         <table>
             <tr>
-                <td style="background-color: #006fb3;" width="300" height="6"></td>
-                <td style="background-color: #fe6565;" width="300" height="6"></td>
+                <td style="background-color: #006fb3;" width="250" height="6"></td>
+                <td style="background-color: #fe6565;" width="250" height="6"></td>
             </tr>
         </table>
     </div>
@@ -42,7 +41,7 @@
     <br>
     <br>
 
-    <h2 class="gb_rojo">EN MANTENIMIENTO</h2>
+    <h2 class="gb_rojo">EN MANTENIMIENTO 🤖</h2>
 
     </center>
     
