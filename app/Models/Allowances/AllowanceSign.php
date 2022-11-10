@@ -21,6 +21,28 @@ class AllowanceSign extends Model implements Auditable
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
+    public function organizationalUnit() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
+    }
+
+    public function allowance() {
+        return $this->belongsTo('App\Models\Allowances\Allowance', 'allowance_id');
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->status) {
+          case 'pending':
+            return 'Pendiente de Aprobación';
+            break;
+          case 'accepted':
+            return 'Aceptada';
+            break;
+          case 'rejected':
+            return 'Rechazada';
+            break;
+        }
+    }
+
      /**
      * The attributes that should be hidden for arrays.
      *

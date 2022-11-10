@@ -76,17 +76,45 @@ class AllowanceController extends Controller
 
         //CADENA DE FIRMAS
         //JEFE DIRECTO
-        $allowance_sing = new AllowanceSign();
-        $allowance_sing->position = '1';
-        $allowance_sing->ou_alias = 'boss';
-        $allowance_sing->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
-        $allowance_sing->status = 'pending';
-        $allowance_sing->allowance_id = $allowance->id;
-        $allowance_sing->save();
+
+        $level_allowance_ou = $allowance->organizationalUnitAllowance->level;
         
-        //JEFE FINANZAS
+        $position = 1;
+        
+        for ($i = $level_allowance_ou; $i >= 2; $i--){
+            $allowance_sing = new AllowanceSign();
+            if($i == $level_allowance_ou && $i>2){
+                $allowance_sing->position = $position;
+                $allowance_sing->ou_alias = 'boss';
+                $allowance_sing->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
+                $allowance_sing->status = 'pending';
+            }
+            else{
+                // $allowance_sing->position = $position;
+                if($i>=3 OR $i<=5){
+                    $allowance_sing->ou_alias = 'boss';
+                    $allowance_sing->position = $position;
+                }
+                if($i==2){
+                    $allowance_sing->ou_alias = 'sub-dir';
+                    $allowance_sing->position = $position;
+                    $allowance_sing->organizational_unit_id = $nextLevel->id;
+                }
+                if($nextLevel){
+                    $allowance_sing->organizational_unit_id = $nextLevel->id;
+                }
+                
+            }
+            $allowance_sing->allowance_id = $allowance->id;
+            $allowance_sing->save();
+
+            $nextLevel = $allowance_sing->organizationalUnit->father;
+            $position = $position + 1;
+        }
+        
+        //SE AGREGA AL FINAL JEFE FINANZAS
         $allowance_sing_finance = new AllowanceSign();
-        $allowance_sing_finance->position = '1';
+        $allowance_sing_finance->position = $position;
         $allowance_sing_finance->ou_alias = 'chief financial officer';
         $allowance_sing_finance->organizational_unit_id = 40;
         $allowance_sing_finance->allowance_id = $allowance->id;
@@ -108,7 +136,7 @@ class AllowanceController extends Controller
      */
     public function show(Allowance $allowance)
     {
-        //
+        return view('allowances.show', compact('allowance'));
     }
 
     /**

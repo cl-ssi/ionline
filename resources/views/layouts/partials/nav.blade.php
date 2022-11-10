@@ -288,7 +288,6 @@
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
                         --}}
-
                     </div>
                 </li>
                 @endif

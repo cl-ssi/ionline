@@ -13,7 +13,9 @@
 
 <!-- <div class="row"> -->
     <div class="col-sm">
-        @livewire('allowances.search-allowances')
+        @livewire('allowances.search-allowances', [
+            'index' => 'own'
+        ])
     </div>
 <!-- </div> -->
 

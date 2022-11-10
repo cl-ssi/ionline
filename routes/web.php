@@ -206,6 +206,7 @@ use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 
 use App\Http\Controllers\Allowances\AllowanceController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
+use App\Http\Controllers\Allowances\AllowanceSignController;
 
 
 /*
@@ -1801,6 +1802,11 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
         Route::get('{allowanceFile}/show', [AllowanceFileController::class, 'show'])->name('show');
         //Route::delete('{allowanceFile}/destroy', [AllowanceFileController::class, 'destroy'])->name('destroy');
     });
+
+    Route::prefix('sign')->as('sign.')->group(function () {
+        Route::put('{allowanceSign}/{status}/{allowance}/update', [AllowanceSignController::class,'update'])->name('update');
+    });
+
 });
 
 /** Módulo de horas para vacunas. ya no se usa */

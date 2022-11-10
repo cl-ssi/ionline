@@ -167,19 +167,19 @@
                         <td class="text-center">
                             {{ $allowance->TotalDays }}
                         </td>
-                        <td>
-                            @foreach($allowance->allowanceSigns as $sign)
-                                @if($sign->status == 'pending' || $sign->request_status == NULL)
-                                    <i class="fas fa-clock fa-2x" title="{{-- $sign->organizationalUnit->name --}}"></i>
+                        <td class="text-center">
+                            @foreach($allowance->allowanceSigns as $allowanceSign)
+                                @if($allowanceSign->status == 'pending' || $allowanceSign->status == NULL)
+                                    <i class="fas fa-clock fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
                                 @endif
-                                @if($sign->status == 'accepted')
+                                @if($allowanceSign->status == 'accepted')
                                     <span style="color: green;">
-                                        <i class="fas fa-check-circle fa-2x" title="{{-- $sign->organizationalUnit->name --}}"></i>
+                                        <i class="fas fa-check-circle fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
                                     </span>
                                 @endif
-                                @if($sign->status == 'rejected')
+                                @if($allowanceSign->status == 'rejected')
                                     <span style="color: Tomato;">
-                                        <i class="fas fa-times-circle fa-2x" title="{{-- $sign->organizationalUnit->name --}}"></i>
+                                        <i class="fas fa-times-circle fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
                                     </span>
                                 @endif
                             @endforeach

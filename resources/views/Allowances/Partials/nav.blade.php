@@ -9,8 +9,12 @@
                 <a class="dropdown-item" href="{{ route('allowances.index') }}"><i class="fas fa-wallet"></i> Mis víaticos</a>
                 <a class="dropdown-item" href="{{ route('allowances.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('allowances.sign_index') }}"><i class="fas fa-check-circle"></i> Gestión de viáticos</a>
-           </div>
+                @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id))
+                    <a class="dropdown-item" href="{{ route('allowances.sign_index') }}"><i class="fas fa-check-circle"></i> Gestión de viáticos</a>
+                @else
+                    <a class="dropdown-item disabled" href="{{ route('allowances.sign_index') }}"><i class="fas fa-check-circle"></i> Gestión de viáticos</a>
+                @endif
+            </div>
         </li>
     {{-- @endcan --}}
 </ul>

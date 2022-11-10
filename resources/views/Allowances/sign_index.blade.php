@@ -11,13 +11,11 @@
 <br />
 </div>
 
-<!-- <div class="row"> -->
-    <div class="col-sm">
-        @livewire('allowances.search-allowances', [
-            'index' => 'sign'
-        ])
-    </div>
-<!-- </div> -->
+<div class="col-sm">
+    @livewire('allowances.search-allowances', [
+        'index' => 'sign'
+    ])
+</div>
 
 @endsection
 

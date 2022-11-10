@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
+use App\Rrhh\Authority;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 class Allowance extends Model implements Auditable
 {
     use HasFactory;
@@ -65,14 +69,31 @@ class Allowance extends Model implements Auditable
     public function getContractualConditionValueAttribute(){
         switch ($this->contractual_condition) {
             case 'to hire':
-              return 'Contrata';
-              break;
+                return 'Contrata';
+                break;
             case 'fee':
-              return 'Honorarios';
-              break;
+                return 'Honorarios';
+                break;
             case '':
-              return '';
-              break;
+                return '';
+                break;
+        }
+    }
+
+    public function getMeansOfTransportValueAttribute(){
+        switch ($this->means_of_transport) {
+            case 'ambulance':
+                return 'Ambulancia';
+                break;
+            case 'plane':
+                return 'Avión';
+                break;
+            case 'bus':
+                return 'Bus';
+                break;
+            case 'other':
+                return 'Otro';
+                break;
         }
     }
 
@@ -85,6 +106,50 @@ class Allowance extends Model implements Auditable
               return 'Ida';
               break;
             case '':
+              return '';
+              break;
+        }
+    }
+
+    public function getOvernightValueAttribute(){
+        switch ($this->overnight) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
+              return 'No';
+              break;
+        }
+    }
+
+    public function getPassageValueAttribute(){
+        switch ($this->passage) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
+              return 'No';
+              break;
+        }
+    }
+
+    public function getFromHalfDayValueAttribute(){
+        switch ($this->from_half_day) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
+              return '';
+              break;
+        }
+    }
+
+    public function getToHalfDayValueAttribute(){
+        switch ($this->to_half_day) {
+            case 1:
+              return 'Sí';
+              break;
+            case 0:
               return '';
               break;
         }
@@ -119,8 +184,10 @@ class Allowance extends Model implements Auditable
 
     public function getTotalIntAllowanceValueAttribute(){
         $total_int_allowance_value = $this->getTotalIntDaysAttribute() * $this->AllowanceValue->value;
-        return number_format($total_int_allowance_value, 0, ",", ".");
+        return $total_int_allowance_value;
     }
+
+    //number_format($foo, 0, ",", ".");
 
     public function getTotalDecimalDayAttribute(){
         $decimal_day = $this->getTotalDaysAttribute() - $this->getTotalIntDaysAttribute();
@@ -128,12 +195,23 @@ class Allowance extends Model implements Auditable
     }
 
     public function getTotalDecimalAllowanceValueAttribute(){
-        $total_decimal_allowance_value = $this->AllowanceValue->value * 0.4;
-        return number_format($total_decimal_allowance_value, 0, ",", ".");
+        $total_decimal_allowance_value = $this->getTotalDecimalDayAttribute() * $this->AllowanceValue->value;
+        return $total_decimal_allowance_value;
     }
 
     public function getAllowanceValueFormatAttribute(){
-        return number_format($this->AllowanceValue->value, 0, ",", ".");
+        return $this->AllowanceValue->value;
+    }
+
+    public function getAllowanceTotalValueFormatAttribute(){
+        // dd($this->getTotalIntAllowanceValueAttribute());
+        $allowance_total_value = $this->getTotalIntAllowanceValueAttribute() + $this->getTotalDecimalAllowanceValueAttribute();
+        return $allowance_total_value;
+    }
+
+    public function getAmIAuthorityAttributte(){
+        $am_i_authority = Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id);
+        dd($am_i_authority);
     }
 
     protected $hidden = [

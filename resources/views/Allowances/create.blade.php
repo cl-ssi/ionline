@@ -44,17 +44,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_place">Lugar</label>
-            <input class="form-control" type="text" autocomplete="off" name="place" required>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_reason">Motivo</label>
-            <input class="form-control" type="text" autocomplete="off" name="reason" required>
-        </fieldset>
-    
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_requester_id">Origen:</label>
+            <label for="for_requester_id">Comuna Origen:</label>
                 @livewire('search-select-commune', [
                     'selected_id' => 'origin_commune_id',
                     'required' => 'required'
@@ -62,11 +52,21 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_requester_id">Destino:</label>
+            <label for="for_requester_id">Comuna Destino:</label>
                 @livewire('search-select-commune', [
                     'selected_id' => 'destination_commune_id',
                     'required' => 'required'
                 ])
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_place">Lugar</label>
+            <input class="form-control" type="text" autocomplete="off" name="place" required>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_reason">Motivo</label>
+            <input class="form-control" type="text" autocomplete="off" name="reason" required>
         </fieldset>
     </div>
 

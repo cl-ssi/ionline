@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('replacement_staff.nav')
-
 <div class="row">
     <div class="col-sm-5">
         <h4 class="mb-3"><i class="fas fa-bell" title="Notificaciones"></i> Mis Notificaciones</h4>

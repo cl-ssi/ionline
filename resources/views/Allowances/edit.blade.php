@@ -45,17 +45,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_place">Lugar</label>
-            <input class="form-control" type="text" autocomplete="off" name="place" value="{{ $allowance->place }}" required>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_reason">Motivo</label>
-            <input class="form-control" type="text" autocomplete="off" name="reason" value="{{ $allowance->reason }}" required>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_requester_id">Origen:</label>
+            <label for="for_requester_id">Comuna Origen:</label>
                 @livewire('search-select-commune', [
                     'selected_id' => 'origin_commune_id',
                     'required'    => 'required',
@@ -64,12 +54,22 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_requester_id">Destino:</label>
+            <label for="for_requester_id">Comuna Destino:</label>
                 @livewire('search-select-commune', [
                     'selected_id' => 'destination_commune_id',
                     'required'    => 'required',
                     'commune'     => $allowance->destinationCommune
                 ])
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_place">Lugar</label>
+            <input class="form-control" type="text" autocomplete="off" name="place" value="{{ $allowance->place }}" required>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_reason">Motivo</label>
+            <input class="form-control" type="text" autocomplete="off" name="reason" value="{{ $allowance->reason }}" required>
         </fieldset>
     </div>
 
@@ -180,20 +180,20 @@
                     </tr>
                     <tr>
                         <td><b>1. DIARIO</b></td>
-                        <td class="text-right">${{ $allowance->AllowanceValueFormat }}</td>
+                        <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
                         <td class="text-center">{{ $allowance->TotalIntDays }}</td>
-                        <td class="text-right">${{ $allowance->TotalIntAllowanceValue }}</td>
+                        <td class="text-right">${{ number_format($allowance->TotalIntAllowanceValue, 0, ",", ".") }}</td>
                     </tr>
                     <tr>
                         <td><b>2. PARCIAL</b></td>
-                        <td class="text-right">${{ $allowance->AllowanceValueFormat }}</td>
+                        <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
                         <td class="text-center">{{ $allowance->TotalDecimalDay }}</td>
-                        <td class="text-right">${{ $allowance->TotalDecimalAllowanceValue }}</td>
+                        <td class="text-right">${{ number_format($allowance->TotalDecimalAllowanceValue, 0, ",", ".") }}</td>
                     </tr>
                     <tr>
                         <td colspan="2"></td>
                         <td class="text-center"><b>Total</b></td>
-                        <td class="text-right">${{ $allowance->TotalIntAllowanceValue + $allowance->TotalDecimalAllowanceValue }}</td>
+                        <td class="text-right">${{ number_format($allowance->AllowanceTotalValueFormat, 0, ",", ".") }}</td>
                     </tr>
                 </tbody>
             </table>
