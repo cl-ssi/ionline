@@ -1958,12 +1958,16 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
         Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
             Route::get('/', [RemFileController::class, 'index'])->name('index');
+            Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
+            Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
             
     });
 
 });
 
-
+/** Rutas para modo mantenimiento */
+Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class,'index']);
+Route::post('/maintenance', [App\Http\Controllers\MaintenanceController::class,'toggle'])->name('maintenance.toggle');
 
 Route::view('/some', 'some');
 

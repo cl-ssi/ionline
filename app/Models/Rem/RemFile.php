@@ -15,7 +15,7 @@ class RemFile extends Model
     public $table = 'rem_files';
 
     protected $fillable = [
-        'name',
+        'filename',
         'month',
         'year',
         'establishment_id',

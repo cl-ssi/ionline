@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
 use App\Models\Rem\UserRem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Establishment;
 use Carbon\Carbon;
@@ -30,76 +31,37 @@ class RemFileController extends Controller
         }
 
         $dates = $this->rango;
+
+        if(auth()->user()->can('Rem: admin')){
+            $rem_establishments = UserRem::all();
+        }
+
+        else {
         $rem_establishments = auth()->user()->remEstablishments;
-
+        }
         return view('rem.file.index', compact('dates','rem_establishments'));
-
-
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function download(RemFile $rem_file)
     {
-        //
+        return Storage::disk('gcs')->download($rem_file->filename);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\RemFile  $remFile
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RemFile $remFile)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\RemFile  $remFile
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RemFile $remFile)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\RemFile  $remFile
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, RemFile $remFile)
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\RemFile  $remFile
+     * @param  \App\Models\RemFile  $rem_file
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RemFile $remFile)
+    public function destroy(RemFile $rem_file)
     {
         //
+        $rem_file->delete();
+        Storage::disk('gcs')->delete($rem_file->filename);
+        session()->flash('success', 'el Archivo fue eliminado exitosamente');
+        return redirect()->route('rem.files.index');
     }
 }

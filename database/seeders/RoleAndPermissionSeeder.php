@@ -124,6 +124,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Suitability: test']);
         Permission::create(['name' => 'Suitability: ssi']);
 
+        Permission::create(['name' => 'Rem: admin', 
+                            'description' => 'Usuario Administrador que revisa los REM y bloquea para que no puedan seguir y a la vez designa a los usuarios por cada establecimiento']);
+        Permission::create(['name' => 'Rem: user',
+                            'description' => 'Usuario asignado para poder cargar REM a establecimiento correspondiente']);
+
         Permission::create(['name' => 'Request Forms: all']);
         Permission::create(['name' => 'Request Forms: audit']);
         Permission::create(['name' => 'Request Forms: boss']);

@@ -45,6 +45,8 @@ class UserRemController extends Controller
     {
         $userRem = new UserRem($request->all());
         $userRem->save();
+        //$user = UserRem
+        $userRem->user->givePermissionTo('Rem: user');
         session()->flash('info', 'El usuario ' . $userRem->fullname . ' ha sido creado como usuario REM');
         return redirect()->route('rem.users.index');
     }
@@ -93,6 +95,7 @@ class UserRemController extends Controller
     {
         //
         $userRem->delete();
+        $userRem->user->revokePermissionTo(['Rem: user']);        
         session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
         return redirect()->route('rem.users.index');
     }

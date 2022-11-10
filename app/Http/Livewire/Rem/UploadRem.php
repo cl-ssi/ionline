@@ -9,16 +9,18 @@ use App\Establishment;
 use Livewire\WithFileUploads;
 
 
+
 class UploadRem extends Component
 {
     use WithFileUploads;
 
-    public $rem_files;
     public $name = "probando";
     public $month;
     public $year;
     public $establishment;
     public $rem_file;
+    public $folder = 'ionline/rem/';
+    public $file;
 
 
     public function mount($year, $month, Establishment $establishment)
@@ -43,13 +45,23 @@ class UploadRem extends Component
     }
 
     public function save()
-    {
-        RemFile::Create([
-            'name'  =>  $this->name,
+    {       
+        //dd($this->file);
+        $file_internal_format = $this->year.'-'.$this->month.'-'.$this->establishment->name.'('.$this->establishment->deis.')';
+        $this->rem_file = RemFile::Create([            
             'month' =>  $this->month,
             'year'  =>  $this->year,
             'establishment_id'  =>  $this->establishment->id,
+            'filename'  =>  $this->folder.$file_internal_format.'.'.$this->file->extension(),
         ]);
+
+        $this->file->storeAs(
+            $this->folder, 
+            $file_internal_format.'.'.$this->file->extension(),
+            'gcs'
+        );
+
+
         session()->flash('success', 'El Archivo fue cargado y subido exitosamente.');
         return redirect()->route('rem.files.index');
     }

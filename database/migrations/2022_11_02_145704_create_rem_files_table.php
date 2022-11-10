@@ -18,6 +18,7 @@ class CreateRemFilesTable extends Migration
             $table->string('filename');
             $table->unsignedInteger('year');
             $table->unsignedInteger('month');
+            /* FIXME: Usa esta nomenclatura $table->foreignId('ou_id')->constrained('organizational_units'); */
             $table->unsignedInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->boolean('is_locked');
