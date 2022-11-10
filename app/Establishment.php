@@ -9,7 +9,8 @@ class Establishment extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
-    public function commune() {
+    public function commune()
+    {
         return $this->belongsTo('\App\Models\Commune');
     }
 

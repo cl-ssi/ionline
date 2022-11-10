@@ -24,8 +24,7 @@ class Holiday extends Model
             Holiday::whereDate('date',$date)->get()->isNotEmpty();
     }
 
-
-
+    /* FIXME: ver si se utiliza y porqué, basta que esté en la variable $dates */
     public function getFormattedDateAttribute()
     {
         return Carbon::parse($this->date);

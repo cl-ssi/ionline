@@ -25,7 +25,17 @@ class Printer extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'serial', 'type', 'brand', 'model', 'ip', 'mac_address', 'active_type', 'comment', 'status', 'place_id'
+        'id',
+        'serial',
+        'type',
+        'brand',
+        'model',
+        'ip',
+        'mac_address',
+        'active_type',
+        'comment',
+        'status',
+        'place_id'
     ];
 
     public function users()

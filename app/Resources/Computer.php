@@ -23,9 +23,33 @@ class Computer extends Model implements Auditable
     protected $table = 'res_computers';
 
     protected $fillable = [
-        'id', 'type', 'brand', 'model', 'serial', 'hostname', 'domain', 'ip', 'mac_address', 'ip_group', 'rack', 'vlan',
-        'network_segment', 'operating_system', 'processor', 'ram', 'hard_disk', 'inventory_number', 'active_type', 'intesis_id', 'comment',
-        'status', 'office_serial', 'windows_serial', 'fusion_at', 'place_id', 'inventory_id',
+        'id',
+        'type',
+        'brand',
+        'model',
+        'serial',
+        'hostname',
+        'domain',
+        'ip',
+        'mac_address',
+        'ip_group',
+        'rack',
+        'vlan',
+        'network_segment',
+        'operating_system',
+        'processor',
+        'ram',
+        'hard_disk',
+        'inventory_number',
+        'active_type',
+        'intesis_id',
+        'comment',
+        'status',
+        'office_serial',
+        'windows_serial',
+        'fusion_at',
+        'place_id',
+        'inventory_id',
     ];
 
     /**
