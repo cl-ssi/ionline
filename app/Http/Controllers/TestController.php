@@ -3,28 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Storage;
-use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\DB;
-use App\Models\WebService\MercadoPublico;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use GuzzleHttp\Client;
+use Carbon\Carbon;
+
+use App\Rrhh\OrganizationalUnit;
+use App\Establishment;
+use App\Models\WebService\MercadoPublico;
 
 class TestController extends Controller
 {
     public function ous()
     {
-        //$ous = OrganizationalUnit::all();
-        $ous = OrganizationalUnit::pluck('id','name');
-        // $ous = OrganizationalUnit::select(DB::raw('id','name'))->get();
-        // debug($ous);
-        return true;
+        $estab = Establishment::find(38);
+        //dump($estab->tree->toArray());
+
+        $a = $estab->tree->toArray();
+
+        $this->printAll($a);
+
+    }
+
+    function printAll($a) {
+        echo str_repeat(" - ", $a['level']). $a['name'] . '<br>';
+        if (!is_array($a)) {
+            print_r($a);
+            return;
+        }
+    
+        foreach($a['childs'] as $k) {
+            $this->printAll($k);
+        }
     }
 
     public function getIp()
     {
-
         if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
             // Check IP from internet.
             // 'ip' => request()->getClientIp(),
@@ -39,16 +54,15 @@ class TestController extends Controller
         
         logger()->info($ip);
         //Storage::disk('local')->prepend('log_ips.txt', $ip);
-
         return $ip;
-
     }
 
     /*
     curl -X PATCH -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/cl-ssi/urgency/issues/22 -d '{"title":"Second Up"}'
     */
 
-    public function getMercadoPublicoTender($date){
+    public function getMercadoPublicoTender($date)
+    {
         $tenders = MercadoPublico::getTender(Carbon::parse($date));
         dd($tenders);
     }
@@ -61,9 +75,4 @@ class TestController extends Controller
         echo "Primer log";
     }
 
-    // public function storeRequestInputs(Request $request)
-    // {
-    // 	Log::info($request->all());
-    // 	var_dump($request->all());
-    // }
 }

@@ -1970,7 +1970,8 @@ Route::post('/maintenance', [App\Http\Controllers\MaintenanceController::class,'
 
 Route::view('/some', 'some');
 
-Route::get('/dev/get-ip',[TestController::class,'getIp']);
-Route::get('/log',[TestController::class,'log']);
+/** Test Routes */
 Route::get('/ous',[TestController::class,'ous']);
+// Route::get('/dev/get-ip',[TestController::class,'getIp']);
+// Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
