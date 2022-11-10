@@ -9,19 +9,47 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Document extends Model implements Auditable
 {
+    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    use \OwenIt\Auditing\Auditable;
-    use SoftDeletes;
-
-
     protected $fillable = [
-        'number', 'date', 'type', 'antecedent', 'responsible', 'subject',
-        'from', 'for', 'greater_hierarchy', 'distribution', 'content', 'file_to_sign_id',
+        'number',
+        'date',
+        'type',
+        'antecedent',
+        'responsible',
+        'subject',
+        'from',
+        'for',
+        'greater_hierarchy',
+        'distribution',
+        'content',
+        'file_to_sign_id',
+    ];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at',
+        'date'
     ];
 
     public function getFromHtmlAttribute()
@@ -31,9 +59,10 @@ class Document extends Model implements Auditable
 
     public function getFromHtmlSignAttribute()
     {
-        /* Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
-           para evitar que salga duplicado en la firmante
-           */
+        /* 
+         * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
+         * para evitar que salga duplicado en la firmante
+         */
         $chars    = array("/", "SERVICIO DE SALUD IQUIQUE", "Servicio de Salud Iquique");
         $htmlchar = array("<br>", "", "");
 
@@ -73,15 +102,18 @@ class Document extends Model implements Auditable
         return str_replace($chars, $htmlchar, $this->distribution);
     }
 
-    public function user() {
-            return $this->belongsTo('App\User')->withTrashed();
+    public function user()
+    {
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
-    public function organizationalUnit() {
-            return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+    public function organizationalUnit()
+    {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
     }
 
-    public function scopeSearch($query, Request $request) {
+    public function scopeSearch($query, Request $request) 
+    {
         if($request->input('id') != "") {
             $query->where('id', $request->input('id') );
         }
@@ -109,11 +141,8 @@ class Document extends Model implements Auditable
         return $query;
     }
 
-    // public function reqEvents() {
-    //     return $this->belongsToMany('App\Requirements\EventDocument');
-    // }
-
-    public function reqEvents() {
+    public function reqEvents()
+    {
         return $this->belongsToMany('App\Requirements\Event','req_documents_events');
     }
 
@@ -121,20 +150,4 @@ class Document extends Model implements Auditable
     {
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
     }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at', 'date'];
 }

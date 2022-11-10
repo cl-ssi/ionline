@@ -9,33 +9,59 @@ use Carbon\Carbon;
 
 class Parte extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'date', 'type', 'number', 'origin', 'subject', 'important', 'entered_at', 'viewed_at','physical_format','received_by_id','reception_date'
+        'date',
+        'type',
+        'number',
+        'origin',
+        'subject',
+        'important',
+        'entered_at',
+        'viewed_at',
+        'physical_format',
+        'received_by_id',
+        'reception_date'
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at',
+        'viewed_at'
     ];
 
     public function getCreationParteDateAttribute()
     {
-      return Carbon::parse($this->date)->format('d-m-Y');
+        return Carbon::parse($this->date)->format('d-m-Y');
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->hasMany('\App\Documents\ParteEvent');
     }
 
-    public function requirements() {
+    public function requirements()
+    {
         return $this->hasMany('\App\Requirements\Requirement');
     }
 
-    public function files() {
+    public function files()
+    {
         return $this->hasMany('App\Documents\ParteFile');
     }
 
-    public function scopeSearch($query, Request $request) {
+    public function scopeSearch($query, Request $request)
+    {
         if($request->input('id') != "") {
             $query->where('id', $request->input('id') );
         }
@@ -60,7 +86,8 @@ class Parte extends Model
     }
 
     /** Fixme cambiar nombre */
-    public function scopeSearch2($query, $request) {
+    public function scopeSearch2($query, $request)
+    {
         if($request != "") {
             $query->where('number','LIKE','%'.$request.'%')
                   ->orWhere('origin','LIKE','%'.$request.'%');
@@ -68,13 +95,4 @@ class Parte extends Model
 
         return $query;
     }
-
-    use SoftDeletes;
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at', 'viewed_at'];
 }

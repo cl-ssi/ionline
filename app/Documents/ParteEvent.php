@@ -7,24 +7,42 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ParteEvent extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'action', 'comment'
+        'action',
+        'comment'
     ];
 
-    public function parte() {
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'parte_id',
+        'organizational_unit_id',
+        'created_at',
+        'updated_at'
+    ];
+
+    public function parte()
+    {
         return $this->belongsTo('\App\Documents\Parte');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('\App\User');
     }
 
-    public function organizationalUnit() {
+    public function organizationalUnit()
+    {
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
@@ -43,15 +61,4 @@ class ParteEvent extends Model
     //     }
     //     return $event;
     // }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'parte_id', 'organizational_unit_id', 'created_at', 'updated_at'
-    ];
-
-    use SoftDeletes;
 }

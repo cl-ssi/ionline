@@ -12,10 +12,20 @@ class Correlative extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'correlative', 'year'
+        'type',
+        'correlative',
+        'year'
     ];
 
-    public static function getCorrelativeFromType($type) {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'doc_correlatives';
+
+    public static function getCorrelativeFromType($type)
+    {
         /* Obtener el objeto correlativo según el tipo */
         $correlative = Correlative::Where('type',"$type")->first();
         /* Almacenar el número del correlativo  */
@@ -27,11 +37,4 @@ class Correlative extends Model
         /* Retornar el número actial */
         return $number;
     }
-
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'doc_correlatives';
 }
