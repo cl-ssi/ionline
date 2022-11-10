@@ -22,8 +22,8 @@ class User extends Authenticatable implements Auditable
     use Notifiable, HasRoles, SoftDeletes, HasFactory;
 
     /**
-    * El id no es incremental ya que es el run sin digito verificador
-    */
+     * El id no es incremental ya que es el run sin digito verificador
+     */
     protected $primaryKey = 'id';
     public $incrementing = false;
 
@@ -62,57 +62,65 @@ class User extends Authenticatable implements Auditable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function organizationalUnit() {
 
+    public function organizationalUnit() 
+    {
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
-    public function telephones() {
+    public function telephones()
+    {
         return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
     }
 
-    public function computers() {
+    public function computers()
+    {
         return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
     }
 
-    public function printers() {
+    public function printers()
+    {
         return $this->belongsToMany('\App\Resources\Printer', 'res_printer_user')->withTimestamps();
     }
 
-    public function mobile() {
+    public function mobile()
+    {
         return $this->hasOne('\App\Resources\Mobile');
     }
 
-    public function country() {
+    public function country()
+    {
         return $this->belongsTo('\App\Models\Country');
     }
 
-    public function pharmacies() {
+    public function pharmacies() 
+    {
         // return $this->belongsToMany('\App\Models\Pharmacies\Pharmacy');
         return$this->belongsToMany('\App\Pharmacies\Pharmacy', 'frm_pharmacy_user')->withTimestamps();
     }
 
-    public function bankAccount() {
+    public function bankAccount()
+    {
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
 
-    // public function requestForms(){
-    //   return $this->hasMany(RequestForm::class, 'request_user_id');
-    // }
-
-    public function requestForms(){
-      return$this->belongsToMany(RequestForm::class, 'arq_request_forms_users', 'purchaser_user_id', 'request_form_id')
-          ->withTimestamps();
+    public function requestForms()
+    {
+        return $this->belongsToMany(RequestForm::class, 'arq_request_forms_users', 'purchaser_user_id', 'request_form_id')
+            ->withTimestamps();
     }
 
-    public function supervisorRequestForms(){
-      return $this->hasMany(RequestForm::class, 'supervisor_user_id');
+    public function supervisorRequestForms()
+    {
+        return $this->hasMany(RequestForm::class, 'supervisor_user_id');
     }
 
-    public function eventRequestForms(){
-      return $this->hasMany(EventRequestForm::class, 'signer_user_id');
+    public function eventRequestForms()
+    {
+        return $this->hasMany(EventRequestForm::class, 'signer_user_id');
     }
 
+    /* TODO: buscar en que se usa y eliminar */
     public function getPosition(){
       if(is_null($this->position)){
         return "";}
@@ -121,7 +129,8 @@ class User extends Authenticatable implements Auditable
       }
 
 
-    public function scopeSearch($query, $name) {
+    public function scopeSearch($query, $name) 
+    {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')
                          ->orWhere('fathers_family', 'LIKE', '%'.$name.'%')
@@ -129,35 +138,38 @@ class User extends Authenticatable implements Auditable
         }
     }
 
-	/**
+    /**
      * Retorna Usuarios según contenido en $searchText
      * Busqueda realizada en: nombres, apellidos, rut.
      * @return Patient[]|Builder[]|Collection
      */
     public static function scopeFullSearch($query, $searchText){
-		$query->withTrashed();
-		$array_search = explode(' ', $searchText);
-		foreach($array_search as $word){
-			$query->where(function($q) use($word){
-				$q->where('name', 'LIKE', '%'.$word.'%')
-				  ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-				  ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-				  ->orwhere('id','LIKE', '%'.$word.'%');
-			});
-		}//End foreach
-		return $query;
-	}// End getPatientsBySearch
+        $query->withTrashed();
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word){
+            $query->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%')
+                  ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                  ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                  ->orwhere('id','LIKE', '%'.$word.'%');
+            });
+        }//End foreach
+        return $query;
+    }// End getPatientsBySearch
 
 
-    public function runFormat() {
+    public function runFormat()
+    {
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
     }
 
-    public function runNotFormat() {
+    public function runNotFormat()
+    {
         return $this->id . '-' . $this->dv;
     }
 
-    public function getRunFormatAttribute() {
+    public function getRunFormatAttribute()
+    {
       return number_format($this->id, 0, '.', '.') . '-' . $this->dv;
     }
 
@@ -171,20 +183,26 @@ class User extends Authenticatable implements Auditable
         return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, "UTF-8");
     }
 
+    /* TODO: Dejar solo una, ShortName (Nombre Apellido1) y eliminar tinnyName*/
     public function getShortNameAttribute()
     {
         return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
     }
 
-    public function getTinnyNameAttribute() {
-        if(!is_null($this->name)){
-          $name = explode(" ", $this->name)[0];
-          return $name.' '.$this->fathers_family;}
+    /* TODO: Fusionar con la de arriba */
+    public function getTinnyNameAttribute()
+    {
+        if(!is_null($this->name))
+        {
+            $name = explode(" ", $this->name)[0];
+            return $name.' '.$this->fathers_family;
+        }
         else
-          return "";
+            return "";
     }
 
-    public function getFirstNameAttribute() {
+    public function getFirstNameAttribute()
+    {
         $names = explode(' ',trim($this->name));
         return ucwords(strtolower("{$names[0]}"));
     }
@@ -200,62 +218,76 @@ class User extends Authenticatable implements Auditable
         return $name[0].$fathers[0].$mothers[0];
     }
 
-    public function serviceRequests() {
-      return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
-  }
+    public function serviceRequests()
+    {
+        return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
+    }
 
-    public function documentEvents() {
+    public function documentEvents()
+    {
         return $this->hasMany('\App\Documents\DocumentEvent');
     }
 
-    public function documents() {
+    public function documents()
+    {
         return $this->hasMany('App\Documents\Document');
     }
 
-    public function reqCategories() {
+    public function reqCategories()
+    {
         return $this->hasMany('App\Requirements\Category');
     }
 
-    public function requirementStatus() {
+    public function requirementStatus()
+    {
         return $this->hasMany('App\Requirements\RequirementStatus');
     }
 
-    public function requirements() {
+    public function requirements()
+    {
         return $this->hasMany('App\Requirements\Requirement');
     }
 
-    public function requirementsEventsFrom() {
+    public function requirementsEventsFrom()
+    {
         return $this->hasMany('App\Requirements\Event','from_user_id');
     }
 
-    public function requirementsEventsTo() {
+    public function requirementsEventsTo()
+    {
         return $this->hasMany('App\Requirements\Event','to_user_id');
     }
 
-    public function purchases() {
+    public function purchases()
+    {
         return $this->hasMany('App\Pharmacies\Purchase');
     }
 
-    public function dispatches() {
+    public function dispatches()
+    {
         return $this->hasMany('App\Pharmacies\Dipatch');
     }
 
-    public function receivings() {
+    public function receivings()
+    {
         return $this->hasMany('App\Pharmacies\Receiving');
     }
 
-    public function establishments() {
+    public function establishments()
+    {
         return $this->belongsToMany('\App\Pharmacies\Establishment', 'frm_establishments_users')
                     ->withTimestamps();
     }
 
-    public function requests() {
+    public function requests()
+    {
         return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff');
     }
 
-    public function remEstablishments() {
-      return $this->hasMany('App\Models\Rem\UserRem');
-  }
+    public function remEstablishments()
+    {
+        return $this->hasMany('App\Models\Rem\UserRem');
+    }
 
     public function stores()
     {
@@ -267,11 +299,11 @@ class User extends Authenticatable implements Auditable
 
     public function getActiveStoreAttribute()
     {
-      $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
-      if($storeActive)
-        return $storeActive;
-      else
-        return null;
+        $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
+        if($storeActive)
+            return $storeActive;
+        else
+            return null;
     }
 
     public function userResults()
@@ -280,6 +312,7 @@ class User extends Authenticatable implements Auditable
         //return $this->hasMany('App\Models\Result', 'user_id', 'id');
     }
 
+    /* FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
     public function serviceRequestsMyPendingsCount()
     {
         $user_id = $this->id;
@@ -338,6 +371,7 @@ class User extends Authenticatable implements Auditable
         return count($serviceRequestsMyPendings);
     }
 
+    /* FIXME: @sickiqq Ordenar la indentación, evaluar si este código se puede mejorar */
     public function serviceRequestsOthersPendingsCount()
     {
         $user_id = $this->id;
@@ -403,35 +437,38 @@ class User extends Authenticatable implements Auditable
      * Busqueda realizada en: nombres, apellidos, rut.
      * @return Patient[]|Builder[]|Collection
      */
-    public static function getUsersBySearch($searchText){
-                  $users = User::query()->withTrashed();
-                  $array_search = explode(' ', $searchText);
-                  foreach($array_search as $word){
-                  $users->where(function($q) use($word){
-                            $q->where('name', 'LIKE', '%'.$word.'%')
-                            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('id','LIKE', '%'.$word.'%')
-                            ;
-                            //->orwhere('dv','LIKE', '%'.$word.'%');
-                      });
-                  }//End foreach
-              return $users;
-        }// End getPatientsBySearch
-
-
-    public static function dvCalculate($num){
-        if(is_numeric($num)){
-          $run = intval($num);
-          $s=1;
-          for($m=0;$run!=0;$run/=10)
-              $s=($s+$run%10*(9-$m++%6))%11;
-          $dv = chr($s?$s+47:75);
-          return $dv;
+    public static function getUsersBySearch($searchText)
+    {
+        $users = User::query()->withTrashed();
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word)
+        {
+            $users->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%')
+                ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                ->orwhere('id','LIKE', '%'.$word.'%');
+                //->orwhere('dv','LIKE', '%'.$word.'%');
+            });
         }
-          else{
+        return $users;
+    }
+
+    public static function dvCalculate($num)
+    {
+        if(is_numeric($num))
+        {
+            $run = intval($num);
+            $s=1;
+            for($m=0;$run!=0;$run/=10)
+                $s=($s+$run%10*(9-$m++%6))%11;
+            $dv = chr($s?$s+47:75);
+            return $dv;
+        }
+        else
+        {
             return "Run no Válido";
-          }
+        }
     }
 
     /**
@@ -447,33 +484,33 @@ class User extends Authenticatable implements Auditable
 
     public function scopeFindByUser($query, $searchText)
     {
-		$array_search = explode(' ', $searchText);
-		foreach($array_search as $word)
-		{
-		$query->where(function($q) use($word){
-			$q->where('name', 'LIKE', '%'.$word.'%')
-			->orwhere('fathers_family','LIKE', '%'.$word.'%')
-			->orwhere('mothers_family','LIKE', '%'.$word.'%')
-			->orwhere('id','LIKE', '%'.$word.'%');
-			});
-		}
-		return $query;
+        $array_search = explode(' ', $searchText);
+        foreach($array_search as $word)
+        {
+            $query->where(function($q) use($word){
+                $q->where('name', 'LIKE', '%'.$word.'%')
+                ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                ->orwhere('id','LIKE', '%'.$word.'%');
+                });
+        }
+        return $query;
     }
 
-	public function subrogations()
-	{
-		return $this->hasMany(Subrogation::class)->orderBy('level');
-	}
-	
-	public function getSubrogantAttribute()
-	{
-		if($this->absent) {
-			return $this->subrogations->where('subrogant.absent','false')->first()->subrogant ?? collect();
-		}
-		else {
-			return $this;
-		}
-	}
+    public function subrogations()
+    {
+        return $this->hasMany(Subrogation::class)->orderBy('level');
+    }
+
+    public function getSubrogantAttribute()
+    {
+        if($this->absent) {
+            return $this->subrogations->where('subrogant.absent','false')->first()->subrogant ?? collect();
+        }
+        else {
+            return $this;
+        }
+    }
 
     public function getIAmSubrogantOfAttribute()
     {
@@ -556,6 +593,6 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $auditExclude = [
-    	'remember_token', 'password'
-	];
+        'remember_token', 'password'
+    ];
 }
