@@ -104,7 +104,7 @@
                 <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
             </fieldset>
 
-            @livewire('requirements.events.associate-document')
+            @livewire('requirements.events.associate-document',['parte_id' => 0])
 
         </div>
 

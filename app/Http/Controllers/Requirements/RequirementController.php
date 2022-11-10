@@ -627,29 +627,32 @@ class RequirementController extends Controller
      */
     public function create_requirement(Parte $parte)
     {
-        $documents = Document::all()->sortBy('id');
-        $ous = OrganizationalUnit::all()->sortBy('name');
+        // $documents = Document::all()->sortBy('id');
+        // $ous = OrganizationalUnit::all()->sortBy('name');
         //        $organizationalUnit = OrganizationalUnit::Find(1);
-        $categories = Category::where('user_id', Auth::user()->id)->get();
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        // $categories = Category::where('user_id', Auth::user()->id)->get();
+        // $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $labels = Label::all();
         // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
-        // $categories = Category::where('user_id',Auth::user()->id)->get();
-        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
+        // $categories = Category::where('user_id', Auth::user()->id)->get();
+        return view('requirements.create', compact('parte','labels'));
     }
 
     public function create_requirement_sin_parte()
     {
-        $documents = Document::all()->sortBy('id');
+        // set_time_limit(7200);
+        // ini_set('memory_limit', '2048M');
+        
+        // $documents = Document::all()->sortBy('id');
         $parte = new Parte;
-        $ous = OrganizationalUnit::all()->sortBy('name');
-        //      $organizationalUnit = OrganizationalUnit::Find(1);
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        $categories = Category::where('user_id', Auth::user()->id)->get();
+        // $ous = OrganizationalUnit::all()->sortBy('name');
+        
+        // $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        // $categories = Category::where('user_id', Auth::user()->id)->get();
         $labels = Label::all();
-        //equirementCategory::where('requirement_id',$requirement->id)->get();
-
-        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
+        
+        // return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
+        return view('requirements.create', compact('parte','labels'));
     }
 
     public function archive_requirement(Requirement $requirement)
@@ -684,6 +687,14 @@ class RequirementController extends Controller
      */
     public function store(Request $request)
     {
+        
+        // $requirement = Requirement::find(15920);
+        // $requirement->categories()->attach($request->input('category_id'));
+        // dd("");
+
+        //se setea variables documents, que ahora viene separada por coma, y no en un array.
+        $request->documents = explode(",",$request->documents);
+
         // validación existencia autoridad en ou
         if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
           return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
@@ -877,6 +888,7 @@ class RequirementController extends Controller
                 }
 
                 $requirement->events()->save($firstEvent);
+                $requirement->categories()->attach($request->input('category_id'));
                 //$requerimientos = $requerimientos + $firstEvent->id + ",";
             }
 

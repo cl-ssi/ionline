@@ -23,28 +23,6 @@
 </h3>
 
 
-
-<!-- <div class="row">
-<div class="col-12">
-
-    <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
-    <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
-    <label for="category_id" class="sr-only">Categorias</label>
-    <select name="category_id" id="category_id" class="selectpicker input-sm"
-        multiple title="Elige tus categorías" >
-        @foreach($categories as $key => $category)
-            <option value="{{$category->id}}"
-            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
-            </option>
-        @endforeach
-    </select>
-
-</div>
-
-</div>
-
-<hr> -->
-
 <div class="form-row">
     @if($parte->id <> 0)
         <div class="col-8">
@@ -76,7 +54,7 @@
                     <label for="category_id">Asignar categoría</label>
                     <select name="category_id[]" id="category_id" class="form-control selectpicker"
                         multiple title="Elige tus categorías" >
-                        @foreach($categories as $key => $category)
+                        @foreach(auth()->user()->reqCategories as $key => $category)
                             <option value="{{$category->id}}"
                             data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
                             </option>
@@ -85,8 +63,9 @@
 
                 </fieldset>
 
+                
 
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
+                {{--<fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="ou">Unidad Organizacional</label>
                     <!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
                     <select class="form-control selectpicker" data-live-search="true" id="ou" name="to_ou_id" required
@@ -145,11 +124,13 @@
                             </button>
                         </div>
                     </div>
-                </fieldset>
+                </fieldset>--}}
 
             </div>
 
-            <table id="tabla_funcionarios" class="table table-striped table-sm" style="display: none">
+            @livewire('requirements.requirement-receivers',['parte_id' => $parte->id])
+
+            <!-- <table id="tabla_funcionarios" class="table table-striped table-sm" style="display: none">
                 <thead>
                     <tr>
                         <th>Unidad Organizacional</th>
@@ -160,7 +141,7 @@
                 <tbody>
 
                 </tbody>
-            </table>
+            </table> -->
 
 
             <div class="form-row">
@@ -199,7 +180,7 @@
                     <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
                 </fieldset>
 
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-3 @endif">
+                <!-- <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-3 @endif">
                     <label for="for_document">Asociar documentos</label>
                     <div class="input-group">
                         <input type="number" class="form-control" id="for_document" name="document">
@@ -216,7 +197,9 @@
                     <table id="tabla_documents" style="display: none">
                         <tr></tr>
                     </table>
-                </fieldset>
+                </fieldset> -->
+
+                @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
 
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-3 @endif">
                     <label for="for_label_id">Etiqueta</label>
@@ -243,39 +226,12 @@
 
 @section('custom_js')
   <script>
-
+{{--
   	 $(document).ready(function(){
        var array = new Array;
   		 $("#ou").val(1);
   		 $("#ou").trigger("change");
-  	 //});
 
-
-
-
-  		// $('#ou').on('change', function(e){
-  		//     console.log(e);
-  		//     var ou_id = e.target.value;
-  		//     $.get('{{ route('rrhh.users.get.from.ou')}}/'+ou_id, function(data) {
-  		//         console.log(data);
-  		//         $('#user').empty();
-  		//         $.each(data, function(index,subCatObj){
-  		//             $('#user').append(
-  		// 							'<option value="'+subCatObj.id+'">'+subCatObj.name+' '+subCatObj.fathers_family+' '+subCatObj.mothers_family+'</option>'
-  		// 							);
-  		//         });
-  		//     });
-  		// });
-
-  		// $('#ou').on('change', function(e){
-  		//     console.log(e);
-  		//     var ou_id = e.target.value;
-  		//     $.get('{{ route('rrhh.users.get.autority.from.ou')}}/'+ou_id, function(data) {
-  		//         console.log(data);
-  		// 				//alert(data.user_id);
-  		// 				document.getElementById("user").value = data.user_id;
-  		//     });
-  		// });
 
       //$(document).ready(function(){
         $(".add-destinatario").click(function(){
@@ -387,6 +343,6 @@
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     })
-
+--}}
   </script>
 @endsection

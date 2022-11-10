@@ -11,6 +11,7 @@ class AssociateDocument extends Component
     public $doc_id;
     public $documents;
     public $message = '';
+    public $parte_id;
 
     public function setDocument()
     {
