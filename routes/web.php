@@ -1965,7 +1965,9 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
 });
 
-Route::get('/maintenance/{param?}', App\Http\Controllers\MaintenanceController::class);
+/** Rutas para modo mantenimiento */
+Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class,'index']);
+Route::post('/maintenance', [App\Http\Controllers\MaintenanceController::class,'toggle'])->name('maintenance.toggle');
 
 Route::view('/some', 'some');
 
