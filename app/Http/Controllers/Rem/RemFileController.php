@@ -5,12 +5,8 @@ namespace App\Http\Controllers\Rem;
 use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
 use App\Models\Rem\UserRem;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
-use App\Establishment;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
+
 
 class RemFileController extends Controller
 {
@@ -21,25 +17,22 @@ class RemFileController extends Controller
      */
     public function index()
     {
-               
+
         $now = now()->startOfMonth();
-        
-        for($i=1; $i<=12; $i++)
-        {
+
+        for ($i = 1; $i <= 12; $i++) {
             $this->rango[] = $now->clone();
             $now->subMonth('1');
         }
 
         $dates = $this->rango;
 
-        if(auth()->user()->can('Rem: admin')){
+        if (auth()->user()->can('Rem: admin')) {
             $rem_establishments = UserRem::all();
+        } else {
+            $rem_establishments = auth()->user()->remEstablishments;
         }
-
-        else {
-        $rem_establishments = auth()->user()->remEstablishments;
-        }
-        return view('rem.file.index', compact('dates','rem_establishments'));
+        return view('rem.file.index', compact('dates', 'rem_establishments'));
     }
 
     public function download(RemFile $rem_file)
@@ -48,7 +41,7 @@ class RemFileController extends Controller
     }
 
 
-    
+
 
     /**
      * Remove the specified resource from storage.
