@@ -12,8 +12,8 @@ use function Livewire\str;
 class SignaturesFlow extends Model Implements Auditable
 {
     use HasFactory;
-    use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,10 +21,26 @@ class SignaturesFlow extends Model Implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation', 'visator_type', 'real_signer_id',
+        'id',
+        'signatures_file_id',
+        'type',
+        'ou_id',
+        'user_id',
+        'sign_position',
+        'status',
+        'signature_date',
+        'observation',
+        'visator_type',
+        'real_signer_id',
     ];
 
-    public function signaturesFile(){
+    protected $table = 'doc_signatures_flows';
+
+    protected $dates = ['signature_date'];
+
+
+    public function signaturesFile()
+    {
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
     }
 
@@ -33,10 +49,12 @@ class SignaturesFlow extends Model Implements Auditable
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
-    public function signature(){
+    public function signature()
+    {
         return $this->signaturesFile->signature();
     }
 
+    /* FIXME: porque no usar la relación userSigner? */
     public function getSignerNameAttribute()
     {
         return User::find($this->user_id)->TinnyName;
@@ -81,8 +99,4 @@ class SignaturesFlow extends Model Implements Auditable
     {
         return $this->status == 1;
     }
-
-    protected $table = 'doc_signatures_flows';
-
-    protected $dates = ['signature_date'];
 }

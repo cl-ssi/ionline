@@ -214,7 +214,7 @@
                         $signedSignaturesFlow->signature->request_date->format('Y-m-d') : '' }}
                     </td>
                     <td>
-                        <b>{{ $signedSignaturesFlow->signerName }}</b>
+                        <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
                         
                         @if($signedSignaturesFlow->userSigner->absent == 1)
                         <br>
