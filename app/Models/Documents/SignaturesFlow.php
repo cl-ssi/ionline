@@ -49,19 +49,30 @@ class SignaturesFlow extends Model Implements Auditable
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
+    public function realSigner()
+    {
+        return $this->belongsTo('App\User', 'real_signer_id')->withTrashed();
+    }
+
     public function signature()
     {
         return $this->signaturesFile->signature();
     }
 
-    /* FIXME: porque no usar la relación userSigner? */
+    /* FIXME: porque no usar la relación userSigner? si el usuario no existe explotará 
+     * puse un return a las relaciones para probar si todo anda bien, si no hay problemas
+     * se pueden borrar y dejar entonces sólo las relaciones
+     */
     public function getSignerNameAttribute()
     {
-        return User::find($this->user_id)->TinnyName;
+        //return User::find($this->user_id)->TinnyName;
+        return $this->userSigner->tinnyName;
     }
     
-    public function getRealSignerNameAttribute(){
-        return User::find($this->real_signer_id)->fullName;
+    public function getRealSignerNameAttribute()
+    {
+        // return User::find($this->real_signer_id)->fullName;
+        return $this->realSigner->tinnyName;
     }
 
     public function getValidationMessagesAttribute(): array
