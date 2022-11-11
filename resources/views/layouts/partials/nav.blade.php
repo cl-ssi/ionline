@@ -40,27 +40,27 @@
 
                         <a class="dropdown-item"
                            href="{{ route('indicators.population') }}">
-                            <i class="fas fa-globe-americas"></i> Tablero de población
+                            <i class="fas fa-globe-americas fa-fw"></i> Tablero de población
                         </a>
 
                         @canany(['be god','Rem: admin','Rem: user'])
                         <a class="dropdown-item"
                            href="{{ route('rem.files.index') }}">
-                            <i class="fas fa-file-excel"></i> Subir Archivo
+                            <i class="fas fa-file-excel fa-fw"></i> Subir Archivo REM
                         </a>
                         @endcan
 
                         @canany(['be god','Rem: admin'])
                         <a class="dropdown-item"
                            href="{{ route('rem.users.index') }}">
-                            <i class="fas fa-users"></i> Usuarios REM
+                            <i class="fas fa-users fa-fw"></i> Usuarios REM
                         </a>
                         @endcan
 
                         @can('RNI Database: view')
                         <a class="dropdown-item"
                            href="{{ route('indicators.rni_db.index') }}">
-                            <i class="fas fa-database"></i> Base de datos RNI
+                            <i class="fas fa-database fa-fw"></i> Base de datos RNI
                         </a>
                         @endcan
 
@@ -68,12 +68,12 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
                            href="{{ route('programmings.index') }}">
-                            <i class="fas fa-calculator"></i> Programación Numérica
+                            <i class="fas fa-calculator fa-fw"></i> Programación Numérica
                         </a>
 
                         <a class="dropdown-item"
                            href="{{ route('communefiles.index') }}">
-                            <i class="fas fa-file-alt"></i> Documentos Comunales
+                            <i class="fas fa-file-alt fa-fw"></i> Documentos Comunales
                         </a>
                         @endcan
 
