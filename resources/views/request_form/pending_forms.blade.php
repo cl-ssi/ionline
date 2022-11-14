@@ -7,7 +7,7 @@
 
 @include('request_form.partials.nav')
 
-@if(count($my_forms_signed) > 0 || count($not_pending_forms) || count($my_pending_forms_to_signs) > 0 || count($new_budget_pending_to_sign) > 0)
+@if(count($my_forms_signed) > 0 || count($pending_forms_to_signs_manager) > 0 || count($not_pending_forms) || count($my_pending_forms_to_signs) > 0 || count($new_budget_pending_to_sign) > 0)
 
     {{--<fieldset class="form-group">
         <div class="input-group mb-3">
@@ -118,6 +118,106 @@
               </div>
             </div>
         </div>
+    @endif
+    
+    @if(count($secretaries) > 0){
+    @if(count($pending_forms_to_signs_manager) > 0)
+    </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma desde secretaría</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                  <thead class="small">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th>Folio</th>
+                      <th style="width: 7%">Fecha Creación</th>
+                      <th>Tipo / <br>Mecanismo de Compra</th>
+                      <th>Descripción</th>
+                      <th>Usuario Gestor</th>
+                      <th>Items</th>
+                      <th>Presupuesto</th>
+                      <th>Etapas de aprobación</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="small">
+                      @foreach($pending_forms_to_signs_manager as $requestForm)
+                            <tr>
+                                <td>{{ $requestForm->id }} <br>
+                                    @switch($requestForm->getStatus())
+                                        @case('Pendiente')
+                                            <i class="fas fa-clock"></i>
+                                            @break
+
+                                        {{--@case('complete')
+                                            <span style="color: green;">
+                                              <i class="fas fa-check-circle"></i>
+                                            </span>
+                                            @break --}}
+
+                                    @endswitch
+                                </td>
+                                <td>
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}">{{ $requestForm->folio }}</a>
+                                  @if($requestForm->father)
+                                  <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}">{{ $requestForm->father->folio }}</a>)
+                                  @endif
+                                </td>
+                                <td>
+                                    {{ $requestForm->created_at->format('d-m-Y H:i') }}<br>
+                                    {{ $requestForm->created_at->diffForHumans() }}
+                                </td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
+                                <td>{{ $requestForm->name }}</td>
+                                <td>{{ $requestForm->user->FullName }}<br>
+                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                </td>
+                                <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                                <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
+                                <td class="text-center">
+                                  @foreach($requestForm->eventRequestForms as $sign)
+                                      @if($sign->status == 'pending')
+                                          <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                      @if($sign->status == 'approved')
+                                          <span style="color: green;">
+                                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'rejected')
+                                          <span style="color: Tomato;">
+                                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'does_not_apply')
+                                        <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                  @endforeach
+                              </td>
+                              <td>
+                              <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+                              </td>
+                            </tr>
+                      @endforeach
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    @else
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma desde secretaría</h6>
+            <div class="card mb-3 bg-light">
+              <div class="card-body">
+                No hay formularios de requerimiento pendientes de firma desde secretaría.
+              </div>
+            </div>
+        </div>
+    @endif
     @endif
 
     @if(array_intersect($events_type, ['finance_event', 'supply_event']))

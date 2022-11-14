@@ -105,17 +105,22 @@ class RequestFormController extends Controller {
 
     public function pending_forms()
     {
-        $my_pending_forms_to_signs = $not_pending_forms = $new_budget_pending_to_sign = $my_forms_signed = collect();
+        $my_pending_forms_to_signs = $pending_forms_to_signs_manager = $not_pending_forms = $new_budget_pending_to_sign = $my_forms_signed = collect();
 
         $events_type = $this->get_events_type_user();
 
-        $iam_authorities_in = [];
+        $iam_authorities_in = $iam_secretaries_in = [];
 
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+        $secretaries = Authority::getAmIAuthorityFromOu(Carbon::now(), 'secretary', Auth::id());
 
         // if(count($authorities) > 0){
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
+          }
+
+          foreach ($secretaries as $secretary){
+              $iam_secretaries_in[] = $secretary->organizational_unit_id;
           }
 
           foreach($events_type as $event_type){
@@ -135,6 +140,25 @@ class RequestFormController extends Controller {
         // }
 
         // return $my_pending_forms_to_signs;
+
+        if(count($secretaries) > 0){
+          foreach(['superior_leader_ship_event', 'leader_ship_event'] as $event_type){
+              $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
+              // return $prev_event_type;
+              $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
+                  ->where('status', 'pending')
+                  ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_secretaries_in){
+                      return $q->where('status', 'pending')->whereIn('ou_signer_user', (count($iam_secretaries_in) > 0 ? $iam_secretaries_in : [Auth::user()->organizationalUnit->id]))->where('event_type', $event_type);
+                  })->when($prev_event_type, function($q) use ($prev_event_type) {
+                      return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                          return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
+                      });
+                  })->get();
+              $pending_forms_to_signs_manager = $pending_forms_to_signs_manager->concat($result);
+          }
+          
+        //   return $pending_forms_to_signs_manager;
+        }
 
         foreach($events_type as $event_type){
             if(in_array($event_type, ['finance_event', 'supply_event'])){
@@ -170,7 +194,7 @@ class RequestFormController extends Controller {
             })->latest('id')->paginate(15, ['*'], 'p2');
 //            })->orderBy('approved_at', 'desc')->paginate(15, ['*'], 'p2');
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'events_type'));
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'pending_forms_to_signs_manager', 'secretaries', 'not_pending_forms', 'new_budget_pending_to_sign', 'my_forms_signed', 'events_type'));
     }
 
     public function contract_manager_forms() {
@@ -238,7 +262,7 @@ class RequestFormController extends Controller {
             return redirect()->route('request_forms.my_forms');
         }
 
-        $requestForm->load('itemRequestForms');
+        $requestForm->load('itemRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit');
 
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
 
