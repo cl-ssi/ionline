@@ -139,7 +139,7 @@
                     @endif
                     <tr>
                         <th class="table-active" colspan="2" scope="row">Justificación de Adquisición</th>
-                        <td>{{ $requestForm->justification }}</td>
+                        <td style="white-space: pre-wrap;">{{ $requestForm->justification }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" colspan="2" scope="row">Comprador</th>
@@ -275,7 +275,7 @@
                             @endif
                         </td>
                         <td>{{ $itemRequestForm->unit_of_measurement }}</td>
-                        <td>{{ $itemRequestForm->specification }}</td>
+                        <td style="white-space: pre-wrap;">{{ $itemRequestForm->specification }}</td>
                         <td align="center">
                             @if($itemRequestForm->article_file)
                                 <a href="{{ route('request_forms.show_item_file', $itemRequestForm) }}" target="_blank">
