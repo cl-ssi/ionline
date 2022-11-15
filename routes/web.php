@@ -1891,7 +1891,6 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
         Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-
     });
 
     Route::prefix('questions')->as('questions.')->middleware('auth')->group(function () {
@@ -1957,18 +1956,18 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
-        Route::prefix('users')->as('users.')->group(function () {
-            Route::get('/', [UserRemController::class, 'index'])->name('index');
-            Route::get('/create', [UserRemController::class, 'create'])->name('create');
-            Route::post('/store', [UserRemController::class, 'store'])->name('store');
-            Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
-            });
+    Route::prefix('users')->as('users.')->group(function () {
+        Route::get('/', [UserRemController::class, 'index'])->name('index');
+        Route::get('/create', [UserRemController::class, 'create'])->name('create');
+        Route::post('/store', [UserRemController::class, 'store'])->name('store');
+        Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
+    });
 
-        Route::prefix('files')->as('files.')->group(function () {
-            Route::get('/', [RemFileController::class, 'index'])->name('index');
-            Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
-            Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');            
-            });
+    Route::prefix('files')->as('files.')->group(function () {
+        Route::get('/', [RemFileController::class, 'index'])->name('index');
+        Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
+        Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');            
+    });
 
 });
 
