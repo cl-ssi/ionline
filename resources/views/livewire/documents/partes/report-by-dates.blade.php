@@ -3,7 +3,7 @@
 
     @include('documents.partes.partials.nav')
 
-    <h3 class="mb-3">Buscar por fecha</h3>
+    <h3 class="mb-3">Buscar por fecha de ingreso</h3>
 
     @canany(['Partes: oficina'])
         <div class="form-row">
@@ -47,7 +47,7 @@
             </fieldset>
         </div>
     @endcanany
-    
+
     <hr>
 
     <table class="table table-bordered table-sm">
