@@ -48,15 +48,17 @@
                 </li>
             @endif
 
-            <li>
-                {{ $movement->created_at->format('Y-m-d') }}
-                - Usado por
-                <b>{{ $movement->usingUser->full_name }}</b>
-                en
-                <b>{{ $movement->place->location->name }}</b>
-                -
-                <b>{{ $movement->place->name }}</b>
-            </li>
+            @if($movement->usingUser)
+                <li>
+                    {{ $movement->created_at->format('Y-m-d') }}
+                    - Usado por
+                    <b>{{ $movement->usingUser->full_name }}</b>
+                    en
+                    <b>{{ $movement->place->location->name }}</b>
+                    -
+                    <b>{{ $movement->place->name }}</b>
+                </li>
+            @endif
 
             <li>
                 {{ $movement->created_at->format('Y-m-d') }}
@@ -69,10 +71,14 @@
 
                 @if($movement->reception_confirmation)
                     <ul>
-                        <li>
-                            {{ $movement->reception_date }} - Confirmación recepción por responsable
-                            <b>{{ $movement->responsibleUser->full_name }}</b>
-                        </li>
+                        @if($movement->reception_date)
+                            <li>
+                                {{ $movement->reception_date }}
+                                - Confirmación recepción por responsable
+                                <b>{{ $movement->responsibleUser->full_name }}</b>
+                            </li>
+                        @endif
+
                         @if($movement->observations)
                             <li>
                                 {{ $movement->reception_date }}
