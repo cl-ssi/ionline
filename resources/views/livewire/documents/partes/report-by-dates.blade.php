@@ -26,7 +26,7 @@
             
             <fieldset class="col-md-3 col-5">
                 <label for="end_at" class="form-label">
-                    {{ __('Fecha Termiino') }}
+                    {{ __('Fecha Término') }}
                 </label>
                 
                 <input wire:model.defer="end_at" type="date" id="end_at" 

@@ -34,7 +34,7 @@ class ReportByDates extends Component
             $partes = Parte::with('files')
                 ->whereDate('entered_at','>=',$this->start_at)
                 ->whereDate('entered_at','<=',$this->end_at)
-                ->paginate(25);
+                ->paginate(50);
         }
         else
         {
