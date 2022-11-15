@@ -47,7 +47,7 @@ class ProgrammingController extends Controller
             return $q->where('year', $year);
         })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
 
-        $communeFiles = CommuneFile::with('commune')->where('year', $year)
+        $communeFiles = CommuneFile::with('commune')->where('year', $year)->where('status', 'active')
             ->when($accessByCommune != null, function($q) use($accessByCommune){
                 $q->whereIn('commune_id', $accessByCommune);
             })
