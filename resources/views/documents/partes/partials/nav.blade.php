@@ -17,6 +17,15 @@
     </li>
     @endcan
 
+    @canany(['Partes: oficina'])
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('documents.partes.report-by-dates') }}">
+            <i class="fas fa-search"></i> Buscar por fecha
+        </a>
+    </li>
+    @endcan
+
     <!-- @canany(['Partes: user'])
     <li class="nav-item">
         <a class="nav-link"

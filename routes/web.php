@@ -1095,7 +1095,9 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
         Route::get('/download/{parte}', [ParteController::class,'download'])->name('download');
         Route::get('/view/{parte}', [ParteController::class,'view'])->name('view');
         Route::get('/inbox', [ParteController::class,'inbox'])->name('inbox');
+        Route::get('report-by-dates',App\Http\Livewire\Documents\Partes\ReportByDates::class)->name('report-by-dates');
     });
+    
     Route::resource('partes', ParteController::class);
 
     Route::get('signatures/index/{tab}', [SignatureController::class,'index'])->name('signatures.index');
