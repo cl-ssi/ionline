@@ -134,13 +134,10 @@ class RegisterInventory extends Component
     {
 		/** Si es responsable o (usuario y responsable) */
         if($this->type == 2 || $this->type == 3)
-		{
 			$reception_confirmation = true;
-		}
         else
-		{
             $reception_confirmation = false;
-		}
+
         return $reception_confirmation;
     }
 
@@ -185,9 +182,10 @@ class RegisterInventory extends Component
             'place_id' => $dataValidated['place_id'],
             'user_responsible_ou_id' => optional($responsibleUser->organizationalUnit)->id,
             'user_responsible_id' => $dataValidated['user_responsible_id'],
-            'user_using_ou_id' => optional($usingUser->organizationalUnit)->id,
+            'user_using_ou_id' => ($usingUser != null) ? optional($usingUser->organizationalUnit)->id : null,
             'user_using_id' => $dataValidated['user_using_id'],
-            'reception_confirmation' => $this->getReceptionConfirmation()
+            'reception_confirmation' => $this->getReceptionConfirmation(),
+            'reception_date' => $this->getReceptionConfirmation() ? now() : null,
         ]);
 
 		/** Enviar notificación al responsable, sólo si necesita confimación */
