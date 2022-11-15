@@ -27,7 +27,7 @@ class CreateMovementRequest extends FormRequest
             'installation_date'     => 'nullable|date_format:Y-m-d',
             'place_id'              => 'required|exists:cfg_places,id',
             'user_responsible_id'   => 'required|exists:users,id',
-            'user_using_id'         => 'required|exists:users,id',
+            'user_using_id'         => 'nullable|exists:users,id',
         ];
     }
 }
