@@ -1533,14 +1533,14 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 // Warehouse
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
     Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
-    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
+    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['can:Store: warehouse manager']);
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 
         Route::prefix('{store}')->middleware('ensure.store')->group(function () {
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
-            Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
+            Route::get('users', [StoreController::class, 'users'])->name('stores.users');
             Route::get('report', [StoreController::class, 'report'])->name('store.report');
             Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
 
