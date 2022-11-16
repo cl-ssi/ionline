@@ -15,11 +15,19 @@ class RemFile extends Model
     public $table = 'rem_files';
 
     protected $fillable = [
-        'filename',
-        'month',
-        'year',
+        'period',
         'establishment_id',
-        'is_locked',
+        'filename',
+        'locked',
+    ];
+
+    /**
+    * The attributes that should be mutated to dates.
+    *
+    * @var array
+    */
+    protected $dates = [
+        'period',
     ];
 
     public function establishment() {

@@ -5,65 +5,65 @@ namespace App\Http\Livewire\Rem;
 use Livewire\Component;
 
 use App\Models\Rem\RemFile;
-use App\Establishment;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class UploadRem extends Component
 {
     use WithFileUploads;
 
-    public $name = "probando";
-    public $month;
-    public $year;
-    public $establishment;
-    public $rem_file;
     public $folder = 'ionline/rem/';
+    public $remFile;
     public $file;
 
+    protected $rules = [
+        'file'  => 'required'
+    ];
 
-    public function mount($year, $month, Establishment $establishment)
+    public function mount(RemFile $remFile)
     {
-        $this->year = $year;
-        $this->month = $month;
-        $this->establishment = $establishment;
-
-        $this->rem_file = RemFile::where('establishment_id', $establishment->id)
-            ->where('year', $year)
-            ->where('month', $month)
-            ->first();
+        $this->remFile = $remFile;
     }
 
     public function lock_unlock()
     {
-        $this->rem_file->is_locked=!$this->rem_file->is_locked;
-        $this->rem_file->save();
+        $this->remFile->locked = !$this->remFile->locked;
+        $this->remFile->save();
         session()->flash('success', 'El Archivo fue Bloqueado/Desbloqueado');
-        return redirect()->route('rem.files.index');
-
     }
 
     public function save()
-    {       
-        //dd($this->file);
-        $file_internal_format = $this->year.'-'.$this->month.'-'.$this->establishment->name.'('.$this->establishment->deis.')';
-        $this->rem_file = RemFile::Create([            
-            'month' =>  $this->month,
-            'year'  =>  $this->year,
-            'establishment_id'  =>  $this->establishment->id,
-            'filename'  =>  $this->folder.$file_internal_format.'.'.$this->file->extension(),
-        ]);
+    {
+        $this->validate();
 
-        $this->file->storeAs(
-            $this->folder, 
-            $file_internal_format.'.'.$this->file->extension(),
-            'gcs'
-        );
+        /** Filename ej: 2022-11_cerro_esmeralda(102-701) */
+        $filename = $this->remFile->period->format('Y-m').'_';
+        $filename .= Str::snake($this->remFile->establishment->name);
+        $filename .= '('.$this->remFile->establishment->deis.')';
+        $filename .= '.'.$this->file->extension();
 
+        $this->remFile->filename = $this->folder.$filename;
+        $this->remFile->save();
+
+        $this->file->storeAs($this->folder, $filename,'gcs');
 
         session()->flash('success', 'El Archivo fue cargado y subido exitosamente.');
-        return redirect()->route('rem.files.index');
+    }
+
+    /**
+    * Destroy
+    */
+    public function deleteFile()
+    {
+        Storage::disk('gcs')->delete($this->remFile->filename);
+
+        $this->remFile->filename = null;
+        $this->remFile->save();
+
+        $this->file = null;
+
+        session()->flash('success', 'el Archivo fue eliminado exitosamente');
     }
 
     public function render()
