@@ -1558,13 +1558,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
-    Route::middleware(['role:Inventory: manager'])->group(function () {
-        Route::get('/', InventoryIndex::class)->name('index');
-        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
-        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
-        Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
-        Route::get('places', InventoryMaintainerPlaces::class)->name('places');
-    });
+    Route::get('/', InventoryIndex::class)->name('index')->middleware(['can:Inventory: index']);
+    Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')->middleware(['can:Inventory: last receptions']);
+    Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')->middleware(['can:Inventory: pending inventory']);
+    Route::get('{inventory}/edit', InventoryEdit::class)->name('edit')->middleware(['can:Inventory: edit']);
+    Route::get('places', InventoryMaintainerPlaces::class)->name('places')->middleware(['can:Inventory: place maintainer']);
+
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
@@ -1965,7 +1964,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::prefix('files')->as('files.')->group(function () {
             Route::get('/', [RemFileController::class, 'index'])->name('index');
             Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
-            Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');            
+            Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
             });
 
 });
