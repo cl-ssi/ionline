@@ -48,14 +48,7 @@
                            href="{{ route('rem.files.index') }}">
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
-                        @endcan
-
-                        @canany(['be god','Rem: admin'])
-                        <a class="dropdown-item"
-                           href="{{ route('rem.users.index') }}">
-                            <i class="fas fa-users fa-fw"></i> Usuarios REM
-                        </a>
-                        @endcan
+                        @endcan                        
 
                         @can('RNI Database: view')
                         <a class="dropdown-item"
