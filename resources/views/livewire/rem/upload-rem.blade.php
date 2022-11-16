@@ -14,7 +14,7 @@
     @if(!$remFile->locked)
 
         @if($remFile->filename)
-            <button type="button" wire:click="deleteFile" class="btn btn-sm btn-danger">
+            <button type="button" wire:click="deleteFile" class="btn btn-sm btn-danger" onclick="return confirm('¿está seguro que desea eliminar este Archivo?');">
                 <i class="fas fa-fw fa-trash-alt"></i>
             </button>
         @else
