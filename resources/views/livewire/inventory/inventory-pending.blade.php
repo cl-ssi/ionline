@@ -85,7 +85,7 @@
                         </td>
                         <td class="text-center">
                             <a
-                                class="btn btn-sm btn-primary"
+                                class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
                                 href="{{ route('inventories.edit', $inventory) }}"
                             >
                                 <i class="fas fa-edit"></i>
