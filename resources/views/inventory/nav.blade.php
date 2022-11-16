@@ -30,7 +30,7 @@
             </a>
         </li>
     @endcan
-    @can('Inventory: pending inventory')
+    @can('Inventory: place maintainer')
         <li class="nav-item dropdown">
             <a
                 class="nav-link dropdown-toggle  {{ active('inventories.places') }}"

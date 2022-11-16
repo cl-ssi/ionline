@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Warehouse;
 
+use App\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,9 @@ class EnsureStore
     {
         $store = $request->route('store');
         $stores = Auth::user()->stores;
+        $user = User::find(Auth::id());
 
-        $roles = Auth::user()->getRoleNames();
-        $role = 'Store: Super admin';
-
-        if($stores->contains($store->id) || $roles->contains($role))
+        if($stores->contains($store->id) || $user->hasPermissionTo('Store: warehouse manager'))
         {
             return $next($request);
         }

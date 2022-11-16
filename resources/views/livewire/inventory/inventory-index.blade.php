@@ -141,7 +141,7 @@
             </tr>
         </table>
     </div>
-    
+
 
     @if($place)
     <table class="mb-3 d-none d-print-block" align="right">
@@ -155,7 +155,7 @@
         </tr>
         <tr>
             <td>Fecha: &nbsp;</td>
-            <td class="font-weight-bold"> 
+            <td class="font-weight-bold">
             {{ now()->format('M Y') }}
             </td>
         </tr>
@@ -165,7 +165,7 @@
     <h3 class="mt-3">
         Inventario
     </h3>
-    
+
     @if($place)
     <table class="table table-sm table-bordered">
         <tr>
@@ -256,7 +256,7 @@
                     </td>
                     <td class="text-center d-print-none">
                         <a
-                            class="btn btn-sm btn-primary"
+                            class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
                             href="{{ route('inventories.edit', $inventory) }}"
                         >
                             <i class="fas fa-edit"></i>

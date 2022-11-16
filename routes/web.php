@@ -1097,7 +1097,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
         Route::get('/inbox', [ParteController::class,'inbox'])->name('inbox');
         Route::get('report-by-dates',App\Http\Livewire\Documents\Partes\ReportByDates::class)->name('report-by-dates');
     });
-    
+
     Route::resource('partes', ParteController::class);
 
     Route::get('signatures/index/{tab}', [SignatureController::class,'index'])->name('signatures.index');
@@ -1533,14 +1533,14 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 // Warehouse
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
     Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
-    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['role:Store: Super admin']);
+    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['can:Store: warehouse manager']);
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 
         Route::prefix('{store}')->middleware('ensure.store')->group(function () {
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
-            Route::get('users', [StoreController::class, 'users'])->name('stores.users')->middleware('role:Store: Super admin');
+            Route::get('users', [StoreController::class, 'users'])->name('stores.users');
             Route::get('report', [StoreController::class, 'report'])->name('store.report');
             Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
 
@@ -1560,13 +1560,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
-    Route::middleware(['role:Inventory: manager'])->group(function () {
-        Route::get('/', InventoryIndex::class)->name('index');
-        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions');
-        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory');
-        Route::get('{inventory}/edit', InventoryEdit::class)->name('edit');
-        Route::get('places', InventoryMaintainerPlaces::class)->name('places');
-    });
+    Route::get('/', InventoryIndex::class)->name('index')->middleware(['can:Inventory: index']);
+    Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')->middleware(['can:Inventory: last receptions']);
+    Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')->middleware(['can:Inventory: pending inventory']);
+    Route::get('{inventory}/edit', InventoryEdit::class)->name('edit')->middleware(['can:Inventory: edit']);
+    Route::get('places', InventoryMaintainerPlaces::class)->name('places')->middleware(['can:Inventory: place maintainer']);
+
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
     Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');

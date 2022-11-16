@@ -22,7 +22,7 @@
                 type="text"
                 class="form-control form-control-sm"
                 id="using"
-                value="{{ $movement->usingUser->full_name }}"
+                value="{{ optional($movement->usingUser)->full_name }}"
                 readonly
             >
         </fieldset>

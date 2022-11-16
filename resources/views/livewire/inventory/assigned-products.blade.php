@@ -104,7 +104,7 @@
                     <td class="text-center" nowrap>
                         <a
                             class="btn btn-sm btn-outline-primary"
-                            href="{{ route('inventories.create-transfer', $inventory)}}"
+                            href="{{ route('inventories.create-transfer', $inventory) }}"
                         >
                             <i class="fas fa-sync-alt"></i>
                             Traspaso
