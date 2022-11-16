@@ -171,7 +171,12 @@
                             <h6 class="dropdown-header">Bodegas</h6>
                         @endcan
 
-                        @hasanyrole('Store: admin|Store: user|Store: Super admin')
+                        @canany([
+                            'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
+                            'Store: list dispatchs', 'Store: bincard report', 'Store: maintainer programs',
+                            'Store: maintainers', 'Sotore: add invoice', 'Store: create dispatch',
+                            'Store: create reception by donation', 'Store: create reception by purcharse order'
+                        ])
                             @forelse(Auth::user()->stores as $store)
                                 <a
                                     class="dropdown-item"
@@ -189,7 +194,7 @@
                                     No tiene bodegas asignadas
                                 </a>
                             @endforelse
-                        @endhasanyrole
+                        @endcanany
 
                         @can('Store: add invoice')
                             <a
@@ -200,14 +205,14 @@
                             </a>
                         @endcan
 
-                        @role('Store: Super admin')
+                        @canany(['Store: warehouse manager'])
                             <a
                                 class="dropdown-item {{ active('warehouse.stores.index') }}"
                                 href="{{ route('warehouse.stores.index') }}"
                             >
                                 <i class="fas fa-fw fa-cog"></i> Administrar bodegas
                             </a>
-                        @endrole
+                        @endcanany
 
 
                         @can('Inventory')
@@ -281,7 +286,7 @@
                         </a>
 
                         @endcan
-                        
+
                         {{--
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
@@ -638,7 +643,7 @@
                                 <img src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g" class="rounded-circle" alt="{{ Auth::user()->firstName }}">
                             @else
                                 {{ Auth::user()->firstName }}
-                            @endif    
+                            @endif
                          <span class="caret"></span>
                             @if(auth()->user()->absent)
                                 <i class="fas text-warning fa-cocktail"></i>
