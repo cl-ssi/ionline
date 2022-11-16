@@ -17,8 +17,8 @@ class UserRemController extends Controller
      */
     public function index()
     {
-        //
         $usersRem = UserRem::All();
+
         return view('rem.user.index', compact('usersRem'));
     }
 
@@ -29,9 +29,9 @@ class UserRemController extends Controller
      */
     public function create()
     {
-        //
         $establishments = Establishment::orderBy('name', 'ASC')->get();
         $users = User::orderBy('name', 'ASC')->get();
+
         return view('rem.user.create', compact('establishments','users'));
     }
 
@@ -45,8 +45,8 @@ class UserRemController extends Controller
     {
         $userRem = new UserRem($request->all());
         $userRem->save();
-        //$user = UserRem
         $userRem->user->givePermissionTo('Rem: user');
+
         session()->flash('info', 'El usuario ' . $userRem->fullname . ' ha sido creado como usuario REM');
         return redirect()->route('rem.users.index');
     }
@@ -93,10 +93,10 @@ class UserRemController extends Controller
      */
     public function destroy(UserRem $userRem)
     {
-        //
+        $userRem->user->revokePermissionTo(['Rem: user']);
         $userRem->delete();
-        $userRem->user->revokePermissionTo(['Rem: user']);        
         session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
+        
         return redirect()->route('rem.users.index');
     }
 }

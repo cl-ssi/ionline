@@ -36,10 +36,12 @@ class Parte extends Model
      * @var array
      */
     protected $dates = [
+        'date',
         'deleted_at',
         'viewed_at'
     ];
 
+    /* FIXME: Esto no es necesario */
     public function getCreationParteDateAttribute()
     {
         return Carbon::parse($this->date)->format('d-m-Y');

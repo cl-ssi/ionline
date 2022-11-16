@@ -46,7 +46,7 @@
                         @canany(['be god','Rem: admin','Rem: user'])
                         <a class="dropdown-item"
                            href="{{ route('rem.files.index') }}">
-                            <i class="fas fa-file-excel fa-fw"></i> Subir Archivo REM
+                            <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
                         @endcan
 

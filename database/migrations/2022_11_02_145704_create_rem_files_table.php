@@ -15,13 +15,14 @@ class CreateRemFilesTable extends Migration
     {
         Schema::create('rem_files', function (Blueprint $table) {
             $table->id();
-            $table->string('filename');
-            $table->unsignedInteger('year');
-            $table->unsignedInteger('month');
-            /* FIXME: Usa esta nomenclatura $table->foreignId('ou_id')->constrained('organizational_units'); */
+            $table->date('period');
+            // FIXME: corregir el tipo de dato de establishment para poder usar esta nomenclatura
+            // $table->foreignId('establishment_id')->constrained('establishments');
             $table->unsignedInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->boolean('is_locked');
+            $table->string('filename')->nullable();
+            $table->boolean('locked');
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,57 +2,40 @@
 
 @section('content')
 
+<h3 class="mb-3">Carga de REMs</h3>
 
-<table class="table table-bordered table-sm" id="table_id">
+<table class="table table-bordered table-sm small">
     <thead>
         <tr class="text-center">
-            <th>#</th>
-            @foreach ($dates as $month)
-            <th scope="col">{{ $month->format('Y-m') }}</th>
+            <th>Período</th>
+            @foreach(array_reverse($periods) as $period)
+            <th>{{ $period->format('Y-m') }}</th>
             @endforeach
         </tr>
-        @forelse ($rem_establishments as $rem_establishment)
+
+        @forelse($establishments as $remFiles)
         <tr>
             <td class="text-center font-weight-bold">
-                {{ $rem_establishment->establishment->name }}
+                {{ $remFiles[0]->establishment->name }}
             </td>
-            @foreach ($dates as $key => $month)
-            <td scope="col">
-                @livewire('rem.upload-rem',
-                [
-                'year' => $month->format('Y'),
-                'month' => $month->format('m'),
-                'establishment' => $rem_establishment->establishment,
-                ],
-                key($key)
-                )
+            @foreach($remFiles as $remFile)
+            <td>
+                @livewire('rem.upload-rem', [$remFile])
             </td>
             @endforeach
         </tr>
         @empty
         <tr>
-            <td colspan="13">
-                No Tiene Asignado Establecimientos para subir REM, contactarse con su encargado de estadistica para que le asigne alguno en caso de ser necesario
+            <td colspan="8">
+                No tiene asignado establecimientos para cargar REMs, por favor contácte a su encargado de estadistica para que le asigne alguno en caso de ser necesario.
             </td>
         </tr>
         @endforelse
     </thead>
 </table>
 
-
-
-
 @endsection
 
 @section('custom_js')
-
-
-<script>
-// Add the following code if you want the name of the file appear on select
-$(".custom-file-input").on("change", function() {
-  var fileName = $(this).val().split("\\").pop();
-  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
-</script>
 
 @endsection
