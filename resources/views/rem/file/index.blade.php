@@ -2,6 +2,8 @@
 
 @section('content')
 
+<h3 class="mb-3">Carga de REMs</h3>
+
 <table class="table table-bordered table-sm small">
     <thead>
         <tr class="text-center">

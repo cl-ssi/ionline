@@ -1862,8 +1862,6 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 });
 
 
-
-/* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
@@ -1954,7 +1952,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 });
 
-/* Nuevas rutas, Laravel 8.0. */
+/* Rutas de cargador de REM */
 Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
@@ -1963,13 +1961,9 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('files')->as('files.')->group(function () {
-        Route::get('/', [RemFileController::class, 'index'])->name('index');
-        Route::get('/download/{rem_file}', [RemFileController::class, 'download'])->name('download');
-        Route::delete('/{rem_file}/destroy', [RemFileController::class, 'destroy'])->name('destroy');            
-    });
-
+    Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
 });
+
 
 /** Rutas para modo mantenimiento */
 Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class,'index']);

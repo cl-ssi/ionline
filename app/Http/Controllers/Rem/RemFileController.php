@@ -70,10 +70,4 @@ class RemFileController extends Controller
             ->orderBy('period','ASC')
             ->get();
     }
-
-    public function download(RemFile $rem_file)
-    {
-        return Storage::disk('gcs')->download($rem_file->filename);
-    }
-
 }

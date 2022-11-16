@@ -1,6 +1,6 @@
 <div>
     @if($remFile->filename)
-        <a class="btn btn-sm btn-outline-secondary" href="{{ route('rem.files.download', $remFile) }}" target="_blank">
+        <a class="btn btn-sm btn-outline-secondary" wire:click="download" target="_blank">
             <i class="fas fa-fw fa-file-excel text-success"></i>
         </a>
     @endif
@@ -18,28 +18,26 @@
                 <i class="fas fa-fw fa-trash-alt"></i>
             </button>
         @else
-
-        <div class="input-group">
-            <div class="custom-file">
-                <input type="file" wire:model="file" class="custom-file-input" id="for-file" required>
-                <label class="custom-file-label" for="for-file" data-browse="Examinar">
-                <div wire:loading wire:target="file"><strong>Cargando</strong></div>
-                    {{ optional($file)->getClientOriginalName() ?? 'Archivo' }}
-                </label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" wire:model="file" class="custom-file-input" id="for-file" required>
+                    <label class="custom-file-label" for="for-file" data-browse="Examinar">
+                        <div wire:loading wire:target="file"><strong>Cargando</strong></div>
+                        {{ optional($file)->getClientOriginalName() ?? 'Archivo' }}
+                    </label>
+                </div>
+                <div class="input-group-append">
+                    <button type="button" wire:click="save" class="btn btn-sm btn-outline-primary" {{ !$file ? 'disabled':'' }}>
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+                @error('file') 
+                    <span class="invalid-feedback" role="alert"> 
+                        <strong>{{ $message }}</strong> 
+                    </span> 
+                @enderror 
             </div>
-            <div class="input-group-append">
-                <button type="button" wire:click="save" class="btn btn-sm btn-outline-primary" {{ !$file ? 'disabled':'' }}>
-                    <i class="fas fa-save"></i>
-                </button>
-            </div>
-            @error('file') 
-                <span class="invalid-feedback" role="alert"> 
-                    <strong>{{ $message }}</strong> 
-                </span> 
-            @enderror 
-        </div>
         @endif
     @endif
-
 
 </div>

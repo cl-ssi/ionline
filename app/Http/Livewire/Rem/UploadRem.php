@@ -30,14 +30,13 @@ class UploadRem extends Component
     {
         $this->remFile->locked = !$this->remFile->locked;
         $this->remFile->save();
-        session()->flash('success', 'El Archivo fue Bloqueado/Desbloqueado');
     }
 
     public function save()
     {
         $this->validate();
 
-        /** Filename ej: 2022-11_cerro_esmeralda(102-701) */
+        /** Filename ej: 2022-11_cerro_esmeralda(102-701).pdf */
         $filename = $this->remFile->period->format('Y-m').'_';
         $filename .= Str::snake($this->remFile->establishment->name);
         $filename .= '('.$this->remFile->establishment->deis.')';
@@ -47,12 +46,10 @@ class UploadRem extends Component
         $this->remFile->save();
 
         $this->file->storeAs($this->folder, $filename,'gcs');
-
-        session()->flash('success', 'El Archivo fue cargado y subido exitosamente.');
     }
 
     /**
-    * Destroy
+    * Delete File
     */
     public function deleteFile()
     {
@@ -62,8 +59,14 @@ class UploadRem extends Component
         $this->remFile->save();
 
         $this->file = null;
+    }
 
-        session()->flash('success', 'el Archivo fue eliminado exitosamente');
+    /**
+    * Download file
+    */
+    public function download()
+    {
+        return Storage::disk('gcs')->download($this->remFile->filename);
     }
 
     public function render()
