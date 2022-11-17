@@ -641,6 +641,7 @@ Nuevo Item Programación Operativa </h4>
     $('#times_month,#months_year').keyup(function() {
         var calc = $('#times_month').val() * $('#months_year').val();
         $('#activity_total').val(Math.round(calc));
+        $('.calculate-performance').keyup();
     });
 
     $(function () {
@@ -668,9 +669,9 @@ Nuevo Item Programación Operativa </h4>
         var coverture       = $('#coverture').val() ? $('#coverture').val() : 100;
 
         var calc = $('#cant_target_population').val() * (prevalence_rate/100) * (coverture/100);
-    
+
         $('#population_attend').val(Math.round(calc));
-        $('#concentration').keyup();
+        $('#concentration,#workshop_session_number,#activity_group,#activity_total').keyup();
     });
 
     $('#activity_group').keyup(function() {
@@ -692,7 +693,8 @@ Nuevo Item Programación Operativa </h4>
         }
 
         $('#workshop_number').val(Math.round(workshop_number_res));
-        
+        $('#activity_total,#workshop_session_number').keyup();
+        $('.calculate-performance').keyup();
     });
 
     $('#workshop_session_number').keyup(function() {
@@ -716,7 +718,8 @@ Nuevo Item Programación Operativa </h4>
         }
 
         $('#activity_total').val(Math.round(activity_total_res));
-        
+        $('#activity_total').keyup();
+        $('.calculate-performance').keyup();
     });
 
     $('#concentration').keyup(function() {
@@ -725,7 +728,8 @@ Nuevo Item Programación Operativa </h4>
 
         var calc = $('#population_attend').val() * concentration;
         $('#activity_total').val(Math.round(calc));
-
+        $('#activity_performance,#activity_total').keyup();
+        $('.calculate-performance').keyup();
     });
 
     $('#activity_performance').keyup(function() {
