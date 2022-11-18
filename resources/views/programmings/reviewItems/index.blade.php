@@ -142,24 +142,24 @@
                         <td class="text-center align-middle">{{ $professionalHour->professional->name ?? '' }}</td>
                         <td class="text-center align-middle">{{ $professionalHour->pivot->activity_performance }}</td>
                         <td class="text-center align-middle">{{ $professionalHour->pivot->designated_hours_weeks }}</td>
-                        <td class="text-center align-middle">{{number_format($programmingDay->days_programming,0, ",", ".")}}</td>
-                        <td class="text-center align-middle">{{number_format($programmingDay->day_work_hours,0, ",", ".")}}</td>
-                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->hours_required_year,2, ",", ".") }}</td>
-                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->hours_required_day,2, ",", ".") }}</td>
-                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->direct_work_year,2, ",", ".") }}</td>
-                        <td class="text-center align-middle">{{number_format($professionalHour->pivot->direct_work_hour,4, ",", ".") }}</td>
+                        <td class="text-center align-middle">{{ $programmingDay->days_programming ? number_format($programmingDay->days_programming,0, ",", ".") : ''}}</td>
+                        <td class="text-center align-middle">{{ $programmingDay->day_work_hours ? number_format($programmingDay->day_work_hours,0, ",", ".") : ''}}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year ? number_format($professionalHour->pivot->hours_required_year,2, ",", ".") : '' }}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day ? number_format($professionalHour->pivot->hours_required_day,2, ",", ".") : '' }}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year ? number_format($professionalHour->pivot->direct_work_year,2, ",", ".") : '' }}</td>
+                        <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour ? number_format($professionalHour->pivot->direct_work_hour,5, ",", ".") : '' }}</td>
                     </tr>
                     @endforeach
                 @else
                 <tr>
                     <td class="text-center align-middle">{{$professional}}</td>
                     <td class="text-center align-middle">{{$programmingItem->activity_performance}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingDay->days_programming,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingDay->day_work_hours,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItem->hours_required_year,2, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItem->hours_required_day,2, ",", ".")}} </td>
-                    <td class="text-center align-middle">{{number_format($programmingItem->direct_work_year,2, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItem->direct_work_hour,4, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{$programmingDay->days_programming ? number_format($programmingDay->days_programming,0, ",", ".") : ''}}</td>
+                    <td class="text-center align-middle">{{$programmingDay->day_work_hours ? number_format($programmingDay->day_work_hours,0, ",", ".") : ''}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->hours_required_year ? number_format($programmingItem->hours_required_year,2, ",", ".") : ''}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->hours_required_day ? number_format($programmingItem->hours_required_day,2, ",", ".") : ''}} </td>
+                    <td class="text-center align-middle">{{$programmingItem->direct_work_year ? number_format($programmingItem->direct_work_year,2, ",", ".") : ''}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->direct_work_hour ? number_format($programmingItem->direct_work_hour,5, ",", ".") : ''}}</td>
                 </tr>
                 @endif
             </tbody>

@@ -355,7 +355,7 @@ Editar Item Programación Operativa </h4>
             title="Jornadas Horas Directas Diarias" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="direct_work_hour" name="professionals[{{$key}}][direct_work_hour]" value="{{$proHour->pivot->direct_work_hour}}" form="edit-form" readonly>
+            <input type="input" class="form-control" id="direct_work_hour" name="professionals[{{$key}}][direct_work_hour]" value="{{$proHour->pivot->direct_work_hour ? number_format($proHour->pivot->direct_work_hour, 5, '.', '') : ''}}" form="edit-form" readonly>
         </div>
     </div>
     </div>

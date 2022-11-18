@@ -341,14 +341,14 @@
                 <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitem->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
                 <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingitem->direct_work_hour ? number_format($programmingitem->direct_work_hour, 5, '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
@@ -383,7 +383,7 @@
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
-                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour ? number_format($professionalHour->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
                 </tr>
                 @endif
             @endforeach
@@ -481,7 +481,7 @@
             <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
@@ -517,7 +517,7 @@
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
-                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour ? number_format($professionalHour->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
                 </tr>
                 @endif
             @endforeach
@@ -633,14 +633,14 @@
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour ? number_format($programmingitemsIndirect->direct_work_hour, 5 , '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
@@ -675,7 +675,7 @@
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
-                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour ? number_format($professionalHour->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
                 </tr>
                 @endif
             @endforeach
@@ -796,14 +796,14 @@
                 <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
                 <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
                 <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
+                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour ? number_format($programmingItemworkshop->direct_work_hour, 5, '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>
@@ -838,7 +838,7 @@
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_year }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->hours_required_day }}</td>
                     <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_year }}</td>
-                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour }}</td>
+                    <td class="text-center align-middle">{{ $professionalHour->pivot->direct_work_hour ? number_format($professionalHour->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
                 </tr>
                 @endif
             @endforeach
