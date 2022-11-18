@@ -42,4 +42,16 @@ class Supplier extends Model
     {
         return $this->belongsTo(ClCommune::class);
     }
+
+    public function scopeSearch($query, $name_search)
+    {
+        if ($name_search) {
+            if($name_search != ''){
+                $query->where(function($q) use($name_search){
+                    $q->where('name', 'LIKE', '%'.$name_search.'%')
+                    ->orwhere('run','LIKE', '%'.$name_search.'%');
+                });
+            }
+        }
+    }
 }

@@ -700,6 +700,7 @@
         <tr class="small " style="font-size:55%;">
 
             @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
+            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">TIPO</th>
@@ -771,6 +772,9 @@
                 </a>
             </td>
         @endcan
+        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+        @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">TALLER</td>

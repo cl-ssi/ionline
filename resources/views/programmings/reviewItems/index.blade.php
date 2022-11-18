@@ -38,7 +38,7 @@
                     @if($programmingItem->activity_subtype == 'Esporádicas')
                     <th class="text-center align-middle table-secondary">CATEGORÍA</th>
                     <th class="text-center align-middle table-secondary">ACTIVIDAD</th>
-                    <th class="text-center align-middle table-secondary">N° MESES AL MES</th>
+                    <th class="text-center align-middle table-secondary">N° VECES AL MES</th>
                     <th class="text-center align-middle table-secondary">N° MESES DEL AÑO</th>
                     <th class="text-center align-middle table-secondary">TOTAL ACTIVIDAD</th>
                     @else <!-- Designación -->

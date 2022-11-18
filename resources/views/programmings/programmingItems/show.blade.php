@@ -95,11 +95,12 @@ Editar Item Programación Operativa </h4>
         <div class="form-group col-md-2">
             <label for="forprogram">Tipo Actividad</label>
             <select name="activity_type" id="activity_type" class="form-control" form="edit-form" required>
-                @php($activity_types = array('Directa', 'Indirecta'))
+                {{--@php($activity_types = array('Directa', 'Indirecta'))
                 <option value="">-- Seleccione tipo --</option>
                 @foreach($activity_types as $activity_type)
                 <option value="{{$activity_type}}" @if($activity_type == $programmingItem->activity_type) selected @endif>{{$activity_type}}</option>
-                @endforeach      
+                @endforeach--}}
+                <option value="Directa">Directa</option>
             </select>
         </div>
         @if($programmingItem->activityItem == null || ($programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO'))
@@ -238,9 +239,24 @@ Editar Item Programación Operativa </h4>
             title="Concentración" 
             data-content="La cantidad de veces que debo darle el control anual">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="concentration" name="concentration" value="{{$programmingItem->concentration ?? '0' }}" required="" form="edit-form">
+            <input type="number" class="form-control" id="concentration" name="concentration" value="{{$programmingItem->concentration}}" {{ $programmingItem->workshop == 'SI' ? 'readonly' : 'required'  }} form="edit-form">
+        </div>
+        @if($programmingItem->workshop == 'SI')
+        <div class="form-group col-md-2">
+            <label for="forprogram">N° De Personas por Grupo</label>
+            <input type="number" class="form-control" id="activity_group" name="activity_group" value="{{$programmingItem->activity_group ?? '0' }}" form="edit-form">
         </div>
 
+        <div class="form-group col-md-2">
+            <label for="forprogram">N° De Talleres</label>
+            <input type="number" class="form-control" id="workshop_number" name="workshop_number"  value="{{$programmingItem->workshop_number ?? '0' }}" form="edit-form" readonly >
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="forprogram">N° De Sesión por Talleres</label>
+            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" value="{{$programmingItem->workshop_session_number ?? '0' }}" form="edit-form" > 
+        </div>
+        @endif
         <div class="form-group col-md-2">
             <label for="forprogram">Total Actividad</label>
             <input type="input" class="form-control" id="activity_total" name="activity_total" value="{{$programmingItem->activity_total ?? '0' }}" required="" readonly form="edit-form">
@@ -594,7 +610,55 @@ Editar Item Programación Operativa </h4>
         var calc = $('#cant_target_population').val() * (prevalence_rate/100) * (coverture/100);
     
         $('#population_attend').val(Math.round(calc));
-        $('#concentration').keyup();
+        $('#concentration,#workshop_session_number,#activity_group,#activity_total').keyup();
+    });
+
+    $('#activity_group').keyup(function() {
+        
+        var activity_group          = $('#activity_group').val();
+        var population_attend   = $('#population_attend').val();
+
+        if(activity_group == 0)
+        {
+            var workshop_number_res = activity_group;
+            console.log("concentration == 0");
+        }
+
+        else if(activity_group > 0)
+        {
+            var workshop_number_res = $('#population_attend').val()/activity_group;
+            console.log("concentration > 0");
+            
+        }
+
+        $('#workshop_number').val(Math.round(workshop_number_res));
+        $('#activity_total,#workshop_session_number').keyup();
+        $('.calculate-performance').keyup();
+    });
+
+    $('#workshop_session_number').keyup(function() {
+        
+        var workshop_number          = $('#workshop_number').val();
+        var activity_group   = $('#activity_group').val();
+        var workshop_session_number   = $('#workshop_session_number').val();
+        
+
+        if(workshop_session_number == 0)
+        {
+            var activity_total_res = workshop_number;
+            console.log("concentration == 0");
+        }
+
+        else if(workshop_session_number > 0)
+        {
+            var activity_total_res = workshop_number*workshop_session_number;
+            console.log("concentration > 0");
+            
+        }
+
+        $('#activity_total').val(Math.round(activity_total_res));
+        $('#activity_total').keyup();
+        $('.calculate-performance').keyup();
     });
 
     $('#concentration').keyup(function() {
@@ -603,9 +667,8 @@ Editar Item Programación Operativa </h4>
 
         var calc = $('#population_attend').val() * concentration;
         $('#activity_total').val(Math.round(calc));
-        $('#activity_performance').keyup();
+        $('#activity_performance,#activity_total').keyup();
         $('.calculate-performance').keyup();
-
     });
 
     $('#activity_performance').keyup(function() {
