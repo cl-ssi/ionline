@@ -156,12 +156,13 @@
 
             //Validación de pdf
             const allowedExtension = ".pdf";
+            const allowedUpperExtension = ".PDF";
             let hasInvalidFiles = false;
 
             for (let i = 0; i < this.files.length; i++) {
                 let file = this.files[i];
 
-                if (!file.name.endsWith(allowedExtension)) {
+                if (!(file.name.endsWith(allowedExtension) || file.name.endsWith(allowedUpperExtension))) {
                     hasInvalidFiles = true;
                 }
             }
