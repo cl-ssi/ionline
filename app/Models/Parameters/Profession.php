@@ -15,6 +15,11 @@ class Profession extends Model implements Auditable
 
     public $table = 'cfg_professions';
 
+    /* TODO: Borrar columnas category y estamento, ya que ahora pertenecen a la relación estament()
+     * cambiar donde se estén ocupando, por la relación, ej: 
+     * $profession->category => $profession->estament->category
+     * $profession->estamento => $profession->estament->name
+     */
     protected $fillable = [
         'name',
         'estament_id',
