@@ -255,16 +255,26 @@ class UserController extends Controller
     {
         if (session()->has('god')) 
         {
-            /* Clean session var */
+            /* Clean session god (user_id) */
             session()->pull('god');
         }
         else 
         {
-            /* set god session var = user_id */
+            /* set god session to user_id */
             session(['god' => Auth::id()]);
         }
 
         Auth::login($user);
+
+        /** Registrar el switch */
+        if (session()->has('god')) 
+        {
+            auth()->user()->accessLogs()->create([
+                'type'=>'switch', 
+                'switch_id' => session()->get('god')
+            ]);
+        }
+        
         return back();
     }
 

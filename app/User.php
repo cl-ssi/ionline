@@ -15,6 +15,7 @@ use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Profile\Subrogation;
+use App\Models\Parameters\AccessLog;
 
 class User extends Authenticatable implements Auditable
 {
@@ -216,6 +217,16 @@ class User extends Authenticatable implements Auditable
         $mothers = str_replace($a, $b, $this->mothers_family);
 
         return $name[0].$fathers[0].$mothers[0];
+    }
+
+    public function accessLogs()
+    {
+        return $this->hasMany(AccessLog::class);
+    }
+
+    public function switchLogs()
+    {
+        return $this->hasMany(AccessLog::class,'switch_id');
     }
 
     public function serviceRequests()

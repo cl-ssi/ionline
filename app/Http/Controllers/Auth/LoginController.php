@@ -54,8 +54,14 @@ class LoginController extends Controller
 
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Authentication passed...
+            /** Authentication passed...*/
+            
+            /** Log access */
+            auth()->user()->accessLogs()->create(['type'=>'local']);
+
+            /** Check if user have a gravatar */
             auth()->user()->checkGravatar;
+
             return redirect()->route('home');
 
             /** Estaba esto, no se que hace */

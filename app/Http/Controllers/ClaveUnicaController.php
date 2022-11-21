@@ -158,7 +158,13 @@ class ClaveUnicaController extends Controller
                 $u->email_personal = $user->email;
                 $u->save();
                 Auth::login($u, true);
+
+                /** Log access */
+                auth()->user()->accessLogs()->create(['type'=>'clave única']);
+
+                /** Check if user have a gravatar */
                 auth()->user()->checkGravatar;
+
                 $route = 'home';
             }
             else {
