@@ -139,7 +139,17 @@ class UserController extends Controller
     {
         //$ouRoot = OrganizationalUnit::find(1);
         $user_id=$user->id;
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        /* FIXME: cambiar cuando creemos un componente para seleccionar OU más eficiente */
+        $ouRoots = OrganizationalUnit::with([
+            'childs',
+            'childs.establishment',
+            'childs.childs',
+            'childs.childs.establishment',
+            'childs.childs.childs',
+            'childs.childs.childs.establishment',
+            'childs.childs.childs.childs',
+            'childs.childs.childs.childs.establishment',
+            ])->where('level', 1)->get();
         $bankaccount = UserBankAccount::where('user_id',$user_id)->get();
         return view('rrhh.edit')
             ->withUser($user)
