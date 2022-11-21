@@ -16,7 +16,7 @@ class AddEstamentIdToCfgProfessionsTable extends Migration
     public function up()
     {
         Schema::table('cfg_professions', function (Blueprint $table) {
-            $table->foreignId('estament_id')->after('name')->default(1);
+            $table->foreignId('estament_id')->after('name')->default(1)->constrained('cfg_estaments');
         });
 
         $professions = Profession::all();
@@ -36,7 +36,7 @@ class AddEstamentIdToCfgProfessionsTable extends Migration
     public function down()
     {
         Schema::table('cfg_professions', function (Blueprint $table) {
-            $table->dropColumn('estament_id');
+            $table->dropConstrainedForeignId('estament_id');
         });
     }
 }
