@@ -17,9 +17,16 @@ class Profession extends Model implements Auditable
 
     protected $fillable = [
         'name',
+        'estament_id',
         'category',
         'estamento',
         'sirh_plant',
         'sirh_profession',
     ];
+
+    public function estament()
+    {
+        return $this->belongsTo(Estament::class);
+    }
+    
 }
