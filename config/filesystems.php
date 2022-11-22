@@ -48,6 +48,12 @@ return [
             'root' => storage_path('app'),
         ],
 
+        /** Driver for testing env (iOnline verde) */
+        'tmp-for-tests' => [
+            'driver' => 'local',
+            'root' => storage_path('app/livewire-tmp'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
