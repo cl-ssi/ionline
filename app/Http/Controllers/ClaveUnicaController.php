@@ -160,7 +160,10 @@ class ClaveUnicaController extends Controller
                 Auth::login($u, true);
 
                 /** Log access */
-                auth()->user()->accessLogs()->create(['type'=>'clave única']);
+                auth()->user()->accessLogs()->create([
+                    'type' => 'clave única',
+                    'enviroment' => env('APP_ENV')
+                ]);
 
                 /** Check if user have a gravatar */
                 auth()->user()->checkGravatar;

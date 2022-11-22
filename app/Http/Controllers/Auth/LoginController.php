@@ -57,7 +57,10 @@ class LoginController extends Controller
             /** Authentication passed...*/
             
             /** Log access */
-            auth()->user()->accessLogs()->create(['type'=>'local']);
+            auth()->user()->accessLogs()->create([
+                'type' => 'local',
+                'enviroment' => env('APP_ENV')
+            ]);
 
             /** Check if user have a gravatar */
             auth()->user()->checkGravatar;

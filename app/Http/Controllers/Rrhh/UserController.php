@@ -281,7 +281,8 @@ class UserController extends Controller
         {
             auth()->user()->accessLogs()->create([
                 'type'=>'switch', 
-                'switch_id' => session()->get('god')
+                'switch_id' => session()->get('god'),
+                'enviroment' => env('APP_ENV')
             ]);
         }
         

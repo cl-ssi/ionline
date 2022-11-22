@@ -20,6 +20,7 @@ class AccessLog extends Model
         'user_id',
         'type',
         'switch_id',
+        'enviroment'
     ];
 
     /**
