@@ -895,27 +895,27 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::delete('{organizationalUnit}/destroy', [OrganizationalUnitController::class,'destroy'])->name('destroy')->middleware('auth');
     });
 
-    Route::prefix('users')->name('users.')->group(function () {
-        Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou')->middleware('auth');
-        Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou')->middleware('auth');
+    Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
+        Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou');
+        Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou');
 
-        Route::get('password', [UserController::class,'editPassword'])->name('password.edit')->middleware('auth');
-        Route::put('password', [UserController::class,'updatePassword'])->name('password.update')->middleware('auth');
+        Route::get('password', [UserController::class,'editPassword'])->name('password.edit');
+        Route::put('password', [UserController::class,'updatePassword'])->name('password.update');
 
-        Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset')->middleware('auth');
-        Route::get('{user}/switch', [UserController::class,'switch'])->name('switch')->middleware('auth');
+        Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset');
+        Route::get('{user}/switch', [UserController::class,'switch'])->name('switch');
 
         /* TODO: Sacar fuera y poner middleware auth a todo este grupo, ya que todas lo utilizan excepto esta */
         Route::get('directory', [UserController::class,'directory'])->name('directory');
 
-        Route::get('/', [UserController::class,'index'])->name('index')->middleware('auth');
-        Route::get('/create', [UserController::class,'create'])->name('create')->middleware('auth');
-        Route::post('/', [UserController::class,'store'])->name('store')->middleware('auth');
-        Route::get('/{user}/edit', [UserController::class,'edit'])->name('edit')->middleware('auth');
-        Route::put('/{user}', [UserController::class,'update'])->name('update')->middleware('auth');
-        Route::delete('/{user}', [UserController::class,'destroy'])->name('destroy')->middleware('auth');
+        Route::get('/', [UserController::class,'index'])->name('index');
+        Route::get('/create', [UserController::class,'create'])->name('create');
+        Route::post('/', [UserController::class,'store'])->name('store');
+        Route::get('/{user}/edit', [UserController::class,'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class,'update'])->name('update');
+        Route::delete('/{user}', [UserController::class,'destroy'])->name('destroy');
 
-        Route::get('/{user}/access-logs', App\Http\Livewire\Parameters\AccessLogIndex::class)->name('access-logs')->middleware('auth');
+        Route::get('/{user}/access-logs', App\Http\Livewire\Parameters\AccessLogIndex::class)->name('access-logs');
 
         Route::prefix('service_requests')->name('service_requests.')->group(function () {
             Route::get('/', [UserController::class,'index_sr'])->name('index')->middleware('auth');
