@@ -50,7 +50,6 @@
 </head>
 <body>
     <div id="app">
-    <!-- TODO ¿QUÉ PASA SI UN INTERNO QUIERE SER PARTE DE STAFF? -->
         @guest
             @include('layouts.partials.nav')
         @else
