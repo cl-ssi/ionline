@@ -477,51 +477,58 @@ class ReportController extends Controller
         $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
       }
     }
-    //dd($ServiceRequest);
 
     $pdf = app('dompdf.wrapper');
 
     if ($ServiceRequest->working_day_type == "DIARIO") {
       $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
-    } else {
+    } 
+    else 
+    {
       //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
       if (
         $ServiceRequest->responsabilityCenter->establishment_id == 1 and
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name != "Covid 2022"
-      ) {
-        if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
-          $pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
-        } else {
-          $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
-        }
-      } else if (
+        $ServiceRequest->programm_name != "Covid 2022") {
+          if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
+            $pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
+          } else {
+            $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
+          }
+      } 
+      else if (
         $ServiceRequest->responsabilityCenter->establishment_id == 1 and
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name == "Covid 2022"
-      ) {
-        //07/10: nataly monardez manda nuevo formato de contrato covid mensual
-        if($ServiceRequest->program_contract_type == "Mensual"){
-          $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_oct_2022', compact('ServiceRequest'));
-        }else{
-          $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
-        }
+        $ServiceRequest->programm_name == "Covid 2022") {
+
+          //07/10: nataly monardez manda nuevo formato de contrato covid mensual
+          if($ServiceRequest->program_contract_type == "Mensual"){
+            if($ServiceRequest->start_date >= "2022-11-01 00:00:00" &&  $ServiceRequest->start_date <= "2022-12-31 23:59:59"){
+              //22/11/2022: Nataly solicita que se haga cambio en clausula DECIMOCUARTO
+              $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_nov_dic_2022', compact('ServiceRequest'));
+            }else{
+              $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_oct_2022', compact('ServiceRequest'));
+            }
+          }else{
+            $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+          }
         
-      } else if (
+      } 
+      else if (
         $ServiceRequest->responsabilityCenter->establishment_id == 38 and
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name == "Covid 2022"
-      ) {
-        //dd($ServiceRequest->programm_name);
-        $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
-      } else if (
+        $ServiceRequest->programm_name == "Covid 2022") {
+          //dd($ServiceRequest->programm_name);
+          $pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
+      } 
+      else if (
         $ServiceRequest->responsabilityCenter->establishment_id == 38 and
         $ServiceRequest->start_date >= "2022-01-01 00:00:00" and
-        $ServiceRequest->programm_name != "Covid 2022"
-      ) {
-        //dd('No es Covid');
-        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-      } else {
+        $ServiceRequest->programm_name != "Covid 2022") {
+          //dd('No es Covid');
+          $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      } 
+      else {
         $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
       }
     }
