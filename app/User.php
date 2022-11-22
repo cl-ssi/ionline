@@ -555,13 +555,13 @@ class User extends Authenticatable implements Auditable
     public function getGravatarUrlAttribute()
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
-        return "http://www.gravatar.com/avatar/$hash";
+        return "https://www.gravatar.com/avatar/$hash";
     }
 
     function getCheckGravatarAttribute()
     {
         $hash = md5($this->email);
-        $uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+        $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
         $headers = @get_headers($uri);
 
         if ( preg_match("|200|", $headers[0]) )
