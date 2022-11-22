@@ -917,6 +917,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/{user}/access-logs', App\Http\Livewire\Parameters\AccessLogIndex::class)->name('access-logs');
 
+        Route::get('/last_access', [UserController::class,'lastAccess'])->name('last_access');
+
         Route::prefix('service_requests')->name('service_requests.')->group(function () {
             Route::get('/', [UserController::class,'index_sr'])->name('index')->middleware('auth');
             Route::get('/create', [UserController::class,'create_sr'])->name('create')->middleware('auth');

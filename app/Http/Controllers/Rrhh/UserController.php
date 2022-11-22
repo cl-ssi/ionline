@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Rrhh\UserBankAccount;
+use App\Models\Parameters\AccessLog;
 
 class UserController extends Controller
 {
@@ -498,5 +499,14 @@ class UserController extends Controller
     {
         // $notifications = auth()->user()->notifications;
         return view('notifications.index');
+    }
+
+    public function lastAccess() 
+    {
+        // $notifications = auth()->user()->notifications;
+        //dd('último acceso');
+        $accessLogs = AccessLog::latest()->paginate(100);
+        return view('rrhh.last_access.index',compact('accessLogs'));
+        //return view('rrhh.users.last_access.index');
     }
 }
