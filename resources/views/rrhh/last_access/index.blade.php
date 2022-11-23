@@ -17,20 +17,22 @@
         </thead>
         <tbody>
             @forelse($accessLogs as $accessLog)
-            <td>
-                <a href="#">
-                    {{ $accessLog->user->name }}
-                </a>
-                @if(!$accessLog->user->active)
-                <i class="fas fa-ban"></i>
-                @endif
-            </td>
-            <td class="text-center small" nowrap>
-                {{ $accessLog->created_at }}
-            </td>
-            <td>
-                {{ $accessLog->type }}
-            </td>
+            <tr>
+                <td>
+                    <a href="{{ route('rrhh.users.service_requests.edit',$accessLog->user->id) }}">
+                        {{ $accessLog->user->name }}
+                    </a>
+                    @if(!$accessLog->user->active)
+                    <i class="fas fa-ban"></i>
+                    @endif
+                </td>
+                <td nowrap>
+                    {{ $accessLog->created_at }}
+                </td>
+                <td>
+                    {{ $accessLog->type }}
+                </td>
+            </tr>
             @empty
 
             <tr class="text-center">

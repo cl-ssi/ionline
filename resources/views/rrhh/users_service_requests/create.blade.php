@@ -67,8 +67,8 @@
 
 	<div class="form-row">
 		<fieldset class="form-group col-md-4">
-			<label for="forPosition">Cargo/Funcion</label>
-			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Funcion" name="position">
+			<label for="forPosition">Cargo/Función</label>
+			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Función" name="position">
 		</fieldset>
 
 		<fieldset class="form-group col-md-8">
