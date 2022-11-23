@@ -11,9 +11,8 @@ class TrustProxies extends Middleware
      * The trusted proxies for this application.
      *
      * @var array|string|null
-     * NOTE: Para que funciones en cloud run
      */
-    protected $proxies = '*';
+    protected $proxies;
 
     /**
      * The headers that should be used to detect proxies.
