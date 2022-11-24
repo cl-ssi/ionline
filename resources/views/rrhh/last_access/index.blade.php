@@ -13,6 +13,7 @@
                 <th>Usuario</th>
                 <th>Fecha</th>
                 <th>Tipo</th>
+                <th>Ambiente</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,9 @@
                 </td>
                 <td>
                     {{ $accessLog->type }}
+                </td>
+                <td>
+                    {{ $accessLog->enviroment }}
                 </td>
             </tr>
             @empty
