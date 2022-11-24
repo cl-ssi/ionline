@@ -57,9 +57,15 @@ class LoginController extends Controller
             /** Authentication passed...*/
             
             /** Log access */
+            $enviroment='servidor nuevo';
+            if(env('OLD_SERVER'))
+            {
+                $enviroment='servidor antiguo'
+            }
             auth()->user()->accessLogs()->create([
                 'type' => 'local',
-                'enviroment' => env('APP_ENV')
+                //'enviroment' => env('APP_ENV')
+                'enviroment' => $enviroment
             ]);
 
             /** Check if user have a gravatar */
