@@ -4,7 +4,10 @@
             <tbody>
                 <tr>
                     <td class="alert-light text-center">
-                        Recibidos ({{ $counters['created'] }})
+                        <span title="Recibidos">
+                            Creados
+                        </span>
+                        ({{ $counters['created'] }})
                     </td>
                     <td class="alert-warning text-center">
                         Respondidos ({{ $counters['replyed'] }})
