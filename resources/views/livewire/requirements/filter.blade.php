@@ -142,7 +142,6 @@
                     <td class="{{ $copia }} text-center">
                         {{ $req->id }}
                         {{ $req->status }}
-                        {{-- @json($req->isCopy($user)) --}}
                         <br>
                         <a
                             href="{{ route('requirements.show', $req->id) }}"
