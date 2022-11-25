@@ -21,7 +21,7 @@
             <tr>
                 <td>
                     <a href="{{ route('rrhh.users.service_requests.edit',$accessLog->user->id) }}">
-                        {{ $accessLog->user->name }}
+                        {{ $accessLog->user->FullName??'' }}
                     </a>
                     @if(!$accessLog->user->active)
                     <i class="fas fa-ban"></i>
@@ -48,6 +48,7 @@
         </tbody>
     </table>
 </div>
+{{ $accessLogs->links() }}
 
 @endsection
 
