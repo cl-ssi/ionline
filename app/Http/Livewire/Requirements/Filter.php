@@ -17,6 +17,8 @@ class Filter extends Component
     public $user;
     public $auth_user;
     public $allowed_users;
+    public $statuses;
+    public $idEventsCopy;
 
     public $status = "Pendiente";
     public $req_id;
@@ -26,9 +28,6 @@ class Filter extends Component
     public $parte;
     public $start;
     public $end;
-
-    public $statuses;
-    public $idEventsCopy;
 
     public function mount()
     {
