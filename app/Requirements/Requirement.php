@@ -5,28 +5,38 @@ namespace App\Requirements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Rrhh\Authority;
-use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Requirements\EventStatus;
-
+use App\User;
 
 class Requirement extends Model implements Auditable
 {
-
+    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+
+    /**
+    * The table associated with the model.
+    *
+    * @var string
+    */
+    protected $table = 'req_requirements';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-
     protected $fillable = [
         'id', 'subject', 'priority', 'status', //'archived',
         'limit_at', 'user_id','parte_id', 'to_authority', 'label_id'
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at', 'limit_at'];
 
     public function events() {
         return $this->hasMany('App\Requirements\Event');
@@ -56,6 +66,20 @@ class Requirement extends Model implements Auditable
         return $this->hasMany('App\Requirements\EventStatus')->where('user_id',auth()->id());
     }
 
+    /** FIX no debería llamarse RequirementStatus, status directamente
+     * sin embargo esa popiedad ya existe
+     */
+    public function requirementStatus() {
+        return $this->hasMany('App\Requirements\RequirementStatus');
+    }
+
+    /** FIX viewed hace referencia a los archivados y no a los vistos
+     */
+    public function archived() {
+        return $this->hasMany('App\Requirements\RequirementStatus')
+            ->where('status','viewed');
+    }
+
     public function getSetEventsAsViewedAttribute() {
         $eventsWithoutCC = $this->eventsWithoutCC->pluck('id')->toArray();
         $eventsViewed = $this->eventsViewed->pluck('id')->toArray();
@@ -74,16 +98,9 @@ class Requirement extends Model implements Auditable
         }
     }
 
-    public function getUnreadedEventsAttribute(){
+    public function getUnreadedEventsAttribute() {
         $ct = $this->eventsWithoutCC->count() - $this->eventsViewed->count();
         return ($ct > 0) ? $ct : null;
-    }
-
-    /** FIX viewed hace referencia a los archivados y no a los vistos
-     */
-    public function archived() {
-        return $this->hasMany('App\Requirements\RequirementStatus')
-            ->where('status','viewed');
     }
 
     public function scopeSearch($query, $request) {
@@ -96,11 +113,31 @@ class Requirement extends Model implements Auditable
         return $query;
     }
 
-    /** FIX no debería llamarse RequirementStatus, status directamente 
-     * sin embargo esa popiedad ya existe
-     */
-    public function requirementStatus() {
-        return $this->hasMany('App\Requirements\RequirementStatus');
+    public function isCopy($user)
+    {
+        return $this->user_id != $user->id && $this->events->where('to_user_id', $user->id)->count() == $this->ccEvents->where('to_user_id', $user->id)->count();
+    }
+
+    public static function eventsCopy(User $user)
+    {
+        $reqs = Requirement::with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+        ->whereHas('events', function ($query) use($user) {
+            $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
+        });
+
+        $reqs = $reqs->get();
+
+        $idEventsCopy = collect([]);
+        foreach($reqs as $req)
+        {
+            $totalEvents = $req->events->where('to_user_id', $user->id)->count();
+            $totalCcEvents = $req->ccEvents->where('to_user_id', $user->id)->count();
+
+            if($totalEvents == $totalCcEvents && $req->user_id != $user->id)
+                $idEventsCopy->push($req->id);
+        }
+
+        return $idEventsCopy;
     }
 
     /**
@@ -163,20 +200,4 @@ class Requirement extends Model implements Auditable
             return $total;
         }
     }
-
-    use SoftDeletes;
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at', 'limit_at'];
-
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'req_requirements';
 }
