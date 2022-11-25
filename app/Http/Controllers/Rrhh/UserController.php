@@ -270,17 +270,12 @@ class UserController extends Controller
         Auth::login($user);
 
         /** Registrar el switch */
-        $enviroment = 'servidor nuevo';
-        if (env('OLD_SERVER')) {
-            $enviroment = 'servidor antiguo';
-        }
-
         if (session()->has('god')) {
+            /** Log access */
             auth()->user()->accessLogs()->create([
                 'type' => 'switch',
                 'switch_id' => session()->get('god'),
-                //'enviroment' => env('APP_ENV')
-                'enviroment' => $enviroment
+                'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
             ]);
         }
 
