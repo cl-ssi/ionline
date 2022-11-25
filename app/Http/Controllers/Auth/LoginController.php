@@ -54,8 +54,23 @@ class LoginController extends Controller
 
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Authentication passed...
+            /** Authentication passed...*/
+            
+            /** Log access */
+            $enviroment='servidor nuevo';
+            if(env('OLD_SERVER'))
+            {
+                $enviroment='servidor antiguo';
+            }
+            auth()->user()->accessLogs()->create([
+                'type' => 'local',
+                //'enviroment' => env('APP_ENV')
+                'enviroment' => $enviroment
+            ]);
+
+            /** Check if user have a gravatar */
             auth()->user()->checkGravatar;
+
             return redirect()->route('home');
 
             /** Estaba esto, no se que hace */

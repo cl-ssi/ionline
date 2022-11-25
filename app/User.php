@@ -15,6 +15,7 @@ use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Profile\Subrogation;
+use App\Models\Parameters\AccessLog;
 
 class User extends Authenticatable implements Auditable
 {
@@ -216,6 +217,16 @@ class User extends Authenticatable implements Auditable
         $mothers = str_replace($a, $b, $this->mothers_family);
 
         return $name[0].$fathers[0].$mothers[0];
+    }
+
+    public function accessLogs()
+    {
+        return $this->hasMany(AccessLog::class);
+    }
+
+    public function switchLogs()
+    {
+        return $this->hasMany(AccessLog::class,'switch_id');
     }
 
     public function serviceRequests()
@@ -544,13 +555,13 @@ class User extends Authenticatable implements Auditable
     public function getGravatarUrlAttribute()
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
-        return "http://www.gravatar.com/avatar/$hash";
+        return "https://www.gravatar.com/avatar/$hash";
     }
 
     function getCheckGravatarAttribute()
     {
         $hash = md5($this->email);
-        $uri = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+        $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
         $headers = @get_headers($uri);
 
         if ( preg_match("|200|", $headers[0]) )

@@ -82,7 +82,8 @@
                         </div>
                     </td>
                     <td>{{ $pendingSignaturesFlow->signature->id}}</td>
-                    <td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>
+                    {{--<td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>--}}
+                    <td>{{ $pendingSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
                         <b>{{ $pendingSignaturesFlow->signerName }}</b>
                         @if($pendingSignaturesFlow->userSigner->absent == 1)
@@ -210,9 +211,10 @@
                 @foreach($signedSignaturesFlows as $signedSignaturesFlow)
                 <tr>
                     <td>{{ $signedSignaturesFlow->signature->id ?? '' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature ?
+                    {{--<td>{{ $signedSignaturesFlow->signature ?
                         $signedSignaturesFlow->signature->request_date->format('Y-m-d') : '' }}
-                    </td>
+                    </td>--}}
+                    <td>{{ $signedSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
                         <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
                         
@@ -297,9 +299,9 @@
             <thead>
                 <tr>
                     <th scope="col">Id</th>
+                    <th scope="col">Fecha de Solicitud</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
-                    <th scope="col">Fecha de Solicitud</th>
                     <th scope="col">Estado Solicitud</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -311,9 +313,10 @@
                 @foreach($mySignatures as $signature)
                 <tr>
                     <td>{{ $signature->id }}</td>
+                    {{--<td>{{ $signature->request_date->format('Y-m-d') }}</td>--}}
+                    <td>{{ $signature->created_at->format('Y-m-d') }}</td>
                     <td>{{ $signature->subject }}</td>
                     <td>{{ $signature->description }}</td>
-                    <td>{{ $signature->request_date->format('Y-m-d') }}</td>
                     <td>
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())
                         <p class="text-success">Aceptada</p>

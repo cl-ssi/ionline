@@ -52,7 +52,7 @@
 			<th scope="col">RUN</th>
 			<th scope="col">Nombre</th>
 			<th scope="col">Unidad Organizacional</th>
-			<th scope="col">Cargo/Funcion</th>
+			<th scope="col">Cargo/Función</th>
 			<th scope="col">Accion</th>
 		</tr>
 	</thead>

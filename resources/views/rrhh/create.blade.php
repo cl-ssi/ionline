@@ -68,8 +68,8 @@
 
 	<!-- <div class="form-row">
 		<fieldset class="form-group col-md-4">
-			<label for="forPosition">Cargo/Funcion</label>
-			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Funcion" name="position">
+			<label for="forPosition">Cargo/Función</label>
+			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Función" name="position">
 		</fieldset>
 
 
@@ -116,7 +116,7 @@
 	
 	<div class="form-row" >
 		<fieldset class="form-group col-md-4">
-			<label for="forPosition">Cargo/Funcion</label>
+			<label for="forPosition">Cargo/Función</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">
 		</fieldset>
 	</div>

@@ -34,6 +34,8 @@ class AddPermissionsInventoryEdit extends Migration
      */
     public function down()
     {
-        //
+        Permission::where('name','Inventory: edit')->delete();
+        Permission::where('name','Inventory: place maintainer')->delete();
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

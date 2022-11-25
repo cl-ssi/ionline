@@ -36,6 +36,8 @@
                 @case('production')
                     @if(env('APP_DEBUG') == true)
                         background-color: rgb(255, 0, 0);
+                    @elseif(!env('OLD_SERVER'))
+                        background-color: rgb(2, 82, 0);
                     @endif
                     @break;
             @endswitch
@@ -50,7 +52,6 @@
 </head>
 <body>
     <div id="app">
-    <!-- TODO ¿QUÉ PASA SI UN INTERNO QUIERE SER PARTE DE STAFF? -->
         @guest
             @include('layouts.partials.nav')
         @else

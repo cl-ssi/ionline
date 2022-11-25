@@ -66,7 +66,7 @@ class ProgrammingItemController extends Controller
             ->first();
 
         if(!$programming){
-            $programming = Programming::find($request->programming_id);
+            $programming = Programming::findorFail($request->programming_id);
             $programming->items = collect();
         }
 
