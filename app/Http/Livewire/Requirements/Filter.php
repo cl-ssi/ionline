@@ -5,57 +5,112 @@ namespace App\Http\Livewire\Requirements;
 use Livewire\Component;
 use App\Requirements\Requirement;
 use App\User;
-//use Livewire\WithPagination;
+use Illuminate\Support\Carbon;
+use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class Filter extends Component
 {
-    //use WithPagination;
+    use WithPagination;
+	protected $paginationTheme = 'bootstrap';
 
-    public $requirements;
     public $user;
+    public $auth_user;
+    public $allowed_users;
 
+    public $status = "Pendiente";
     public $req_id;
     public $subject;
     public $category;
     public $user_involved;
     public $parte;
+    public $start;
+    public $end;
 
-    public function mount(User $user)
+    public $statuses;
+    public $idEventsCopy;
+
+    public function mount()
     {
-        $this->user = $user;
+        $this->getEventsCopy();
+        $this->getAllowedUsers();
+        $this->getStatuses();
     }
 
-    public function search()
+    public function render()
+    {
+        return view('livewire.requirements.filter', [
+            'requirements' => $this->getRequirements(),
+        ]);
+    }
+
+    public function getRequirements()
     {
         $requirements = Requirement::query();
+
         $requirements
-            ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived', 'categories', 'events', 'ccEvents', 'parte', 'events.from_user', 'events.to_user', 'events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) {
                 $query->where('from_user_id', $this->user->id)->orWhere('to_user_id', $this->user->id);
             });
 
         if($this->req_id)
         {
-            $requirements->where('id',$this->req_id)->get();
+            $requirements->whereId($this->req_id)->get();
         }
         else
         {
+            if($this->status == 'Archivado')
+            {
+                $requirements->whereHas('archived', function ($query) {
+                    $query->whereIn('user_id', [$this->user->id, $this->auth_user->id]);
+                });
+                $requirements->whereNotIn('id', $this->idEventsCopy);
+            }
+
+            if($this->status == 'Pendiente')
+            {
+                $requirements->whereDoesntHave('archived', function ($query) {
+                    $query->whereIn('user_id', [$this->user->id, $this->auth_user->id]);
+                });
+                $requirements->whereNotIn('id', $this->idEventsCopy);
+            }
+
+            if($this->status == 'Copia')
+            {
+                $requirements->whereIn('id', $this->idEventsCopy);
+            }
+
+            if(
+                $this->status != 'Archivado' &&
+                $this->status != 'Pendiente' &&
+                $this->status != 'Copia' &&
+                $this->status != 'Todos'
+            )
+            {
+                $requirements->whereStatus(Str::lower($this->status));
+                $requirements->whereNotIn('id', $this->idEventsCopy);
+            }
+
             if($this->subject)
             {
-                $requirements->where('subject','LIKE','%'.$this->subject.'%');
+                $requirements->where('subject', 'LIKE', '%' . $this->subject . '%');
             }
+
             if($this->category)
             {
                 $requirements->whereHas('categories', function ($query) {
-                    $query->where('name','LIKE','%'.$this->category.'%');
+                    $query->where('name', 'LIKE', '%' . $this->category . '%');
                 });
             }
+
             if($this->parte)
             {
                 $requirements->whereHas('parte', function ($query) {
                     $query->search2($this->parte);
                 });
             }
+
             if($this->user_involved)
             {
                 $requirements->whereHas('events', function ($query) {
@@ -67,12 +122,40 @@ class Filter extends Component
                     });
                 });
             }
+
+            if($this->start)
+                $requirements->whereDate('created_at', '>=', Carbon::parse($this->start)->startOfDay());
+
+            if($this->end)
+                $requirements->whereDate('created_at', '<=', Carbon::parse($this->end)->endOfDay());
         }
-        $this->requirements = $requirements->get();
+
+        return $requirements->latest()->paginate(5);
 
     }
-    public function render()
+
+    public function getEventsCopy()
     {
-        return view('livewire.requirements.filter');
+        $this->idEventsCopy = Requirement::eventsCopy($this->user);
+    }
+
+    public function getAllowedUsers()
+    {
+        $this->allowed_users = User::whereIn('id' , $this->allowed_users)->get();
+    }
+
+    public function getStatuses()
+    {
+        $statuses = Requirement::groupBy('status')->get('status')->pluck('status');
+        $statuses->push('archivado');
+        $statuses->push('pendiente');
+        $statuses->push('copia');
+        $statuses->push('todos');
+
+        $statuses = $statuses->map(function ($item) {
+            return Str::ucfirst($item);
+        });
+
+        $this->statuses = $statuses;
     }
 }
