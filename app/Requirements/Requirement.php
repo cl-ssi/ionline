@@ -120,7 +120,7 @@ class Requirement extends Model implements Auditable
 
     public static function eventsCopy(User $user)
     {
-        $reqs = Requirement::with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+        $reqs = Requirement::with('events','ccEvents')
         ->whereHas('events', function ($query) use($user) {
             $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
         });
