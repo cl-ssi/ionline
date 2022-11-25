@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Requirements;
 
 use App\Documents\Parte;
 use App\Documents\Document;
+use App\Http\Controllers\Controller;
 use App\Mail\RequirementNotification;
 use App\Requirements\Label;
 use App\Requirements\Requirement;
@@ -11,22 +12,18 @@ use App\Requirements\Event;
 use App\Requirements\EventStatus;
 use App\Requirements\RequirementCategory;
 use App\Requirements\RequirementStatus;
-use App\Requirements\EventDocument;
-use App\Requirements\Category;
 use App\Requirements\File;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Redirect;
 
 class RequirementController extends Controller
 {
-
     public function __constructor()
     {
         Carbon::setLocale('es');
@@ -48,74 +45,27 @@ class RequirementController extends Controller
             {
                 $authority_chief = Authority::getAuthorityFromDate($authority->organizational_unit_id, now(), 'manager');
                 $allowed_users->push($authority_chief->user);
-                /** Esto permite ver también la bandeja del "representa" 
+                /** Esto permite ver también la bandeja del "representa"
                  * que se puede agregar al crear una autoridad
                  */
                 if($authority_chief->represents)
-                {
                     $allowed_users->push($authority_chief->represents);
-                }
                 // 0 => 14104369 Carlos Calvo
                 // 1 => 10278387 José Donoso
             }
         }
 
         /** Si no pasó ningún usuario por parametro o
-         * si el usuario es distinto al user logeado ($auth_user) y 
+         * si el usuario es distinto al user logeado ($auth_user) y
          * si el $user no existe en los permitidos entonces mostramos su bandeja personal */
-        if(is_null($user) OR ($user != $auth_user AND !$allowed_users->contains($user) ) )
-        {
-            return redirect()->route('requirements.inbox',$auth_user);
-        }
 
-        /** Construyo la query de requerimientos */
-        $requirements_query = Requirement::query();
-        $requirements_query
-            ->with('archived','categories','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
-            ->whereHas('events', function ($query) use ($user) {
-                $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
-            });
-        if($request->has('archived'))
-        {
-            $requirements_query->whereHas('archived', function ($query) use ($user,$auth_user) {
-                $query->whereIn('user_id', [$user->id,$auth_user->id]);
-            });
-        }
-        else
-        {
-            $requirements_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
-                $query->whereIn('user_id', [$user->id,$auth_user->id]);
-            });
-        }
-        $requirements = $requirements_query->latest()->paginate(100)->withQueryString();
-        /** Fin de la query de requerimientos */
+        if(is_null($user) || ($user != $auth_user && !$allowed_users->contains($user) ) )
+            return redirect()->route('requirements.inbox', $auth_user);
 
+        $allowed_users = $allowed_users->pluck('id');
 
-        /* Query para los contadores */
-        $counters_query = Requirement::query();
-        
-        $counters_query->whereHas('events', function ($query) use ($user) {
-                $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
-            });
-        
-        $counters['archived'] = $counters_query->clone()
-                ->whereHas('archived', function ($query) use ($user,$auth_user) {
-                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
-                })->count();
-
-        $counters_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
-                    $query->whereIn('user_id', [$user->id,$auth_user->id]);
-                });
-
-        $counters['created'] = $counters_query->clone()->where('status','creado')->count();
-        $counters['replyed'] = $counters_query->clone()->where('status','respondido')->count();
-        $counters['derived'] = $counters_query->clone()->where('status','derivado')->count();
-        $counters['closed'] = $counters_query->clone()->where('status','cerrado')->count();
-
-        /** Retorno a la vista */
-        return view('requirements.inbox', compact('requirements','user','allowed_users','counters'));
+        return view('requirements.inbox', compact('user', 'auth_user', 'allowed_users'));
     }
-    
 
     public function outbox(Request $request)
     {
@@ -379,9 +329,6 @@ class RequirementController extends Controller
         return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
     }
 
-
-
-
     public function secretary_outbox(Request $request)
     {
         $ous_secretary = [];
@@ -391,7 +338,7 @@ class RequirementController extends Controller
         }
 
         //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
-        $userIsSecretary = (count($ous_secretary) > 0); 
+        $userIsSecretary = (count($ous_secretary) > 0);
 
         //Se obtienen unidades organizacionales donde usuario es secretary
         $secretaryOuIds = [];
@@ -615,11 +562,6 @@ class RequirementController extends Controller
         return view('requirements.outbox', compact('created_requirements', 'archived_requirements', 'legend'));
     }
 
-
-
-
-    
-
     /**
      * Show the form for creating a new resource.
      *
@@ -642,15 +584,15 @@ class RequirementController extends Controller
     {
         // set_time_limit(7200);
         // ini_set('memory_limit', '2048M');
-        
+
         // $documents = Document::all()->sortBy('id');
         $parte = new Parte;
         // $ous = OrganizationalUnit::all()->sortBy('name');
-        
+
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
         // $categories = Category::where('user_id', Auth::user()->id)->get();
         $labels = Label::all();
-        
+
         // return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
         return view('requirements.create', compact('parte','labels'));
     }
@@ -678,7 +620,6 @@ class RequirementController extends Controller
         return redirect()->back()->with('success', 'Se han eliminado correctamente');
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -687,7 +628,7 @@ class RequirementController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // $requirement = Requirement::find(15920);
         // $requirement->categories()->attach($request->input('category_id'));
         // dd("");
@@ -1046,7 +987,6 @@ class RequirementController extends Controller
     //
     // }
 
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -1086,6 +1026,6 @@ class RequirementController extends Controller
 
         session()->flash('success', 'El requerimiento ' . $id . ' ha sido eliminado');
 
-        return redirect()->route('requirements.inbox');        
+        return redirect()->route('requirements.inbox');
     }
 }
