@@ -63,17 +63,17 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-4">
                         <label for="forRut">Fecha de Nacimiento</label>
-                        <input wire:model="birthday" name="birthday" class="form-control form-control-sm" type="date" value="{{ $birthday ? $birthday : '' }}">
+                        <input wire:model.defer="birthday" name="birthday" class="form-control form-control-sm" type="date" value="{{ $birthday ? $birthday : '' }}">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_telephone">Teléfono</label>
-                        <input wire:model="phone_number" name="phone_number" class="form-control form-control-sm" type="text" value="{{ $phone_number ? $phone_number : '' }}">
+                        <input wire:model.defer="phone_number" name="phone_number" class="form-control form-control-sm" type="text" value="{{ $phone_number ? $phone_number : '' }}">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-4">
                         <label for="for_telephone">E-Mail</label>
-                        <input wire:model="email" name="email" class="form-control form-control-sm" type="text" placeholder="correo@redsalud.gob.cl" value="{{ $email ? $email : '' }}">
+                        <input wire:model.defer="email" name="email" class="form-control form-control-sm" type="text" placeholder="correo@redsalud.gob.cl" value="{{ $email ? $email : '' }}">
                     </fieldset>
                 </div>
 
@@ -101,12 +101,12 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-3">
                         <label for="for_departure_date">Fecha/Hora Ida</label>
-                        <input wire:model="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
+                        <input wire:model.defer="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_return_date">Fecha/Hora Vuelta</label>
-                        <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local" {{$round_trip == 'one-way only' ? 'disabled' : ''}}>
+                        <input wire:model.defer="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local" {{$round_trip == 'one-way only' ? 'disabled' : ''}}>
                     </fieldset>
 
                     <fieldset class="form-group col-sm-3">
@@ -122,7 +122,7 @@
 
                     <fieldset class="form-group col-sm-3">
                         <label for="for_origin">Valor Estimado</label>
-                        <input wire:model="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
+                        <input wire:model.defer="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
                     </fieldset>
                 </div>
 

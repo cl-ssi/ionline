@@ -593,6 +593,14 @@
                             >
                                 <i class="fas fa-smile-beam"></i> Frases del día
                             </a>
+
+
+                            <a
+                                class="dropdown-item {{active('rrhh.users.last_access')}}"
+                                href="{{ route('rrhh.users.last_access') }}"
+                            >
+                                <i class="fas fa-list-alt"></i> Últimos accesos
+                            </a>
                         @endcanany
 
                         </ul>

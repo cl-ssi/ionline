@@ -192,7 +192,7 @@ class DigitalSignatureController extends Controller
                 $destinatarios = $signaturesFlow->signature->recipients;
 
                 $dest_vec=array();
-                $cont=0;
+                
 
 
                 if (strpos($destinatarios, ',') !== false) {
@@ -202,12 +202,18 @@ class DigitalSignatureController extends Controller
                     $dest_vec[0] = $destinatarios;
                 }
 
-
+                $has_director_mail=false;
                 foreach ($dest_vec as $dest) {
-                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0)
+                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl')
                     {
-                        $cont=$cont+1;
-                        $tipo = null;
+                        $has_director_mail=true;
+                    }
+
+                }
+                
+                // Entra en caso que tengo algun correo de dirección
+                if ($has_director_mail===true)
+                    {                        
                         $generador = $signaturesFlow->signature->responsable->fullname;
                         $unidad = $signaturesFlow->signature->organizationalUnit->name;
 
@@ -249,7 +255,7 @@ class DigitalSignatureController extends Controller
                             ]);
                         }
                     }
-                }
+                
             }
 
             // Si es visación en cadena, se envía notificación por correo al siguiente firmante

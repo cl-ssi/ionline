@@ -36,7 +36,7 @@ class SuitabilityController extends Controller
         $dataArray = array();
         $schools = School::orderBy('name', 'asc')->get();
         $result = Result::has('signedCertificate')->with('psirequest');
-        $month = $request->month;    
+        $month = $request->month;
         $sumesperando = 0;
         $sumfinalizado = 0;
         $sumaprobado = 0;
@@ -44,32 +44,34 @@ class SuitabilityController extends Controller
         if ($request->year != null) {
 
             foreach ($schools as $school) {
-                $counteraprobado = PsiRequest::where('school_id', $school->id
+                $counteraprobado = PsiRequest::where(
+                    'school_id',
+                    $school->id
                 )->where('status', 'Aprobado')
-                ->where('created_at','like',$request->year.'%')
-                ->when($month != 'Todos', function ($q) use ($month) {
-                    return $q->whereMonth('created_at', '=', $month);
-                })
-                ->get()
-                ->count();
+                    ->where('created_at', 'like', $request->year . '%')
+                    ->when($month != 'Todos', function ($q) use ($month) {
+                        return $q->whereMonth('created_at', '=', $month);
+                    })
+                    ->get()
+                    ->count();
 
                 $counteresperando = PsiRequest::where('school_id', $school->id)
-                ->where('status', 'Esperando Test')
-                ->whereDate('created_at','like',$request->year.'%')
-                ->when($month != 'Todos', function ($q) use ($month) {
-                    return $q->whereMonth('created_at', '=', $month);
-                })
-                ->get()
-                ->count();
+                    ->where('status', 'Esperando Test')
+                    ->whereDate('created_at', 'like', $request->year . '%')
+                    ->when($month != 'Todos', function ($q) use ($month) {
+                        return $q->whereMonth('created_at', '=', $month);
+                    })
+                    ->get()
+                    ->count();
 
                 $counterfinalizado = PsiRequest::where('school_id', $school->id)
-                ->where('status', 'Test Finalizado')
-                ->whereDate('created_at','like',$request->year.'%')
-                ->when($month != 'Todos', function ($q) use ($month) {
-                    return $q->whereMonth('created_at', '=', $month);
-                })
-                ->get()
-                ->count();
+                    ->where('status', 'Test Finalizado')
+                    ->whereDate('created_at', 'like', $request->year . '%')
+                    ->when($month != 'Todos', function ($q) use ($month) {
+                        return $q->whereMonth('created_at', '=', $month);
+                    })
+                    ->get()
+                    ->count();
 
                 $sumaprobado += $counteraprobado;
                 $sumesperando += $counteresperando;
@@ -95,22 +97,20 @@ class SuitabilityController extends Controller
 
     public function reportsigned(Request $request)
     {
-        
+
         $dataArray = array();
         $schools = School::orderBy('name', 'asc')->get();
         $month = $request->month;
         $sumfinalizado = 0;
 
         $results = Result::has('signedCertificate')->with('psirequest')->get();
-        $cont=0;
+        $cont = 0;
 
-        foreach($schools as $school)
-        {
-        foreach ($results as $result) {
-            dump($result->signedCertificate->signaturesFlows->last());      
-
+        foreach ($schools as $school) {
+            foreach ($results as $result) {
+                dump($result->signedCertificate->signaturesFlows->last());
+            }
         }
-    }
 
 
         return view('suitability.reportsigned', compact('request'));
@@ -122,9 +122,10 @@ class SuitabilityController extends Controller
         return view('external.suitability.create', compact('school'));
     }
 
-    public function listOwn(School $school)    {
+    public function listOwn(School $school)
+    {
 
-        
+
         return view('external.suitability.index', compact('school'));
     }
 
@@ -145,8 +146,8 @@ class SuitabilityController extends Controller
     public function approved()
     {
         $psirequests = PsiRequest::where('status', 'Aprobado')->paginate(100);
-        
-        
+
+
         return view('suitability.approved', compact('psirequests'));
     }
 
@@ -183,23 +184,22 @@ class SuitabilityController extends Controller
 
     public function indexOwn(Request $request)
     {
-        $school_id = $request->colegio;        
+        $school_id = $request->colegio;
         $psirequests_count = PsiRequest::count();
         $psirequests = PsiRequest::when($school_id != null, function ($q) use ($school_id) {
-            
+
             return $q->where('school_id', $school_id);
         })
-        ->paginate(100);
-        if($school_id != null) {
+            ->paginate(100);
+        if ($school_id != null) {
             $psirequests_count = $psirequests->count();
-
         }
-            
-        
-        
-            //->get();
+
+
+
+        //->get();
         $schools = School::orderBy("name", "asc")->get();
-        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id','psirequests_count'));
+        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id', 'psirequests_count'));
     }
 
 
@@ -301,9 +301,13 @@ class SuitabilityController extends Controller
         // $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
         // $userVisator2 = User::find(13867504); //13.867.504 Alejandra Aguirre
 
-        $signer = Signer::query()
-            ->where('type', 'signer')
-            ->first();
+        // $signer = Signer::query()
+        //     ->where('type', 'signer')
+        //     ->first();
+        //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+
+        $signer = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager');
+        //dd($signer);
 
         $visators = Signer::query()
             ->where('type', 'visator')
@@ -433,7 +437,7 @@ class SuitabilityController extends Controller
     public function update(PsiRequest $psirequest)
     {
         $psirequest->status = "Esperando Test";
-        $psirequest->save();        
+        $psirequest->save();
         session()->flash('success', 'Se ha vuelto el test a estado "Esperando Test"');
         return redirect()->back();
     }
