@@ -596,8 +596,8 @@
 
 
                             <a
-                                class="dropdown-item {{active('rrhh.users.last_access')}}"
-                                href="{{ route('rrhh.users.last_access') }}"
+                                class="dropdown-item {{active('rrhh.users.last-access')}}"
+                                href="{{ route('rrhh.users.last-access') }}"
                             >
                                 <i class="fas fa-list-alt"></i> Últimos accesos
                             </a>

@@ -17,8 +17,8 @@
                     <i class="fas fa-square" style="color:
                         @switch($log->enviroment)
                             @case('local') rgb(73, 17, 82); @break
-                            @case('testing') rgb(2, 82, 0); @break
-                            @case('production') rgb(0,108,183); @break;
+                            @case('Cloud Run') rgb(2, 82, 0); @break
+                            @case('Servidor') rgb(0,108,183); @break;
                             @default rgb(255,255,255); @break;
                         @endswitch
                         ">

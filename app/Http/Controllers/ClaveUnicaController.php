@@ -160,14 +160,9 @@ class ClaveUnicaController extends Controller
                 Auth::login($u, true);
 
                 /** Log access */
-                $enviroment = 'servidor nuevo';
-                if (env('OLD_SERVER')) {
-                    $enviroment = 'servidor antiguo';
-                }
                 auth()->user()->accessLogs()->create([
                     'type' => 'clave única',
-                    //'enviroment' => env('APP_ENV')
-                    'enviroment' => $enviroment
+                    'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
                 ]);
 
                 /** Check if user have a gravatar */
