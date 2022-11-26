@@ -48,7 +48,13 @@
                            href="{{ route('rem.files.index') }}">
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
-                        @endcan                        
+                        @endcan
+                        @can('be god')
+                        <a class="dropdown-item"
+                           href="{{ route('rem.periods.index') }}">
+                            <i class="fas fa-calendar-check"></i> Periodos REM
+                        </a>
+                        @endcan
 
                         @can('RNI Database: view')
                         <a class="dropdown-item"
