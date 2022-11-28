@@ -11,6 +11,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Documents\SignaturesFile;
+use App\User;
 
 class Allowance extends Model implements Auditable
 {
@@ -81,10 +82,10 @@ class Allowance extends Model implements Auditable
             return 'Pendiente';
             break;
           case 'complete':
-            return 'Finalizada';
+            return 'Finalizado';
             break;
           case 'rejected':
-            return 'Rechazada';
+            return 'Rechazado';
             break;
         }
     }
@@ -227,14 +228,33 @@ class Allowance extends Model implements Auditable
     }
 
     public function getAllowanceTotalValueFormatAttribute(){
-        // dd($this->getTotalIntAllowanceValueAttribute());
         $allowance_total_value = $this->getTotalIntAllowanceValueAttribute() + $this->getTotalDecimalAllowanceValueAttribute();
         return $allowance_total_value;
     }
 
-    public function getAmIAuthorityAttributte(){
-        $am_i_authority = Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id);
-        dd($am_i_authority);
+    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
+        if ($status_search OR $search_id OR $user_allowance_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('status', $status_search);
+                });
+            }
+
+            if($search_id != ''){
+                $query->where(function($q) use($search_id){
+                    $q->where('id', $search_id);
+                });
+            }
+
+            $array_user_allowance_search = explode(' ', $user_allowance_search);
+            foreach($array_user_allowance_search as $word){
+                $query->whereHas('userAllowance' ,function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+        }
     }
 
     protected $hidden = [

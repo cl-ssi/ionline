@@ -1,113 +1,31 @@
 <div>
     <div class="card card-body small">
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
-        {{-- 
+        
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-2">
-                <label for="for_status_search">Estado Formulario</label>
+                <label for="for_status_search">Estado Viático</label>
                 <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
-                    <option value="saved">Guardado</option>
                     <option value="pending">Pendiente</option>
-                    <option value="Approved">Aprobado</option>
+                    <option value="complete">Finalizado</option>
                     <option value="rejected">Rechazado</option>
                 </select>
             </fieldset>  
 
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_status_purchase_search">Estado Proceso Compra</label>
-                <select name="status_purchase_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatusPurchase">
-                    <option value="">Seleccione...</option>
-                    <option value="canceled">Anulado</option>
-                    <option value="finalized">Finalizado</option>
-                    <option value="in_process">En proceso</option>
-                    <option value="purchased">Comprado</option>
-                </select>
-            </fieldset>
-            
             <fieldset class="form-group col-12 col-md-1">
                 <label for="for_id">ID</label>
                 <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
                     placeholder="001" wire:model.debounce.500ms="selectedId">
             </fieldset>
 
-            <fieldset class="form-group col-12 col-md-1">
-                <label for="for_folio">Folio</label>
-                <input class="form-control form-control-sm" type="text" name="folio_search" autocomplete="off" 
-                    placeholder="2022-17" wire:model.debounce.500ms="selectedFolio">
-            </fieldset>
-
             <fieldset class="form-group col-12 col-md-3">
-                <label for="for_name">Descripción</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off"
-                    name="name_search" wire:model.debounce.500ms="selectedName">
+                <label for="for_requester">Funcionario</label>
+                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
+                    name="user_allowance_search" wire:model.debounce.500ms="selectedUserAllowance">
             </fieldset>
+        </div>
 
-            <fieldset class="form-group col-12 col-md-3">
-                <label for="regiones">Periodo de Creación</label>
-                <div class="input-group">
-                    <input type="date" class="form-control form-control-sm" name="start_date_search" wire:model.debounce.500ms="selectedStartDate">
-                    <input type="date" class="form-control form-control-sm" name="end_date_search" wire:model.debounce.500ms="selectedEndDate">
-                </div>
-            </fieldset>
-        
-        </div>
-        
-        <div class="form-row">
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_requester">Usuario Gestor</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="requester_search" wire:model.debounce.500ms="selectedRequester">
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-4">
-                    <label for="for_requester_ou_id">U.O. Usuario Gestor</label>
-                    @livewire('search-select-organizational-unit', [
-                        'emit_name'            => 'searchedRequesterOu',
-                        'selected_id'          => 'requester_ou_id',
-                        'small_option'         => true,
-                        'organizationalUnit'   => $organizationalUnit
-                    ])
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_requester">Administrador Contrato</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="admin_search" wire:model.debounce.500ms="selectedAdmin">
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-4">
-                <label for="for_requester_ou_id">U.O. Administrador Contrato</label>
-                    @livewire('search-select-organizational-unit', [
-                        'emit_name'          => 'searchedAdminOu',
-                        'selected_id'        => 'admin_ou_id',
-                        'small_option'       => true,
-                        'organizationalUnit' => $organizationalUnit
-                    ])
-            </fieldset>
-        </div>
-        <div class="form-row">
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_purchaser">Comprador</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="purchaser_search" wire:model.debounce.500ms="selectedPurchaser" @if($inbox == 'purchase') disabled @endif>
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_purchaser">Programa</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="program_search" wire:model.debounce.500ms="selectedProgram">
-            </fieldset>
-            @if($inbox == 'purchase')
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_purchaser">N° O.C.</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="purchase_order_search" wire:model.debounce.500ms="selectedPo">
-            </fieldset>
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_purchaser">N° Licitación.</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
-                    name="tender_search" wire:model.debounce.500ms="selectedTender">
-            </fieldset>
-            @endif
-        </div>
-        --}}
     </div>
 
     <br>
@@ -151,11 +69,11 @@
                                 @break
 
                             @case('complete')
-                                <span class="badge badge-success">Finalizada</span>
+                                <span class="badge badge-success">Finalizado</span>
                                 @break
 
                             @case('rejected')
-                                <span class="badge badge-danger">Rechazada</span>
+                                <span class="badge badge-danger">Rechazado</span>
                                 @break
 
                             @default
