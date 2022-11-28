@@ -54,6 +54,11 @@
                            href="{{ route('rem.periods.index') }}">
                             <i class="fas fa-calendar-check fa-fw"></i> Periodos REM
                         </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('rem.series.index') }}">
+                            <i class="fas fa-stream fa-fw"></i> Series REM
+                        </a>
                         @endcan
 
                         @can('RNI Database: view')
