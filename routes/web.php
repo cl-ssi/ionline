@@ -1967,8 +1967,10 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/store', [UserRemController::class, 'store'])->name('store');
         Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
-    Route::prefix('periods')->as('periods.')->group(function () {
+    Route::prefix('periods')->as('periods.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodController::class, 'index'])->name('index');
+        Route::get('/create', [RemPeriodController::class, 'create'])->name('create');
+        Route::post('/store', [RemPeriodController::class, 'store'])->name('store');
     });
 
     Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
