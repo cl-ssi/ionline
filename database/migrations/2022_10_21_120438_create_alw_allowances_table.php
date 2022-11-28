@@ -16,6 +16,7 @@ class CreateAlwAllowancesTable extends Migration
         Schema::create('alw_allowances', function (Blueprint $table) {
             $table->id();
 
+            $table->string('status')->nullable();
             $table->foreignId('user_allowance_id');
             $table->string('contractual_condition')->nullable();
             $table->foreignId('allowance_value_id');
@@ -36,6 +37,7 @@ class CreateAlwAllowancesTable extends Migration
             $table->foreignId('creator_user_id');
             $table->foreignId('creator_ou_id');
             $table->date('document_date')->nullable();
+            $table->foreignId('signatures_file_id')->nullable();
 
             $table->foreign('user_allowance_id')->references('id')->on('users');
             $table->foreign('allowance_value_id')->references('id')->on('cfg_allowance_values');
@@ -45,6 +47,7 @@ class CreateAlwAllowancesTable extends Migration
             $table->foreign('destination_commune_id')->references('id')->on('cl_communes');
             $table->foreign('creator_user_id')->references('id')->on('users');
             $table->foreign('creator_ou_id')->references('id')->on('organizational_units');
+            $table->foreign('signatures_file_id')->references('id')->on('doc_signatures_files');
 
             $table->timestamps();
             $table->softDeletes();

@@ -38,7 +38,19 @@ class SearchAllowances extends Component
                     ->paginate(50)
             ]);
         }
-        else{
+
+        if($this->index == 'own'){
+            return view('livewire.allowances.search-allowances', [
+                'allowances' => Allowance::
+                    latest()
+                    ->where('user_allowance_id', Auth::user()->id)
+                    ->orWhere('creator_user_id', Auth::user()->id)
+                    ->orWhere('organizational_unit_allowance_id', Auth::user()->organizationalUnit->id)
+                    ->paginate(50)
+            ]);
+        }
+
+        if($this->index == 'all'){
             return view('livewire.allowances.search-allowances', [
                 'allowances' => Allowance::
                     latest()

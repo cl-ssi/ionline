@@ -10,6 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Documents\SignaturesFile;
 
 class Allowance extends Model implements Auditable
 {
@@ -18,10 +19,10 @@ class Allowance extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'resol_number', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
+        'resol_number', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
         'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
-        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date'
+        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date', 'signatures_file_id'
     ];
 
      /**
@@ -62,8 +63,30 @@ class Allowance extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\AllowanceValue', 'allowance_value_id');
     }
 
+    public function allowanceEstablishment() {
+        return $this->belongsTo('App\Establishment', 'establishment_id');
+    }
+
     public function allowanceSigns() {
         return $this->hasMany('App\Models\Allowances\AllowanceSign', 'allowance_id');
+    }
+
+    public function signedAllowance(){
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->request) {
+          case 'pending':
+            return 'Pendiente';
+            break;
+          case 'complete':
+            return 'Finalizada';
+            break;
+          case 'rejected':
+            return 'Rechazada';
+            break;
+        }
     }
 
     public function getContractualConditionValueAttribute(){

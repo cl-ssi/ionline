@@ -163,6 +163,8 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
 
+use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
+
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Models\WebService\MercadoPublico;
 use App\Http\Controllers\RequestForms\PassengerController;
@@ -484,6 +486,16 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 });
 /** Fin Replacement Staff */
 
+/* Replacepent Staff */
+Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
+    Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
+    Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
+});
+/** Inicio Perfil de Cargos */
+
+
+
+/** Fin Perfil de Cargos */
 
 /** Inicio Recursos */
 Route::prefix('resources')->name('resources.')->middleware('auth')->group(function () {
@@ -1800,6 +1812,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {
 
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
+    Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');;
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');
     Route::post('store', [AllowanceController::class,'store'])->name('store');
@@ -1808,12 +1821,15 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
 
     Route::prefix('file')->as('file.')->group(function () {
-        Route::get('{allowanceFile}/show', [AllowanceFileController::class, 'show'])->name('show');
-        //Route::delete('{allowanceFile}/destroy', [AllowanceFileController::class, 'destroy'])->name('destroy');
+        Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
     });
 
     Route::prefix('sign')->as('sign.')->group(function () {
         Route::put('{allowanceSign}/{status}/{allowance}/update', [AllowanceSignController::class,'update'])->name('update');
+        Route::get('/{allowance}/create_view_document', [AllowanceSignController::class, 'create_view_document'])->name('create_view_document');
+        Route::get('/{allowance}/create_form_document', [AllowanceSignController::class, 'create_form_document'])->name('create_form_document');
+        Route::get('/callback-sign-allowance/{message}/{modelId}/{signaturesFile?}', [AllowanceSignController::class, 'callbackSign'])->name('callbackSign');    
+        // Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     });
 
 });

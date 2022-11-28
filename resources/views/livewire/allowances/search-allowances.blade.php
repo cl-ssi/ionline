@@ -135,20 +135,38 @@
                         <th>Lugar</th>
                         <th>Motivo</th>
                         <th>Detalle</th>
-                        <th>Periodo</th>
-                        <th>Total de días</th>
-                        <th>Estado</th>
-                        <th></th>
+                        <th colspan="2">Periodo</th>
+                        <th>Gestión</th>
+                        <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($allowances as $allowance)
                     <tr>
-                        <th>{{ $allowance->id }}</th>
+                        <th>
+                            {{ $allowance->id }} <br>
+                            @switch($allowance->status)
+                            @case('pending')
+                                <span class="badge badge-warning">Pendiente</span>
+                                @break
+
+                            @case('complete')
+                                <span class="badge badge-success">Finalizada</span>
+                                @break
+
+                            @case('rejected')
+                                <span class="badge badge-danger">Rechazada</span>
+                                @break
+
+                            @default
+                                Default case...
+                        @endswitch    
+                        </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
-                            {{ $allowance->userAllowance->FullName }} <br>
-                            {{ $allowance->organizationalUnitAllowance->name }}
+                            <b>{{ $allowance->userAllowance->FullName }}</b> <br>
+                            {{ $allowance->organizationalUnitAllowance->name }} <br><br>
+                            <b>Creado por</b>: {{ $allowance->userCreator->TinnyName }}
                         </td>
                         <td>{{ $allowance->ContractualConditionValue }}</td>
                         <td>{{ $allowance->place }}</td>
@@ -166,6 +184,11 @@
                         </td>
                         <td class="text-center">
                             {{ $allowance->TotalDays }}
+                            @if($allowance->TotalDays > 1)
+                                días
+                            @else
+                                día
+                            @endif
                         </td>
                         <td class="text-center">
                             @foreach($allowance->allowanceSigns as $allowanceSign)
@@ -187,11 +210,39 @@
                         <td>
                             @if($index == 'sign')
                                 <a href="{{ route('allowances.show', $allowance) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Aceptar o Declinar"><i class="fas fa-signature"></i></a>
+                                    class="btn btn-outline-secondary btn-sm" title="Aceptar o Declinar">
+                                    <i class="fas fa-signature"></i>
+                                </a>
                             @endif
                             @if($index == 'own')
-                            <a href="{{ route('allowances.edit', $allowance) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                                @if($allowance->allowanceSigns->first()->status == 'pending')
+                                    <a href="{{ route('allowances.edit', $allowance) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('allowances.show', $allowance) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Ver Viático">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                @endif
+                            @endif
+                            @if($index == 'all')
+                                <a href="{{ route('allowances.show', $allowance) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Ver Viático">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @endif
+                        </td>
+                        <td>
+                            @if($allowance->signatures_file_id)
+                                <a class="btn btn-outline-primary btn-sm" title="Ver viático firmado" 
+                                    href="{{ route('allowances.file.show_file', $allowance) }}" target="_blank">
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
+                            @else
+                                <a class="btn btn-outline-primary btn-sm disabled" title="Ver viático firmado">
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
                             @endif
                         </td>
                     </tr>
