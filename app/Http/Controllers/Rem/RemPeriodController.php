@@ -40,13 +40,19 @@ class RemPeriodController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO :realizar validación en caso que ya exista el periodo no se pueda ingresar
-        $remPeriod = new RemPeriod($request->all());
-        $period = \Carbon\Carbon::createFromFormat('Y-m-d', $request->year."-".$request->month."-1");        
-        $remPeriod->period=$period;
-        $remPeriod->save();
-        session()->flash('info', 'Se ha sido creado el Periodo correctamente.');
-        return redirect()->route('rem.periods.index');
+        $remPeriod = RemPeriod::where('year', $request->year)->where('month', $request->month)->first();
+        if ($remPeriod == NULL) {
+            $remPeriod = new RemPeriod($request->all());
+            $period = \Carbon\Carbon::createFromFormat('Y-m-d', $request->year . "-" . $request->month . "-1");
+            $remPeriod->period = $period;
+            $remPeriod->save();
+            session()->flash('info', 'Se ha sido creado el Periodo correctamente.');
+            return redirect()->route('rem.periods.index');
+        } 
+        else {
+            session()->flash('danger', 'El periodo que desea crear ya se encontraba registrado');
+            return redirect()->route('rem.periods.index');
+        }
     }
 
     /**
