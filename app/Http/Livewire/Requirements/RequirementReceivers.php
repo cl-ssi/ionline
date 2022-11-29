@@ -24,13 +24,14 @@ class RequirementReceivers extends Component
 
     public function mount()
     {
-        
+        $this->ouRoots = null;
         $this->ouRoots = OrganizationalUnit::where('level', 1)->with('establishment',
                                                                      'childs','childs.establishment',
                                                                      'childs.childs','childs.childs.establishment',
                                                                      'childs.childs.childs','childs.childs.childs.establishment',
                                                                      'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
-                                                                     'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment')
+                                                                     'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
+                                                                     'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
                                                                      ->get();
         $this->to_ou_id = 1;
         // $this->to_user_id = 17430005;
@@ -53,7 +54,7 @@ class RequirementReceivers extends Component
             }
         }
 
-        $user = User::find($this->to_user_id);
+        $user = User::find($this->to_user_id)->with('organizationalUnit');
         array_push($this->user_array, $user);
     }
 
@@ -78,20 +79,33 @@ class RequirementReceivers extends Component
             }
         }
 
-        $user = User::find($this->to_user_id);
+        $user = User::find($this->to_user_id)->with('organizationalUnit');
         array_push($this->user_cc_array, $user);
     }
 
     public function render()
     {
         if($this->to_ou_id){
+
+            $this->ouRoots = OrganizationalUnit::where('level', $this->to_ou_id)->with('establishment',
+                                                                                        'childs','childs.establishment',
+                                                                                        'childs.childs','childs.childs.establishment',
+                                                                                        'childs.childs.childs','childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
+                                                                                        ->get();
+
             //obtiene usuarios de ou
             $authority = null;
             $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
             if($current_authority) {
                 $authority = $current_authority->user;
             }
-            $users = User::where('organizational_unit_id', $this->to_ou_id)->orderBy('name')->get();
+
+            $users = User::where('organizational_unit_id', $this->to_ou_id)
+                        ->orderBy('name')
+                        ->get();
             if ($authority <> null) {
                 if(!$users->find($authority)) {
                     $users->push($authority);
@@ -105,12 +119,12 @@ class RequirementReceivers extends Component
         // se agrega para que deje todos los objetos del array del tipo User
         foreach($this->user_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->user_array[$key] = User::find($item['id']);  
+                $this->user_array[$key] = User::find($item['id'])->with('organizationalUnit');  
             }
         }
         foreach($this->user_cc_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->user_cc_array[$key] = User::find($item['id']);  
+                $this->user_cc_array[$key] = User::find($item['id'])->with('organizationalUnit');  
             }
         }
         
