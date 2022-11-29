@@ -54,7 +54,7 @@ class RequirementReceivers extends Component
             }
         }
 
-        $user = User::find($this->to_user_id)->with('organizationalUnit');
+        $user = User::find($this->to_user_id);
         array_push($this->user_array, $user);
     }
 
@@ -79,7 +79,7 @@ class RequirementReceivers extends Component
             }
         }
 
-        $user = User::find($this->to_user_id)->with('organizationalUnit');
+        $user = User::find($this->to_user_id);
         array_push($this->user_cc_array, $user);
     }
 
@@ -119,12 +119,12 @@ class RequirementReceivers extends Component
         // se agrega para que deje todos los objetos del array del tipo User
         foreach($this->user_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->user_array[$key] = User::find($item['id'])->with('organizationalUnit');  
+                $this->user_array[$key] = User::find($item['id']);  
             }
         }
         foreach($this->user_cc_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->user_cc_array[$key] = User::find($item['id'])->with('organizationalUnit');  
+                $this->user_cc_array[$key] = User::find($item['id']);  
             }
         }
         
