@@ -19,6 +19,7 @@
             <th>Año</th>
             <th>Mes</th>
         </tr>
+    </thead>
 
     <tbody>
         @foreach($periods as $period)
@@ -29,7 +30,7 @@
         </tr>
         @endforeach
     </tbody>
-    </thead>
+    
 </table>
 
 @endsection

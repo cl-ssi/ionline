@@ -98,6 +98,7 @@ use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemFileController;
 use App\Http\Controllers\Rem\RemPeriodController;
 use App\Http\Controllers\Rem\RemSerieController;
+use App\Http\Controllers\Rem\RemPeriodSerieController;
 
 
 use App\Http\Controllers\HealthPlan\HealthPlanController;
@@ -1993,6 +1994,11 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemSerieController::class, 'index'])->name('index');
         Route::get('/create', [RemSerieController::class, 'create'])->name('create');
         Route::post('/store', [RemSerieController::class, 'store'])->name('store');
+    });
+    Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
+        Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');
+        Route::get('/create', [RemPeriodSerieController::class, 'create'])->name('create');
+        Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');
     });
 
     Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
