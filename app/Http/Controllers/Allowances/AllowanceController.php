@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
+use App\Models\Parameters\Parameter;
 
 class AllowanceController extends Controller
 {
@@ -24,6 +25,11 @@ class AllowanceController extends Controller
     public function index()
     {   
         return view('allowances.index');
+    }
+
+    public function all_index()
+    {   
+        return view('allowances.all_index');
     }
 
     public function sign_index()
@@ -51,14 +57,16 @@ class AllowanceController extends Controller
      */
     public function store(Request $request)
     {
+        //SE ALMACENA VIATICO
         $allowance = new Allowance($request->All());
+        $allowance->status = 'pending';
         $allowance->organizationalUnitAllowance()->associate($allowance->userAllowance->organizationalUnit);
-        $allowance->establishment_id = $allowance->userAllowance->organizationalUnit->establishment->id;
+        $allowance->allowanceEstablishment()->associate($allowance->userAllowance->organizationalUnit->establishment);
         $allowance->userCreator()->associate(Auth::user());
         $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
-
         $allowance->save();
 
+        // SE ALMACENAN ARCHIVOS ADJUNTOS
         if($request->has('file')){
             foreach ($request->file as $key_file => $file) {
                 $allowanceFile = new AllowanceFile();
@@ -74,49 +82,92 @@ class AllowanceController extends Controller
             }
         }
 
-        //CADENA DE FIRMAS
-        //JEFE DIRECTO
+        //CONSULTO SI EL VIATICO ES PARA UNA AUTORIDAD
+        $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $allowance->userAllowance->id);
+        //AUTORIDAD
+        if(!empty($iam_authorities)){
+            foreach($iam_authorities as $iam_authority){
 
-        $level_allowance_ou = $allowance->organizationalUnitAllowance->level;
-        
-        $position = 1;
-        
-        for ($i = $level_allowance_ou; $i >= 2; $i--){
-            $allowance_sing = new AllowanceSign();
-            if($i == $level_allowance_ou && $i>2){
-                $allowance_sing->position = $position;
-                $allowance_sing->ou_alias = 'boss';
-                $allowance_sing->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
-                $allowance_sing->status = 'pending';
+                if($allowance->userAllowance->organizationalUnit->id == $iam_authority->organizational_unit_id){
+
+                    $level_allowance_ou = $iam_authority->organizationalUnit->level - 1;
+                    $nextLevel = $iam_authority->organizationalUnit->father;
+                    $position = 1;
+
+
+                    for ($i = $level_allowance_ou; $i >= 2; $i--){
+
+                        $allowance_sing = new AllowanceSign();
+                        $allowance_sing->position = $position;
+                        if($i >= 3){
+                            $allowance_sing->event_type = 'boss';
+                            if($i == $level_allowance_ou){
+                                $allowance_sing->status = 'pending';
+                            }
+                        }
+                        if($i == 2){
+                            $allowance_sing->event_type = 'sub-dir or boss';
+                            if($i == $level_allowance_ou){
+                                $allowance_sing->status = 'pending';
+                            }
+                        }
+                        $allowance_sing->organizational_unit_id = $nextLevel->id;
+                        $allowance_sing->allowance_id = $allowance->id;
+
+                        $allowance_sing->save();
+
+                        $nextLevel = $allowance_sing->organizationalUnit->father;
+                        $position = $position + 1;
+
+                    }
+
+                }
             }
-            else{
-                // $allowance_sing->position = $position;
-                if($i>=3 OR $i<=5){
-                    $allowance_sing->ou_alias = 'boss';
-                    $allowance_sing->position = $position;
+        }
+        //NO AUTORIDAD
+        else{
+            $level_allowance_ou = $allowance->organizationalUnitAllowance->level;
+            $position = 1;
+
+            for ($i = $level_allowance_ou; $i >= 2; $i--){
+
+                $allowance_sing = new AllowanceSign();
+                $allowance_sing->position = $position;
+
+                if($i >= 3){
+                    $allowance_sing->event_type = 'boss';
+                    if($i == $level_allowance_ou){
+                        $allowance_sing->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
+                        $allowance_sing->status = 'pending';
+                    }
+                    else{
+                        $allowance_sing->organizational_unit_id = $nextLevel->id;
+                    }
+                    
                 }
-                if($i==2){
-                    $allowance_sing->ou_alias = 'sub-dir';
-                    $allowance_sing->position = $position;
-                    $allowance_sing->organizational_unit_id = $nextLevel->id;
-                }
-                if($nextLevel){
+                if($i == 2){
+                    $allowance_sing->event_type = 'sub-dir or boss';
+                    if($i == $level_allowance_ou){
+                        $allowance_sing->status = 'pending';
+                    }
                     $allowance_sing->organizational_unit_id = $nextLevel->id;
                 }
                 
-            }
-            $allowance_sing->allowance_id = $allowance->id;
-            $allowance_sing->save();
+                $allowance_sing->allowance_id = $allowance->id;
 
-            $nextLevel = $allowance_sing->organizationalUnit->father;
-            $position = $position + 1;
+                $allowance_sing->save();
+
+                $nextLevel = $allowance_sing->organizationalUnit->father;
+                $position = $position + 1;
+            }
+
         }
         
         //SE AGREGA AL FINAL JEFE FINANZAS
         $allowance_sing_finance = new AllowanceSign();
         $allowance_sing_finance->position = $position;
-        $allowance_sing_finance->ou_alias = 'chief financial officer';
-        $allowance_sing_finance->organizational_unit_id = 40;
+        $allowance_sing_finance->event_type = 'chief financial officer';
+        $allowance_sing_finance->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
         $allowance_sing_finance->allowance_id = $allowance->id;
         $allowance_sing_finance->save();
 
@@ -161,6 +212,7 @@ class AllowanceController extends Controller
     public function update(Request $request, Allowance $allowance)
     {
         $allowance->fill($request->All());
+        
         $allowance->from_half_day = $request->has('from_half_day') ?? 0;
         $allowance->to_half_day = $request->has('to_half_day') ?? 0;
         $allowance->organizationalUnitAllowance()->associate($allowance->userAllowance->organizationalUnit);
@@ -206,5 +258,10 @@ class AllowanceController extends Controller
     public function destroy(Allowance $allowance)
     {
         //
+    }
+
+    public function show_file(Allowance $allowance)
+    {
+        return Storage::disk('gcs')->response($allowance->signedAllowance->signed_file);
     }
 }

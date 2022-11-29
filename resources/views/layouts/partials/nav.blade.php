@@ -48,7 +48,18 @@
                            href="{{ route('rem.files.index') }}">
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
-                        @endcan                        
+                        @endcan
+                        @can('be god')
+                        <a class="dropdown-item"
+                           href="{{ route('rem.periods.index') }}">
+                            <i class="fas fa-calendar-check fa-fw"></i> Periodos REM
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('rem.series.index') }}">
+                            <i class="fas fa-stream fa-fw"></i> Series REM
+                        </a>
+                        @endcan
 
                         @can('RNI Database: view')
                         <a class="dropdown-item"
@@ -145,7 +156,7 @@
 
 
                 @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id != 1)
-                <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*']) }}">
+                <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*','allowances.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-money-check"></i> SDA
@@ -279,13 +290,17 @@
                         </a>
 
                         @endcan
+                        
+                        @if(Auth::user()->can('Allowances: create') || 
+                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
+                            Auth::user()->can('Allowances: all'))
 
-                        {{--
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
-                        --}}
+                        @endcan
+                        
                     </div>
                 </li>
                 @endif
@@ -385,6 +400,7 @@
 
                         @if(Auth::user()->hasRole('Replacement Staff: user rys'))
                             <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
 
                             <a class="dropdown-item {{ active('replacement_staff.request.assign_index') }}"
                                href="{{ route('replacement_staff.request.assign_index') }}">
@@ -399,6 +415,7 @@
                             Auth::user()->hasRole('Replacement Staff: admin'))
 
                             <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
 
                             <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}"
                                href="{{ route('replacement_staff.request.own_index') }}">
@@ -408,7 +425,11 @@
                                 @endif
                             </a>
                         @endif
-
+                        {{--
+                        <a class="dropdown-item" href="{{ route('job_position_profile.create') }}">
+                            <i class="fas fa-id-badge"></i> Perfil de Cargos
+                        </a>
+                        --}}
                         {{-- @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
                             <div class="dropdown-divider"></div>
 
@@ -596,8 +617,8 @@
 
 
                             <a
-                                class="dropdown-item {{active('rrhh.users.last_access')}}"
-                                href="{{ route('rrhh.users.last_access') }}"
+                                class="dropdown-item {{active('rrhh.users.last-access')}}"
+                                href="{{ route('rrhh.users.last-access') }}"
                             >
                                 <i class="fas fa-list-alt"></i> Últimos accesos
                             </a>

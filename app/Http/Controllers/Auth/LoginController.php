@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -19,8 +21,8 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
-    use AuthenticatesUsers;
+    
+    use ThrottlesLogins, AuthenticatesUsers;
 
 
     /**
@@ -41,35 +43,93 @@ class LoginController extends Controller
      *
      * @return Response
      */
-    public function attemptLogin(Request $request)
+    public function login(Request $request)
     {
-        $credentials = $request->only('id', 'password');
+        $this->validateLogin($request);
 
-        /*
-        * Limpiar run y quitar el DV
-        */
-        $credentials['id'] = str_replace('.','',$credentials['id']);
-        $credentials['id'] = str_replace('-','',$credentials['id']);
-        $credentials['id'] = substr($credentials['id'], 0, -1);
-
-
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            /** Authentication passed...*/
+        if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
             
+            return $this->sendLockoutResponse($request);
+        }
+        
+        
+        /** No permitir login si tiene permiso "Nuevo iOnline" */
+        if(env('OLD_SERVER'))
+        {
+            $user = User::find($request->input('id'));
+            
+            if($user AND $user->can('Nuevo iOnline'))
+            {
+                session()->flash('info', 
+                    'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
+                    <b>https://i.saludiquique.gob.cl</b> <br>Muchas gracias.');
+                return redirect()->route('welcome');
+            }
+        }
+        
+        if ($this->attemptLogin($request)) {
+            /** Authentication passed...*/
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+
             /** Log access */
             auth()->user()->accessLogs()->create([
                 'type' => 'local',
-                'enviroment' => env('APP_ENV')
+                'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
             ]);
 
             /** Check if user have a gravatar */
             auth()->user()->checkGravatar;
 
-            return redirect()->route('home');
-
-            /** Estaba esto, no se que hace */
-            // return redirect()->intended('dashboard');
+            return $this->sendLoginResponse($request);
         }
+        
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        /*
+        * Limpiar run y quitar el DV
+        */
+        $runUpper   = strtoupper($request->input('id'));
+        $runFilter  = preg_replace('/[^0-9K]/', '', $runUpper);
+        $id         = substr($runFilter, 0, -1);
+
+        $request->replace([
+            'id'        => $id, 
+            'password'  => $request->input('password')
+        ]);
+
+        $request->validate([
+            'id'        => 'required|string',
+            'password'  => 'required|string',
+        ]);
+    }
+
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->boolean('remember')
+        );
     }
 
     public function logout()

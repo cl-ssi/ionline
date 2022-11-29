@@ -10,6 +10,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Documents\SignaturesFile;
+use App\User;
 
 class Allowance extends Model implements Auditable
 {
@@ -18,10 +20,10 @@ class Allowance extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'resol_number', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
+        'resol_number', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
         'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
-        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date'
+        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date', 'signatures_file_id'
     ];
 
      /**
@@ -62,8 +64,30 @@ class Allowance extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\AllowanceValue', 'allowance_value_id');
     }
 
+    public function allowanceEstablishment() {
+        return $this->belongsTo('App\Establishment', 'establishment_id');
+    }
+
     public function allowanceSigns() {
         return $this->hasMany('App\Models\Allowances\AllowanceSign', 'allowance_id');
+    }
+
+    public function signedAllowance(){
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->request) {
+          case 'pending':
+            return 'Pendiente';
+            break;
+          case 'complete':
+            return 'Finalizado';
+            break;
+          case 'rejected':
+            return 'Rechazado';
+            break;
+        }
     }
 
     public function getContractualConditionValueAttribute(){
@@ -204,14 +228,33 @@ class Allowance extends Model implements Auditable
     }
 
     public function getAllowanceTotalValueFormatAttribute(){
-        // dd($this->getTotalIntAllowanceValueAttribute());
         $allowance_total_value = $this->getTotalIntAllowanceValueAttribute() + $this->getTotalDecimalAllowanceValueAttribute();
         return $allowance_total_value;
     }
 
-    public function getAmIAuthorityAttributte(){
-        $am_i_authority = Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id);
-        dd($am_i_authority);
+    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
+        if ($status_search OR $search_id OR $user_allowance_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('status', $status_search);
+                });
+            }
+
+            if($search_id != ''){
+                $query->where(function($q) use($search_id){
+                    $q->where('id', $search_id);
+                });
+            }
+
+            $array_user_allowance_search = explode(' ', $user_allowance_search);
+            foreach($array_user_allowance_search as $word){
+                $query->whereHas('userAllowance' ,function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
+        }
     }
 
     protected $hidden = [

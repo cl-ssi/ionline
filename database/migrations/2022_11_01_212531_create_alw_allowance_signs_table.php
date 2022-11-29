@@ -17,7 +17,7 @@ class CreateAlwAllowanceSignsTable extends Migration
             $table->id();
 
             $table->integer('position');
-            $table->string('ou_alias');
+            $table->string('event_type');
             $table->foreignId('organizational_unit_id');
             $table->foreignId('user_id')->nullable();
             $table->string('status')->nullable();

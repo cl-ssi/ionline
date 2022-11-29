@@ -12,6 +12,7 @@
 
 <div class="row">
     <div class="col-md-9">
+        <h6><i class="fas fa-info-circle"></i> Descripción de Viático</h6>
         <div class="table-responsive">
             <table class="table table-sm table-bordered text-center small">
                 <tbody>
@@ -26,12 +27,12 @@
                         <td>{{ $allowance->ContractualConditionValue }}</td>
                     </tr>
                     <tr class="table-active">
-                        <th colspan="2">Cargo</th>
+                        <th colspan="2">Cargo / Función</th>
                         <th colspan="2">Gr. Cat. horas</th>
                     </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td colspan="2" class="text-center">{{ $allowance->allowanceValue->name }}</td>
+                    <tr class="text-center">
+                        <td colspan="2">{{ $allowance->position }}</td>
+                        <td colspan="2">{{ $allowance->allowanceValue->name }}</td>
                     </tr>
                     <tr class="table-active">
                         <th colspan="2">Establecimiento</th>
@@ -80,6 +81,13 @@
                 </tbody>
             </table>
         </div>
+
+        @if($allowance->signatures_file_id)
+            <a class="btn btn-primary float-right" title="Ver viático firmado" 
+                href="{{ route('allowances.file.show_file', $allowance) }}" target="_blank">
+                <i class="fas fa-file-pdf"></i> Viático Firmado
+            </a>
+        @endif
     </div>
     <div class="col-md-3">
         <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
@@ -136,19 +144,19 @@
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
         <tbody>
+                @php 
+                    $signsCount = $allowance->AllowanceSigns->whereNotIn('status', ['not valid'])->count();
+                    $width = 100 / $signsCount;
+                @endphp
             <tr>
-                @foreach($allowance->AllowanceSigns as $sign)
+                @foreach($allowance->AllowanceSigns->whereNotIn('status', ['not valid']) as $sign)
                 <td class="table-active text-center">
                      <strong>{{ $sign->organizationalUnit->name }}</strong><br>
                 </td>
                 @endforeach
             </tr>
             <tr>
-                @php 
-                    $signsCount = $allowance->AllowanceSigns->count();
-                    $width = 100 / $signsCount;
-                @endphp
-                @foreach($allowance->AllowanceSigns as $allowanceSign)
+                @foreach($allowance->AllowanceSigns->whereNotIn('status', ['not valid']) as $allowanceSign)
                 <td class="text-center" width="{{ $width }}">
                     @if($allowanceSign->status == 'pending')
                     Estado: {{ $allowanceSign->StatusValue }} <br><br>
@@ -156,15 +164,24 @@
                         @if($authority->organizational_unit_id == $allowanceSign->organizational_unit_id)
                             <div class="row">
                                 <div class="col-sm">
-                                    <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted', $allowance]) }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn btn-success btn-sm"
-                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                            title="Aceptar">
+                                    @if($allowanceSign->event_type != 'chief financial officer')
+                                        <form method="POST" class="form-horizontal" action="{{ route('allowances.sign.update', [$allowanceSign, 'status' => 'accepted', $allowance]) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-success btn-sm"
+                                                onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                                title="Aceptar">
+                                                <i class="fas fa-check-circle"></i> Aceptar
+                                            </button>
+                                        </form>
+                                    @else
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
                                             <i class="fas fa-check-circle"></i> Aceptar
                                         </button>
-                                    </form>
+
+                                        @include('allowances.partials.document_sign')
+                                    @endif
                                 </div>
                                 <div class="col-sm">
                                     <p>
