@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('rem.periods_series.create') }}">
+            Agregar REM a Periodo
+        </a>
+    </div>
+</div>
+
 <hr>
 <h3 class="mb-3">Listado de Periodos Con los REM que les corresponde</h3>
 

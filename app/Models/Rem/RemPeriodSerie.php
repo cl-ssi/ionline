@@ -9,6 +9,12 @@ class RemPeriodSerie extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'period_id',
+        'serie_id',
+        'month',
+    ];
+
     public function serie(){
         return $this->belongsTo('App\Models\Rem\RemSerie','serie_id');
       }

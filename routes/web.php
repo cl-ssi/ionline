@@ -1998,6 +1998,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');
         Route::get('/create', [RemPeriodSerieController::class, 'create'])->name('create');
+        Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');
     });
 
     Route::get('/files', [RemFileController::class, 'index'])->name('files.index');

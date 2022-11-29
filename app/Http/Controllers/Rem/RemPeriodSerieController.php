@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Rem;
 use App\Http\Controllers\Controller;
 
 use App\Models\Rem\RemPeriodSerie;
+use App\Models\Rem\RemSerie;
+use App\Models\Rem\RemPeriod;
+use Illuminate\Http\Request;
 
 
 class RemPeriodSerieController extends Controller
@@ -28,6 +31,9 @@ class RemPeriodSerieController extends Controller
     public function create()
     {
         //
+        $remSeries = RemSerie::all();
+        $remPeriods = RemPeriod::all();        
+        return view('rem.period_serie.create', compact('remSeries','remPeriods'));
     }
 
     /**
@@ -36,9 +42,14 @@ class RemPeriodSerieController extends Controller
      * @param  \App\Http\Requests\StoreRemPeriodSerieRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRemPeriodSerieRequest $request)
+    public function store(Request $request)
     {
         //
+        //dd($request);
+        $remPeriodSerie = new RemPeriodSerie($request->all());
+        $remPeriodSerie->save();
+        session()->flash('info', 'La serie ha sido creada con éxito');
+        return redirect()->route('rem.periods_series.index');
     }
 
     /**
