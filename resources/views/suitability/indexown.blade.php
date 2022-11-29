@@ -27,7 +27,7 @@
         </fieldset>
     </div>
 
-    </forn>
+</form>
 
     <table class="table table-sm">
         <thead>
