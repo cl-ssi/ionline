@@ -20,7 +20,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
     protected $fillable = [
         'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
         'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation',
-        'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts'
+        'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts', 'passenger_request_form_id'
     ];
 
     public function purchasingProcess() {
@@ -29,6 +29,10 @@ class PurchasingProcessDetail extends Pivot implements Auditable
 
     public function itemRequestForm() {
         return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
+    }
+
+    public function passenger() {
+        return $this->belongsTo(Passenger::class, 'passenger_request_form_id');
     }
 
     public function internalPurchaseOrder() {
@@ -68,7 +72,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         elseif($this->fundToBeSettled) return 'Fondo a rendir';
         elseif($this->tender) return $this->tender->purchaseType->name ?? '';
         elseif($this->directDeal) return $this->directDeal->purchaseType->name ?? '';
-        elseif($this->immediatePurchase) return $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
+        elseif($this->immediatePurchase) return $this->itemRequestForm && $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
     }

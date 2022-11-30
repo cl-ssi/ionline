@@ -20,6 +20,10 @@ class Passenger extends Model
         return $this->belongsTo(BudgetItem::class);
     }
 
+    public function purchasingProcess(){
+      return $this->belongsToMany(PurchasingProcess::class, 'arq_purchasing_process_detail')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
+    }
+
     public function getRunFormatAttribute() {
         return number_format($this->run, 0,'.','.') . '-' . $this->dv;
     }
@@ -48,11 +52,29 @@ class Passenger extends Model
           break;
 
         case 'hand luggage':
-          return "Equipaje de mano";
+          return "Equipaje de Cabina";
           break;
 
         case 'handbag':
           return "Bolso de Mano";
+          break;
+        
+        case 'oversized baggage':
+          return "Equipaje Sobredimensionado";
+          break;
+      }
+    }
+
+    public function getRoundTripNameAttribute()
+    {
+      switch ($this->round_trip) {
+
+        case 'round trip':
+          return "Ida y Vuelta";
+          break;
+
+        case 'one-way only':
+          return "Solo Ida";
           break;
       }
     }

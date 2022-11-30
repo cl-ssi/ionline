@@ -63,8 +63,12 @@ class PurchasingProcess extends Model implements Auditable
         return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
     }
 
+    public function detailsPassenger(){
+        return $this->belongsToMany(Passenger::class, 'arq_purchasing_process_detail', 'purchasing_process_id', 'passenger_request_form_id')->withPivot('id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id', 'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation', 'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
+    }
+
     public function getExpense(){
-        return $this->details->where('pivot.status', 'total')->sum('pivot.expense');
+        return $this->details->count() > 0 ? $this->details->where('pivot.status', 'total')->sum('pivot.expense') : $this->detailsPassenger->where('pivot.status', 'total')->sum('pivot.expense');
     }
 
     public function requestForm(){
