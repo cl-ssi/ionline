@@ -30,6 +30,7 @@ class Holiday extends Model
         return Carbon::parse($this->date);
     }
 
+
     /**
     * The attributes that should be mutated to dates.
     *
@@ -37,6 +38,10 @@ class Holiday extends Model
     */
     protected $dates = [
         'date',
+    ];
+
+    protected $casts = [
+        'date' => 'date:Y-m-d'
     ];
 
     /**

@@ -1,19 +1,19 @@
 <div class="form-row mb-3">
     <fieldset class="col-md-4">
         <label for="for-name">Nombre*</label>
-        <input type="text" wire:model="name" class="form-control">
-        @error('name') <span class="text-danger">{{ $message }}</span> @enderror
+        <input type="text" wire:model="holiday.name" class="form-control">
+        @error('holiday.name') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
 
     <fieldset class="col-md-2">
         <label for="for-date">Fecha*</label>
-        <input type="date" wire:model="date" class="form-control">
-        @error('date') <span class="text-danger">{{ $message }}</span> @enderror
+        <input type="date" wire:model.lazy="holiday.date" class="form-control">
+        @error('holiday.date') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
 
     <fieldset class="col-md-2">
         <label for="for-date">Región</label>
-        <select class="form-control" wire:model="region">
+        <select class="form-control" wire:model.lazy="holiday.region">
             <option value="">Todas</option>
             <option>I</option>
             <option>II</option>
@@ -32,6 +32,6 @@
             <option>XV</option>
             <option>XVI</option>
         </select>
-        @error('region') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('holiday.region') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
 </div>
