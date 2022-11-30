@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\CleanTempDirectory::class,
         Commands\ChangeStaffStatus::class,
+        Commands\ChangeProgrammmingStatus::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('clean:tempDir')->daily();
         $schedule->command('change:staffStatus')->daily();
+        $schedule->command('change:proStatus')->yearlyOn(12, 1, '00:00');
     }
 
     /**
