@@ -309,7 +309,7 @@
                     <div class="form-group col-md-12">
                         <label for="forprogram">Evaluar</label>
                         <select name="review" id="review"  class="form-control">
-                            @if($programmingItem->professionalHours->count() > 0 && $programmingItem->activity_type == 'Directa')
+                            @if($programmingItem->professionalHours->count() > 0 && $programmingItem->activity_type == 'Indirecta')
                             <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada.</option>
                             <option value="Actividad bien programada">Actividad bien programada.</option>
                             <option value="El profesional asignado está bien programado">El profesional asignado está bien programado.</option>
