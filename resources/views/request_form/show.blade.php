@@ -283,7 +283,7 @@
                             @endif
                         </td>
                         <td align="right">{{ $itemRequestForm->quantity }}</td>
-                        <td align="right">{{ number_format($itemRequestForm->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{ str_replace(',00', '', number_format($itemRequestForm->unit_value, 2,",",".")) }}</td>
                         <td align="center">{{ $itemRequestForm->tax }}</td>
                         <td align="right">{{ number_format($itemRequestForm->expense,$requestForm->precision_currency,",",".") }}</td>
                     </tr>

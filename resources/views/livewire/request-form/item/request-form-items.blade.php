@@ -150,7 +150,7 @@
                     @endif
                     </td>
                     <td style="text-align:right">{{ $item['quantity'] }}</td>
-                    <td style="text-align:right">{{ number_format($item['unitValue'],$precision_currency,",",".") }}</td>
+                    <td style="text-align:right">{{ str_replace(',00', '', number_format($item['unitValue'], 2,",",".")) }}</td>
                     <td>{{$item['taxes']}}</td>
                     <td align="right">{{ number_format($item['totalValue'],$precision_currency,",",".") }}</td>
                     <td align="center" class="brd-l brd-b">

@@ -38,12 +38,12 @@
                             <th class="table-active" style="width: 33%">Gasto Estimado</th>
                             <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                         </tr>
-                        @if($requestForm->has_increased_expense)
+                        {{--@if($requestForm->has_increased_expense)
                         <tr>
                             <th class="table-active" style="width: 33%">Nuevo Presupuesto</th>
                             <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                         </tr>
-                        @endif
+                        @endif--}}
                         <tr>
                             <th class="table-active" scope="row">Nombre del Solicitante</th>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
