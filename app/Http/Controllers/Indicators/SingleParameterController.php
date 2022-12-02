@@ -207,6 +207,12 @@ class SingleParameterController extends Controller
                   ->orderBy('Sexo')
                   ->orderBy('Edad')
                   ->get();
+                
+                // Edad: 9999 => adultos mayores de 111 o + años
+                $total_pob->transform(function ($item, $key) {
+                    if($item->Edad == 9999) $item->Edad = "111 o más";
+                    return $item;
+                });
             }
             else{
                 $total_pob = collect(new PercapitaOficial);
