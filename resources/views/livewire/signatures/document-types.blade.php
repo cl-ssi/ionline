@@ -1,4 +1,4 @@
- <fieldset class="form-group col-3">
+ <fieldset class="form-group col-6 col-md-3">
     <label for="for_document_type">Tipo de Documento</label>
     <select class="form-control document_type" name="document_type" required wire:model='selectedDocumentType' wire:change='changeDocumentType'>
         @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones', 'Acta', 'Protocolo', 'Reservado'))
