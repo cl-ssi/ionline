@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Documents\Document;
-use App\Documents\Parte;
-use App\Documents\ParteEvent;
-use App\Documents\ParteFile;
+use App\Models\Documents\Document;
+use App\Models\Documents\Parte;
+use App\Models\Documents\ParteEvent;
+use App\Models\Documents\ParteFile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -97,7 +97,7 @@ class ParteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $document
      * @return \Illuminate\Http\Response
      */
     public function show(Parte $parte)
@@ -112,7 +112,7 @@ class ParteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $document
      * @return \Illuminate\Http\Response
      */
     public function edit(Parte $parte)
@@ -124,7 +124,7 @@ class ParteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $document
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Parte $parte)
@@ -151,7 +151,7 @@ class ParteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $document
      * @return \Illuminate\Http\Response
      */
     public function destroy(Parte $parte)

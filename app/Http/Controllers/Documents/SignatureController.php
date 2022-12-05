@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Documents;
 
 use App\Agreements\Addendum;
 use App\Agreements\Agreement;
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Http\Controllers\Controller;
 use App\Mail\NewSignatureRequest;
 use App\Mail\SignedDocument;
@@ -30,8 +30,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use Throwable;
-use App\Documents\Parte;
-use App\Documents\ParteFile;
+use App\Models\Documents\Parte;
+use App\Models\Documents\ParteFile;
 use Carbon\Carbon;
 
 class SignatureController extends Controller

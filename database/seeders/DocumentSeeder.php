@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use Carbon\Carbon;
 
 class DocumentSeeder extends Seeder

@@ -45,7 +45,7 @@ class Requirement extends Model implements Auditable
     }
 
     public function parte() {
-        return $this->belongsTo('App\Documents\Parte');
+        return $this->belongsTo('App\Models\Documents\Parte');
     }
 
     public function categories() {

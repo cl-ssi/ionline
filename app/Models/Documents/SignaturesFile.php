@@ -31,7 +31,7 @@ class SignaturesFile extends Model
 
     public function document()
     {
-        return $this->hasOne('App\Documents\Document', 'file_to_sign_id');
+        return $this->hasOne('App\Models\Documents\Document', 'file_to_sign_id');
     }
 
     public function suitabilityResult()
@@ -42,7 +42,7 @@ class SignaturesFile extends Model
 
     public function parteFile()
     {
-        return $this->hasOne('App\Documents\ParteFile', 'signature_file_id');
+        return $this->hasOne('App\Models\Documents\ParteFile', 'signature_file_id');
     }
 
 

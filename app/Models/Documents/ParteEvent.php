@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Documents;
+namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +33,7 @@ class ParteEvent extends Model
 
     public function parte()
     {
-        return $this->belongsTo('\App\Documents\Parte');
+        return $this->belongsTo('\App\Models\Documents\Parte');
     }
 
     public function user()
@@ -47,11 +47,11 @@ class ParteEvent extends Model
     }
 
     // public function father() {
-    //     return $this->belongsTo('\App\Documents\ParteEvent', 'parte_events_id');
+    //     return $this->belongsTo('\App\Models\Documents\ParteEvent', 'parte_events_id');
     // }
     //
     // public function childs() {
-    //     return $this->hasMany('\App\Documents\ParteEvent', 'parte_events_id');
+    //     return $this->hasMany('\App\Models\Documents\ParteEvent', 'parte_events_id');
     // }
     //
     // public function ancestor($event = array()) {

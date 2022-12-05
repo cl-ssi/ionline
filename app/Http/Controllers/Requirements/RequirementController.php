@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Requirements;
 
-use App\Documents\Parte;
-use App\Documents\Document;
+use App\Models\Documents\Parte;
+use App\Models\Documents\Document;
 use App\Mail\RequirementNotification;
 use App\Requirements\Label;
 use App\Requirements\Requirement;

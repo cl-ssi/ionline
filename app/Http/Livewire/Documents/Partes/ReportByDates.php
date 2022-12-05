@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Documents\Partes;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Documents\Parte;
+use App\Models\Documents\Parte;
 
 class ReportByDates extends Component
 {

@@ -25,6 +25,6 @@ class Deliver extends Model
 
     public function document()
     {
-        return $this->belongsTo('App\Documents\Document');
+        return $this->belongsTo('App\Models\Documents\Document');
     }
 }

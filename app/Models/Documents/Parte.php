@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Documents;
+namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,7 +49,7 @@ class Parte extends Model
 
     public function events()
     {
-        return $this->hasMany('\App\Documents\ParteEvent');
+        return $this->hasMany('\App\Models\Documents\ParteEvent');
     }
 
     public function requirements()
@@ -59,7 +59,7 @@ class Parte extends Model
 
     public function files()
     {
-        return $this->hasMany('App\Documents\ParteFile');
+        return $this->hasMany('App\Models\Documents\ParteFile');
     }
 
     public function scopeSearch($query, Request $request)

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Http\Controllers\Controller;
 use App\Models\RequestForms\FundToBeSettled;
 use Illuminate\Support\Facades\File;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Documents;
+namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,7 +31,7 @@ class ParteFile extends Model
 
     public function event()
     {
-        return $this->belongsTo('App\Documents\Parte');
+        return $this->belongsTo('App\Models\Documents\Parte');
     }
 
     public function signatureFile()

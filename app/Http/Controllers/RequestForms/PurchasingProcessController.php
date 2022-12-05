@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Models\RequestForms\PurchasingProcess;
 use Illuminate\Http\Request;
 
