@@ -109,7 +109,7 @@
     </div>
 
     <br>
-    <!-- TODOS LOS FORMULARIOS -->
+    <!-- Todos los formularios -->
     @if($request_forms->count() > 0 && $inbox == 'all')
         <div class="row">
             <div class="col">

@@ -2317,7 +2317,7 @@ class ProgramApsValueController extends Controller
             $data[$comuna->name][50]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         // /* 51 */
-        // //TODO: hacer las consultas para trazadora #51
+        /* TODO: hacer las consultas para trazadora #51 */
         // mostrar nada en los meses
         if($comuna == null)
             foreach($numeradores as $numerador) $data[51]['total_numerador'] = null;

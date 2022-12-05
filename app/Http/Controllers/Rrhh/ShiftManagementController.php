@@ -199,8 +199,8 @@ class ShiftManagementController extends Controller
             // array_push($this->groupsnames, ""); //agregos los sin grupo
 
             // $groupsnames = array();
-            // TODO: Traer los shfituser que pertenezcan al mes que estás buscando
-            // TODO: ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname')
+            /* TODO: Traer los shfituser que pertenezcan al mes que estás buscando */
+            /* TODO: ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname')*/
             // foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
 
             //         array_push($this->groupsnames, $g->groupname);
@@ -224,8 +224,8 @@ class ShiftManagementController extends Controller
         }
         // echo "SISH: ". $staffInShift;
 
-        // TODO: Ver si es necesario asignar a una variable local
-        // TODO: Pasar el select de Series a un livewire
+        /* TODO: Ver si es necesario asignar a una variable local */
+        /* TODO: Pasar el select de Series a un livewire */
         $months = $this->months;
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         // $ouRoots = OrganizationalUnit::with('childs.childs.childs.childs')->where('level', 1)->get();
@@ -341,7 +341,7 @@ class ShiftManagementController extends Controller
         // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
 
-    // TODO: Cambiar todos los shifttype actions a su propio controller
+    /* TODO: Cambiar todos los shifttype actions a su propio controller */
  	public function shiftstypesindex(){ // pantalla principal tipos de series,
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
         $sTypes = ShiftTypes::all();
@@ -429,7 +429,7 @@ class ShiftManagementController extends Controller
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
-        // TODO: Auth()->id(); <- chequear
+        /* TODO: Auth()->id(); <- chequear si de esta forma reduce una query */
         $nShift->asigned_by = Auth()->user()->id;
         $nShift->user_id = $r->slcStaff;
         $nShift->shift_types_id = $r->shiftId;
@@ -476,7 +476,7 @@ class ShiftManagementController extends Controller
                         $nShiftD->working_day =$previous;
 
                 }
-                // TODO: cambiar a español o esperanto
+                /* TODO: cambiar a español o esperanto */
                 $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//";
                 $nShiftD->shift_user_id = $nShift->id;
                 $nShiftD->save();
@@ -856,7 +856,7 @@ class ShiftManagementController extends Controller
             }else{
                 $nMonth = 1;
             }
-            // TODO: No poner fecha estática
+            /* TODO: No poner fechas estáticas */
             $dateFormat = Carbon::createFromFormat('Y-m-d',  "2021-".$nMonth."-01", 'Europe/London');
             $nMonth = $dateFormat->format('m');
             Session::put('actuallyMonth',$nMonth);
@@ -876,7 +876,7 @@ class ShiftManagementController extends Controller
 
                 $pMonth = 12;
             }
-            // TODO: No poner fecha estática
+            /* TODO: No poner fechas estáticas */
             $dateFormat = Carbon::createFromFormat('Y-m-d',  "2021-".$pMonth."-01", 'Europe/London');
             $pMonth = $dateFormat->format('m');
             Session::put('actuallyMonth',$pMonth);

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShiftUser extends Model
 {
-	// TODO: Nomralizar los nombres de las funciones miFuncionPulenta
+	/* TODO: Nomralizar los nombres de las funciones miFuncionPulenta */
     use HasFactory;
     protected $fillable = [ 'date_from', 'date_up', 'asigned_by', 'user_id','shift_types_id', 'organizational_units_id' , 'groupname','commentary','position'];
 

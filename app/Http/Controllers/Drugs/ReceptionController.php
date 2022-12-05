@@ -48,7 +48,7 @@ class ReceptionController extends Controller
             ->withPolice_units($policeUnits);
     }
 
-    //TODO: $x = Parameter::Where('module','drugs')->Where('parameter','MandatadoResolucion')->first(['value'])->value
+    /* TODO: $x = Parameter::Where('module','drugs')->Where('parameter','MandatadoResolucion')->first(['value'])->value */
 
     /**
      * Store a newly created resource in storage.

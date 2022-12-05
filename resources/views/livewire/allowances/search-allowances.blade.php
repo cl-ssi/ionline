@@ -29,7 +29,7 @@
     </div>
 
     <br>
-    <!-- TODOS LOS FORMULARIOS -->
+    <!-- Todos los formularios -->
     @if($allowances->count() > 0)
         <div class="row">
             <div class="col">

@@ -57,7 +57,7 @@ class ProgrammingItemController extends Controller
                             })->when($workAreaFilter != null, function($q3) use ($workAreaFilter){
                                 return $q3->where('work_area', $workAreaFilter);
                             });
-                            // TODO: búsqueda por tipo de profesional
+                            /* TODO: búsqueda por tipo de profesional */
                             // ->when($cycleFilter != null, function($q3) use ($cycleFilter){
                             //     return $q3->where('vital_cycle', $cycleFilter);
                             // });

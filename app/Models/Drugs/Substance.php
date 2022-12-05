@@ -19,7 +19,7 @@ class Substance extends Model
         return $this->hasMany('App\Models\Drugs\ReceptionItem');
     }
 
-    // TODO: asociar result_substance en ReceptionItem a otro item.
+    /* TODO: asociar result_substance en ReceptionItem a otro item. */
 
     /**
     * The table associated with the model.
