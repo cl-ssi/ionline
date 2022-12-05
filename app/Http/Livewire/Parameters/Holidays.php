@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Parameters;
 
 use Livewire\Component;
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 use Livewire\WithPagination;
 
 class Holidays extends Component

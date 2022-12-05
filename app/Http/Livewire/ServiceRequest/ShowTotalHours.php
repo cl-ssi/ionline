@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\ServiceRequest;
 
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 // use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\User;
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
@@ -18,7 +18,7 @@ use App\Models\Rrhh\ShiftDateOfClosing;
 use App\Models\Rrhh\ShiftClose;
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
-// TODO: que hace rol
+/* TODO: que hace role? */
 use Spatie\Permission\Models\Role;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

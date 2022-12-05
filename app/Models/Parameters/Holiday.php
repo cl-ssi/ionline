@@ -1,11 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models\Parameters;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-/** TODO #106 mover a directorio models */
 class Holiday extends Model
 {
     /**
