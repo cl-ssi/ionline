@@ -8,7 +8,7 @@ use App\Agreements\Agreement;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\Signer;
 use App\Agreements\Stage;
-use App\Municipality;
+use App\Models\Parameters\Municipality;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;

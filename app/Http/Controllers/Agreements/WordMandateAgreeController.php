@@ -15,7 +15,7 @@ use App\Agreements\MyClass;
 use App\Agreements\ProgramResolution;
 use App\Agreements\Signer;
 use App\Models\Commune;
-use App\Municipality;
+use App\Models\Parameters\Municipality;
 use App\Establishment;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;

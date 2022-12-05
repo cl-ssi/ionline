@@ -42,7 +42,7 @@ class Agreement extends Model
     }
 
     public function municipality() {
-        return $this->belongsTo('App\Municipality');
+        return $this->belongsTo('App\Models\Parameters\Municipality');
     }
 
     public function agreement_amounts() {

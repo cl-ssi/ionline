@@ -11,7 +11,7 @@ use App\Agreements\Addendum;
 use App\Agreements\Signer;
 use App\Establishment;
 use App\Models\Commune;
-use App\Municipality;
+use App\Models\Parameters\Municipality;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

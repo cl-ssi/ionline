@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
-use App\Municipality;
+use App\Models\Parameters\Municipality;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
