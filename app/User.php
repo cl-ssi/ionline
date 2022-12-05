@@ -71,22 +71,22 @@ class User extends Authenticatable implements Auditable
 
     public function telephones()
     {
-        return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Telephone', 'res_telephone_user')->withTimestamps();
     }
 
     public function computers()
     {
-        return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Computer', 'res_computer_user')->withTimestamps();
     }
 
     public function printers()
     {
-        return $this->belongsToMany('\App\Resources\Printer', 'res_printer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Printer', 'res_printer_user')->withTimestamps();
     }
 
     public function mobile()
     {
-        return $this->hasOne('\App\Resources\Mobile');
+        return $this->hasOne('\App\Models\Resources\Mobile');
     }
 
     public function country()

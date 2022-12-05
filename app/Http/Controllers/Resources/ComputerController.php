@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Resources;
 
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use App\User;
 use App\Models\Parameters\Place;
 use Illuminate\Http\Request;
@@ -77,7 +77,7 @@ class ComputerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Resources\Computer  $computer
+     * @param  \App\Models\Resources\Computer  $computer
      * @return \Illuminate\Http\Response
      */
     public function show(Computer $computer)
@@ -88,7 +88,7 @@ class ComputerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Resources\Computer  $computer
+     * @param  \App\Models\Resources\Computer  $computer
      * @return \Illuminate\Http\Response
      */
     public function edit(Computer $computer)
@@ -106,7 +106,7 @@ class ComputerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Resources\Computer  $computer
+     * @param  \App\Models\Resources\Computer  $computer
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateComputerRequest $request, Computer $computer)
@@ -121,7 +121,7 @@ class ComputerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Resources\Computer  $computer
+     * @param  \App\Models\Resources\Computer  $computer
      * @return \Illuminate\Http\Response
      */
     public function destroy(Computer $computer)

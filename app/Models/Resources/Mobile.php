@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Resources;
+namespace App\Models\Resources;
 
-use App\Models\Parameters\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Telephone extends Model
+class Mobile extends Model
 {
     use SoftDeletes;
 
@@ -15,14 +14,16 @@ class Telephone extends Model
      *
      * @var string
      */
-    protected $table = 'res_telephones';
+    protected $table = 'res_mobiles';
 
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = [
+        'deleted_at'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -30,12 +31,14 @@ class Telephone extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'minsal', 'mac', 'place_id'
+        'brand', 
+        'model', 
+        'number'
     ];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany('\App\User', 'res_telephone_user')->withTimestamps();
+        return $this->belongsTo('\App\User');
     }
 
     public function scopeSearch($query, $search)
@@ -43,12 +46,7 @@ class Telephone extends Model
         if ($search != "")
         {
             return $query->where('number', 'LIKE', '%' . $search . '%')
-                ->orWhere('minsal', 'LIKE', '%' . $search . '%');
+                ->orWhere('brand', 'LIKE', '%' . $search . '%');
         }
-    }
-
-    public function place()
-    {
-        return $this->belongsTo(Place::class);
     }
 }

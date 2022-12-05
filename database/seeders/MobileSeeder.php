@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Resources\Mobile;
+use App\Models\Resources\Mobile;
 use App\User;
 
 class MobileSeeder extends Seeder

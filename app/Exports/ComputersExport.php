@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use App\Models\Parameters\Place;
 use Maatwebsite\Excel\Concerns\{FromCollection, WithHeadings, WithMapping, ShouldAutoSize};
 

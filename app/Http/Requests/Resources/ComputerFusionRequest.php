@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Resources;
 
 use App\Models\Inv\Inventory;
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

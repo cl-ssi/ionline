@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Resources\Wingle;
+use App\Models\Resources\Wingle;
 
 class WingleSeeder extends Seeder
 {

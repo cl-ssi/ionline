@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Resources;
 
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use Livewire\Component;
 use Livewire\WithPagination;
 

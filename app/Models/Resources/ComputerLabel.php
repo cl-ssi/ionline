@@ -3,7 +3,7 @@
 namespace App\Models\Resources;
 
 use App\Models\Inv\InventoryLabel;
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 

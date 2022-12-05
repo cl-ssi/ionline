@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Resources\Telephone;
+use App\Models\Resources\Telephone;
 use App\User;
 
 class TelephoneSeeder extends Seeder
@@ -34,7 +34,7 @@ class TelephoneSeeder extends Seeder
         /**
          * Create 10 random telephones.
          */
-        //factory(App\Resources\Telephone::class, 10)->create();
+        //factory(App\Models\Resources\Telephone::class, 10)->create();
 
     }
 }

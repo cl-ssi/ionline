@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Resources;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use Illuminate\Validation\Rule;
 
 class UpdateComputerRequest extends FormRequest

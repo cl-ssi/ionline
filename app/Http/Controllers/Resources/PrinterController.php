@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Resources\Printer;
+use App\Models\Resources\Printer;
 use App\User;
 use App\Models\Parameters\Place;
 use App\Http\Requests\Resources\StorePrinterRequest;

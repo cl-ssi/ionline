@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Resources\Telephone;
+use App\Models\Resources\Telephone;
 use App\User;
 use App\Models\Parameters\Place;
 use App\Http\Requests\Resources\UpdateTelephoneRequest;

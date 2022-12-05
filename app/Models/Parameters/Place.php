@@ -39,6 +39,6 @@ class Place extends Model
 
     public function computers()
     {
-        return $this->hasMany('App\Resources\Computer');
+        return $this->hasMany('App\Models\Resources\Computer');
     }
 }

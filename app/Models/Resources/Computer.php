@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resources;
+namespace App\Models\Resources;
 
 use App\Models\Inv\Inventory;
 use App\Models\Inv\InventoryLabel;
