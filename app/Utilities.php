@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,7 +49,7 @@ class Utilities extends Model
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
         $label = array();
         foreach ($authorities as $key => $authority) {
-          $label['uo_id'] = $authority->organizational_unit_id;
+            $label['uo_id'] = $authority->organizational_unit_id;
         }
         return $label;
     }

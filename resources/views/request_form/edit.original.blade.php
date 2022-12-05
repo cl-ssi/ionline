@@ -350,7 +350,7 @@
                 @foreach($requestForm->requestformevents as $event)
                   @if($loop->last)
                     @if(($event->type == "status" && $event->StatusName === 'Aprobado por solicitante') &&
-                        in_array($requestForm->whoauthorize_unit_id, App\Utilities::getPermissionSignaureAuthorize()))
+                        in_array($requestForm->whoauthorize_unit_id, App\Models\Utilities::getPermissionSignaureAuthorize()))
                         <form method="POST" class="form-horizontal" action="{{ route('request_forms.store_approved_chief', $requestForm) }}">
                             @csrf
                             @method('PUT')
@@ -622,7 +622,7 @@
             @foreach($requestForm->requestformevents as $event)
               @if($loop->last)
                 @if($event->status === 'crp_record' &&
-                  in_array($requestForm->finance_unit_id, App\Utilities::getPermissionSignaureAuthorize()))
+                  in_array($requestForm->finance_unit_id, App\Models\Utilities::getPermissionSignaureAuthorize()))
                     <form method="POST" class="form-horizontal" action="{{ route('request_forms.store_approved_finance', $requestForm) }}">
                         @csrf
                         @method('PUT')
