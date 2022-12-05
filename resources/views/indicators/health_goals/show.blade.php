@@ -594,7 +594,7 @@
                                     <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('numerador') != null ? number_format($indicator->getLastValueByFactor('numerador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
-                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth('numerador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, null), 0, ',', '.') : ''}}</td>
                                     @endforeach
                                 @endif
                             </tr>
@@ -609,7 +609,7 @@
                                     <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('denominador') != null ? number_format($indicator->getLastValueByFactor('denominador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
-                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, null), 0, ',', '.') : ''}}</td>
                                     @endforeach
                                 @endif
                             </tr>
