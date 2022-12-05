@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commune extends Model
 {
-    public function agreements() {
-        return $this->hasMany('App\Agreement\Agreement');
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +14,7 @@ class Commune extends Model
     protected $fillable = [
         'name'
     ];
-
+    
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -27,13 +23,17 @@ class Commune extends Model
     protected $hidden = [
         'created_at', 'updated_at'
     ];
-
+    
+    public function agreements() {
+        return $this->hasMany('App\Agreement\Agreement');
+    }
+    
     public function establishments() {
-    		return $this->hasMany('\App\Establishment');
+        return $this->hasMany('\App\Establishment');
     }
 
     public function municipality() {
-            return $this->hasOne('\App\Municipality');
+        return $this->hasOne('\App\Models\Parameters\Municipality');
     }
 
     public function communeFiles() {
