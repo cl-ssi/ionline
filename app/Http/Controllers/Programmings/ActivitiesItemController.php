@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Programmings\ActivityProgram;
 use App\Programmings\ActivityItem;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\Commune;
 
 class ActivitiesItemController extends Controller

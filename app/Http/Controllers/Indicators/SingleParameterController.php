@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators;
 
 use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Exports\PercapitaExport;
 use App\Exports\PercapitaOficialExport;
 use Illuminate\Http\Request;

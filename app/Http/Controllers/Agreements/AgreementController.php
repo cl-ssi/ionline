@@ -9,7 +9,7 @@ use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\Addendum;
 use App\Agreements\Signer;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Parameters\Municipality;
 use Carbon\Carbon;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Rem;
 
 use App\Models\Rem\UserRem;
 use App\Http\Controllers\Controller;
-use App\Establishment;
+use App\Models\Establishment;
 use App\User;
 use Illuminate\Http\Request;
 

@@ -20,7 +20,7 @@ class SingleParameter extends Model
     ];
 
     public function establishment() {
-        return $this->belongsTo('App\Establishment');
+        return $this->belongsTo('App\Models\Establishment');
     }
 
     public function scopeSearch($query, Request $request) {

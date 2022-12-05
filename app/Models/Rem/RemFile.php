@@ -31,7 +31,7 @@ class RemFile extends Model
     ];
 
     public function establishment() {
-        return $this->belongsTo('App\Establishment');
+        return $this->belongsTo('App\Models\Establishment');
     }
 
 }

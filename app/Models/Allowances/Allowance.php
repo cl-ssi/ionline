@@ -65,7 +65,7 @@ class Allowance extends Model implements Auditable
     }
 
     public function allowanceEstablishment() {
-        return $this->belongsTo('App\Establishment', 'establishment_id');
+        return $this->belongsTo('App\Models\Establishment', 'establishment_id');
     }
 
     public function allowanceSigns() {

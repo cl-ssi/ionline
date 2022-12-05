@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Parameters;
 
-use App\Establishment;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -43,7 +43,7 @@ class EstablishmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Establishment  $establishment
+     * @param  \App\Models\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function show(Establishment $establishment)
@@ -54,7 +54,7 @@ class EstablishmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Establishment  $establishment
+     * @param  \App\Models\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function edit(Establishment $establishment)
@@ -66,7 +66,7 @@ class EstablishmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Establishment  $establishment
+     * @param  \App\Models\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Establishment $establishment)
@@ -81,7 +81,7 @@ class EstablishmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Establishment  $establishment
+     * @param  \App\Models\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function destroy(Establishment $establishment)

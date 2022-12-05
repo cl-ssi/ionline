@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Rrhh\OrganizationalUnit;
 
 class EstablishmentOuSearch extends Component

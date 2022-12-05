@@ -7,7 +7,7 @@ use App\Agreements\Agreement;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\Signer;
 use App\Agreements\Stage;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\Parameters\Municipality;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;

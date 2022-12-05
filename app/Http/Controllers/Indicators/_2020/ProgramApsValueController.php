@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Indicators\_2020;
 use App\Indicators\ProgramApsValue;
 use App\Indicators\ProgramApsGlosa;
 use App\Models\Commune;
-use App\Establishment;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // use App\Indicators\Rem;

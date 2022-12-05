@@ -104,7 +104,7 @@ class ServiceRequest extends Model implements Auditable
     }
 
     public function establishment() {
-    		return $this->belongsTo('\App\Establishment');
+    		return $this->belongsTo('\App\Models\Establishment');
     }
 
     // public function responsabilityCenter() {

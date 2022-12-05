@@ -29,7 +29,7 @@ class Commune extends Model
     }
     
     public function establishments() {
-        return $this->hasMany('\App\Establishment');
+        return $this->hasMany('\App\Models\Establishment');
     }
 
     public function municipality() {

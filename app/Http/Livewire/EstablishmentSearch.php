@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Establishment;
+use App\Models\Establishment;
 use Livewire\Component;
 
 class EstablishmentSearch extends Component
