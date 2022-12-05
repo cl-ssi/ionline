@@ -14,24 +14,17 @@ class CreateDrgDestructionsTable extends Migration
     public function up()
     {
         Schema::create('drg_destructions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('reception_id');
+            $table->id('id');
+            $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->string('police');
             $table->date('destructed_at');
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('manager_id')->unsigned();
-            $table->bigInteger('lawyer_id')->unsigned();
-            $table->bigInteger('observer_id')->nullable()->unsigned();
-            $table->bigInteger('lawyer_observer_id')->unsigned();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('manager_id')->constrained('users');
+            $table->foreignId('lawyer_id')->constrained('users');
+            $table->foreignId('observer_id')->constrained('users');
+            $table->foreignId('lawyer_observer_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('reception_id')->references('id')->on('drg_receptions');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('manager_id')->references('id')->on('users');
-            $table->foreign('lawyer_id')->references('id')->on('users');
-            $table->foreign('observer_id')->references('id')->on('users');
-            $table->foreign('lawyer_observer_id')->references('id')->on('users');
         });
     }
 

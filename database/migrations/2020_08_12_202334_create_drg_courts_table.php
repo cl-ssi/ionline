@@ -14,7 +14,7 @@ class CreateDrgCourtsTable extends Migration
     public function up()
     {
         Schema::create('drg_courts', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->string('name');
             $table->string('address')->nullable();
             $table->string('commune');

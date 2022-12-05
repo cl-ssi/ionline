@@ -14,7 +14,7 @@ class CreateDrgPoliceUnitsTable extends Migration
     public function up()
     {
         Schema::create('drg_police_units', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->string('code', 8)->nullable();
             $table->string('name');
             $table->boolean('status')->nullable();;

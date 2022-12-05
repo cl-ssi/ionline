@@ -14,21 +14,16 @@ class CreateDrgRecordToCourtTable extends Migration
     public function up()
     {
         Schema::create('drg_record_to_court', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->integer('number')->nullable();
             $table->date('document_date')->nullable();
             $table->text('observation')->nullable();
-            $table->unsignedInteger('reception_id');
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('manager_id')->unsigned();
-            $table->bigInteger('lawyer_id')->unsigned();
+            $table->foreignId('reception_id')->constrained('drg_receptions');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('manager_id')->constrained('users');
+            $table->foreignId('lawyer_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('reception_id')->references('id')->on('drg_receptions');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('manager_id')->references('id')->on('users');
-            $table->foreign('lawyer_id')->references('id')->on('users');
         });
     }
 

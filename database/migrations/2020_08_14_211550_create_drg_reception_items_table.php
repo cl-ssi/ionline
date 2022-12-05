@@ -14,10 +14,9 @@ class CreateDrgReceptionItemsTable extends Migration
     public function up()
     {
         Schema::create('drg_reception_items', function (Blueprint $table) {
-            $table->increments('id');
-            // TODO: en MySql se creo la columna como varchar
+            $table->id('id');
             $table->text('description');
-            $table->unsignedInteger('substance_id');
+            $table->foreignId('substance_id')->constrained('drg_substances');
             $table->string('nue')->nullable();
             $table->integer('sample_number');
             $table->float('document_weight',10,3)->nullable();
@@ -28,16 +27,12 @@ class CreateDrgReceptionItemsTable extends Migration
             $table->float('countersample',8,3);
             $table->float('destruct',10,3);
             $table->string('equivalent')->nullable();
-            $table->unsignedInteger('reception_id');
+            $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->integer('result_number')->nullable();
             $table->date('result_date')->nullable();
-            $table->unsignedInteger('result_substance_id')->nullable();
+            $table->foreignId('result_substance_id')->constrained('drg_substances');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('substance_id')->references('id')->on('drg_substances');
-            $table->foreign('reception_id')->references('id')->on('drg_receptions');
-            $table->foreign('result_substance_id')->references('id')->on('drg_substances');
         });
     }
 

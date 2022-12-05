@@ -14,7 +14,7 @@ class CreateDrgSubstancesTable extends Migration
     public function up()
     {
         Schema::create('drg_substances', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->boolean('presumed')->default(1);
             $table->string('name');
             $table->enum('rama',['Alucinógenos','Estimulantes', 'Depresores'])->nullable();
