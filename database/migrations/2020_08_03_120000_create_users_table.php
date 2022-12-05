@@ -14,6 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            /** Es equivalente a $table->id() de laravel 8 */
             $table->bigInteger('id')->unsigned()->unique();
             $table->char('dv',1);
             $table->string('name');
