@@ -2002,6 +2002,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     });
 
     Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
+    Route::get('/files_2', [RemFileController::class, 'index_2'])->name('files.index_2');
 });
 
 

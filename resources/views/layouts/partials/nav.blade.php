@@ -48,6 +48,10 @@
                            href="{{ route('rem.files.index') }}">
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
+                        <a class="dropdown-item"
+                           href="{{ route('rem.files.index_2') }}">
+                            <i class="fas fa-file-excel fa-fw"></i> Carga de Rems NUEVO
+                        </a>
                         @endcan
                         @can('be god')
                         <a class="dropdown-item"

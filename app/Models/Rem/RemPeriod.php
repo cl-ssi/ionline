@@ -5,6 +5,7 @@ namespace App\Models\Rem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Rem\RemPeriodSerie;
 
 class RemPeriod extends Model
 {
@@ -19,8 +20,18 @@ class RemPeriod extends Model
         'month',
     ];
 
-    // protected $dates = [
-    //     'period',
-    // ];
+    protected $casts = [
+        'period' => 'date',
+    ];
 
+
+    public function series()
+    {
+        return $this->hasMany(RemPeriodSerie::class, 'period_id', 'id');
+        
+    }
+    
+
+    
+    
 }

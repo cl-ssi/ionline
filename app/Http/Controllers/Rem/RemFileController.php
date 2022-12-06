@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Rem;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
+use App\Models\Rem\RemPeriod;
 use App\Models\Rem\UserRem;
 use Illuminate\Support\Facades\Storage;
 
@@ -63,6 +64,23 @@ class RemFileController extends Controller
             return view('rem.file.index', compact('periods', 'establishments'));
         }
     }
+
+    public function index_2()
+    {
+        $user = auth()->user();
+    
+        if ($user->can('Rem: admin')) {
+            $remEstablishments = UserRem::all();
+        } else {
+            $remEstablishments = $user->remEstablishments;
+        }
+        
+    
+        $periods = RemPeriod::all();        
+        
+        return view('rem.file.index_2', compact('periods'));
+    }
+    
 
     /**
      * getRemFiles, tengo que llamar dos veces a esta query solo en el caso que no exista un perido
