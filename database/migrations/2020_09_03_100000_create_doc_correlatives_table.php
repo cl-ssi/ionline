@@ -14,7 +14,7 @@ class CreateDocCorrelativesTable extends Migration
     public function up()
     {
         Schema::create('doc_correlatives', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->smallInteger('year');
             $table->enum('type',['Memo','Ordinario','Reservado','Circular',
                                 'Acta de recepción','Otros']);

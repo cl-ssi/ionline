@@ -14,7 +14,7 @@ class CreateProCommuneFilesTable extends Migration
     public function up()
     {
         Schema::create('pro_commune_files', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->year('year');
             $table->string('description')->nullable();
             $table->json('access')->nullable();
@@ -24,11 +24,9 @@ class CreateProCommuneFilesTable extends Migration
             $table->text('observation')->nullable();
             $table->enum('status',['active','inactive']);
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedInteger('commune_id');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('commune_id')->constrained('communes');
 
-            $table->foreign('commune_id')->references('id')->on('communes');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

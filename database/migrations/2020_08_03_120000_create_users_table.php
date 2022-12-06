@@ -26,14 +26,12 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('position')->nullable();
             $table->date('birthday')->nullable();
-            $table->foreignId('organizational_unit_id')->nullable();
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
             $table->boolean('active')->default(true);
             $table->boolean('external')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
         });
     }
 

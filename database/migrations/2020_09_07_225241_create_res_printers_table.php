@@ -33,8 +33,7 @@ class CreateResPrintersTable extends Migration
       Schema::create('res_printer_user', function (Blueprint $table) {
           $table->foreignId('printer_id')->unsigned();
           $table->foreign('printer_id')->references('id')->on('res_printers')->onDelete('cascade');
-          $table->foreignId('user_id')->unsigned();
-          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+          $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
           $table->timestamps();
       });
     }

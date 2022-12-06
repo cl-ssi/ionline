@@ -17,7 +17,7 @@ class CreateRemUsersTable extends Migration
             $table->id();
             $table->foreignId('user_id')
                 ->constrained('users');
-            $table->unsignedInteger('establishment_id');
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
             $table->softDeletes();

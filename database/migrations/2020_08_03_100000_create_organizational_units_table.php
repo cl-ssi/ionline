@@ -16,11 +16,9 @@ class CreateOrganizationalUnitsTable extends Migration
         Schema::create('organizational_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('organizational_unit_id')->nullable();
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
         });
     }
 

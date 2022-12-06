@@ -14,7 +14,7 @@ class CreateDocumentsTable extends Migration
     public function up()
     {
         Schema::create('documents', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('number')->nullable();
             $table->date('date')->nullable();
             $table->enum('type',['Memo','Ordinario','Reservado','Circular','Acta de recepción','Otros']);

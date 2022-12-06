@@ -14,7 +14,7 @@ class CreateReqCategoriesTable extends Migration
     public function up()
     {
         Schema::create('req_categories', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('color');
             $table->unsignedBigInteger('user_id');

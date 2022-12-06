@@ -15,7 +15,7 @@ class CreateFrmReceivingItemsTable extends Migration
     {
         Schema::create('frm_receiving_items', function (Blueprint $table) {
 
-          $table->bigIncrements('id');
+          $table->id();
           $table->bigInteger('barcode')->nullable();
           $table->unsignedBigInteger('receiving_id');
           $table->unsignedBigInteger('product_id');

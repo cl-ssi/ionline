@@ -14,7 +14,7 @@ class CreateIndComgesUsersTable extends Migration
     public function up()
     {
         Schema::create('ind_comges_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->tinyInteger('referrer_number');
             $table->bigInteger('comges_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();

@@ -14,7 +14,7 @@ class CreateFrmDeliveriesTable extends Migration
     public function up()
     {
         Schema::create('frm_deliveries', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('establishment_id');
             $table->string('invoice')->nullable();
             $table->date('request_date');

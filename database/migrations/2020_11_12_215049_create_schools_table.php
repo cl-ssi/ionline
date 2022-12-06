@@ -22,8 +22,7 @@ class CreateSchoolsTable extends Migration
             $table->boolean('free')->nullable();
             $table->string('legal')->nullable();
             $table->string('holder')->nullable();
-            $table->unsignedInteger('commune_id');
-            $table->foreign('commune_id')->references('id')->on('communes');
+            $table->foreignId('commune_id')->constrained('communes');
             $table->timestamps();
             $table->softDeletes();
         });

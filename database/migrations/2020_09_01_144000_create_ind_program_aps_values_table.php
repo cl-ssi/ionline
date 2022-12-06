@@ -14,9 +14,9 @@ class CreateIndProgramApsValuesTable extends Migration
     public function up()
     {
         Schema::create('ind_program_aps_values', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('periodo');
-            $table->unsignedInteger('program_aps_glosa_id');
+            $table->foreignId('program_aps_glosa_id')->constrained('ind_program_aps_glosas');
             $table->integer('poblacion')->unsigned()->nullable();
             $table->integer('cobertura')->unsigned()->nullable();
             $table->integer('concentracion')->unsigned()->nullable();
@@ -24,14 +24,10 @@ class CreateIndProgramApsValuesTable extends Migration
             $table->integer('observadoAnterior')->nullable();
             $table->string('rendimientoProfesional')->nullable();
             $table->text('observaciones')->nullable();
-            $table->unsignedInteger('commune_id');
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->foreignId('commune_id')->constrained('communes');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('program_aps_glosa_id')->references('id')->on('ind_program_aps_glosas');
-            $table->foreign('commune_id')->references('id')->on('communes');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
         });
     }
 

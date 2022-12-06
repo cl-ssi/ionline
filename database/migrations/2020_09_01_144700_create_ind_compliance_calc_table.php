@@ -14,7 +14,7 @@ class CreateIndComplianceCalcTable extends Migration
     public function up()
     {
         Schema::create('ind_compliance_calc', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->decimal('left_result_value', 6, 3)->nullable(); //ponderación por corte
             $table->enum('left_result_operator',['<','<='])->nullable();
             $table->decimal('right_result_value', 6, 3)->nullable(); //ponderación por corte

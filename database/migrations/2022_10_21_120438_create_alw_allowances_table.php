@@ -20,7 +20,7 @@ class CreateAlwAllowancesTable extends Migration
             $table->foreignId('user_allowance_id');
             $table->string('contractual_condition')->nullable();
             $table->foreignId('allowance_value_id');
-            $table->unsignedInteger('establishment_id');
+            $table->unsignedBigInteger('establishment_id');
             $table->foreignId('organizational_unit_allowance_id');
             $table->string('place')->nullable();
             $table->string('reason')->nullable();

@@ -16,10 +16,7 @@ class CreateRemFilesTable extends Migration
         Schema::create('rem_files', function (Blueprint $table) {
             $table->id();
             $table->date('period');
-            // FIXME: corregir el tipo de dato de establishment para poder usar esta nomenclatura
-            // $table->foreignId('establishment_id')->constrained('establishments');
-            $table->unsignedInteger('establishment_id');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->string('filename')->nullable();
             $table->boolean('locked');
 

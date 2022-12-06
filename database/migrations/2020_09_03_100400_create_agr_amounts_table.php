@@ -14,7 +14,7 @@ class CreateAgrAmountsTable extends Migration
     public function up()
     {
         Schema::create('agr_amounts', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('amount')->unsigned()->nullable();
             $table->enum('subtitle',['21','22','24', '29'])->nullable();
             $table->bigInteger('agreement_id')->unsigned();

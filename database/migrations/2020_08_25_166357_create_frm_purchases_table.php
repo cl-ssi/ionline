@@ -15,7 +15,7 @@ class CreateFrmPurchasesTable extends Migration
     {
         Schema::create('frm_purchases', function (Blueprint $table) {
 
-            $table->bigIncrements('id');
+            $table->id();
             $table->dateTime('date');
             $table->unsignedBigInteger('supplier_id');
             $table->longText('purchase_order'); //orden de compra

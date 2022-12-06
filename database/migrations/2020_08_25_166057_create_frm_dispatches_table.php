@@ -15,7 +15,7 @@ class CreateFrmDispatchesTable extends Migration
     {
         Schema::create('frm_dispatches', function (Blueprint $table) {
 
-          $table->bigIncrements('id');
+          $table->id();
           $table->dateTime('date'); //fecha xfecha
           $table->unsignedBigInteger('pharmacy_id'); //origen
           $table->unsignedBigInteger('establishment_id');

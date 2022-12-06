@@ -14,7 +14,7 @@ class CreateAgrAddendumsTable extends Migration
     public function up()
     {
         Schema::create('agr_addendums', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('number');
             $table->date('date');
             $table->string('file')->nullable();

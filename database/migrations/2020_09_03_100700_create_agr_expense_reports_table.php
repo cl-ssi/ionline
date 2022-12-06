@@ -14,7 +14,7 @@ class CreateAgrExpenseReportsTable extends Migration
     public function up()
     {
         Schema::create('agr_expense_reports', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->enum('type',['Operación','Personal','Inversión','Otro']);
             $table->integer('expenditure_number');
             $table->date('expenditure_date');

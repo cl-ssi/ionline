@@ -14,7 +14,7 @@ class CreateFrmEstablishmentsUsersTable extends Migration
     public function up()
     {
         Schema::create('frm_establishments_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('establishment_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

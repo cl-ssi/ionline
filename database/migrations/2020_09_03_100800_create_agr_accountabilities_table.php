@@ -14,7 +14,7 @@ class CreateAgrAccountabilitiesTable extends Migration
     public function up()
     {
         Schema::create('agr_accountabilities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('month');
             $table->integer('document');
             $table->date('date');

@@ -14,19 +14,17 @@ class CreateIndSingleParametersTable extends Migration
     public function up()
     {
         Schema::create('ind_single_parameters', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('law');
             $table->year('year');
             $table->decimal('indicator',10,2);
-            $table->unsignedInteger('establishment_id');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->enum('type',['mensual','semestral','anual','acumulada']);
             $table->string('description')->nullable()->default(NULL);
             $table->integer('month')->nullable()->default(NULL);
             $table->enum('position',['numerador','denominador'])->default(NULL);
             $table->integer('value')->nullable()->default(NULL);
             $table->timestamps();
-
-            $table->foreign('establishment_id')->references('id')->on('establishments');
         });
     }
 

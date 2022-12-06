@@ -14,7 +14,7 @@ class CreateIndProgramApsGlosasTable extends Migration
     public function up()
     {
         Schema::create('ind_program_aps_glosas', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->integer('periodo');
             $table->integer('numero');
             $table->string('nivel');

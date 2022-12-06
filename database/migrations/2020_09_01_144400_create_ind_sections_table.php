@@ -14,7 +14,7 @@ class CreateIndSectionsTable extends Migration
     public function up()
     {
         Schema::create('ind_sections', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->tinyInteger('number');
             $table->decimal('weighting', 6, 3)->nullable(); // % de la evaluación anual
             $table->timestamps();

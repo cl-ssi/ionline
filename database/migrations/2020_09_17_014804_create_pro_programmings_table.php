@@ -14,17 +14,14 @@ class CreateProProgrammingsTable extends Migration
     public function up()
     {
         Schema::create('pro_programmings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->year('year');
             $table->string('description')->nullable();
 
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedInteger('establishment_id');
+            $table->foreignId('user_id')->constrainde('users');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->json('access')->nullable();
             $table->timestamps();
-
-            $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

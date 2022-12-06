@@ -14,7 +14,7 @@ class CreateFrmEstablishmentsProductsTable extends Migration
     public function up()
     {
         Schema::create('frm_establishments_products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('stock');
             $table->integer('critic_stock')->nullable();
             $table->integer('max_stock')->nullable();

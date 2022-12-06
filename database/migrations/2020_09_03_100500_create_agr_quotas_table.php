@@ -14,7 +14,7 @@ class CreateAgrQuotasTable extends Migration
     public function up()
     {
         Schema::create('agr_quotas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('description',32)->nullable();
             $table->integer('percentage')->nullable();
             $table->integer('amount')->nullable();

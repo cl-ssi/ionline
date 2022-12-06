@@ -37,11 +37,10 @@ class CreateResComputersTable extends Migration
           $table->enum('status',['active','inactive'])->nullable(); //new
           $table->string('office_serial')->nullable(); //new
           $table->string('windows_serial')->nullable(); //new
-          $table->foreignId('place_id')->nullable();
+          $table->foreignId('place_id')->nullable()->constrained('cfg_places');
 
           $table->timestamps();
           $table->softDeletes();
-          $table->foreign('place_id')->references('id')->on('cfg_places')->onDelete('restrict');
       });
 
       Schema::create('res_computer_user', function (Blueprint $table) {

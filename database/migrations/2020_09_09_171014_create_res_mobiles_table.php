@@ -18,10 +18,9 @@ class CreateResMobilesTable extends Migration
           $table->string('brand');
           $table->string('model');
           $table->integer('number')->unique();
-          $table->foreignId('user_id')->nullable();
+          $table->foreignId('user_id')->constrained('users');
           $table->timestamps();
           $table->softDeletes();
-          $table->foreign('user_id')->references('id')->on('users');
       });
     }
 

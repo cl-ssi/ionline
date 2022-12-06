@@ -14,7 +14,7 @@ class CreateIndValuesTable extends Migration
     public function up()
     {
         Schema::create('ind_values', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('month');
             $table->enum('factor',['numerador','denominador']);
             $table->integer('value')->default(0);
