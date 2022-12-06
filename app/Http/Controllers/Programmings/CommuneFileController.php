@@ -31,20 +31,20 @@ class CommuneFileController extends Controller
             }
         }
 
-        $communeFiles = CommuneFile::with('commune', 'user')->where('year', $year)
+        $communeFiles = CommuneFile::with('commune', 'user')->where('year', $year)->where('status', 'active')
             ->when($accessByCommune != null, function($q) use($accessByCommune){
                 $q->whereIn('commune_id', $accessByCommune);
             })
             ->get();
 
-        return view('programmings/communeFiles/index', compact('communeFiles', 'request', 'year'));
+        return view('programmings.communeFiles.index', compact('communeFiles', 'request', 'year'));
     }
 
     public function create() 
     {   
         $communes = Commune::get();
         $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
-        return view('programmings/communeFiles/create', compact('communes', 'users'));
+        return view('programmings.communeFiles.create', compact('communes', 'users'));
     }
 
     public function store(Request $request)
@@ -130,7 +130,7 @@ class CommuneFileController extends Controller
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($communeFile->access);
         $user = $communeFile->user;
-        return view('programmings/communeFiles/show')->withCommuneFile($communeFile)->with('access_list', $access_list)->with('user', $user)->withCommunes($communes)->withUsers($users);
+        return view('programmings.communeFiles.show')->withCommuneFile($communeFile)->with('access_list', $access_list)->with('user', $user)->withCommunes($communes)->withUsers($users);
     }
 
     public function update(Request $request,$id)
