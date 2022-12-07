@@ -12,17 +12,21 @@ class Court extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'address', 'commune', 'status'
+        'name',
+        'address',
+        'commune',
+        'status',
     ];
 
-    public function Receptions() {
-        return $this->hasMany('App\Models\Drugs\Reception');
-    }
-
     /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'drg_courts';
+
+    public function Receptions()
+    {
+        return $this->hasMany(Reception::class);
+    }
 }

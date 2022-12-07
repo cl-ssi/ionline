@@ -30,7 +30,7 @@ class CreateDrgReceptionItemsTable extends Migration
             $table->foreignId('reception_id')->constrained('drg_receptions');
             $table->integer('result_number')->nullable();
             $table->date('result_date')->nullable();
-            $table->foreignId('result_substance_id')->constrained('drg_substances');
+            $table->foreignId('result_substance_id')->nullable()->constrained('drg_substances');
             $table->timestamps();
             $table->softDeletes();
         });

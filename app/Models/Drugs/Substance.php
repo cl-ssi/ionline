@@ -12,19 +12,25 @@ class Substance extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'rama', 'unit', 'laboratory', 'isp', 'presumed'
+        'name',
+        'rama',
+        'unit',
+        'laboratory',
+        'isp',
+        'presumed',
     ];
 
-    public function items() {
-        return $this->hasMany('App\Models\Drugs\ReceptionItem');
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_substances';
+
+    public function items()
+    {
+        return $this->hasMany(ReceptionItem::class);
     }
 
     /* TODO: asociar result_substance en ReceptionItem a otro item. */
-
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'drg_substances';
 }

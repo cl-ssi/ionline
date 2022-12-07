@@ -11,11 +11,11 @@
 <fieldset class="form-group">
     <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+            <a class="btn btn-primary" href="{{ route('drugs.courts.create') }}"><i class="fas fa-plus"></i> Agregar nuevo</a>
         </div>
         <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Buscar" name="search" required="">
         <div class="input-group-append">
-            <a class="btn btn-primary" href="{{ route('drugs.courts.create') }}"><i class="fas fa-plus"></i> Agregar nuevo</a>
+            <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
         </div>
     </div>
 </fieldset>
