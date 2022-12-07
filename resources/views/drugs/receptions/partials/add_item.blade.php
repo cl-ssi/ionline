@@ -14,8 +14,9 @@
                 </fieldset>
 
                 <fieldset class="form-group col-4">
-                    <label for="for_substance">Sustancia</label>
-                    <select name="substance_id" id="for_substance" class="form-control">
+                    <label for="for_substance">Sustancia*</label>
+                    <select name="substance_id" id="for_substance" class="form-control" required>
+                        <option></option>
                         @foreach($substances as $substance)
                         <option value="{{ $substance->id }}">{{ $substance->name }}</option>
                         @endforeach
@@ -42,7 +43,7 @@
                 </fieldset>
 
                 <fieldset class="form-group col">
-                    <label for="for_net_weight">Peso Neto</label>
+                    <label for="for_net_weight">Peso Neto *</label>
                     <input type="text" class="form-control" id="for_net_weight" placeholder="Peso Neto" name="net_weight" required>
                 </fieldset>
 
@@ -70,7 +71,7 @@
 
             <div class="form-row">
                 <fieldset class="form-group col">
-                    <label for="for_description">Descripción</label>
+                    <label for="for_description">Descripción *</label>
                     <textarea name="description" class="form-control" id="for_description" rows="3" required="required"></textarea>
                 </fieldset>
                 

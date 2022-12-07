@@ -12,17 +12,20 @@ class PoliceUnit extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'name', 'status'
+        'code',
+        'name',
+        'status',
     ];
 
-    public function Receptions() {
-        return $this->hasMany('App\Models\Drugs\Reception');
-    }
-
     /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'drg_police_units';
+
+    public function Receptions()
+    {
+        return $this->hasMany(Reception::class);
+    }
 }

@@ -38,6 +38,7 @@
             <th>N° Doc</th>
             <th>Origen Oficio</th>
             <th>Origen Parte</th>
+            <th>Items</th>
             <th>Recep</th>
             <th>Destr</th>
             <th class="d-print-none"></th>
@@ -51,6 +52,7 @@
             <td class="text-center">{{ $reception->document_number }}</td>
             <td>{{ $reception->documentPoliceUnit->name }}</td>
             <td>{{ $reception->partePoliceUnit->name }}</td>
+            <td>{{ $reception->items()->count() }}</td>
             <td>
                 @if( $reception->haveItems() )
                 <a href="{{ route('drugs.receptions.record', $reception->id) }}" class="btn btn-outline-success btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
