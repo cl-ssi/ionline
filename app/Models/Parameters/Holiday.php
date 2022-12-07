@@ -13,7 +13,9 @@ class Holiday extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'name', 'region'
+        'date',
+        'name',
+        'region'
     ];
 
     /** Retorna si es feriado o domingo */
