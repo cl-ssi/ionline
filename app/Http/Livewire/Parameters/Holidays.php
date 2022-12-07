@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Parameters;
 
 use Livewire\Component;
 use App\Models\Parameters\Holiday;
+use App\Models\ClRegion;
 use Livewire\WithPagination;
 
 class Holidays extends Component
@@ -17,6 +18,17 @@ class Holidays extends Component
 
     public $holiday;
 
+    /** Listado de regiones */
+    public $regions;
+
+    /**
+    * moun
+    */
+    public function mount()
+    {
+        $this->regions = ClRegion::pluck('name','id');
+    }
+
     protected function rules()
     {
         /* FIXME: si seleccionas una fecha en el navegador y luego la borras,
@@ -26,7 +38,7 @@ class Holidays extends Component
         return [
             'holiday.date' => 'required|date_format:Y-m-d|after:' . $startOfYear,
             'holiday.name' => 'required|min:4',
-            'holiday.region' => 'nullable',
+            'holiday.region_id' => 'nullable',
         ];
     }
 
