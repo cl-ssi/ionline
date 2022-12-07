@@ -27,8 +27,10 @@
         @foreach($periods as $period)
         <td>
             @foreach($period->series as $serie)
-            <ul>
-                {{$serie->serie->name??''}}
+            <ul>                
+                Serie:{{$serie->serie->name??''}}
+                @livewire('rem.new-upload-rem',['period'=>$period,'serie'=>$serie, 'remEstablishment'=>$remEstablishment, 'rem_period_series'=>$serie])
+                <br>                
             </ul>
             @endforeach
         </td>
