@@ -251,7 +251,7 @@ class ReceptionController extends Controller
             'resultSubstance',
             'reception.sampleToIsp',
             'reception.recordToCourt'
-            ])->orderBy('reception_id', 'desc')->paginate(5000);
+            ])->orderBy('reception_id', 'desc')->paginate(1000);
 
         //$destruct = $items->sum('destruct');
 
