@@ -17,7 +17,7 @@
                 </td>
                 <td>{{ $holiday->date->format('Y-m-d') }}</td>
                 <td>{{ $holiday->name }}</td>
-                <td>{{ $holiday->region ? $holiday->region : 'Todas' }}</td>
+                <td>{{ optional($holiday->region)->name ?? 'Todas' }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-danger" 
                         onclick="confirm('¿Está seguro que desea borrar el feriado {{ $holiday->name }}?') || event.stopImmediatePropagation()" 

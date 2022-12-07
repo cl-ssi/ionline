@@ -68,7 +68,7 @@
             </div>
             @include('layouts.partials.errors')
             @include('layouts.partials.flash_message')
-            @yield('content')
+            @yield('content', $slot ?? '')
         </main>
 
         <footer class="footer">
