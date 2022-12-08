@@ -53,23 +53,6 @@
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
                         @endcan
-                        @can('be god')
-                        <a class="dropdown-item"
-                           href="{{ route('rem.periods.index') }}">
-                            <i class="fas fa-calendar-check fa-fw"></i> Periodos REM
-                        </a>
-
-                        <a class="dropdown-item"
-                           href="{{ route('rem.series.index') }}">
-                            <i class="fas fa-stream fa-fw"></i> Series REM
-                        </a>
-
-                        <a class="dropdown-item"
-                           href="{{ route('rem.periods_series.index') }}">
-                            <i class="fa fa-calendar fa-fw"></i> Periodos y Series de REM
-                        </a>
-                        @endcan
-
                         @can('RNI Database: view')
                         <a class="dropdown-item"
                            href="{{ route('indicators.rni_db.index') }}">

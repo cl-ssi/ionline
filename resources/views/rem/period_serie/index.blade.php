@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+@canany(['be god','Rem: admin','Rem: user'])
+@include('rem.nav')
+@endcan
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
         <a class="btn btn-success" href="{{ route('rem.periods_series.create') }}">

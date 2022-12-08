@@ -2,16 +2,14 @@
 
 @section('content')
 
+@canany(['be god','Rem: admin','Rem: user'])
+@include('rem.nav')
+@endcan
+
 <h3 class="mb-3">Carga de REMs</h3>
 
 
-@canany(['be god','Rem: admin'])
-<a class="btn btn-primary" href="{{ route('rem.users.index') }}">
-    <i class="fas fa-users fa-fw"></i> Usuarios REM
-</a>
-<br>
-<br>
-@endcan
+
 <table class="table table-bordered table-sm small">
     <thead>
         <tr class="text-center">

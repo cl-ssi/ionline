@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+@canany(['be god','Rem: admin','Rem: user'])
+@include('rem.nav')
+@endcan
 
 <h3 class="mb-3">Crear Nueva Serie de REM</h3>
 <form method="post" id="form-edit" action="{{ route('rem.series.store') }}">
