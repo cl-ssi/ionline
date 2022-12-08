@@ -19,6 +19,7 @@ class RemFile extends Model
         'establishment_id',
         'filename',
         'locked',
+        'rem_period_series_id'
     ];
 
     /**

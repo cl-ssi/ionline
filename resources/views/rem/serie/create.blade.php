@@ -9,7 +9,7 @@
     <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_name">Nombre Serie</label>
-            <input type="text" class="form-control" name="name" id="for_name">
+            <input type="text" class="form-control" name="name" id="for_name" autocomplete="off">
         </fieldset>
     </div>
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>

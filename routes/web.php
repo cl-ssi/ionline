@@ -2000,8 +2000,12 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/create', [RemPeriodSerieController::class, 'create'])->name('create');
         Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');
     });
+    Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
+        Route::get('/', [RemFileController::class, 'index'])->name('index');
+        Route::post('/store', [RemFileController::class, 'store'])->name('store');
+    });
 
-    Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
+    
     Route::get('/files_2', [RemFileController::class, 'index_2'])->name('files.index_2');
 });
 

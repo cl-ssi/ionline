@@ -7,6 +7,7 @@ use App\Models\Rem\RemFile;
 use App\Models\Rem\RemPeriod;
 use App\Models\Rem\UserRem;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class RemFileController extends Controller
 {
@@ -67,6 +68,7 @@ class RemFileController extends Controller
 
     public function index_2()
     {
+        $now = now()->startOfMonth();
         $user = auth()->user();
     
         if ($user->can('Rem: admin')) {
@@ -74,11 +76,30 @@ class RemFileController extends Controller
         } else {
             $remEstablishments = $user->remEstablishments;
         }
+
+
+        $periods = RemPeriod::all();
+        $periods_count = RemPeriod::count();
+
+        if($periods_count==0)
+        {
+            session()->flash('danger', 'No hay asignado periodos para el REM');
+            return redirect()->route('home');
+
+        }
+
+
+        //dd($periods_count);
+
+
+        for ($i = 1; $i <=$periods_count; $i++) {
+            $periods_back[] = $now->clone();
+            $now->subMonth('1');
+        }
+        $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
         
-    
-        $periods = RemPeriod::all();        
         
-        return view('rem.file.index_2', compact('periods'));
+        return view('rem.file.index_2', compact('periods','remFiles'));
     }
     
 
@@ -96,4 +117,15 @@ class RemFileController extends Controller
             ->orderBy('period', 'ASC')
             ->get();
     }
+
+
+    public function store(Request $request)
+    {
+        dd('entre al store');
+
+    }
+
+
+
+
 }
