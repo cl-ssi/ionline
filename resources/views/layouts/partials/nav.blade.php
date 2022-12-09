@@ -307,7 +307,9 @@
                     'Users: service requests',
                     'Service Request',
                     'Replacement Staff: create request',
-                    'Replacement Staff: view requests'])
+                    'Replacement Staff: view requests',
+                    'Job Position Profile: create',
+                    'Job Position Profile: all'])
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -417,19 +419,13 @@
                                 @endif
                             </a>
                         @endif
-                        {{--
-                        <a class="dropdown-item" href="{{ route('job_position_profile.create') }}">
+
+                        @canany(['Job Position Profile: create', 'Job Position Profile: all'])
+                        <a class="dropdown-item" href="{{ route('job_position_profile.index') }}">
                             <i class="fas fa-id-badge"></i> Perfil de Cargos
                         </a>
-                        --}}
-                        {{-- @if(Auth::user()->hasRole('Replacement Staff: personal') || Auth::user()->hasRole('Replacement Staff: personal sign'))
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item {{ active('replacement_staff.request.personal_index') }}"
-                               href="{{ route('replacement_staff.request.personal_index') }}">
-                                <i class="far fa-id-card"></i> Solicitudes de Contratación
-                            </a>
-                        @endif --}}
+                        @endcan
+                        
                     </div>
 
                 </li>

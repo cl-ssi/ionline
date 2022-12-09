@@ -125,7 +125,7 @@
                                 @endif
                             @endforeach
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if($index == 'sign')
                                 <a href="{{ route('allowances.show', $allowance) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Aceptar o Declinar">
@@ -151,7 +151,7 @@
                                 </a>
                             @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if($allowance->signatures_file_id)
                                 <a class="btn btn-outline-primary btn-sm" title="Ver viático firmado" 
                                     href="{{ route('allowances.file.show_file', $allowance) }}" target="_blank">

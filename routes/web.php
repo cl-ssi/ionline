@@ -492,6 +492,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
+    Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
+    Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
+    Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
+    Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
 });
 /** Inicio Perfil de Cargos */
 
@@ -1834,6 +1838,9 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
         // Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     });
 
+    Route::prefix('reports')->as('reports.')->group(function () {
+        Route::get('/create_by_dates', [AllowanceController::class, 'by_dates'])->name('by_dates');
+    });
 });
 
 /** Módulo de horas para vacunas. ya no se usa */

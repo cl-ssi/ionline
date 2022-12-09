@@ -71,10 +71,10 @@ class SearchSelectOrganizationalUnit extends Component
     }
 
     public function mount()
-    {
-        // if($this->organizationalUnit) {
-        //     $this->setOrganizationalUnit($this->organizationalUnit);
-        // }
+    {   
+        if($this->organizationalUnit) {
+            $this->setOrganizationalUnit($this->organizationalUnit);
+        }
     }
 
     public function updatedQuery()

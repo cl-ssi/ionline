@@ -172,7 +172,7 @@ class AllowanceController extends Controller
         $allowance_sing_finance->save();
 
         //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-        $notification = Authority::getAuthorityFromDate($allowance_sing->organizational_unit_id, Carbon::now(), 'manager');
+        $notification = Authority::getAuthorityFromDate($allowance->allowanceSigns->first()->organizational_unit_id, Carbon::now(), 'manager');
         $notification->user->notify(new NewAllowance($allowance));
 
         session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$allowance->id);

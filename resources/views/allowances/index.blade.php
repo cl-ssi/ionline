@@ -7,8 +7,8 @@
 @include('allowances.partials.nav')
 
 <h5><i class="fas fa-file"></i> Mis viaticos</h5>
+<p>Incluye Víaticos de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</p>
 
-<br />
 </div>
 
 <!-- <div class="row"> -->
