@@ -40,10 +40,16 @@ class RemSerieController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $remSerie = new RemSerie($request->all());
-        $remSerie->save();
-        session()->flash('info', 'La serie ha sido creada con éxito');
+        $serie = RemSerie::firstOrCreate(
+            ['name' => $request->name],
+            $request->all()
+        );
+        $serie->save();
+        if ($serie->wasRecentlyCreated) {
+            session()->flash('info', 'La serie ha sido creada con éxito.');
+        } else {
+            session()->flash('danger', 'La serie que desea crear ya se encontraba registrada');
+        }
         return redirect()->route('rem.series.index');
     }
 

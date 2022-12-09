@@ -14,25 +14,25 @@
 
 
 <hr>
-<h3 class="mb-3">Listado de Series para el REM</h3>
-<table class="table table-sm table-bordered">
+<h3 class="mb-3">Listado de Series para REM</h3>
+<div class="table-responsive-sm">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Serie</th>
-            <th>Borrar</th>
+            <th class="text-center">SERIES</th>            
         </tr>
     </thead>
     <tbody>
     @forelse($series as $serie)
         <tr>
-            <td>{{ $serie->name??'' }}</td>
-            <td></td>
+            <td class="text-center">{{ $serie->name??'' }}</td>            
         </tr>        
         @empty
     @endforelse
 
     </tbody>
 </table>
+</div>
 
 @endsection
 
