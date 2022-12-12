@@ -69,7 +69,7 @@ class SingleManager extends Component
     {
         $this->validate();
         $this->parameter->save();
-	    $this->save = 'spin';
+        $this->save = 'spin';
         $this->save = true;
     }
 
