@@ -19,7 +19,10 @@
 
         <div class="form-group col-2 col-md-1">
             <button type="button" wire:click="save()" class="btn btn-primary">Guardar</button>
-            <p class="form-text text-success">{{ ($save) ? 'Ok' : '' }}</p>
+            <p class="form-text text-success">
+            @if($save == 'spin') <i class="fas fa-cog fa-spin"></i>@endif
+            {{ ($save) ? 'Ok' : '' }}
+            </p>
         </div>
 
     </div>
