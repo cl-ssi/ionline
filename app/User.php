@@ -564,23 +564,22 @@ class User extends Authenticatable implements Auditable
         $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
         $headers = @get_headers($uri);
 
-        if ( preg_match("|200|", $headers[0]) )
-        {
-            if(!$this->gravatar)
-            {
-                $this->gravatar = true;
-                $this->save();
-            }
-        } 
-        else 
-        {
-            if($this->gravatar)
-            {
-                $this->gravatar = false;
-                $this->save();
+        /* Permite login local si no hay conexión a internet */
+        if ($headers) {
+            if (preg_match("|200|", $headers[0])) {
+                if (!$this->gravatar) {
+                    $this->gravatar = true;
+                    $this->save();
+                }
+            } else {
+                if ($this->gravatar) {
+                    $this->gravatar = false;
+                    $this->save();
+                }
             }
         }
     }
+
 
     /**
      * The attributes that should be cast to native types.
