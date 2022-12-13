@@ -44,6 +44,9 @@ class ReviewItemController extends Controller
         $reviewItem->review_id = 1;
         $reviewItem->user_id = Auth()->user()->id;
         $reviewItem->save();
+
+        session()->flash('success', 'Se ha creado una nueva observación para la actividad programada.');
+
         return redirect()->back();
     }
 
@@ -63,6 +66,8 @@ class ReviewItemController extends Controller
 
         $reviewItem->save();
 
+        session()->flash('success', 'Se ha editado la observación satisfactoriamente.');
+
         return redirect()->back();
     }
 
@@ -78,6 +83,8 @@ class ReviewItemController extends Controller
         }
 
         $reviewItem->save();
+
+        session()->flash('success', 'Se ha rectificado correctamente la observación.');
 
         return redirect()->back();
     }

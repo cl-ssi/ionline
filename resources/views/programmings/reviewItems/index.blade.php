@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Evaluación de Activividad</h4>
 <h6 class="mb-3">{{$programmingItem->programming->description ?? ''}}</h6>
-<a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+<a href="{{ Session::has('success') ? route('programmingitems.index', ['programming_id' => $programmingItem->programming_id, 'activity_type' => $programmingItem->professionalHours->count() == 0 ? '' : ($programmingItem->activity_subtype != null ? 'Indirecta' : 'Directa')]) : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
