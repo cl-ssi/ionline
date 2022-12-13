@@ -6,8 +6,10 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Participación {{ $programming->establishment->type }} {{ $programming->establishment->name }} {{ $programming->year}} 
+<h3 class="mb-3">Participación {{ $programming->establishment->type }} {{ $programming->establishment->name }} {{ $programming->year}}
+@if($programming->status == 'active')
 <a href="{{ route('participation.create', ['programming' => $programming, 'indicatorId' => $indicator->id]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar actividad</a>
+@endif
 </h3>
 <button onclick="tableExcel()" class="btn btn-success mb-1 btn-sm">Exportar Excel</button>
 <table id="participation-table" class="table table-sm table-hover">
@@ -16,7 +18,9 @@
             <th class="text-center align-middle table-dark">#</th>
             <th class="text-center align-middle table-dark">Nombre actividad</th>
             <th class="text-center align-middle table-dark">Total programadas</th>
+            @if($programming->status == 'active')
             <th class="text-center align-middle table-dark"></th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -25,6 +29,7 @@
             <td class="text-left" style="width:20px;">{{$loop->iteration}}</td>
             <td class="text-left">{{$value->activity_name}}</td>
             <td class="text-center">{{$value->value}}</td>
+            @if($programming->status == 'active')
             <td class="text-center align-middle">
                 <a href="{{ route('participation.edit', ['value' => $value->id, 'programming' => $programming->id]) }}" class="btn btb-flat btn-xs  btn-light" >
                 <i class="fas fa-edit"></i></a> 
@@ -33,6 +38,7 @@
                     <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desea eliminar este item?')"><i class="fas fa-trash-alt"></i></button>
                 </form>
             </td>
+            @endif
         </tr>
         @empty
         <tr><td colspan="4" class="text-center">No hay actividades programadas</td></tr>
