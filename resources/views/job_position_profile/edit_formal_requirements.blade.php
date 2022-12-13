@@ -51,8 +51,9 @@
     
     Requisito General ({{ $generalRequirements->staffDecree->name }}/2017)
     <br><br>
-    <div class="alert alert-secondary text-justify" role="alert">
-        {{ $generalRequirements->description }}
+    <div class="alert alert-secondary text-justify" role="alert" >
+        {{--} nl2br(e($generalRequirements->description)) --}}
+        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
     </div>
 
     <div class="form-row">
@@ -93,9 +94,9 @@
 <div class="row">
     <div class="col">
         <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">
-            <i class="fas fa-chevron-left"></i> I.Identificación del Cargo
+            <i class="fas fa-chevron-left"></i> I. Identificación del Cargo
         </a>
-        <a class="btn btn-info float-right" href="{{-- route('job_position_profile.edit_formal_requirements', $jobPositionProfile) --}}">
+        <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_objectives', $jobPositionProfile) }}">
             <i class="fas fa-chevron-right"></i> III. Propósitos del Cargo
         </a>
     </div>

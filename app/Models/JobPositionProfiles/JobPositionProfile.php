@@ -16,7 +16,7 @@ class JobPositionProfile extends Model implements Auditable
     protected $fillable = [
         'name', 'charges_number', 'degree', 'subordinates', 'salary', 'law', 'dfl3', 'dfl29',
         'other_legal_framework', 'working_day', 'specific_requirement', 'training', 'experience',
-        'technical_competence'
+        'technical_competence', 'objective'
     ];
 
     public function user() {
@@ -41,6 +41,10 @@ class JobPositionProfile extends Model implements Auditable
 
     public function staffDecreeByEstament() {
         return $this->belongsTo('App\Models\Parameters\StaffDecree', 'staff_decree_by_estament_id');
+    }
+
+    public function roles() {
+        return $this->hasMany('App\Models\JobPositionProfiles\Role');
     }
 
     /**

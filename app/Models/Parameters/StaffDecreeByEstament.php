@@ -15,7 +15,7 @@ class StaffDecreeByEstament extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'start_degree', 'end_degree', 'description'
+        'estament_id', 'start_degree', 'end_degree', 'description', 'staff_decree_id'
     ];
 
     public function staffDecree()

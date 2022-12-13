@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Parameters\StaffDecree;
 use App\Models\Parameters\StaffDecreeByEstament;
+use App\Models\JobPositionProfiles\Role;
 
 
 
@@ -102,6 +103,11 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.edit_formal_requirements', compact('jobPositionProfile', 'generalRequirements'));
     }
 
+    public function edit_objectives(JobPositionProfile $jobPositionProfile)
+    {
+        return view('job_position_profile.edit_objectives', compact('jobPositionProfile'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -122,6 +128,24 @@ class JobPositionProfileController extends Controller
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado Exitosamente El Perfil de Cargo');
         return redirect()->route('job_position_profile.edit', $jobPositionProfile);
+    }
+
+    public function update_objectives(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $jobPositionProfile->fill($request->all());
+        $jobPositionProfile->save();
+
+        //dd($request);
+
+        foreach ($request->descriptions as $key => $description) {
+            $role = new Role();
+            $role->description = $description;
+            $role->jobPositionProfile()->associate($jobPositionProfile->id);
+            $role->save();
+        }
+        
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente los objetivos Perfil de Cargo');
+        return redirect()->route('job_position_profile.edit_objectives', $jobPositionProfile);
     }
 
     /**
