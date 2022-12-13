@@ -49,7 +49,7 @@ class SignatureController extends Controller
         $pendingSignaturesFlows = null;
         $users[0] = Auth::user()->id;
 
-        if(Auth::user()->getIAmSubrogantOfAttribute()->count() > 0){
+        if(Auth::user()->iAmSubrogantOf->count() > 0){
             foreach(Auth::user()->getIAmSubrogantOfAttribute() as $surrogacy){
                 array_push($users, $surrogacy->id);
             }
