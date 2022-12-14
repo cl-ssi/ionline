@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('rem.users.index') }}">
+        <a class="nav-link" href="{{ route('rem.files.index_2') }}">
             <i class="fas fa-file-excel fa-fw"></i> Carga de REMS
         </a>
     </li>

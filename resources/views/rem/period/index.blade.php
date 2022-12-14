@@ -29,7 +29,7 @@
     <tbody>
         @foreach($periods as $period)
         <tr>
-            <td>{{ $period->period }}</td>
+            <td>{{ $period->period->format('Y-m') }}</td>
             <td>{{ $period->year }}</td>
             <td>{{ $period->month }}</td>
         </tr>
