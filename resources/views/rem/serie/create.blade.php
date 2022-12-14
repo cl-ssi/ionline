@@ -10,9 +10,9 @@
     @csrf
     @method('POST')
     <div class="form-row">
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-2">
             <label for="for_name">Nombre Serie</label>
-            <input type="text" class="form-control" name="name" id="for_name" autocomplete="off">
+            <input type="text" class="form-control" name="name" id="for_name" autocomplete="off" maxlength="2">
         </fieldset>
     </div>
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>

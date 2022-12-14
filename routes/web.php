@@ -915,7 +915,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('{organizationalUnit}', [OrganizationalUnitController::class,'update'])->name('update')->middleware('auth');
         Route::delete('{organizationalUnit}/destroy', [OrganizationalUnitController::class,'destroy'])->name('destroy')->middleware('auth');
     });
-
+    // Se saca el directorio ya que no debería tener acceso los usuarios logeado solamente
+    Route::get('directory', [UserController::class,'directory'])->name('users.directory');
     Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou');
@@ -927,7 +928,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch');
 
         /* TODO: Sacar fuera y poner middleware auth a todo este grupo, ya que todas lo utilizan excepto esta */
-        Route::get('directory', [UserController::class,'directory'])->name('directory');
+        //Route::get('directory', [UserController::class,'directory'])->name('directory');
 
         Route::get('/', [UserController::class,'index'])->name('index');
         Route::get('/create', [UserController::class,'create'])->name('create');
