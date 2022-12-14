@@ -5,9 +5,10 @@
 @section('content')
 
 @include('programmings/nav')
-@can('TrainingItem: edit')
+
+@if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')
 <a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-@endcan
+@endif
 <h4 class="mb-3"> Capacitaciones Municipales {{$trainingItems->first()->communeFile->year ?? ''}} - {{$trainingItems->first()->communeFile->commune->name ?? ''}}</h4>
 
 <button onclick="tableExcel('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
@@ -43,8 +44,8 @@
             <th class="text-center align-middle">ORGANISMO EJECUTOR</th>
             <th class="text-center align-middle">COORDINADOR</th>
             <th class="text-center align-middle">FECHA DE EJECUCIÓN</th>
-            @can('TrainingItem: edit')<th class="text-center align-middle">EDITAR</th> @endcan
-            @can('TrainingItem: delete')<th class="text-center align-middle">ELIMINAR</th> @endcan
+            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')<th class="text-center align-middle">EDITAR</th> @endif
+            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')<th class="text-center align-middle">ELIMINAR</th> @endif
         </tr>
     </thead>
     <tbody style="font-size:60%;">
@@ -69,12 +70,12 @@
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
 
-            @can('TrainingItem: edit')
+            @if(Auth::user()->can('TrainingItem: edit') && $programming_status == 'active')
                 <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-flat btn-xs  btn-light" >
                     <i class="fas fa-edit"></i></a>
                 </td>
-            @endcan
-            @can('TrainingItem: delete')
+            @endif
+            @if(Auth::user()->can('TrainingItem: delete') && $programming_status == 'active')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('trainingitems.destroy', $trainingItem->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
@@ -83,7 +84,7 @@
                     </button>
                 </form>
             </td>
-            @endcan
+            @endif
         </tr>
         @endforeach
     </tbody>
