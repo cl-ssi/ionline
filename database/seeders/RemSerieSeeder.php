@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Rem\RemSerie;
 
 class RemSerieSeeder extends Seeder
 {
@@ -14,5 +15,10 @@ class RemSerieSeeder extends Seeder
     public function run()
     {
         //
+        $remserie = new RemSerie();
+        $remserie->name ='A';
+        $remserie->name ='BM';
+        $remserie->name ='BS';
+        $remserie->name ='D';
     }
 }

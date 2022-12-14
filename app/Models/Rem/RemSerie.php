@@ -14,8 +14,6 @@ class RemSerie extends Model
     public $table = 'rem_series';
 
     protected $fillable = [
-        'name',
-        'period_id',
-        'serie_id',
+        'name',        
     ];
 }

@@ -54,14 +54,10 @@ class RemFileController extends Controller
         }
 
 
-        if (empty($establishments)) 
-        {            
+        if (empty($establishments)) {
             session()->flash('danger', 'El usuario no tiene asignados establecimientos para subir REM. Favor contactarse con su encargado para que le asigne en caso que corresponda');
             return redirect()->route('home');
-        }
-
-        else 
-        {
+        } else {
             return view('rem.file.index', compact('periods', 'establishments'));
         }
     }
@@ -70,7 +66,8 @@ class RemFileController extends Controller
     {
         $now = now()->startOfMonth();
         $user = auth()->user();
-    
+        $remFiles = [];
+
         if ($user->can('Rem: admin')) {
             $remEstablishments = UserRem::all();
         } else {
@@ -81,27 +78,24 @@ class RemFileController extends Controller
         $periods = RemPeriod::all();
         $periods_count = RemPeriod::count();
 
-        if($periods_count==0)
-        {
+        if ($periods_count == 0) {
             session()->flash('danger', 'No hay asignado periodos para el REM');
-            return redirect()->route('home');
+            //return redirect()->route('home');
 
+        } else {
+
+            
+            for ($i = 1; $i <= $periods_count; $i++) {
+                $periods_back[] = $now->clone();
+                $now->subMonth('1');
+            }
+            $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
         }
 
 
-        //dd($periods_count);
-
-
-        for ($i = 1; $i <=$periods_count; $i++) {
-            $periods_back[] = $now->clone();
-            $now->subMonth('1');
-        }
-        $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
-        
-        
-        return view('rem.file.index_2', compact('periods','remFiles'));
+        return view('rem.file.index_2', compact('periods', 'remFiles'));
     }
-    
+
 
     /**
      * getRemFiles, tengo que llamar dos veces a esta query solo en el caso que no exista un perido
@@ -122,10 +116,5 @@ class RemFileController extends Controller
     public function store(Request $request)
     {
         dd('entre al store');
-
     }
-
-
-
-
 }
