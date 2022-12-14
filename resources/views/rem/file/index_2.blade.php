@@ -1,10 +1,7 @@
 @extends('layouts.app')
-
 @section('content')
-
-@canany(['be god','Rem: admin','Rem: user'])
 @include('rem.nav')
-@endcan
+
 
 <h3 class="mb-3">Carga de REMs</h3>
 
@@ -22,6 +19,7 @@
         <tr>
             <td class="text-center font-weight-bold">
                 {{$remEstablishment->establishment->name}}
+                ({{$remEstablishment->establishment->type}})
             </td>
 
             @foreach($periods as $period)

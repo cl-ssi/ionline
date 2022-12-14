@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@canany(['be god','Rem: admin','Rem: user'])
 @include('rem.nav')
-@endcan
 
 <form method="POST" class="form-horizontal" action="{{ route('rem.users.store') }}">
     @csrf

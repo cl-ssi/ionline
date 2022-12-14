@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@canany(['be god','Rem: admin','Rem: user'])
 @include('rem.nav')
-@endcan
 
 
 <div style="margin-bottom: 10px;" class="row">
