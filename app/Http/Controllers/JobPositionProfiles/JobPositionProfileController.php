@@ -108,6 +108,11 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.edit_objectives', compact('jobPositionProfile'));
     }
 
+    public function edit_organization(JobPositionProfile $jobPositionProfile)
+    {   
+        return view('job_position_profile.edit_organization', compact('jobPositionProfile'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -136,12 +141,13 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile->save();
 
         //dd($request);
-
-        foreach ($request->descriptions as $key => $description) {
-            $role = new Role();
-            $role->description = $description;
-            $role->jobPositionProfile()->associate($jobPositionProfile->id);
-            $role->save();
+        if($request->descriptions){
+            foreach ($request->descriptions as $key => $description) {
+                $role = new Role();
+                $role->description = $description;
+                $role->jobPositionProfile()->associate($jobPositionProfile->id);
+                $role->save();
+            }
         }
         
         session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente los objetivos Perfil de Cargo');

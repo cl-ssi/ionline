@@ -13,43 +13,7 @@
 
 <h6>Progreso</h5>
 
-<table class="table table-sm small text-center">
-    <thead class="table-info">
-        <tr>
-            <th>I.IDENTIFICACIÓN DEL CARGO</th>
-            <th>II. REQUISITOS FORMALES</th>
-            <th>III. PROPÓSITOS DEL CARGO</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <span style="color: green;">
-                    <i class="fas fa-check-circle fa-2x"></i>
-                </span>
-            </td>
-            <td>
-                @if($jobPositionProfile->staff_decree_by_estament_id)
-                <span style="color: green;">
-                    <i class="fas fa-check-circle fa-2x"></i>
-                </span>
-                
-                @else
-                    <i class="fas fa-clock fa-2x"></i>
-                @endif
-            </td>
-            <td>
-                @if($jobPositionProfile->roles->count() > 0)
-                    <span style="color: green;">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </span>
-                @else
-                    <i class="fas fa-clock fa-2x"></i>
-                @endif
-            </td>
-        </tr>
-    </tbody>
-</table>
+
 
 <hr>
 
@@ -83,11 +47,11 @@
 
 <div class="row">
     <div class="col">
-        <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">
-            <i class="fas fa-chevron-left"></i> I.Identificación del Cargo
+        <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">
+            <i class="fas fa-chevron-left"></i> II. Requisitos Formales
         </a>
-        <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">
-            <i class="fas fa-chevron-right"></i> III. Propósitos del Cargo
+        <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_organization', $jobPositionProfile) }}">
+            <i class="fas fa-chevron-right"></i> IV. Organización y Contexto del Cargo
         </a>
     </div>
 </div>

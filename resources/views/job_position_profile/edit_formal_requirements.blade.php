@@ -13,32 +13,7 @@
 
 <h6>Progreso</h5>
 
-<table class="table table-sm small text-center">
-    <thead class="table-info">
-        <tr>
-            <th>I.Identificación del Cargo</th>
-            <th>II. REQUISITOS FORMALES</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <span style="color: green;">
-                    <i class="fas fa-check-circle fa-2x"></i>
-                </span>
-            </td>
-            <td>
-                @if($jobPositionProfile->staff_decree_by_estament_id)
-                <span style="color: green;">
-                    <i class="fas fa-check-circle fa-2x"></i>
-                </span>
-                @else
-                    <i class="fas fa-clock fa-2x"></i>
-                @endif
-            </td>
-        </tr>
-    </tbody>
-</table>
+
 
 <hr>
 

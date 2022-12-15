@@ -15,8 +15,10 @@
 <table class="table table-sm small text-center">
     <thead class="table-info">
         <tr>
-            <th>I.Identificación del Cargo</th>
+            <th>I. IDENTIFICACIÓN DEL CARGO</th>
             <th>II. REQUISITOS FORMALES</th>
+            <th>III. PROPÓSITOS DEL CARGO</th>
+            <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
         </tr>
     </thead>
     <tbody>
@@ -25,15 +27,30 @@
                 <span style="color: green;">
                     <i class="fas fa-check-circle fa-2x"></i>
                 </span>
+                <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
             </td>
             <td>
                 @if($jobPositionProfile->staff_decree_by_estament_id)
-                <span style="color: green;">
-                    <i class="fas fa-check-circle fa-2x"></i>
-                </span>
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">Ir</a>
                 @else
                     <i class="fas fa-clock fa-2x"></i>
                 @endif
+            </td>
+            <td>
+                @if($jobPositionProfile->roles->count() > 0)
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">Ir</a>
+                @else
+                    <i class="fas fa-clock fa-2x"></i>
+                @endif
+            </td>
+            <td>
+                
             </td>
         </tr>
     </tbody>
