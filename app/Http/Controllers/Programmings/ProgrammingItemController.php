@@ -29,13 +29,13 @@ class ProgrammingItemController extends Controller
 
         $programming = Programming::whereId($request->programming_id)
             // busqueda de actividades sin filtro pero con tipo de actividad
-            ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType == 'Directa', function ($q) use ($activityType){
-                return $q->whereHas('items', $filter = function($q2) use ($activityType) {
-                    return $q2->when($activityType != null, function($q3) use ($activityType){
-                                return $q3->where('activity_type', $activityType)->with('activityItem');
-                            });
-                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
-            })
+            // ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType == 'Directa', function ($q) use ($activityType){
+            //     return $q->whereHas('items', $filter = function($q2) use ($activityType) {
+            //         return $q2->when($activityType != null, function($q3) use ($activityType){
+            //                     return $q3->where('activity_type', $activityType)->with('activityItem');
+            //                 });
+            //     })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
+            // })
             // busqueda de actividades sin filtro ni tipo de actividad
             ->when(!$listTracer && !$activityFilter && !$cycleFilter && !$activityType, function ($q){
                 return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user');
