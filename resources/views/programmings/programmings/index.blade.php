@@ -38,7 +38,8 @@
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
                 @can('Programming: edit')<th class="text-left align-middle table-dark" >Editar</th>@endcan
                 <th class="text-left align-middle table-dark" >%</th> 
-                <th class="text-left align-middle table-dark" >Obs.</th> 
+                <th class="text-left align-middle table-dark" >Obs.</th>
+                <th class="text-left align-middle table-dark" >Act.<br>pte.</th>
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
@@ -76,7 +77,8 @@
                 </td>
             @endcan
                 <td > <span class="badge badge-info">{{ $total_tracers != 0 ? number_format(($programming->getCountActivities()/$total_tracers) *100, 0, ',', ' ') : 0}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count(), 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count() + $programming->pendingIndirectItems->count(), 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-warning">{{ number_format($programming->pendingItems->count() + $programming->pendingIndirectItems->count(), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
@@ -127,14 +129,14 @@
                 @can('ProgrammingItem: view')
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Directa']) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
-                        <span class="small d-none d-sm-none d-md-inline">Actividades directas</span> 
+                        <span class="small d-none d-sm-none d-md-inline">Act. directas</span> 
                     </a>
                 @endcan
 
                 @can('ProgrammingItem: view')
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Indirecta']) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
-                        <span class="small d-none d-sm-none d-md-inline">Actividades indirectas</span> 
+                        <span class="small d-none d-sm-none d-md-inline">Act. indirectas</span> 
                     </a>
                 @endcan
                 @else
