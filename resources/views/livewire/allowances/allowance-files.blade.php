@@ -14,19 +14,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($allowance->files as $file)
+                    @foreach($allowance->files as $allowanceFile)
                     <tr>
-                        <td>{{ $file->created_at->format('d-m-Y H:i:s') }}</td>
-                        <td>{{ $file->name }}</td>
-                        <td>{{ $file->user->TinnyName }}</td>
+                        <td>{{ $allowanceFile->created_at->format('d-m-Y H:i:s') }}</td>
+                        <td>{{ $allowanceFile->name }}</td>
+                        <td>{{ $allowanceFile->user->TinnyName }}</td>
                         <td style="width: 8%">
-                            <a class="btn btn-primary form-control" href="{{ route('allowances.file.show', $file) }}" 
+                            <a class="btn btn-primary form-control" href="{{ route('allowances.files.show', $allowanceFile) }}" 
                                 target="_blank"> <i class="fas fa-paperclip"></i>
                             </a>
                         </td>
                         <td style="width: 8%">
                             <a class="btn btn-danger form-control" 
-                                wire:click="destroy({{ $file }})"
+                                wire:click="destroy({{ $allowanceFile }})"
                                 onclick="return confirm('¿Está seguro que desea eliminar el Archivo Adjunto? (Perderas todos los cambios no guardados)')">
                                     <i class="fas fa-trash"></i>
                             </a>

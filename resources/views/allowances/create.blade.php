@@ -28,6 +28,7 @@
             <select name="contractual_condition" class="form-control" required>
                 <option value="">Seleccione...</option>
                 <option value="to hire">Contrata</option>
+                <option value="holder">Titular</option>
             </select>
         </fieldset>
 
@@ -126,30 +127,9 @@
             <input type="date" class="form-control" name="from" id="for_from" required>
         </fieldset>
 
-        <!-- <fieldset class="form-check form-group mt-4 col-12 col-sm-3"> -->
-        <fieldset class="form-group col-12 col-sm-3">
-            <label for="for_calidad_juridica">Medio día</label>
-            <div class="mt-1 ml-4">
-                <input class="form-check-input" type="checkbox" name="from_half_day" value="1">
-                <label class="form-check-label" for="for_from_half_day">
-                    Si
-                </label>
-            </div>
-        </fieldset>
-
         <fieldset class="form-group col-12 col-sm-3">
             <label for="for_end_date">Hasta</label>
             <input type="date" class="form-control" name="to" id="for_to" required>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-sm-3">
-            <label for="for_calidad_juridica">Medio día</label>
-            <div class="mt-1 ml-4">
-                <input class="form-check-input" type="checkbox" name="to_half_day" value="1">
-                <label class="form-check-label" for="for_to_half_day">
-                    Si
-                </label>
-            </div>
         </fieldset>
     </div>
     

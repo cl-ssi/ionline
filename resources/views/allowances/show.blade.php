@@ -84,7 +84,7 @@
 
         @if($allowance->signatures_file_id)
             <a class="btn btn-primary float-right" title="Ver viático firmado" 
-                href="{{ route('allowances.file.show_file', $allowance) }}" target="_blank">
+                href="{{ route('allowances.show_file', $allowance) }}" target="_blank">
                 <i class="fas fa-file-pdf"></i> Viático Firmado
             </a>
         @endif
@@ -92,10 +92,10 @@
     <div class="col-md-3">
         <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
         <div class="list-group">
-            @foreach($allowance->files as $allowancefile)
-            <a href="{{ route('allowances.file.show', $allowancefile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
-                <i class="fas fa-file"></i> {{ $allowancefile->name }} <br>
-                <i class="fas fa-calendar-day"></i> {{ $allowancefile->created_at->format('d-m-Y H:i') }}</a>
+            @foreach($allowance->files as $allowanceFile)
+            <a href="{{ route('allowances.files.show', $allowanceFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                <i class="fas fa-file"></i> {{ $allowanceFile->name }} <br>
+                <i class="fas fa-calendar-day"></i> {{ $allowanceFile->created_at->format('d-m-Y H:i') }}</a>
             @endforeach
         </div>
     </div>
@@ -105,40 +105,42 @@
 
 <h6><i class="fas fa-dollar-sign"></i> Resumen</h6>
 <div class="table-responsive">
-    <table class="table table-sm table-bordered table-hover small">
+    <table class="table table-sm table-bordered table-striped table-hover">
         <tbody>
-            <tr class="text-center table-active">
-                <th width="25%">Viático</th>
-                <th width="25%">Valor</th>
-                <th width="25%">N° Días</th>
-                <th width="25%">Valor Total</th>
+            <tr class="text-center">
+                <th>Viático</th>
+                <th>Valor</th>
+                <th>N° Días</th>
+                <th>Valor Total</th>
             </tr>
             <tr>
                 <td><b>1. DIARIO</b></td>
-                <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                <td class="text-center">{{ $allowance->TotalIntDays }}</td>
-                <td class="text-right">${{ number_format($allowance->TotalIntAllowanceValue, 0, ",", ".") }}</td>
+                <td class="text-right">
+                    ${{ $allowance->day_value ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
+                </td>
+                <td class="text-center">{{ intval($allowance->total_days) }}</td>
+                <td class="text-right">
+                    ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
+                </td>
             </tr>
             <tr>
-                <td><b>2. PARCIAL</b></td>
-                <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                <td class="text-center">{{ $allowance->TotalDecimalDay }}</td>
-                <td class="text-right">${{ number_format($allowance->TotalDecimalAllowanceValue, 0, ",", ".") }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"></td>
-                <td class="text-center"><b>Total</b></td>
-                <td class="text-right">${{ number_format($allowance->AllowanceTotalValueFormat, 0, ",", ".") }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                    <td><b>2. PARCIAL</b></td>
+                    <td class="text-right">
+                        ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                    </td>
+                    <td class="text-center">0,5</td>
+                    <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-center"><b>Total</b></td>
+                    <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 <br>
-
-{{-- dd( App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ) --}}
-
-
 
 <i class="fas fa-check-circle"></i> Gestión de víatico.
 <div class="table-responsive">

@@ -64,6 +64,24 @@ class AllowanceController extends Controller
         $allowance->allowanceEstablishment()->associate($allowance->userAllowance->organizationalUnit->establishment);
         $allowance->userCreator()->associate(Auth::user());
         $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
+        
+        //CALCULO DE DIAS
+
+        $allowance->total_days = $this->allowanceTotalDays($request);
+        
+        //VALOR DE VIATICO COMPLETO / MEDIO
+        $value_by_degree = AllowanceValue::find($request->allowance_value_id);
+        if($allowance->total_days >= 1){
+            $allowance->day_value = $value_by_degree->value;
+            $allowance->half_day_value = $value_by_degree->value * 0.4;
+        }
+        else{
+            $allowance->half_day_value = $value_by_degree->value * 0.4;
+        }
+
+        //TOTAL VIÁTICO
+        $allowance->total_value = $this->allowanceTotalValue($allowance);
+
         $allowance->save();
 
         // SE ALMACENAN ARCHIVOS ADJUNTOS
@@ -160,7 +178,6 @@ class AllowanceController extends Controller
                 $nextLevel = $allowance_sing->organizationalUnit->father;
                 $position = $position + 1;
             }
-
         }
         
         //SE AGREGA AL FINAL JEFE FINANZAS
@@ -177,6 +194,25 @@ class AllowanceController extends Controller
 
         session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$allowance->id);
         return redirect()->route('allowances.index');
+    }
+
+    public function allowanceTotalDays($request){
+        if($request->from == $request->to){
+            return 0.5;
+        }
+        else{
+            return Carbon::parse($request->from)->diffInDays(Carbon::parse($request->to)) + 0.5;
+        }
+    }
+
+    public function allowanceTotalValue($allowance){
+        $total_int_days = intval($allowance->total_days);
+        if($total_int_days >= 1){
+            return ($allowance->day_value * $total_int_days) + $allowance->half_day_value;
+        }
+        else{
+            return $allowance->half_day_value;
+        }
     }
 
     /**

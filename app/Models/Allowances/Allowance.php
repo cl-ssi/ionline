@@ -23,7 +23,8 @@ class Allowance extends Model implements Auditable
         'resol_number', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
         'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
-        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date', 'signatures_file_id'
+        'from', 'to', 'total_days', 'day_value', 'half_day_value', 'total_value', 'creator_user_id', 'creator_ou_id', 
+        'document_date', 'signatures_file_id'
     ];
 
      /**
@@ -155,81 +156,6 @@ class Allowance extends Model implements Auditable
               return 'No';
               break;
         }
-    }
-
-    public function getFromHalfDayValueAttribute(){
-        switch ($this->from_half_day) {
-            case 1:
-              return 'Sí';
-              break;
-            case 0:
-              return '';
-              break;
-        }
-    }
-
-    public function getToHalfDayValueAttribute(){
-        switch ($this->to_half_day) {
-            case 1:
-              return 'Sí';
-              break;
-            case 0:
-              return '';
-              break;
-        }
-    }
-
-    public function getTotalDaysAttribute(){
-        $total_days = $this->from->diffInDays($this->to);
-        if($this->from == $this->to){
-            if($this->from_half_day == 1 || $this->to_half_day == 1){
-                $total_days = 0.5;
-            }
-            else{
-                $total_days = 1;
-            }
-            return $total_days;
-        }
-        else{
-            if($this->from_half_day == 1){
-                $total_days = $total_days - 0.5;
-            }
-            if($this->to_half_day == 1){
-                $total_days = $total_days - 0.5;
-            }
-            return $total_days + 1;
-        }
-    }
-
-    public function getTotalIntDaysAttribute(){
-        $total_int_days = intval($this->getTotalDaysAttribute());
-        return $total_int_days;
-    }
-
-    public function getTotalIntAllowanceValueAttribute(){
-        $total_int_allowance_value = $this->getTotalIntDaysAttribute() * $this->AllowanceValue->value;
-        return $total_int_allowance_value;
-    }
-
-    //number_format($foo, 0, ",", ".");
-
-    public function getTotalDecimalDayAttribute(){
-        $decimal_day = $this->getTotalDaysAttribute() - $this->getTotalIntDaysAttribute();
-        return $decimal_day;
-    }
-
-    public function getTotalDecimalAllowanceValueAttribute(){
-        $total_decimal_allowance_value = $this->getTotalDecimalDayAttribute() * $this->AllowanceValue->value;
-        return $total_decimal_allowance_value;
-    }
-
-    public function getAllowanceValueFormatAttribute(){
-        return $this->AllowanceValue->value;
-    }
-
-    public function getAllowanceTotalValueFormatAttribute(){
-        $allowance_total_value = $this->getTotalIntAllowanceValueAttribute() + $this->getTotalDecimalAllowanceValueAttribute();
-        return $allowance_total_value;
     }
 
     public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){

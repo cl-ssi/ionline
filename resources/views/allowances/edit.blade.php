@@ -29,6 +29,7 @@
             <select name="contractual_condition" class="form-control" required>
                 <option value="">Seleccione...</option>
                 <option value="to hire" {{ ($allowance->contractual_condition == 'to hire')?'selected':'' }}>Contrata</option>
+                <option value="holder" {{ ($allowance->contractual_condition == 'holder')?'selected':'' }}>Titular</option>
             </select>
         </fieldset>
 
@@ -78,6 +79,7 @@
             <label for="for_round_trip">Medio de Transporte</label>
             <select name="means_of_transport" class="form-control" required>
                 <option value="">Seleccione...</option>
+                <option value="ambulance" {{ ($allowance->means_of_transport == 'ambulance')?'selected':'' }}>Ambulancia</option>
                 <option value="plane" {{ ($allowance->means_of_transport == 'plane')?'selected':'' }}>Avión</option>
                 <option value="bus" {{ ($allowance->means_of_transport == 'bus')?'selected':'' }}>Bus</option>
                 <option value="other" {{ ($allowance->means_of_transport == 'other')?'selected':'' }}>Otro</option>
@@ -132,33 +134,10 @@
                 value="{{ $allowance->from->format('Y-m-d') }}" required>
         </fieldset>
 
-        <!-- <fieldset class="form-check form-group mt-4 col-12 col-sm-3"> -->
-        <fieldset class="form-group col-12 col-sm-3">
-            <label for="for_calidad_juridica">Medio día</label>
-            <div class="mt-1 ml-4">
-                <input class="form-check-input" type="checkbox" name="from_half_day" value="1"
-                    {{ ($allowance->from_half_day == 1)?'checked':''}}>
-                <label class="form-check-label" for="for_from_half_day">
-                    Si
-                </label>
-            </div>
-        </fieldset>
-
         <fieldset class="form-group col-12 col-sm-3">
             <label for="for_end_date">Hasta</label>
             <input type="date" class="form-control" name="to" id="for_to"
                 value="{{ $allowance->to->format('Y-m-d') }}" required>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-sm-3">
-            <label for="for_calidad_juridica">Medio día</label>
-            <div class="mt-1 ml-4">
-                <input class="form-check-input" type="checkbox" name="to_half_day" value="1"
-                    {{ ($allowance->to_half_day == 1)?'checked':''}}>
-                <label class="form-check-label" for="for_to_half_day">
-                    Si
-                </label>
-            </div>
         </fieldset>
     </div>
 
@@ -168,37 +147,41 @@
 
     <h6><i class="fas fa-dollar-sign"></i> Resumen</h6>
     
-    @if(($allowance->TotalDays + 1) > 0.5)
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered table-striped table-hover">
-                <tbody>
-                    <tr class="text-center">
-                        <th>Viático</th>
-                        <th>Valor</th>
-                        <th>N° Días</th>
-                        <th>Valor Total</th>
-                    </tr>
-                    <tr>
-                        <td><b>1. DIARIO</b></td>
-                        <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                        <td class="text-center">{{ $allowance->TotalIntDays }}</td>
-                        <td class="text-right">${{ number_format($allowance->TotalIntAllowanceValue, 0, ",", ".") }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>2. PARCIAL</b></td>
-                        <td class="text-right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                        <td class="text-center">{{ $allowance->TotalDecimalDay }}</td>
-                        <td class="text-right">${{ number_format($allowance->TotalDecimalAllowanceValue, 0, ",", ".") }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td class="text-center"><b>Total</b></td>
-                        <td class="text-right">${{ number_format($allowance->AllowanceTotalValueFormat, 0, ",", ".") }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    @endif
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped table-hover">
+            <tbody>
+                <tr class="text-center">
+                    <th>Viático</th>
+                    <th>Valor</th>
+                    <th>N° Días</th>
+                    <th>Valor Total</th>
+                </tr>
+                <tr>
+                    <td><b>1. DIARIO</b></td>
+                    <td class="text-right">
+                        ${{ $allowance->day_value ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
+                    </td>
+                    <td class="text-center">{{ intval($allowance->total_days) }}</td>
+                    <td class="text-right">
+                        ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>2. PARCIAL</b></td>
+                    <td class="text-right">
+                        ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                    </td>
+                    <td class="text-center">0,5</td>
+                    <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="text-center"><b>Total</b></td>
+                    <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <hr>
 

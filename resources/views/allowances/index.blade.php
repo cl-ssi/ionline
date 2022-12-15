@@ -11,13 +11,13 @@
 
 </div>
 
-<!-- <div class="row"> -->
-    <div class="col-sm">
-        @livewire('allowances.search-allowances', [
-            'index' => 'own'
-        ])
-    </div>
-<!-- </div> -->
+
+<div class="col-sm">
+    @livewire('allowances.search-allowances', [
+        'index' => 'own'
+    ])
+</div>
+
 
 @endsection
 

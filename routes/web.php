@@ -498,6 +498,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
     Route::get('{jobPositionProfile}/edit_objectives', [JobPositionProfileController::class, 'edit_objectives'])->name('edit_objectives');
     Route::put('{jobPositionProfile}/update_objectives', [JobPositionProfileController::class, 'update_objectives'])->name('update_objectives');
+    Route::get('/{jobPositionProfile}/edit_organization', [JobPositionProfileController::class, 'edit_organization'])->name('edit_organization');
 });
 /** Inicio Perfil de Cargos */
 
@@ -1828,9 +1829,10 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
     Route::get('{allowance}/edit', [AllowanceController::class,'edit'])->name('edit');
     Route::put('{allowance}/update', [AllowanceController::class,'update'])->name('update');
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
+    Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
 
-    Route::prefix('file')->as('file.')->group(function () {
-        Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
+    Route::prefix('files')->as('files.')->group(function () {
+        Route::get('/show/{allowanceFile}', [AllowanceFileController::class, 'show'])->name('show');
     });
 
     Route::prefix('sign')->as('sign.')->group(function () {

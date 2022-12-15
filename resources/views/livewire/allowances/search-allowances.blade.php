@@ -96,13 +96,12 @@
                             {{ $allowance->RoundTripValue }}
                         </td>
                         <td>
-                            {{ $allowance->from->format('d-m-Y') }} {{ ($allowance->from_half_day) ?  'medio día' : '' }}<br>
-                            {{ $allowance->to->format('d-m-Y') }} {{ ($allowance->to_half_day) ?  'medio día' : '' }}
-                            {{-- <span class="badge badge-warning">Medio día</span> --}}
+                            {{ $allowance->from->format('d-m-Y') }}<br>
+                            {{ $allowance->to->format('d-m-Y') }}
                         </td>
                         <td class="text-center">
-                            {{ $allowance->TotalDays }}
-                            @if($allowance->TotalDays > 1)
+                            {{ number_format($allowance->total_days, 1, ",", ".") }}
+                            @if($allowance->total_days > 1)
                                 días
                             @else
                                 día
@@ -154,7 +153,7 @@
                         <td class="text-center">
                             @if($allowance->signatures_file_id)
                                 <a class="btn btn-outline-primary btn-sm" title="Ver viático firmado" 
-                                    href="{{ route('allowances.file.show_file', $allowance) }}" target="_blank">
+                                    href="{{ route('allowances.show_file', $allowance) }}" target="_blank">
                                     <i class="fas fa-file-pdf"></i>
                                 </a>
                             @else
