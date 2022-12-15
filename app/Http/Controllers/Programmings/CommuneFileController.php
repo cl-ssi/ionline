@@ -36,6 +36,12 @@ class CommuneFileController extends Controller
                 $q->whereIn('commune_id', $accessByCommune);
             })
             ->get();
+        
+        foreach($communeFiles as $communeFile){
+            $communeFile->programming_status = Programming::where('year', $year)->whereHas('establishment.commune', function($q) use ($communeFile){
+                return $q->where('id', $communeFile->commune_id);
+            })->first()->status;
+        }
 
         return view('programmings.communeFiles.index', compact('communeFiles', 'request', 'year'));
     }

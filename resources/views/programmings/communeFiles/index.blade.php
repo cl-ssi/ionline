@@ -38,11 +38,14 @@
         @foreach($communeFiles as $communeFile)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
-        @can('Communefiles: edit')
-            <td ><a href="{{ route('communefiles.show', $communeFile->id) }}" class="btn btb-flat btn-sm btn-light" >
-                <i class="fas fa-edit"></i></a>
+            @if(Auth::user()->can('Communefiles: edit'))
+            <td >
+                @if($communeFile->programming_status == 'active')
+                <a href="{{ route('communefiles.show', $communeFile->id) }}" class="btn btb-flat btn-sm btn-light" >
+                    <i class="fas fa-edit"></i></a>
+                @endif
             </td>
-        @endcan
+            @endif
             <td >{{ $communeFile->id }}</td>
             <td>{{ $communeFile->year }}</td>
             <td>{{ $communeFile->commune->name }}</td>
@@ -76,8 +79,7 @@
             </td>
             <td class="text-right">
             <!-- Permiso para adjuntar documentos municipales programación númerica -->
-
-            @can('Communefiles: upload')
+            @if(Auth::user()->can('Communefiles: upload') && $communeFile->programming_status == 'active')
                 <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                     data-target="#updateModal"
                     data-communefile_id="{{ $communeFile->id }}"
@@ -87,7 +89,7 @@
                     data-formaction="{{ route('communefiles.update', $communeFile->id)}}">
                 <i class="fas fa-paperclip small"></i> Adjuntar
                 </button>
-                @endcan
+            @endif
             
             <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
             @if($year < 2022)
