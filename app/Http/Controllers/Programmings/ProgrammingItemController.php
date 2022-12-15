@@ -12,6 +12,7 @@ use App\Programmings\ActivityItem;
 use App\Models\Programmings\ReviewItem;
 use App\Programmings\ActivityProgram;
 use App\Programmings\Professional;
+use App\Programmings\ProgrammingActivityItem;
 use Illuminate\Support\Arr;
 
 class ProgrammingItemController extends Controller
@@ -61,7 +62,7 @@ class ProgrammingItemController extends Controller
                             // ->when($cycleFilter != null, function($q3) use ($cycleFilter){
                             //     return $q3->where('vital_cycle', $cycleFilter);
                             // });
-                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'items.user'])->get();
+                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
             })
             ->first();
 

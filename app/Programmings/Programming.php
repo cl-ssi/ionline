@@ -42,6 +42,10 @@ class Programming extends Model implements Auditable
         return $this->belongsToMany(ActivityItem::class, 'pro_programming_activity_item')->withPivot('id', 'requested_by', 'observation')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
     }
 
+    public function getPendingIndirectItemsAttribute(){
+        return ProgrammingActivityItem::where('programming_id', $this->id)->whereNull('activity_item_id')->whereNull('deleted_at')->get();
+    }
+
     public function countTotalReviewsBy($status) {
         $total=0;
         foreach($this->items as $item){
