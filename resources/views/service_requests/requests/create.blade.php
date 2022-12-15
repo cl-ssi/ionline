@@ -79,10 +79,12 @@
 			<label for="for_weekly_hours">Hrs.Semanales</label>
 			<select name="weekly_hours" class="form-control" id="for_weekly_hours">
 				<option value=""></option>
+                <option value="45">45</option>
 				<option value="44">44</option>
 				<option value="33">33</option>
 				<option value="30">30</option>
 				<option value="28">28</option>
+                <option value="25">25</option>
 				<option value="22">22</option>
 				<option value="20">20</option>
 				<option value="16">16</option>
