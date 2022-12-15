@@ -38,7 +38,7 @@ class ChangeProgrammmingStatus extends Command
      */
     public function handle()
     {
-        Programming::where('year', date("Y") + 1)->update(['status'=>'inactive']);
+        Programming::where('year', date("Y") + 1)->update(['status'=>'active']);
         $this->info('Programming status updated successfully.');
     }
 }

@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('clean:tempDir')->daily();
         $schedule->command('change:staffStatus')->daily();
-        $schedule->command('change:proStatus')->yearlyOn(12, 1, '00:00');
+        $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
     }
 
     /**
