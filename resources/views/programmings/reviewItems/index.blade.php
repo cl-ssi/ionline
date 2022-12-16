@@ -209,7 +209,9 @@
                         <th class="text-center align-middle table-dark">COMENTARIO / ACUERDO</th>
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >¿CONFIRMAR?</th>@endcan
-                        @can('Reviews: rectify')<th class="text-center align-middle table-dark" >RECTIFICAR</th>@endcan
+                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
+                        <th class="text-center align-middle table-dark" >RECTIFICAR</th>
+                        @endif
                         @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
                     </tr>
                 </thead>
@@ -268,7 +270,7 @@
                         </td>
                         @endcan
                         <!-- EVALUAR PARA  -->
-                        @can('Reviews: rectify')
+                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
                        
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
@@ -280,7 +282,7 @@
                         <i class="far fa-check-square text-success "></i>
                         </button>
                         </td>
-                        @endcan
+                        @endif
                         @can('Reviews: delete')
                         <td class="text-center align-middle">
                             <form method="POST" action="{{ route('reviewItems.destroy', $review->id) }}" class="small d-inline">
