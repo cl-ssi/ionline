@@ -69,7 +69,6 @@ class AllowanceController extends Controller
         $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
         
         //CALCULO DE DIAS
-
         $allowance->total_days = $this->allowanceTotalDays($request);
         
         //VALOR DE VIATICO COMPLETO / MEDIO
@@ -255,13 +254,26 @@ class AllowanceController extends Controller
     public function update(Request $request, Allowance $allowance)
     {
         $allowance->fill($request->All());
-        
-        $allowance->from_half_day = $request->has('from_half_day') ?? 0;
-        $allowance->to_half_day = $request->has('to_half_day') ?? 0;
         $allowance->organizationalUnitAllowance()->associate($allowance->userAllowance->organizationalUnit);
-        $allowance->establishment_id = $allowance->userAllowance->organizationalUnit->establishment->id;
+        $allowance->allowanceEstablishment()->associate($allowance->userAllowance->organizationalUnit->establishment);
         $allowance->userCreator()->associate(Auth::user());
         $allowance->organizationalUnitCreator()->associate(Auth::user()->organizationalUnit);
+
+        //CALCULO DE DIAS
+        $allowance->total_days = $this->allowanceTotalDays($request);
+
+        //VALOR DE VIATICO COMPLETO / MEDIO
+        $value_by_degree = AllowanceValue::find($request->allowance_value_id);
+        if($allowance->total_days >= 1){
+            $allowance->day_value = $value_by_degree->value;
+            $allowance->half_day_value = $value_by_degree->value * 0.4;
+        }
+        else{
+            $allowance->half_day_value = $value_by_degree->value * 0.4;
+        }
+
+        //TOTAL VIÁTICO
+        $allowance->total_value = $this->allowanceTotalValue($allowance);
 
         $allowance->save();
 

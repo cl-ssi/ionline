@@ -105,7 +105,7 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="overnight" id="for_overnight_no" value="0" 
-                        {{ ($allowance->overnight == 1)?'checked':''}}required>
+                        {{ ($allowance->overnight == 0)?'checked':''}} required>
                     <label class="form-check-label" for="for_overnight_no">No</label>
                 </div>
             </div>
