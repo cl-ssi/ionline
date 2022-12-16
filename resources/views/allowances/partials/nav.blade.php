@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
     {{-- @canany(['Replacement Staff: list rrhh', 'Replacement Staff: staff manage']) --}}
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{ active(['allowances.*']) }}" href="#" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle {{ request()->routeIs('allowances.index*') || request()->routeIs('allowances.create*') || request()->routeIs('allowances.all_index*') || request()->routeIs('allowances.sign_index*')  ? 'active' : '' }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-wallet"></i> Viáticos
             </a>
 
@@ -24,12 +24,14 @@
         </li>
 
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle {{ active(['allowances.reports.*']) }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-file-export"></i> Reportes
             </a>
 
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{-- route('allowances.reports.allowances') --}}"><i class="fas fa-calendar"></i> Viáticos por fecha</a>
+                <a class="dropdown-item {{ active(['allowances.reports.create_by_dates']) }}" href="{{ route('allowances.reports.create_by_dates') }}">
+                    <i class="fas fa-calendar"></i> Viáticos por fecha
+                </a>
             </div>
         </li>
     {{-- @endcan --}}

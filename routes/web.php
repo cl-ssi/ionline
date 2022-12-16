@@ -1844,7 +1844,8 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
     });
 
     Route::prefix('reports')->as('reports.')->group(function () {
-        Route::get('/create_by_dates', [AllowanceController::class, 'by_dates'])->name('by_dates');
+        Route::get('/create_by_dates', [AllowanceController::class, 'create_by_dates'])->name('create_by_dates');
+        Route::get('/create_by_dates_excel/{from}/{to}', [AllowanceController::class, 'create_by_dates_excel'])->name('create_by_dates_excel');
     });
 });
 

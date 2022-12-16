@@ -15,6 +15,9 @@ use App\Rrhh\Authority;
 use App\Notifications\Allowances\NewAllowance;
 use App\Models\Parameters\Parameter;
 
+use App\Exports\AllowancesExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class AllowanceController extends Controller
 {
     /**
@@ -299,5 +302,17 @@ class AllowanceController extends Controller
     public function show_file(Allowance $allowance)
     {
         return Storage::disk('gcs')->response($allowance->signedAllowance->signed_file);
+    }
+
+    //REPORTS
+    public function create_by_dates()
+    {
+        return view('allowances.reports.create_by_dates');
+        //return Excel::download(new AllowancesExport, 'listado-viaticos.xlsx');
+    }
+
+    public function create_by_dates_excel($from, $to)
+    {
+        return Excel::download(new AllowancesExport($from, $to), 'listado-viaticos.xlsx');
     }
 }
