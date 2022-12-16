@@ -409,7 +409,7 @@
                 @foreach($indicator->establishments as $establishment)
                     @php($values = $indicator->getValuesBy($commune, $establishment->alias_estab))
                     @if($establishment->comuna == $commune && $values)
-                    <strong> {{ $establishment->alias_estab }} </strong>
+                    <strong id="{{str_replace(' ','_',$establishment->alias_estab)}}"> {{ $establishment->alias_estab }} </strong>
                     <!-- archivos por corte -->
                     <div class="float-right">
                         @php($ends = [1 => '1er', 2 => '2o', 3 => '3er', 4 => '4o'])
@@ -626,6 +626,14 @@
 @section('custom_js')
 <script type="text/javascript">
     $('#myTab a[href="{!! session()->has("commune") ? "#".session()->get("commune") : "#IQUIQUE" !!}"]').tab('show') // Select tab by name
+
+    var hasEstablishment = {!! session()->has("establishment") ? 'true' : 'false' !!};
+    if (hasEstablishment) {
+        $('html,body').animate({
+            scrollTop: $('#{!! session()->get("establishment") !!}').offset().top
+        }, 'fast');
+    }
+
     $('[data-toggle="tooltip"]').tooltip()
 
     $('input[type="file"]').bind('change', function(e) {
