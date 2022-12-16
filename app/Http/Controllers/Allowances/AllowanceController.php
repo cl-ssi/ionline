@@ -147,38 +147,42 @@ class AllowanceController extends Controller
         }
         //NO AUTORIDAD
         else{
+            // dd('NO ES AUTORIDAD');
             $level_allowance_ou = $allowance->organizationalUnitAllowance->level;
             $position = 1;
 
             for ($i = $level_allowance_ou; $i >= 2; $i--){
 
-                $allowance_sing = new AllowanceSign();
-                $allowance_sing->position = $position;
+                $allowance_sign = new AllowanceSign();
+                $allowance_sign->position = $position;
 
                 if($i >= 3){
-                    $allowance_sing->event_type = 'boss';
+                    $allowance_sign->event_type = 'boss';
                     if($i == $level_allowance_ou){
-                        $allowance_sing->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
-                        $allowance_sing->status = 'pending';
+                        $allowance_sign->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
+                        $allowance_sign->status = 'pending';
                     }
                     else{
-                        $allowance_sing->organizational_unit_id = $nextLevel->id;
+                        $allowance_sign->organizational_unit_id = $nextLevel->id;
                     }
                     
                 }
                 if($i == 2){
-                    $allowance_sing->event_type = 'sub-dir or boss';
+                    $allowance_sign->event_type = 'sub-dir or boss';
                     if($i == $level_allowance_ou){
-                        $allowance_sing->status = 'pending';
+                        $allowance_sign->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
+                        $allowance_sign->status = 'pending';
                     }
-                    $allowance_sing->organizational_unit_id = $nextLevel->id;
+                    else{
+                        $allowance_sign->organizational_unit_id = $nextLevel->id;
+                    }
                 }
                 
-                $allowance_sing->allowance_id = $allowance->id;
+                $allowance_sign->allowance_id = $allowance->id;
 
-                $allowance_sing->save();
+                $allowance_sign->save();
 
-                $nextLevel = $allowance_sing->organizationalUnit->father;
+                $nextLevel = $allowance_sign->organizationalUnit->father;
                 $position = $position + 1;
             }
         }

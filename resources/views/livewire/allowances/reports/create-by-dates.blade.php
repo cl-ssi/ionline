@@ -4,7 +4,7 @@
         
         <div class="form-row">
             <fieldset class="form-group col-sm">
-                <label for="regiones">Periodo de Creación</label>
+                <label for="regiones">Fecha de comienzo de Viático</label>
                 <div class="input-group">
                     <input type="date" class="form-control" name="start_date_search" wire:model.debounce.500ms="selectedStartDate" required>
                     <input type="date" class="form-control" name="end_date_search" wire:model.debounce.500ms="selectedEndDate" required>
@@ -16,10 +16,10 @@
     <br>
 
     <div class="row">
-        <div class="col-md">
+        <div class="col-12 col-md-6">
             <p class="font-weight-lighter">Total de Registros: <b>{{ $allowances->total() }}</b></p>
         </div>
-        <div class="col-md">
+        <div class="col-12 col-md-6">
             <a class="btn btn-success btn-sm float-right @if($allowances->count() <= 0) disabled @endif"
                 href="{{ route('allowances.reports.create_by_dates_excel', ['from' => $selectedStartDate, 'to' => $selectedEndDate]) }}">
                 <i class="fas fa-file-excel"></i> Exportar

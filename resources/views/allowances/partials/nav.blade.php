@@ -6,8 +6,8 @@
             </a>
 
             <div class="dropdown-menu">
+                <a class="dropdown-item {{ active(['allowances.index']) }}" href="{{ route('allowances.index') }}"><i class="fas fa-wallet"></i> Mis víaticos</a>
                 @if(Auth::user()->can('Allowances: create') || App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id))
-                    <a class="dropdown-item {{ active(['allowances.index']) }}" href="{{ route('allowances.index') }}"><i class="fas fa-wallet"></i> Mis víaticos</a>
                     <a class="dropdown-item {{ active(['allowances.create']) }}" href="{{ route('allowances.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
                 @endif
 
@@ -23,6 +23,7 @@
             </div>
         </li>
 
+        @can('Allowances: reports')
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{ active(['allowances.reports.*']) }}" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-file-export"></i> Reportes
@@ -34,5 +35,5 @@
                 </a>
             </div>
         </li>
-    {{-- @endcan --}}
+        @endcan
 </ul>

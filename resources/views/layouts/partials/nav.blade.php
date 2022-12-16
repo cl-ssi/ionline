@@ -283,15 +283,17 @@
 
                         @endcan
                         
-                        @if(Auth::user()->can('Allowances: create') || 
+                       
+                        {{-- @if(Auth::user()->can('Allowances: create') || 
                             App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
-                            Auth::user()->can('Allowances: all'))
+                            Auth::user()->can('Allowances: all') ||
+                            Auth::user()->can('Allowances: reports')) --}}
 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('allowances.index') }}" href="{{ route('allowances.index') }}">
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
-                        @endcan
+                        {{-- @endcan --}}
                         
                     </div>
                 </li>
