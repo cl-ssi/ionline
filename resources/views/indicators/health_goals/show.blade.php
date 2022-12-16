@@ -318,7 +318,7 @@
                                 @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
                                     <!-- Button trigger modal -->
                                     <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                        @if($result)
+                                        @if($result && $result->value == 1)
                                             <i class="fas fa-circle text-success"></i>
                                         @else
                                             @if($isManager)
@@ -449,7 +449,7 @@
                                     @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
                                         <!-- Button trigger modal -->
                                         <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                            @if($result)
+                                            @if($result && $result->value == 1)
                                                 <i class="fas fa-circle text-success"></i>
                                             @else
                                                 @if($isManager)
