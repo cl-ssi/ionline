@@ -109,37 +109,67 @@ class AllowanceController extends Controller
             foreach($iam_authorities as $iam_authority){
 
                 if($allowance->userAllowance->organizationalUnit->id == $iam_authority->organizational_unit_id){
-
                     $level_allowance_ou = $iam_authority->organizationalUnit->level - 1;
                     $nextLevel = $iam_authority->organizationalUnit->father;
                     $position = 1;
 
-
-                    for ($i = $level_allowance_ou; $i >= 2; $i--){
-
-                        $allowance_sing = new AllowanceSign();
-                        $allowance_sing->position = $position;
-                        if($i >= 3){
-                            $allowance_sing->event_type = 'boss';
-                            if($i == $level_allowance_ou){
-                                $allowance_sing->status = 'pending';
+                    if($iam_authority->organizationalUnit->level == 2){
+                        for ($i = $level_allowance_ou; $i >= 1; $i--){
+                            $allowance_sing = new AllowanceSign();
+                            $allowance_sing->position = $position;
+                            if($i >= 3){
+                                $allowance_sing->event_type = 'boss';
+                                if($i == $level_allowance_ou){
+                                    $allowance_sing->status = 'pending';
+                                }
                             }
-                        }
-                        if($i == 2){
-                            $allowance_sing->event_type = 'sub-dir or boss';
-                            if($i == $level_allowance_ou){
-                                $allowance_sing->status = 'pending';
+                            if($i == 2){
+                                $allowance_sing->event_type = 'sub-dir or boss';
+                                if($i == $level_allowance_ou){
+                                    $allowance_sing->status = 'pending';
+                                }
                             }
+                            if($i == 1){
+                                $allowance_sing->event_type = 'dir';
+                                if($i == $level_allowance_ou){
+                                    $allowance_sing->status = 'pending';
+                                }
+                            }
+                            $allowance_sing->organizational_unit_id = $nextLevel->id;
+                            $allowance_sing->allowance_id = $allowance->id;
+
+                            $allowance_sing->save();
+
+                            $nextLevel = $allowance_sing->organizationalUnit->father;
+                            $position = $position + 1;
                         }
-                        $allowance_sing->organizational_unit_id = $nextLevel->id;
-                        $allowance_sing->allowance_id = $allowance->id;
-
-                        $allowance_sing->save();
-
-                        $nextLevel = $allowance_sing->organizationalUnit->father;
-                        $position = $position + 1;
-
                     }
+                    else{
+                        for ($i = $level_allowance_ou; $i >= 2; $i--){
+                            $allowance_sing = new AllowanceSign();
+                            $allowance_sing->position = $position;
+                            if($i >= 3){
+                                $allowance_sing->event_type = 'boss';
+                                if($i == $level_allowance_ou){
+                                    $allowance_sing->status = 'pending';
+                                }
+                            }
+                            if($i == 2){
+                                $allowance_sing->event_type = 'sub-dir or boss';
+                                if($i == $level_allowance_ou){
+                                    $allowance_sing->status = 'pending';
+                                }
+                            }
+                            $allowance_sing->organizational_unit_id = $nextLevel->id;
+                            $allowance_sing->allowance_id = $allowance->id;
+
+                            $allowance_sing->save();
+
+                            $nextLevel = $allowance_sing->organizationalUnit->father;
+                            $position = $position + 1;
+                        }
+                    } 
+                        
 
                 }
             }
@@ -291,13 +321,6 @@ class AllowanceController extends Controller
                 $allowanceFile->save();
             }
         }
-
-        //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-        //$notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
-        //$notification_ou_manager->user->notify(new NotificationSign($request_replacement));
-
-        //NOTIFICACIONES
-        // $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
 
         session()->flash('success', 'Estimado Usuario, se ha editado exitosamente la solicitud de viatico N°'.$allowance->id);
         return redirect()->route('allowances.index');

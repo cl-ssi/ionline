@@ -254,20 +254,26 @@
                 </tr>
                 <tr>
                     <th align="left">1. DIARIO</th>
-                    <td align="right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                    <td align="center">{{ $allowance->TotalIntDays }}</td>
-                    <td align="right">${{ number_format($allowance->TotalIntAllowanceValue, 0, ",", ".") }}</td>
+                    <td align="right">
+                        ${{ $allowance->day_value ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
+                    </td>
+                    <td align="center">{{ intval($allowance->total_days) }}</td>
+                    <td align="right">
+                        ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
+                    </td>
                 </tr>
                 <tr>
                     <th align="left">2. PARCIAL</th>
-                    <td align="right">${{ number_format($allowance->AllowanceValueFormat, 0, ",", ".") }}</td>
-                    <td align="center">{{ $allowance->TotalDecimalDay }}</td>
-                    <td align="right">${{ number_format($allowance->TotalDecimalAllowanceValue, 0, ",", ".") }}</td>
+                    <td align="right">
+                        ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                    </td>
+                    <td align="center">0,5</td>
+                    <td align="right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
                     <td align="center"><b>Total</b></td>
-                    <td align="right">${{ number_format($allowance->AllowanceTotalValueFormat, 0, ",", ".") }}</td>
+                    <td align="right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
                 </tr>
             </tbody>
         </table>

@@ -124,21 +124,21 @@
                 </td>
             </tr>
             <tr>
-                    <td><b>2. PARCIAL</b></td>
-                    <td class="text-right">
-                        ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
-                    </td>
-                    <td class="text-center">0,5</td>
-                    <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td class="text-center"><b>Total</b></td>
-                    <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <td><b>2. PARCIAL</b></td>
+                <td class="text-right">
+                    ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                </td>
+                <td class="text-center">0,5</td>
+                <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>                    
+                <td class="text-center"><b>Total</b></td>
+                <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <br>
 
