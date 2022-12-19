@@ -44,13 +44,13 @@ class ClaveUnicaController extends Controller
 
     public function callback(Request $request)
     {
-        $code             = $request->input('code');
-        $state             = $request->input('state'); // token
+        $code            = $request->input('code');
+        $state           = $request->input('state'); // token
 
         $url_base        = self::URL_BASE_CLAVE_UNICA . "token/";
-        $client_id         = env("CLAVEUNICA_CLIENT_ID");
-        $client_secret     = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri     = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $client_id       = env("CLAVEUNICA_CLIENT_ID");
+        $client_secret   = env("CLAVEUNICA_SECRET_ID");
+        $redirect_uri    = urlencode(env("CLAVEUNICA_CALLBACK"));
 
         try {
             $response = Http::asForm()->post($url_base, [
@@ -157,6 +157,20 @@ class ClaveUnicaController extends Controller
                 $u->mothers_family = $user->mothers_family;
                 $u->email_personal = $user->email;
                 $u->save();
+
+                /** No permitir login si tiene permiso "Nuevo iOnline" */
+                if(env('OLD_SERVER'))
+                {
+                    if($u AND $u->can('Nuevo iOnline'))
+                    {
+                        session()->flash('info', 
+                            'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
+                            <b>https://i.saludiquique.gob.cl</b> <br>Muchas gracias.');
+                        return redirect()->route('welcome');
+                    }
+                    /* TODO: cerrar sessión en CU al no permitir el login al usuario */
+                }
+
                 Auth::login($u, true);
 
                 /** Log access */
