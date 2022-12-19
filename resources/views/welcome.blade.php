@@ -88,7 +88,7 @@
                     <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
                     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-                    @if(env('OLD_SERVER'))
+                    @if(!env('OLD_SERVER'))
                     <a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
                         href="https://uni.saludiquique.gob.cl/claveunica/i"
                         title="Este es el botón Iniciar sesión de ClaveÚnica">
