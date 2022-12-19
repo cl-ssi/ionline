@@ -79,89 +79,87 @@
     <div class="container">
         <div class="card-deck mb-3">
 
-			<div class="card shadow-sm">
-				<div class="card-header">
-					<h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
-				</div>
-				<div class="card-body">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal text-center">Ingreso al sistema</h4>
+                </div>
+                <div class="card-body">
 
                     <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
-					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-					@if(env('APP_ENV') == 'production')
-					<a class="btn-cu btn-m btn-color-estandar m-auto" 
-						href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
-						title="Este es el botón Iniciar sesión de ClaveÚnica">
-						<span class="cl-claveunica"></span>
-						<span class="texto">Iniciar sesión</span>
-					</a>
-					@endif
-					<!--./ fin botón-->
+                    <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+                    @if(env('OLD_SERVER'))
+                    <a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
+                        href="https://uni.saludiquique.gob.cl/claveunica/i"
+                        title="Este es el botón Iniciar sesión de ClaveÚnica">
+                        <span class="cl-claveunica"></span>
+                        <span class="texto">Iniciar sesión</span>
+                    </a>
 
-					<!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-					@if(env('APP_ENV') == 'testing' OR env('APP_ENV') == 'local')
-					<a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
-						href="https://uni.saludiquique.gob.cl/claveunica/i"
-						title="Este es el botón Iniciar sesión de ClaveÚnica">
-						<span class="cl-claveunica"></span>
-						<span class="texto">Iniciar sesión</span>
-					</a>
-					@endif
-					<!--./ fin botón-->
+                    @else
+                    
+                    <a class="btn-cu btn-m btn-color-estandar m-auto" 
+                        href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
+                        title="Este es el botón Iniciar sesión de ClaveÚnica">
+                        <span class="cl-claveunica"></span>
+                        <span class="texto">Iniciar sesión</span>
+                    </a>
+                    @endif
+                    <!--./ fin botón-->
 
-				
-				<hr>
-				
+                
+                <hr>
+                
                 <h6 class="mb-3 text-center">O con tu cuenta del sistema</h6>
 
-				<form method="POST" action="{{ route('login') }}">
-					@csrf
-					<div class="form-group row">
-						<label for="id" class="col-4 col-md-4 col-form-label text-right">{{ __('RUN') }}</label>
-						<div class="col-8 col-md-6">
-							<input id="id" type="text" class="form-control @error('id') is-invalid @enderror"
-								name="id" value="{{ old('id') }}" required autofocus>
-							@error('id')
-							<span class="invalid-feedback" role="alert">
-								<strong>{{ $message }}</strong>
-							</span>
-							@enderror
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="password" class="col-4 col-md-4 col-form-label text-right">{{ __('Clave') }}</label>
-						<div class="col-8 col-md-6">
-						<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
-								name="password" required autocomplete="current-password">
-							@error('password')
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
-						</div>
-					</div>
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+                    <div class="form-group row">
+                        <label for="id" class="col-4 col-md-4 col-form-label text-right">{{ __('RUN') }}</label>
+                        <div class="col-8 col-md-6">
+                            <input id="id" type="text" class="form-control @error('id') is-invalid @enderror"
+                                name="id" value="{{ old('id') }}" required autofocus>
+                            @error('id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-4 col-md-4 col-form-label text-right">{{ __('Clave') }}</label>
+                        <div class="col-8 col-md-6">
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                                name="password" required autocomplete="current-password">
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
 
-					<div class="form-group row">
-						<div class="col-8 offset-4">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
-								<label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
-							</div>
-						</div>
-					</div>
+                    <div class="form-group row">
+                        <div class="col-8 offset-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember" value=1 {{ old('remember') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="remember">{{ __('Recuerdame') }}</label>
+                            </div>
+                        </div>
+                    </div>
 
-					<div class="form-group row">
-						<div class="col-8 col-md-6 offset-4">
-							<button type="submit" class="btn btn-secondary btn-block">
-								{{ __('Iniciar sesión') }}
-							</button>
-						</div>
-					</div>
-				</form>
+                    <div class="form-group row">
+                        <div class="col-8 col-md-6 offset-4">
+                            <button type="submit" class="btn btn-secondary btn-block">
+                                {{ __('Iniciar sesión') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
 
-				</div>
-			</div>
+                </div>
+            </div>
 
 
             <div class="card shadow-sm">
@@ -178,16 +176,16 @@
 
                     </ul>
                     <div class="row justify-content-center">
-						<a class="btn btn-primary" href="https://esmeralda.saludtarapaca.gob.cl">
-							Resultado Exámenes
-						</a>
+                        <a class="btn btn-primary" href="https://esmeralda.saludtarapaca.gob.cl">
+                            Resultado Exámenes
+                        </a>
                     </div>
 
 
                     <hr>
 
-					<h6 class="mb-3">Otros links de interés</h6>
-					
+                    <h6 class="mb-3">Otros links de interés</h6>
+                    
                     <a class="card-link" href="{{ route('rrhh.users.directory') }}">
                         <i class="fas fa-fw fa-address-book"></i>
                         Directorio telefónico
@@ -206,30 +204,30 @@
 
 
             <div class="card shadow-sm">
-				<div class="card-header">
+                <div class="card-header">
                     <h4 class="my-0 font-weight-normal">
-						<a href="https://portal.saludtarapaca.gob.cl" class="btn btn-secondary btn-block">Portal de sistemas</a>
-					</h4>
+                        <a href="https://portal.saludtarapaca.gob.cl" class="btn btn-secondary btn-block">Portal de sistemas</a>
+                    </h4>
                 </div>
                 <ul class="list-group list-group-flush">
-					<li class="list-group-item">
-						<a href="https://i.saludiquique.cl" class="btn btn-info btn-block disabled">iOnline</a>
-					</li>
-					<li class="list-group-item">
-						<a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
-					</li>
-					<li class="list-group-item">
-						<a href="https://neo.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">NeoSalud</a>
-					</li>
-					<li class="list-group-item">
-						<a href="https://uni.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">UniSalud</a>
-					</li>
-					<li class="list-group-item">
-						<a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
-					</li>
-					<li class="list-group-item">
-						<a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a>
-					</li>
+                    <li class="list-group-item">
+                        <a href="https://i.saludiquique.cl" class="btn btn-info btn-block disabled">iOnline</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://neo.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">NeoSalud</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://uni.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">UniSalud</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a>
+                    </li>
                 </ul>
             </div>
 
