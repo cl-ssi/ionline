@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fc7f63a9252f8fa43c9fd537a517b98",
+    "content-hash": "5e83899347171d3b5f8d81bbcd418c26",
     "packages": [
+        {
+            "name": "aquaro/laravel-maintenance-mode",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AquaroTorres/laravel-maintenance-mode.git",
+                "reference": "43c0a836482eb4922243067749a1a8b297f06369"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AquaroTorres/laravel-maintenance-mode/zipball/43c0a836482eb4922243067749a1a8b297f06369",
+                "reference": "43c0a836482eb4922243067749a1a8b297f06369",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Aquaro\\LaravelMaintenanceMode\\MaintenanceModeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aquaro\\LaravelMaintenanceMode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "AquaroTorres",
+                    "email": "alvarotorres@gmail.com"
+                }
+            ],
+            "description": "Laravel Maintenance Mode without terminal access.",
+            "support": {
+                "issues": "https://github.com/AquaroTorres/laravel-maintenance-mode/issues",
+                "source": "https://github.com/AquaroTorres/laravel-maintenance-mode/tree/v0.1.1"
+            },
+            "time": "2022-12-19T19:02:14+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -11592,9 +11639,9 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3",
+        "php": "^7.4|^8.1",
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
