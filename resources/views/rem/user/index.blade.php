@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('rem.nav')
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
@@ -36,7 +37,7 @@
                 </form>
             </td>
         </tr>
-     @endforeach   
+     @endforeach
     </tbody>
 </table>
 

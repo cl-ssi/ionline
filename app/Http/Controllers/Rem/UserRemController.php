@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Rem;
 
 use App\Models\Rem\UserRem;
 use App\Http\Controllers\Controller;
-use App\Establishment;
+use App\Models\Establishment;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,9 @@ class UserRemController extends Controller
      */
     public function index()
     {
-        $usersRem = UserRem::All();
+        $usersRem = UserRem::join('establishments', 'rem_users.establishment_id', '=', 'establishments.id')
+            ->orderBy('establishments.name', 'ASC')
+            ->get();
 
         return view('rem.user.index', compact('usersRem'));
     }
@@ -32,7 +34,7 @@ class UserRemController extends Controller
         $establishments = Establishment::orderBy('name', 'ASC')->get();
         $users = User::orderBy('name', 'ASC')->get();
 
-        return view('rem.user.create', compact('establishments','users'));
+        return view('rem.user.create', compact('establishments', 'users'));
     }
 
     /**
@@ -96,7 +98,7 @@ class UserRemController extends Controller
         $userRem->user->revokePermissionTo(['Rem: user']);
         $userRem->delete();
         session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
-        
+
         return redirect()->route('rem.users.index');
     }
 }

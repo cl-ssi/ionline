@@ -89,7 +89,7 @@
                         @if($pendingSignaturesFlow->userSigner->absent == 1)
                         <br>    
                         <b>Firma Subrrogada por</b>: 
-                        {{ Auth::user()->getTinnyNameAttribute() }}
+                        {{ Auth::user()->tinnyName }}
                         @endif
                         <br>
                         {{ $pendingSignaturesFlow->type }}

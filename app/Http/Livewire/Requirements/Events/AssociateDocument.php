@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Requirements\Events;
 
 use Livewire\Component;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 
 class AssociateDocument extends Component
 {

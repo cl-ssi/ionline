@@ -109,7 +109,7 @@
     </div>
 
     <br>
-    <!-- TODOS LOS FORMULARIOS -->
+    <!-- Todos los formularios -->
     @if($request_forms->count() > 0 && $inbox == 'all')
         <div class="row">
             <div class="col">
@@ -318,6 +318,9 @@
                             @endif--}}
                         </td>
                         <td>
+                            <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección">
+                                <i class="fas fa-eye"></i>
+                            </a>
                             @if($requestForm->signatures_file_id)
                             <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" href="{{ $requestForm->signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 1]) }}" target="_blank" title="Certificado">
                                 <i class="fas fa-file-contract"></i>

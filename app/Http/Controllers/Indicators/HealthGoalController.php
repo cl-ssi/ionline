@@ -402,6 +402,7 @@ class HealthGoalController extends Controller
         }
         
         session()->flash('commune', str_replace(" ","_",$value->commune)); //Necesario para ubicar comuna en el conjunto de tabs
+        if($value->establishment) session()->flash('establishment', str_replace(" ","_",$value->establishment)); //Necesario para ubicar el establecimiento despues de ubicarse en el tab
         session()->flash('success', 'Actividad ejecutada para comuna de '.$request->commune.' se registra satisfactoriamente.');
         return redirect()->route('indicators.health_goals.show', [$law, $year, $indicator]);
     }

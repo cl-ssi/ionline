@@ -14,15 +14,13 @@ class CreateEstablishmentsTable extends Migration
     public function up()
     {
         Schema::create('establishments', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->string('alias')->nullable();
             $table->enum('type',['HOSPITAL','CESFAM','CECOSF','PSR','CGR','SAPU','COSAM','PRAIS']);
             $table->string('deis');
-            $table->unsignedInteger('commune_id');
+            $table->foreignId('commune_id')->constrained('communes');
             $table->timestamps();
-
-            $table->foreign('commune_id')->references('id')->on('communes');
         });
     }
 

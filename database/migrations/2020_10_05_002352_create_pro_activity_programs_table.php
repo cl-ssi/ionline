@@ -14,7 +14,7 @@ class CreateProActivityProgramsTable extends Migration
     public function up()
     {
         Schema::create('pro_activity_programs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->year('year');
             $table->string('description')->nullable();
 

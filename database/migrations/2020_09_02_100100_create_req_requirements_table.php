@@ -14,7 +14,7 @@ class CreateReqRequirementsTable extends Migration
     public function up()
     {
         Schema::create('req_requirements', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->text('subject');
             $table->enum('priority',['normal','urgente']);
             $table->enum('status',['creado','respondido','cerrado','derivado','reabierto']);

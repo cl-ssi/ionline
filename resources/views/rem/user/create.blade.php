@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@include('rem.nav')
 
 <form method="POST" class="form-horizontal" action="{{ route('rem.users.store') }}">
     @csrf

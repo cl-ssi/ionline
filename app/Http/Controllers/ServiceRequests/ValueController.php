@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequests\Value;
-use App\Establishment;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 
 class ValueController extends Controller

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use Carbon\Carbon;
@@ -16,7 +16,7 @@ use App\Mail\SendDocument;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
-use App\Documents\Correlative;
+use App\Models\Documents\Correlative;
 //use Illuminate\Support\Facades\Response;
 
 class DocumentController extends Controller
@@ -119,7 +119,7 @@ class DocumentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Documents\Document  $document
+     * @param  \App\Models\Documents\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function show(Document $document)
@@ -139,7 +139,7 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Documents\Document  $document
+     * @param  \App\Models\Documents\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function edit(Document $document)
@@ -158,7 +158,7 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Documents\Document  $document
+     * @param  \App\Models\Documents\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Document $document)
@@ -191,7 +191,7 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Documents\Document  $document
+     * @param  \App\Models\Documents\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function destroy(Document $document)
@@ -203,7 +203,7 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Documents\Document  $document
+     * @param  \App\Models\Documents\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function deleteFile(Document $document)

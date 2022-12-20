@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 use Illuminate\Database\Seeder;
 
 class HolidaySeeder extends Seeder

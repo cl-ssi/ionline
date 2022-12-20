@@ -14,25 +14,24 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            /** Es equivalente a $table->id() de laravel 8 */
             $table->bigInteger('id')->unsigned()->unique();
             $table->char('dv',1);
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
-            $table->string('email'); //->unique();
+            $table->string('email');
             $table->string('email_personal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('position')->nullable();
             $table->date('birthday')->nullable();
-            $table->foreignId('organizational_unit_id')->nullable();
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
             $table->boolean('active')->default(true);
             $table->boolean('external')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
         });
     }
 

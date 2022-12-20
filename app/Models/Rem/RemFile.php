@@ -19,6 +19,7 @@ class RemFile extends Model
         'establishment_id',
         'filename',
         'locked',
+        'rem_period_series_id'
     ];
 
     /**
@@ -31,7 +32,7 @@ class RemFile extends Model
     ];
 
     public function establishment() {
-        return $this->belongsTo('App\Establishment');
+        return $this->belongsTo('App\Models\Establishment');
     }
 
 }

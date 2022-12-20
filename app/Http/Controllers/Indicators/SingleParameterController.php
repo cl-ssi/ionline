@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators;
 
 use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Exports\PercapitaExport;
 use App\Exports\PercapitaOficialExport;
 use Illuminate\Http\Request;
@@ -207,6 +207,12 @@ class SingleParameterController extends Controller
                   ->orderBy('Sexo')
                   ->orderBy('Edad')
                   ->get();
+                
+                // Edad: 9999 => adultos mayores de 111 o + años
+                $total_pob->transform(function ($item, $key) {
+                    if($item->Edad == 9999) $item->Edad = "111 o más";
+                    return $item;
+                });
             }
             else{
                 $total_pob = collect(new PercapitaOficial);

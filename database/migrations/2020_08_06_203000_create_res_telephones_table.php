@@ -13,30 +13,21 @@ class CreateResTelephonesTable extends Migration
      */
     public function up()
     {
-          Schema::create('res_telephones', function (Blueprint $table) {
-              $table->id();
-              $table->integer('number')->unique();
-              $table->integer('minsal')->unique();
-              $table->macAddress('mac')->unique()->nullable();
-              $table->foreignId('place_id')->nullable();
-              $table->timestamps();
-              $table->softDeletes();
+        Schema::create('res_telephones', function (Blueprint $table) {
+            $table->id();
+            $table->integer('number')->unique();
+            $table->integer('minsal')->unique();
+            $table->macAddress('mac')->unique()->nullable();
+            $table->foreignId('place_id')->nullable()->constrained('cfg_places');
+            $table->timestamps();
+            $table->softDeletes();
+        });
 
-              $table->foreign('place_id')
-                    ->references('id')
-                    ->on('cfg_places')
-                    ->onDelete('restrict');
-          });
-
-          Schema::create('res_telephone_user', function (Blueprint $table) {
-              $table->foreignId('telephone_id')->unsigned();
-              $table->foreign('telephone_id')->references('id')->on('res_telephones')->onDelete('cascade');
-
-              $table->foreignId('user_id')->unsigned();
-              $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-              $table->timestamps();
-          });
+        Schema::create('res_telephone_user', function (Blueprint $table) {
+            $table->foreignId('telephone_id')->constrained('res_telephones');
+            $table->foreignId('user_id')->constrained('users');
+            $table->timestamps();
+        });
     }
 
     /**

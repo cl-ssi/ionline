@@ -10,6 +10,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Documents\SignaturesFile;
+use App\User;
 
 class Allowance extends Model implements Auditable
 {
@@ -18,10 +20,11 @@ class Allowance extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'resol_number', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
+        'resol_number', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
         'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
-        'from', 'to', 'from_half_day', 'to_half_day', 'creator_user_id', 'creator_ou_id', 'document_date'
+        'from', 'to', 'total_days', 'day_value', 'half_day_value', 'total_value', 'creator_user_id', 'creator_ou_id', 
+        'document_date', 'signatures_file_id'
     ];
 
      /**
@@ -62,8 +65,30 @@ class Allowance extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\AllowanceValue', 'allowance_value_id');
     }
 
+    public function allowanceEstablishment() {
+        return $this->belongsTo('App\Models\Establishment', 'establishment_id');
+    }
+
     public function allowanceSigns() {
         return $this->hasMany('App\Models\Allowances\AllowanceSign', 'allowance_id');
+    }
+
+    public function signedAllowance(){
+        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->request) {
+          case 'pending':
+            return 'Pendiente';
+            break;
+          case 'complete':
+            return 'Finalizado';
+            break;
+          case 'rejected':
+            return 'Rechazado';
+            break;
+        }
     }
 
     public function getContractualConditionValueAttribute(){
@@ -133,85 +158,29 @@ class Allowance extends Model implements Auditable
         }
     }
 
-    public function getFromHalfDayValueAttribute(){
-        switch ($this->from_half_day) {
-            case 1:
-              return 'Sí';
-              break;
-            case 0:
-              return '';
-              break;
-        }
-    }
-
-    public function getToHalfDayValueAttribute(){
-        switch ($this->to_half_day) {
-            case 1:
-              return 'Sí';
-              break;
-            case 0:
-              return '';
-              break;
-        }
-    }
-
-    public function getTotalDaysAttribute(){
-        $total_days = $this->from->diffInDays($this->to);
-        if($this->from == $this->to){
-            if($this->from_half_day == 1 || $this->to_half_day == 1){
-                $total_days = 0.5;
+    public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
+        if ($status_search OR $search_id OR $user_allowance_search) {
+            if($status_search != ''){
+                $query->where(function($q) use($status_search){
+                    $q->where('status', $status_search);
+                });
             }
-            else{
-                $total_days = 1;
+
+            if($search_id != ''){
+                $query->where(function($q) use($search_id){
+                    $q->where('id', $search_id);
+                });
             }
-            return $total_days;
+
+            $array_user_allowance_search = explode(' ', $user_allowance_search);
+            foreach($array_user_allowance_search as $word){
+                $query->whereHas('userAllowance' ,function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                });
+            }
         }
-        else{
-            if($this->from_half_day == 1){
-                $total_days = $total_days - 0.5;
-            }
-            if($this->to_half_day == 1){
-                $total_days = $total_days - 0.5;
-            }
-            return $total_days + 1;
-        }
-    }
-
-    public function getTotalIntDaysAttribute(){
-        $total_int_days = intval($this->getTotalDaysAttribute());
-        return $total_int_days;
-    }
-
-    public function getTotalIntAllowanceValueAttribute(){
-        $total_int_allowance_value = $this->getTotalIntDaysAttribute() * $this->AllowanceValue->value;
-        return $total_int_allowance_value;
-    }
-
-    //number_format($foo, 0, ",", ".");
-
-    public function getTotalDecimalDayAttribute(){
-        $decimal_day = $this->getTotalDaysAttribute() - $this->getTotalIntDaysAttribute();
-        return $decimal_day;
-    }
-
-    public function getTotalDecimalAllowanceValueAttribute(){
-        $total_decimal_allowance_value = $this->getTotalDecimalDayAttribute() * $this->AllowanceValue->value;
-        return $total_decimal_allowance_value;
-    }
-
-    public function getAllowanceValueFormatAttribute(){
-        return $this->AllowanceValue->value;
-    }
-
-    public function getAllowanceTotalValueFormatAttribute(){
-        // dd($this->getTotalIntAllowanceValueAttribute());
-        $allowance_total_value = $this->getTotalIntAllowanceValueAttribute() + $this->getTotalDecimalAllowanceValueAttribute();
-        return $allowance_total_value;
-    }
-
-    public function getAmIAuthorityAttributte(){
-        $am_i_authority = Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id);
-        dd($am_i_authority);
     }
 
     protected $hidden = [

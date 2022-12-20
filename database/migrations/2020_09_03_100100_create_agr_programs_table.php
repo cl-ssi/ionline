@@ -14,7 +14,7 @@ class CreateAgrProgramsTable extends Migration
     public function up()
     {
         Schema::create('agr_programs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('alias')->nullable();
             $table->timestamps();

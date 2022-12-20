@@ -13,7 +13,12 @@ class TrainingsItemController extends Controller
     public function index(Request $request)
     {
         $trainingItems = TrainingItem::where('programming_id',$request->commune_file_id)->OrderBy('linieamiento_estrategico')->get();
-        return view('programmings.trainingItems.index')->withtrainingItems($trainingItems);
+        $communeFile = CommuneFile::find($request->commune_file_id);
+        $programming_status = Programming::where('year', $communeFile->year)->whereHas('establishment.commune', function($q) use ($communeFile){
+            return $q->where('id', $communeFile->commune_id);
+        })->first()->status;
+
+        return view('programmings.trainingItems.index', compact('trainingItems', 'programming_status'));
     }
 
     public function create(Request $request)

@@ -15,7 +15,7 @@ class AddFkEstablishmentToSrValuesTable extends Migration
     {
         Schema::table('sr_values', function (Blueprint $table) {
             //
-            $table->unsignedInteger('establishment_id')->after('validity_from')->nullable();
+            $table->unsignedBigInteger('establishment_id')->after('validity_from')->nullable();
             $table->foreign('establishment_id')->references('id')->on('establishments');
         });
     }

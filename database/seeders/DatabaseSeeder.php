@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CourtSeeder::class);
         $this->call(PoliceUnitSeeder::class);
         $this->call(SubstanceSeeder::class);
-        $this->call(ReceptionSeeder::class);
+        // $this->call(ReceptionSeeder::class);
         $this->call(TelephoneSeeder::class);
         $this->call(PlaceSeeder::class);
         $this->call(ProfessionSeeder::class);

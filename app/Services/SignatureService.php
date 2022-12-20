@@ -81,7 +81,7 @@ class SignatureService
      */
     public function sendRequest()
     {
-        // TODO: View or document
+        /* TODO: View or document */
         $pdf = \PDF::loadView($this->view, $this->dataView);
         $pdf = $pdf->download('filename.pdf');
 

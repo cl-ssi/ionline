@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Resources\Mobile;
+use App\Models\Resources\Mobile;
 use App\Http\Requests\Resources\StoreMobileRequest;
 use App\Http\Requests\Resources\UpdateMobileRequest;
 use App\User;

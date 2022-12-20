@@ -70,7 +70,7 @@ class PercapitaOficialExport implements FromCollection, WithHeadings, WithMappin
         return [
             $percapita->Centro_APS,
             $percapita->Comuna,
-            $percapita->Edad,
+            $percapita->Edad == 9999 ? "111 o más" : $percapita->Edad, // Edad: 9999 => adultos mayores de 111 o + años
             $percapita->Sexo,
             $percapita->Inscritos,
         ];

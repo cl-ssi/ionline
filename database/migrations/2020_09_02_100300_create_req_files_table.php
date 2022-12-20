@@ -14,7 +14,7 @@ class CreateReqFilesTable extends Migration
     public function up()
     {
         Schema::create('req_files', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
             $table->bigInteger('event_id')->unsigned();

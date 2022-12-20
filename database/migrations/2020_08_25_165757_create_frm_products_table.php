@@ -14,7 +14,7 @@ class CreateFrmProductsTable extends Migration
     public function up()
     {
         Schema::create('frm_products', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
 
             $table->bigInteger('barcode')->nullable();
             $table->string('name');

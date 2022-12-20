@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Indicators\_2020;
 use App\Indicators\ProgramApsValue;
 use App\Indicators\ProgramApsGlosa;
 use App\Models\Commune;
-use App\Establishment;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // use App\Indicators\Rem;
@@ -2317,7 +2317,7 @@ class ProgramApsValueController extends Controller
             $data[$comuna->name][50]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         // /* 51 */
-        // //TODO: hacer las consultas para trazadora #51
+        /* TODO: hacer las consultas para trazadora #51 */
         // mostrar nada en los meses
         if($comuna == null)
             foreach($numeradores as $numerador) $data[51]['total_numerador'] = null;

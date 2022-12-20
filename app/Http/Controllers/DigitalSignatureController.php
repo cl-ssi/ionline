@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
-use App\Documents\Parte;
-use App\Documents\ParteFile;
+use App\Models\Documents\Parte;
+use App\Models\Documents\ParteFile;
 use Carbon\Carbon;
 
 /* No sé si son necesarias, las puse para el try catch */

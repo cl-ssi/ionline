@@ -361,7 +361,7 @@ class RequestFormController extends Controller {
     public function show(RequestForm $requestForm)
     {
         $eventType = 'supply_event';
-        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles', 'associateProgram');
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles', 'associateProgram');
         return view('request_form.show', compact('requestForm', 'eventType'));
     }
 

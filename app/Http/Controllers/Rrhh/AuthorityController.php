@@ -18,7 +18,12 @@ class AuthorityController extends Controller
      */
     public function index(Request $request)
     {
-        $ouTopLevels = OrganizationalUnit::with('childs.childs.childs.childs')->where('level', 1)->get();
+        $ouTopLevels = OrganizationalUnit::with([
+            'childs',
+            'childs.childs',
+            'childs.childs.childs.childs',
+            'childs.childs.childs.childs.childs'
+            ])->where('level', 1)->get();
         if($request->date) {
             $today = new \DateTime($request->date);
         }

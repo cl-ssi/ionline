@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Programmings\Programming;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\CommuneFile;
 use App\Programmings\ActivityItem;

@@ -12,6 +12,7 @@ use App\Programmings\ActivityItem;
 use App\Models\Programmings\ReviewItem;
 use App\Programmings\ActivityProgram;
 use App\Programmings\Professional;
+use App\Programmings\ProgrammingActivityItem;
 use Illuminate\Support\Arr;
 
 class ProgrammingItemController extends Controller
@@ -28,13 +29,13 @@ class ProgrammingItemController extends Controller
 
         $programming = Programming::whereId($request->programming_id)
             // busqueda de actividades sin filtro pero con tipo de actividad
-            ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType == 'Directa', function ($q) use ($activityType){
-                return $q->whereHas('items', $filter = function($q2) use ($activityType) {
-                    return $q2->when($activityType != null, function($q3) use ($activityType){
-                                return $q3->where('activity_type', $activityType)->with('activityItem');
-                            });
-                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
-            })
+            // ->when(!$listTracer && !$activityFilter && !$cycleFilter && $activityType == 'Directa', function ($q) use ($activityType){
+            //     return $q->whereHas('items', $filter = function($q2) use ($activityType) {
+            //         return $q2->when($activityType != null, function($q3) use ($activityType){
+            //                     return $q3->where('activity_type', $activityType)->with('activityItem');
+            //                 });
+            //     })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
+            // })
             // busqueda de actividades sin filtro ni tipo de actividad
             ->when(!$listTracer && !$activityFilter && !$cycleFilter && !$activityType, function ($q){
                 return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user');
@@ -57,11 +58,11 @@ class ProgrammingItemController extends Controller
                             })->when($workAreaFilter != null, function($q3) use ($workAreaFilter){
                                 return $q3->where('work_area', $workAreaFilter);
                             });
-                            // TODO: búsqueda por tipo de profesional
+                            /* TODO: búsqueda por tipo de profesional */
                             // ->when($cycleFilter != null, function($q3) use ($cycleFilter){
                             //     return $q3->where('vital_cycle', $cycleFilter);
                             // });
-                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'items.user'])->get();
+                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
             })
             ->first();
 

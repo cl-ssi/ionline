@@ -39,13 +39,13 @@
 @endif
 <h4 class="mb-3"> Programación {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} - <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 btn-sm">
         Observaciones 
-            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count()}}</span>
+            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count() + $programming->pendingIndirectItems->count()}}</span>
             <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
             <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
         </a>
-        @if($programming->pendingItems != null)
+        @if($programming->pendingItems != null || $programming->pendingIndirectItems != null)
         <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal">
-        <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{$programming->pendingItems->count()}}</span>
+        <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{$programming->pendingItems->count() + $programming->pendingIndirectItems->count()}}</span>
         </button> 
         @endif
 </h4>
@@ -68,6 +68,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <select style="font-size:70%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
+                                    <option style="font-size:70%;" value="">OTRA ACTIVIDAD INDIRECTA PENDIENTE</option>
                                 @foreach($pendingActivities as $activity)
                                     <option style="font-size:70%;" value="{{ $activity->id }}">
                                         {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 300, '(...)') }}
@@ -101,6 +102,55 @@
                             @can('ProgrammingItem: evaluate')<th class="text-center align-middle">ACCIONES</th>@endcan
                         </thead>
                         <tbody style="font-size:70%;">
+                            @forelse($programming->pendingIndirectItems as $item)
+                            <tr class="small">
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle">OTRA ACTIVIDAD INDIRECTA PENDIENTE</td>
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle">-</td>
+                                <td class="text-center align-middle w-25">
+                                    <div class="editable-txt">{!! $item->observation !!} 
+                                    @can('ProgrammingItem: evaluate')
+                                    <button id="btn_{{$item->id}}" title="Editar observaciones" class="float-right edit-btn" style="border: none; background-color:transparent;">
+                                        <i class="fas fa-edit fa-lg text-warning"></i>
+                                    </button>
+                                    @endcan
+                                    </div>
+
+                                    @can('ProgrammingItem: evaluate')
+                                    <form id="form_{{$item->id}}" class="editable-form" action="{{ route('pendingitems.update', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <textarea name="observation" rows="2" class="w-100">{!! $item->observation !!}</textarea><br>
+                                        <button type="reset" title="Cancelar" class="float-right edit-btn" style="border: none; background-color:transparent;">
+                                            <i class="fas fa-times fa-lg text-danger"></i>
+                                        </button> 
+                                        <button type="submit" title="Guardar" class="float-right" style="border: none; background-color:transparent;">
+                                            <i class="fas fa-check fa-lg text-success"></i>
+                                        </button>
+                                    </form>
+                                    @endcan
+                                </td>
+                                <td class="text-center align-middle">{{ $item->requestedBy->fullName ?? '' }}</td>
+                                @can('ProgrammingItem: evaluate')
+                                <td class="text-center align-middle">
+                                <form action="{{ route('pendingitems.destroy', $item->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" title="Eliminar actividad pendiente" style="border: none; background-color:transparent;">
+                                        <i class="fas fa-trash fa-lg text-danger"></i>
+                                    </button>
+                                </form>
+                                </td>
+                                @endcan
+                            </tr>
+                            @empty
+                            <td class="text-center align-middle" colspan="10"><br><br>No hay actividades indirectas pendientes<br><br><br></td>
+                            @endforelse
+
                             @forelse($programming->pendingItems as $item)
                             <tr class="small">
                                 <td class="text-center align-middle">{{ $item->tracer }}</td>

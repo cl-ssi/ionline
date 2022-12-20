@@ -14,12 +14,12 @@ class CreatePartesTable extends Migration
     public function up()
     {
         Schema::create('partes', function (Blueprint $table) {
-            $table->bigIncrements('id')->unsigned();
+            $table->id();
             $table->datetime('entered_at');
             $table->enum('type', ['Carta','Circular','Decreto', 'Demanda', 'Informe', 'Memo', 'Oficio', 'Ordinario', 'Otro', 'Permiso Gremial', 'Reservado', 'Resolución']);
             $table->date('date');
             $table->integer('number')->unsigned()->nullable();
-            //$table->unsignedInteger('organizational_unit_id')->nullable();
+            //$table->unsignedBigInteger('organizational_unit_id')->nullable();
             $table->string('origin')->nullable();
             $table->text('subject');
             $table->boolean('important')->nullable();

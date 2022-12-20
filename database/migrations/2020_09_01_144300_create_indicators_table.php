@@ -14,7 +14,7 @@ class CreateIndicatorsTable extends Migration
     public function up()
     {
         Schema::create('indicators', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->tinyInteger('number');
             $table->text('name');
             $table->decimal('weighting_by_section', 6, 3)->nullable(); //ponderación por corte

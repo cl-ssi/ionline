@@ -55,7 +55,7 @@ class RequestFormMessageController extends Controller
         }
 
         $message->save();
-        /*  TODO #108 Pasar a parametro el APP_RF_MAIL */
+        /* TODO #108 Pasar a parametro el APP_RF_MAIL */
         Mail::to($message->requestForm->user->email)
             ->cc(env('APP_RF_MAIL'))
             ->send(new NewRequestFormMessage($message));

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Resources\Wingle;
+use App\Models\Resources\Wingle;
 
 class WingleController extends Controller
 {

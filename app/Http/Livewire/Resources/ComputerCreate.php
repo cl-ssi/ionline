@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Resources;
 
 use App\Http\Requests\Resources\ComputerCreateRequest;
 use App\Models\Inv\Inventory;
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use Livewire\Component;
 
 class ComputerCreate extends Component

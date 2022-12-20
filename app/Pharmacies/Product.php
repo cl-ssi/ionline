@@ -435,7 +435,7 @@ class Product extends Model
         foreach ($matrix as $key => $data) {
           $flag = 0;
 
-          //TODO se agrega validación if $final, comparar con bd final
+          /* TODO: se agrega validación if $final, comparar con bd final */
           if($final[0] <> null){
               foreach ($final as $key2 => $f) {
                   if ($f['product_id'] == $data->product_id && $f['due_date'] == $data->due_date && $f['batch'] == $data->batch) {

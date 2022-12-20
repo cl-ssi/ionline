@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Pharmacies;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Pharmacies\Deliver;

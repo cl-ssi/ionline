@@ -24,13 +24,14 @@ class RequirementReceivers extends Component
 
     public function mount()
     {
-        
+        $this->ouRoots = null;
         $this->ouRoots = OrganizationalUnit::where('level', 1)->with('establishment',
                                                                      'childs','childs.establishment',
                                                                      'childs.childs','childs.childs.establishment',
                                                                      'childs.childs.childs','childs.childs.childs.establishment',
                                                                      'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
-                                                                     'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment')
+                                                                     'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
+                                                                     'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
                                                                      ->get();
         $this->to_ou_id = 1;
         // $this->to_user_id = 17430005;
@@ -85,13 +86,26 @@ class RequirementReceivers extends Component
     public function render()
     {
         if($this->to_ou_id){
+
+            $this->ouRoots = OrganizationalUnit::where('level', $this->to_ou_id)->with('establishment',
+                                                                                        'childs','childs.establishment',
+                                                                                        'childs.childs','childs.childs.establishment',
+                                                                                        'childs.childs.childs','childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
+                                                                                        'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
+                                                                                        ->get();
+
             //obtiene usuarios de ou
             $authority = null;
             $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
             if($current_authority) {
                 $authority = $current_authority->user;
             }
-            $users = User::where('organizational_unit_id', $this->to_ou_id)->orderBy('name')->get();
+
+            $users = User::where('organizational_unit_id', $this->to_ou_id)
+                        ->orderBy('name')
+                        ->get();
             if ($authority <> null) {
                 if(!$users->find($authority)) {
                     $users->push($authority);

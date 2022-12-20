@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Resources;
 use App\Http\Controllers\Controller;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
-use App\Resources\Computer;
-use App\Resources\Printer;
+use App\Models\Resources\Computer;
+use App\Models\Resources\Printer;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller

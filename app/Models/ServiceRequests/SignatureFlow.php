@@ -30,7 +30,7 @@ class SignatureFlow extends Model implements Auditable
     }
 
     public function resolution(){
-      return $this->belongsTo('App\Documents\Signature');
+      return $this->belongsTo('App\Models\Documents\Signature');
     }
 
     public function organizationalUnit(){

@@ -19,8 +19,7 @@ class CreateWreStores extends Migration
 
             $table->string('name', 255)->nullable();
             $table->string('address', 255)->nullable();
-            $table->unsignedInteger('commune_id')->nullable();
-            $table->foreign('commune_id')->references('id')->on('communes');
+            $table->foreignId('commune_id')->nullable()->constrained('communes');
 
             $table->timestamps();
             $table->softDeletes();

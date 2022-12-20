@@ -65,7 +65,7 @@ class CreateServiceRequestsTable extends Migration
             //datos adicionales
             $table->bigInteger('contract_number')->nullable();
             $table->integer('month_of_payment')->nullable();
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->string('nationality', 100)->nullable();
             $table->string('digera_strategy', 100)->nullable();
             $table->string('rrhh_team', 100)->nullable();
@@ -84,7 +84,6 @@ class CreateServiceRequestsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('subdirection_ou_id')->references('id')->on('organizational_units');
             $table->foreign('responsability_center_ou_id')->references('id')->on('organizational_units');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
 
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

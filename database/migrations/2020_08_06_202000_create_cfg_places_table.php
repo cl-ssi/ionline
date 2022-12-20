@@ -17,13 +17,9 @@ class CreateCfgPlacesTable extends Migration
               $table->id();
               $table->string('name');
               $table->string('description')->nullable()->default(NULL);
-              $table->foreignId('location_id')->unsigned();
+              $table->foreignId('location_id')->constrained('cfg_locations')->onDelete('restrict');
               $table->timestamps();
               $table->softDeletes();
-
-              $table->foreign('location_id')
-                    ->references('id')->on('cfg_locations')
-                    ->onDelete('restrict');
           });
     }
 

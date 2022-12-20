@@ -50,7 +50,7 @@
                     @endif
                   </td>
                   <td align="right">{{$item->quantity}}</td>
-                  <td align="right">{{ number_format($item->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                  <td align="right">{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
                   <td>{{$item->tax}}</td>
                   <td align="right">{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Resources\Printer;
+use App\Models\Resources\Printer;
 
 class PrinterSeeder extends Seeder
 {

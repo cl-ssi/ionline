@@ -277,7 +277,7 @@
                   <td>{{ $item->product ? $item->product->code.' '.$item->product->name : $item->article }}</td>
                   <td>{{ $item->specification }}</td>
                   <td align="right">{{ $item->quantity }}</td>
-                  <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                  <td align="right">{{$requestForm->symbol_currency}}{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
                   <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
               @endforeach

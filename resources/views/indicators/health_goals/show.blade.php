@@ -318,7 +318,7 @@
                                 @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, null))
                                     <!-- Button trigger modal -->
                                     <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                        @if($result)
+                                        @if($result && $result->value == 1)
                                             <i class="fas fa-circle text-success"></i>
                                         @else
                                             @if($isManager)
@@ -409,7 +409,7 @@
                 @foreach($indicator->establishments as $establishment)
                     @php($values = $indicator->getValuesBy($commune, $establishment->alias_estab))
                     @if($establishment->comuna == $commune && $values)
-                    <strong> {{ $establishment->alias_estab }} </strong>
+                    <strong id="{{str_replace(' ','_',$establishment->alias_estab)}}"> {{ $establishment->alias_estab }} </strong>
                     <!-- archivos por corte -->
                     <div class="float-right">
                         @php($ends = [1 => '1er', 2 => '2o', 3 => '3er', 4 => '4o'])
@@ -449,7 +449,7 @@
                                     @php($result = $indicator->getValueByActivityNameAndMonth('numerador', $value->activity_name, $number, $commune, $establishment->alias_estab))
                                         <!-- Button trigger modal -->
                                         <button class="btn btb-sm btn-link" data-toggle="modal" id="btn_{{$value->id}}-{{$number}}" data-target="#registerActivity{{$value->id}}-{{$number}}">
-                                            @if($result)
+                                            @if($result && $result->value == 1)
                                                 <i class="fas fa-circle text-success"></i>
                                             @else
                                                 @if($isManager)
@@ -594,7 +594,7 @@
                                     <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('numerador') != null ? number_format($indicator->getLastValueByFactor('numerador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
-                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth('numerador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, null), 0, ',', '.') : ''}}</td>
                                     @endforeach
                                 @endif
                             </tr>
@@ -609,7 +609,7 @@
                                     <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('denominador') != null ? number_format($indicator->getLastValueByFactor('denominador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
-                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, null), 0, ',', '.') : ''}}</td>
                                     @endforeach
                                 @endif
                             </tr>
@@ -626,6 +626,14 @@
 @section('custom_js')
 <script type="text/javascript">
     $('#myTab a[href="{!! session()->has("commune") ? "#".session()->get("commune") : "#IQUIQUE" !!}"]').tab('show') // Select tab by name
+
+    var hasEstablishment = {!! session()->has("establishment") ? 'true' : 'false' !!};
+    if (hasEstablishment) {
+        $('html,body').animate({
+            scrollTop: $('#{!! session()->get("establishment") !!}').offset().top
+        }, 'fast');
+    }
+
     $('[data-toggle="tooltip"]').tooltip()
 
     $('input[type="file"]').bind('change', function(e) {

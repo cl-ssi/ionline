@@ -2,8 +2,9 @@
 
 namespace App\Models\Drugs;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class SampleToIsp extends Model
 {
@@ -15,25 +16,15 @@ class SampleToIsp extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'document_date', 'envelope_weight', 'observation',
-        'reception_id', 'user_id', 'manager_id', 'lawyer_id'
+        'number', 
+        'document_date', 
+        'envelope_weight', 
+        'observation',
+        'reception_id', 
+        'user_id', 
+        'manager_id', 
+        'lawyer_id',
     ];
-
-    public function reception() {
-        return $this->belongsTo('App\Models\Drugs\Reception');
-    }
-
-    public function user() {
-        return $this->belongsTo('App\User');
-    }
-
-    public function manager() {
-        return $this->belongsTo('App\User', 'manager_id');
-    }
-
-    public function lawyer() {
-        return $this->belongsTo('App\User', 'lawyer_id');
-    }
 
     /**
      * The attributes that should be mutated to dates.
@@ -43,4 +34,24 @@ class SampleToIsp extends Model
     protected $dates = ['document_date', 'deleted_at'];
 
     protected $table = 'drg_sample_to_isps';
+
+    public function reception()
+    {
+        return $this->belongsTo(Reception::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    public function lawyer()
+    {
+        return $this->belongsTo(User::class, 'lawyer_id');
+    }
 }

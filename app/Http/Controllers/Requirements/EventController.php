@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Requirements;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Mail\RequirementEventNotification;
 use App\Mail\RequirementNotification;
 use App\Requirements\RequirementCategory;

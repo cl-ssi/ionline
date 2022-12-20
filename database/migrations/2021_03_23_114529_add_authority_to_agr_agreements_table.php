@@ -14,7 +14,7 @@ class AddAuthorityToAgrAgreementsTable extends Migration
     public function up()
     {
         Schema::table('agr_agreements', function (Blueprint $table) {
-            $table->integer('authority_id')->after('commune_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('authority_id')->after('commune_id')->unsigned()->nullable();
             $table->foreign('authority_id')->references('id')->on('rrhh_authorities');
         });
     }

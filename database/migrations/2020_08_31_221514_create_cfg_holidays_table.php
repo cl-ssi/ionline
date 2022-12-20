@@ -14,7 +14,7 @@ class CreateCfgHolidaysTable extends Migration
     public function up()
     {
         Schema::create('cfg_holidays', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->date('date');
             $table->string('name');
             $table->enum('region',['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'])->nullable();

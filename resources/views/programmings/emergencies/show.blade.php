@@ -6,8 +6,10 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Emergencias y desastres {{ $programming->establishment->type }} {{ $programming->establishment->name }} {{ $programming->year}} 
+<h3 class="mb-3">Emergencias y desastres {{ $programming->establishment->type }} {{ $programming->establishment->name }} {{ $programming->year}}
+@if($programming->status == 'active')
 <a href="{{ route('emergencies.create', $programming) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar item</a>
+@endif
 </h3>
 <button onclick="tableExcel()" class="btn btn-success mb-1 btn-sm">Exportar Excel</button>
 <table id="emergencies-table" class="table table-sm table-hover">
@@ -20,7 +22,7 @@
             <th class="text-center align-middle table-dark">Factor (a*b*c)</th>
             <th class="text-center align-middle table-dark">Descripción de los posibles efectos</th>
             <th class="text-center align-middle table-dark">Medidas de prevención y mitigación gestionadas para los posibles efectos</th>
-            <th class="text-center align-middle table-dark"></th>
+            @if($programming->status == 'active')<th class="text-center align-middle table-dark"></th>@endif
         </tr>
     </thead>
     <tbody>
@@ -35,6 +37,7 @@
             <td class="text-left"><ul>@foreach($items as $item) <li>{{$item}}</li> @endforeach</ul></td>
             @php($items = explode("\r", $emergency->measures))
             <td class="text-left"><ul>@foreach($items as $item) <li>{{$item}}</li> @endforeach</ul></td>
+            @if($programming->status == 'active')
             <td class="text-center align-middle">
                 <a href="{{ route('emergencies.edit', $emergency->id) }}" class="btn btb-flat btn-xs  btn-light" >
                 <i class="fas fa-edit"></i></a> 
@@ -43,6 +46,7 @@
                     <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desea eliminar este item?')"><i class="fas fa-trash-alt"></i></button>
                 </form>
             </td>
+            @endif
         </tr>
         @empty
         <tr><td colspan="7" class="text-center small">No hay registro de emergencias y desastres</td></tr>

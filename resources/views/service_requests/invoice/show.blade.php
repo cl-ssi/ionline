@@ -17,8 +17,7 @@
 		<hr>
 
 		<h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
-		<p>Si tiene alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
-		<a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>. El horario de atención es de 8:30 a 14:00.</p>
+		<p>Si tiene alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH El horario de atención es de 8:30 a 14:00.</p>
 
 
 
@@ -152,9 +151,7 @@
 @else
 	<div class="alert alert-danger">
 		<h4 class="alert-heading">No existe un usuario con este run en nuestros registros. </h4>
-		<p>Si tiene alguna duda respecto a algún contrato, puede ponerse en contacto con el área de RRHH a través de del anexo 57 9819 o bién a través de 
-		<a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>. <br>
-		El horario de atención es de 8:30 a 16:00.</p>
+		<p>Si tiene alguna duda respecto a algún contrato, puede ponerse en contacto con el área de RRHH a través de del anexo 57 9819 El horario de atención es de 8:30 a 16:00.</p>
 	</div>
 @endif
 

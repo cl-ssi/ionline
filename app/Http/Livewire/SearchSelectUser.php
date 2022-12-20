@@ -51,6 +51,8 @@ class SearchSelectUser extends Component
         $this->resetx();
         $this->user = $user;
         $this->selectedName = $user->fullName;
+        /** Emite a cualquier otro componente que user_id seleccionó */
+        $this->emit('userSelected',$user->id);
     }
 
     public function updatedQuery()

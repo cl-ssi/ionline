@@ -38,12 +38,12 @@
                             <th class="table-active" style="width: 33%">Gasto Estimado</th>
                             <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                         </tr>
-                        @if($requestForm->has_increased_expense)
+                        {{--@if($requestForm->has_increased_expense)
                         <tr>
                             <th class="table-active" style="width: 33%">Nuevo Presupuesto</th>
                             <td>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                         </tr>
-                        @endif
+                        @endif--}}
                         <tr>
                             <th class="table-active" scope="row">Nombre del Solicitante</th>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
@@ -100,7 +100,7 @@
             @if($requestForm->isPurchaseInProcess())
             <!-- <div class="float-right"> -->
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" @if($requestForm->purchasingProcess == null || ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0)) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
+                <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" @if($requestForm->purchasingProcess == null || ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() == 0 && $requestForm->purchasingProcess->detailsPassenger->count() == 0)) onclick="return alert('No hay registro de compras para dar término al proceso de compra') || event.stopImmediatePropagation()" @endif data-target="#processClosure" data-status="finished">
                     Terminar <i class="fas fa-shopping-cart"></i>
                 </button>
                 <!-- Button trigger modal -->
@@ -213,175 +213,176 @@
 </div>
 
 <br>
+
+@if($requestForm->isPurchaseInProcess())
+    @if($requestForm->purchase_mechanism_id == 1)
+        @if($requestForm->purchase_type_id == 1)
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+        @endif
+        @if($requestForm->purchase_type_id == 2)
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+        @endif
+        @if($requestForm->purchase_type_id == 3)
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+        @endif
+    @endif
+
+    @if($requestForm->purchase_mechanism_id == 2)
+        @if($requestForm->father || $requestForm->purchase_type_id == 4)
+        <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+        @else
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
+        @endif
+    @endif
+
+    @if($requestForm->purchase_mechanism_id == 3)
+        @if($requestForm->father)
+        <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+        @else
+        <form method="POST" class="form-horizontal" action="{{ isset($result) ? route('request_forms.supply.update_direct_deal', [$requestForm, $result]) : route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
+        @endif
+    @endif
+
+    @if($requestForm->purchase_mechanism_id == 4)
+        @if($requestForm->father)
+        <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+        @else
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
+        @endif
+    @endif
+
+    <!-- compra ágil -->
+    @if($requestForm->purchase_mechanism_id == 5)
+    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
+    @endif
+
+    @csrf
+    @method(isset($result) ? 'PUT' : 'POST')
+@endif
  
 @if($requestForm->type_form == 'bienes y/o servicios')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md">
-                <div class="table-responsive">
-                    <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
-                    @if($requestForm->isPurchaseInProcess())
-                    @if($requestForm->purchase_mechanism_id == 1)
-                    @if($requestForm->purchase_type_id == 1)
-                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
-                        @endif
-                        @if($requestForm->purchase_type_id == 2)
-                        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md">
+            <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
+                <table class="table table-sm table-hover table-bordered small">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Item</th>
+                            <!-- <th>Estado</th> -->
+                            <th>Cod.Presup.</th>
+                            <th>Artículo</th>
+                            <th>UM</th>
+                            <th>Especificaciones Técnicas</th>
+                            <th><i class="fas fa-paperclip"></i></th>
+                            <th>Proveedor<br>RUT - Nombre</th>
+                            <th>Especificaciones del proveedor</th>
+                            <th width="100">Cantidad</th>
+                            <th width="150">Valor U.</th>
+                            <th width="80">Impto.</th>
+                            <th width="100">Cargos</th>
+                            <th width="100">Dsctos</th>
+                            <th width="150">Total Item</th>
+                            <th colspan="2"></th>
+                            <!-- <th></th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($requestForm->itemRequestForms as $key => $item)
+                        @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
+                        <tr data-id="{{$item->product->code ?? ''}}">
+                            <td>{{ $key+1 }}</td>
+                            <!-- <td>{{ $item->status }}</td> -->
+                            <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                            <td>@if($item->product_id)
+                            {{ optional($item->product)->code}} {{ optional($item->product)->name }}
+                            @else
+                            {{ $item->article }}
                             @endif
-                            @if($requestForm->purchase_type_id == 3)
-                            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
-                                @endif
-                                @endif
-
-                                @if($requestForm->purchase_mechanism_id == 2)
-                                @if($requestForm->father || $requestForm->purchase_type_id == 4)
-                                <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo o CONVENIO MARCO MENOR A 1.000 UTM -->
-                                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                                    @else
-                                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_convenio_marco', $requestForm) }}" enctype="multipart/form-data">
-                                        @endif
-                                        @endif
-
-                                        @if($requestForm->purchase_mechanism_id == 3)
-                                        @if($requestForm->father)
-                                        <!-- OC ejecución inmediata desde trato directo con ejecucion en el tiempo -->
-                                        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                                            @else
-                                            <form method="POST" class="form-horizontal" action="{{ isset($result) ? route('request_forms.supply.update_direct_deal', [$requestForm, $result]) : route('request_forms.supply.create_direct_deal', $requestForm) }}" enctype="multipart/form-data">
-                                                @endif
-                                                @endif
-
-                                                @if($requestForm->purchase_mechanism_id == 4)
-                                                @if($requestForm->father)
-                                                <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
-                                                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                                                    @else
-                                                    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
-                                                        @endif
-                                                        @endif
-
-                                                        <!-- compra ágil -->
-                                                        @if($requestForm->purchase_mechanism_id == 5)
-                                                        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
-                                                            @endif
-
-                                                            @csrf
-                                                            @method(isset($result) ? 'PUT' : 'POST')
-                                                            @endif
-                                                            <table class="table table-sm table-hover table-bordered small">
-                                                                <thead class="text-center">
-                                                                    <tr>
-                                                                        <th>Item</th>
-                                                                        <!-- <th>Estado</th> -->
-                                                                        <th>Cod.Presup.</th>
-                                                                        <th>Artículo</th>
-                                                                        <th>UM</th>
-                                                                        <th>Especificaciones Técnicas</th>
-                                                                        <th><i class="fas fa-paperclip"></i></th>
-                                                                        <th>Proveedor<br>RUT - Nombre</th>
-                                                                        <th>Especificaciones del proveedor</th>
-                                                                        <th width="100">Cantidad</th>
-                                                                        <th width="150">Valor U.</th>
-                                                                        <th width="80">Impto.</th>
-                                                                        <th width="100">Cargos</th>
-                                                                        <th width="100">Dsctos</th>
-                                                                        <th width="150">Total Item</th>
-                                                                        <th colspan="2"></th>
-                                                                        <!-- <th></th> -->
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach($requestForm->itemRequestForms as $key => $item)
-                                                                    @php($selectedItem = isset($result) ? $result_details->firstWhere('item_request_form_id', $item->id) : null)
-                                                                    <tr data-id="{{$item->product->code ?? ''}}">
-                                                                        <td>{{ $key+1 }}</td>
-                                                                        <!-- <td>{{ $item->status }}</td> -->
-                                                                        <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                                                                        <td>@if($item->product_id)
-                                                                            {{ optional($item->product)->code}} {{ optional($item->product)->name }}
-                                                                            @else
-                                                                            {{ $item->article }}
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>{{ $item->unit_of_measurement }}</td>
-                                                                        <td>{{ $item->specification }}</td>
-                                                                        <td align="center">
-                                                                            @if($item->article_file)
-                                                                            <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
-                                                                                <i class="fas fa-file"></i></a>
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            <input type="text" class="form-control form-control-sm mb-2" name="supplier_run[]" id="for_supplier_run" value="{{ old('supplier_run.'.$key, $selectedItem->supplier_run ?? '') }}"> 
-                                                                            <textarea class="form-control form-control-sm" name="supplier_name[]" id="for_supplier_name">{{ old('supplier_name.'.$key, $selectedItem->supplier_name ?? '') }}</textarea>
-                                                                        </td>
-                                                                        <td>
-                                                                            <textarea class="form-control form-control-sm" name="supplier_specifications[]" id="for_supplier_specifications" rows="4">{{ old('supplier_specifications.'.$key, $selectedItem->supplier_specifications ?? '') }}</textarea>
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <!-- <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}"> -->
-                                                                            <select name="tax[]" class="form-control form-control-sm" id="for_tax">
-                                                                                <option value="">Seleccione...</option>    
-                                                                                <option value="iva" {{$item->tax == 'iva' ? 'selected' : ''}} >I.V.A. 19%</option>
-                                                                                <option value="bh" {{$item->tax == 'bh' ? 'selected' : ''}} ></option>
-                                                                                <option value="srf" {{$item->tax == 'srf' ? 'selected' : ''}} >S.R.F Zona Franca 0%</option>
-                                                                                <option value="e" {{$item->tax == 'e' ? 'selected' : ''}}>Exento 0%</option>
-                                                                                <option value="nd" {{$item->tax == 'nd' ? 'selected' : ''}} >No Definido</option>
-                                                                            </select>
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_charges" name="charges[]" value="{{ old('charges.'.$key, $selectedItem->charges ?? '') }}">
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_discounts" name="discounts[]" value="{{ old('discounts.'.$key, $selectedItem->discounts ?? '') }}">
-                                                                        </td>
-                                                                        <td align="right">
-                                                                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
-                                                                        </td>
-                                                                        <td align="center">
-                                                                            <fieldset class="form-group">
-                                                                                <div class="form-check">
-                                                                                    <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
-                                                                                </div>
-                                                                            </fieldset>
-                                                                        </td>
-                                                                        <!-- <td align="center">
-                                    <a href="">
-                                    <span style="color: Tomato;">
-                                        <i class="fas fa-times-circle"></i>
-                                    </span>
-                                    </a>
-                                </td> -->
-                                                                    </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                                <tfoot>
-                                                                    <tr>
-                                                                        <td colspan="12"></td>
-                                                                        <td class="text-right">Valor Total</td>
-                                                                        <td align="right">
-                                                                            <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="12"></td>
-                                                                        <td class="text-right">Total seleccionado</td>
-                                                                        <td align="right">
-                                                                            <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tfoot>
-                                                            </table>
-                </div>
+                            </td>
+                            <td>{{ $item->unit_of_measurement }}</td>
+                            <td>{{ $item->specification }}</td>
+                            <td align="center">
+                            @if($item->article_file)
+                            <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
+                            <i class="fas fa-file"></i></a>
+                            @endif
+                            </td>
+                            <td>
+                            <input type="text" class="form-control form-control-sm mb-2" name="supplier_run[]" id="for_supplier_run" value="{{ old('supplier_run.'.$key, $selectedItem->supplier_run ?? '') }}"> 
+                            <textarea class="form-control form-control-sm" name="supplier_name[]" id="for_supplier_name">{{ old('supplier_name.'.$key, $selectedItem->supplier_name ?? '') }}</textarea>
+                            </td>
+                            <td>
+                            <textarea class="form-control form-control-sm" name="supplier_specifications[]" id="for_supplier_specifications" rows="4">{{ old('supplier_specifications.'.$key, $selectedItem->supplier_specifications ?? '') }}</textarea>
+                            </td>
+                            <td align="right">
+                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
+                            </td>
+                            <td align="right">
+                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
+                            </td>
+                            <td align="right">
+                            <!-- <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}"> -->
+                            <select name="tax[]" class="form-control form-control-sm" id="for_tax">
+                            <option value="">Seleccione...</option>    
+                            <option value="iva" {{$item->tax == 'iva' ? 'selected' : ''}} >I.V.A. 19%</option>
+                            <option value="bh" {{$item->tax == 'bh' ? 'selected' : ''}} ></option>
+                            <option value="srf" {{$item->tax == 'srf' ? 'selected' : ''}} >S.R.F Zona Franca 0%</option>
+                            <option value="e" {{$item->tax == 'e' ? 'selected' : ''}}>Exento 0%</option>
+                            <option value="nd" {{$item->tax == 'nd' ? 'selected' : ''}} >No Definido</option>
+                            </select>
+                            </td>
+                            <td align="right">
+                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_charges" name="charges[]" value="{{ old('charges.'.$key, $selectedItem->charges ?? '') }}">
+                            </td>
+                            <td align="right">
+                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_discounts" name="discounts[]" value="{{ old('discounts.'.$key, $selectedItem->discounts ?? '') }}">
+                            </td>
+                            <td align="right">
+                            <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
+                            </td>
+                            <td align="center">
+                            <fieldset class="form-group">
+                            <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>
+                            </div>
+                            </fieldset>
+                            </td>
+                            <!-- <td align="center">
+                            <a href="">
+                            <span style="color: Tomato;">
+                            <i class="fas fa-times-circle"></i>
+                            </span>
+                            </a>
+                            </td> -->
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="12"></td>
+                            <td class="text-right">Valor Total</td>
+                            <td align="right">
+                            <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12"></td>
+                            <td class="text-right">Total seleccionado</td>
+                            <td align="right">
+                            <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
+</div>
 @else
     <div class="container-fluid">
         <div class="row">
@@ -393,10 +394,6 @@
                             <tr>
                                 <th>Item</th>
                                 <th>Pasajero</th>
-                                <th>Fecha Nac.</th>
-                                <th>Teléfono</th>
-                                <th>E-mail</th>
-                                {{-- @if(in_array($eventType, ['finance_event', 'supply_event', 'pre_budget_event', 'budget_event'])) --}}
                                 <th>Item Pres.</th> 
                                 <th>Tipo viaje</th>
                                 <th>Origen</th>
@@ -404,9 +401,9 @@
                                 <th>Fecha ida</th>
                                 <th>Fecha vuelta</th>
                                 <th>Equipaje</th>
-                                <th>Total pasaje</th>
-                                {{-- @endif --}}
                                 {{--
+                                <th>Total pasaje</th>
+    
                                 <th>Cod.Presup.</th>
                                 <th>Artículo</th>
                                 <th>UM</th>
@@ -415,36 +412,37 @@
                                 <th>Proveedor<br>RUT - Nombre</th>
                                 <th>Especificaciones del proveedor</th>
                                 <th width="100">Cantidad</th>
+                                --}}
+
                                 <th width="150">Valor U.</th>
-                                <th width="80">Impto.</th>
+                                {{--<th width="80">Impto.</th>--}}
                                 <th width="100">Cargos</th>
                                 <th width="100">Dsctos</th>
                                 <th width="150">Total Item</th>
                                 <th colspan="2"></th>
                                 <!-- <th></th> -->
-                                --}}
+                                
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($requestForm->passengers as $key => $passenger)
-                            <tr data-id="{{$item->product->code ?? ''}}">
+                            @php($selectedItem = isset($result) ? $result_details->firstWhere('passenger_request_form_id', $passenger->id) : null)
+                            {{--<tr data-id="{{$item->product->code ?? ''}}">--}}
+                            <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>
                                     <b>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</b> <br>
                                     {{ $passenger->FullName }}
                                 </td>
-                                <td>{{ $passenger->birthday ? $passenger->birthday->format('d-m-Y') : '' }}</td>
-                                <td>{{ $passenger->phone_number }}</td>
-                                <td>{{ $passenger->email }}</td>
-                                <td></td>
-                                <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
+                                <td>{{ $passenger->budgetItem()->first()->fullName() }}</td>
+                                <td>{{ $passenger->roundTripName }}</td>
                                 <td>{{ $passenger->origin }}</td>
                                 <td>{{ $passenger->destination }}</td>
                                 <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
                                 <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y H:i') : '' }}</td>
-                                <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
-                                <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
+                                <td>{{ $passenger->baggageName }}</td>
                                 {{--
+                                <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
                                 <td>{{ $item->budgetItem()->first()->fullName() }}</td>
                                 <td>@if($item->product_id)
                                     {{ optional($item->product)->code}} {{ optional($item->product)->name }}
@@ -468,22 +466,24 @@
                                     <textarea class="form-control form-control-sm" name="supplier_specifications[]" id="for_supplier_specifications" rows="4">{{ old('supplier_specifications.'.$key, $selectedItem->supplier_specifications ?? '') }}</textarea>
                                 </td>
                                 <td align="right">
-                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $item->quantity) }}">
+                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? $passenger->quantity) }}">
                                 </td>
+                                --}}
+                                <input type="hidden" id="for_quantity" name="quantity[]" value="{{ old('quantity.'.$key, $selectedItem->quantity ?? 1) }}">
                                 <td align="right">
-                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $item->unit_value) }}">
+                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ old('unit_value.'.$key, $selectedItem->unit_value ?? $passenger->unit_value) }}">
                                 </td>
-                                <td align="right">
-                                    <!-- <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}"> -->
+                                {{--<td align="right">
                                     <select name="tax[]" class="form-control form-control-sm" id="for_tax">
                                         <option value="">Seleccione...</option>    
-                                        <option value="iva" {{$item->tax == 'iva' ? 'selected' : ''}} >I.V.A. 19%</option>
-                                        <option value="bh" {{$item->tax == 'bh' ? 'selected' : ''}} ></option>
-                                        <option value="srf" {{$item->tax == 'srf' ? 'selected' : ''}} >S.R.F Zona Franca 0%</option>
-                                        <option value="e" {{$item->tax == 'e' ? 'selected' : ''}}>Exento 0%</option>
-                                        <option value="nd" {{$item->tax == 'nd' ? 'selected' : ''}} >No Definido</option>
+                                        <option value="iva">I.V.A. 19%</option>
+                                        <option value="bh"></option>
+                                        <option value="srf">S.R.F Zona Franca 0%</option>
+                                        <option value="e">Exento 0%</option>
+                                        <option value="nd">No Definido</option>
                                     </select>
-                                </td>
+                                </td>--}}
+                                <input type="hidden" name="tax[]" value="e" id="for_tax">
                                 <td align="right">
                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_charges" name="charges[]" value="{{ old('charges.'.$key, $selectedItem->charges ?? '') }}">
                                 </td>
@@ -491,16 +491,15 @@
                                     <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_discounts" name="discounts[]" value="{{ old('discounts.'.$key, $selectedItem->discounts ?? '') }}">
                                 </td>
                                 <td align="right">
-                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $item->expense) }}" readonly>
+                                    <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ old('item_total.'.$key, $selectedItem->expense ?? $passenger->unit_value) }}" readonly>
                                  </td>
                                  <td align="center">
                                     <fieldset class="form-group">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') || ($selectedItem && $item->id == $selectedItem->item_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>    
+                                            <input class="form-check-input" type="checkbox" name="passenger_id[{{$key}}]" onclick="disabledSaveBtn()" id="for_passenger_id" value="{{ $passenger->id }}" {{ $passenger->id == old('passenger_id.'.$key, '') || ($selectedItem && $passenger->id == $selectedItem->passenger_request_form_id) ? 'checked' : '' }} @if($isBudgetEventSignPending || !$requestForm->isPurchaseInProcess()) disabled @endif>    
                                         </div>
                                     </fieldset>
                                 </td>
-                                --}}
                             </tr>
                             @endforeach
                         </tbody>
@@ -597,7 +596,7 @@
 <br>
 @endif
 
-@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
+@if($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details->count() > 0 || $requestForm->purchasingProcess->detailsPassenger->count() > 0))
 </main> <!-- close div container -->
 <!-- nueva tabla -->
 <div class="container-fluid">
@@ -629,7 +628,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
+                    @foreach( ($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $key => $detail)
                     <tr @if($detail->pivot->status != 'total') class="text-muted" @endif>
                         <td>{{ $key+1 }}</td>
                         <td>{{ $detail->pivot->id}}<br>
@@ -930,7 +929,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($requestForm->purchasingProcess->details as $detail)
+                            @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $detail)
                             @if($detail->pivot->audits->count() > 0)
                             @foreach($detail->pivot->audits->sortByDesc('updated_at') as $audit)
                             <tr>
@@ -974,7 +973,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($requestForm->purchasingProcess->details as $detail)
+                            @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $detail)
                             @if($detail->pivot->audits->count() > 0)
                             @foreach($detail->pivot->getPurchasingType()->audits->sortByDesc('updated_at') as $audit)
                             <tr>

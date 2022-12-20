@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Resources\Computer;
+use App\Models\Resources\Computer;
 use App\User;
 
 class ComputerSeeder extends Seeder

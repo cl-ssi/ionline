@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Parameters;
 
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

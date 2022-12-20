@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\ServiceRequest;
 
-use App\Holiday;
+use App\Models\Parameters\Holiday;
 // use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -35,7 +35,7 @@ class ShowTotalHours extends Component
 
     public function render()
     {
-        //TODO HORA MÉDICA ya no obtiene el valor hora de value
+        /* TODO: HORA MÉDICA ya no obtiene el valor hora de value */
         $value = $this->fulfillment->serviceRequest->net_amount;
         // if( $this->fulfillment->serviceRequest->type == 'Covid' )
         // {

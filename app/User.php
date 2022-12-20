@@ -71,22 +71,22 @@ class User extends Authenticatable implements Auditable
 
     public function telephones()
     {
-        return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Telephone', 'res_telephone_user')->withTimestamps();
     }
 
     public function computers()
     {
-        return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Computer', 'res_computer_user')->withTimestamps();
     }
 
     public function printers()
     {
-        return $this->belongsToMany('\App\Resources\Printer', 'res_printer_user')->withTimestamps();
+        return $this->belongsToMany('\App\Models\Resources\Printer', 'res_printer_user')->withTimestamps();
     }
 
     public function mobile()
     {
-        return $this->hasOne('\App\Resources\Mobile');
+        return $this->hasOne('\App\Models\Resources\Mobile');
     }
 
     public function country()
@@ -236,12 +236,12 @@ class User extends Authenticatable implements Auditable
 
     public function documentEvents()
     {
-        return $this->hasMany('\App\Documents\DocumentEvent');
+        return $this->hasMany('\App\Models\Documents\DocumentEvent');
     }
 
     public function documents()
     {
-        return $this->hasMany('App\Documents\Document');
+        return $this->hasMany('App\Models\Documents\Document');
     }
 
     public function reqCategories()
@@ -516,7 +516,7 @@ class User extends Authenticatable implements Auditable
     public function getSubrogantAttribute()
     {
         if($this->absent) {
-            return $this->subrogations->where('subrogant.absent','false')->first()->subrogant ?? collect();
+            return $this->subrogations->where('subrogant.absent',false)->first()->subrogant ?? collect();
         }
         else {
             return $this;
@@ -564,23 +564,22 @@ class User extends Authenticatable implements Auditable
         $uri = 'https://www.gravatar.com/avatar/' . $hash . '?d=404';
         $headers = @get_headers($uri);
 
-        if ( preg_match("|200|", $headers[0]) )
-        {
-            if(!$this->gravatar)
-            {
-                $this->gravatar = true;
-                $this->save();
-            }
-        } 
-        else 
-        {
-            if($this->gravatar)
-            {
-                $this->gravatar = false;
-                $this->save();
+        /* Permite login local si no hay conexión a internet */
+        if ($headers) {
+            if (preg_match("|200|", $headers[0])) {
+                if (!$this->gravatar) {
+                    $this->gravatar = true;
+                    $this->save();
+                }
+            } else {
+                if ($this->gravatar) {
+                    $this->gravatar = false;
+                    $this->save();
+                }
             }
         }
     }
+
 
     /**
      * The attributes that should be cast to native types.

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Programmings\Programming;
 use App\Programmings\ProgrammingItem;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\Commune;
 use App\User;
 use Illuminate\Support\Facades\Storage;

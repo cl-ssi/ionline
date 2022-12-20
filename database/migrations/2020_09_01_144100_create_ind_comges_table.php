@@ -14,7 +14,7 @@ class CreateIndComgesTable extends Migration
     public function up()
     {
         Schema::create('ind_comges', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->tinyInteger('number');
             $table->string('name');
             $table->integer('year');

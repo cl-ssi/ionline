@@ -21,7 +21,7 @@ class ReviewItemController extends Controller
                              ->where('programming_item_id', $request->programmingItem_id)
                              ->get();
 
-        $programmingItem = ProgrammingItem::with('activityItem', 'programming')->find($request->programmingItem_id);
+        $programmingItem = ProgrammingItem::with('activityItem', 'programming')->findOrFail($request->programmingItem_id);
         
         $programmingDay = ProgrammingDay::where('programming_id',$programmingItem->programming_id)->first();
 
@@ -44,6 +44,9 @@ class ReviewItemController extends Controller
         $reviewItem->review_id = 1;
         $reviewItem->user_id = Auth()->user()->id;
         $reviewItem->save();
+
+        session()->flash('success', 'Se ha creado una nueva observación para la actividad programada.');
+
         return redirect()->back();
     }
 
@@ -63,6 +66,8 @@ class ReviewItemController extends Controller
 
         $reviewItem->save();
 
+        session()->flash('success', 'Se ha editado la observación satisfactoriamente.');
+
         return redirect()->back();
     }
 
@@ -78,6 +83,8 @@ class ReviewItemController extends Controller
         }
 
         $reviewItem->save();
+
+        session()->flash('success', 'Se ha rectificado correctamente la observación.');
 
         return redirect()->back();
     }

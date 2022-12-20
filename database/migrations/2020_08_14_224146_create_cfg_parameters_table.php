@@ -14,7 +14,7 @@ class CreateCfgParametersTable extends Migration
     public function up()
     {
         Schema::create('cfg_parameters', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('module',50);
             $table->string('parameter');
             $table->string('value');

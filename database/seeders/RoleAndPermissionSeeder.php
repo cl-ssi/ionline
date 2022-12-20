@@ -150,6 +150,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Replacement Staff: technical evaluation', 'description' => 'Permite acceder al listado de solicitudes aceptadas para evaluación técnica']);
         Permission::create(['name' => 'Replacement Staff: view requests', 'description' => 'Permite visualizar requerimientos']);
 
+        Permission::create(['name' => 'Allowances: create', 'description' => 'Permite crear viáticos']);
+        Permission::create(['name' => 'Allowances: all',    'description' => 'Permite visualizar todos los viáticos']);
+        Permission::create(['name' => 'Allowances: reports', 'description' => 'Permite acceder a los reportes del módulo']);
+
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'

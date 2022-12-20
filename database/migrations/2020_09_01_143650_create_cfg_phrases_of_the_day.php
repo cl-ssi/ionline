@@ -14,7 +14,7 @@ class CreateCfgPhrasesOfTheDay extends Migration
     public function up()
     {
         Schema::create('cfg_phrases_of_the_day', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->text('phrase');
             $table->timestamps();
         });

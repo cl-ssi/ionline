@@ -14,14 +14,14 @@ class CreateAgrAgreementsTable extends Migration
     public function up()
     {
         Schema::create('agr_agreements', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->date('date');
             $table->smallInteger('period');
             $table->string('file')->nullable();
             $table->string('fileAgreeEnd')->nullable();
             $table->string('fileResEnd')->nullable();
-            $table->unsignedBigInteger('program_id');
-            $table->unsignedInteger('commune_id');
+            $table->foreignId('program_id')->constrained('agr_programs');
+            $table->foreignId('commune_id')->constrained('communes');
             $table->smallInteger('quotas');
             $table->string('referente');
             
@@ -48,9 +48,6 @@ class CreateAgrAgreementsTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('program_id')->references('id')->on('agr_programs');
-            $table->foreign('commune_id')->references('id')->on('communes');
         });
     }
 

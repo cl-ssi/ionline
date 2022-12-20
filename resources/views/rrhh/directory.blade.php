@@ -27,7 +27,7 @@
 	<div class="float-right">
 		<form class="form-inline" method="GET" action="{{ route('rrhh.users.directory') }}">
 			<div class="input-group mb-3">
-				<input type="text" name="name" class="form-control" placeholder="Nombre o Apellido">
+				<input type="text" name="name" class="form-control" placeholder="Nombre o Apellido" autocomplete="off">
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary" type="submit">
 						<i class="fas fa-search" aria-hidden="true"></i></button>

@@ -30,7 +30,7 @@
                 @foreach($calendar as $item)
                     <div class="dia_calendario small p-2 text-center" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
 
-                        @if(App\Holiday::checkDate($item['date']))
+                        @if(App\Models\Parameters\Holiday::checkDate($item['date']))
                             <span class="text-danger">{{ $item['date'] }}</span>
                         @else
                             {{ $item['date'] }}

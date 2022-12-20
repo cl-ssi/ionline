@@ -14,7 +14,7 @@ class CreateIndActionsTable extends Migration
     public function up()
     {
         Schema::create('ind_actions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('number');
             $table->text('name');
             $table->text('verification_means');

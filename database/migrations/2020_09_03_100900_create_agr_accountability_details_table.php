@@ -14,7 +14,7 @@ class CreateAgrAccountabilityDetailsTable extends Migration
     public function up()
     {
         Schema::create('agr_accountability_details', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->enum('type', ['Operacional','Personal','Inversión']);
             $table->string('egressNumber');
             $table->date('egressDate');

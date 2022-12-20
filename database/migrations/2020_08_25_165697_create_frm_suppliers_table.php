@@ -14,7 +14,7 @@ class CreateFrmSuppliersTable extends Migration
     public function up()
     {
         Schema::create('frm_suppliers', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('rut'); //->unique();
             $table->string('address')->nullable();

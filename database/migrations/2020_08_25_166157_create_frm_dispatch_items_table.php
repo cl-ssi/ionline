@@ -15,7 +15,7 @@ class CreateFrmDispatchItemsTable extends Migration
     {
         Schema::create('frm_dispatch_items', function (Blueprint $table) {
 
-          $table->bigIncrements('id');
+          $table->id();
           $table->bigInteger('barcode')->nullable();
           $table->unsignedBigInteger('dispatch_id');
           $table->unsignedBigInteger('product_id');

@@ -26,8 +26,7 @@ class ParameterController extends Controller
      */
     public function indexDrugs()
     {
-        $parameters = Parameter::where('module','drugs')->get();
-        return view('drugs.parameters')->withParameters($parameters);
+        return view('drugs.parameters');
     }
 
     /**

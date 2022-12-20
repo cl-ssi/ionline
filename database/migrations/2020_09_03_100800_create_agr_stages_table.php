@@ -14,7 +14,7 @@ class CreateAgrStagesTable extends Migration
     public function up()
     {
         Schema::create('agr_stages', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->enum('type',
                 ['Enc. Convenio','Jefe APS','Jurídico','Finanzas','Envío Comuna','Devuelto Comuna','RTP','DAJ','DAP','DGF','SDGA','Comuna','OfParte']);
             $table->enum('group',

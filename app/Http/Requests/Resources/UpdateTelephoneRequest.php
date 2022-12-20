@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Resources;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Resources\Telephone;
+use App\Models\Resources\Telephone;
 use Illuminate\Validation\Rule;
 
 class UpdateTelephoneRequest extends FormRequest

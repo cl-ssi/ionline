@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Evaluación de Activividad</h4>
 <h6 class="mb-3">{{$programmingItem->programming->description ?? ''}}</h6>
-<a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+<a href="{{ Session::has('success') ? route('programmingitems.index', ['programming_id' => $programmingItem->programming_id, 'activity_type' => $programmingItem->professionalHours->count() == 0 ? '' : ($programmingItem->activity_subtype != null ? 'Indirecta' : 'Directa')]) : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -209,7 +209,9 @@
                         <th class="text-center align-middle table-dark">COMENTARIO / ACUERDO</th>
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >¿CONFIRMAR?</th>@endcan
-                        @can('Reviews: rectify')<th class="text-center align-middle table-dark" >RECTIFICAR</th>@endcan
+                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
+                        <th class="text-center align-middle table-dark" >RECTIFICAR</th>
+                        @endif
                         @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
                     </tr>
                 </thead>
@@ -268,7 +270,7 @@
                         </td>
                         @endcan
                         <!-- EVALUAR PARA  -->
-                        @can('Reviews: rectify')
+                        @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
                        
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
@@ -280,7 +282,7 @@
                         <i class="far fa-check-square text-success "></i>
                         </button>
                         </td>
-                        @endcan
+                        @endif
                         @can('Reviews: delete')
                         <td class="text-center align-middle">
                             <form method="POST" action="{{ route('reviewItems.destroy', $review->id) }}" class="small d-inline">
@@ -309,7 +311,7 @@
                     <div class="form-group col-md-12">
                         <label for="forprogram">Evaluar</label>
                         <select name="review" id="review"  class="form-control">
-                            @if($programmingItem->professionalHours->count() > 0)
+                            @if($programmingItem->professionalHours->count() > 0 && $programmingItem->activity_type == 'Indirecta')
                             <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada.</option>
                             <option value="Actividad bien programada">Actividad bien programada.</option>
                             <option value="El profesional asignado está bien programado">El profesional asignado está bien programado.</option>

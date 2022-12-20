@@ -96,6 +96,9 @@ use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemFileController;
+use App\Http\Controllers\Rem\RemPeriodController;
+use App\Http\Controllers\Rem\RemSerieController;
+use App\Http\Controllers\Rem\RemPeriodSerieController;
 
 
 use App\Http\Controllers\HealthPlan\HealthPlanController;
@@ -161,6 +164,8 @@ use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
+
+use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Models\WebService\MercadoPublico;
@@ -483,6 +488,23 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 });
 /** Fin Replacement Staff */
 
+/* Replacepent Staff */
+Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
+    Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
+    Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
+    Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
+    Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
+    Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
+    Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
+    Route::get('{jobPositionProfile}/edit_objectives', [JobPositionProfileController::class, 'edit_objectives'])->name('edit_objectives');
+    Route::put('{jobPositionProfile}/update_objectives', [JobPositionProfileController::class, 'update_objectives'])->name('update_objectives');
+    Route::get('/{jobPositionProfile}/edit_organization', [JobPositionProfileController::class, 'edit_organization'])->name('edit_organization');
+});
+/** Inicio Perfil de Cargos */
+
+
+
+/** Fin Perfil de Cargos */
 
 /** Inicio Recursos */
 Route::prefix('resources')->name('resources.')->middleware('auth')->group(function () {
@@ -894,7 +916,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('{organizationalUnit}', [OrganizationalUnitController::class,'update'])->name('update')->middleware('auth');
         Route::delete('{organizationalUnit}/destroy', [OrganizationalUnitController::class,'destroy'])->name('destroy')->middleware('auth');
     });
-
+    // Se saca el directorio ya que no debería tener acceso los usuarios logeado solamente
+    Route::get('directory', [UserController::class,'directory'])->name('users.directory');
     Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class,'getFromOu'])->name('get.from.ou');
         Route::get('autority/{ou_id?}', [UserController::class,'getAutorityFromOu'])->name('get.autority.from.ou');
@@ -906,7 +929,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch');
 
         /* TODO: Sacar fuera y poner middleware auth a todo este grupo, ya que todas lo utilizan excepto esta */
-        Route::get('directory', [UserController::class,'directory'])->name('directory');
+        //Route::get('directory', [UserController::class,'directory'])->name('directory');
 
         Route::get('/', [UserController::class,'index'])->name('index');
         Route::get('/create', [UserController::class,'create'])->name('create');
@@ -917,7 +940,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/{user}/access-logs', App\Http\Livewire\Parameters\AccessLogIndex::class)->name('access-logs');
 
-        Route::get('/last_access', [UserController::class,'lastAccess'])->name('last_access');
+        Route::get('/last-access', [UserController::class,'lastAccess'])->name('last-access');
 
         Route::prefix('service_requests')->name('service_requests.')->group(function () {
             Route::get('/', [UserController::class,'index_sr'])->name('index')->middleware('auth');
@@ -1799,22 +1822,31 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {
 
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
+    Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');
     Route::get('create', [AllowanceController::class, 'create'])->name('create');
     Route::post('store', [AllowanceController::class,'store'])->name('store');
     Route::get('{allowance}/edit', [AllowanceController::class,'edit'])->name('edit');
     Route::put('{allowance}/update', [AllowanceController::class,'update'])->name('update');
     Route::get('{allowance}/show', [AllowanceController::class, 'show'])->name('show');
+    Route::get('/show_file/{allowance}', [AllowanceController::class, 'show_file'])->name('show_file');
 
-    Route::prefix('file')->as('file.')->group(function () {
-        Route::get('{allowanceFile}/show', [AllowanceFileController::class, 'show'])->name('show');
-        //Route::delete('{allowanceFile}/destroy', [AllowanceFileController::class, 'destroy'])->name('destroy');
+    Route::prefix('files')->as('files.')->group(function () {
+        Route::get('/show/{allowanceFile}', [AllowanceFileController::class, 'show'])->name('show');
     });
 
     Route::prefix('sign')->as('sign.')->group(function () {
         Route::put('{allowanceSign}/{status}/{allowance}/update', [AllowanceSignController::class,'update'])->name('update');
+        Route::get('/{allowance}/create_view_document', [AllowanceSignController::class, 'create_view_document'])->name('create_view_document');
+        Route::get('/{allowance}/create_form_document', [AllowanceSignController::class, 'create_form_document'])->name('create_form_document');
+        Route::get('/callback-sign-allowance/{message}/{modelId}/{signaturesFile?}', [AllowanceSignController::class, 'callbackSign'])->name('callbackSign');    
+        // Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     });
 
+    Route::prefix('reports')->as('reports.')->group(function () {
+        Route::get('/create_by_dates', [AllowanceController::class, 'create_by_dates'])->name('create_by_dates');
+        Route::get('/create_by_dates_excel/{from}/{to}', [AllowanceController::class, 'create_by_dates_excel'])->name('create_by_dates_excel');
+    });
 });
 
 /** Módulo de horas para vacunas. ya no se usa */
@@ -1966,14 +1998,30 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/store', [UserRemController::class, 'store'])->name('store');
         Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
+    Route::prefix('periods')->as('periods.')->middleware('auth')->group(function () {
+        Route::get('/', [RemPeriodController::class, 'index'])->name('index');
+        Route::get('/create', [RemPeriodController::class, 'create'])->name('create');
+        Route::post('/store', [RemPeriodController::class, 'store'])->name('store');
+    });
+    Route::prefix('series')->as('series.')->middleware('auth')->group(function () {
+        Route::get('/', [RemSerieController::class, 'index'])->name('index');
+        Route::get('/create', [RemSerieController::class, 'create'])->name('create');
+        Route::post('/store', [RemSerieController::class, 'store'])->name('store');
+    });
+    Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
+        Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');
+        Route::get('/create', [RemPeriodSerieController::class, 'create'])->name('create');
+        Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');
+    });
+    Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
+        Route::get('/', [RemFileController::class, 'index'])->name('index');
+        Route::post('/store', [RemFileController::class, 'store'])->name('store');
+    });
 
-    Route::get('/files', [RemFileController::class, 'index'])->name('files.index');
+    
+    Route::get('/files_2', [RemFileController::class, 'index_2'])->name('files.index_2');
 });
 
-
-/** Rutas para modo mantenimiento */
-Route::get('/maintenance', [App\Http\Controllers\MaintenanceController::class,'index']);
-Route::post('/maintenance', [App\Http\Controllers\MaintenanceController::class,'toggle'])->name('maintenance.toggle');
 
 Route::view('/some', 'some');
 

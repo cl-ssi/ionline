@@ -14,7 +14,7 @@ class CreateProProfessionalsTable extends Migration
     public function up()
     {
         Schema::create('pro_professionals', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('alias')->nullable();
             $table->string('code')->nullable();

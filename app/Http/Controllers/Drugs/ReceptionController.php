@@ -48,7 +48,7 @@ class ReceptionController extends Controller
             ->withPolice_units($policeUnits);
     }
 
-    //TODO: $x = Parameter::Where('module','drugs')->Where('parameter','MandatadoResolucion')->first(['value'])->value
+    /* TODO: $x = Parameter::Where('module','drugs')->Where('parameter','MandatadoResolucion')->first(['value'])->value */
 
     /**
      * Store a newly created resource in storage.
@@ -251,7 +251,7 @@ class ReceptionController extends Controller
             'resultSubstance',
             'reception.sampleToIsp',
             'reception.recordToCourt'
-            ])->orderBy('reception_id', 'desc')->paginate(5000);
+            ])->orderBy('reception_id', 'desc')->paginate(1000);
 
         //$destruct = $items->sum('destruct');
 

@@ -35,11 +35,15 @@ class Programming extends Model implements Auditable
     }
 
     public function establishment() {
-        return $this->belongsTo('App\Establishment');
+        return $this->belongsTo('App\Models\Establishment');
     }
 
     public function pendingItems(){
         return $this->belongsToMany(ActivityItem::class, 'pro_programming_activity_item')->withPivot('id', 'requested_by', 'observation')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
+    }
+
+    public function getPendingIndirectItemsAttribute(){
+        return ProgrammingActivityItem::where('programming_id', $this->id)->whereNull('activity_item_id')->whereNull('deleted_at')->get();
     }
 
     public function countTotalReviewsBy($status) {

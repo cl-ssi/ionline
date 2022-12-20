@@ -34,7 +34,7 @@
             </h5>
             <div class="card-body">
                 <div class="form-row">
-                    <fieldset class="form-group col-3">
+                    <fieldset class="form-group col-6 col-md-3">
                         <label for="for_request_date">Fecha Documento</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date')}}" required>
@@ -44,7 +44,7 @@
                 <div class="form-row">
                     @livewire('signatures.document-types')
                     
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-9">
                         <label for="for_subject">Materia o tema del documento</label>
                         <input type="text" class="form-control" id="for_subject" name="subject"
                             value="{{isset($signature) ? $signature->subject : old('subject')}}" required>
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="form-row">
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-12">
                         <label for="for_description">Descripción del documento</label>
                         <input type="text" class="form-control" id="for_description" name="description"
                             value="{{isset($signature) ? $signature->description : old('description')}}" required>
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="form-row">
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-6">
                         @if(isset($signature) && $signature->signaturesFileDocument->file != null)
                             <button name="id" class="btn btn-link" form="showPdf" formtarget="_blank">
                                 <i class="fas fa-paperclip"></i> Documento
@@ -75,14 +75,14 @@
                         @endif
                     </fieldset>
 
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-6">
                         <label for="for_annexed">Anexos</label>
                         <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
                     </fieldset>
                 </div>
 
                 <div class="form-row">
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-12">
                         <label for="for_url">Link o Url asociado</label>
                         <input type="url" class="form-control" id="for_url" name="url"
                             value="{{isset($signature) ? $signature->url : old('url')}}" >
@@ -140,13 +140,13 @@
             <div class="card-body">
         
                 <div class="form-row mt-4">
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-6">
                         <label for="for_distribution">Distribución del documento (separados por coma)</label>
                         <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
                                 rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->distribution)  : old('distribution')}}</textarea>
                     </fieldset>
 
-                    <fieldset class="form-group col">
+                    <fieldset class="form-group col-12 col-md-6">
                         <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
                         <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients"
                                   rows="6"> {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>

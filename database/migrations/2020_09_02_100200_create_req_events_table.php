@@ -14,7 +14,7 @@ class CreateReqEventsTable extends Migration
     public function up()
     {
         Schema::create('req_events', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
 
             $table->text('body');
             $table->enum('status',['creado','respondido','cerrado','derivado','reabierto','en copia']);

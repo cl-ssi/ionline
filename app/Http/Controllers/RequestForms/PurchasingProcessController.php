@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\Documents\Document;
+use App\Models\Documents\Document;
 use App\Models\RequestForms\PurchasingProcess;
 use Illuminate\Http\Request;
 
@@ -59,7 +59,7 @@ class PurchasingProcessController extends Controller
     {
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         if (Auth()->user()->organizational_unit_id == $ouSearch) {
-            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
             if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
@@ -103,7 +103,7 @@ class PurchasingProcessController extends Controller
         // return $result;
         $result_details = PurchasingProcessDetail::where($purchasingProcessDetail->getPurchasingTypeColumn(), $result->id)->get();
         // return $result_details;
-        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
         $requestForm->purchase_type_id = $result->purchase_type_id;
         $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
         if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
@@ -114,7 +114,7 @@ class PurchasingProcessController extends Controller
 
     public function show(RequestForm $requestForm)
     {
-        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
         // return $requestForm;
         return view('request_form.purchase.show', compact('requestForm'));
     }
@@ -168,10 +168,10 @@ class PurchasingProcessController extends Controller
     {
         //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
         $totalItemPurchased = 0;
-        if ($requestForm->purchasingProcess && $requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+        if ($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details || $requestForm->purchasingProcess->detailsPassenger)) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
 
         $totalItemSelected = 0;
-        foreach (request()->item_id as $key => $item)
+        foreach ((request()->has('item_id') ? request()->item_id : request()->passenger_id) as $key => $item)
             $totalItemSelected += request()->item_total[$key];
 
         return $totalItemPurchased + $totalItemSelected > $requestForm->estimated_expense;
@@ -179,7 +179,7 @@ class PurchasingProcessController extends Controller
 
     public function create_internal_oc(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -194,26 +194,31 @@ class PurchasingProcessController extends Controller
         $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
         $internalPurchaseOrder->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->internal_purchase_order_id = $internalPurchaseOrder->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -224,7 +229,7 @@ class PurchasingProcessController extends Controller
 
     public function create_petty_cash(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -244,26 +249,31 @@ class PurchasingProcessController extends Controller
         $pettyCash->file = $request->file ? $request->file->storeAs('/ionline/request_forms/purchase_item_files', $file_name . '.' . $request->file->extension(), 'gcs') : null;
         $pettyCash->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            } 
             $detail->petty_cash_id              = $pettyCash->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -274,7 +284,7 @@ class PurchasingProcessController extends Controller
 
     public function create_fund_to_be_settled(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -288,26 +298,31 @@ class PurchasingProcessController extends Controller
         $fundToBeSettled->document_id             = Document::where('number', $request->memo_number)->where('type', 'Memo')->first()->id;
         $fundToBeSettled->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->fund_to_be_settled_id      = $fundToBeSettled->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -318,7 +333,7 @@ class PurchasingProcessController extends Controller
 
     public function create_tender(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -329,19 +344,24 @@ class PurchasingProcessController extends Controller
         $tender = new Tender($request->all());
         $tender->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->tender_id                  = $tender->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
@@ -380,7 +400,7 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -391,7 +411,7 @@ class PurchasingProcessController extends Controller
 
     public function create_oc(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -404,19 +424,24 @@ class PurchasingProcessController extends Controller
         $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
         $oc->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->immediate_purchase_id      = $oc->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
@@ -441,7 +466,7 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -452,7 +477,7 @@ class PurchasingProcessController extends Controller
 
     public function create_convenio_marco(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -463,19 +488,24 @@ class PurchasingProcessController extends Controller
         $cm = new ImmediatePurchase($request->all());
         $cm->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->immediate_purchase_id      = $cm->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
@@ -503,7 +533,7 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }
@@ -514,7 +544,7 @@ class PurchasingProcessController extends Controller
 
     public function create_direct_deal(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if ($this->estimated_expense_exceeded($requestForm)) {
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
             return redirect()->back()->withInput();
@@ -524,19 +554,24 @@ class PurchasingProcessController extends Controller
         $directdeal = new DirectDeal($request->all());
         $directdeal->save();
 
-        foreach ($request->item_id as $key => $item) {
+        $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
+        foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->item_request_form_id       = $item;
+            if($request->has('item_id')){
+                $detail->item_request_form_id       = $item;
+                $detail->supplier_run               = $request->supplier_run[$key];
+                $detail->supplier_name              = $request->supplier_name[$key];
+                $detail->supplier_specifications    = $request->supplier_specifications[$key];
+            }else{ // passengers
+                $detail->passenger_request_form_id  = $item;
+            }
             $detail->direct_deal_id             = $directdeal->id;
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
             $detail->tax                        = $request->tax[$key];
             $detail->expense                    = $request->item_total[$key];
-            $detail->supplier_run               = $request->supplier_run[$key];
-            $detail->supplier_name              = $request->supplier_name[$key];
-            $detail->supplier_specifications    = $request->supplier_specifications[$key];
             $detail->charges                    = $request->charges[$key];
             $detail->discounts                  = $request->discounts[$key];
             $detail->status                     = 'total';
@@ -572,7 +607,7 @@ class PurchasingProcessController extends Controller
             }
         }
 
-        $requestForm->load('purchasingProcess.details');
+        $requestForm->load('purchasingProcess.details', 'purchasingProcess.detailsPassenger');
         if (round($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense()) == 0) { //Saldo total utilizado
             $requestForm->purchasingProcess()->update(['status' => Str::contains($requestForm->subtype, 'tiempo') ? 'finalized' : 'purchased']);
         }

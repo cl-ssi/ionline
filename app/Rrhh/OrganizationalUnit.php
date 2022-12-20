@@ -39,15 +39,15 @@ class OrganizationalUnit extends Model implements Auditable
     }
 
     public function documents() {
-        return $this->hasMany('\App\Documents\Document');
+        return $this->hasMany('\App\Models\Documents\Document');
     }
 
     public function documentEvents() {
-        return $this->hasMany('\App\Documents\DocumentEvent');
+        return $this->hasMany('\App\Models\Documents\DocumentEvent');
     }
 
     public function establishment() {
-        return $this->belongsTo('\App\Establishment', 'establishment_id');
+        return $this->belongsTo('\App\Models\Establishment', 'establishment_id');
     }
 
     public function requestForms(){

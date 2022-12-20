@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShiftUserDay extends Model
 {
-	// TODO: nombres de funciones miFuncionPulenta
+	/* TODO: nombres de funciones miFuncionPulenta */
     use HasFactory;
     protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id','working_day','derived_from','shift_close_id' ];
 

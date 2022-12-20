@@ -19,6 +19,6 @@ class Value extends Model implements Auditable
     //
     //
     // public function establishment() {
-    //     return $this->belongsTo('\App\Establishment', 'establishment_id');
+    //     return $this->belongsTo('\App\Models\Establishment', 'establishment_id');
     // }
 }

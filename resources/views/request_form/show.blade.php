@@ -283,7 +283,7 @@
                             @endif
                         </td>
                         <td align="right">{{ $itemRequestForm->quantity }}</td>
-                        <td align="right">{{ number_format($itemRequestForm->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{ str_replace(',00', '', number_format($itemRequestForm->unit_value, 2,",",".")) }}</td>
                         <td align="center">{{ $itemRequestForm->tax }}</td>
                         <td align="right">{{ number_format($itemRequestForm->expense,$requestForm->precision_currency,",",".") }}</td>
                     </tr>
@@ -370,7 +370,7 @@
         <br>
     @endif
 
-    @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
+    @if($requestForm->purchasingProcess && ($requestForm->purchasingProcess->details->count() > 0 || $requestForm->purchasingProcess->detailsPassenger->count() > 0))
     </main> <!-- close div container -->
     <!-- nueva tabla -->
     <div class="container-fluid">
@@ -401,7 +401,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($requestForm->purchasingProcess->details as $key => $detail)
+                        @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $key => $detail)
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
@@ -701,7 +701,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($requestForm->purchasingProcess->details as $detail)
+                                    @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $detail)
                                         @if($detail->pivot->audits->count() > 0)
                                             @foreach($detail->pivot->audits->sortByDesc('updated_at') as $audit)
                                                 <tr>
@@ -750,7 +750,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($requestForm->purchasingProcess->details as $detail)
+                                    @foreach(($requestForm->purchasingProcess->details->count() > 0 ? $requestForm->purchasingProcess->details : $requestForm->purchasingProcess->detailsPassenger) as $detail)
                                         @if($detail->pivot->audits->count() > 0)
                                             @foreach($detail->pivot->getPurchasingType()->audits->sortByDesc('updated_at') as $audit)
                                                 <tr>

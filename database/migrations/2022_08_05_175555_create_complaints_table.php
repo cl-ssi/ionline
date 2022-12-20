@@ -14,38 +14,37 @@ class CreateComplaintsTable extends Migration
     public function up()
     {
         Schema::create('complaint_values', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::create('complaint_principles', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::create('complaints', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->enum('type',['Consulta','Denuncia','Riesgo ético']);
-            $table->integer('complaint_values_id')->unsigned();
+            $table->unsignedBigInteger('complaint_values_id')->unsigned();
             $table->string('other_value')->nullable();
-            $table->integer('complaint_principles_id')->unsigned();
+            $table->unsignedBigInteger('complaint_principles_id')->unsigned();
             $table->longtext('content');
             $table->string('file')->nullable();
             $table->string('email');
             $table->boolean('know_code');
             $table->boolean('identify');
-            // $table->unsignedInteger('user_id')->nullable();
-            $table->foreignId('user_id')->nullable();
+            // $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('complaint_values_id')->references('id')->on('complaint_values');
             $table->foreign('complaint_principles_id')->references('id')->on('complaint_principles');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

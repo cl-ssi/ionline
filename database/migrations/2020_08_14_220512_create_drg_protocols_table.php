@@ -14,16 +14,13 @@ class CreateDrgProtocolsTable extends Migration
     public function up()
     {
         Schema::create('drg_protocols', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id('id');
             $table->smallInteger('sample');
             $table->enum('result',['Positivo','Negativo']);
-            $table->bigInteger('user_id')->unsigned();
-            $table->unsignedInteger('reception_item_id');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('reception_item_id')->constrained('drg_reception_items');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('reception_item_id')->references('id')->on('drg_reception_items');
         });
     }
 

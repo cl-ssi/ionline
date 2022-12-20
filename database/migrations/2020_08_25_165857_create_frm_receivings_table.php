@@ -15,7 +15,7 @@ class CreateFrmReceivingsTable extends Migration
     {
         Schema::create('frm_receivings', function (Blueprint $table) {
 
-            $table->bigIncrements('id');
+            $table->id();
             $table->dateTime('date'); //fecha xfecha
             $table->unsignedBigInteger('establishment_id'); //origen
             $table->unsignedBigInteger('pharmacy_id'); //destino

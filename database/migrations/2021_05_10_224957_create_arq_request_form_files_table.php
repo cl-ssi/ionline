@@ -14,11 +14,11 @@ class CreateArqRequestFormFilesTable extends Migration
     public function up()
     {
         Schema::create('arq_request_form_files', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
-            $table->unsignedInteger('request_form_id')->unsigned()->nullable();//id del formulario de requerimiento.
-            $table->unsignedInteger('user_id')->nullable();//id del usuario.
+            $table->unsignedBigInteger('request_form_id')->unsigned()->nullable();//id del formulario de requerimiento.
+            $table->unsignedBigInteger('user_id')->nullable();//id del usuario.
 
             $table->timestamps();
             $table->softDeletes();

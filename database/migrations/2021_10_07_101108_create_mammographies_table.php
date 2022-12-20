@@ -24,7 +24,7 @@ class CreateMammographiesTable extends Migration
             $table->integer('age');
             $table->string('email')->nullable();
             $table->string('personal_email')->nullable();
-            $table->unsignedInteger('establishment_id'); //Confirmar
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->foreignId('organizational_unit_id')->nullable(); //Confirmar
             $table->string('organizationalUnit')->nullable(); //Confirmar
             $table->boolean('inform_method')->nullable(); //Confirmar
@@ -35,7 +35,6 @@ class CreateMammographiesTable extends Migration
             $table->string('ed_observation')->nullable(); //Confirmar
 
             $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
 
             $table->timestamps();
             $table->softDeletes();

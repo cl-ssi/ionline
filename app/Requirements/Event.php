@@ -60,7 +60,7 @@ class Event extends Model
     //     return $this->belongsToMany('App\Requirements\EventDocument');
     // }
     public function documents() {
-        return $this->belongsToMany('App\Documents\Document','req_documents_events');
+        return $this->belongsToMany('App\Models\Documents\Document','req_documents_events');
     }
 
     /**

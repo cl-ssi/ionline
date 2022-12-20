@@ -14,7 +14,7 @@ class CreateMunicipalitiesTable extends Migration
     public function up()
     {
         Schema::create('municipalities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name_municipality');
             $table->string('rut_municipality');
             $table->string('adress_municipality');
@@ -23,10 +23,8 @@ class CreateMunicipalitiesTable extends Migration
             $table->string('decree_representative'); // DECRETO ALCALDICIO
             $table->string('name_representative');
             $table->string('rut_representative');
-            $table->unsignedInteger('commune_id');
+            $table->foreignId('commune_id')->constrained('communes');
             $table->timestamps();
-
-            $table->foreign('commune_id')->references('id')->on('communes');
         });
     }
 

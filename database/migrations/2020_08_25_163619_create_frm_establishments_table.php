@@ -14,7 +14,7 @@ class CreateFrmEstablishmentsTable extends Migration
     public function up()
     {
         Schema::create('frm_establishments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name')->unique();
             //se añade por defecto 1 para la relación con la bodega
             $table->unsignedBigInteger('pharmacy_id')->default(1);

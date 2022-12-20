@@ -15,9 +15,9 @@ class CreateRemUsersTable extends Migration
     {
         Schema::create('rem_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')                
-                ->constrained('users');            
-            $table->unsignedInteger('establishment_id');
+            $table->foreignId('user_id')
+                ->constrained('users');
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
             $table->softDeletes();

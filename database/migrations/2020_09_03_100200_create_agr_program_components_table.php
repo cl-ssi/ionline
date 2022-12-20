@@ -14,7 +14,7 @@ class CreateAgrProgramComponentsTable extends Migration
     public function up()
     {
         Schema::create('agr_program_components', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->unsignedBigInteger('program_id');
             $table->timestamps();

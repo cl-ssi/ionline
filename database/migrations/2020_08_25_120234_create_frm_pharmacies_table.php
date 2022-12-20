@@ -14,7 +14,7 @@ class CreateFrmPharmaciesTable extends Migration
     public function up()
     {
         Schema::create('frm_pharmacies', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('address');
             $table->timestamps();

@@ -3,88 +3,79 @@
 namespace App\Http\Livewire\Parameters;
 
 use Livewire\Component;
-use App\Holiday;
+use App\Models\Parameters\Holiday;
+use App\Models\ClRegion;
+use Livewire\WithPagination;
 
 class Holidays extends Component
 {
-    public $holidays;
-    public $view;
+    /** Necesario para paginar los resultados */
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
+    /** Mostrar o no el form, tanto para crear como para editar */
+    public $form = false;
 
     public $holiday;
-    public $date, $name, $region;
+
+    /** Listado de regiones */
+    public $regions;
+
+    /**
+    * moun
+    */
+    public function mount()
+    {
+        $this->regions = ClRegion::pluck('name','id');
+    }
 
     protected function rules()
     {
-        /* Esto fixea que si seleccionas una fecha en el navegador 
-         * y luego la borras, se pasa un string vacio en vez de null */
-        empty($this->date) ? $this->date = null : $this->date;
+        /* FIXME: si seleccionas una fecha en el navegador y luego la borras,
+         * se pasa un string vacío para la fecha y se guarda 0000-00-00 en la BD */
+        $startOfYear = now()->startOfYear()->format('Y-m-d');
 
         return [
-            'date' => 'required|date_format:Y-m-d',
-            'name' => 'required|min:4',
-            'region' => 'nullable',
+            'holiday.date' => 'required|date_format:Y-m-d|after:' . $startOfYear,
+            'holiday.name' => 'required|min:4',
+            'holiday.region_id' => 'nullable',
         ];
     }
 
     protected $messages = [
-        'date.required' => 'La fecha desde es requerida.',
-        'name.required' => 'El nombre es requerido.',
+        'holiday.date.required' => 'La fecha desde es requerida.',
+        'holiday.name.required' => 'El nombre es requerido.',
     ];
-
-    public function mount()
-    {
-        $this->holidays = Holiday::latest()->get();
-        $this->view = 'index';
-    }
 
     public function index()
     {
-        $this->view = 'index';
+        $this->resetErrorBag();
+        $this->form = false;
     }
 
-    public function create()
+    public function form(Holiday $holiday)
     {
-        $this->view = 'create';
-        $this->holiday = null;
-        
-        $this->date = null;
-        $this->name = null;
-        $this->region = null;
+        $this->holiday = Holiday::firstOrNew([ 'id' => $holiday->id]);
+        $this->form = true;
     }
 
-    public function store()
+    public function save()
     {
-        Holiday::create($this->validate());
-        $this->mount();
-        $this->view = 'index';
-    }
-
-    public function edit(Holiday $holiday)
-    {
-        $this->view = 'edit';
-        $this->holiday = $holiday;
-        
-        $this->date = $holiday->date->format('Y-m-d');
-        $this->name = $holiday->name;
-        $this->region = $holiday->region;
-    }
-
-    public function update(Holiday $holiday)
-    {
-        $holiday->update($this->validate());
-
-        $this->mount();
-        $this->view = 'index';
+        $this->validate();
+        $this->holiday->save();
+        $this->index();
     }
 
     public function delete(Holiday $holiday)
     {
         $holiday->delete();
-        $this->mount();
     }
 
     public function render()
     {
-        return view('livewire.parameters.holidays')->extends('layouts.app');
+        $holidays = Holiday::latest()->paginate(25);
+        return view('livewire.parameters.holidays', [
+            'holidays' => $holidays,
+        ]);
     }
 }

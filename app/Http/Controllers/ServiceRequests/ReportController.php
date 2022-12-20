@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Rrhh\OrganizationalUnit;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;

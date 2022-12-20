@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use Carbon\Carbon;
 
 use App\Rrhh\OrganizationalUnit;
-use App\Establishment;
+use App\Models\Establishment;
 use App\Models\WebService\MercadoPublico;
 
 class TestController extends Controller

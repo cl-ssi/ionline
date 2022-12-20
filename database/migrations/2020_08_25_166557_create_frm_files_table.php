@@ -14,7 +14,7 @@ class CreateFrmFilesTable extends Migration
     public function up()
     {
         Schema::create('frm_files', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('file')->nullable();
             $table->string('name')->nullable();
             $table->bigInteger('dispatch_id')->unsigned();

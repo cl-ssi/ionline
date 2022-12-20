@@ -22,7 +22,7 @@ class CreateVaccinationsTable extends Migration
             $table->string('mothers_family');
             $table->string('email')->nullable();
             $table->string('personal_email')->nullable();
-            $table->unsignedInteger('establishment_id');
+            $table->foreignId('establishment_id')->constrained('establishments');
             $table->foreignId('organizational_unit_id')->nullable();
             $table->string('organizationalUnit')->nullable();
             $table->boolean('inform_method')->nullable();
@@ -44,7 +44,6 @@ class CreateVaccinationsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
-            $table->foreign('establishment_id')->references('id')->on('establishments');
         });
     }
 

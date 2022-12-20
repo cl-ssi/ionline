@@ -23,7 +23,7 @@ class ControlItem extends Model
         'control_id',
         'program_id',
         'product_id',
-        'unit_id', // TODO: Por definir el uso
+        'unit_id', /* TODO: Por definir el uso */
     ];
 
     public function control()

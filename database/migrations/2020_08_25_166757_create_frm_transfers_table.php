@@ -14,7 +14,7 @@ class CreateFrmTransfersTable extends Migration
     public function up()
     {
         Schema::create('frm_transfers', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('from');
             $table->unsignedBigInteger('to');
             $table->unsignedBigInteger('product_id');

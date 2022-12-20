@@ -15,7 +15,7 @@ class CreateFrmPurchasesItemsTable extends Migration
     {
         Schema::create('frm_purchases_items', function (Blueprint $table) {
 
-          $table->bigIncrements('id');
+          $table->id();
           $table->bigInteger('barcode')->nullable();
           $table->unsignedBigInteger('purchase_id');
           $table->unsignedBigInteger('product_id');

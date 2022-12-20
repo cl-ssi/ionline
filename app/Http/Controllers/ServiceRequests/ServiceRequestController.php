@@ -22,7 +22,7 @@ use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
-use App\Establishment;
+use App\Models\Establishment;
 use App\User;
 use DB;
 

@@ -233,10 +233,12 @@
 		    <label for="for_weekly_hours">Hrs.Semanales</label>
 		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
 				<option value=""></option>
+                <option value="45" @if($serviceRequest->weekly_hours == 45) selected @endif>45</option>
 				<option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
 				<option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
 				<option value="30" @if($serviceRequest->weekly_hours == 30) selected @endif>30</option>
 				<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
+                <option value="25" @if($serviceRequest->weekly_hours == 25) selected @endif>25</option>
 				<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
 				<option value="20" @if($serviceRequest->weekly_hours == 20) selected @endif>20</option>
 				<option value="16" @if($serviceRequest->weekly_hours == 16) selected @endif>16</option>
