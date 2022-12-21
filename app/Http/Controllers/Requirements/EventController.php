@@ -263,8 +263,9 @@ class EventController extends Controller
 
     public function download(File $file)
     {
-        // return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+        // dd($file);
+        return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
         // $file = $dispatch->files->first();
-        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 }
