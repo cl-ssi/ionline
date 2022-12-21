@@ -182,6 +182,9 @@ class ClaveUnicaController extends Controller
                 /** Check if user have a gravatar */
                 auth()->user()->checkGravatar;
 
+                /** Store login type */
+                session(['loginType' => 'ClaveUnica']);
+
                 $route = 'home';
             } else {
                 session()->flash('danger', 'No existe el usuario registrado en el sistema');
@@ -255,7 +258,7 @@ class ClaveUnicaController extends Controller
             }
 
             /** Cerrar Sesión Local */
-            if(Auth::check()) {
+            if(!Auth::check()) {
                 Auth::logout();
     
                 request()->session()->invalidate();

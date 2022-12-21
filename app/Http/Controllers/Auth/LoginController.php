@@ -49,7 +49,7 @@ class LoginController extends Controller
 
         if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-            
+
             return $this->sendLockoutResponse($request);
         }
         
@@ -82,6 +82,9 @@ class LoginController extends Controller
 
             /** Check if user have a gravatar */
             auth()->user()->checkGravatar;
+
+            /** Store login type */
+            session(['loginType' => 'local']);
 
             return $this->sendLoginResponse($request);
         }
