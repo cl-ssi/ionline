@@ -243,7 +243,7 @@ class ClaveUnicaController extends Controller
     public function logout()
     {
         /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
-        if(env('OLD_SERVER')) {
+        if(!env('OLD_SERVER')) {
             return redirect()->route('logout-local');
         }
 
