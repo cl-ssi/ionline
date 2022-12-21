@@ -242,21 +242,46 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
+        if(env('APP_ENV') == 'local')
+        {
+            /* Si es ambiente de desarrollo cerramos sólo localmente */
+            return redirect()->route('logout-local');
+        }
+        else 
+        {
+            /** Cerrar sesión clave única */
+            /* Url para cerrar sesión en clave única */
+            $url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+            /* Url para luego cerrar sesión en nuestro sisetema */
+            $url_redirect   = env('APP_URL') . "/logout";
+            $url            = $url_logout.urlencode($url_redirect);
+            return redirect($url);
+        }
+
         /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
         if(!env('OLD_SERVER')) {
             return redirect()->route('logout-local');
         }
 
-        if (env('APP_ENV') == 'production' ) {
-            $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
-            $url_redirect = env('APP_URL') . "/logout";
-            $url = $url_logout . urlencode($url_redirect);
-            /* TODO: Chequear que esto de verdad cierre clave unica, no lo he probado */
-            $response = Http::get($url);
-            /** Antes lo hacía así. */
-            // return redirect()->to($url)->send();
-        }
-        return redirect()->route('logout-local');
+        // if (env('APP_ENV') == 'production' ) {
+        //     if(Auth::check())
+        //     {
+        //         Auth::logout();
+    
+        //         request()->session()->invalidate();
+        //         request()->session()->regenerateToken();
+    
+        //         $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+        //         $url_redirect = env('APP_URL') . "/logout";
+        //         $url = $url_logout . urlencode($url_redirect);
+        //         /* TODO: Chequear que esto de verdad cierre clave unica, no lo he probado */
+        //         // $response = Http::get($url);
+        //         /** Antes lo hacía así. */
+        //         return redirect()->to($url_logout)->send();
+        //     }
+        //     return redirect()->route('welcome');
+        // }
+        // return redirect()->route('logout-local');
     }
 
     /** Sirve para almacenar el json de un usuario, ya no se ocupa */
