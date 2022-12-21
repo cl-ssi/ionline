@@ -108,8 +108,8 @@ class EventController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('requirements');
-                    // $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                    // $fileModel->file = $file->store('requirements');
+                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $requirementEvent->id;
                     //$fileModel->ticket()->associate($ticket);
@@ -194,8 +194,8 @@ class EventController extends Controller
                         foreach ($request->file('forfile') as $file) {
                             $filename = $file->getClientOriginalName();
                             $fileModel = new File;
-                            $fileModel->file = $file->store('requirements');
-                            // $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+                            // $fileModel->file = $file->store('requirements');
+                            $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                             $fileModel->name = $filename;
                             $fileModel->event_id = $requirementEvent->id;
                             //$fileModel->ticket()->associate($ticket);
