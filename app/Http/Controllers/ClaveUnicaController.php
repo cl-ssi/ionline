@@ -249,6 +249,12 @@ class ClaveUnicaController extends Controller
         }
         else 
         {
+            /** Cerrar Sesión Local */
+            Auth::logout();
+
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            
             /** Cerrar sesión clave única */
             /* Url para cerrar sesión en clave única */
             $url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
