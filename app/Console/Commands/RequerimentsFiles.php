@@ -42,15 +42,15 @@ class RequerimentsFiles extends Command
         //echo'funciono';
         $events = Event::whereHas('files')->get();
         foreach ($events as $event) {
-            foreach ($event->files as $file) {
-                list($folder,$name) = explode('/',$file->file);
+            foreach ($event->files as $file_event) {
+                list($folder,$name) = explode('/',$file_event->file);
                 
-                if(Storage::exists($file->file)){
-                    $file = Storage::disk('local')->get($file->file);
+                if(Storage::exists($file_event->file)){
+                    $file = Storage::disk('local')->get($file_event->file);
                     Storage::disk('gcs')->put('ionline/requirements/'.$name, $file);
-                    $file->update(['file' => 'ionline/requirements/'.$name]);
+                    $file_event->update(['file' => 'ionline/requirements/'.$name]);
                 }else{
-                    echo $file->id . " " . $name."\n";
+                    echo $file_event->id . " " . $name."\n";
                 }
             }
 
