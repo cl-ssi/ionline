@@ -242,16 +242,21 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
+        /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
+        if(env('OLD_SERVER')) {
+            return redirect()->route('logout-local');
+        }
+
         if (env('APP_ENV') == 'production' ) {
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
+            /* TODO: Chequear que esto de verdad cierre clave unica, no lo he probado */
             $response = Http::get($url);
-            dd($response->status());
+            /** Antes lo hacía así. */
+            // return redirect()->to($url)->send();
         }
         return redirect()->route('logout-local');
-
-        // return redirect()->to($url)->send();
     }
 
     /** Sirve para almacenar el json de un usuario, ya no se ocupa */
