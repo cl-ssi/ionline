@@ -245,27 +245,13 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
-        if(env('APP_ENV') == 'local')
-        {
-            /* Si es ambiente de desarrollo cerramos sólo localmente */
+        if(session('loginType') == 'local') {
             return redirect()->route('logout-local');
         }
-        else 
-        {
+        else {
             /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
             if(!env('OLD_SERVER')) {
                 return redirect()->route('logout-local');
-            }
-
-            /** Cerrar Sesión Local */
-            if(!Auth::check()) {
-                Auth::logout();
-    
-                request()->session()->invalidate();
-                request()->session()->regenerateToken();
-            }
-            else {
-                return redirect()->route('welcome');
             }
 
             /** Cerrar sesión clave única */
