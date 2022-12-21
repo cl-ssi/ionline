@@ -249,12 +249,22 @@ class ClaveUnicaController extends Controller
         }
         else 
         {
-            /** Cerrar Sesión Local */
-            Auth::logout();
+            /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
+            if(!env('OLD_SERVER')) {
+                return redirect()->route('logout-local');
+            }
 
-            request()->session()->invalidate();
-            request()->session()->regenerateToken();
-            
+            /** Cerrar Sesión Local */
+            if(Auth::check()) {
+                Auth::logout();
+    
+                request()->session()->invalidate();
+                request()->session()->regenerateToken();
+            }
+            else {
+                return redirect()->route('welcome');
+            }
+
             /** Cerrar sesión clave única */
             /* Url para cerrar sesión en clave única */
             $url_logout     = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
@@ -262,11 +272,6 @@ class ClaveUnicaController extends Controller
             $url_redirect   = env('APP_URL') . "/logout";
             $url            = $url_logout.urlencode($url_redirect);
             return redirect($url);
-        }
-
-        /* TODO: cuando el servidor se migre a cloud run, este bloque ya no será necesario */
-        if(!env('OLD_SERVER')) {
-            return redirect()->route('logout-local');
         }
 
         // if (env('APP_ENV') == 'production' ) {
