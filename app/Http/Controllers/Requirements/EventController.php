@@ -108,7 +108,8 @@ class EventController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('requirements');
+                    // $fileModel->file = $file->store('requirements');
+                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $requirementEvent->id;
                     //$fileModel->ticket()->associate($ticket);
@@ -193,7 +194,8 @@ class EventController extends Controller
                         foreach ($request->file('forfile') as $file) {
                             $filename = $file->getClientOriginalName();
                             $fileModel = new File;
-                            $fileModel->file = $file->store('requirements');
+                            // $fileModel->file = $file->store('requirements');
+                            $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                             $fileModel->name = $filename;
                             $fileModel->event_id = $requirementEvent->id;
                             //$fileModel->ticket()->associate($ticket);
@@ -264,8 +266,8 @@ class EventController extends Controller
     public function download(File $file)
     {
         // dd($file);
-        return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+        // return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
         // $file = $dispatch->files->first();
-        // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 }
