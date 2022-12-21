@@ -242,16 +242,16 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
-
-        if (env('APP_ENV') == 'local' or env('APP_ENV') == 'testing') {
-            return redirect()->route('logout-local');
-        } else {
+        if (env('APP_ENV') == 'production' ) {
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
+            $response = Http::get($url);
+            dd($response->status());
         }
+        return redirect()->route('logout-local');
 
-        return redirect()->to($url)->send();
+        // return redirect()->to($url)->send();
     }
 
     /** Sirve para almacenar el json de un usuario, ya no se ocupa */
