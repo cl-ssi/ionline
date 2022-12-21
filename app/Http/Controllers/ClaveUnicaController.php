@@ -245,6 +245,7 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
+        return redirect()->route('logout-local');
         // if(session('loginType') == 'local') {
         //     return redirect()->route('logout-local');
         // }
