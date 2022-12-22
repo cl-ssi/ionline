@@ -253,10 +253,12 @@ class ClaveUnicaController extends Controller
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
-            $response = Http::get($url);
-            dd($response->status());
-            if($response->status() == 302) {
-            }
+            $response = Http::withOptions([
+                'allow_redirects'=>true,
+            ])->get($url);
+            // dd($response->status());
+            // if($response->status() == 302) {
+            // }
             // return redirect()->to($url)->send();
             // return redirect($url);
         }
