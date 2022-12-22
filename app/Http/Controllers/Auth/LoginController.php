@@ -84,7 +84,7 @@ class LoginController extends Controller
             auth()->user()->checkGravatar;
 
             /** Store login type */
-            session(['loginType' => 'local']);
+            session(['loginType' => 'Local']);
 
             return $this->sendLoginResponse($request);
         }
