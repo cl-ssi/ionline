@@ -254,8 +254,8 @@ class ClaveUnicaController extends Controller
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
             $response = Http::get($url);
+            dd($response->status());
             if($response->status() == 302) {
-                dd('302');
             }
             // return redirect()->to($url)->send();
             // return redirect($url);
