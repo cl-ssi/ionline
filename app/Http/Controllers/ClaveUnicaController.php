@@ -183,7 +183,7 @@ class ClaveUnicaController extends Controller
                 auth()->user()->checkGravatar;
 
                 /** Store login type */
-                session(['loginType' => 'ClaveUnica']);
+                session(['loginType' => 'clave_unica']);
 
                 $route = 'home';
             } else {
@@ -246,7 +246,7 @@ class ClaveUnicaController extends Controller
     public function logout()
     {
         /** Si el login fue local */
-        if(session('loginType') == 'Local' OR env('APP_ENV') == 'local') {
+        if(session('loginType') == 'local' OR env('APP_ENV') == 'local') {
             return redirect()->route('logout-local');
         }
         else {
