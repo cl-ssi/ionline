@@ -253,16 +253,21 @@ class ClaveUnicaController extends Controller
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
+            /* TODO: Esto no cierra clave única, buscar otra alternativa
+             * Clave única se mantiene abierto por 60 segundos
+             **/
             $response = Http::withOptions([
                 'allow_redirects'=>true,
             ])->get($url);
-            // dd($response->status());
-            // if($response->status() == 302) {
-            // }
+            /** Si ejecuto cualquiera de estas, al pasar los 60 segundos
+             * Clave única no redirecciona al logout que se le pasó en redirect=xxxxx
+             * Enviar una soliticud a clave unica para setear el uri de logout, 
+             * que creo no se seteo, ya que esta integración se hizo antes de que CU implemente el redirect
+             */
             // return redirect()->to($url)->send();
             // return redirect($url);
+            return redirect()->route('logout-local');
         }
-        return redirect()->route('logout-local');
     }
 
     /** Sirve para almacenar el json de un usuario, ya no se ocupa */
