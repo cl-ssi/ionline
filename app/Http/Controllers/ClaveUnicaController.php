@@ -256,6 +256,7 @@ class ClaveUnicaController extends Controller
             // return redirect()->to($url)->send();
             return redirect($url);
         }
+        return redirect()->route('logout-local');
     }
 
     /** Sirve para almacenar el json de un usuario, ya no se ocupa */
