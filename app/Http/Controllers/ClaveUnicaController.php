@@ -245,7 +245,7 @@ class ClaveUnicaController extends Controller
 
     public function logout()
     {
-        return redirect()->route('logout-local');
+        //return redirect()->route('logout-local');
         // if(session('loginType') == 'local') {
         //     return redirect()->route('logout-local');
         // }
@@ -261,9 +261,11 @@ class ClaveUnicaController extends Controller
             /* Url para luego cerrar sesión en nuestro sisetema */
             $url_redirect   = env('APP_URL') . "/logout";
             $url            = $url_logout.urlencode($url_redirect);
-            $response = Http::get($url);
+            $response = Http::withOptions([
+                ['allow_redirects' => ['track_redirects' => true]]
+            ])->get($url);
 
-            logger()->info(session('loginType'));
+            // logger()->info(session('loginType'));
             logger()->info($response->status());
 
         // }
