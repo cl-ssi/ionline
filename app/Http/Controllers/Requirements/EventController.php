@@ -268,7 +268,7 @@ class EventController extends Controller
         // dd($file);
         // return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
         // $file = $dispatch->files->first();
-        if(Storage::exists($file)){
+        if(Storage::disk('gcs')->exists($file)){
             return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
         }else{
             return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
