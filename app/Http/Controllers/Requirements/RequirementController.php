@@ -741,7 +741,8 @@ class RequirementController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('requirements');
+                    // $fileModel->file = $file->store('requirements');
+                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $firstEvent->id;
                     $fileModel->save();
@@ -880,7 +881,8 @@ class RequirementController extends Controller
                     foreach ($request->file('forfile') as $file) {
                         $filename = $file->getClientOriginalName();
                         $fileModel = new File;
-                        $fileModel->file = $file->store('requirements');
+                        // $fileModel->file = $file->store('requirements');
+                        $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                         $fileModel->name = $filename;
                         $fileModel->event_id = $firstEvent->id;
                         $fileModel->save();
