@@ -18,10 +18,19 @@
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
 
+            <div class="alert alert-info" role="alert">
+                <p class="font-italic font-weight-bold">
+                    <i class="fas fa-gift text-danger"></i>
+                    Feliz navidad te desea el glorioso Departamento Tic
+                    <i class="fas fa-sleigh text-danger"></i> 
+                </p>
+            </div>
+            
+
         </div>
         <div class="col-md-3 col-12">
-            <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
-            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
+            <img src="{{ asset('images/tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad">
+            <!-- <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail"> -->
         </div>
     </div>
 
@@ -45,7 +54,7 @@
     <div class="alert alert-light" style="display: none" role="alert" id="developers">
         Hola {{ auth()->user()->firstName }}, soy el sistema <i class="fas fa-cog fa-spin fa-2x" style="color:green"></i>
         , quiero contarte que fui desarrollado el año 2018 por <a href="mailto:alvaro.torres@redsalud.gob.cl">
-            Alvaro Torres</a> y <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a>
+         Alvaro Torres</a> y <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a>
         y hoy día soy mantenido por un excelente equipo de desarrollo del Departamento TIC,
         dónde se incorporó los Estebanes (Rojas + Miranda), Germán Zuñiga y Álvaro Lupa.
         <br>
