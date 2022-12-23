@@ -49,7 +49,7 @@ class LoginController extends Controller
 
         if (method_exists($this, 'hasTooManyLoginAttempts') && $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-            
+
             return $this->sendLockoutResponse($request);
         }
         
@@ -82,6 +82,9 @@ class LoginController extends Controller
 
             /** Check if user have a gravatar */
             auth()->user()->checkGravatar;
+
+            /** Store login type */
+            session(['loginType' => 'local']);
 
             return $this->sendLoginResponse($request);
         }
@@ -134,15 +137,15 @@ class LoginController extends Controller
 
     public function logout()
     {
-		if(Auth::check())
-		{
+        if(Auth::check())
+        {
             Auth::logout();
 
             request()->session()->invalidate();
             request()->session()->regenerateToken();
 
             return redirect()->route('welcome');
-		}
+        }
 
         if(Auth::guard('external')->check()) // significa que es un usuario externo
         {
@@ -151,8 +154,8 @@ class LoginController extends Controller
             return redirect()->route('welcome');
         }
 
-		return redirect('/');
-	}
+        return redirect('/');
+    }
 
 
     /**
