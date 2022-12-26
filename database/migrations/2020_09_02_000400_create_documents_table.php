@@ -15,14 +15,14 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->integer('number')->nullable();
+            $table->string('number',50)->nullable();
             $table->date('date')->nullable();
-            $table->enum('type',['Memo','Ordinario','Reservado','Circular','Acta de recepción','Otros']);
+            $table->enum('type',['Memo','Ordinario','Reservado','Circular','Acta de recepción','Otros','Oficio','Resolución','Acta de Recepción Obras Menores']);
             $table->text('antecedent')->nullable();
             $table->text('responsible')->nullable();
-            $table->string('subject');
-            $table->string('from');
-            $table->string('for');
+            $table->text('subject');
+            $table->string('from')->nullable();
+            $table->string('for')->nullable();
             $table->enum('greater_hierarchy',['from','for']);
             $table->text('distribution')->nullable();
             $table->longtext('content');

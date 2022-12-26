@@ -16,8 +16,7 @@ class CreateDocCorrelativesTable extends Migration
         Schema::create('doc_correlatives', function (Blueprint $table) {
             $table->id();
             $table->smallInteger('year');
-            $table->enum('type',['Memo','Ordinario','Reservado','Circular',
-                                'Acta de recepción','Otros']);
+            $table->enum('type',['Memo','Ordinario','Reservado','Circular','Acta de recepción','Otros','Oficio','Resolución','Acta de Recepción Obras Menores']);
             $table->integer('correlative');
             $table->timestamps();
         });

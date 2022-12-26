@@ -26,13 +26,15 @@
                     @php($revisor_temp = null)
                     @php($passTotalA = false)
                     @php($totalA = $totalB = $totalC = 0)
-                    @foreach($communeFile->programming_reviews as $review)
+                    @php($countA = $countB = $countB = 0)
+                    @foreach($communeFile->programming_reviews as  $key => $review)
                     @if($communeFile->isLastReviewBy('REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES', $review))
                     <tr class="font-weight-bold">
                         <td class="text-right align-middle">TOTAL PARTE A</td>
                         <td class="text-center align-middle">{{$totalA}}</td>
                         <td class="text-center align-middle" colspan="2">PESO RELATIVO DEL COMPONENTE A (40%)</td>
                     </tr>
+                    @php($countA = $key)
                     @endif
                     <tr>
                         @if($review->revisor != $revisor_temp)
@@ -63,6 +65,7 @@
                             <td class="text-center align-middle">{{$totalB}}</td>
                             <td class="text-center align-middle" colspan="2">PESO RELATIVO DEL COMPONENTE B (40%)</td>
                         </tr>
+                        @php($countB = $key - $countA + 1)
                         @endif
                         @if($communeFile->isLastReviewBy('REVISION DE CAPACITACIÓN MUNICIPAL', $review))
                         @php($totalC += $review->score)
@@ -71,6 +74,8 @@
                             <td class="text-center align-middle">{{$totalC}}</td>
                             <td class="text-center align-middle" colspan="2">PESO RELATIVO DEL COMPONENTE C (20%)</td>
                         </tr>
+                        @php($countC = $key - $countA - $countB+1)
+                        @break
                         @endif
                     </tr>
                     <?php
@@ -78,7 +83,7 @@
                         if($review->revisor != 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES') $totalC += $review->score;
                     ?>
                     @endforeach
-                    @php($totalPonderado = ceil(($totalA/36)*40 + ($totalB/3)*40 + ($totalC/15)*20))
+                    @php($totalPonderado = ceil(($totalA/($countA*3))*40 + ($totalB/($countB*3))*40 + ($totalC/($countC*3))*20))
                     <tr class="font-weight-bold">
                         <td class="text-right align-middle" colspan="2">TOTAL PONDERADO</td>
                         <td class="text-right align-middle">{{$totalPonderado}}%</td>

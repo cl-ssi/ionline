@@ -108,7 +108,8 @@ class EventController extends Controller
                 foreach ($request->file('forfile') as $file) {
                     $filename = $file->getClientOriginalName();
                     $fileModel = new File;
-                    $fileModel->file = $file->store('requirements');
+                    // $fileModel->file = $file->store('requirements');
+                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                     $fileModel->name = $filename;
                     $fileModel->event_id = $requirementEvent->id;
                     //$fileModel->ticket()->associate($ticket);
@@ -193,7 +194,8 @@ class EventController extends Controller
                         foreach ($request->file('forfile') as $file) {
                             $filename = $file->getClientOriginalName();
                             $fileModel = new File;
-                            $fileModel->file = $file->store('requirements');
+                            // $fileModel->file = $file->store('requirements');
+                            $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
                             $fileModel->name = $filename;
                             $fileModel->event_id = $requirementEvent->id;
                             //$fileModel->ticket()->associate($ticket);
@@ -263,6 +265,17 @@ class EventController extends Controller
 
     public function download(File $file)
     {
-        return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+        // dd($file);
+        // return Storage::response($file->file, mb_convert_encoding($file->name, 'ASCII'));
+        // $file = $dispatch->files->first();
+        
+        if(Storage::disk('gcs')->exists($file->file)){
+            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        }else{
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
+
+        // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        
     }
 }
