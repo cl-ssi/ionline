@@ -195,13 +195,13 @@ class AgreementController extends Controller
         $agreement->establishment_list  = serialize($request->establishment);
         if($request->hasFile('file')){
 
-            Storage::delete($agreement->file);
-            $agreement->file = $request->file('file')->store('resolutions');
+            Storage::disk('gcs')->delete($agreement->file);
+            $agreement->file = $request->file('file')->store('ionline/agreements/agree', ['disk' => 'gcs']);
         }
  
         if($request->hasFile('fileResEnd')){
-            Storage::delete($agreement->fileResEnd);
-            $agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
+            Storage::disk('gcs')->delete($agreement->fileResEnd);
+            $agreement->fileResEnd = $request->file('fileResEnd')->store('ionline/agreements/agree_res', ['disk' => 'gcs']);
         }
 
         $agreement->referrer_id = $request->referrer_id;
@@ -288,8 +288,8 @@ class AgreementController extends Controller
         $Stage->observation = $request->observation;
         
         if($request->hasFile('file')){
-            Storage::delete($Stage->file);
-            $Stage->file = $request->file('file')->store('agg_stage');
+            Storage::disk('gcs')->delete($Stage->file);
+            $Stage->file = $request->file('file')->store('ionline/agreements/agg_stage', ['disk' => 'gcs']);
         }
            
         $Stage->save();
@@ -313,20 +313,20 @@ class AgreementController extends Controller
   
     public function download(Agreement $file)
     {
-        return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function preview(Agreement $agreement)
     {
         $filename = 'tmp_files/'.$agreement->file;
         if(!Storage::disk('public')->exists($filename))
-            Storage::disk('public')->put($filename, Storage::disk('local')->get($agreement->file));
+            Storage::disk('public')->put($filename, Storage::disk('gcs')->get($agreement->file));
         return Redirect::away('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
     }
 
     public function downloadAgree(Agreement $file)
     {
-        return Storage::response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function downloadRes(Agreement $file)

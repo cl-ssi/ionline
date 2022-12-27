@@ -95,13 +95,13 @@ class AddendumController extends Controller
         }
         
         if($request->hasFile('file')){
-            Storage::delete($addendum->file);
-            $addendum->file = $request->file('file')->store('resolutions');
+            Storage::disk('gcs')->delete($addendum->file);
+            $addendum->file = $request->file('file')->store('ionline/agreements/addendum', ['disk' => 'gcs']);
         }
 
         if($request->hasFile('res_file')){
-            Storage::delete($addendum->res_file);
-            $addendum->res_file = $request->file('res_file')->store('resolutions');
+            Storage::disk('gcs')->delete($addendum->res_file);
+            $addendum->res_file = $request->file('res_file')->store('ionline/agreements/addendum_res', ['disk' => 'gcs']);
         }
         $addendum->save();
 
@@ -152,14 +152,14 @@ class AddendumController extends Controller
 
     public function downloadRes(Addendum $addendum)
     {
-        return Storage::response($addendum->res_file, mb_convert_encoding($addendum->name,'ASCII'));
+        return Storage::disk('gcs')->response($addendum->res_file, mb_convert_encoding($addendum->name,'ASCII'));
     }
 
     public function preview(Addendum $addendum)
     {
         $filename = 'tmp_files/'.$addendum->file;
         if(!Storage::disk('public')->exists($filename))
-            Storage::disk('public')->put($filename, Storage::disk('local')->get($addendum->file));
+            Storage::disk('public')->put($filename, Storage::disk('gcs')->get($addendum->file));
         return Redirect::away('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
     }
 
