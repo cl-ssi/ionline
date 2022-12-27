@@ -15,7 +15,7 @@ class AddWeeklyHoursColumnServiceRequestTable extends Migration
     {
       Schema::table('doc_service_requests', function (Blueprint $table) {
           $table->double('weekly_hours', 8, 2)->nullable()->after('program_contract_type');
-          $table->double('net_amount', 8, 2)->nullable()->after('gross_amount');
+          $table->double('net_amount', 10, 0)->nullable()->after('gross_amount');
 
       });
     }
