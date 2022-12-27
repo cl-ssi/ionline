@@ -90,8 +90,8 @@ class ProgramResolutionController extends Controller
         $program_resolution = ProgramResolution::findOrFail($programResolutionId);
         $program_resolution->update($request->All());
         if($request->hasFile('file')){
-            Storage::delete($program_resolution->file);
-            $program_resolution->file = $request->file('file')->store('resolutions');
+            Storage::disk('gcs')->delete($program_resolution->file);
+            $program_resolution->file = $request->file('file')->store('ionline/agreements/program_res', ['disk' => 'gcs']);
         }
         $program_resolution->save();
 
@@ -114,7 +114,7 @@ class ProgramResolutionController extends Controller
 
     public function download(ProgramResolution $program_resolution)
     {
-        return Storage::response($program_resolution->file, mb_convert_encoding($program_resolution->number,'ASCII'));
+        return Storage::disk('gcs')->response($program_resolution->file, mb_convert_encoding($program_resolution->number,'ASCII'));
     }
 
     public function storeAmount(Request $request, ProgramResolution $program_resolution)
