@@ -331,7 +331,7 @@ class AgreementController extends Controller
 
     public function downloadRes(Agreement $file)
     {
-        return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function sign(Agreement $agreement, $type)
