@@ -107,7 +107,7 @@ class WordWithdrawalAgreeController extends Controller
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreement = Agreement::with('Program','Commune','referrer')->where('id', $id)->first();
-        $file = Storage::disk('')->path($agreement->file);
+        $file = Storage::disk('gcs')->path($agreement->file);
         
         // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
         $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionretirohead'.$agreement->period.'.docx'));
@@ -177,7 +177,7 @@ class WordWithdrawalAgreeController extends Controller
         } else { // Resolucion Addedum
             // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
             $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumretirohead'.$addendum->agreement->period.'.docx'));
-            $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
+            $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('gcs')->path($addendum->file)); //addendum doc
             $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumretirofooter'.$addendum->agreement->period.'.docx'));
             // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
             $addendum->director_signer = Signer::with('user')->find($request->signer_id);
