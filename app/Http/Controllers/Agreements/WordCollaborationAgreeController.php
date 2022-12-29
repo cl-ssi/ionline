@@ -109,7 +109,7 @@ class WordCollaborationAgreeController extends Controller
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreement = Agreement::with('Program','Commune')->where('id', $id)->first();
-        $file = Storage::disk('gcs')->path($agreement->file);
+        $file = Storage::disk('gcs')->get($agreement->file);
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         
         // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion

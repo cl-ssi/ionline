@@ -118,7 +118,7 @@ class WordMandatePFCAgreeController extends Controller
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreements     = Agreement::with('Program','Commune','agreement_amounts', 'referrer')->where('id', $id)->first();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
-        $file           = Storage::disk('gcs')->path($agreements->file);
+        $file           = Storage::disk('gcs')->get($agreements->file);
         $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
