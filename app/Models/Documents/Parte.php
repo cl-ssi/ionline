@@ -87,7 +87,7 @@ class Parte extends Model
         return $query;
     }
 
-    /** Fixme cambiar nombre */
+    /* FIXME:  cambiar nombre */
     public function scopeSearch2($query, $request)
     {
         if($request != "") {

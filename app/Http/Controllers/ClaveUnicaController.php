@@ -151,12 +151,22 @@ class ClaveUnicaController extends Controller
             }
 
             $u = User::find($user->id);
+
             if ($u) {
-                $u->name = $user->name;
-                $u->fathers_family = $user->fathers_family;
-                $u->mothers_family = $user->mothers_family;
-                $u->email_personal = $user->email;
-                $u->save();
+                /* Almacenar sólo si los valores son diferentes a los registrados */
+                if ($u->name != $user->name OR 
+                    $u->fathers_family != $user->fathers_family OR 
+                    $u->mothers_family != $user->mothers_family OR
+                    $u->email_personal != $user->email) 
+                {
+                    $u->name = $user->name;
+                    $u->fathers_family = $user->fathers_family;
+                    $u->mothers_family = $user->mothers_family;
+                    if (isset($user->email)) {
+                        $u->email_personal = $user->email;
+                    }
+                    $u->save();
+                }
 
                 /** No permitir login si tiene permiso "Nuevo iOnline" */
                 if(env('OLD_SERVER'))

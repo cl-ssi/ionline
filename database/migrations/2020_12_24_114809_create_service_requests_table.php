@@ -35,7 +35,7 @@ class CreateServiceRequestsTable extends Migration
             $table->unsignedBigInteger('subdirection_ou_id');
             $table->unsignedBigInteger('responsability_center_ou_id');
             $table->unsignedBigInteger('responsable_id');
-            // $table->string('rut', 100); /* FIX: @sickiqq no está en el backup, tiene migración para eliminar? */
+            // $table->string('rut', 100); /* FIXME: @sickiqq no está en el backup, tiene migración para eliminar? */
             // $table->string('name', 100);
             $table->string('address', 100)->nullable();
             $table->string('phone_number', 150)->nullable();
