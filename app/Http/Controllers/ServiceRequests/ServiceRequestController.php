@@ -754,6 +754,7 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
+    /* FIXME: @sick esto no debería estar acá */
     set_time_limit(7200);
     ini_set('memory_limit', '2048M');
 
@@ -771,6 +772,7 @@ class ServiceRequestController extends Controller
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
     // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+    /* FIXME: no dejar fechas fijas, o solo se puede utilizar el 2022? */
     ->where('start_date','>=','2022-01-01 00:00')
     ->orderBy('request_date', 'asc')
     ->get();
@@ -796,6 +798,7 @@ class ServiceRequestController extends Controller
     ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
+    /* FIXME: no dejar fechas fijas, o solo se puede utilizar el 2022? */
     ->where('start_date','>=','2022-01-01 00:00')
     ->orderBy('request_date', 'asc')->get();
 
