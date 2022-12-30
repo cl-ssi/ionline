@@ -317,7 +317,7 @@ Route::group(['middleware' => 'auth:external'], function () {
 });
 
 
-/** TODO: pasarlo al controller del usuario */
+/* TODO: pasarlo al controller del usuario */
 Route::post('/email/verification-notification/{user}', function (User $user) {
     $user->sendEmailVerificationNotification();
     return back()->with('success', 'El enlace de verificación se ha enviado al correo personal <b>'. $user->email_personal .'</b> para su confirmación.');
@@ -332,7 +332,7 @@ Route::post('/email/verification-notification/{user}', function (User $user) {
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 
-/** TODO: no tiene auth */
+/* TODO: no tiene auth */
 Route::post('/{signaturesFlowId}/firma', [DigitalSignatureController::class,'signPdfFlow'])->name('signPdfFlow');
 Route::post('/firma', [DigitalSignatureController::class,'signPdf'])->name('signPdf');
 Route::get('/validador', [SignatureController::class,'verify'])->name('verifyDocument');
@@ -615,7 +615,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 });
 /** Fin Agreements */
 
-/** TODO #51 agrupar con middleware auth y revisar rutas que no se ocupen */
+/* TODO #51 agrupar con middleware auth y revisar rutas que no se ocupen */
 /** Programación Númerica APS */
 Route::resource('programmings', ProgrammingController::class)->middleware('auth');
 Route::put('programmingStatus/{id}', [ProgrammingController::class,'updateStatus'])->middleware('auth')->name('programmingStatus.update');
@@ -694,7 +694,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
     });
 
-    /** TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
+    /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */
     Route::prefix('shift-management')->group(function () {
 
@@ -995,7 +995,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     });
 
-    /** FIX hay dos RoleControllers */
+    /* FIXME: hay dos RoleControllers */
     Route::resource('roles', App\Http\Controllers\Parameters\RoleController::class);
 
     Route::prefix('communes')->as('communes.')->group(function () {

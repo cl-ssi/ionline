@@ -190,15 +190,18 @@
 
     <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_request_date">Fecha Solicitud</label>
+            <!-- FIXME: @sick No dejar código estático -->
 		    <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($serviceRequest->request_date)->format('Y-m-d')}}" min="2020-01-01" max="2023-12-31">
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-3">
+        <!-- FIXME: @sick No dejar código estático -->
 		    <label for="for_start_date">F.Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}" min="2020-01-01" max="2023-12-31">
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-3">
+        <!-- FIXME: @sick No dejar código estático -->
 		    <label for="for_end_date">F.Fin de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}" min="2020-01-01" max="2023-12-31">
 		</fieldset>

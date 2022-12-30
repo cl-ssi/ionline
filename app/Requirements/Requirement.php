@@ -79,7 +79,7 @@ class Requirement extends Model implements Auditable
         return ($ct > 0) ? $ct : null;
     }
 
-    /** FIX viewed hace referencia a los archivados y no a los vistos
+    /* FIXME: viewed hace referencia a los archivados y no a los vistos
      */
     public function archived() {
         return $this->hasMany('App\Requirements\RequirementStatus')
@@ -96,7 +96,7 @@ class Requirement extends Model implements Auditable
         return $query;
     }
 
-    /** FIX no debería llamarse RequirementStatus, status directamente 
+    /* FIXME: no debería llamarse RequirementStatus, status directamente 
      * sin embargo esa popiedad ya existe
      */
     public function requirementStatus() {
