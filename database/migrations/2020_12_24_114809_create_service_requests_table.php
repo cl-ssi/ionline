@@ -91,7 +91,7 @@ class CreateServiceRequestsTable extends Migration
 
         Schema::create('doc_shift_controls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('service_request_id');
+            $table->unsignedBigInteger('service_request_id')->nullable();
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
             $table->string('observation', 100)->nullable();
