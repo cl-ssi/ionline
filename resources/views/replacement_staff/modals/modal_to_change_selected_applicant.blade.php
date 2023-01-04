@@ -61,6 +61,7 @@
                                             <option value="">Seleccione...</option>
                                             <option value="renuncia a reemplazo">Renuncia a reemplazo (Posterior ingreso)</option>
                                             <option value="rechazo oferta laboral">Rechazo oferta laboral (Previo ingreso)</option>
+                                            <option value="error digitacion">Error de digitación</option>
                                         </select>
                                     </fieldset>
                                 </div>

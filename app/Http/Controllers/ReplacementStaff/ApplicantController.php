@@ -202,15 +202,10 @@ class ApplicantController extends Controller
     }
 
     public function decline_selected_applicant(Request $request, Applicant $applicant){
+        $applicant->fill($request->all());
         $applicant->desist = 1;
-        $applicant->desist_observation = $request->observation;
-        $applicant->reason = $request->reason;
-        $applicant->start_date = $request->start_date;
-        $applicant->end_date = $request->end_date;
 
         $applicant->save();
-
-        //if($applicant->reason == 'renuncia a reemplazo'){
 
         $applicantsSelected = Applicant::where('technical_evaluation_id', $applicant->technical_evaluation_id)
             ->where('selected', 1)

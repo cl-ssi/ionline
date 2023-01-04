@@ -476,6 +476,9 @@
                               @if($applicant->reason == 'rechazo oferta laboral')
                                 Rechazo oferta laboral (Previo ingreso)
                               @endif
+                              @if($applicant->reason == 'error digitacion')
+                                Error de Digitación
+                              @endif
                             </span>
                           @endif
                         </td>
