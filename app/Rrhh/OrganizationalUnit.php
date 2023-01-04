@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-use App\Users;
-
 class OrganizationalUnit extends Model implements Auditable
 {
     use SoftDeletes;
@@ -91,7 +89,7 @@ class OrganizationalUnit extends Model implements Auditable
         return $initials;
     }
 
-    public function getTree($getBrothers = false)
+    public function getTree($getBrothers = false, $getChilds = false)
     {
         $tree = collect([]);
         $root = $this;
@@ -122,6 +120,15 @@ class OrganizationalUnit extends Model implements Auditable
             }
         }
 
+        if($getChilds)
+        {
+            foreach($this->childs as $child)
+            {
+                $sheet = [$child->name, $child->father->name ?? '', ''];
+                $tree->push($sheet);
+            }
+        }
+
         return $tree;
     }
 
@@ -133,6 +140,11 @@ class OrganizationalUnit extends Model implements Auditable
     public function getTreeWithBrothersAttribute()
     {
         return $this->getTree(true);
+    }
+
+    public function getTreeWithChildsAttribute()
+    {
+        return $this->getTree(false, true);
     }
 
     public static function getOrganizationalUnitsBySearch($searchText)
