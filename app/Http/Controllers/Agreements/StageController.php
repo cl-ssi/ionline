@@ -21,7 +21,7 @@ class StageController extends Controller
         //dd($request->hasFile('file'));
         $stage = new Stage($request->All());
         if($request->hasFile('file'))
-            $stage->file = $request->file('file')->store('agg_stage');
+            $stage->file = $request->file('file')->store('ionline/agreements/agg_stage', ['disk' => 'gcs']);
         $stage->save();
 
         session()->flash('info', 'Se agregó el evento "'.$stage->type.'"');
@@ -31,7 +31,7 @@ class StageController extends Controller
 
     public function download(Stage $file)
     {
-        return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 
 }

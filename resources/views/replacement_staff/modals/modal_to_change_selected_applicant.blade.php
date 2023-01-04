@@ -61,13 +61,14 @@
                                             <option value="">Seleccione...</option>
                                             <option value="renuncia a reemplazo">Renuncia a reemplazo (Posterior ingreso)</option>
                                             <option value="rechazo oferta laboral">Rechazo oferta laboral (Previo ingreso)</option>
+                                            <option value="error digitacion">Error de digitación</option>
                                         </select>
                                     </fieldset>
                                 </div>
                                 <div class="form-row">
                                     <fieldset class="form-group col-12">
-                                        <label for="for_observation">Observación</label>
-                                        <textarea class="form-control" name="observation" id="for_observation" rows="2" required></textarea>
+                                        <label for="for_desist_observation">Observación</label>
+                                        <textarea class="form-control" name="desist_observation" id="for_desist_observation" rows="2" required></textarea>
                                     </fieldset>
                                 </div>
                                 <div class="form-row">

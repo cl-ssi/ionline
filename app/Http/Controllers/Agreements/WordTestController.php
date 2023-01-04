@@ -213,7 +213,7 @@ class WordTestController extends Controller
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreements     = Agreement::with('Program','Commune','agreement_amounts', 'referrer')->where('id', $id)->first();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
-        $file           = Storage::disk('')->path($agreements->file);
+        $file           = Storage::disk('gcs')->url($agreements->file);
         $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
@@ -320,7 +320,7 @@ class WordTestController extends Controller
         } else { // Resolucion Addedum
             // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
             $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead'.$addendum->agreement->period.'.docx'));
-            $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
+            $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('gcs')->url($addendum->file)); //addendum doc
             $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter'.$addendum->agreement->period.'.docx'));
             // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
             $addendum->director_signer = Signer::with('user')->find($request->signer_id);

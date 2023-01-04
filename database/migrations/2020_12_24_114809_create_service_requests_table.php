@@ -35,8 +35,8 @@ class CreateServiceRequestsTable extends Migration
             $table->unsignedBigInteger('subdirection_ou_id');
             $table->unsignedBigInteger('responsability_center_ou_id');
             $table->unsignedBigInteger('responsable_id');
-            $table->string('rut', 100); /* FIX: @sickiqq no está en el backup, tiene migración para eliminar? */
-            $table->string('name', 100);
+            // $table->string('rut', 100); /* FIXME: @sickiqq no está en el backup, tiene migración para eliminar? */
+            // $table->string('name', 100);
             $table->string('address', 100)->nullable();
             $table->string('phone_number', 150)->nullable();
             $table->string('email', 100)->nullable();
@@ -69,12 +69,12 @@ class CreateServiceRequestsTable extends Migration
             $table->string('nationality', 100)->nullable();
             $table->string('digera_strategy', 100)->nullable();
             $table->string('rrhh_team', 100)->nullable();
-            $table->double('gross_amount', 8, 2)->nullable();
+            $table->double('gross_amount', 10, 0)->nullable();
             $table->boolean('sirh_contract_registration')->nullable();
             $table->bigInteger('resolution_number')->nullable();
             $table->bigInteger('bill_number')->nullable();
-            $table->double('total_hours_paid', 8, 2)->nullable();
-            $table->double('total_paid', 8, 2)->nullable();
+            $table->double('total_hours_paid', 10, 2)->nullable();
+            $table->double('total_paid', 10, 2)->nullable();
             $table->datetime('payment_date')->nullable();
 
             $table->string('verification_code', 100)->nullable();
@@ -91,7 +91,7 @@ class CreateServiceRequestsTable extends Migration
 
         Schema::create('doc_shift_controls', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('service_request_id');
+            $table->unsignedBigInteger('service_request_id')->nullable();
             $table->datetime('start_date')->nullable();
             $table->datetime('end_date')->nullable();
             $table->string('observation', 100)->nullable();

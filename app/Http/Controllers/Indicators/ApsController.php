@@ -179,7 +179,7 @@ class ApsController extends Controller
                 }
 
                 // Consultamos si existen en el denominador valores manuales por comuna
-                if($factor == 'denominador' && $indicator->denominator_values_by_commune != null){
+                if($factor == 'denominador' && $indicator->denominator_values_by_commune != null && $establishment_type != 'ssi'){
                     $values = array_map('trim', explode(',', $indicator->denominator_values_by_commune));
                     $communes = array('ALTO HOSPICIO', 'CAMIÑA', 'COLCHANE', 'HUARA', 'IQUIQUE', 'PICA', 'POZO ALMONTE');
 
