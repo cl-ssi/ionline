@@ -90,7 +90,9 @@
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
 
-    <!-- <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
+</div>
+
+<h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
             Solicitar a Yeannett del Departamento Tic (tic.ssi@redsalud.gob.cl) o 
@@ -117,8 +119,7 @@
         <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a> - 
         <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">iPhone</a>
         </li>
-    </ol> -->
-</div>
+    </ol>
 
 @endsection
 
