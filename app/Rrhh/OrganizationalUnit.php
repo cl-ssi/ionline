@@ -13,6 +13,8 @@ class OrganizationalUnit extends Model implements Auditable
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
+    protected $table = 'organizational_units';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,35 +24,50 @@ class OrganizationalUnit extends Model implements Auditable
         'name','level', 'organizational_unit_id','establishment_id','sirh_function','sirh_ou_id','sirh_cost_center'
     ];
 
-    public function users() {
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [];
+
+    public function users()
+    {
         return $this->hasMany('\App\User');
     }
 
-    public function father() {
+    public function father()
+    {
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
-    public function childs() {
+    public function childs()
+    {
         return $this->hasMany('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
-    public function authorities() {
+    public function authorities()
+    {
         return $this->hasMany('\App\Rrhh\Authority');
     }
 
-    public function documents() {
+    public function documents()
+    {
         return $this->hasMany('\App\Models\Documents\Document');
     }
 
-    public function documentEvents() {
+    public function documentEvents()
+    {
         return $this->hasMany('\App\Models\Documents\DocumentEvent');
     }
 
-    public function establishment() {
+    public function establishment()
+    {
         return $this->belongsTo('\App\Models\Establishment', 'establishment_id');
     }
 
-    public function requestForms(){
+    public function requestForms()
+    {
       return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
@@ -74,7 +91,52 @@ class OrganizationalUnit extends Model implements Auditable
         return $initials;
     }
 
-    public static function getOrganizationalUnitsBySearch($searchText){
+    public function getTree($getBrothers = false)
+    {
+        $tree = collect([]);
+        $root = $this;
+
+        for($i = 1; $i <= $this->level; $i++)
+        {
+            if($this->id == $root->id)
+            {
+                $info['v'] = $root->name;
+                $info['f'] = "{$root->name}<div style='color:red; font-style:italic'>Funcionario</div>";
+            }
+            else
+            {
+                $info = $root->name;
+            }
+
+            $sheet = [$info, $root->father->name ?? '', ''];
+            $tree->push($sheet);
+            $root = $root->father;
+        }
+
+        if($this->father && $getBrothers)
+        {
+            foreach($this->father->childs as $child)
+            {
+                $sheet = [$child->name, $child->father->name ?? '', ''];
+                $tree->push($sheet);
+            }
+        }
+
+        return $tree;
+    }
+
+    public function getTreeAttribute()
+    {
+        return $this->getTree();
+    }
+
+    public function getTreeWithBrothersAttribute()
+    {
+        return $this->getTree(true);
+    }
+
+    public static function getOrganizationalUnitsBySearch($searchText)
+    {
         $organizationalUnits = OrganizationalUnit::query();
         $array_search = explode(' ', $searchText);
         foreach($array_search as $word){
@@ -82,16 +144,7 @@ class OrganizationalUnit extends Model implements Auditable
                 $q->where('name', 'LIKE', '%'.$word.'%');
             });
         }
-        
+
         return $organizationalUnits;
     }
-
-    protected $table = 'organizational_units';
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [];
 }
