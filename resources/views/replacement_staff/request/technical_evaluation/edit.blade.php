@@ -761,7 +761,7 @@
         var mylist = document.getElementById("for_reason");
         var result = mylist.options[mylist.selectedIndex].text;
 
-        if (result == 'Rechazo oferta laboral (Previo ingreso)') {
+        if (result == 'Rechazo oferta laboral (Previo ingreso)' || result == 'Error de digitación') {
           //disable all the radio button
           document.getElementById("for_start_date").readOnly = true;
           document.getElementById("for_end_date").readOnly = true;

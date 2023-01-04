@@ -67,8 +67,8 @@
                                 </div>
                                 <div class="form-row">
                                     <fieldset class="form-group col-12">
-                                        <label for="for_observation">Observación</label>
-                                        <textarea class="form-control" name="observation" id="for_observation" rows="2" required></textarea>
+                                        <label for="for_desist_observation">Observación</label>
+                                        <textarea class="form-control" name="desist_observation" id="for_desist_observation" rows="2" required></textarea>
                                     </fieldset>
                                 </div>
                                 <div class="form-row">

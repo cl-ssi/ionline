@@ -111,52 +111,56 @@
 
 <br>
 
-<div class="row">
-    <div class="col-sm">
-        <div class="table-responsive">
-          <h6><i class="fas fa-info-circle"></i> Listado de Evaluaciones Técnicas</h6>
-          <table class="table table-sm table-bordered table-striped">
-              <thead class="small text-center">
-                  <tr>
-                      <th rowspan="2">#</th>
-                      <th rowspan="2">Solicitud</th>
-                      <th rowspan="2">Calificación Evaluación Psicolaboral</th>
-                      <th rowspan="2">Calificación Evaluación Técnica y/o de Apreciación Global</th>
-                      <th rowspan="2">Observacion</th>
-                      <th rowspan="2">Estado</th>
-                      <th rowspan="2">Rachazo</th>
-                      <th colspan="2">Fecha Efectiva</th>
-                  </tr>
-                  <tr>
-                      <th>Ingreso</th>
-                      <th>Fin</th>
-                  </tr>
-              </thead>
-              <tbody class="small">
+</div>
+
+<div class="col-sm">
+    <div class="table-responsive">
+        <h6><i class="fas fa-info-circle"></i> Listado de Evaluaciones Técnicas</h6>
+        <table class="table table-sm table-bordered table-striped">
+            <thead class="small text-center">
+                <tr>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">Nombre Solicitud</th>
+                    <th rowspan="2" width="10%">Calificación Evaluación Psicolaboral</th>
+                    <th rowspan="2" width="12%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                    <th colspan="2">Seleccionado</th>
+                    <th colspan="2">Desiste</th>
+                    <th colspan="2">Fecha Efectiva</th>
+                </tr>
+                <tr>
+                    <th>Estado</th>
+                    <th>Observacion</th>
+                    <th>Estado</th>
+                    <th>Observacion</th>
+                    <th>Ingreso</th>
+                    <th>Fin</th>
+                </tr>
+            </thead>
+            <tbody class="small">
                 @foreach($applicants as $key => $applicant)
-                  <tr>
-                      <td>{{ $key + 1 }}</td>
-                      <td><a href="{{ route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation) }}" target="_blank">{{ $applicant->technicalEvaluation->requestReplacementStaff->name }}</a></td>
-                      <td>{{ $applicant->psycholabor_evaluation_score }}</td>
-                      <td>{{ $applicant->technical_evaluation_score }}</td>
-                      <td>{{ $applicant->observations }}</td>
-                      <td>
-                        @if($applicant->selected == 1)
-                          Seleccionado
-                        @endif
-                      </td>
-                      <td>
-                        @if($applicant->desist == 1)
-                          Rechazo
-                        @endif
-                      </td>
-                      <td>{{ $applicant->start_date->format('d-m-Y') }}</td>
-                      <td>{{ $applicant->end_date->format('d-m-Y') }}</td>
-                  </tr>
+                    <tr>
+                        <td class="text-center"><a href="{{ route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff) }}" target="_blank">{{ $applicant->technicalEvaluation->requestReplacementStaff->id }}</a></td>
+                        <td><a href="{{ route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation->requestReplacementStaff) }}" target="_blank">{{ $applicant->technicalEvaluation->requestReplacementStaff->name }}</a></td>
+                        <td class="text-center">{{ $applicant->psycholabor_evaluation_score }}</td>
+                        <td class="text-center">{{ $applicant->technical_evaluation_score }}</td>
+                        <td class="text-center">
+                            @if($applicant->selected == 1)
+                            Si
+                            @endif
+                        </td>
+                        <td class=>{{ $applicant->observations }}</td>
+                        <td class="text-center">
+                            @if($applicant->desist == 1)
+                            Si
+                            @endif
+                        </td>
+                        <td class=>{{ $applicant->desist_observation }}</td>
+                        <td class="text-center" width="8%">{{ $applicant->start_date->format('d-m-Y') }}</td>
+                        <td class="text-center" width="8%">{{ $applicant->end_date->format('d-m-Y') }}</td>
+                    </tr>
                 @endforeach
-              </tbody>
-          </table>
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
 
