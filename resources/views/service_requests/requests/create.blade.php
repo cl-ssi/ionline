@@ -84,6 +84,7 @@
 				<option value=""></option>
                 <option value="45">45</option>
 				<option value="44">44</option>
+                <option value="40">40</option>
 				<option value="33">33</option>
 				<option value="30">30</option>
 				<option value="28">28</option>
