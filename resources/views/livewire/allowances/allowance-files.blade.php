@@ -44,7 +44,6 @@
             <button class="btn text-white btn-info float-right" wire:click.prevent="add({{ $i }})">Agregar <i class="fas fa-plus"></i></button>
         </fieldset>
     </div>
-
     @foreach($inputs as $key => $value)
         <div class="form-row">
             <fieldset class="form-group col mt">
@@ -60,11 +59,15 @@
                     <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
                 </div>
             </fieldset>
-
+            @if($key > 0 || $form == 'edit')
             <fieldset class="form-group col-md-2">
                 <label for="for_button"><br></label>
                 <button class="btn btn-danger btn-block" wire:click.prevent="remove({{ $key }})">Remover</button>
             </fieldset>
+            @else
+            <fieldset class="form-group col-md-2">
+            </fieldset>
+            @endif
         </div>
         <hr>
         @endforeach

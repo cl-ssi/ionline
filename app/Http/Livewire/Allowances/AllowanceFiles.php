@@ -15,8 +15,7 @@ class AllowanceFiles extends Component
     public $i = 1;
     public $count = 0;
 
-    // public $users;
-    // public $technicalEvaluation;
+    public $form;
     
     public function add($i)
     {
@@ -30,10 +29,14 @@ class AllowanceFiles extends Component
     {
         unset($this->inputs[$i]);
         $this->count--;
+        $this->i--;
     }
 
     public function render()
     {
+        if($this->i == 1 && $this->form == 'create'){
+            $this->add($this->i);
+        }
         return view('livewire.allowances.allowance-files');
     }
 

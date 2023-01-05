@@ -136,7 +136,9 @@
     <hr>
     <br>
 
-    @livewire('allowances.allowance-files')
+    @livewire('allowances.allowance-files', [
+        'form' => 'create'
+    ])
 
     <br>
 
