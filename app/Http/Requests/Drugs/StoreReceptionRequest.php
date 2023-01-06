@@ -25,11 +25,11 @@ class StoreReceptionRequest extends FormRequest
     {
         return [
             'parte_label'               => 'required',
-            'parte'                     => 'nullable|string|max:255',
+            'parte'                     => 'required|string|max:255',
             'parte_police_unit_id'      => 'required|exists:drg_police_units,id',
             'court_id'                  => 'required|exists:drg_courts,id',
-            'document_number'           => 'nullable|string|max:255',
-            'document_police_unit_id'   => 'nullable|exists:drg_police_units,id',
+            'document_number'           => 'required|string|max:255',
+            'document_police_unit_id'   => 'required|exists:drg_police_units,id',
             'document_date'             => 'required|date_format:Y-m-d',
             'delivery'                  => 'nullable|string|max:255',
             'delivery_run'              => 'nullable|string|max:255',
