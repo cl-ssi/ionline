@@ -45,8 +45,8 @@
 
     <div class="form-row">
         <fieldset class="form-group col-2">
-            <label for="for_parte">Número *</label>
-            <input type="text" class="form-control" id="for_parte" name="parte" value="{{ $reception->parte }}">
+            <label for="for_parte">Parte/Of.Res/RUC *</label>
+            <input type="text" class="form-control" id="for_parte" name="parte" value="{{ $reception->parte }}" required>
         </fieldset>
 
         <fieldset class="form-group col-5">
@@ -95,7 +95,7 @@
         <fieldset class="form-group col-3">
             <label for="fordocument_date">Fecha Oficio *</label>
             <input type="date" class="form-control" id="fordocument_date"
-            name="document_date" value="{{ $reception->document_date->format('Y-m-d') }}">
+            name="document_date" value="{{ $reception->document_date->format('Y-m-d') }}" required>
         </fieldset>
     </div>
 

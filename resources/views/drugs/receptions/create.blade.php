@@ -34,8 +34,8 @@
     <div class="form-row">
 
         <fieldset class="form-group col-2">
-            <label for="for_parte">Parte/Of.Res/RUC</label>
-            <input type="text" class="form-control" id="for_parte" name="parte">
+            <label for="for_parte">Parte/Of.Res/RUC *</label>
+            <input type="text" class="form-control" id="for_parte" name="parte" required>
         </fieldset>
 
         <fieldset class="form-group col-5">
