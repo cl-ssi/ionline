@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ingresar Recepción')
+@section('title', 'Editar Recepción')
 
 @section('content')
 
@@ -33,6 +33,15 @@
             </div>
         </fieldset>
     </div>
+
+    @can('Drugs: edit date receptions')
+        <div class="form-row">
+            <fieldset class="form-group col-3">
+                <label for="for_date">Fecha</label>
+                <input type="datetime-local" class="form-control" id="for_date" name="date" value="{{  old('date', $reception->date->format('Y-m-d\TH:i')) }}">
+            </fieldset>
+        </div>
+    @endcan
 
     <div class="form-row">
         <fieldset class="form-group col-2">

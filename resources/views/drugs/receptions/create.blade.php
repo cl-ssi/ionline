@@ -31,7 +31,6 @@
         </fieldset>
     </div>
 
-
     <div class="form-row">
 
         <fieldset class="form-group col-2">

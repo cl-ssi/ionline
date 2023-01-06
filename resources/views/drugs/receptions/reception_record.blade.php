@@ -14,8 +14,8 @@
 <div class="titulo">ACTA DE RECEPCIÓN N° {{ $reception->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $reception->created_at->day }} de {{ $reception->created_at->monthName }} del {{ $reception->created_at->year }}</strong>
-    siendo las <strong>{{ $reception->created_at->format('H:i') }}</strong> horas
+    En Iquique, a <strong>{{ $reception->date->day }} de {{ $reception->date->monthName }} del {{ $reception->date->year }}</strong>
+    siendo las <strong>{{ $reception->date->format('H:i') }}</strong> horas
     en la Unidad de Drogas de Servicio de Salud de Iquique,
     en conformidad a la ley 20.000/2005, se ha recibido el
     Ordinario N° <strong>{{ $reception->document_number }}</strong>

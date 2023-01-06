@@ -24,7 +24,8 @@
 
     <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="submit">
-            <i class="fas fa-search" aria-hidden="true"></i></button>
+            <i class="fas fa-search" aria-hidden="true"></i>
+        </button>
     </div>
 
 </div>
@@ -48,7 +49,7 @@
         @foreach($receptions as $reception)
         <tr>
             <td class="text-center">{{ $reception->id }}</td>
-            <td class="text-center" nowrap>{{ $reception->created_at->format('d-m-Y') }}</td>
+            <td class="text-center" nowrap>{{ $reception->date->format('d-m-Y') }}</td>
             <td class="text-center">{{ $reception->document_number }}</td>
             <td>{{ $reception->documentPoliceUnit->name }}</td>
             <td>{{ $reception->partePoliceUnit->name }}</td>
@@ -62,11 +63,11 @@
             <td style="text-align: center;">
                 @if($reception->haveItemsForDestruction() )
                     @if($reception->wasDestructed())
-                    <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}" 
+                    <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}"
                         class="btn btn-outline-danger btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                     @else
                         <span class="badge badge-secondary" title="Dias restantes para su destrucción">
-                            {{ $reception->created_at->diffInDays(Carbon\Carbon::now()) -15 }}
+                            {{ $reception->date->diffInDays(Carbon\Carbon::now()) -15 }}
                         </span>
                     @endif
                 @else
