@@ -102,8 +102,19 @@ class AllowanceController extends Controller
             }
         }
 
+        //SE AGREGA AL PRINCIPIO VISACIÓN SIRH
+        $allowance_sing_sirh = new AllowanceSign();
+        $allowance_sing_sirh->position = 1;
+        $allowance_sing_sirh->event_type = 'sirh';
+        $allowance_sing_sirh->allowance_id = $allowance->id;
+        $allowance_sing_sirh->organizational_unit_id = 40;
+        $allowance_sing_sirh->save();
+
         //CONSULTO SI EL VIATICO ES PARA UNA AUTORIDAD
         $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $allowance->userAllowance->id);
+
+        //dd($iam_authorities);
+
         //AUTORIDAD
         if(!empty($iam_authorities)){
             foreach($iam_authorities as $iam_authority){
@@ -176,9 +187,8 @@ class AllowanceController extends Controller
         }
         //NO AUTORIDAD
         else{
-            // dd('NO ES AUTORIDAD');
             $level_allowance_ou = $allowance->organizationalUnitAllowance->level;
-            $position = 1;
+            $position = 2;
 
             for ($i = $level_allowance_ou; $i >= 2; $i--){
 
@@ -249,6 +259,10 @@ class AllowanceController extends Controller
         else{
             return $allowance->half_day_value;
         }
+    }
+
+    public function signNoAuthority($allowance){
+        
     }
 
     /**
