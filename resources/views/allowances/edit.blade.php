@@ -186,7 +186,8 @@
     <hr>
 
     @livewire('allowances.allowance-files', [
-        'allowance' => $allowance    
+        'allowance' => $allowance,
+        'form'      => 'edit'
     ])
 
     <br>
