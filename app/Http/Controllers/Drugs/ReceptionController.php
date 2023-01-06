@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Drugs;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Drugs\StoreReceptionRequest;
+use App\Http\Requests\Drugs\UpdateReceptionRequest;
 use App\Models\Drugs\Reception;
 use App\Models\Drugs\ReceptionItem;
-use App\User;
 use App\Models\Parameters\Parameter;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Drugs\Court;
 use App\Models\Drugs\PoliceUnit;
 use App\Models\Drugs\Substance;
 use App\Models\Drugs\Destruction;
 use App\Models\Drugs\Protocol;
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-
 
 class ReceptionController extends Controller
 {
@@ -53,13 +53,14 @@ class ReceptionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Drugs\StoreReceptionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreReceptionRequest $request)
     {
-        $reception = new Reception($request->All());
+        $reception = new Reception($request->validated());
         $reception->user()->associate(Auth::user());
+        $reception->date = now();
         $reception->manager_id = Parameter::get('drugs','Jefe')->value;
         $reception->lawyer_id  = Parameter::get('drugs','Mandatado')->value;
         $reception->save();
@@ -104,18 +105,16 @@ class ReceptionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Drugs\UpdateReceptionRequest  $request
      * @param  \App\Models\Drugs\Reception  $reception
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reception $reception)
+    public function update(UpdateReceptionRequest $request, Reception $reception)
     {
-        $reception->fill($request->all());
-        $reception->save();
+        $reception->update($request->validated());
         session()->flash('success', 'El acta de recepción '.$reception->id.' ha sido actualizado.');
-        return redirect()->route('drugs.receptions.show',$reception->id);
+        return redirect()->route('drugs.receptions.show', $reception->id);
     }
-
 
     public function showRecord(Reception $reception)
     {
@@ -124,7 +123,6 @@ class ReceptionController extends Controller
 
     public function showDocFiscal(Reception $reception)
     {
-
         /* Borrar poque no se ocupa parece XD */
         $substances = ReceptionItem::Where('reception_id',1)->distinct()->get(['substance_id']);
 
@@ -132,8 +130,6 @@ class ReceptionController extends Controller
 
         //return view('drugs.receptions.doc_fiscal', compact('reception', 'substances', 'mandato'));
     }
-
-
 
     public function storeItem(Request $request, Reception $reception)
     {

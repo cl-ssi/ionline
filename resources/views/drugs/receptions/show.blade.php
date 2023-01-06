@@ -14,7 +14,7 @@
         <td><a href="{{ route('drugs.receptions.show', $reception->id) }}">{{ $reception->id }}</a></td>
 
         <th>Fecha Acta</th>
-        <td>{{ $reception->created_at->format('d-m-Y') }}</td>
+        <td>{{ $reception->date->format('d-m-Y') }}</td>
 
         <td colspan="2">
             @can('Drugs: edit receptions')

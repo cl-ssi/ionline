@@ -62,7 +62,7 @@
     <ol>
         <li style="padding-bottom: 10px;">
             <strong>Acta de recepción N°: {{ $reception->id }}</strong>
-            del <strong>{{ $reception->created_at->format('d-m-Y') }}</strong>
+            del <strong>{{ $reception->date->format('d-m-Y') }}</strong>
             de la Unidad de Drogas del {{ env('APP_SS') }}.
         </li>
 

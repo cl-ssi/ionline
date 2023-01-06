@@ -20,7 +20,7 @@
     <div class="left" style="padding-bottom: 6px;">
         <strong>ANT:</strong>
         Acta de Recepción N° {{ $reception->id }} -
-        {{ $reception->created_at->format('d-m-Y') }}<br>
+        {{ $reception->date->format('d-m-Y') }}<br>
         Unidad de Drogas - Ley 20.000
     </div>
     <div class="left" style="padding-bottom: 8px;">
@@ -74,7 +74,7 @@
         </li>
         <li style="padding-bottom: 10px;">
             Se anexa acta de recepción <strong>{{ $reception->id }}</strong>
-            del <strong>{{ $reception->created_at->format('d-m-Y') }}</strong>.
+            del <strong>{{ $reception->date->format('d-m-Y') }}</strong>.
         </li>
         <li style="padding-bottom: 10px;">
             La presente delegación de firma se aprobó por resolución exenta

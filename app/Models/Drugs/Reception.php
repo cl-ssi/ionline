@@ -23,7 +23,7 @@ class Reception extends Model implements Auditable
         'document_number', 'document_police_unit_id', 'document_date',
         'delivery', 'delivery_run', 'delivery_position',
         'court_id', 'imputed', 'imputed_run', 'observation',
-        'reservado_isp_number', 'reservado_isp_date',
+        'reservado_isp_number', 'reservado_isp_date', 'date',
         //'user_id', 'manager_id', 'lawyer_id'
     ];
 
@@ -33,6 +33,7 @@ class Reception extends Model implements Auditable
      * @var array
      */
     protected $dates = [
+        'date',
         'deleted_at',
         'document_date',
         'reservado_isp_date',

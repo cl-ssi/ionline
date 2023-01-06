@@ -61,7 +61,7 @@
         <tr>
             <td class="text-center">{{ $item->reception->user->Initials }}</td>
             <td class="text-right"><a href="{{ route('drugs.receptions.show', $item->reception_id) }}">{{ $item->reception_id }}</a></td>
-            <td nowrap>{{ $item->reception->created_at->format('d-m-Y') }}</td>
+            <td nowrap>{{ $item->reception->date->format('d-m-Y') }}</td>
             <td class="text-center">{{ $item->reception->document_number }}</td>
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
