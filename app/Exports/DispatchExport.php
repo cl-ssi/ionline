@@ -23,17 +23,29 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
 
     public function headings(): array
     {
-        return ['id', 'fecha', 'establecimiento','notas'];
+        return ['id', 'fecha', 'establecimiento','notas','Estado recepción'];
     }
 
     public function map($dispatch): array
     {
-        return [
-            $dispatch->id,
-            Date::dateTimeToExcel($dispatch->date),
-            $dispatch->establishment->name,
-            $dispatch->notes,
-        ];
+        if($dispatch->verificationMailings->count()>0){
+            return [
+                $dispatch->id,
+                Date::dateTimeToExcel($dispatch->date),
+                $dispatch->establishment->name,
+                $dispatch->notes,
+                $dispatch->verificationMailings->last()->status,
+            ];
+        }else{
+            return [
+                $dispatch->id,
+                Date::dateTimeToExcel($dispatch->date),
+                $dispatch->establishment->name,
+                $dispatch->notes,
+                '',
+            ];
+        }
+        
     }
 
     public function columnFormats(): array
@@ -43,6 +55,7 @@ class DispatchExport implements FromCollection, WithHeadings, WithMapping, WithC
             'B' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'C' => NumberFormat::FORMAT_GENERAL,
             'D' => NumberFormat::FORMAT_GENERAL,
+            'E' => NumberFormat::FORMAT_GENERAL,
         ];
     }
 }
