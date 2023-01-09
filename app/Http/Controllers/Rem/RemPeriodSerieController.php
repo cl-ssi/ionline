@@ -31,8 +31,8 @@ class RemPeriodSerieController extends Controller
     public function create()
     {
         //
-        $remSeries = RemSerie::all();
-        $remPeriods = RemPeriod::all();        
+        $remSeries = RemSerie::orderBy('name')->get();
+        $remPeriods = RemPeriod::all();
         return view('rem.period_serie.create', compact('remSeries', 'remPeriods'));
     }
 

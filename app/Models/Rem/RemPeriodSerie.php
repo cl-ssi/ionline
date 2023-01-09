@@ -14,6 +14,7 @@ class RemPeriodSerie extends Model
     protected $fillable = [
         'period_id',
         'serie_id',
+        'type',
         'month',
     ];
 

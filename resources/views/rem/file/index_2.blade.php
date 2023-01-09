@@ -24,12 +24,14 @@
 
             @foreach($periods as $period)
             <td>
-                @forelse($period->series as $serie)
+                @forelse($period->series as $serie)                
+                @if($serie->type == $remEstablishment->establishment->type)
                 <ul>
                     Serie:{{$serie->serie->name??''}}
                     <br>
                     @livewire('rem.new-upload-rem',['period'=>$period,'serie'=>$serie, 'remEstablishment'=>$remEstablishment,'rem_period_series'=>$serie])
                 </ul>
+                @endif()
                 @empty
                 <h6>No Existen Series asociado a este periodo, Favor asociar Serie al periodo</h6>
                 @endforelse

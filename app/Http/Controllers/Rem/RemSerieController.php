@@ -17,7 +17,7 @@ class RemSerieController extends Controller
     public function index()
     {
         //
-        $series = RemSerie::all();
+        $series = RemSerie::orderBy('name')->get();
         return view('rem.serie.index', compact('series'));
     }
 
