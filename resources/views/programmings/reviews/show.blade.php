@@ -51,7 +51,7 @@
                             data-review_id="{{ $review->id }}"
                             data-score="{{ $review->score }}"
                             data-observation="{{ $review->observation }}"
-                            data-info="{{ $review->updated_at && $review->updatedBy ? 'Actualizado '. $review->updated_at->diffForHumans() .' por '. $review->updatedBy->fullName : '' }}"
+                            data-info="{{ $review->updated_at && $review->updatedBy ? 'Actualizado el '. $review->updated_at->format('d-m-Y H:i'). ' por '. $review->updatedBy->fullName : '' }}"
                             data-formaction="{{ route('reviews.update', $review->id)}}">
                         <i class="fas fa-edit small"></i> Evaluar
                         </button>
