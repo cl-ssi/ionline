@@ -30,6 +30,11 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col">
+        <label for="for_serie_id">Tipo</label>
+
+        </fieldset>
+
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>

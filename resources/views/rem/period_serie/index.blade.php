@@ -18,6 +18,7 @@
         <tr>
             <th>Periodo</th>
             <th>Serie</th>
+            <th>Tipo de Establecimiento</th>
         </tr>
     </thead>
 
@@ -25,11 +26,12 @@
     <tr>
         <td>{{ $remPeriodSerie->period->year ?? 'sin año'  }}-{{ $remPeriodSerie->period->month ?? 'sin mes'  }}</td>
         <td>{{ $remPeriodSerie->serie->name ?? 'sin nombre' }}</td>
+        <td>{{ $remPeriodSerie->type ?? 'sin tipo' }}</td>
     </tr>
 
     @empty
     <tr>
-        <td colspan="2" align="center">No hay Series Asociadas a Periodos</td>
+        <td colspan="3" align="center">No hay Series Asociadas a Periodos</td>
     </tr>
 
     @endforelse
