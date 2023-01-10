@@ -153,6 +153,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Allowances: create', 'description' => 'Permite crear viáticos']);
         Permission::create(['name' => 'Allowances: all',    'description' => 'Permite visualizar todos los viáticos']);
         Permission::create(['name' => 'Allowances: reports', 'description' => 'Permite acceder a los reportes del módulo']);
+        Permission::create(['name' => 'Allowances: sirh', 'description' => 'Permite revisión inicial del formulario e ingreso de folio sirh']);
 
 
         // @role(

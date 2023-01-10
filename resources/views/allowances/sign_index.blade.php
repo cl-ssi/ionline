@@ -6,7 +6,11 @@
 
 @include('allowances.partials.nav')
 
-<h5><i class="fas fa-check-circle"></i> Gestión de viaticos</h5>
+<h5><i class="fas fa-check-circle"></i> Gestión de viaticos:
+    @if(Auth::user()->can('Allowances: sirh'))
+        SIRH
+    @endif
+</h5>
 
 <br />
 </div>

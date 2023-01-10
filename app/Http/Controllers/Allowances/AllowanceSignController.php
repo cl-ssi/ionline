@@ -101,19 +101,23 @@ class AllowanceSignController extends Controller
 
             //SI NO SE CANCELÓ LA PRIMERA FIRMA SE REALIZA EL PROCESO NORMALMENTE
             if($AllowanceSignNotValid != true){
+
                 $allowanceSign->user_id = Auth::user()->id;
                 $allowanceSign->status = $status;
                 $allowanceSign->date_sign = Carbon::now();
                 $allowanceSign->save();
 
                 $position = $allowanceSign->position + 1;
+
+                if($request->has('folio_sirh')){
+                    $allowance->fill($request->All());
+                    $allowance->save();
+                }
             }
 
             $nextAllowanceSign = $allowanceSign->allowance->allowanceSigns->where('position', $position)->first();
             
             if($nextAllowanceSign->count() > 0){
-                //$nextAllowanceSign = $allowanceSign->allowance->allowanceSigns->where('position', $allowanceSign->position + $position)->first();
-                // dd($nextAllowanceSign);
                 $nextAllowanceSign->status = 'pending';
                 $nextAllowanceSign->save();
 

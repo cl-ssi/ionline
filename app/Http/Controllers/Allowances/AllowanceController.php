@@ -106,6 +106,7 @@ class AllowanceController extends Controller
         $allowance_sing_sirh = new AllowanceSign();
         $allowance_sing_sirh->position = 1;
         $allowance_sing_sirh->event_type = 'sirh';
+        $allowance_sing_sirh->status = 'pending';
         $allowance_sing_sirh->allowance_id = $allowance->id;
         $allowance_sing_sirh->organizational_unit_id = 40;
         $allowance_sing_sirh->save();
@@ -113,16 +114,17 @@ class AllowanceController extends Controller
         //CONSULTO SI EL VIATICO ES PARA UNA AUTORIDAD
         $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $allowance->userAllowance->id);
 
-        //dd($iam_authorities);
+        // dd($iam_authorities);
 
         //AUTORIDAD
         if(!empty($iam_authorities)){
             foreach($iam_authorities as $iam_authority){
-
                 if($allowance->userAllowance->organizationalUnit->id == $iam_authority->organizational_unit_id){
+                    //SE RESTA UNA U.O. POR SER AUTORIDAD
                     $level_allowance_ou = $iam_authority->organizationalUnit->level - 1;
+                    
                     $nextLevel = $iam_authority->organizationalUnit->father;
-                    $position = 1;
+                    $position = 2;
 
                     if($iam_authority->organizationalUnit->level == 2){
                         for ($i = $level_allowance_ou; $i >= 1; $i--){
@@ -130,21 +132,12 @@ class AllowanceController extends Controller
                             $allowance_sing->position = $position;
                             if($i >= 3){
                                 $allowance_sing->event_type = 'boss';
-                                if($i == $level_allowance_ou){
-                                    $allowance_sing->status = 'pending';
-                                }
                             }
                             if($i == 2){
                                 $allowance_sing->event_type = 'sub-dir or boss';
-                                if($i == $level_allowance_ou){
-                                    $allowance_sing->status = 'pending';
-                                }
                             }
                             if($i == 1){
                                 $allowance_sing->event_type = 'dir';
-                                if($i == $level_allowance_ou){
-                                    $allowance_sing->status = 'pending';
-                                }
                             }
                             $allowance_sing->organizational_unit_id = $nextLevel->id;
                             $allowance_sing->allowance_id = $allowance->id;
@@ -161,15 +154,9 @@ class AllowanceController extends Controller
                             $allowance_sing->position = $position;
                             if($i >= 3){
                                 $allowance_sing->event_type = 'boss';
-                                if($i == $level_allowance_ou){
-                                    $allowance_sing->status = 'pending';
-                                }
                             }
                             if($i == 2){
                                 $allowance_sing->event_type = 'sub-dir or boss';
-                                if($i == $level_allowance_ou){
-                                    $allowance_sing->status = 'pending';
-                                }
                             }
                             $allowance_sing->organizational_unit_id = $nextLevel->id;
                             $allowance_sing->allowance_id = $allowance->id;
@@ -180,8 +167,6 @@ class AllowanceController extends Controller
                             $position = $position + 1;
                         }
                     } 
-                        
-
                 }
             }
         }
@@ -199,7 +184,6 @@ class AllowanceController extends Controller
                     $allowance_sign->event_type = 'boss';
                     if($i == $level_allowance_ou){
                         $allowance_sign->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
-                        $allowance_sign->status = 'pending';
                     }
                     else{
                         $allowance_sign->organizational_unit_id = $nextLevel->id;
@@ -210,7 +194,6 @@ class AllowanceController extends Controller
                     $allowance_sign->event_type = 'sub-dir or boss';
                     if($i == $level_allowance_ou){
                         $allowance_sign->organizational_unit_id = $allowance->organizationalUnitAllowance->id;
-                        $allowance_sign->status = 'pending';
                     }
                     else{
                         $allowance_sign->organizational_unit_id = $nextLevel->id;
@@ -259,10 +242,6 @@ class AllowanceController extends Controller
         else{
             return $allowance->half_day_value;
         }
-    }
-
-    public function signNoAuthority($allowance){
-        
     }
 
     /**

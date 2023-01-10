@@ -23,8 +23,19 @@ class SearchAllowances extends Component
     protected $queryString = ['selectedStatus', 'selectedId'];
 
     public function render()
-    {
+    {   
         if($this->index == 'sign'){
+            if(auth()->user()->hasPermissionTo('Allowances: sirh')){
+                return view('livewire.allowances.search-allowances', [
+                    'allowances' => Allowance::
+                        latest()
+                        ->search($this->selectedStatus,
+                            $this->selectedId,
+                            $this->selectedUserAllowance)
+                        ->paginate(50)
+                ]);
+            }
+
             $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::user()->id);
             if($authorities){
                 foreach ($authorities as $authority){

@@ -20,7 +20,7 @@ class Allowance extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'resol_number', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
+        'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id','contractual_condition', 'level',
         'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
         'from', 'to', 'total_days', 'day_value', 'half_day_value', 'total_value', 'creator_user_id', 'creator_ou_id', 
