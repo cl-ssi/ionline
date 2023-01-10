@@ -124,20 +124,26 @@ class Indicator extends Model
 
     public function getCompliance()
     {
-        if(isset($this->numerator_acum_last_year)) // REM P
-            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
-        elseif(in_array($this->id, [445,453])) // indicador N° 10 en DSSI y Hospital, metas sanitarias 19.664 año 2022
+        if(isset($this->numerator_acum_last_year)){ // REM P
+            $result = $this->getLastValueByFactor('denominador');
+            return $result != 0 ? $this->getLastValueByFactor('numerador') / $result * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
+        }elseif(in_array($this->id, [445,453])){ // indicador N° 10 en DSSI y Hospital, metas sanitarias 19.664 año 2022
             return $this->getValuesAcum('numerador');
-        else
-            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
+        }else{
+            $result = $this->getValuesAcum('denominador');
+            return $result != 0 ? $this->getValuesAcum('numerador') / $result * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
+        }
     }
 
     public function getCompliance2($commune, $establishment)
     {
-        if(isset($this->isNumRemP)) // REM P
-            return $this->getLastValueByFactor2('denominador', $commune, $establishment) != 0 ? $this->getLastValueByFactor2('numerador', $commune, $establishment) / $this->getLastValueByFactor2('denominador', $commune, $establishment) * 100 : 0;
-        else
-            return $this->getValuesAcum2('denominador', $commune, $establishment) != 0 ? $this->getValuesAcum2('numerador', $commune, $establishment) / $this->getValuesAcum2('denominador', $commune, $establishment) * 100 : 0;
+        if(isset($this->isNumRemP)){ // REM P
+            $result = $this->getLastValueByFactor2('denominador', $commune, $establishment);
+            return $result != 0 ? $this->getLastValueByFactor2('numerador', $commune, $establishment) / $result * 100 : 0;
+        }else{
+            $result = $this->getValuesAcum2('denominador', $commune, $establishment);
+            return $result != 0 ? $this->getValuesAcum2('numerador', $commune, $establishment) / $result * 100 : 0;
+        }
     }
 
     public function getValueByFactorAndMonth($factor, $month)
