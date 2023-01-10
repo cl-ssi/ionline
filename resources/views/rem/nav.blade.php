@@ -1,13 +1,13 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 @canany(['be god','Rem: admin','Rem: user'])
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('rem.files.index_2') }}">
+        <a class="nav-link" href="{{ route('rem.files.rem_original') }}">
             <i class="fas fa-file-excel fa-fw"></i> Carga de REMS
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('rem.files.index_2') }}">
+        <a class="nav-link" href="{{ route('rem.files.rem_correccion') }}">
             <i class="fas fa-edit fa-fw"></i> Corrección de REMS
         </a>
     </li>

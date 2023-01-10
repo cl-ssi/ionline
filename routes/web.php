@@ -2016,10 +2016,14 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
         Route::get('/', [RemFileController::class, 'index'])->name('index');
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
+        Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
     });
 
     
-    Route::get('/files_2', [RemFileController::class, 'index_2'])->name('files.index_2');
+    Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
+    Route::get('/rem_correccion', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
+    
+    
 });
 
 

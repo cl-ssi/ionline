@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Rem;
 use App\Http\Controllers\Controller;
 use App\Models\Rem\RemFile;
 use App\Models\Rem\RemPeriod;
+use App\Models\Rem\RemPeriodSerie;
 use App\Models\Rem\UserRem;
+use App\Models\Establishment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class RemFileController extends Controller
 {
@@ -16,6 +20,8 @@ class RemFileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public $folder = 'ionline/rem/';
     public function index()
     {
         $now = now()->startOfMonth();
@@ -62,7 +68,51 @@ class RemFileController extends Controller
         }
     }
 
-    public function index_2()
+    public function autorizacion_store(Request $request)
+    {
+
+        // Valida que el archivo que se está subiendo sea de tipo PDF
+        $request->validate([
+            'file' => 'required|mimes:pdf',
+        ]);
+
+        $data = $request->all();
+        $establishment_id = $data['establishment_id'];
+        $establishment = Establishment::find($establishment_id);
+
+        $rem_period_series_id = $data['rem_period_series_id'];
+        $remperiodserie = RemPeriodSerie::find($rem_period_series_id);
+
+
+        // Creación del archivo con formato personalizado ej: 2022-11_cerro_esmeralda(102-701)_B.pdf */
+        $filename = Carbon::parse($data['period'])->format('Y-m') . '_';
+        $filename .= Str::snake($establishment->name);
+        $filename .= '(' . $establishment->deis . ')_';
+        $filename .= $remperiodserie->serie->name;
+        $filename .= '_Autorizacion';
+        $filename .= '.' . $request->file->extension();
+
+        // Actualiza o crea un nuevo registro en la tabla RemFiles con los datos proporcionados
+        $remFile = RemFile::updateOrCreate(
+            [
+                'period' => $data['period'],
+                'rem_period_series_id' => $data['rem_period_series_id'],
+                'establishment_id' => $data['establishment_id'],
+                'type'=>'Autorizacion'
+            ],
+            [
+                'filename' => $this->folder . $filename,
+            ]
+        );
+
+        // Almacena el archivo en el disco configurado (en este caso, Google Cloud Storage)
+        $request->file->storeAs($this->folder, $filename, 'gcs');
+
+        // Redirigir a la misma página en la que se encuentra el componente
+        return redirect()->route('rem.files.rem_correccion');
+    }
+
+    public function rem_original()
     {
         $now = now()->startOfMonth();
         $user = auth()->user();
@@ -84,7 +134,7 @@ class RemFileController extends Controller
 
         } else {
 
-            
+
             for ($i = 1; $i <= $periods_count; $i++) {
                 $periods_back[] = $now->clone();
                 $now->subMonth('1');
@@ -94,6 +144,11 @@ class RemFileController extends Controller
 
 
         return view('rem.file.index_2', compact('periods', 'remFiles'));
+    }
+
+    public function rem_correccion()
+    {
+        return $this->rem_original();
     }
 
 

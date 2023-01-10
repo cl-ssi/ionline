@@ -1,9 +1,19 @@
 <div>
+@if ($type=='autorizacion'))
+<ul>
+Autorización PDF:
+</ul>
+@endif
+
+
 
 
 
     @if($hasFile && $remFiles->first()->filename)
     {{-- Muestra el botón de descarga --}}
+    @if (request()->is('*/rem_correccion'))
+
+    @endif
     <button type="button" style="width: 200px; height: 50px" wire:click="download" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-fw fa-file-excel text-success"></i> Descargar Archivo
     </button>

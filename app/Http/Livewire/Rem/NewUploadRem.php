@@ -23,6 +23,7 @@ class NewUploadRem extends Component
     public $rem_period_series_id;
     public $rem_period_series;
     public $serie;
+    public $type;
     public $hasFile = false;
 
     protected $rules = [
@@ -63,7 +64,7 @@ class NewUploadRem extends Component
         $this->remFiles->first()->filename = null;
         $this->remFiles->first()->save();
         $this->file = null;
-        return redirect()->route('rem.files.index_2');
+        return redirect()->route('rem.files.rem_original');
     }
 
 
@@ -71,7 +72,7 @@ class NewUploadRem extends Component
     {
         $this->remFiles->first()->locked = !$this->remFiles->first()->locked;
         $this->remFiles->first()->save();
-        return redirect()->route('rem.files.index_2');
+        return redirect()->route('rem.files.rem_original');
     }
 
 
@@ -82,6 +83,7 @@ class NewUploadRem extends Component
         $filename .= Str::snake($this->remEstablishment->establishment->name);
         $filename .= '(' . $this->remEstablishment->establishment->deis . ')_';
         $filename .= $this->rem_period_series->serie->name;
+        $filename .= '_Original';
         $filename .= '.' . $this->file->extension();
 
         $this->remFileNew = RemFile::updateOrCreate(
@@ -89,6 +91,8 @@ class NewUploadRem extends Component
                 'period' => $this->period->period,
                 'rem_period_series_id' => $this->rem_period_series->id,
                 'establishment_id' => $this->remEstablishment->establishment->id,
+                'type'=>'Original'
+                
             ],
             [
 
@@ -105,6 +109,6 @@ class NewUploadRem extends Component
 
 
         // Redirigir a la misma página en la que se encuentra el componente
-        return redirect()->route('rem.files.index_2');
+        return redirect()->route('rem.files.rem_original');
     }
 }

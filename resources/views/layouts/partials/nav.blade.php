@@ -50,7 +50,7 @@
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a> -->
                         <a class="dropdown-item"
-                           href="{{ route('rem.files.index_2') }}">
+                           href="{{ route('rem.files.rem_original') }}">
                             <i class="fas fa-file-excel fa-fw"></i> Carga de Rems
                         </a>
                         @endcan
