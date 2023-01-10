@@ -107,7 +107,12 @@
 			@endif
 
 			<br>
-			<span class="small"><strong class="text-muted"><br>{{ env('APP_SS') }}<br>Gobierno de Chile</strong></span>
+			<span class="small">
+                <strong class="text-muted"><br>
+                {{ $user->organizationalUnit->establishment->name }}<br>
+                Gobierno de Chile
+                </strong>
+            </span>
 
 		</address>
 		@endforeach

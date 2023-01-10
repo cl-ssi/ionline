@@ -60,7 +60,7 @@ class UserController extends Controller
         }
 
         /* Devuelve sólo Dirección, ya que de él dependen todas las unidades organizacionales hacia abajo */
-        $organizationalUnit = OrganizationalUnit::find(1);
+        $organizationalUnit = OrganizationalUnit::with('childs','childs.childs','childs.childs.childs','childs.childs.childs')->find(1);
         return view('rrhh.directory')->withUsers($users)->withOrganizationalUnit($organizationalUnit);
     }
 
