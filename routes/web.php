@@ -1187,6 +1187,8 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/', [RNIdbController::class,'index'])->middleware('auth')->name('index');
         Route::put('/', [RNIdbController::class,'update'])->middleware('auth')->name('update');
         Route::get('/{file}', [RNIdbController::class,'download'])->middleware('auth')->name('download');
+        Route::post('/{file}', [RNIdbController::class,'add_user'])->middleware('auth')->name('add_user');
+        Route::delete('/{file}', [RNIdbController::class,'revoke_user'])->middleware('auth')->name('revoke_user');
     });
 
     Route::prefix('comges')->as('comges.')->middleware('auth')->group(function () {
