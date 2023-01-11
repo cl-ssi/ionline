@@ -508,7 +508,7 @@ class ReportController extends Controller
                     $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_nov_dic_2022', compact('ServiceRequest'));
                 }elseif($ServiceRequest->start_date >= "2023-01-01 00:00:00" &&  $ServiceRequest->start_date <= "2023-01-31 23:59:59"){
                     //11/01/2023: Nataly solicita cambios solo para enero 2023
-                    $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_ene_2023.blade', compact('ServiceRequest'));
+                    $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_ene_2023', compact('ServiceRequest'));
                 }else{
                     $pdf->loadView('service_requests.report_resolution_covid_2022_hetg_mensual_oct_2022', compact('ServiceRequest'));
                 }
