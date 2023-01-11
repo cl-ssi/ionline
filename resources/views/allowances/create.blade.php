@@ -6,6 +6,12 @@
 
 @include('allowances.partials.nav')
 
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <h5><i class="fas fa-file"></i> Nuevo formulario para solicitud de Viático</h5>
 
 <br>
