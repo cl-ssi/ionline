@@ -760,6 +760,7 @@ class ServiceRequestController extends Controller
 
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
+    $semester = $request->semester;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
@@ -773,7 +774,14 @@ class ServiceRequestController extends Controller
     })
     // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
     /* FIXME: no dejar fechas fijas, o solo se puede utilizar el 2022? */
-    ->where('start_date','>=','2022-01-01 00:00')
+    // ->where('start_date','>=','2023-01-01 00:00')
+    ->whereYear('start_date',$request->year)
+    ->when($semester == 1, function ($q) use ($semester) {
+        return $q->whereMonth('start_date', [1,2,3,4,5,6]);
+      })
+    ->when($semester == 2, function ($q) use ($semester) {
+    return $q->whereMonth('start_date', [7,8,9,10,11,12]);
+    })
     ->orderBy('request_date', 'asc')
     ->get();
 
@@ -799,7 +807,14 @@ class ServiceRequestController extends Controller
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
     /* FIXME: no dejar fechas fijas, o solo se puede utilizar el 2022? */
-    ->where('start_date','>=','2022-01-01 00:00')
+    // ->where('start_date','>=','2023-01-01 00:00')
+    ->whereYear('start_date',$request->year)
+    ->when($semester == 1, function ($q) use ($semester) {
+        return $q->whereMonth('start_date', [1,2,3,4,5,6]);
+      })
+    ->when($semester == 2, function ($q) use ($semester) {
+    return $q->whereMonth('start_date', [7,8,9,10,11,12]);
+    })
     ->orderBy('request_date', 'asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
