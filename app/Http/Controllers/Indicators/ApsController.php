@@ -40,7 +40,8 @@ class ApsController extends Controller
                 $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->with('values');
             }]);
         } else {
-            $iaps->load('indicators.values');
+            // $iaps->load('indicators.values');
+            $iaps->indicators = $iaps->indicators()->paginate(10);
         }
 
         $this->loadValuesWithRemSource($year, $iaps, $establishment_type);
