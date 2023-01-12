@@ -36,8 +36,9 @@
         <div class="form-group col">
 			<label>Semestre</label>
 			<select class="form-control" data-live-search="true" name="semester" data-size="5">
-				<option value="1" @if($request->semester == "1") selected @endif>Enero-Junio</option>
-                <option value="2" @if($request->semester == "2") selected @endif>Julio-Diciembre</option>
+				<option value="1" @if($request->semester == "1") selected @endif>Enero-Abril</option>
+                <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
+                <option value="3" @if($request->semester == "3") selected @endif>Septiembre-Diciembre</option>
 			</select>
 		</div>
 		<div class="form-group col-2 col-md-1">
