@@ -27,12 +27,14 @@ RUN docker-php-ext-install zip
 
 RUN docker-php-ext-install bcmath
 
-RUN cd /usr/local/etc/php/conf.d/ && \
-  echo 'post_max_size = 50M' >> docker-php-post_max_size.ini
+# RUN cd /usr/local/etc/php/conf.d/ && \
+#   echo 'post_max_size = 50M' >> docker-php-post_max_size.ini
 
 RUN mkdir -p /run/nginx
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 RUN mkdir -p /app
 COPY . /app
