@@ -145,7 +145,7 @@
 
         <div class="right" style="float: right; width: 340px;">
             <div class="left" style="padding-bottom: 6px;">
-                <strong>Resolución Exenta N° </strong>
+                <strong>ID:</strong> {{ $allowance->folio_sirh }}
             </div>
             <div class="left" style="padding-bottom: 2px;">
                 <strong>Iquique, {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</strong>
@@ -289,6 +289,9 @@
                     @foreach($allowance->AllowanceSigns->whereNotIn('status', ['not valid']) as $sign)
                     <th>
                         {{ $sign->organizationalUnit->name }}
+                        @if($sign->event_type == "sirh")
+                            SIRH
+                        @endif
                     </th>
                     @endforeach
                 </tr>
