@@ -75,9 +75,9 @@ class TestController extends Controller
         echo "Primer log";
     }
 
-    public function info()
-    {
-        phpinfo();
-    }
+    // public function info()
+    // {
+    //     phpinfo();
+    // }
 
 }

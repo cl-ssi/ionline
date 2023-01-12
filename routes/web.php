@@ -2036,4 +2036,4 @@ Route::get('/ous',[TestController::class,'ous']);
 // Route::get('/dev/get-ip',[TestController::class,'getIp']);
 // Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
-Route::get('/info',[TestController::class,'info']);
+// Route::get('/info',[TestController::class,'info']);
