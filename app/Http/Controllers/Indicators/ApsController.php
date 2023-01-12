@@ -36,9 +36,10 @@ class ApsController extends Controller
         $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
 
         if($iaps->slug == 'chcc'){ //Programa Chile Crece Contigo
-            $iaps->load(['indicators' => function($q) use ($establishment_type){
-                $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->with('values');
-            }]);
+            // $iaps->load(['indicators' => function($q) use ($establishment_type){
+            //     $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->with('values');
+            // }]);
+            $iaps->indicators = $iaps->indicators()->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->paginate(10);
         } else {
             // $iaps->load('indicators.values');
             $iaps->indicators = $iaps->indicators()->paginate(10);
