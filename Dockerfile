@@ -1,4 +1,4 @@
-FROM php:7.4.3-fpm-alpine
+FROM php:7.4.33-fpm-alpine
 
 RUN apk add --no-cache nginx wget
 
