@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Warehouse\Invoices;
 use App\Http\Requests\RequestForm\StoreInvoiceRequest;
 use App\Models\RequestForms\Invoice;
 use App\Models\Warehouse\Control;
+use App\Models\Warehouse\Store;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -12,6 +13,8 @@ use Livewire\WithFileUploads;
 class InvoiceManagement extends Component
 {
     use WithFileUploads;
+
+    public $store;
 
     public $controls;
     public $number;
@@ -22,7 +25,7 @@ class InvoiceManagement extends Component
     public $selected_controls;
     public $folder = 'ionline/invoices/';
 
-    public function mount()
+    public function mount(Store $store)
     {
         $this->iteration = 1;
         $this->selected_controls = [];
@@ -36,7 +39,7 @@ class InvoiceManagement extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.invoices.invoice-management')->extends('layouts.app');
+        return view('livewire.warehouse.invoices.invoice-management');
     }
 
     public function searchPurchaseOrder()
@@ -47,6 +50,7 @@ class InvoiceManagement extends Component
         if($this->search)
         {
             $controls = Control::query()
+                ->whereStoreId($this->store->id)
                 ->whereType(1)
                 ->wherePoCode($this->search)
                 ->get();
@@ -65,7 +69,7 @@ class InvoiceManagement extends Component
         $this->file->storeAs($this->folder, $url, 'gcs');
 
         $invoice->update([
-            'url'   => Storage::url($this->folder . $url)
+            'url' => Storage::url($this->folder . $url)
         ]);
 
         $controls = Control::whereIn('id', $this->selected_controls)->get();
