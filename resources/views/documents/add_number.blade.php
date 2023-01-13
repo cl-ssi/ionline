@@ -23,7 +23,6 @@
 
 @if(isset($document))
 
-
     <div class="row">
         <div class="col">
             <p> <strong>De:</strong> {!! $document->fromHtml !!} </p>
@@ -75,7 +74,7 @@
             <div class="row">
                 <fieldset class="form-group col">
                     <label for="for-distribution"><strong>Distribución:</strong></label>
-                    <textarea name="distribution" rows="10" class="form-control">{{ $document->distribution}}</textarea>
+                    <textarea name="distribution" rows="10" class="form-control">{{ $document->distribution }}</textarea>
                 </fieldset>
             </div>
 
@@ -114,6 +113,10 @@
         </form>
     @endif
 
+@else
+<p>
+    No se ha encontrado un documento con el código interno indicado
+</p>
 @endif
 
 
