@@ -5,6 +5,12 @@
         </div>
     </div>
 
+    @if($store->visator == null)
+    <div class="alert alert-warning" role="alert">
+        Recuerde añadir un visador a la bodega
+    </div>
+    @endif
+
     <div class="row">
         <div class="col">
             <div class="card">
@@ -38,7 +44,7 @@
                                     class="form-control form-control-sm @error('user_id') is-invalid @enderror"
                                     wire:model.debounce.500ms="search"
                                     placeholder="{{ $selectedName }}"
-                                    value="{{$selectedName}}"
+                                    value="{{ $selectedName }}"
                                     @if($user_id) disabled @endif
                                 >
                                 <div class="input-group-append">

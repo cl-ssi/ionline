@@ -60,4 +60,31 @@
             </span>
         @enderror
     </fieldset>
+
+    <fieldset class="form-group col-md-3">
+        <label for="establishment-id">Establecimiento</label>
+        <select
+            id="establishment-id"
+            class="form-control @error('establishment_id') is-invalid @enderror"
+            wire:model.debounce.1500ms="establishment_id"
+            required
+        >
+            <option value="">
+                Selecciona un establecimiento
+            </option>
+            @foreach($establishments as $establishment)
+                <option
+                    value="{{ $establishment->id }}"
+                    {{ optional($store)->establishment_id == $establishment->id ? 'selected' : '' }}
+                >
+                    {{ $establishment->name }}
+                </option>
+            @endforeach
+        </select>
+        @error('establishment_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
 </div>
