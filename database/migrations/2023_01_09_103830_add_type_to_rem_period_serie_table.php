@@ -16,7 +16,7 @@ class AddTypeToRemPeriodSerieTable extends Migration
         Schema::table('rem_period_series', function (Blueprint $table) {
             $table->string('type')
                 ->nullable()
-                ->after('file_name');            
+                ->after('serie_id');            
             //
         });
     }
