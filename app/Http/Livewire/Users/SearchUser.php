@@ -15,10 +15,13 @@ class SearchUser extends Component
     public $eventName;
     public $smallInput = false;
     public $placeholder;
+    public $idsExceptUsers = [];
 
     protected $listeners = [
         'clearSearchUser' => 'clearSearch',
-        'userId'
+        'userId',
+        'idsExceptUsers',
+        'render'
     ];
 
     public function mount()
@@ -39,6 +42,7 @@ class SearchUser extends Component
         if($this->search)
         {
             $this->users = User::query()
+            ->whereNotIn('id', $this->idsExceptUsers)
                 ->when($this->search, function ($query) {
                     $query->findByUser($this->search);
                 })
@@ -71,5 +75,10 @@ class SearchUser extends Component
     public function userId($user_id)
     {
         $this->user_id = $user_id;
+    }
+
+    public function idsExceptUsers($idsExceptUsers)
+    {
+        $this->idsExceptUsers = $idsExceptUsers;
     }
 }
