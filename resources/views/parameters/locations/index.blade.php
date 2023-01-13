@@ -9,7 +9,10 @@
         <h3 class="mb-3">Ubicaciones</h3>
     </div>
     <div class="col text-right">
-        <a class="btn btn-primary mb-3" href="{{ route('parameters.locations.create') }}">
+        <a
+            class="btn btn-primary mb-3"
+            href="{{ route('parameters.locations.create', $establishment) }}"
+        >
             Crear
         </a>
     </div>
@@ -31,7 +34,12 @@
             <td>{{ $location->name }}</td>
             <td>{{ $location->address }}</td>
             <td>
-                <a href="{{ route('parameters.locations.edit', $location) }}">
+                <a
+                    href="{{ route('parameters.locations.edit', [
+                        'establishment' => $establishment,
+                        'location' => $location,
+                    ]) }}"
+                >
                     <i class="fas fa-edit"></i>
                 </a>
             </td>

@@ -6,7 +6,11 @@
 
 <h3 class="mb-3">Crear Ubicación</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('parameters.locations.store') }}">
+<form
+    method="POST"
+    class="form-horizontal"
+    action="{{ route('parameters.locations.store', $establishment) }}"
+>
     @csrf
 
     <div class="form-row">
@@ -33,9 +37,11 @@
             >
         </fieldset>
     </div>
-    
+
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a class="btn btn-outline-secondary" href="{{ route('parameters.locations.index') }}">Volver</a>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.locations.index', $establishment) }}">
+        Volver
+    </a>
 
 </form>
 

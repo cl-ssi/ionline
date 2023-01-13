@@ -4,10 +4,16 @@
 
 @section('content')
 
-
 <h3 class="mb-3">Editar Ubicación</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('parameters.locations.update', $location) }}">
+<form
+    method="POST"
+    class="form-horizontal"
+    action="{{ route('parameters.locations.update', [
+        'establishment' => $establishment,
+        'location' => $location
+    ]) }}"
+>
     @csrf
     @method('PUT')
 
@@ -38,7 +44,9 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a class="btn btn-outline-secondary" href="{{ route('parameters.locations.index') }}">Volver</a>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.locations.index', $establishment) }}">
+        Volver
+    </a>
 
 </form>
 
