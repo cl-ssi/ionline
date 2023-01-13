@@ -32,6 +32,7 @@ class ReportByDates extends Component
         if($this->start_at AND $this->end_at)
         {
             $partes = Parte::with('files')
+                ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
                 ->whereDate('entered_at','>=',$this->start_at)
                 ->whereDate('entered_at','<=',$this->end_at)
                 ->paginate(50);
