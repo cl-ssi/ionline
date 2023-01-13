@@ -1,10 +1,6 @@
 <div>
-    @section('title', 'Gestión de Facturas')
-
-    @include('warehouse.nav')
-
     <h4 class="mb-3">
-        Gestión de Facturas
+        Gestión de Facturas: {{ $store->name }}
     </h4>
 
     <div class="form-row mb-3">
