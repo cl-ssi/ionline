@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Commune;
+use App\Models\Inv\EstablishmentUser;
+use App\Models\Warehouse\Store;
+use App\User;
 
 class Establishment extends Model implements Auditable
 {
@@ -42,6 +45,18 @@ class Establishment extends Model implements Auditable
     public function organizationalUnits()
     {
         return $this->hasMany(OrganizationalUnit::class);
+    }
+
+    public function stores()
+    {
+        return $this->hasMany(Store::class);
+    }
+
+    public function usersInventories()
+    {
+        return $this->belongsToMany(User::class, 'inv_establishment_user')
+            ->using(EstablishmentUser::class)
+            ->withTimestamps();
     }
 
     /**
