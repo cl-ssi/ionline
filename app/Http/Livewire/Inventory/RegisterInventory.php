@@ -172,6 +172,7 @@ class RegisterInventory extends Component
         $dataValidated['po_code'] = $this->po_code;
         $dataValidated['request_user_ou_id'] = $this->request_form ? $this->request_form->request_user_ou_id : null;
         $dataValidated['request_user_id'] = $this->request_form ? $this->request_form->request_user_id : null;
+        $dataValidated['establishment_id'] = auth()->user()->organizationalUnit->establishment->id;
         $responsibleUser = User::find($dataValidated['user_responsible_id']);
         $usingUser =  User::find($dataValidated['user_using_id']);
         $inventory = Inventory::create($dataValidated);
