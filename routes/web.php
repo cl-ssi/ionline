@@ -212,7 +212,8 @@ use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Controllers\Allowances\AllowanceController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
-
+use App\Http\Livewire\Inventory\InventoryManager;
+use App\Http\Livewire\Inventory\InventoryManageUsers;
 
 /*
 |--------------------------------------------------------------------------
@@ -1010,7 +1011,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');
 
-    Route::prefix('locations')->as('locations.')->group(function () {
+    Route::prefix('establishment/{establishment}/locations')->as('locations.')->group(function () {
         Route::get('/', [LocationController::class,'index'])->name('index');
         Route::get('/create', [LocationController::class,'create'])->name('create');
         Route::get('/edit/{location}', [LocationController::class,'edit'])->name('edit');
@@ -1018,7 +1019,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', [LocationController::class,'store'])->name('store');
     });
 
-    Route::prefix('places')->as('places.')->group(function () {
+    Route::prefix('establishment/{establishment}/places')->as('places.')->group(function () {
         Route::get('/', MaintainerPlaces::class)->name('index');
     });
 
@@ -1118,7 +1119,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
-        Route::get('outbox', [ParteController::class,'outbox'])->name('outbox');
+        Route::get('/outbox', [ParteController::class,'outbox'])->name('outbox');
         Route::get('/download/{file}',  [ParteController::class,'download'])->name('download');
         Route::delete('/files/{file}', [ParteFileController::class,'destroy'])->name('files.destroy');
         Route::get('/admin', [ParteController::class,'admin'])->name('admin');
@@ -1562,17 +1563,18 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 
 // Warehouse
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
-    Route::get('invoice-management', InvoiceManagement::class)->name('invoice-management');
-    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])->middleware(['can:Store: warehouse manager']);
+    Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])
+        ->middleware(['can:Store: warehouse manager']);
 
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 
-        Route::prefix('{store}')->middleware('ensure.store')->group(function () {
+        Route::prefix('{store}')->middleware('ensure.store')->group(function() {
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
             Route::get('users', [StoreController::class, 'users'])->name('stores.users');
             Route::get('report', [StoreController::class, 'report'])->name('store.report');
             Route::get('generate-reception', [ControlController::class, 'generateReception'])->name('generate-reception');
+            Route::get('invoice-management', [ControlController::class, 'invoiceManage'])->name('invoice-management');
 
             Route::resource('controls', ControlController::class)->except(['store', 'update', 'show']);
             Route::resource('products', WarehouseProductController::class)->only(['index', 'create', 'edit']);
@@ -1590,19 +1592,33 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
-    Route::get('/', InventoryIndex::class)->name('index')->middleware(['can:Inventory: index']);
-    Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')->middleware(['can:Inventory: last receptions']);
-    Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')->middleware(['can:Inventory: pending inventory']);
-    Route::get('{inventory}/edit', InventoryEdit::class)->name('edit')->middleware(['can:Inventory: edit']);
-    Route::get('places', InventoryMaintainerPlaces::class)->name('places')->middleware(['can:Inventory: place maintainer']);
+
+    Route::prefix('establishment/{establishment}')->group(function() {
+        Route::get('/', InventoryIndex::class)->name('index')
+            ->middleware(['can:Inventory: index']);
+        Route::get('last-receptions', InventoryLastReceptions::class)->name('last-receptions')
+            ->middleware(['can:Inventory: last receptions']);
+        Route::get('pending-inventory', InventoryPending::class)->name('pending-inventory')
+            ->middleware(['can:Inventory: pending inventory']);
+        Route::get('/inventory/{inventory}/edit', InventoryEdit::class)->name('edit')
+            ->middleware(['can:Inventory: edit']);
+        Route::get('places', InventoryMaintainerPlaces::class)->name('places')
+            ->middleware(['can:Inventory: place maintainer']);
+
+        Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
+    });
 
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
     Route::get('assigned-products', AssignedProducts::class)->name('assigned-products');
-    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')->middleware('ensure.movement');
-    Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')->middleware('ensure.inventory');
+    Route::get('movement/{movement}/check-transfer', CheckTransfer::class)->name('check-transfer')
+        ->middleware('ensure.movement');
+    Route::get('{inventory}/create-transfer', CreateTransfer::class)->name('create-transfer')
+        ->middleware('ensure.inventory');
     Route::get('register', RegisterInventory::class)->name('register');
-});
 
+    Route::get('/manager', InventoryManager::class)->name('manager')->middleware(['can:Inventory: manager']);
+
+});
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
     Route::get('/', [App\Http\Controllers\Pharmacies\PharmacyController::class,'index'])->name('index');
@@ -1839,7 +1855,7 @@ Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(functi
         Route::put('{allowanceSign}/{status}/{allowance}/update', [AllowanceSignController::class,'update'])->name('update');
         Route::get('/{allowance}/create_view_document', [AllowanceSignController::class, 'create_view_document'])->name('create_view_document');
         Route::get('/{allowance}/create_form_document', [AllowanceSignController::class, 'create_form_document'])->name('create_form_document');
-        Route::get('/callback-sign-allowance/{message}/{modelId}/{signaturesFile?}', [AllowanceSignController::class, 'callbackSign'])->name('callbackSign');    
+        Route::get('/callback-sign-allowance/{message}/{modelId}/{signaturesFile?}', [AllowanceSignController::class, 'callbackSign'])->name('callbackSign');
         // Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     });
 
@@ -2019,11 +2035,8 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
     });
 
-    
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
     Route::get('/rem_correccion', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
-    
-    
 });
 
 
