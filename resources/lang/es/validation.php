@@ -205,6 +205,7 @@ return [
         'discharge_date'        => 'fecha de baja',
         'domain'                => 'dominio',
         'email'                 => 'correo electrónico',
+        'establishment_id'      => 'establecimiento',
         'excerpt'               => 'extracto',
         'first_name'            => 'nombre',
         'file'                  => 'archivo',
