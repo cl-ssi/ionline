@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Http\Controllers\Controller;
 use App\Models\Documents\Document;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Correlative;
+use App\Mail\SendDocument;
+use App\Rrhh\OrganizationalUnit;
+use App\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use App\Mail\SendDocument;
 use Illuminate\Support\Facades\Mail;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use App\Models\Documents\Correlative;
-//use Illuminate\Support\Facades\Response;
 
 class DocumentController extends Controller
 {
@@ -68,7 +66,7 @@ class DocumentController extends Controller
                 ->paginate(100);
 
             return view('documents.index', compact('ownDocuments', 'otherDocuments', ));
-        } 
+        }
         else {
             return redirect()->back()->with('danger', 'Usted no posee asignada una unidad organizacional favor contactar a su administrador');
         }
@@ -98,6 +96,7 @@ class DocumentController extends Controller
     {
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
+        $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
 
         /* Agrega uno desde el correlativo */
@@ -224,13 +223,17 @@ class DocumentController extends Controller
 
     public function find(Request $request)
     {
-        $document = Document::Find($request->id);
+        $document = Document::query()
+            ->whereId($request->id)
+            ->whereEstablishmentId( auth()->user()->organizationalUnit->establishment->id)
+            ->first();
         return view('documents.add_number', compact('document'));
     }
 
     public function storeNumber(Request $request, Document $document)
     {
         $document->fill($request->all());
+
         if ($request->hasFile('file')) {
             $filename = $document->id . '-' .
                 $document->type . '_' .
@@ -254,8 +257,6 @@ class DocumentController extends Controller
 
         return redirect()->route('documents.partes.outbox');
     }
-
-
 
     /**
      * Show the form for creating a new resource.
