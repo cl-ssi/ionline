@@ -142,6 +142,7 @@
     @endforeach
 </div>
 <!-- fin print indicadores -->
+{{$iaps->indicators->links()}}
 @else <!-- Hospital, Hector Reyno u otro en especifico -->
     <h3 class="mb-3">{{$iaps->name}}.</h3>
     <h5 class="mb-3">{{$iaps->establishment_type}}.</h5>

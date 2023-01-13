@@ -14,13 +14,31 @@
 				<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>
 			</div>
 			<input type="text" value="Todos los datos" disabled> -->
-		<div class="form-group col-10 col-md-11">
+		<div class="form-group col">
 			<label>Establecimiento</label>
 			<select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
 				<option value="">Todos</option>
 				<option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
 				<option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
 				<option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+			</select>
+		</div>
+        <div class="form-group col">
+			<label>Año</label>
+			<select class="form-control" data-live-search="true" name="year" data-size="5">
+				<option value="2023" @if($request->year == "2023") selected @endif>2023</option>
+                <option value="2022" @if($request->year == "2022") selected @endif>2022</option>
+                <option value="2021" @if($request->year == "2021") selected @endif>2021</option>
+                <option value="2020" @if($request->year == "2020") selected @endif>2020</option>
+                <option value="2019" @if($request->year == "2019") selected @endif>2019</option>
+			</select>
+		</div>
+        <div class="form-group col">
+			<label>Semestre</label>
+			<select class="form-control" data-live-search="true" name="semester" data-size="5">
+				<option value="1" @if($request->semester == "1") selected @endif>Enero-Abril</option>
+                <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
+                <option value="3" @if($request->semester == "3") selected @endif>Septiembre-Diciembre</option>
 			</select>
 		</div>
 		<div class="form-group col-2 col-md-1">

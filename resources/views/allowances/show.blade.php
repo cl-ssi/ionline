@@ -6,7 +6,9 @@
 
 @include('allowances.partials.nav')
 
-<h5><i class="fas fa-file"></i> Viatico ID: {{ $allowance->id }}</h5>
+<h5>
+    <i class="fas fa-file"></i> Viatico ID: {{ $allowance->id }} - Folio sirh: @if($allowance->folio_sirh) {{ $allowance->folio_sirh }} @else No disponible @endif
+</h5>
 
 <br />
 

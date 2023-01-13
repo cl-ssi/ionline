@@ -98,7 +98,7 @@ class RemFileController extends Controller
                 'period' => $data['period'],
                 'rem_period_series_id' => $data['rem_period_series_id'],
                 'establishment_id' => $data['establishment_id'],
-                'type'=>'Autorizacion'
+                'type' => 'Autorizacion'
             ],
             [
                 'filename' => $this->folder . $filename,
@@ -107,6 +107,8 @@ class RemFileController extends Controller
 
         // Almacena el archivo en el disco configurado (en este caso, Google Cloud Storage)
         $request->file->storeAs($this->folder, $filename, 'gcs');
+
+        session()->flash('success', 'Autorización de corrección subida exitosamente.');
 
         // Redirigir a la misma página en la que se encuentra el componente
         return redirect()->route('rem.files.rem_correccion');
@@ -143,12 +145,73 @@ class RemFileController extends Controller
         }
 
 
-        return view('rem.file.index_2', compact('periods', 'remFiles'));
+        return view('rem.file.rem_original', compact('periods', 'remFiles'));
     }
 
     public function rem_correccion()
     {
-        return $this->rem_original();
+
+
+        $now = now()->startOfMonth();
+        $user = auth()->user();
+        $remFiles = [];
+
+        if ($user->can('Rem: admin')) {
+            $remEstablishments = UserRem::all();
+        } else {
+            $remEstablishments = $user->remEstablishments;
+        }
+
+
+        $periods = RemPeriod::all();
+        $periods_count = RemPeriod::count();
+
+        if ($periods_count == 0) {
+            session()->flash('danger', 'No hay asignado periodos para el REM');
+        } else {
+
+
+            for ($i = 1; $i <= $periods_count; $i++) {
+                $periods_back[] = $now->clone();
+                $now->subMonth('1');
+            }
+            $remFiles = $this->getRemFiles($remEstablishments, $periods_back);
+        }
+
+        // ...
+        // Obtener los archivos de REM
+
+
+        // Iterar sobre los períodos
+        foreach ($periods as $period) {
+            // Verificar si existe un archivo en el período correspondiente y de tipo Original
+            $fileExists = $remFiles
+                ->where('period', $period->period)
+                ->whereNotNull('filename')
+                ->where('type', 'Original')
+                ->first();
+
+            // Verificar si existe una autorización en el período correspondiente
+            $fileAutorizacion = $remFiles
+                ->where('period', $period->period)
+                ->whereNotNull('filename')
+                ->where('type', 'Autorizacion')
+                ->first();
+
+            // Verificar si existe un archivo de correccion en el período correspondiente
+            $fileCorreccion = $remFiles
+                ->where('period', $period->period)
+                ->whereNotNull('filename')
+                ->where('type', 'Correccion')
+                ->first();
+
+            // Almacenar el resultado en un array
+            $filesExist[] = $fileExists;
+            $filesAutorizacion[] = $fileAutorizacion;
+            $filesCorreccion[] = $fileCorreccion;
+        }
+
+        return view('rem.file.rem_correccion', compact('periods', 'remFiles', 'filesExist','filesAutorizacion','filesCorreccion',));
     }
 
 
@@ -168,8 +231,8 @@ class RemFileController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function download(RemFile $remFile)
     {
-        dd('entre al store');
+        return Storage::disk('gcs')->download($remFile->filename);
     }
 }

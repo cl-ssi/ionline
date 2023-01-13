@@ -1188,6 +1188,8 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/', [RNIdbController::class,'index'])->middleware('auth')->name('index');
         Route::put('/', [RNIdbController::class,'update'])->middleware('auth')->name('update');
         Route::get('/{file}', [RNIdbController::class,'download'])->middleware('auth')->name('download');
+        Route::post('/{file}', [RNIdbController::class,'add_user'])->middleware('auth')->name('add_user');
+        Route::delete('/{file}', [RNIdbController::class,'revoke_user'])->middleware('auth')->name('revoke_user');
     });
 
     Route::prefix('comges')->as('comges.')->middleware('auth')->group(function () {
@@ -2033,6 +2035,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemFileController::class, 'index'])->name('index');
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
+        Route::get('/download/{remFile}', [RemFileController::class, 'download'])->name('download');
     });
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
@@ -2047,3 +2050,4 @@ Route::get('/ous',[TestController::class,'ous']);
 // Route::get('/dev/get-ip',[TestController::class,'getIp']);
 // Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
+// Route::get('/info',[TestController::class,'info']);

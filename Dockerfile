@@ -1,4 +1,4 @@
-FROM php:7.4.3-fpm-alpine
+FROM php:7.4.33-fpm-alpine
 
 RUN apk add --no-cache nginx wget
 
@@ -30,6 +30,8 @@ RUN docker-php-ext-install bcmath
 RUN mkdir -p /run/nginx
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
+
+COPY docker/php.ini /usr/local/etc/php/conf.d/docker-php.ini
 
 RUN mkdir -p /app
 COPY . /app

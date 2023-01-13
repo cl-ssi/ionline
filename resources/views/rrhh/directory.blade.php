@@ -109,7 +109,7 @@
 			<br>
 			<span class="small">
                 <strong class="text-muted"><br>
-                {{ $user->organizationalUnit->establishment->name }}<br>
+                {{ optional($user->organizationalUnit)->establishment->name?? '' }}<br>
                 Gobierno de Chile
                 </strong>
             </span>

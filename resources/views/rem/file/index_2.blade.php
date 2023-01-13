@@ -3,10 +3,15 @@
 @include('rem.nav')
 
 
-<h3 class="mb-3">Carga de REMs</h3>
+<h3 class="mb-3">Carga de REMs @if (request()->is('*/rem_correccion')) Corrección @endif</h3>
 
 @php
 $form_shown = false;
+@endphp
+
+@php
+$already_autorizacion = false;
+$remFile = 0;
 @endphp
 
 <table class="table table-bordered table-sm small">
@@ -31,8 +36,14 @@ $form_shown = false;
 
                 @if (request()->is('*/rem_correccion'))
                 @if(!$form_shown)
+                @foreach($remFiles->where('type', 'Autorizacion') as $remFile)
+                @php
+                $already_autorizacion = true;
+                $remFile = $remFile->id;
+                @endphp
+                @endforeach
 
-
+                @if(!$already_autorizacion)
                 <form method="POST" action="{{ route('rem.files.autorizacion_store') }}" enctype="multipart/form-data">
                     @csrf
                     <!-- Aquí va el elemento de entrada para subir archivos -->                    
@@ -50,7 +61,12 @@ $form_shown = false;
 
                     </div>
                     <button type="submit" class="btn btn-primary">Subir</button>
-                </form>
+                </form>                
+                @else
+                Ver autorizacion para modificar REM
+                <a class="nav-link" href="{{ route('rem.files.download', $remFile) }}" target="_blank">Descargar Autorizacion</a>
+                @endif
+
                 @php
                 $form_shown = true;
                 @endphp

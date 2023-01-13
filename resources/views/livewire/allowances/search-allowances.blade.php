@@ -46,7 +46,7 @@
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
-                        <th>ID</th>
+                        <th>ID <br> <span class="badge badge-secondary">Folio sirh</span></th>
                         <th style="width: 8%">Fecha Creación</th>
                         <th>Funcionario</th>
                         <th>Calidad</th>
@@ -63,6 +63,9 @@
                     <tr>
                         <th>
                             {{ $allowance->id }} <br>
+                            @if($allowance->folio_sirh) 
+                                <span class="badge badge-secondary">{{ $allowance->folio_sirh }}</span> <br>
+                            @endif
                             @switch($allowance->status)
                             @case('pending')
                                 <span class="badge badge-warning">Pendiente</span>
