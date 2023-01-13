@@ -208,9 +208,10 @@ class RemFileController extends Controller
             // Almacenar el resultado en un array
             $filesExist[] = $fileExists;
             $filesAutorizacion[] = $fileAutorizacion;
+            $filesCorreccion[] = $fileCorreccion;
         }
 
-        return view('rem.file.rem_correccion', compact('periods', 'remFiles', 'filesExist','filesAutorizacion'));
+        return view('rem.file.rem_correccion', compact('periods', 'remFiles', 'filesExist','filesAutorizacion','filesCorreccion',));
     }
 
 

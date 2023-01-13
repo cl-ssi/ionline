@@ -25,6 +25,8 @@ class NewUploadRem extends Component
     public $serie;
     public $type;
     public $hasFile = false;
+    public $isOriginal = false;
+    public $isCorreccion = false;
 
     protected $rules = [
         'file'  => 'required'
@@ -47,6 +49,8 @@ class NewUploadRem extends Component
 
         // Establecer la variable $hasFile en true si hay al menos un registro en la colección
         $this->hasFile = $remFiles->count() > 0;
+        $this->isOriginal = $remFiles->where('type','Original')->count() > 0;
+        $this->isCorreccion = $remFiles->where('type','Correccion')->count() > 0;
     }
 
     public function download()
