@@ -1,11 +1,13 @@
 <div>
     @section('title', 'Últimos Ingresos')
 
-    @include('inventory.nav')
+    @include('inventory.nav', [
+        'establishment' => $establishment
+    ])
 
-    <h3 class="mb-3">
-        Últimos ingresos a bodega
-    </h3>
+    <h4 class="mb-3">
+        {{ $establishment->name }}: Últimos ingresos a bodega
+    </h4>
 
     <div class="form-row">
         <fieldset class="form-group col-md-3">

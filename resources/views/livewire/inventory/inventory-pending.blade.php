@@ -1,11 +1,13 @@
 <div>
     @section('title', 'Bandeja Pendiente')
 
-    @include('inventory.nav')
+    @include('inventory.nav', [
+        'establishment' => $establishment
+    ])
 
-    <h3 class="mb-3">
-        Bandeja Pendiente de Inventario
-    </h3>
+    <h4 class="mb-3">
+        {{ $establishment->name }}: Bandeja Pendiente de Inventario
+    </h4>
 
     <div class="form-row">
         <fieldset class="form-group col-md-3">
@@ -86,7 +88,10 @@
                         <td class="text-center">
                             <a
                                 class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
-                                href="{{ route('inventories.edit', $inventory) }}"
+                                href="{{ route('inventories.edit', [
+                                    'inventory' => $inventory,
+                                    'establishment' => $establishment
+                                ]) }}"
                             >
                                 <i class="fas fa-edit"></i>
                             </a>

@@ -1,13 +1,19 @@
 <div>
     @section('title', 'Inventario')
 
-    @include('inventory.nav')
+    @include('inventory.nav', [
+        'establishment' => $establishment
+    ])
+
+    <h4 class="mb-3">
+        {{ $establishment->name }}: Inventario
+    </h4>
 
     <div class="form-row g-2 my-3 d-print-none">
         <fieldset class="form-group col-md-3">
             <label for="products">Productos</label>
             <select
-                wire:model.defer="unspsc_product_id"
+                wire:model="unspsc_product_id"
                 id="products"
                 class="form-control form-control-sm"
             >
@@ -23,7 +29,7 @@
         <fieldset class="form-group col-md-2">
             <label for="locations">Ubicaciones</label>
             <select
-                wire:model.defer="location_id"
+                wire:model="location_id"
                 id="locations"
                 class="form-control form-control-sm"
             >
@@ -39,7 +45,7 @@
         <fieldset class="form-group col-md-2">
             <label for="places">Lugares</label>
             <select
-                wire:model.defer="place_id"
+                wire:model="place_id"
                 id="places"
                 class="form-control form-control-sm"
             >
@@ -55,7 +61,7 @@
         <fieldset class="form-group col-md-2">
             <label for="responsibles">Responsables</label>
             <select
-                wire:model.defer="user_responsible_id"
+                wire:model="user_responsible_id"
                 id="responsibles"
                 class="form-control form-control-sm"
             >
@@ -71,7 +77,7 @@
         <fieldset class="form-group col-md-2">
             <label for="users">Usuarios</label>
             <select
-                wire:model.defer="user_using_id"
+                wire:model="user_using_id"
                 id="users"
                 class="form-control form-control-sm"
             >
@@ -162,9 +168,9 @@
     </table>
     @endif
 
-    <h3 class="mt-3">
+    <h5 class="mt-3">
         Inventario
-    </h3>
+    </h5>
 
     @if($place)
     <table class="table table-sm table-bordered">
@@ -257,7 +263,10 @@
                     <td class="text-center d-print-none">
                         <a
                             class="btn btn-sm btn-primary @cannot('Inventory: edit') disabled @endcannot"
-                            href="{{ route('inventories.edit', $inventory) }}"
+                            href="{{ route('inventories.edit', [
+                                'inventory' => $inventory,
+                                'establishment' => $establishment,
+                            ]) }}"
                         >
                             <i class="fas fa-edit"></i>
                         </a>
