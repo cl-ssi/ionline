@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Http\Controllers\Controller;
 use App\Models\Documents\Document;
 use App\Models\Documents\Parte;
 use App\Models\Documents\ParteEvent;
 use App\Models\Documents\ParteFile;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Rrhh\OrganizationalUnit;
-use Carbon\Carbon;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
 class ParteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Bandeja de Entrada
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-
-        $partes = Parte::Search($request)
+        $partes = Parte::query()
+            ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
+            ->search($request)
             ->with(['requirements','files','requirements.events','requirements.events.to_user'])
             ->latest()->paginate('100');
         //$d->events()->doesntHave('father')->get()
@@ -36,14 +37,22 @@ class ParteController extends Controller
         return view('documents.partes.index', compact('partes', 'request'));
     }
 
+    /**
+     * Bandeja de Salida
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function outbox(Request $request)
     {
-        $documents = Document::Search($request)
-                             ->where('type',['Ordinario','Circular'])
-                             ->latest()
-                             ->paginate('100');
+        $documents = Document::query()
+            ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
+            ->search($request)
+            ->where('type',['Ordinario','Circular'])
+            ->latest()
+            ->paginate('100');
         $users = User::orderBy('name')->orderBy('fathers_family')->get();
-        return view('documents.partes.outbox', compact('documents','users'));
+        return view('documents.partes.outbox', compact('documents', 'users'));
     }
 
     /**
@@ -68,7 +77,7 @@ class ParteController extends Controller
         //$request->entered_at = date("Y-m-d H:i:s",strtotime($request->entered_at));
         //dd($request);
         $parte = new Parte($request->All());
-        //dd($parte);
+        $parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $parte->save();
 
         //dd($parte);
@@ -97,14 +106,14 @@ class ParteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $parte
      * @return \Illuminate\Http\Response
      */
     public function show(Parte $parte)
     {
         $files = ParteFile::where('parte_id',$parte->id)->get();
         $ous = OrganizationalUnit::all()->sortBy('name');
-        $organizationalUnit = OrganizationalUnit::Find(1);
+        $organizationalUnit = OrganizationalUnit::find(1);
         //$leafs = $parte->events()->doesntHave('childs')->get();
         return view('documents.partes.show', compact('parte','leafs','ous','organizationalUnit','files'));
     }
@@ -112,7 +121,7 @@ class ParteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $parte
      * @return \Illuminate\Http\Response
      */
     public function edit(Parte $parte)
@@ -124,10 +133,10 @@ class ParteController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $parte
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Parte $parte)
+    public function update(Parte $parte, Request $request)
     {
         $parte->fill($request->All());
 
@@ -151,7 +160,7 @@ class ParteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Documents\Parte  $document
+     * @param  \App\Models\Documents\Parte  $parte
      * @return \Illuminate\Http\Response
      */
     public function destroy(Parte $parte)
