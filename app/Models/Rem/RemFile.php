@@ -36,4 +36,8 @@ class RemFile extends Model
         return $this->belongsTo('App\Models\Establishment');
     }
 
+    public function periodSerie() {
+        return $this->belongsTo('App\Models\Rem\RemPeriodSerie', 'rem_period_series_id');
+    }
+
 }
