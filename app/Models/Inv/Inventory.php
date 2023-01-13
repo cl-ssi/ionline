@@ -42,6 +42,7 @@ class Inventory extends Model implements Auditable
         'depreciation',
         'deliver_date',
         'description',
+        'establishment_id',
         'request_user_ou_id',
         'request_user_id',
         'user_responsible_id',
@@ -63,8 +64,13 @@ class Inventory extends Model implements Auditable
     ];
 
     protected $appends = [
-        'have_computer'
+        'have_computer',
     ];
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
 
     public function requestOrganizationalUnit()
     {

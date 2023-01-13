@@ -2,6 +2,7 @@
 
 namespace App\Models\Parameters;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,6 +21,7 @@ class Place extends Model
         'name',
         'description',
         'location_id',
+        'establishment_id',
         'floor_number',
     ];
 
@@ -40,5 +42,10 @@ class Place extends Model
     public function computers()
     {
         return $this->hasMany('App\Models\Resources\Computer');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
     }
 }
