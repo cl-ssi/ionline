@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Inventory;
 
+use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Unspsc\Product as UnspscProduct;
@@ -15,8 +16,14 @@ class InventoryLastReceptions extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $establishment;
     public $search;
     public $type_reception_id;
+
+    public function mount(Establishment $establishment)
+    {
+        //
+    }
 
     public function render()
     {
@@ -31,34 +38,37 @@ class InventoryLastReceptions extends Component
 
         $controlItems = ControlItem::query()
             ->when($this->search, function ($query) use($search) {
-                $query->when($this->type_reception_id == TypeReception::receiving(), function($query) use($search) {
-                    $query->whereHas('control', function($query) use($search) {
-                        $query->whereHas('origin', function($query) use($search) {
+                $query->when($this->type_reception_id == TypeReception::receiving(), function ($query) use ($search) {
+                    $query->whereHas('control', function ($query) use ($search) {
+                        $query->whereHas('origin', function ($query) use ($search) {
                             $query->where('name', 'like', $search);
                         });
                     });
                 })
-                ->when($this->type_reception_id == TypeReception::purchaseOrder(), function($query) use($search) {
+                ->when($this->type_reception_id == TypeReception::purchaseOrder(), function ($query) use ($search) {
                     $query->whereHas('control', function($query) use($search) {
                         $query->where('po_code', 'like', $search);
                     });
                 })
-                ->orWhereHas('product', function ($query) use($search) {
+                ->orWhereHas('product', function ($query) use ($search) {
                     $query->where('name', 'like', $search)
-                        ->orWhereHas('product', function($query) use($search) {
+                        ->orWhereHas('product', function ($query) use ($search) {
                             $query->where('name', 'like', $search);
                         });
                 });
             })
-            ->when($this->type_reception_id != '', function($query) {
+            ->when($this->type_reception_id != '', function ($query) {
                 $query->whereHas('control', function ($query) {
                     $query->whereTypeReceptionId($this->type_reception_id);
                 });
             })
-            ->whereHas('control', function($query) use($search) {
-                $query->whereType(1) // Control Type: Receptions
-                    ->whereTypeReceptionId(TypeReception::receiving()) // By PurchaseOrder or Donations
-                    ->orWhere('type_reception_id', TypeReception::purchaseOrder());
+            ->whereHas('control', function($query) {
+                $query->whereHas('store', function ($query) {
+                    $query->whereEstablishmentId($this->establishment->id);
+                })
+                ->whereType(1) // Control Type: Receptions
+                ->whereTypeReceptionId(TypeReception::receiving()) // By PurchaseOrder or Donations
+                ->orWhere('type_reception_id', TypeReception::purchaseOrder());
             })
             ->whereInventory(null)
             ->orderByDesc('created_at')
@@ -87,6 +97,7 @@ class InventoryLastReceptions extends Component
         for($i = 1; $i <= $controlItem->quantity; $i++)
         {
             Inventory::create([
+                'establishment_id' => $this->establishment->id,
                 'po_price' => $controlItem->unit_price,
                 'po_code' => $controlItem->control->po_code,
                 'po_date' => $controlItem->control->po_date,

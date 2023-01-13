@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Inventory;
 
+use App\Models\Establishment;
 use App\Models\Inv\InventoryMovement;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -11,6 +12,13 @@ class PendingMovements extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+
+    public $establishment;
+
+    public function mount(Establishment $establishment)
+    {
+        //
+    }
 
     public function render()
     {

@@ -3,12 +3,15 @@
 namespace App\Http\Livewire\Inventory;
 
 use App\Http\Requests\Inventory\UpdateInventoryRequest;
+use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use Livewire\Component;
 
 class InventoryEdit extends Component
 {
     public $inventory;
+    public $establishment;
+
     public $number_inventory;
     public $useful_life;
     public $status;
@@ -24,7 +27,7 @@ class InventoryEdit extends Component
             ->extends('layouts.app');
     }
 
-    public function mount(Inventory $inventory)
+    public function mount(Inventory $inventory, Establishment $establishment)
     {
         $this->inventory = $inventory;
 
@@ -51,6 +54,6 @@ class InventoryEdit extends Component
         $this->inventory->update($dataValidated);
 
         session()->flash('success', 'El item del inventario fue editado exitosamente.');
-        return redirect()->route('inventories.pending-inventory');
+        return redirect()->route('inventories.pending-inventory', $this->establishment);
     }
 }

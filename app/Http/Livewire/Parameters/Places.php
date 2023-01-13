@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Parameters;
 
+use App\Models\Establishment;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
 use Livewire\Component;
@@ -12,6 +13,7 @@ class Places extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $establishment;
     public $view;
     public $place;
     public $name;
@@ -22,8 +24,8 @@ class Places extends Component
     public function render()
     {
         return view('livewire.parameters.places', [
-            //'places' => Place::latest()->paginate(10)            
-            'places' => Place::orderBy('location_id', 'asc')->get()
+            //'places' => Place::latest()->paginate(10)
+            'places' => $this->getPlaces()
         ]);
     }
 
@@ -36,7 +38,7 @@ class Places extends Component
         ];
     }
 
-    public function mount()
+    public function mount(Establishment $establishment)
     {
         $this->view = 'index';
     }
@@ -53,14 +55,15 @@ class Places extends Component
         $this->name = null;
         $this->description = null;
         $this->location_id = null;
-        $this->locations = Location::all();
+        $this->locations = Location::whereEstablishmentId($this->establishment->id)->get();
     }
 
     public function store()
     {
         $dataValidated = $this->validate();
+        $dataValidated['establishment_id'] = $this->establishment->id;
         $place = Place::create($dataValidated);
-        $this->mount();
+        $this->mount($this->establishment);
 
         session()->flash('info', 'Se ha creado la oficina con el id <span class="h5">' . $place->id . "</span>. Por favor anote el número en la hoja de inventario que está ubicada en la pared.");
 
@@ -86,7 +89,7 @@ class Places extends Component
     public function update(Place $place)
     {
         $place->update($this->validate());
-        $this->mount();
+        $this->mount($this->establishment);
 
         session()->flash( 'info', 'La oficina fue actualizada exitosamente.');
 
@@ -96,6 +99,17 @@ class Places extends Component
     public function delete(Place $place)
     {
         $place->delete();
-        $this->mount();
+        $this->mount($this->establishment);
+    }
+
+    public function getPlaces()
+    {
+        return Place::query()
+            ->orderBy('location_id', 'asc')
+            ->orderBy('name')
+            ->when($this->establishment, function($query) {
+                $query->whereEstablishmentId($this->establishment->id);
+            })
+            ->get();
     }
 }

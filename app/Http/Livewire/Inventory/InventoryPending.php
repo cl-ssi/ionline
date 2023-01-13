@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Inventory;
 
+use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\Warehouse\TypeReception;
 use Livewire\Component;
@@ -12,6 +13,7 @@ class InventoryPending extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $establishment;
     public $search;
     public $type_reception_id;
 
@@ -20,6 +22,11 @@ class InventoryPending extends Component
         return view('livewire.inventory.inventory-pending', [
             'inventories' => $this->getInventories()
         ])->extends('layouts.app');
+    }
+
+    public function mount(Establishment $establishment)
+    {
+        //
     }
 
     public function getInventories()
@@ -53,6 +60,7 @@ class InventoryPending extends Component
                         });
                 });
             })
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNull('number')
             ->orderByDesc('id')
             ->paginate(5);
