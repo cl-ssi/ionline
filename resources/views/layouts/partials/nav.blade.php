@@ -3,7 +3,15 @@
         <a class="navbar-brand" href="{{ route('home') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="{{ __('Toggle navigation') }}"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -88,25 +96,35 @@
 
                 <li class="nav-item dropdown">
 
-                <a class="nav-link dropdown-toggle {{ active(['documents.*','documents.*','agreements.*','quality_aps.*','health_plan.*']) }}" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a
+                    class="nav-link dropdown-toggle
+                    {{ active(['documents.*','documents.*','agreements.*','quality_aps.*','health_plan.*']) }}"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
                     <i class="fas fa-file-alt"></i> Docs
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                     @canany(['Documents: create','Documents: edit','Documents: add number', 'Documents: dev'])
-                    <a class="dropdown-item {{ active('documents.index') }}"
-                        href="{{ route('documents.index') }}">
+                    <a
+                        class="dropdown-item {{ active('documents.index') }}"
+                        href="{{ route('documents.index') }}"
+                    >
                         <i class="fas fa-pen"></i> Generador de documentos
                     </a>
                     @endcan
 
                     @canany(['Documents: signatures and distribution'])
-                      <a class="dropdown-item {{ active('documents.signatures.*') }}"
-                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
-                          <i class="fas fa-signature"></i> Solicitud de firmas
-                      </a>
+                        <a class="dropdown-item {{ active('documents.signatures.*') }}"
+                            href="{{ route('documents.signatures.index', ['pendientes']) }}">
+                            <i class="fas fa-signature"></i> Solicitud de firmas
+                        </a>
                     @endcan
 
                     @canany(['Partes: oficina','Partes: user','Partes: director'])
@@ -147,7 +165,7 @@
                 @endcan
 
 
-                @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id != 1)
+                @if(auth()->user()->organizationalUnit && auth()->user()->organizationalUnit->establishment_id != 1)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*','allowances.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -155,7 +173,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @if(Auth()->user()->organizationalUnit && Auth()->user()->organizationalUnit->establishment_id == 38)
+                        @if(auth()->user()->organizationalUnit && auth()->user()->organizationalUnit->establishment_id == 38)
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
@@ -170,13 +188,13 @@
                         @canany([
                             'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
                             'Store: list dispatchs', 'Store: bincard report', 'Store: maintainer programs',
-                            'Store: maintainers', 'Sotore: add invoice', 'Store: create dispatch',
+                            'Store: maintainers', 'Store: add invoice', 'Store: create dispatch',
                             'Store: create reception by donation', 'Store: create reception by purcharse order'
                         ])
                             @forelse(Auth::user()->stores as $store)
                                 <a
                                     class="dropdown-item"
-                                    href="{{ route('warehouse.store.active', $store) }}"
+                                    href="{{ route('warehouse.store.active', $store->id) }}"
                                 >
                                     @if($store->id == optional(Auth::user()->active_store)->id)
                                         <i class="fas fa-fw fa-box-open"></i>
@@ -192,30 +210,42 @@
                             @endforelse
                         @endcanany
 
-                        @can('Store: add invoice')
+                        {{-- @can('Store: add invoice')
                             <a
                                 class="dropdown-item {{ active('warehouse.invoice-management') }}"
                                 href="{{ route('warehouse.invoice-management') }}"
                             >
                                 <i class="fas fa-fw fa-file-invoice-dollar"></i> Ingreso facturas
                             </a>
-                        @endcan
+                        @endcan --}}
 
                         @canany(['Store: warehouse manager'])
                             <a
                                 class="dropdown-item {{ active('warehouse.stores.index') }}"
                                 href="{{ route('warehouse.stores.index') }}"
                             >
-                                <i class="fas fa-fw fa-cog"></i> Administrar bodegas
+                                <i class="fas fa-fw fa-cog"></i> Administrar Bodegas
                             </a>
                         @endcanany
 
 
                         @can('Inventory')
                             <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Inventario</h6>
+                        @endcan
 
-                            <a class="dropdown-item" href="{{ route('inventories.index') }}">
-                                <i class="fas fa-fw fa-clipboard-list"></i> Inventario
+                        @can('Inventory')
+                            @foreach(auth()->user()->establishmentInventories as $establishmentItem)
+                            <a class="dropdown-item" href="{{ route('inventories.index', $establishmentItem) }}">
+                                <i class="fas fa-fw fa-clipboard-list"></i>
+                                {{ $establishmentItem->name }}
+                            </a>
+                            @endforeach
+                        @endcan
+
+                        @can('Inventory: manager')
+                            <a class="dropdown-item" href="{{ route('inventories.manager') }}">
+                                <i class="fas fa-fw fa-cog"></i> Administrar Inventarios
                             </a>
                         @endcan
 
@@ -234,7 +264,8 @@
                         @if(Auth::user()->pharmacies->count() > 0)
                             <a class="dropdown-item {{ active('pharmacies.index') }}"
                                 href="{{ route('pharmacies.index') }}">
-                                <i class="fas fa-fw fa-prescription-bottle-alt"></i> {{Auth::user()->pharmacies->first()->name}}
+                                <i class="fas fa-fw fa-prescription-bottle-alt"></i>
+                                {{ Auth::user()->pharmacies->first()->name}}
                             </a>
                         @else
                             <a class="dropdown-item">
@@ -282,9 +313,9 @@
                         </a>
 
                         @endcan
-                        
-                       
-                        {{-- @if(Auth::user()->can('Allowances: create') || 
+
+
+                        {{-- @if(Auth::user()->can('Allowances: create') ||
                             App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
                             Auth::user()->can('Allowances: all') ||
                             Auth::user()->can('Allowances: reports')) --}}
@@ -294,7 +325,7 @@
                             <i class="fas fa-wallet"></i> Viáticos
                         </a>
                         {{-- @endcan --}}
-                        
+
                     </div>
                 </li>
                 @endif
@@ -417,7 +448,9 @@
                                href="{{ route('replacement_staff.request.own_index') }}">
                                 <i class="far fa-id-card"></i> Solicitudes de Contratación
                                 @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
+                                    <span class="badge badge-secondary">
+                                        {{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }}
+                                    </span>
                                 @endif
                             </a>
                         @endif
@@ -427,7 +460,7 @@
                             <i class="fas fa-id-badge"></i> Perfil de Cargos
                         </a>
                         @endcan
-                        
+
                     </div>
 
                 </li>
@@ -552,15 +585,19 @@
                         <li><hr class="dropdown-divider"></li>
 
                         @canany(['be god','Parameters: locations'])
-                            <a class="dropdown-item {{ active(['parameters.locations.*']) }}"
-                                href="{{ route('parameters.locations.index') }}">
+                            <a
+                                class="dropdown-item {{ active(['parameters.locations.*']) }}"
+                                href="{{ route('parameters.locations.index', auth()->user()->organizationalUnit->establishment) }}"
+                            >
                                 <i class="fas fa-fw fa-building"></i> Ubicaciones (edificios)
                             </a>
                         @endcanany
 
                         @canany(['be god','Parameters: places'])
-                            <a class="dropdown-item {{ active(['parameters.places.*']) }}"
-                                href="{{ route('parameters.places.index') }}">
+                            <a
+                                class="dropdown-item {{ active(['parameters.places.*']) }}"
+                                href="{{ route('parameters.places.index', auth()->user()->organizationalUnit->establishment) }}"
+                            >
                                 <i class="fas fa-fw fa-map-marker-alt"></i> Lugares (oficinas)
                             </a>
                         @endcanany
@@ -621,7 +658,15 @@
 
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a
+                            class="nav-link"
+                            href="#"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            v-pre
+                        >
                             <i class="fas fa-bell" title="Notificaciones"></i>
                             @if(count(auth()->user()->unreadNotifications))
                             <span class="badge badge-secondary">{{ count(auth()->user()->unreadNotifications) }}</span>
@@ -650,9 +695,22 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <a
+                            id="navbarDropdown"
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            role="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            v-pre
+                        >
                             @if(auth()->user()->gravatar)
-                                <img src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g" class="rounded-circle" alt="{{ Auth::user()->firstName }}">
+                                <img
+                                    src="{{ auth()->user()->gravatarUrl }}?s=30&d=mp&r=g"
+                                    class="rounded-circle"
+                                    alt="{{ Auth::user()->firstName }}"
+                                >
                             @else
                                 {{ Auth::user()->firstName }}
                             @endif

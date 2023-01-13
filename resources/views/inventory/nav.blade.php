@@ -2,9 +2,9 @@
     @can('Inventory: index')
         <li class="nav-item">
             <a
-                class="nav-link {{ active('inventories.index') }}"
+                class="nav-link {{ active('inventories.index', $establishment) }}"
                 aria-current="page"
-                href="{{ route('inventories.index') }}"
+                href="{{ route('inventories.index', $establishment) }}"
             >
                 <i class="fas fa-fw fa-clipboard-list"></i> Inventario
             </a>
@@ -14,7 +14,7 @@
         <li class="nav-item">
             <a
                 class="nav-link {{ active('inventories.last-receptions') }}"
-                href="{{ route('inventories.last-receptions') }}"
+                href="{{ route('inventories.last-receptions', $establishment) }}"
             >
             <i class="fas fa-clock"></i> Últimos Ingresos a Bodega
             </a>
@@ -24,7 +24,7 @@
         <li class="nav-item">
             <a
                 class="nav-link {{ active(['inventories.pending-inventory', 'inventories.edit']) }}"
-                href="{{ route('inventories.pending-inventory') }}"
+                href="{{ route('inventories.pending-inventory', $establishment) }}"
             >
                 <i class="fas fa-hourglass"></i> Bandeja Pendiente de Inventario
             </a>
@@ -33,7 +33,7 @@
     @can('Inventory: place maintainer')
         <li class="nav-item dropdown">
             <a
-                class="nav-link dropdown-toggle  {{ active('inventories.places') }}"
+                class="nav-link dropdown-toggle  {{ active('inventories.places', $establishment) }}"
                 data-toggle="dropdown"
                 href="#"
                 role="button"
@@ -44,7 +44,7 @@
             <div class="dropdown-menu">
                 <a
                     class="dropdown-item"
-                    href="{{ route('inventories.places') }}"
+                    href="{{ route('inventories.places', $establishment) }}"
                 >
                     <i class="fas fa-file-alt"></i> Lugares
                 </a>
