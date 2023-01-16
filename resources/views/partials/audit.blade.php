@@ -5,6 +5,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Usuario</th>
+                <th>Acción</th>
                 <th>Modificaciones</th>
             </tr>
         </thead>
@@ -16,10 +17,22 @@
                 <tr>
                     <td nowrap>{{ $audit->created_at }}</td>
                     <td nowrap>{{ optional($audit->user)->tinnyName }}</td>
+                    <td nowrap>{{ $audit->event }}</td>
                     <td>
-                        @foreach($audit->old_values as $attribute => $value )
-                        <strong>{{ $attribute }}</strong> : {{ $value }} => {{ $audit->new_values[$attribute] }} <br>
-                        @endforeach
+                        @switch($audit->event)
+                            @case('created')
+                                @foreach($audit->new_values as $attribute => $value )
+                                <strong>{{ $attribute }}</strong> : {{ $value }} <br>
+                                @endforeach
+                                @break
+                            @case('updated')
+                                @foreach($audit->old_values as $attribute => $value )
+                                <strong>{{ $attribute }}</strong> : {{ $value }} => {{ $audit->new_values[$attribute] }} <br>
+                                @endforeach
+                                @break
+                            @case('deleted')
+                                @break
+                        @endswitch
                     </td>
                 </tr>
                 @endforeach
