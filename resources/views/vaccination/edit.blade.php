@@ -130,7 +130,7 @@
 </form>
 
 @can('be god')
-    @include('partials.audit', ['audits' => $vaccination->audits] )
+    @include('partials.audit', ['audits' => $vaccination->audits()] )
 @endcan
 
 @endsection

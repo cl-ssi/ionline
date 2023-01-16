@@ -25,6 +25,8 @@ class NewUploadRem extends Component
     public $serie;
     public $type;
     public $hasFile = false;
+    public $isOriginal = false;
+    public $isCorreccion = false;
 
     protected $rules = [
         'file'  => 'required'
@@ -43,14 +45,16 @@ class NewUploadRem extends Component
 
         // Asignar el resultado a una propiedad del componente Livewire
         $this->remFiles = $remFiles;
-        
+
 
         // Establecer la variable $hasFile en true si hay al menos un registro en la colección
         $this->hasFile = $remFiles->count() > 0;
+        $this->isOriginal = $remFiles->where('type','Original')->count() > 0;
+        $this->isCorreccion = $remFiles->where('type','Correccion')->count() > 0;
     }
 
     public function download()
-    {        
+    {
 
         if ($this->remFiles && is_object($this->remFiles->first())) {
             return Storage::disk('gcs')->download($this->remFiles->first()->filename);
@@ -83,7 +87,7 @@ class NewUploadRem extends Component
         $filename .= Str::snake($this->remEstablishment->establishment->name);
         $filename .= '(' . $this->remEstablishment->establishment->deis . ')_';
         $filename .= $this->rem_period_series->serie->name;
-        $filename .= '_Original';
+        $filename .= '_' . $this->type;
         $filename .= '.' . $this->file->extension();
 
         $this->remFileNew = RemFile::updateOrCreate(
@@ -91,8 +95,8 @@ class NewUploadRem extends Component
                 'period' => $this->period->period,
                 'rem_period_series_id' => $this->rem_period_series->id,
                 'establishment_id' => $this->remEstablishment->establishment->id,
-                'type'=>'Original'
-                
+                'type' => $this->type
+
             ],
             [
 
@@ -109,6 +113,13 @@ class NewUploadRem extends Component
 
 
         // Redirigir a la misma página en la que se encuentra el componente
-        return redirect()->route('rem.files.rem_original');
+        if ($this->type=='Original') {
+            session()->flash('success', 'Archivo de REM Subido Exitosamente');
+            return redirect()->route('rem.files.rem_original');
+        } elseif ($this->type=='Correccion') {
+            
+            session()->flash('success', 'Archivo de Correccion de REM subido exitosamente');
+            return redirect()->route('rem.files.rem_correccion');
+        }
     }
 }

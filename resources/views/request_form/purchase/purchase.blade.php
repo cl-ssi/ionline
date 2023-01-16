@@ -859,7 +859,7 @@
 
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
-                @include('partials.audit', ['audits' => $requestForm->audits])
+                @include('partials.audit', ['audits' => $requestForm->audits()])
             </div>
         </div>
     </div>

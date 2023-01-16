@@ -163,7 +163,7 @@
 <br /><hr />
 <div style="height: 300px; overflow-y: scroll;">
   @foreach($serviceRequest->fulfillments as $key => $fulfillment)
-    @include('service_requests.requests.partials.audit', ['audits' => $fulfillment->audits] )
+    @include('service_requests.requests.partials.audit', ['audits' => $fulfillment->audits()] )
   @endforeach
 </div>
 @endcanany
@@ -173,10 +173,10 @@
 <div style="height: 300px; overflow-y: scroll;">
   @foreach($serviceRequest->fulfillments as $fulfillment)
     @foreach($fulfillment->FulfillmentItems as $fulfillmentItem)
-      @include('service_requests.requests.partials.audit', ['audits' => $fulfillmentItem->audits] )
+      @include('service_requests.requests.partials.audit', ['audits' => $fulfillmentItem->audits()] )
     @endforeach
     @foreach($fulfillment->shiftControls as $shiftControl)
-      @include('service_requests.requests.partials.audit', ['audits' => $shiftControl->audits] )
+      @include('service_requests.requests.partials.audit', ['audits' => $shiftControl->audits()] )
     @endforeach
   @endforeach
 </div>

@@ -2019,6 +2019,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemFileController::class, 'index'])->name('index');
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
+        Route::get('/download/{remFile}', [RemFileController::class, 'download'])->name('download');
     });
 
     
@@ -2036,3 +2037,4 @@ Route::get('/ous',[TestController::class,'ous']);
 // Route::get('/dev/get-ip',[TestController::class,'getIp']);
 // Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
+// Route::get('/info',[TestController::class,'info']);

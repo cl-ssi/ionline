@@ -93,9 +93,7 @@
         </fieldset>
     </div>
 
-        <div class="form-group d-inline">
-            @livewire('rrhh.update-user-bank-account' , ['bankaccount' => $bankaccount->last(), 'user'=>$user])
-        </div>
+
 
     <div class="form-group d-inline">
         <button type="submit" class="btn btn-sm btn-primary">
@@ -127,7 +125,7 @@
 
     <br /><hr />
     <div style="height: 300px; overflow-y: scroll;">
-            @include('partials.audit', ['audits' => $user->audits] )
+            @include('partials.audit', ['audits' => $user->audits()] )
     </div>
 
 @endcan

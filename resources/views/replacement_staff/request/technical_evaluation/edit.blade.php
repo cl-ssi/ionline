@@ -745,7 +745,7 @@
 
 <hr/>
 <div style="height: 300px; overflow-y: scroll;">
-    @include('partials.audit', ['audits' => $requestReplacementStaff->technicalEvaluation->audits] )
+    @include('partials.audit', ['audits' => $requestReplacementStaff->technicalEvaluation->audits()] )
 </div>
 
 @endif
