@@ -9,6 +9,8 @@
             </tr>
         </thead>
         <tbody>
+            @php($audits = $audits->with('user')->get())
+            
             @if($audits && $audits->count() > 0)
                 @foreach($audits->sortByDesc('updated_at') as $audit)
                 <tr>

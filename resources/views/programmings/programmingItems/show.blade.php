@@ -496,7 +496,7 @@ Editar Item Programación Operativa </h4>
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                      data-parent="#accordionExample">
                     <div class="card-body">
-                        @include('partials.audit', ['audits' => $programmingItem->audits])
+                        @include('partials.audit', ['audits' => $programmingItem->audits()])
                     </div>
                 </div>
             </div>

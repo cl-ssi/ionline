@@ -88,7 +88,7 @@
 
 
 @can('be god')
-    @include('partials.audit', ['audits' => $mammography->audits] )
+    @include('partials.audit', ['audits' => $mammography->audits()] )
 @endcan
 
 @endsection

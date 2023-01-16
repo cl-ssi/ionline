@@ -132,10 +132,10 @@
 
 
 @can('be god')
-    @include('partials.audit', ['audits' => $signature->audits] )
+    @include('partials.audit', ['audits' => $signature->audits()] )
 
     @if($signature->signaturesFlowSigner)
-        @include('partials.audit', ['audits' => $signature->signaturesFlowSigner->audits] )
+        @include('partials.audit', ['audits' => $signature->signaturesFlowSigner->audits()] )
     @else
         <div class="alert alert-danger" role="alert">
             No tiene firmante
