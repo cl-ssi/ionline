@@ -516,11 +516,17 @@
                             <a class="dropdown-item {{ active('parameters.communes.*') }}"
                                 href="{{ route('parameters.communes.index') }}">
                                 <i class="fas fa-fw fa-map"></i> Comunas
-                            </a>
+                            </a>                            
 
                             <a class="dropdown-item {{ active('parameters.establishments.index') }}"
                                 href="{{ route('parameters.establishments.index') }}">
                                 <i class="fas fa-fw fa-hospital"></i> Establecimientos
+                            </a>                            
+
+
+                            <a class="dropdown-item {{ active('parameters.establishments.index') }}"
+                                href="{{ route('parameters.establishment_types.index') }}">
+                                <i class="fas fa-th-list"></i> Tipos de Establecimientos
                             </a>
 
                             <li><hr class="dropdown-divider"></li>
