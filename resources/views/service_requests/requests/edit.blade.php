@@ -921,13 +921,13 @@
     @canany(['Service Request: audit'])
     <br /><hr />
     <div style="height: 300px; overflow-y: scroll;">
-        @include('service_requests.requests.partials.audit', ['audits' => $serviceRequest->audits()] )
+        @include('service_requests.requests.partials.audit', ['audits' => $serviceRequest->audits] )
     </div>
 
     <br /><hr />
     <div style="height: 300px; overflow-y: scroll;">
       @foreach($serviceRequest->SignatureFlows as $signatureFlow)
-        @include('service_requests.requests.partials.audit', ['audits' => $signatureFlow->audits()] )
+        @include('service_requests.requests.partials.audit', ['audits' => $signatureFlow->audits] )
       @endforeach
     </div>
     @endcanany
