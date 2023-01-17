@@ -24,6 +24,7 @@ class Location extends Model
     protected $fillable = [
         'name',
         'address',
+        'establishment_id',
     ];
 
     /**
@@ -36,6 +37,11 @@ class Location extends Model
     ];
 
     public function places()
+    {
+        return $this->hasMany(Place::class);
+    }
+
+    public function establishment()
     {
         return $this->hasMany(Place::class);
     }

@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs mb-3">
-    @if(Auth::user()->active_store)
+    @if(auth()->user()->active_store)
         @can('Store')
             <li class="nav-item">
                 <a
@@ -19,7 +19,7 @@
                     class="nav-link {{ request()->query('type') === 'receiving' ? 'active' : '' }} {{ active('warehouse.generate-reception') }}"
                     aria-current="page"
                     href="{{ route('warehouse.controls.index', [
-                        'store' => Auth::user()->active_store,
+                        'store' => auth()->user()->active_store,
                         'type' => 'receiving',
                         'nav' => 'nav',
                     ]) }}"
@@ -34,7 +34,7 @@
                     class="nav-link {{ request()->query('type') === 'dispatch' ? 'active' : '' }}"
                     aria-current="page"
                     href="{{ route('warehouse.controls.index', [
-                        'store' => Auth::user()->active_store,
+                        'store' => auth()->user()->active_store,
                         'type' => 'dispatch',
                         'nav' => 'nav',
                     ]) }}"
@@ -57,7 +57,10 @@
                 <div class="dropdown-menu">
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.store.report', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
+                        href="{{ route('warehouse.store.report', [
+                            'store' => auth()->user()->active_store,
+                            'nav' => 'nav'])
+                        }}"
                     >
                         <i class="fas fa-file-alt"></i> Reporte Bincard
                     </a>
@@ -83,25 +86,37 @@
                 <div class="dropdown-menu">
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.products.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
+                        href="{{ route('warehouse.products.index', [
+                            'store' => auth()->user()->active_store,
+                            'nav' => 'nav'])
+                        }}"
                     >
                         <i class="fas fa-boxes"></i> Productos
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.categories.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
+                        href="{{ route('warehouse.categories.index', [
+                            'store' => auth()->user()->active_store,
+                            'nav' => 'nav'])
+                        }}"
                     >
                         <i class="fas fa-flag"></i> Categorías
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.origins.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
+                        href="{{ route('warehouse.origins.index', [
+                            'store' => auth()->user()->active_store,
+                            'nav' => 'nav'])
+                        }}"
                     >
                         <i class="fas fa-download"></i> Origenes
                     </a>
                     <a
                         class="dropdown-item"
-                        href="{{ route('warehouse.destinations.index', ['store' => Auth::user()->active_store, 'nav' => 'nav']) }}"
+                        href="{{ route('warehouse.destinations.index', [
+                            'store' => auth()->user()->active_store,
+                            'nav' => 'nav'])
+                        }}"
                     >
                         <i class="fas fa-upload"></i> Destinos
                     </a>
@@ -115,7 +130,10 @@
             <a
                 class="nav-link {{ active('warehouse.invoice-management') }}"
                 aria-current="page"
-                href="{{ route('warehouse.invoice-management') }}"
+                href="{{ route('warehouse.invoice-management', [
+                    'store' => auth()->user()->active_store,
+                    'nav' => 'nav'
+                ]) }}"
             >
                 <i class="fas fa-file-invoice-dollar"></i> Facturas
             </a>

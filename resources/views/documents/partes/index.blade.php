@@ -75,7 +75,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($partes as $parte)
+        @forelse($partes as $parte)
         <tr>
             <td rowspan="2" class="text-center">{{ $parte->id }}</td>
             <td data-toggle="tooltip" data-placement="top"
@@ -140,13 +140,13 @@
 
                     @elseif( Auth::user()->can('Partes: oficina'))
                         @if($req->events->count() > 0)
-                            
+
                             <span  data-toggle="tooltip" data-placement="top"
                             data-original-title="{{ optional($req->events->where('status', '<>', 'en copia')->first())->to_user_id }}
                                                 {{ ($req->events->where('status', '<>', 'en copia')->first()->to_user->fullname)??''}}
                                                 {{ optional($req->events->where('status', '<>', 'en copia')->first())->CreationDate }}">
-                            
-                            
+
+
                             <i class="fas fa-rocket"></i>
                             </span>
                         @endif
@@ -156,7 +156,7 @@
                 @if($parte->files->count()>0)
                     @foreach($parte->files as $file)
                     @if($file->signatureFile)
-                    @if($file->signatureFile->HasAllFlowsSigned)                    
+                    @if($file->signatureFile->HasAllFlowsSigned)
                         {{--<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$file->signatureFile->signed_file}}"  target="_blank" title="Documento Firmado">
                         <i class="fas fa-signature"></i>
                         </a>--}}
@@ -169,7 +169,7 @@
                     @else
                         Firmas Pend.
                     @endif
-                    @else                    
+                    @else
                         <a href="{{ route('documents.partes.download', $file->id) }}"
                             target="_blank"
                             data-toggle="tooltip" data-placement="top"
@@ -184,7 +184,15 @@
                 @endif
             </td>
         </tr>
-        @endforeach
+        @empty
+        <tr class="text-center">
+            <td colspan="7">
+                <em>
+                    No hay partes
+                </em>
+            </td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
 

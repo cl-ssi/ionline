@@ -5,9 +5,12 @@
         @case('index')
             <div class="row">
                 <div class="col">
-                    <h3 class="mb-3">
+                    <h4 class="mb-3">
+                        @if($establishment)
+                            {{ $establishment->name }}:
+                        @endif
                         Lugares
-                    </h3>
+                    </h4>
                 </div>
                 <div class="col">
                     <button

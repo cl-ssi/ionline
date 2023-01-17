@@ -1,6 +1,13 @@
 <div>
     @include('layouts.partials.flash_message')
 
+    @if(! $store->visator)
+    <div class="alert alert-danger" role="alert">
+        La bodega no posee visador. Recuerde añadir uno.
+    </div>
+    @endif
+
+
     <div class="mt-2">
         <h4>Nuevo Ingreso: {{ $store->name }}</h4>
     </div>
@@ -244,6 +251,17 @@
                     </span>
                 @enderror
             @endif
+        </fieldset>
+
+        <fieldset class="form-group col-md-4">
+            <label for="visator-id" class="form-label">Visador</label>
+                <input
+                    id="visator-id"
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ $store->visator->full_name ?? 'La bodega no posee visador'  }}"
+                    readonly
+                >
         </fieldset>
     </div>
 
@@ -515,7 +533,7 @@
                 wire:click="finish"
                 wire:loading.attr="disabled"
                 wire:target="finish"
-                @if($po_code == null)
+                @if($po_code == null || !$store->visator)
                     disabled
                 @endif
             >

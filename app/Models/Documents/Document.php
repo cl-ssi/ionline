@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class Document extends Model implements Auditable
         'distribution',
         'content',
         'file_to_sign_id',
+        'establishment_id',
     ];
 
     /**
@@ -59,7 +61,7 @@ class Document extends Model implements Auditable
 
     public function getFromHtmlSignAttribute()
     {
-        /* 
+        /*
          * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
          * para evitar que salga duplicado en la firmante
          */
@@ -112,7 +114,22 @@ class Document extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
     }
 
-    public function scopeSearch($query, Request $request) 
+    public function reqEvents()
+    {
+        return $this->belongsToMany('App\Requirements\Event','req_documents_events');
+    }
+
+    public function fileToSign()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
+    }
+
+    public function scopeSearch($query, Request $request)
     {
         if($request->input('id') != "") {
             $query->where('id', $request->input('id') );
@@ -139,15 +156,5 @@ class Document extends Model implements Auditable
         }
 
         return $query;
-    }
-
-    public function reqEvents()
-    {
-        return $this->belongsToMany('App\Requirements\Event','req_documents_events');
-    }
-
-    public function fileToSign()
-    {
-        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
     }
 }

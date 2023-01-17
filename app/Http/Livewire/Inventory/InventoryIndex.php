@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Inventory;
 
+use App\Models\Establishment;
 use App\Models\Inv\Inventory;
 use App\Models\Parameters\Location;
 use App\Models\Parameters\Place;
@@ -16,6 +17,8 @@ class InventoryIndex extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+
+    public $establishment;
 
     public $products;
     public $users;
@@ -38,7 +41,7 @@ class InventoryIndex extends Component
 
     public $managerInventory;
 
-    public function mount()
+    public function mount(Establishment $establishment)
     {
         $this->getProducts();
         $this->getUsers();
@@ -57,7 +60,6 @@ class InventoryIndex extends Component
     {
         return view('livewire.inventory.inventory-index',[
             'inventories' => $this->getInventories(),
-
         ])->extends('layouts.app');
     }
 
@@ -81,6 +83,7 @@ class InventoryIndex extends Component
                     $query->whereRelation('location', 'id', '=', $this->location_id);
                 });
             })
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('number')
             ->orderByDesc('id')
             ->paginate(25);
@@ -91,6 +94,7 @@ class InventoryIndex extends Component
     public function getUsers()
     {
         $userIds = Inventory::query()
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('user_using_id')
             ->groupBy('user_using_id')
             ->pluck('user_using_id');
@@ -104,6 +108,7 @@ class InventoryIndex extends Component
     public function getResponsibles()
     {
         $responsibleIds = Inventory::query()
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('user_responsible_id')
             ->groupBy('user_responsible_id')
             ->pluck('user_responsible_id');
@@ -117,6 +122,7 @@ class InventoryIndex extends Component
     public function getProducts()
     {
         $productIds = Inventory::query()
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('unspsc_product_id')
             ->groupBy('unspsc_product_id')
             ->pluck('unspsc_product_id');
@@ -130,6 +136,7 @@ class InventoryIndex extends Component
     public function getLocations()
     {
         $this->placeIds = Inventory::query()
+            ->whereEstablishmentId($this->establishment->id)
             ->whereNotNull('place_id')
             ->groupBy('place_id')
             ->pluck('place_id');
@@ -139,7 +146,9 @@ class InventoryIndex extends Component
             ->orderBy('name')
             ->get();
 
-        $this->locations = Location::whereIn('id', $places->pluck('location_id'))->get();
+        $this->locations = Location::query()
+            ->whereIn('id', $places->pluck('location_id'))
+            ->get();
     }
 
     public function updatedUnspscProductId($unspsc_product_id)

@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -27,7 +28,8 @@ class Parte extends Model
         'viewed_at',
         'physical_format',
         'received_by_id',
-        'reception_date'
+        'establishment_id',
+        'reception_date',
     ];
 
     /**
@@ -38,14 +40,8 @@ class Parte extends Model
     protected $dates = [
         'date',
         'deleted_at',
-        'viewed_at'
+        'viewed_at',
     ];
-
-    /* FIXME: Esto no es necesario */
-    public function getCreationParteDateAttribute()
-    {
-        return Carbon::parse($this->date)->format('d-m-Y');
-    }
 
     public function events()
     {
@@ -60,6 +56,17 @@ class Parte extends Model
     public function files()
     {
         return $this->hasMany('App\Models\Documents\ParteFile');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
+    }
+
+    /* FIXME: Esto no es necesario */
+    public function getCreationParteDateAttribute()
+    {
+        return Carbon::parse($this->date)->format('d-m-Y');
     }
 
     public function scopeSearch($query, Request $request)
@@ -87,7 +94,7 @@ class Parte extends Model
         return $query;
     }
 
-    /* FIXME:  cambiar nombre */
+    /* FIXME: cambiar nombre */
     public function scopeSearch2($query, $request)
     {
         if($request != "") {

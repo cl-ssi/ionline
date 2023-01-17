@@ -11,36 +11,36 @@
                 <label for="start_at" class="form-label">
                     {{ __('Fecha Inicio') }}
                 </label>
-                
-                <input wire:model.defer="start_at" type="date" id="start_at" 
-                    class="form-control @error('start_at') is-invalid @enderror" 
-                    value="{{ old('start_at')}}" 
-                    autocomplete="start_at" required> 
-                
-                @error('start_at') 
-                    <span class="invalid-feedback" role="alert"> 
-                        <strong>{{ $message }}</strong> 
-                    </span> 
-                @enderror 
+
+                <input wire:model.defer="start_at" type="date" id="start_at"
+                    class="form-control @error('start_at') is-invalid @enderror"
+                    value="{{ old('start_at')}}"
+                    autocomplete="start_at" required>
+
+                @error('start_at')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </fieldset>
-            
+
             <fieldset class="col-md-3 col-5">
                 <label for="end_at" class="form-label">
                     {{ __('Fecha Término') }}
                 </label>
-                
-                <input wire:model.defer="end_at" type="date" id="end_at" 
-                    class="form-control @error('end_at') is-invalid @enderror" 
-                    value="{{ old('end_at') }}" 
-                    autocomplete="end_at" required> 
-                
-                @error('end_at') 
-                    <span class="invalid-feedback" role="alert"> 
-                        <strong>{{ $message }}</strong> 
-                    </span> 
-                @enderror 
+
+                <input wire:model.defer="end_at" type="date" id="end_at"
+                    class="form-control @error('end_at') is-invalid @enderror"
+                    value="{{ old('end_at') }}"
+                    autocomplete="end_at" required>
+
+                @error('end_at')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </fieldset>
-            
+
             <fieldset class="col-md-1 col-1">
                 <label for="btn-search">Buscar</label>
                 <button class="btn btn-primary" wire:click="filter()">Buscar</button>
@@ -64,7 +64,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($partes as $parte)    
+            @forelse($partes as $parte)
             <tr>
                 <td>{{ $parte->id }}</td>
                 <td>
@@ -95,7 +95,7 @@
                                 @else
                                     Firmas Pend.
                                 @endif
-                            @else                    
+                            @else
                                 <a href="{{ route('documents.partes.download', $file->id) }}"
                                     target="_blank"
                                     data-toggle="tooltip" data-placement="top"
@@ -112,7 +112,7 @@
                 </td>
             </tr>
             @empty
-            <tr>
+            <tr class="text-center">
                 <td colspan="8">No hay registros</td>
             </tr>
             @endforelse

@@ -77,7 +77,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($documents as $document)
+        @forelse($documents as $document)
         <tr>
             <td rowspan="2">{{ $document->id }}</td>
             <td>{{ $document->number }}</td>
@@ -113,7 +113,15 @@
         <tr>
             <td colspan="7" class="pb-2">{{ $document->subject }}</td>
         </tr>
-        @endforeach
+        @empty
+        <tr class="text-center">
+            <td colspan="7">
+                <em>
+                    No hay partes
+                </em>
+            </td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
 

@@ -48,24 +48,42 @@
                     </td>
                     <td>{{ $store->name }}</td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.stores.users', ['store' => $store, 'nav' => 'nav-admin']) }}">
+                        <a
+                            href="{{ route('warehouse.stores.users',
+                                ['store' => $store,
+                                'nav' => 'nav-admin'])
+                            }}"
+                        >
                             {{ $store->users->count() }} usuarios
                         </a>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.categories.index', ['store' => $store, 'nav' => 'nav-admin']) }}">
+                        <a
+                            href="{{ route('warehouse.categories.index', [
+                                'store' => $store,
+                                'nav' => 'nav-admin'
+                            ]) }}"
+                        >
                             {{ $store->categories->count() }} categorías
                         </a>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('warehouse.products.index', ['store' => $store, 'nav' => 'nav-admin']) }}">
+                        <a
+                            href="{{ route('warehouse.products.index', [
+                                'store' => $store,
+                                'nav' => 'nav-admin'
+                            ]) }}"
+                        >
                             {{ $store->products->count() }} productos
                         </a>
                     </td>
                     <td class="text-center">
                         <a
                             class="btn btn-sm btn-outline-secondary"
-                            href="{{ route('warehouse.store.report', ['store' => $store, 'nav' => 'nav-admin'])}}"
+                            href="{{ route('warehouse.store.report', [
+                                'store' => $store,
+                                'nav' => 'nav-admin'
+                            ]) }}"
                             title="Reporte Bincard"
                         >
                             <i class="fas fa-file-alt"></i>
@@ -73,14 +91,20 @@
                         <div class="btn-group" role="group">
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.origins.index', ['store' => $store, 'nav' => 'nav-admin']) }}"
+                                href="{{ route('warehouse.origins.index', [
+                                    'store' => $store,
+                                    'nav' => 'nav-admin'
+                                ]) }}"
                                 title="Origenes"
                             >
                                 <i class="fas fa-download"></i>
                             </a>
                             <a
                                 class="btn btn-sm btn-outline-secondary"
-                                href="{{ route('warehouse.destinations.index', ['store' => $store, 'nav' => 'nav-admin']) }}"
+                                href="{{ route('warehouse.destinations.index', [
+                                    'store' => $store,
+                                    'nav' => 'nav-admin'
+                                ]) }}"
                                 title="Destinos"
                             >
                                 <i class="fas fa-upload"></i>
@@ -112,7 +136,10 @@
                             </a>
                         </div>
 
-                        <button class="btn btn-sm btn-outline-danger" wire:click="delete({{ $store }})">
+                        <button
+                            class="btn btn-sm btn-outline-danger"
+                            wire:click="delete({{ $store }})"
+                        >
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>

@@ -5,5 +5,7 @@
         'store' => null
     ])
 
-    <button wire:click="createStore" class="btn btn-primary">Guardar</button>
+    <button wire:click="createStore" class="btn btn-primary">
+        Guardar
+    </button>
 </div>

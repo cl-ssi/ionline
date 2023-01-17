@@ -112,4 +112,17 @@ class ControlController extends Controller
         $nav = $request->nav;
         return view('warehouse.stores.generate-reception', compact('store', 'nav'));
     }
+
+    /**
+     * Invoice Manage
+     *
+     * @param  \App\Models\Warehouse\Store  $store
+     * @param  \Iluminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function invoiceManage(Store $store, Request $request)
+    {
+        $nav = $request->nav;
+        return view('warehouse.stores.manage-invoice', compact('store', 'nav'));
+    }
 }

@@ -9,7 +9,8 @@
                 @endif
             </span>
             <span class="input-group-text" wire:loading wire:target="search">
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                </span>
                 <span class="sr-only">...</span>
             </span>
         </div>

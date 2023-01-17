@@ -3,6 +3,7 @@
 namespace App\Models\Warehouse;
 
 use App\Models\Commune;
+use App\Models\Establishment;
 use App\Models\Warehouse\Origin;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +19,8 @@ class Store extends Model
     protected $fillable = [
         'name',
         'address',
-        'commune_id'
+        'commune_id',
+        'establishment_id',
     ];
 
     public function commune()
@@ -52,6 +54,11 @@ class Store extends Model
             ->using(StoreUser::class)
             ->withPivot(['role_id', 'status'])
             ->withTimestamps();
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class);
     }
 
     public function getVisatorAttribute()

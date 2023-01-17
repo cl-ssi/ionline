@@ -1,7 +1,9 @@
 <div>
     @section('title', 'Editar Inventario')
 
-    @include('inventory.nav')
+    @include('inventory.nav', [
+        'establishment' => $establishment
+    ])
 
     <div class="row">
         <div class="col">
@@ -10,7 +12,12 @@
             </h3>
         </div>
         <div class="col text-right">
-            <a href="{{ route('inventories.pending-inventory') }}" class="btn btn-primary">
+            <a
+                href="{{ route('inventories.pending-inventory', [
+                    'establishment' => $establishment
+                ]) }}"
+                class="btn btn-primary"
+            >
                 Atrás
             </a>
         </div>
