@@ -56,7 +56,7 @@
 
 <hr/>
 <div style="height: 300px; overflow-y: scroll;">
-    @include('partials.audit', ['audits' => $jobPositionProfile->audits] )
+    @include('partials.audit', ['audits' => $jobPositionProfile->audits()] )
 </div>
 
 @endsection

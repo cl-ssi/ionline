@@ -12,9 +12,9 @@
 
 <h3 class="mb-3">Metas Sanitarias</h3>
 
-<div class="alert alert-warning" role="alert">
+<!-- <div class="alert alert-warning" role="alert">
     Indicadores "<strong>En Revisión</strong>", pendientes de verificación por parte de referentes.
-</div>
+</div> -->
 
 <div class="row">
 

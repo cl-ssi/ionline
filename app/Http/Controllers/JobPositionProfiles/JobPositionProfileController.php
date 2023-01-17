@@ -91,7 +91,7 @@ class JobPositionProfileController extends Controller
             where('staff_decree_id', $staffDecree->id)
             ->where('estament_id', $jobPositionProfile->estament_id)
             ->get();
-        
+
         foreach($staffDecreeByEstaments as $staffDecreeByEstament){
             if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
                 && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){

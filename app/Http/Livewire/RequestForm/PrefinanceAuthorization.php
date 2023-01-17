@@ -38,7 +38,7 @@ class PrefinanceAuthorization extends Component
       $this->comment            = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
-      $this->lstProgram         = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
+      $this->lstProgram         = Program::with('Subtitle')->orderBy('alias_finance')->get();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;

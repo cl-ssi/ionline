@@ -127,7 +127,7 @@ class Indicator extends Model
         if(isset($this->numerator_acum_last_year)){ // REM P
             $result = $this->getLastValueByFactor('denominador');
             return $result != 0 ? $this->getLastValueByFactor('numerador') / $result * (Str::contains($this->goal, '%') || $this->goal == null ? 100 : 1) : 0;
-        }elseif(in_array($this->id, [445,453])){ // indicador N° 10 en DSSI y Hospital, metas sanitarias 19.664 año 2022
+        }elseif(in_array($this->id, [445,453,441,449])){ // indicador N° 10 en DSSI y Hospital y N° 6 en DSSI y Hospital, metas sanitarias 19.664 año 2022
             return $this->getValuesAcum('numerador');
         }else{
             $result = $this->getValuesAcum('denominador');
@@ -193,8 +193,9 @@ class Indicator extends Model
     public function getContribution()
     {
         if($this->values->isEmpty()) return 0;
-        if(Str::contains(str_replace('≤', '<=', $this->goal), '<=')) return $this->getCompliance() <= preg_replace('/[^0-9.]/', '', $this->goal) ? $this->weighting : 0;
-        $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
+        $filteredNumbers = array_filter(preg_split('/[^0-9.]/', $this->goal));
+        if(Str::contains(str_replace('≤', '<=', $this->goal), '<=')) return $this->getCompliance() <= reset($filteredNumbers) ? $this->weighting : 0;
+        $result = ($this->getCompliance() * $this->weighting) / reset($filteredNumbers);
         return $result > $this->weighting ? $this->weighting : (!$this->precision ? $result : 0);
     }
 

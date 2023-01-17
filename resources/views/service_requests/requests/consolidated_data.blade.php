@@ -16,10 +16,10 @@
 			<input type="text" value="Todos los datos" disabled> -->
 		<div class="form-group col">
 			<label>Establecimiento</label>
-			<select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
+			<select class="form-control" data-live-search="true" name="establishment_id" data-size="5" required>
 				<option value="">Todos</option>
 				<option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-				<option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+				<!-- <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option> -->
 				<option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
 			</select>
 		</div>
@@ -40,6 +40,20 @@
                 <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
                 <option value="3" @if($request->semester == "3") selected @endif>Septiembre-Diciembre</option>
 			</select>
+            <!-- <select class="form-control" data-live-search="true" name="month" data-size="5">
+				<option value="1" @if($request->semester == "1") selected @endif>Enero</option>
+                <option value="2" @if($request->semester == "2") selected @endif>Febrero</option>
+                <option value="3" @if($request->semester == "3") selected @endif>Marzo</option>
+                <option value="4" @if($request->semester == "4") selected @endif>Abril</option>
+                <option value="5" @if($request->semester == "5") selected @endif>Mayo</option>
+                <option value="6" @if($request->semester == "6") selected @endif>Junio</option>
+                <option value="7" @if($request->semester == "7") selected @endif>Julio</option>
+                <option value="8" @if($request->semester == "8") selected @endif>Agosto</option>
+                <option value="9" @if($request->semester == "9") selected @endif>Septiembre</option>
+                <option value="10" @if($request->semester == "10") selected @endif>Octubre</option>
+                <option value="11" @if($request->semester == "11") selected @endif>Noviembre</option>
+                <option value="12" @if($request->semester == "12") selected @endif>Diciembre</option>
+			</select> -->
 		</div>
 		<div class="form-group col-2 col-md-1">
 			<label>&nbsp;</label>
@@ -99,260 +113,260 @@
 	</thead>
 	<tbody>
 		@foreach($serviceRequests as $key => $serviceRequest)
-		<!-- si tiene cumplimiento -->
-		@if($serviceRequest->fulfillments->count() > 0)
-		@foreach($serviceRequest->fulfillments as $key2 => $fulfillment)
-		@if($fulfillment->month != 1)
-		<tr class="table-success">
-			<td nowrap>{{$serviceRequest->id}}</td>
-			<td nowrap>{{$serviceRequest->contract_number}}</td>
-			<td nowrap>{{$fulfillment->MonthOfPayment()}}</td>
-			<td nowrap>12</td>
-			<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
-			<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
-			<td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
-			<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->programm_name}}</td>
-			<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
-			@else
-			<td nowrap>{{$serviceRequest->rrhh_team}}</td>
-			@endif
-			<td nowrap>{{$serviceRequest->weekly_hours}}</td>
-			<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->estamento}}</td>
-			<td nowrap>
-				@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@else
-			<td nowrap>{{$serviceRequest->estate}}</td>
-			<td nowrap>
-				@if($serviceRequest->estate == "Administrativo")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@endif
-			<td nowrap>{{$serviceRequest->gross_amount}}</td>
-			<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
-				@elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{$fulfillment->bill_number}}</td>
-			<td nowrap>{{$fulfillment->total_hours_paid}}</td>
-			<td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
-			<td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
-			<td nowrap>{{$serviceRequest->program_contract_type}}</td>
-			<td nowrap>
-				@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-				@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-				@else Finalizada @endif</td>
-			<td nowrap>{{$serviceRequest->working_day_type}}</td>
-			<td nowrap>{{$serviceRequest->type}}</td>
-			<td nowrap>{{$fulfillment->quit_status()}}</td>
-		</tr>
-		@else
-		@if($fulfillment->bill_number != NULL || $fulfillment->total_hours_paid != NULL || $fulfillment->total_paid != NULL ||
-		$fulfillment->payment_date != NULL || $fulfillment->contable_month != NULL)
-		<tr class="table-success">
-			<td nowrap>{{$serviceRequest->id}}</td>
-			<td nowrap>{{$serviceRequest->contract_number}}</td>
-			<td nowrap>{{$fulfillment->MonthOfPayment()}}</td>
-			<td nowrap>12</td>
-			<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
-			<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
-			<td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
-			<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->programm_name}}</td>
-			<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
-			@else
-			<td nowrap>{{$serviceRequest->rrhh_team}}</td>
-			@endif
-			<td nowrap>{{$serviceRequest->weekly_hours}}</td>
-			<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->estamento}}</td>
-			<td nowrap>
-				@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@else
-			<td nowrap>{{$serviceRequest->estate}}</td>
-			<td nowrap>
-				@if($serviceRequest->estate == "Administrativo")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@endif
-			<td nowrap>{{$serviceRequest->gross_amount}}</td>
-			<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
-				@elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{$fulfillment->bill_number}}</td>
-			<td nowrap>{{$fulfillment->total_hours_paid}}</td>
-			<td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
-			<td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
-			<td nowrap>{{$serviceRequest->program_contract_type}}</td>
-			<td nowrap>
-				@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-				@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-				@else Finalizada @endif</td>
-			<td nowrap>{{$serviceRequest->working_day_type}}</td>
-			<td nowrap>{{$serviceRequest->type}}</td>
-			<td nowrap>{{$fulfillment->quit_status()}}</td>
-		</tr>
-		@else
-		<tr class="table-success">
-			<td nowrap>{{$serviceRequest->id}}</td>
-			<td nowrap>{{$serviceRequest->contract_number}}</td>
-			<td nowrap>@if($serviceRequest->total_paid) Enero @endif</td>
-			<td nowrap>12</td>
-			<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
-			<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
-			<td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
-			<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->programm_name}}</td>
-			<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
-			@else
-			<td nowrap>{{$serviceRequest->rrhh_team}}</td>
-			@endif
-			<td nowrap>{{$serviceRequest->weekly_hours}}</td>
-			<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->estamento}}</td>
-			<td nowrap>
-				@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@else
-			<td nowrap>{{$serviceRequest->estate}}</td>
-			<td nowrap>
-				@if($serviceRequest->estate == "Administrativo")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@endif
-			<td nowrap>{{$serviceRequest->gross_amount}}</td>
-			<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
-				@elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{$serviceRequest->bill_number}}</td>
-			<td nowrap>{{$serviceRequest->total_hours_paid}}</td>
-			<td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
-			<td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
-			<td nowrap>{{$serviceRequest->program_contract_type}}</td>
-			<td nowrap>
-				@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-				@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-				@else Finalizada @endif</td>
-			<td nowrap>{{$serviceRequest->working_day_type}}</td>
-			<td nowrap>{{$serviceRequest->type}}</td>
-			<td nowrap>{{$fulfillment->quit_status()}}</td>
-		</tr>
-		@endif
-		@endif
-		@endforeach
-		<!-- si no tiene cumplimiento, desde hoja de ruta -->
-		@else
-		<tr>
-			<td nowrap>{{$serviceRequest->id}}</td>
-			<td nowrap>{{$serviceRequest->contract_number}}</td>
-			<td nowrap>@if($serviceRequest->total_paid) Enero @endif</td>
-			<td nowrap>12</td>
-			<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
-			<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
-			<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
-			<td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
-			<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
-			<td nowrap>{{$serviceRequest->programm_name}}</td>
-			<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
-			@else
-			<td nowrap>{{$serviceRequest->rrhh_team}}</td>
-			@endif
-			<td nowrap>{{$serviceRequest->weekly_hours}}</td>
-			<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-			@if($serviceRequest->profession)
-			<td nowrap>{{$serviceRequest->profession->estamento}}</td>
-			<td nowrap>
-				@if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@else
-			<td nowrap>{{$serviceRequest->estate}}</td>
-			<td nowrap>
-				@if($serviceRequest->estate == "Administrativo")
-				Apoyo Administrativo
-				@else
-				Apoyo Clínico
-				@endif
-			</td>
-			@endif
-			<td nowrap>{{$serviceRequest->gross_amount}}</td>
-			<td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
-				@elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
-			<td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
-			<td nowrap>{{$serviceRequest->bill_number}}</td>
-			<td nowrap>{{$serviceRequest->total_hours_paid}}</td>
-			<td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
-			<td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
-			<td nowrap>{{$serviceRequest->program_contract_type}}</td>
-			<td nowrap>
-				@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-				@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-				@else Finalizada @endif</td>
-			<td nowrap>{{$serviceRequest->working_day_type}}</td>
-			<td nowrap>{{$serviceRequest->type}}</td>
-			<td nowrap></td>
-		</tr>
-		@endif
+            <!-- si tiene cumplimiento -->
+            @if($serviceRequest->fulfillments->count() > 0)
+                @foreach($serviceRequest->fulfillments as $key2 => $fulfillment)
+                    @if($fulfillment->month != 1)
+                        <tr class="table-success">
+                            <td nowrap>{{$serviceRequest->id}}</td>
+                            <td nowrap>{{$serviceRequest->contract_number}}</td>
+                            <td nowrap>{{$fulfillment->MonthOfPayment()}}</td>
+                            <td nowrap>12</td>
+                            <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
+                            <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
+                            <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
+                            <td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+                            <td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+                            <td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
+                            <td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
+                            <td nowrap>{{$serviceRequest->programm_name}}</td>
+                            <td nowrap>{{$serviceRequest->digera_strategy}}</td>
+                            @if($serviceRequest->profession)
+                            <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+                            @else
+                            <td nowrap>{{$serviceRequest->rrhh_team}}</td>
+                            @endif
+                            <td nowrap>{{$serviceRequest->weekly_hours}}</td>
+                            <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+                            @if($serviceRequest->profession)
+                            <td nowrap>{{$serviceRequest->profession->estamento}}</td>
+                            <td nowrap>
+                                @if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+                                Apoyo Administrativo
+                                @else
+                                Apoyo Clínico
+                                @endif
+                            </td>
+                            @else
+                            <td nowrap>{{$serviceRequest->estate}}</td>
+                            <td nowrap>
+                                @if($serviceRequest->estate == "Administrativo")
+                                Apoyo Administrativo
+                                @else
+                                Apoyo Clínico
+                                @endif
+                            </td>
+                            @endif
+                            <td nowrap>{{$serviceRequest->gross_amount}}</td>
+                            <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
+                                @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
+                            <td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
+                            <td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
+                            <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
+                            <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
+                            <td nowrap>{{$fulfillment->bill_number}}</td>
+                            <td nowrap>{{$fulfillment->total_hours_paid}}</td>
+                            <td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
+                            <td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
+                            <td nowrap>{{$serviceRequest->program_contract_type}}</td>
+                            <td nowrap>
+                                @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+                                @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+                                @else Finalizada @endif</td>
+                            <td nowrap>{{$serviceRequest->working_day_type}}</td>
+                            <td nowrap>{{$serviceRequest->type}}</td>
+                            <td nowrap>{{$fulfillment->quit_status()}}</td>
+                        </tr>
+                    @else
+                        @if($fulfillment->bill_number != NULL || $fulfillment->total_hours_paid != NULL || $fulfillment->total_paid != NULL ||
+                        $fulfillment->payment_date != NULL || $fulfillment->contable_month != NULL)
+                            <tr class="table-success">
+                                <td nowrap>{{$serviceRequest->id}}</td>
+                                <td nowrap>{{$serviceRequest->contract_number}}</td>
+                                <td nowrap>{{$fulfillment->MonthOfPayment()}}</td>
+                                <td nowrap>12</td>
+                                <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
+                                <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
+                                <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
+                                <td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+                                <td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+                                <td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
+                                <td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
+                                <td nowrap>{{$serviceRequest->programm_name}}</td>
+                                <td nowrap>{{$serviceRequest->digera_strategy}}</td>
+                                @if($serviceRequest->profession)
+                                <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+                                @else
+                                <td nowrap>{{$serviceRequest->rrhh_team}}</td>
+                                @endif
+                                <td nowrap>{{$serviceRequest->weekly_hours}}</td>
+                                <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+                                @if($serviceRequest->profession)
+                                <td nowrap>{{$serviceRequest->profession->estamento}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+                                    Apoyo Administrativo
+                                    @else
+                                    Apoyo Clínico
+                                    @endif
+                                </td>
+                                @else
+                                <td nowrap>{{$serviceRequest->estate}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->estate == "Administrativo")
+                                    Apoyo Administrativo
+                                    @else
+                                    Apoyo Clínico
+                                    @endif
+                                </td>
+                                @endif
+                                <td nowrap>{{$serviceRequest->gross_amount}}</td>
+                                <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
+                                    @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
+                                <td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
+                                <td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
+                                <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
+                                <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
+                                <td nowrap>{{$fulfillment->bill_number}}</td>
+                                <td nowrap>{{$fulfillment->total_hours_paid}}</td>
+                                <td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
+                                <td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
+                                <td nowrap>{{$serviceRequest->program_contract_type}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+                                    @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+                                    @else Finalizada @endif</td>
+                                <td nowrap>{{$serviceRequest->working_day_type}}</td>
+                                <td nowrap>{{$serviceRequest->type}}</td>
+                                <td nowrap>{{$fulfillment->quit_status()}}</td>
+                            </tr>
+                        @else
+                            <tr class="table-success">
+                                <td nowrap>{{$serviceRequest->id}}</td>
+                                <td nowrap>{{$serviceRequest->contract_number}}</td>
+                                <td nowrap>@if($serviceRequest->total_paid) Enero @endif</td>
+                                <td nowrap>12</td>
+                                <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
+                                <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
+                                <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
+                                <td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+                                <td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+                                <td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
+                                <td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
+                                <td nowrap>{{$serviceRequest->programm_name}}</td>
+                                <td nowrap>{{$serviceRequest->digera_strategy}}</td>
+                                @if($serviceRequest->profession)
+                                <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+                                @else
+                                <td nowrap>{{$serviceRequest->rrhh_team}}</td>
+                                @endif
+                                <td nowrap>{{$serviceRequest->weekly_hours}}</td>
+                                <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+                                @if($serviceRequest->profession)
+                                <td nowrap>{{$serviceRequest->profession->estamento}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+                                    Apoyo Administrativo
+                                    @else
+                                    Apoyo Clínico
+                                    @endif
+                                </td>
+                                @else
+                                <td nowrap>{{$serviceRequest->estate}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->estate == "Administrativo")
+                                    Apoyo Administrativo
+                                    @else
+                                    Apoyo Clínico
+                                    @endif
+                                </td>
+                                @endif
+                                <td nowrap>{{$serviceRequest->gross_amount}}</td>
+                                <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
+                                    @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
+                                <td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
+                                <td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
+                                <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
+                                <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
+                                <td nowrap>{{$serviceRequest->bill_number}}</td>
+                                <td nowrap>{{$serviceRequest->total_hours_paid}}</td>
+                                <td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
+                                <td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
+                                <td nowrap>{{$serviceRequest->program_contract_type}}</td>
+                                <td nowrap>
+                                    @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+                                    @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+                                    @else Finalizada @endif</td>
+                                <td nowrap>{{$serviceRequest->working_day_type}}</td>
+                                <td nowrap>{{$serviceRequest->type}}</td>
+                                <td nowrap>{{$fulfillment->quit_status()}}</td>
+                            </tr>
+                        @endif
+                    @endif
+                @endforeach
+                <!-- si no tiene cumplimiento, desde hoja de ruta -->
+            @else
+                <tr>
+                    <td nowrap>{{$serviceRequest->id}}</td>
+                    <td nowrap>{{$serviceRequest->contract_number}}</td>
+                    <td nowrap>@if($serviceRequest->total_paid) Enero @endif</td>
+                    <td nowrap>12</td>
+                    <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
+                    <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
+                    <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
+                    <td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+                    <td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+                    <td nowrap>{{$serviceRequest->employee->birthday? $serviceRequest->employee->birthday->format('d-m-Y'):''}}</td>
+                    <td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
+                    <td nowrap>{{$serviceRequest->programm_name}}</td>
+                    <td nowrap>{{$serviceRequest->digera_strategy}}</td>
+                    @if($serviceRequest->profession)
+                    <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+                    @else
+                    <td nowrap>{{$serviceRequest->rrhh_team}}</td>
+                    @endif
+                    <td nowrap>{{$serviceRequest->weekly_hours}}</td>
+                    <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
+                    @if($serviceRequest->profession)
+                    <td nowrap>{{$serviceRequest->profession->estamento}}</td>
+                    <td nowrap>
+                        @if($serviceRequest->profession->category == "E" || $serviceRequest->profession->category == "F")
+                        Apoyo Administrativo
+                        @else
+                        Apoyo Clínico
+                        @endif
+                    </td>
+                    @else
+                    <td nowrap>{{$serviceRequest->estate}}</td>
+                    <td nowrap>
+                        @if($serviceRequest->estate == "Administrativo")
+                        Apoyo Administrativo
+                        @else
+                        Apoyo Clínico
+                        @endif
+                    </td>
+                    @endif
+                    <td nowrap>{{$serviceRequest->gross_amount}}</td>
+                    <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
+                        @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
+                    <td nowrap>@if($serviceRequest->resolution_number)Sí @else No @endif</td>
+                    <td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
+                    <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
+                    <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
+                    <td nowrap>{{$serviceRequest->bill_number}}</td>
+                    <td nowrap>{{$serviceRequest->total_hours_paid}}</td>
+                    <td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
+                    <td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
+                    <td nowrap>{{$serviceRequest->program_contract_type}}</td>
+                    <td nowrap>
+                        @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+                        @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+                        @else Finalizada @endif</td>
+                    <td nowrap>{{$serviceRequest->working_day_type}}</td>
+                    <td nowrap>{{$serviceRequest->type}}</td>
+                    <td nowrap></td>
+                </tr>
+            @endif
 		@endforeach
 	</tbody>
 </table>

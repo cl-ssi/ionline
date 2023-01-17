@@ -585,7 +585,7 @@
                                 <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></td>
                                 <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                                 <td rowspan="2" class="text-center align-middle">{{$indicator->weighting}}%</td>
-                                <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance(), 2, ',', '.')}}{{Str::contains($indicator->goal, '%') ? '%' : ''}} <br> <small>Aporte: {{number_format($indicator->getContribution(), 2, ',', '.')}}%</small></td>
+                                <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance(), 2, ',', '.')}}{{Str::contains($indicator->goal, 'días') ? '' : '%'}} <br> <small>Aporte: {{number_format($indicator->getContribution(), 2, ',', '.')}}%</small></td>
                                 @if(isset($indicator->numerator_acum_last_year))
                                 <td class="text-right">{{number_format($indicator->numerator_acum_last_year, 0, ',', '.')}}</td>
                                 @endif
@@ -599,6 +599,7 @@
                                 @endif
                             </tr>
                             <!-- denominador -->
+                            @if($indicator->denominator)
                             <tr class="text-center">
                                 <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
                                 @if(isset($indicator->denominator_acum_last_year))
@@ -613,6 +614,7 @@
                                     @endforeach
                                 @endif
                             </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>

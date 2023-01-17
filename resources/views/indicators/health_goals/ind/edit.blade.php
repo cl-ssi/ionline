@@ -86,7 +86,8 @@
         </div>
         <div class="form-group col-md-2">
             <label for="numerator">Fuente de datos</label>
-            <select class="form-control" id="denominator_source" name="denominator_source" required>
+            <select class="form-control" id="denominator_source" name="denominator_source">
+                <option value="">Seleccione</option>
                 @foreach($sources_type as $source)
                 <option value="{{$source}}" @if($indicator->denominator_source == $source) selected @endif>{{$source}}</option>
                 @endforeach

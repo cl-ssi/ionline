@@ -70,15 +70,11 @@
                     </tr>
                     <tr class="table-active">
                         <th>Desde</th>
-                        <th>Medio día</th>
                         <th>Hasta</th>
-                        <th>Medio Día</th>
                     </tr>
                     <tr>
                         <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                        <td>{{ $allowance->FromHalfDayValue }}</td>
-                        <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                        <td>{{ $allowance->ToHalfDayValue }}</td>
+                        <td>{{ $allowance->to->format('d-m-Y') }}</td>
                     </tr>
                 </tbody>
             </table>

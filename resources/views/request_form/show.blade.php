@@ -125,7 +125,7 @@
                     </tr>
                     <tr>
                         <th class="table-active" colspan="2" scope="row">Programa Asociado</th>
-                        <td>{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
+                        <td>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
                     </tr>
                     @if(in_array($eventType, ['finance_event', 'supply_event']))
                         <tr>
@@ -625,7 +625,7 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                      data-parent="#accordionExample">
                     <div class="card-body">
-                        @include('partials.audit', ['audits' => $requestForm->audits])
+                        @include('partials.audit', ['audits' => $requestForm->audits()])
                     </div>
                 </div>
             </div>
