@@ -35,13 +35,13 @@
             <select name="type" id="for_type" class="form-control selectpicker" title="Seleccione tipo" required>
                 <option value="">Seleccionar Tipo</option>
                 <option value="CECOSF">CECOSF</option>
+                <option value="CESFAM">CESFAM</option>
                 <option value="CGR">CGR</option>
-                <option value="CESFAM">CESFAM</option>                
                 <option value="COSAM">COSAM</option>
                 <option value="HOSPITAL">HOSPITAL</option>
                 <option value="PRAIS">PRAIS</option>
                 <option value="PSR">PSR</option>
-                <option value="SAPU">SAPU</option>                
+                <option value="SAPU">SAPU</option>
             </select>
         </fieldset>
 

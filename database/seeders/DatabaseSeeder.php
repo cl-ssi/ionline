@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Parameters\EstablishmentType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CountrySeeder::class);
         $this->call(CommuneSeeder::class);
+        $this->call(EstablishmentTypeSeeder::class);
         $this->call(EstablishmentSeeder::class);
         $this->call(OrganizationalUnitSeeder::class);
         $this->call(RoleAndPermissionSeeder::class);
@@ -45,7 +47,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RstFundamentSeeder::class);
         $this->call(RstFundamentDetailSeeder::class);
 
-        /* SEED PARA MANTENEDORES DE ABASTECIEMIENTOS */
+        /* SEED PARA MANTENEDORES DE ABASTECIMIENTOS */
         $this->call(PurchaseMechanismSeeder::class);
         $this->call(PurchaseTypeSeeder::class);
         $this->call(UnitOfMeasurementSeeder::class);
