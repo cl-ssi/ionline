@@ -228,15 +228,11 @@
             <tr>
                 <th rowspan="2" style="width: 20%">Sección VI</th>
                 <th>Desde</th>
-                <th>Medio día</th>
                 <th>Hasta</th>
-                <th>Medio Día</th>
             </tr>
             <tr align="center">
                 <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                <td>{{ $allowance->FromHalfDayValue }}</td>
-                <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                <td>{{ $allowance->ToHalfDayValue }}</td>
+                <td>{{ $allowance->to->format('d-m-Y') }}</td>
             </tr>
         </table>
 
