@@ -599,6 +599,7 @@
                                 @endif
                             </tr>
                             <!-- denominador -->
+                            @if($indicator->denominator)
                             <tr class="text-center">
                                 <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
                                 @if(isset($indicator->denominator_acum_last_year))
@@ -613,6 +614,7 @@
                                     @endforeach
                                 @endif
                             </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
