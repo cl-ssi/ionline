@@ -32,7 +32,30 @@ class SelectOrganizationalUnit extends Component
         /** Single establishment */
         if($this->establishment_id)
         {
+            // $ous = OrganizationalUnit::where('establishment_id', $this->establishment_id)->orderByDesc('level')->get();
+            // $max_level = $ous->first()->level;
 
+            // for($i = $max_level; $i >= 1; $i--) {
+            //     foreach($ous->where('level',$i) as $ou) {
+            //         // app('debugbar')->log($ou);
+            //         if($ou->level != 1) {
+            //             $tree[$ou->organizational_unit_id] = ['id'=>$ou->id, 'name'=>$ou->name, 'level'=> $ou->level];
+            //         }
+            //     }
+            // }
+
+            // foreach($ous as $ou) {
+
+            //     // if($ou->level == 1) {
+            //     //     $tree[$ou->id]['name'] = $ou->name; 
+            //     // }
+            //     // else {
+            //     //     if($ou->level)
+            //     //     $tree[$ou->organizational_unit_id]['childs'][$ou->id]['name'] = $ou->name; 
+            //     // }
+            // }
+
+            // app('debugbar')->log($tree);
 
             $this->ouRoot = OrganizationalUnit::where('level',1)->where('establishment_id', $this->establishment_id)->first();
             if($this->ouRoot)
