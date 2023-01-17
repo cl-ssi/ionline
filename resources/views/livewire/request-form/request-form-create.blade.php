@@ -40,7 +40,7 @@
                     <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
                         <option value="">Seleccione...</option>
                         @foreach($lstProgram as $val)
-                        <option value="{{$val->id}}">{{$val->alias_finance}} - Subtítulo {{$val->Subtitle->name}}</option>
+                        <option value="{{$val->id}}">{{$val->alias_finance}} {{$val->period}} - Subtítulo {{$val->Subtitle->name}}</option>
                         @endforeach
                         <option value="other">Otro</option>
                     </select>

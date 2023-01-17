@@ -86,7 +86,7 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      $this->lstProgram             = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
+      $this->lstProgram             = Program::with('Subtitle')->orderBy('alias_finance')->get();
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
