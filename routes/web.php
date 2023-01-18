@@ -687,15 +687,15 @@ Route::resource('assigment', AssigmentController::class)->middleware('auth');
 Route::post('assigment.import', [AssigmentController::class,'import'])->name('assigment.import');
 
 
+Route::prefix('integrity')->as('integrity.')->group(function(){
+    Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
+    Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
+    Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
+});
+
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', [RoleController::class,'index'])->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', [RoleController::class,'attach'])->name('roles.attach')->middleware('auth');
-
-    Route::prefix('integrity')->as('integrity.')->group(function(){
-        Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
-        Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
-        Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
-    });
 
     /* TODO: #50 incorporar auth en el grupo e importar controllers al comienzo del archivo */
     /** Inicio Shift Managment */

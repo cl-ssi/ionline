@@ -69,7 +69,7 @@ class ComplaintController extends Controller
         /* Correo al encargado de integridad y ética */
         Mail::to('integridad_etica.ssi@redsalud.gob.cl')->send(new Confirmation($complaint));
 
-        return redirect()->route('rrhh.integrity.complaints.mail', [$complaint]);
+        return redirect()->route('integrity.complaints.mail', [$complaint]);
     }
 
     /**

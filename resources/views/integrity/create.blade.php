@@ -27,7 +27,7 @@
 
 <h4>Ingreso de nueva Consulta/Denuncia/Riesgo Ético</h4>
 
-<form method="POST" class="form-horizontal" action="{{ route('rrhh.integrity.complaints.store') }}" enctype="multipart/form-data">
+<form method="POST" class="form-horizontal" action="{{ route('integrity.complaints.store') }}" enctype="multipart/form-data">
     @csrf
 
     <fieldset class="form-group">
