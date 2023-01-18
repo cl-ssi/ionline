@@ -49,6 +49,14 @@
 
 <table class="table table-sm table-bordered">
 	<tr>
+        <td>
+            <a href="{{ route('requirements.inbox',$user) }}?unreadedEvents=true" class="btn btn-sm btn-success">
+                <i class="fas fa-eye"></i> <span class='badge badge-secondary'></span>
+            </a>
+            <a href="{{ route('requirements.inbox',$user) }}?unreadedEvents=false" class="btn btn-sm btn-light">
+                <i class="fas fa-eye"></i> <span class='badge badge-secondary'></span>
+            </a>
+        </td>
 		<td class="alert-light text-center">Recibidos ({{ $counters['created'] }})</td>
         <td class="alert-warning text-center">Respondidos ({{ $counters['replyed'] }})</td>
         <td class="alert-primary text-center">Derivados ({{ $counters['derived'] }})</td>

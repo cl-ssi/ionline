@@ -86,10 +86,23 @@ class RequirementController extends Controller
             $requirements_query->whereDoesntHave('archived', function ($query) use ($user,$auth_user) {
                 $query->whereIn('user_id', [$user->id,$auth_user->id]);
             });
-        }
+        }        
+
         $requirements = $requirements_query->latest()->paginate(100)->withQueryString();
         /** Fin de la query de requerimientos */
 
+        //18/01/2023: directora solicita filtro para solo ver los requerimientos no aperturados
+        if($request->has('unreadedEvents'))
+        {
+            if($request['unreadedEvents']=="true"){
+                foreach($requirements as $key => $requirement){
+                    if(!$requirement->unreadedEvents){
+                        $requirements->forget($key);
+                    }
+                }
+            }
+        }
+        
 
         /* Query para los contadores */
         $counters_query = Requirement::query();
