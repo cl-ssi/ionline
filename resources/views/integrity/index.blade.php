@@ -23,14 +23,14 @@
     <tbody>
         @foreach($complaints as $complaint)
         <tr>
-            <td><a href="{{ route('rrhh.integrity.complaints.show',$complaint->id) }}" class="btn btn-primary btn-sm">{{ $complaint->id }}</a></td>
+            <td><a href="{{ route('integrity.complaints.show',$complaint->id) }}" class="btn btn-primary btn-sm">{{ $complaint->id }}</a></td>
             <td nowrap>{{ $complaint->created_at }}</td>
             <td>{{ $complaint->type }}</td>
             <td>{{ $complaint->value->name }} {{ $complaint->other_value }} / {{ $complaint->principle->name }}</td>
             <td>{{ $complaint->user_id }}</td>
             <td>{{ $complaint->content }}
                 @if($complaint->file)
-                    <a href="{{ route('rrhh.integrity.complaints.download', $complaint->id) }}"> <i class="fas fa-paperclip"></i></a>
+                    <a href="{{ route('integrity.complaints.download', $complaint->id) }}"> <i class="fas fa-paperclip"></i></a>
                 @endif
             </td>
         </tr>

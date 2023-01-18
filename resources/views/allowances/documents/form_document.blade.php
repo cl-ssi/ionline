@@ -124,6 +124,13 @@
           clear: both;
         }
 
+        .aprove {
+            border: 1px solid #cccccc;
+            padding: 0 4px 0 4px;
+            font-size: 90%;
+            width: 230;
+        }
+
         @media all {
           .page-break {
             display: none;
@@ -151,7 +158,6 @@
                 <strong>Iquique, {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</strong>
             </div>
         </div>
-
 
         <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
 
@@ -338,6 +344,21 @@
             EL ANTICIPO DE VIATICO DEBERA REINTEGRARSE DENTRO DE LAS 48 HORAS DE REALIZADO EL COMETIDO. 
         </div>
     </div>
+
+    <br>
+
+    <!-- <div class="aprove">
+        <em>Aprobado digitalmentes el {{ now() }} por:</em><br>
+        <span style="font-size: 110%;">
+            <b>{{ auth()->user()->fullName }}</b> <br>
+        </span>
+        <span style="font-size: 100%;">
+            {{ optional(auth()->user()->organizationalUnit)->name }} <br>
+        </span>
+        {{ optional(auth()->user()->organizationalUnit)->establishment->name }}<br>
+    </div> -->
+
+
 </body>
 
 </html>

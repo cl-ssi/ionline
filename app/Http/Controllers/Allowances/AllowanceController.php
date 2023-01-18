@@ -128,6 +128,12 @@ class AllowanceController extends Controller
                 $allowance_sing_sirh->organizational_unit_id = 40;
                 $allowance_sing_sirh->save();
 
+                //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
+                $notificationSirhPermissionUsers = User::permission('Allowances: sirh')->get();
+                foreach($notificationSirhPermissionUsers as $notificationSirhPermissionUser){
+                    $notificationSirhPermissionUser->notify(new NewAllowance($allowance));
+                }
+
                 //CONSULTO SI EL VIATICO ES PARA UNA AUTORIDAD
                 $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $allowance->userAllowance->id);
 
@@ -231,10 +237,6 @@ class AllowanceController extends Controller
                 $allowance_sing_finance->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
                 $allowance_sing_finance->allowance_id = $allowance->id;
                 $allowance_sing_finance->save();
-
-                //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-                $notification = Authority::getAuthorityFromDate($allowance->allowanceSigns->first()->organizational_unit_id, Carbon::now(), 'manager');
-                $notification->user->notify(new NewAllowance($allowance));
 
                 session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$allowance->id);
                 return redirect()->route('allowances.index');

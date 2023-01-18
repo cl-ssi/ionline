@@ -481,8 +481,8 @@
                 @endcan
 
                 @can('Integrity: manage complaints')
-                <li class="nav-item {{ active('rrhh.integrity.complaints.*') }}">
-                    <a class="nav-link" href="{{ route('rrhh.integrity.complaints.index') }}">
+                <li class="nav-item {{ active('integrity.complaints.*') }}">
+                    <a class="nav-link" href="{{ route('integrity.complaints.index') }}">
                     <i class="fas fa-balance-scale"></i> Integridad</a>
                 </li>
                 @endcan
