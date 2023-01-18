@@ -215,7 +215,7 @@ use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Livewire\Inventory\InventoryManager;
 use App\Http\Livewire\Inventory\InventoryManageUsers;
-use App\Models\Parameters\EstablishmentType;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1011,7 +1011,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/{establishment}', [EstablishmentController::class,'update'])->name('update');
     });
 
-    Route::prefix('establishment_types')->as('establishment_types.')->group(function () {
+    Route::prefix('establishment-types')->as('establishment_types.')->group(function () {
         Route::get('/', [EstablishmentTypeController::class,'index'])->name('index');
         Route::get('/create', [EstablishmentTypeController::class, 'create'])->name('create');
         Route::post('/store', [EstablishmentTypeController::class, 'store'])->name('store');
