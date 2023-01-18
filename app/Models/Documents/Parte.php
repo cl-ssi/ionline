@@ -90,6 +90,10 @@ class Parte extends Model
         if($request->input('subject') != "") {
             $query->where('subject', 'LIKE', '%'.$request->input('subject').'%' );
         }
+        
+        if($request->input('without_sgr') != "") {
+            $query->whereDoesntHave('requirements');
+        }
 
         return $query;
     }
