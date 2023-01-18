@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Formulario de Requerimientos: Abastecimiento</title>
+    <title>Viático</title>
 
     <meta name="description" content="">
     <meta name="author" content="Servicio de Salud Iquique">
@@ -179,7 +179,7 @@
 
             <tr>
                 <th rowspan="2">Sección II</th>
-                <th colspan="2">Cargo</th>
+                <th colspan="2">Cargo / Función</th>
                 <th colspan="2">Gr. Cat. horas</th>
             </tr>
             <tr align="center">
@@ -227,12 +227,12 @@
 
             <tr>
                 <th rowspan="2" style="width: 20%">Sección VI</th>
-                <th>Desde</th>
-                <th>Hasta</th>
+                <th colspan="2">Desde</th>
+                <th colspan="2">Hasta</th>
             </tr>
             <tr align="center">
-                <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                <td>{{ $allowance->to->format('d-m-Y') }}</td>
+                <td colspan="2">{{ $allowance->from->format('d-m-Y') }}</td>
+                <td colspan="2">{{ $allowance->to->format('d-m-Y') }}</td>
             </tr>
         </table>
 

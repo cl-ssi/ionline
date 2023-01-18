@@ -44,7 +44,7 @@
                     <span style="color: green;">
                         <i class="fas fa-check-circle fa-2x"></i>
                     </span>
-                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">Ir</a>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_objectives', $jobPositionProfile) }}">Ir</a>
                 @else
                     <i class="fas fa-clock fa-2x"></i>
                 @endif

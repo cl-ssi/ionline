@@ -132,7 +132,7 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile->save();
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado Exitosamente El Perfil de Cargo');
-        return redirect()->route('job_position_profile.edit', $jobPositionProfile);
+        return redirect()->route('job_position_profile.edit_formal_requirements', $jobPositionProfile);
     }
 
     public function update_objectives(Request $request, JobPositionProfile $jobPositionProfile)
