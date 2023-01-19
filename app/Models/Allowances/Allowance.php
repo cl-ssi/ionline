@@ -99,6 +99,9 @@ class Allowance extends Model implements Auditable
             case 'fee':
                 return 'Honorarios';
                 break;
+            case 'holder':
+                return 'Titular';
+                break;
             case '':
                 return '';
                 break;
