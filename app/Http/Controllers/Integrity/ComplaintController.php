@@ -61,7 +61,7 @@ class ComplaintController extends Controller
         $complaint = new Complaint($request->All());
         //$complaint->user_id = Auth::id();
         if($request->hasFile('file'))
-            $complaint->file = $request->file('file')->store('integrity')->disk('gcs');
+            $complaint->file = $request->file('file')->store('ionline/integrity', ['disk' => 'gcs']);
         $complaint->save();
 
         /* Enviar email al usuario sólo si es un mail bien formateado válido */
