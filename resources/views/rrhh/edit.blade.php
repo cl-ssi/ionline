@@ -57,7 +57,7 @@
     </div>
     <div class="form-row">
         <fieldset class="form-group col-md-12">
-            <label for="forOrganizationalUnit">Unidad Organizacional</label>
+            <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
                     'establishment_id' => $user->organizationalUnit->establishment->id, 
                     'organizational_unit_id' => $user->organizationalUnit->id,
