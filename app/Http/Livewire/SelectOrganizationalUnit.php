@@ -21,17 +21,12 @@ class SelectOrganizationalUnit extends Component
      * @livewire('select-organizational-unit', ['establishment_id' => '38', 'organizational_unit_id' => '20'])
      */
 
-    // public $ouRoot;
-    // public $ouRoots;
-    public $establishment_id;
     public $selected_id = 'organizational_unit_id';
-
+    public $establishment_id;
     public $organizational_unit_id;
-
-    public $establishments;
     public $filter;
 
-    public $tree;
+    public $establishments;
 
     public $options;
     public $ous;
@@ -47,12 +42,11 @@ class SelectOrganizationalUnit extends Component
     }
 
     /**
-    * Load OUS from estab
+    * Load OUS from establishment_id
     */
     public function loadOus()
     {
         $this->options = array();
-        
 
         $ous = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
             ->where('establishment_id',$this->establishment_id)
@@ -61,7 +55,6 @@ class SelectOrganizationalUnit extends Component
             ->toArray();
         
         $this->buildTree($ous, 'father_id', 'id');
-        // app('debugbar')->log($this->establishment_id);
     }
 
     public function render()
@@ -72,12 +65,16 @@ class SelectOrganizationalUnit extends Component
         else {
             $options = $this->options;
         }
+
+        /** Vacía el array ou antes de formar una con pares de valores id,name */
+        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
         $this->ous = array();
+
         foreach($options as $id => $option) {
             $this->ous[] = array('id'=> $id, 'name' => $option);
         }
 
-        app('debugbar')->log($this->ous);
+        // app('debugbar')->log($this->ous);
 
         return view('livewire.select-organizational-unit');
     }

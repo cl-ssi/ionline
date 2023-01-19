@@ -19,5 +19,5 @@
         @endforeach
     </select>
     
-    <input type="text" class="form-control" placeholder="Filtrar por nombre" wire:model.lazy="filter">
+    <input type="text" class="form-control" placeholder="Filtrar por nombre" wire:model.debounce400ms="filter">
 </div>
