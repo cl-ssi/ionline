@@ -49,10 +49,10 @@ class InventoryIndex extends Component
         $this->getLocations();
         $this->places = collect([]);
 
-        $param_ou_inventory_id = Parameter::get('inventory','ou_inventory_id');
-        if($param_ou_inventory_id)
+        $manager_inventory_id = Parameter::get('inventory','Encargado de inventario');
+        if($manager_inventory_id)
         {
-            $this->managerInventory = Authority::getAuthorityFromDate($param_ou_inventory_id, now(), 'manager')->user ?? null;
+            $this->managerInventory = User::find($manager_inventory_id);
         }
     }
 
