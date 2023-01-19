@@ -72,7 +72,7 @@ class ComplaintController extends Controller
         /* Correo al encargado de integridad y ética */
         $emailParameter = Parameter::get('integrity','email');
         if($emailParameter) {
-            Mail::to($emailParameter->value)->send(new Confirmation($complaint));
+            Mail::to($emailParameter)->send(new Confirmation($complaint));
         }
 
         return view('integrity.mails.confirmation')->withComplaint($complaint);
