@@ -20,6 +20,8 @@
             <th>II. REQUISITOS FORMALES</th>
             <th>III. PROPÓSITOS DEL CARGO</th>
             <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
+            <th>V. RESPONSABILIDAD DEL CARGO</th>
+            <th>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</th>
         </tr>
     </thead>
     <tbody>
@@ -51,7 +53,14 @@
                 @endif
             </td>
             <td>
-                
+                @if($jobPositionProfile->working_team)
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_organization', $jobPositionProfile) }}">Ir</a>
+                @else
+                    <i class="fas fa-clock fa-2x"></i>
+                @endif
             </td>
         </tr>
     </tbody>

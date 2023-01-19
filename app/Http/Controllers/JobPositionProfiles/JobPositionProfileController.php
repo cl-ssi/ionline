@@ -110,7 +110,8 @@ class JobPositionProfileController extends Controller
 
     public function edit_organization(JobPositionProfile $jobPositionProfile)
     {   
-        return view('job_position_profile.edit_organization', compact('jobPositionProfile'));
+        $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
+        return view('job_position_profile.edit_organization', compact('jobPositionProfile', 'tree'));
     }
 
     /**
@@ -152,6 +153,15 @@ class JobPositionProfileController extends Controller
         
         session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente los objetivos Perfil de Cargo');
         return redirect()->route('job_position_profile.edit_objectives', $jobPositionProfile);
+    }
+
+    public function update_organization(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $jobPositionProfile->fill($request->all());
+        $jobPositionProfile->save();
+        
+        session()->flash('success', 'Estimado Usuario, se ha actualizado exitosamente la organización y contexto del cargo');
+        return redirect()->route('job_position_profile.edit_organization', $jobPositionProfile);
     }
 
     /**
