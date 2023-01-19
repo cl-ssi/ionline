@@ -23,6 +23,8 @@ class Parameter extends Model
 
     public static function get($module, $parameter)
     {
-        return Parameter::where('module', $module)->where('parameter', $parameter)->first();
+        $parameter = Parameter::where('module', $module)->where('parameter', $parameter)->first();
+        if(isset($parameter)) return $parameter->value;
+        else return null;
     }
 }

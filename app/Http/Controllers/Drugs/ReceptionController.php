@@ -61,8 +61,8 @@ class ReceptionController extends Controller
         $reception = new Reception($request->validated());
         $reception->user()->associate(Auth::user());
         $reception->date = now();
-        $reception->manager_id = Parameter::get('drugs','Jefe')->value;
-        $reception->lawyer_id  = Parameter::get('drugs','Mandatado')->value;
+        $reception->manager_id = Parameter::get('drugs','Jefe');
+        $reception->lawyer_id  = Parameter::get('drugs','Mandatado');
         $reception->save();
 
         return redirect()->route('drugs.receptions.show', $reception);
@@ -78,12 +78,12 @@ class ReceptionController extends Controller
     {
         $substances = Substance::where('presumed', true)->orderBy('name')->get();
         $trashedDestructions = Destruction::onlyTrashed()->where('reception_id', $reception->id)->get();
-        $manager = User::Find(Parameter::get('drugs','Jefe')->value)->FullName;
-        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')->value))->FullName;
-        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')->value))->FullName;
+        $manager = User::Find(Parameter::get('drugs','Jefe'))->FullName;
+        $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->FullName;
+        $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->FullName;
 
         //dd($trashedDestructions);
-        //$observer = User::Find(Parameter::get('drugs','Mandatado')->value)->FullName;
+        //$observer = User::Find(Parameter::get('drugs','Mandatado'))->FullName;
         return view('drugs.receptions.show', compact('reception', 'substances', 'trashedDestructions','manager','observer','lawyer_observer'));
     }
 
@@ -126,7 +126,7 @@ class ReceptionController extends Controller
         /* Borrar poque no se ocupa parece XD */
         $substances = ReceptionItem::Where('reception_id',1)->distinct()->get(['substance_id']);
 
-        $mandato = Parameter::get('drugs','MandatadoResolucion')->value;
+        $mandato = Parameter::get('drugs','MandatadoResolucion');
 
         //return view('drugs.receptions.doc_fiscal', compact('reception', 'substances', 'mandato'));
     }
@@ -226,7 +226,7 @@ class ReceptionController extends Controller
         $letra = $letras[$clave];
         /* Fin del calculo de la letra del item */
 
-        $manager_position = Parameter::get('drugs','Jefe')->value;
+        $manager_position = Parameter::get('drugs','Jefe');
         return view('drugs.receptions.protocols.show', compact('protocol','letra','manager_position'));
     }
 

@@ -18,6 +18,8 @@ class SingleManager extends Component
      * 
      * Type puede ser de tipo User o Value
      *
+     * Obtener el valor de un parametro
+     * $value = Parameter::get('module','parameter');
      */
 
     public $module;

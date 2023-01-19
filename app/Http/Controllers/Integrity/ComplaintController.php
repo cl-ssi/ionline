@@ -70,7 +70,7 @@ class ComplaintController extends Controller
         }
 
         /* Correo al encargado de integridad y ética */
-        $emailParameter = Parameter::where('module','integrity')->where('parameter','email')->first();
+        $emailParameter = Parameter::get('integrity','email');
         if($emailParameter) {
             Mail::to($emailParameter->value)->send(new Confirmation($complaint));
         }
