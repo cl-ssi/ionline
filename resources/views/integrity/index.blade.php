@@ -8,6 +8,12 @@
 
 <h3>Administrador: Registro de ingresos</h3>
 
+@livewire('parameters.parameter.single-manager',[
+    'module' => 'integrity',
+    'parameterName' => 'email',
+    'type' => 'value'
+])
+
 <table class="table">
     <thead>
         <tr>
@@ -37,5 +43,7 @@
         @endforeach
     </tbody>
 </table>
+
+{{ $complaints->links() }}
 
 @endsection
