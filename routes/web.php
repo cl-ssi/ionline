@@ -690,7 +690,7 @@ Route::post('assigment.import', [AssigmentController::class,'import'])->name('as
 
 Route::prefix('integrity')->as('integrity.')->group(function(){
     Route::get('complaints/download/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'download'])->name('complaints.download')->middleware('auth');
-    Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail')->middleware('auth');
+    Route::get('complaints/mail/{complaint}', [App\Http\Controllers\Integrity\ComplaintController::class,'mail'])->name('complaints.mail');
     Route::resource('complaints', App\Http\Controllers\Integrity\ComplaintController::class);
 });
 

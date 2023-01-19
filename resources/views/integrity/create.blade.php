@@ -31,7 +31,7 @@
     @csrf
 
     <fieldset class="form-group">
-        <label for="for"><strong>Seleccione el tipo</strong></label><br>
+        <label for="for"><strong>Seleccione el tipo*</strong></label><br>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="forConsulta" value="Consulta" required>
             <label class="form-check-label" for="forConsulta">Consulta</label>
@@ -49,7 +49,7 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for"><strong>Identifique el valor que más se ve representado con su Consulta/Denuncia/Riesgo Ético</strong></label><br>
+        <label for="for"><strong>Identifique el valor que más se ve representado con su Consulta/Denuncia/Riesgo Ético*</strong></label><br>
         @foreach($values as $value)
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="complaint_values_id" id="for{{ $value->name }}" value="{{ $value->id }}" required>
@@ -64,7 +64,7 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for"><strong>Clasifique el Principio de la función pública asociado a su Consulta/Denuncia/Riesgo Ético</strong></label><br>
+        <label for="for"><strong>Clasifique el Principio de la función pública asociado a su Consulta/Denuncia/Riesgo Ético*</strong></label><br>
         <div class="row">
             @foreach($principles as $principle)
             <div class="col-3">
@@ -78,7 +78,7 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="forComplaint"><strong>Describa en forma clara y objetiva su Consulta/Denuncia/Riesgo Ético</strong></label>
+        <label for="forComplaint"><strong>Describa en forma clara y objetiva su Consulta/Denuncia/Riesgo Ético*</strong></label>
         <textarea rows="5" class="form-control" id="forComplaint" name="content" required></textarea>
     </fieldset>
 
@@ -96,7 +96,7 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for"><strong>¿Conoce el <a target="_blank" href="http://ssiq.redsalud.gob.cl/wrdprss_minsal/wp-content/uploads/2018/06/1-REX-2534_31082017-APRUEBA-CODIGO-DE-ETICA-DEL-SSI.pdf">código de ética</a> de la institución?</strong></label><br>
+        <label for="for"><strong>¿Conoce el <a target="_blank" href="http://ssiq.redsalud.gob.cl/wrdprss_minsal/wp-content/uploads/2018/06/1-REX-2534_31082017-APRUEBA-CODIGO-DE-ETICA-DEL-SSI.pdf">código de ética</a> de la institución?*</strong></label><br>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="know_code" id="forSi" value="1" required>
             <label class="form-check-label" for="forSi">Si</label>
@@ -110,7 +110,7 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for"><strong>¿Desea usted mantener su identitdad en reserva?</strong><br>
+        <label for="for"><strong>¿Desea usted mantener su identitdad en reserva?*</strong><br>
             Sólo será de conocimiento de coordinador de integridad, y sólo podrá ser utilizada para fines estadísticos, sin revelear datos personales o sensibles.</label><br>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="identify" id="identifySi" value="1" required>
