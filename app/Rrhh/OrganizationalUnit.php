@@ -69,6 +69,14 @@ class OrganizationalUnit extends Model implements Auditable
       return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
+    public function scopeSearch($query, $name)
+    {
+        if($name != "")
+        {
+            return $query->where('name', 'LIKE', '%'.$name.'%');
+        }
+    }
+
     public function getInitialsAttribute()
     {
         $words = explode(' ', $this->name);

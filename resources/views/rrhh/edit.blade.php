@@ -54,43 +54,15 @@
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." 
                 name="position"	value="{{ $user->position }}">
         </fieldset>
-
-        <fieldset class="form-group col-md-8">
-            <label for="forOrganizationalUnit">Unidad Organizacional - {{ $user->organizational_unit_id }}</label>
-            <!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
-                <select class="form-control selectpicker" data-live-search="true" id="forOrganizationalUnit" name="organizationalunit" required data-size="5">
-                    <option value=""></option>
-            @foreach($ouRoots as $ouRoot)
-                <option value="{{ $ouRoot->id }}" {{ ($user->organizationalunit == $ouRoot)?'selected':''}}>
-                {{ $ouRoot->name }} ({{$ouRoot->establishment->name}})
-                </option>
-                @foreach($ouRoot->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}" {{ (optional($user->organizationalUnit)->id == $child_level_1->id)?'selected':''}}>
-                    &nbsp;&nbsp;&nbsp;
-                    {{ $child_level_1->name }} ({{ $child_level_1->establishment->name }})
-                    </option>
-                    @foreach($child_level_1->childs as $child_level_2)
-                        <option value="{{ $child_level_2->id }}" {{ (optional($user->organizationalUnit)->id == $child_level_2->id)?'selected':''}}>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ $child_level_2->name }} ({{ $child_level_2->establishment->name }})
-                        </option>
-                        @foreach($child_level_2->childs as $child_level_3)
-                            <option value="{{ $child_level_3->id }}" {{ (optional($user->organizationalUnit)->id == $child_level_3->id)?'selected':''}}>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                {{ $child_level_3->name }} ({{ $child_level_3->establishment->name }})
-                            </option>
-                            @foreach($child_level_3->childs as $child_level_4)
-                            <option value="{{ $child_level_4->id }}" {{ (optional($user->organizationalUnit)->id == $child_level_4->id)?'selected':''}}>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                {{ $child_level_4->name }} ({{ $child_level_4->establishment->name }})
-                            </option>
-                            @endforeach
-                        @endforeach
-                    @endforeach
-                @endforeach
-            @endforeach
-
-            </select>
+    </div>
+    <div class="form-row">
+        <fieldset class="form-group col-md-12">
+            <label for="forOrganizationalUnit">Unidad Organizacional</label>
+                @livewire('select-organizational-unit', [
+                    'establishment_id' => $user->organizationalUnit->establishment->id, 
+                    'organizational_unit_id' => $user->organizationalUnit->id,
+                    'select_id' => 'organizationalunit'
+                ])
         </fieldset>
     </div>
 
