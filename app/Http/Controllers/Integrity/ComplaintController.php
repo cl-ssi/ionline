@@ -60,7 +60,7 @@ class ComplaintController extends Controller
         $complaint = new Complaint($request->All());
         //$complaint->user_id = Auth::id();
         if($request->hasFile('file'))
-            $complaint->file = $request->file('file')->store('integrity');
+            $complaint->file = $request->file('file')->store('integrity')->disk('gcs');
         $complaint->save();
 
         //Auth::user()
@@ -92,7 +92,7 @@ class ComplaintController extends Controller
     public function download(Complaint $complaint)
     {
         /* TODO: #91 Mover a google storage */
-        return Storage::download($complaint->file);
+        return Storage::disk('gcs')->download($complaint->file);
     }
 
     /**
