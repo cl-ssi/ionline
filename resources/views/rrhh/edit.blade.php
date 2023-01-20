@@ -58,8 +58,8 @@
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [
-                    'establishment_id' => $user->organizationalUnit->establishment->id, 
-                    'organizational_unit_id' => $user->organizationalUnit->id,
+                    'establishment_id' => optional($user->organizationalUnit)->establishment_id, 
+                    'organizational_unit_id' => optional($user->organizationalUnit)->id,
                     'select_id' => 'organizationalunit'
                 ])
         </fieldset>
