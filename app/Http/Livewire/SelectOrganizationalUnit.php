@@ -53,14 +53,20 @@ class SelectOrganizationalUnit extends Component
             // ->orderBy('name')
             ->get()
             ->toArray();
-        
-        $this->buildTree($ous, 'father_id', 'id');
+        if(!empty($ous)) {
+            $this->buildTree($ous, 'father_id', 'id');
+        }
     }
 
     public function render()
     {
         if($this->filter) {
-            $options = array_filter($this->options, fn($haystack) => str_contains($haystack, $this->filter));
+            $options = array_filter(
+                $this->options, 
+                fn($haystack) => str_contains(
+                    strtolower($haystack), $this->filter
+                )
+            );
         }
         else {
             $options = $this->options;
