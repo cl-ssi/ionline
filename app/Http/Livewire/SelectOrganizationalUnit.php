@@ -64,7 +64,7 @@ class SelectOrganizationalUnit extends Component
             $options = array_filter(
                 $this->options, 
                 fn($haystack) => str_contains(
-                    strtolower($haystack), $this->filter
+                    strtolower($haystack), strtolower($this->filter)
                 )
             );
         }
