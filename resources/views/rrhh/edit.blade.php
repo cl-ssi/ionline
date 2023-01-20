@@ -38,17 +38,17 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-4">
-            <label for="forPosition">Cargo/Función</label>
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." 
                 name="position"	value="{{ $user->position }}">
         </fieldset>
 
-        <div class="form-group col">
+        <div class="form-group col-12 col-md-4">
             <label for="email">Correo</label>
             <input type="email" class="form-control" name="email" value="{{$user->email}}">
         </div>
-        <div class="form-group col">
+        <div class="form-group col-12 col-md-4">
             <label for="email">Correo Personal</label>
             <input type="email" class="form-control" name="email_personal" value="{{$user->email_personal}}">
         </div>

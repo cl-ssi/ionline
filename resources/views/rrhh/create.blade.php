@@ -46,17 +46,17 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-4">
-            <label for="forPosition">Cargo/Función</label>
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="formGroupEmailInput">Email*</label>
             <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email" name="email" required="required">
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="formGroupEmailInput">Email Personal</label>
             <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email Personal" name="email_personal" readonly>
         </fieldset>
