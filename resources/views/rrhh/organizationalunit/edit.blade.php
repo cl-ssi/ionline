@@ -7,15 +7,8 @@
 <h3>Editar Unidad Organizacional del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.update',$organizationalUnit->id) }}">
-    {{ method_field('PUT') }} {{ csrf_field() }}
-
-    <div class="form-row">
-        <fieldset class="form-group col-4">
-            <label for="forEstablishment">Id Establecimiento</label>
-            <input type="text" class="form-control" id="forEstablishment"
-                name="establishment_id" required="required" value="{{ $organizationalUnit->establishment_id }}" readonly>
-        </fieldset>
-    </div>
+    {{ method_field('PUT') }}
+    {{ csrf_field() }}
 
     @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
     <div class="form-row">
@@ -26,20 +19,15 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-9">
+        <fieldset class="form-group col-12">
             <label for="forFather">Depende de</label>
-            <select class="custom-select" id="forFather" name="father">
-                @foreach($organizationalUnits as $ou)
-                    <option value="{{ $ou->id }}" @if ($organizationalUnit->father == $ou) selected="selected" @endif>{{ $ou->name }}</option>
-                @endforeach
-            </select>
+            @livewire('select-organizational-unit', [
+                'establishment_id' => optional($organizationalUnit->father)->establishment_id,
+                'organizational_unit_id' => optional($organizationalUnit->father)->id,
+                'readonlyEstablishment' => true,
+            ])
         </fieldset>
 
-        <fieldset class="form-group col-3">
-            <label for="forLevel">Nivel</label>
-            <input type="number" class="form-control" id="forLevel"
-                name="level" required="required" value="{{ $organizationalUnit->level }}">
-        </fieldset>
     </div>
     @else
         <div class="form-row">
@@ -52,19 +40,11 @@
         <div class="form-row">
             <fieldset class="form-group col-9">
                 <label for="forFather">Depende de</label>
-                <select class="custom-select" disabled>
-                    @foreach($organizationalUnits as $ou)
-                        <option value="{{ $ou->id }}" @if ($organizationalUnit->father == $ou) selected="selected" @endif>{{ $ou->name }}</option>
-                    @endforeach
-                </select>
-            </fieldset>
-
-            <input type="hidden" class="form-control" id="forfather" name="father" value="{{ $organizationalUnit->father->id }}">
-
-            <fieldset class="form-group col-3">
-                <label for="forLevel">Nivel</label>
-                <input type="number" class="form-control" id="forLevel"
-                    name="level" required="required" value="{{ $organizationalUnit->level }}" readonly>
+                @livewire('select-organizational-unit', [
+                    'establishment_id' => optional($organizationalUnit->father)->establishment_id,
+                    'organizational_unit_id' => optional($organizationalUnit->father)->id,
+                    'readonlyEstablishment' => true,
+                ])
             </fieldset>
         </div>
     @endcan

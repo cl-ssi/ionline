@@ -4,18 +4,10 @@
 
 @section('content')
 
-<h3>Crear nueva unidad organizacional del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
+<h3>Crear nueva unidad organizacional</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.store') }}">
     {{ csrf_field() }}
-
-    <div class="form-row">
-        <fieldset class="form-group col-4">
-            <label for="forEstablishment">Id Establecimiento</label>
-            <input type="text" class="form-control" id="forEstablishment"
-                name="establishment_id" required="required" readonly value="{{ Auth::user()->organizationalUnit->establishment->id}}">
-        </fieldset>
-    </div>
 
     <div class="form-row">
         <fieldset class="form-group col-12">
@@ -26,15 +18,11 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-9">
+        <fieldset class="form-group col-12">
             <label for="forFather">Depende de</label>
-            @livewire('select-organizational-unit', ['establishment_id' => auth()->user()->organizationalUnit->establishment_id , 'selected_id' => 'father'])
-        </fieldset>
-
-        <fieldset class="form-group col-3">
-            <label for="forLevel">Nivel</label>
-            <input type="number" class="form-control" id="forLevel"
-                name="level" required="required">
+            @livewire('select-organizational-unit', [
+                'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+            ])
         </fieldset>
     </div>
 
@@ -56,10 +44,6 @@
             <input type="number" class="form-control" id="forsirh_cost_center"
                 placeholder="Código SIRH de la unidad organizacional" name="sirh_cost_center">
         </fieldset>
-    </div>
-
-    <div class="row">
-
     </div>
 
     <button type="submit" class="btn btn-primary">Crear</button>

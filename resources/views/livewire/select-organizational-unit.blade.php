@@ -1,9 +1,11 @@
 <div class="input-group mb-3">
     <select class="custom-select" 
         id="establishment_id" 
+        name="establishment_id" 
         wire:model="establishment_id" 
-        wire:change="loadOus"
-        required>
+        wire:change="loadOus" 
+        required
+       {{ $readonlyEstablishment ? 'disabled' : '' }}>
         <option value="0"></option>
         @foreach($establishments->sortBy('name') as $establishment)
             <option value="{{ $establishment->id }}"> {{ $establishment->name }}</option>
@@ -24,7 +26,7 @@
     </select>
     
     <input type="text" 
-        class="form-control" 
+        class="form-control"
         placeholder="Filtrar listado de unidades" 
         wire:model.debounce400ms="filter">
 </div>

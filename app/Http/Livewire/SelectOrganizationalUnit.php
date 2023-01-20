@@ -8,7 +8,7 @@ use App\Models\Establishment;
 
 class SelectOrganizationalUnit extends Component
 {
-    /** Uso: 
+    /** Uso:
      * @livewire('select-organizational-unit')
      * 
      * Se puede definir el nombre del campo que almacenará el id de unidad organizacional
@@ -19,11 +19,19 @@ class SelectOrganizationalUnit extends Component
      *
      * Si necesitas que aparezca precargada la unidad organizacional
      * @livewire('select-organizational-unit', ['establishment_id' => '38', 'organizational_unit_id' => '20'])
+     * 
+     * Todas las opciones:
+     * 
+     * 'organizational_unit_id' => '20',
+     * 'establishment_id' => '38',
+     * 'selected_id' => 'ou_id',
+     * 'readonlyEstablishment' => true,
      */
 
     public $selected_id = 'organizational_unit_id';
     public $establishment_id;
     public $organizational_unit_id;
+    public $readonlyEstablishment = false;
     public $filter;
 
     public $establishments;
@@ -39,6 +47,8 @@ class SelectOrganizationalUnit extends Component
         /* TODO: Esperando que la tabla de establecimientos se pueda filtrar por establecimientos dependientes del ss */
         $this->establishments = Establishment::whereIn('id',[1,38,41])->get();
         $this->loadOus();
+
+        // app('debugbar')->log($this->readonlyEstablishment);
     }
 
     /**

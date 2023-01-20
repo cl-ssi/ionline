@@ -19,7 +19,13 @@ class OrganizationalUnit extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'name','level', 'organizational_unit_id','establishment_id','sirh_function','sirh_ou_id','sirh_cost_center'
+        'name',
+        'level',
+        'organizational_unit_id',
+        'establishment_id',
+        'sirh_function',
+        'sirh_ou_id',
+        'sirh_cost_center'
     ];
 
     /**
