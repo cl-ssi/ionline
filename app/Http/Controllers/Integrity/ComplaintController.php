@@ -12,6 +12,9 @@ use App\Models\Integrity\ComplaintPrinciple;
 use App\Models\Integrity\Complaint;
 use App\Mail\Confirmation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
+
 
 class ComplaintController extends Controller
 {
@@ -58,6 +61,16 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'user_id' => ['required', 'exists:users,id'],
+        ];
+        
+        $messages = [
+            'user_id.exists' => 'El run :input digitado no es un funcionario válido, recordar que es sin puntos y sin digito verificador.',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules,$messages);
+        $validator->validate();
         $complaint = new Complaint($request->All());
         //$complaint->user_id = Auth::id();
         if($request->hasFile('file'))
