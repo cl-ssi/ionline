@@ -18,10 +18,16 @@
             <div class="mt-3 col-12">
                 <button type="button" class="btn btn-success" wire:click="save()">Guardar</button>
                 <button type="button" class="btn btn-outline-secondary" wire:click="index()">Cancelar</button>
+                @if($category->requirements()->exists())
+                <button type="button" class="btn btn-danger" disabled>
+                    <i class="fas fa-trash" title="no se puede eliminar, tiene requerimientos asociados"></i>
+                </button>
+                @else
                 <button type="button" class="btn btn-danger" 
                     onclick="confirm('¿Está seguro que desea borrar la categoría {{ $category->name }} de su unidad organizacional?') || event.stopImmediatePropagation()" 
                     wire:click="delete({{$category}})"><i class="fas fa-trash"></i>
                 </button>
+                @endif
             </div>
         </div>
     @else
@@ -53,7 +59,9 @@
             <tbody>
                 @foreach($categories as $category)
                 <tr>
-                    <td>{{ $category->name }}</td>
+                    <td>
+                        <i class="fas fa-copyright"></i> {{ $category->name }}
+                    </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary" 
                             wire:click="form({{$category}})"><i class="fas fa-edit"></i></button>

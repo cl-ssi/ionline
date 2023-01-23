@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Rrhh\OrganizationalUnit;
+use App\Requirements\Requirement;
 
 class Category extends Model
 {
@@ -32,7 +33,7 @@ class Category extends Model
     }
     
     public function requirements() {
-        return $this->belongsToMany('App\Requirements\Category','req_requirements_categories');//->withPivot('requirement_id','category_id');
+        return $this->hasMany(Requirement::class);
     }
 
     public function scopeSearch($query, $request) {

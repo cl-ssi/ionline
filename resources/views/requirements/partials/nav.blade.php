@@ -28,7 +28,7 @@
     <li class="nav-item">
         <a class="nav-link {{active('requirements.categories')}}"
             href="{{ route('requirements.categories') }}">
-            <i class="fas fa-th-list"></i>
+            <i class="fas fa-copyright"></i>
             Categorías
         </a>
     </li>
