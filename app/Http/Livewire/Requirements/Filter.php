@@ -16,7 +16,7 @@ class Filter extends Component
 
     public $req_id;
     public $subject;
-    public $category;
+    public $label;
     public $user_involved;
     public $parte;
 
@@ -29,7 +29,7 @@ class Filter extends Component
     {
         $requirements = Requirement::query();
         $requirements
-            ->with('archived','categories','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived','labels','events','ccEvents','parte','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) {
                 $query->where('from_user_id', $this->user->id)->orWhere('to_user_id', $this->user->id);
             });
@@ -44,10 +44,10 @@ class Filter extends Component
             {
                 $requirements->where('subject','LIKE','%'.$this->subject.'%');
             }
-            if($this->category)
+            if($this->label)
             {
-                $requirements->whereHas('categories', function ($query) {
-                    $query->where('name','LIKE','%'.$this->category.'%');
+                $requirements->whereHas('labels', function ($query) {
+                    $query->where('name','LIKE','%'.$this->label.'%');
                 });
             }
             if($this->parte)

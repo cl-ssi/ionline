@@ -1,32 +1,14 @@
 <div>
-	<div class="dropdown">
-		<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-			Categorías
-		</button>
-
-		<div class="dropdown-menu">
-			@foreach(auth()->user()->reqCategories as $category)
-			<a class="dropdown-item" href="#" wire:click="setCategory({{$category->id}})">
-				<span 
-					class='badge badge-primary' 
-					style='background-color: #{{ $category->color }};'>
-					{{ $category->name }}
-				</span>
-				@if(in_array($category->id, $reqCategoriesArray))
-				<i class="fas fa-check"></i>
-				@endif
-			</a>
-			@endforeach
-		</div>
-
-		@foreach($reqCategories as $category)
-		<span 
-			class='badge badge-primary' 
-			style='background-color: #{{ $category->color }};'>
-			{{ $category->name }}
-		</span>
-		@endforeach
-
-	</div>
-
+    @if($requirement->firstEvent->to_ou_id == auth()->user()->organizationalUnit->id)
+        <select wire:model="category_id" wire:change="setCategory" class="form-control">
+            <option value="">Seleccione una categoría</option>
+            @foreach(auth()->user()->organizationalUnit->categories as $category)
+                <option value="{{ $category->id }}">{{ $category->name }}</option>
+            @endforeach
+        </select>
+    @elseif($requirement->category_id)
+        <span class='badge badge-dark'>
+            {{ optional($requirement->category)->name }}
+        </span>
+    @endif
 </div>

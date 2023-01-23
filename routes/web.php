@@ -1,220 +1,220 @@
 <?php
 
-use App\Http\Controllers\Requirements\LabelController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
 use App\User;
-use App\Http\Controllers\HomeController;
-
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\ClaveUnicaController;
-
-use App\Http\Controllers\TestController;
-
-use App\Http\Controllers\MunicipalityController;
-use App\Http\Controllers\DigitalSignatureController;
-use App\Http\Controllers\AssigmentController;
-use App\Http\Controllers\WebserviceController;
-
-use App\Http\Controllers\VaccinationController;
-
-use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Agreements\ProgramController;
-use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\WordTestController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-use App\Http\Controllers\Agreements\WordMandateAgreeController;
-use App\Http\Controllers\Agreements\ProgramResolutionController;
-use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
-use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
-
-use App\Http\Controllers\Drugs\CourtController;
-use App\Http\Controllers\Drugs\ReceptionController;
-use App\Http\Controllers\Drugs\SubstanceController;
-use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
-
-use App\Http\Controllers\Unspsc\ClassController;
-use App\Http\Controllers\Unspsc\FamilyController;
-use App\Http\Controllers\Unspsc\ProductController;
-use App\Http\Controllers\Unspsc\SegmentController;
 
 /** Un modelo? */
 use App\Pharmacies\Purchase;
-use App\Http\Controllers\Pharmacies\PharmacyController;
-use App\Http\Controllers\Pharmacies\PurchaseController;
-
-use App\Http\Controllers\Rrhh\RoleController;
-use App\Http\Controllers\Rrhh\UserController;
-use App\Http\Controllers\Rrhh\AuthorityController;
-use App\Http\Controllers\Rrhh\AttendanceController;
-use App\Http\Controllers\Rrhh\OrganizationalUnitController;
-
-use App\Http\Controllers\Suitability\TestsController;
-
-use App\Http\Controllers\Documents\ParteController;
-use App\Http\Controllers\Documents\DocumentController;
-use App\Http\Controllers\Documents\SignatureController;
-use App\Http\Controllers\Documents\ParteFileController;
-
-use App\Http\Livewire\TicResources;
-use App\Http\Controllers\Resources\WingleController;
-use App\Http\Controllers\Resources\MobileController;
-use App\Http\Controllers\Resources\PrinterController;
-use App\Http\Controllers\Resources\ComputerController;
-use App\Http\Controllers\Resources\TelephoneController;
-
-use App\Http\Controllers\Parameters\LogController;
-use App\Http\Controllers\Parameters\PhraseOfTheDayController;
-use App\Http\Controllers\Parameters\PurchaseMechanismController;
-use App\Http\Controllers\Parameters\UnitOfMeasurementController;
-use App\Http\Controllers\Parameters\CommuneController;
-use App\Http\Controllers\Parameters\LocationController;
-use App\Http\Controllers\Parameters\ParameterController;
-use App\Http\Controllers\Parameters\BudgetItemController;
-use App\Http\Controllers\Parameters\PermissionController;
-use App\Http\Controllers\Parameters\ProfessionController;
-use App\Http\Controllers\Parameters\PurchaseTypeController;
-use App\Http\Controllers\Parameters\PurchaseUnitController;
-use App\Http\Controllers\Parameters\EstablishmentController;
-use App\Http\Controllers\Parameters\EstablishmentTypeController;
-use App\Http\Controllers\Parameters\InventoryLabelController;
-
-use App\Http\Controllers\Suitability\OptionsController;
-use App\Http\Controllers\Suitability\ResultsController;
-use App\Http\Controllers\Suitability\SchoolsController;
-use App\Http\Controllers\Suitability\SuitabilityController;
-use App\Http\Controllers\Suitability\QuestionsController;
-use App\Http\Controllers\Suitability\CategoriesController;
-use App\Http\Controllers\Suitability\SchoolUserController;
-
-use App\Http\Controllers\Rem\UserRemController;
-use App\Http\Controllers\Rem\RemFileController;
-use App\Http\Controllers\Rem\RemPeriodController;
-use App\Http\Controllers\Rem\RemSerieController;
-use App\Http\Controllers\Rem\RemPeriodSerieController;
-
-
-use App\Http\Controllers\HealthPlan\HealthPlanController;
-use App\Http\Controllers\RNIdb\RNIdbController;
-
-use App\Http\Controllers\Indicators\ApsController;
-use App\Http\Controllers\Indicators\IaapsController;
-use App\Http\Controllers\Indicators\ComgesController;
-use App\Http\Controllers\Indicators\HealthGoalController;
-use App\Http\Controllers\Indicators\ProgramApsController;
-use App\Http\Controllers\Indicators\SingleParameterController;
-use App\Http\Controllers\QualityAps\QualityApsController;
-
-use App\Http\Controllers\Mammography\MammographyController;
-use App\Http\Controllers\Parameters\ProgramController as ParametersProgramController;
-use App\Http\Controllers\Requirements\EventController;
-use App\Http\Controllers\Requirements\CategoryController;
-use App\Http\Controllers\Requirements\RequirementController;
-
-use App\Http\Controllers\ServiceRequests\ValueController;
-use App\Http\Controllers\ServiceRequests\ReportController;
-use App\Http\Controllers\ServiceRequests\InvoiceController;
-use App\Http\Controllers\ServiceRequests\AttachmentController;
-use App\Http\Controllers\ServiceRequests\FulfillmentController;
-use App\Http\Controllers\ServiceRequests\SignatureFlowController;
-use App\Http\Controllers\ServiceRequests\ServiceRequestController;
-use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
-use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
-use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
-
-use App\Http\Controllers\Programmings\ActionTypeController;
-use App\Http\Controllers\Programmings\ReviewItemController;
-use App\Http\Controllers\Programmings\CommuneFileController;
-use App\Http\Controllers\Programmings\ProgrammingController;
-use App\Http\Controllers\Programmings\ProfessionalController;
-use App\Http\Controllers\Programmings\TrainingsItemController;
-use App\Http\Controllers\Programmings\ActivitiesItemController;
-use App\Http\Controllers\Programmings\ProgrammingDayController;
-use App\Http\Controllers\Programmings\ProgrammingItemController;
-use App\Http\Controllers\Programmings\ProfessionalHourController;
-use App\Http\Controllers\Programmings\ActivitiesProgramController;
-use App\Http\Controllers\Programmings\ProgrammingReportController;
-use App\Http\Controllers\Programmings\ProgrammingReviewController;
-use App\Http\Controllers\Programmings\MinisterialProgramController;
-use App\Http\Controllers\Programmings\ProgrammingActivityItemController;
-use App\Http\Controllers\Programmings\ParticipationController;
-use App\Http\Controllers\Programmings\EmergenciesController;
-
-use App\Http\Controllers\ReplacementStaff\ProfileController;
-use App\Http\Controllers\ReplacementStaff\LanguageController;
-use App\Http\Controllers\ReplacementStaff\TrainingController;
-use App\Http\Controllers\ReplacementStaff\ApplicantController;
-use App\Http\Controllers\ReplacementStaff\CommissionController;
-use App\Http\Controllers\ReplacementStaff\ExperienceController;
-use App\Http\Controllers\ReplacementStaff\RequestSignController;
-use App\Http\Controllers\ReplacementStaff\StaffManageController;
-use App\Http\Controllers\ReplacementStaff\ContactRecordController;
-use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
-use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
-use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
-use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
-use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
-use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
-use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
-use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
-
-use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
-
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Models\WebService\MercadoPublico;
-use App\Http\Controllers\RequestForms\PassengerController;
-use App\Http\Controllers\RequestForms\PettyCashController;
-use App\Http\Controllers\RequestForms\RequestFormController;
-use App\Http\Controllers\RequestForms\AttachedFilesController;
 
-use App\Http\Controllers\RequestForms\FundToBeSettledController;
-use App\Http\Controllers\RequestForms\ItemRequestFormController;
-use App\Http\Controllers\RequestForms\RequestFormCodeController;
-use App\Http\Controllers\RequestForms\RequestFormFileController;
-use App\Http\Controllers\RequestForms\RequestFormEventController;
-use App\Http\Controllers\RequestForms\PurchasingProcessController;
-use App\Http\Controllers\RequestForms\RequestFormMessageController;
-use App\Http\Controllers\RequestForms\EventRequestFormFileController;
-use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
-
-use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
-use App\Http\Controllers\Warehouse\ControlController;
-use App\Http\Controllers\Warehouse\DestinationController;
-use App\Http\Controllers\Warehouse\OriginController;
-use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
-use App\Http\Controllers\Warehouse\StoreController;
-use App\Http\Livewire\Inventory\AssignedProducts;
-use App\Http\Livewire\Inventory\CheckTransfer;
-use App\Http\Livewire\Inventory\CreateTransfer;
-use App\Http\Livewire\Inventory\InventoryEdit;
-use App\Http\Livewire\Inventory\InventoryIndex;
-use App\Http\Livewire\Inventory\InventoryLastReceptions;
-use App\Http\Livewire\Inventory\InventoryPending;
-use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
-use App\Http\Livewire\Inventory\PendingMovements;
-use App\Http\Livewire\Inventory\RegisterInventory;
-use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
-use App\Http\Livewire\Parameters\MaintainerPlaces;
-use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
-use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
-use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
-use App\Http\Livewire\Resources\ComputerCreate;
-use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
+use App\Http\Livewire\TicResources;
+use App\Http\Livewire\Resources\ComputerFusion;
 
-use App\Http\Controllers\Allowances\AllowanceController;
-use App\Http\Controllers\Allowances\AllowanceFileController;
-use App\Http\Controllers\Allowances\AllowanceSignController;
+use App\Http\Livewire\Resources\ComputerCreate;
+
+use App\Http\Livewire\Requirements\Categories;
+use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
+use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
+use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
+
+use App\Http\Livewire\Parameters\MaintainerPlaces;
+
+use App\Http\Livewire\Inventory\RegisterInventory;
+use App\Http\Livewire\Inventory\PendingMovements;
+use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
+use App\Http\Livewire\Inventory\InventoryPending;
 use App\Http\Livewire\Inventory\InventoryManager;
 use App\Http\Livewire\Inventory\InventoryManageUsers;
+use App\Http\Livewire\Inventory\InventoryLastReceptions;
+use App\Http\Livewire\Inventory\InventoryIndex;
+use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\CreateTransfer;
+use App\Http\Livewire\Inventory\CheckTransfer;
+use App\Http\Livewire\Inventory\AssignedProducts;
+use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+
+use App\Http\Controllers\WebserviceController;
+use App\Http\Controllers\Warehouse\StoreController;
+use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
+use App\Http\Controllers\Warehouse\OriginController;
+
+use App\Http\Controllers\Warehouse\DestinationController;
+use App\Http\Controllers\Warehouse\ControlController;
+use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
+use App\Http\Controllers\VaccinationController;
+
+use App\Http\Controllers\Unspsc\SegmentController;
+use App\Http\Controllers\Unspsc\ProductController;
+use App\Http\Controllers\Unspsc\FamilyController;
+
+use App\Http\Controllers\Unspsc\ClassController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\Suitability\TestsController;
+use App\Http\Controllers\Suitability\SuitabilityController;
+use App\Http\Controllers\Suitability\SchoolsController;
+
+use App\Http\Controllers\Suitability\SchoolUserController;
+
+use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\QuestionsController;
+use App\Http\Controllers\Suitability\OptionsController;
+use App\Http\Controllers\Suitability\CategoriesController;
+
+use App\Http\Controllers\ServiceRequests\ValueController;
+use App\Http\Controllers\ServiceRequests\SignatureFlowController;
+use App\Http\Controllers\ServiceRequests\ServiceRequestController;
+use App\Http\Controllers\ServiceRequests\ReportController;
+use App\Http\Controllers\ServiceRequests\InvoiceController;
+use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
+use App\Http\Controllers\ServiceRequests\FulfillmentController;
+use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
+use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
+use App\Http\Controllers\ServiceRequests\AttachmentController;
+
+use App\Http\Controllers\Rrhh\UserController;
+use App\Http\Controllers\Rrhh\RoleController;
+use App\Http\Controllers\Rrhh\OrganizationalUnitController;
+use App\Http\Controllers\Rrhh\AuthorityController;
+use App\Http\Controllers\Rrhh\AttendanceController;
+
+use App\Http\Controllers\Resources\WingleController;
+use App\Http\Controllers\Resources\TelephoneController;
+use App\Http\Controllers\Resources\PrinterController;
+use App\Http\Controllers\Resources\MobileController;
+use App\Http\Controllers\Resources\ComputerController;
+
+use App\Http\Controllers\Requirements\RequirementController;
+use App\Http\Controllers\Requirements\LabelController;
+use App\Http\Controllers\Requirements\EventController;
+use App\Http\Controllers\Requirements\CategoryController;
+
+use App\Http\Controllers\RequestForms\RequestFormMessageController;
+use App\Http\Controllers\RequestForms\RequestFormFileController;
+use App\Http\Controllers\RequestForms\RequestFormEventController;
+use App\Http\Controllers\RequestForms\RequestFormController;
+use App\Http\Controllers\RequestForms\RequestFormCodeController;
+use App\Http\Controllers\RequestForms\PurchasingProcessController;
+use App\Http\Controllers\RequestForms\PettyCashController;
+use App\Http\Controllers\RequestForms\PassengerController;
+use App\Http\Controllers\RequestForms\ItemRequestFormController;
+use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
+use App\Http\Controllers\RequestForms\FundToBeSettledController;
+use App\Http\Controllers\RequestForms\EventRequestFormFileController;
+use App\Http\Controllers\RequestForms\AttachedFilesController;
+
+use App\Http\Controllers\ReplacementStaff\TrainingController;
+use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
+use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
+use App\Http\Controllers\ReplacementStaff\StaffManageController;
+use App\Http\Controllers\ReplacementStaff\RequestSignController;
+use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\ProfileController;
+use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
+use App\Http\Controllers\ReplacementStaff\LanguageController;
+use App\Http\Controllers\ReplacementStaff\ExperienceController;
+use App\Http\Controllers\ReplacementStaff\ContactRecordController;
+use App\Http\Controllers\ReplacementStaff\CommissionController;
+use App\Http\Controllers\ReplacementStaff\ApplicantController;
+
+use App\Http\Controllers\Rem\UserRemController;
+use App\Http\Controllers\Rem\RemSerieController;
+use App\Http\Controllers\Rem\RemPeriodSerieController;
+use App\Http\Controllers\Rem\RemPeriodController;
+use App\Http\Controllers\Rem\RemFileController;
+
+use App\Http\Controllers\RNIdb\RNIdbController;
+use App\Http\Controllers\QualityAps\QualityApsController;
+
+use App\Http\Controllers\Programmings\TrainingsItemController;
+use App\Http\Controllers\Programmings\ReviewItemController;
+use App\Http\Controllers\Programmings\ProgrammingReviewController;
+use App\Http\Controllers\Programmings\ProgrammingReportController;
+use App\Http\Controllers\Programmings\ProgrammingItemController;
+use App\Http\Controllers\Programmings\ProgrammingDayController;
+use App\Http\Controllers\Programmings\ProgrammingController;
+use App\Http\Controllers\Programmings\ProgrammingActivityItemController;
+use App\Http\Controllers\Programmings\ProfessionalHourController;
+use App\Http\Controllers\Programmings\ProfessionalController;
+use App\Http\Controllers\Programmings\ParticipationController;
+use App\Http\Controllers\Programmings\MinisterialProgramController;
+use App\Http\Controllers\Programmings\EmergenciesController;
+use App\Http\Controllers\Programmings\CommuneFileController;
+use App\Http\Controllers\Programmings\ActivitiesProgramController;
+use App\Http\Controllers\Programmings\ActivitiesItemController;
+use App\Http\Controllers\Programmings\ActionTypeController;
+
+use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Http\Controllers\Pharmacies\PharmacyController;
+use App\Http\Controllers\Parameters\UnitOfMeasurementController;
+use App\Http\Controllers\Parameters\PurchaseUnitController;
+use App\Http\Controllers\Parameters\PurchaseTypeController;
+use App\Http\Controllers\Parameters\PurchaseMechanismController;
+use App\Http\Controllers\Parameters\ProgramController as ParametersProgramController;
+use App\Http\Controllers\Parameters\ProfessionController;
+use App\Http\Controllers\Parameters\PhraseOfTheDayController;
+use App\Http\Controllers\Parameters\PermissionController;
+use App\Http\Controllers\Parameters\ParameterController;
+use App\Http\Controllers\Parameters\LogController;
+use App\Http\Controllers\Parameters\LocationController;
+
+use App\Http\Controllers\Parameters\InventoryLabelController;
+
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Parameters\EstablishmentTypeController;
+use App\Http\Controllers\Parameters\EstablishmentController;
+use App\Http\Controllers\Parameters\CommuneController;
+use App\Http\Controllers\Parameters\BudgetItemController;
+use App\Http\Controllers\MunicipalityController;
+
+use App\Http\Controllers\Mammography\MammographyController;
+use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
+use App\Http\Controllers\Indicators\SingleParameterController;
+use App\Http\Controllers\Indicators\ProgramApsController;
+use App\Http\Controllers\Indicators\IaapsController;
+use App\Http\Controllers\Indicators\HealthGoalController;
+use App\Http\Controllers\Indicators\ComgesController;
+use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\Drugs\SubstanceController;
+use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
+use App\Http\Controllers\Drugs\ReceptionController;
+use App\Http\Controllers\Drugs\CourtController;
+use App\Http\Controllers\Documents\SignatureController;
+use App\Http\Controllers\Documents\ParteFileController;
+use App\Http\Controllers\Documents\ParteController;
+use App\Http\Controllers\Documents\DocumentController;
+use App\Http\Controllers\DigitalSignatureController;
+use App\Http\Controllers\ClaveUnicaController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AssigmentController;
+use App\Http\Controllers\Allowances\AllowanceSignController;
+use App\Http\Controllers\Allowances\AllowanceFileController;
+use App\Http\Controllers\Allowances\AllowanceController;
+use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
+use App\Http\Controllers\Agreements\WordTestController;
+use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
+use App\Http\Controllers\Agreements\WordMandateAgreeController;
+use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
+use App\Http\Controllers\Agreements\StageController;
+use App\Http\Controllers\Agreements\SignerController;
+
+use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\ProgramController;
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
 
 
 /*
@@ -1165,13 +1165,13 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('secretary_outbox', [RequirementController::class,'secretary_outbox'])->name('secretary_outbox');
     Route::get('archive_requirement/{requirement}', [RequirementController::class,'archive_requirement'])->name('archive_requirement');
     Route::get('archive_requirement_delete/{requirement}', [RequirementController::class,'archive_requirement_delete'])->name('archive_requirement_delete');
-    Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
+    // Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
     Route::get('create_requirement/{parte}',  [RequirementController::class,'create_requirement'])->name('create_requirement');
     Route::get('create_requirement_sin_parte',  [RequirementController::class,'create_requirement_sin_parte'])->name('create_requirement_sin_parte');
     // Route::get('create_event/{req_id}',  [EventController::class,'create_event'])->name('create_event');
-    Route::resource('categories', CategoryController::class);
-    Route::resource('events', EventController::class);
     Route::resource('labels', LabelController::class);
+    Route::resource('events', EventController::class);
+    Route::get('/categories',Categories::class)->name('categories');
     Route::get('report1', [RequirementController::class,'report1'])->name('report1');
     // Route::get('report_reqs_by_org', [RequirementController::class,'report_reqs_by_org])->name('report_reqs_by_org');
 

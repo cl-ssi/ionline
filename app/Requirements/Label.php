@@ -14,7 +14,8 @@ class Label extends Model
     
     protected $fillable = [
         'name',
-        'ou_id',
+        'color',
+        'user_id',
     ];
     
     public function organizationalUnit(): BelongsTo

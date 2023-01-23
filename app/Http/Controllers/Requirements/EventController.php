@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Requirements;
 use App\Models\Documents\Document;
 use App\Mail\RequirementEventNotification;
 use App\Mail\RequirementNotification;
-use App\Requirements\RequirementCategory;
-use App\Requirements\Category;
 use App\Requirements\Requirement;
 use App\Requirements\Event;
 use App\Requirements\File;

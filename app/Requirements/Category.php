@@ -2,9 +2,10 @@
 
 namespace App\Requirements;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\Rrhh\OrganizationalUnit;
 
 class Category extends Model
 {
@@ -14,7 +15,8 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name','color','user_id'
+        'name',
+        'organizational_unit_id'
     ];
 
     /**
@@ -24,6 +26,15 @@ class Category extends Model
     */
     protected $table = 'req_categories';
 
+    public function organizationalUnit()
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
+    }
+    
+    public function requirements() {
+        return $this->belongsToMany('App\Requirements\Category','req_requirements_categories');//->withPivot('requirement_id','category_id');
+    }
+
     public function scopeSearch($query, $request) {
 
         if($request != "") {
@@ -32,15 +43,4 @@ class Category extends Model
 
         return $query;
     }
-
-    //relaciones
-    public function user()
-    {
-      return $this->belongsTo('App\User')->withTrashed();
-    }
-
-    public function requirements() {
-        return $this->belongsToMany('App\Requirements\Category','req_requirements_categories');//->withPivot('requirement_id','category_id');
-    }
-
 }

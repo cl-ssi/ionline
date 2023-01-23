@@ -5,7 +5,7 @@ namespace App\Requirements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RequirementCategory extends Model
+class LabelRequirement extends Model
 {
   /**
    * The attributes that are mass assignable.
@@ -13,15 +13,16 @@ class RequirementCategory extends Model
    * @var array
    */
   protected $fillable = [
-      'requirement_id', 'category_id'
+      'requirement_id',
+      'label_id'
   ];
 
-  public function categories() {
-      return $this->belongsToMany('App\Requirements\Category');
+  public function labels() {
+      return $this->belongsToMany('App\Requirements\Label');
   }
 
-  public function Requirements() {
-      return $this->belongsToMany('App\Requirements\Requirement','req_requirements_categories');
+  public function requirements() {
+      return $this->belongsToMany('App\Requirements\Requirement');
   }
 
   /**
@@ -36,5 +37,5 @@ class RequirementCategory extends Model
   *
   * @var string
   */
-  protected $table = 'req_requirements_categories';
+  protected $table = 'req_labels_requirements';
 }

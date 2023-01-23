@@ -182,9 +182,9 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany('App\Models\Documents\Document');
     }
 
-    public function reqCategories()
+    public function reqLabels()
     {
-        return $this->hasMany('App\Requirements\Category');
+        return $this->hasMany('App\Requirements\Label');
     }
 
     public function requirementStatus()

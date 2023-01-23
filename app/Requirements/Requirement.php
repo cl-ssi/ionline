@@ -2,19 +2,22 @@
 
 namespace App\Requirements;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Rrhh\Authority;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Rrhh\Authority;
+use App\Requirements\LabelRequirement;
 use App\Requirements\EventStatus;
+use App\Requirements\Event;
+use App\Requirements\Category;
 
 
 class Requirement extends Model implements Auditable
 {
-
+    use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     /**
@@ -24,8 +27,15 @@ class Requirement extends Model implements Auditable
      */
 
     protected $fillable = [
-        'id', 'subject', 'priority', 'status', //'archived',
-        'limit_at', 'user_id','parte_id', 'to_authority', 'label_id'
+        'id',
+        'subject',
+        'priority',
+        'status',
+        'limit_at',
+        'user_id',
+        'parte_id',
+        'to_authority',
+        'category_id'
     ];
 
     public function events() {
@@ -48,12 +58,36 @@ class Requirement extends Model implements Auditable
         return $this->belongsTo('App\Models\Documents\Parte');
     }
 
-    public function categories() {
-        return $this->belongsToMany('App\Requirements\Category','req_requirements_categories');//->withPivot('requirement_id','category_id');;
+    public function labels() {
+        return $this->belongsToMany('App\Requirements\Label','req_labels_requirements');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+
+    public function firstEvent()
+    {
+        return $this->hasOne(Event::class)->where('status','creado');
     }
 
     public function eventsViewed() {
         return $this->hasMany('App\Requirements\EventStatus')->where('user_id',auth()->id());
+    }
+
+    /** Setea las labels de un requerimiento en base a un array de ids de labels */
+    public function setLabels($labels) {
+        if(is_array($labels)){
+            foreach($labels as $label) {
+                LabelRequirement::create([
+                    'user_id' => auth()->id(),
+                    'requirement_id' => $this->id,
+                    'label_id' => $label,
+                ]);
+            }
+        }
     }
 
     public function getSetEventsAsViewedAttribute() {
@@ -163,8 +197,6 @@ class Requirement extends Model implements Auditable
             return $total;
         }
     }
-
-    use SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.

@@ -10,77 +10,93 @@
 <link href="{{ asset('css/animate.css') }}" rel="stylesheet" type="text/css"/>
 
 <style type="text/css" rel="stylesheet">
-	#page-loader {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 1000;
-		background: #FFF none repeat scroll 0% 0%;
-		z-index: 99999;
-	}
+    #page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        background: #FFF none repeat scroll 0% 0%;
+        z-index: 99999;
+    }
 
-	#page-loader .preloader-interior {
-		display: block;
-		position: relative;
-		left: 50%;
-		top: 50%;
-		width: 189px;
-		height: 171px;
-		margin: -75px 0 0 -75px;
-		background-image: url("{{asset('images/logo_rgb.png')}}");
-		-webkit-animation: heartbeat 1s infinite;
-	}
+    #page-loader .preloader-interior {
+        display: block;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        width: 189px;
+        height: 171px;
+        margin: -75px 0 0 -75px;
+        background-image: url("{{asset('images/logo_rgb.png')}}");
+        -webkit-animation: heartbeat 1s infinite;
+    }
 
-	#page-loader .preloader-interior:before {
-		content: "";
-		position: absolute;
-		top: 5px;
-		left: 5px;
-		right: 5px;
-		bottom: 5px;
-		-webkit-animation: heartbeat 1s infinite;
-	}
+    #page-loader .preloader-interior:before {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        -webkit-animation: heartbeat 1s infinite;
+    }
 
-	@keyframes heartbeat
-	{
-		0%{transform: scale( .75 );}
-		20%{transform: scale( 1 );}
-		40%{transform: scale( .75 );}
-		60%{transform: scale( 1 );}
-		80%{transform: scale( .75 );}
-		100%{transform: scale( .75 );}
-	}
+    @keyframes heartbeat
+    {
+        0%{transform: scale( .75 );}
+        20%{transform: scale( 1 );}
+        40%{transform: scale( .75 );}
+        60%{transform: scale( 1 );}
+        80%{transform: scale( .75 );}
+        100%{transform: scale( .75 );}
+    }
 
 </style>
 
-<div class="row mb-3 d-print-none">
-    <div class="col-2">
+<div class="row d-print-none">
+    <div class="col-6 col-md-2">
         <a class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample"
             href="{{ route('requirements.create') }}">
-            <i class="fas fa-plus"></i> Nuevo evento
+            <i class="fas fa-plus"></i> Evento
         </a>
     </div>
-    <div class="col-1">
-		@can('Requirements: delete')
-			@if($requirement->status == 'creado')
-			<form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
-				@csrf
-				@method('DELETE')
-				<button type="submit" class="btn btn-outline-danger" 
-					onclick="return confirm('¿Desea eliminar este requerimiento?')">
-					<i class="fas fa-trash"></i><span>
-				</button>
-			</form>
-			@endif
-		@endcan
+    <div class="col-6 col-md-5">
+        @livewire('requirements.set-label',['req' => $requirement])
     </div>
 
-    <div class="col">
-        @livewire('requirements.set-category',['req' => $requirement])
+    <div class="col-12 col-md-4">
+        @livewire('requirements.set-category',['requirement' => $requirement])
     </div>
+
+    <div class="col-6 col-md-1">
+        @can('Requirements: delete')
+            @if($requirement->status == 'creado')
+            <form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-outline-danger" 
+                    onclick="return confirm('¿Desea eliminar este requerimiento?')">
+                    <i class="fas fa-trash"></i><span>
+                </button>
+            </form>
+            @endif
+        @endcan
+
+        @if($requirement->archived->where('user_id',auth()->id())->isEmpty())
+        <a href="{{ route('requirements.archive_requirement',$requirement) }}" title="Archivar" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-fw fa-box-open"></i>
+        </a>
+        @else
+        <a href="{{ route('requirements.archive_requirement_delete',$requirement) }}" title="Desarchivar" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-fw fa-box"></i>
+        </a>
+        @endif
+    </div>
+
 </div>
+
 
 @include('requirements.events.create')
 
@@ -105,9 +121,9 @@
 
 @if($requirement->limit_at)
 <h6 class="mb-3 text-danger"> 
-	<i class="fas fa-chess-king"></i>
-	Fecha límite del requerimiento: 
-	{{ optional($requirement->limit_at)->format('Y-m-d') }}
+    <i class="fas fa-chess-king"></i>
+    Fecha límite del requerimiento: 
+    {{ optional($requirement->limit_at)->format('Y-m-d') }}
 </h6>
 @endif
 
@@ -115,8 +131,8 @@
   @if($event->status <> 'en copia')
     <div class="card mb-3">
         <div class="card-header">
-			
-			<cite title="Fecha">
+            
+            <cite title="Fecha">
             @switch($event->status)
                 @case('creado')
                     <i class="fas fa-check"></i> Creado
@@ -125,7 +141,7 @@
                     <i class="fas fa-comment text-warning"></i> Respondido
                     @break
                 @case('cerrado')
-					<i class="fas fa-ban fa-lg text-success"></i> Cerrado
+                    <i class="fas fa-ban fa-lg text-success"></i> Cerrado
                     @break
                 @case('derivado')
                     <i class="fas fa-reply text-primary"></i> Derivado
@@ -134,46 +150,46 @@
                     <i class="fas fa-paper-plane text-warning"></i> Reabierto
                     @break
             @endswitch
-			 el {{ $event->created_at->format('Y-m-d H:i') }}
-			
-			@if($event->limit_at)
-				<span class="text-danger">
-				con fecha límite: {{ $event->limit_at->format('Y-m-d H:i') }}
-				</span>
-			@endif
-			</cite>
+             el {{ $event->created_at->format('Y-m-d H:i') }}
+            
+            @if($event->limit_at)
+                <span class="text-danger">
+                con fecha límite: {{ $event->limit_at->format('Y-m-d H:i') }}
+                </span>
+            @endif
+            </cite>
 
-			<span class="float-right text-muted">{{ $event->id }}</span>
+            <span class="float-right text-muted">{{ $event->id }}</span>
 
-			<div>
-				Por	<strong>{{ $event->from_user->fullName }}</strong> de
-				<span class="text-info">{{ $event->from_user->organizationalUnit->name }}</span>
-			</div>
+            <div>
+                Por	<strong>{{ $event->from_user->fullName }}</strong> de
+                <span class="text-info">{{ $event->from_user->organizationalUnit->name }}</span>
+            </div>
 
-			@if($event->status != 'cerrado' AND $event->status != 'respondido')
-				<div>
-				Para <strong>{{$event->to_user->fullName }}</strong>
-				de <span class="text-info">{{$event->to_ou->name}}</span>
-				</div>
-			@endif
+            @if($event->status != 'cerrado' AND $event->status != 'respondido')
+                <div>
+                Para <strong>{{$event->to_user->fullName }}</strong>
+                de <span class="text-info">{{$event->to_ou->name}}</span>
+                </div>
+            @endif
 
-			@php $cc = ""; @endphp
+            @php $cc = ""; @endphp
 
-			@foreach($requirement->events as $event_)
-				@if($event_->status == "en copia")
-					@if($event_->body == $event->body && $event->created_at->format('H') == $event_->created_at->format('H'))
-						@php
-							$cc = $cc . $event_->to_user->tinnyName . ", ";
-						@endphp
-					@endif
-				@endif
-			@endforeach
+            @foreach($requirement->events as $event_)
+                @if($event_->status == "en copia")
+                    @if($event_->body == $event->body && $event->created_at->format('H') == $event_->created_at->format('H'))
+                        @php
+                            $cc = $cc . $event_->to_user->tinnyName . ", ";
+                        @endphp
+                    @endif
+                @endif
+            @endforeach
 
-			@if($cc != null)
-			<div class="blockquote-footer">
-				En copia a: <strong>{{$cc}}</strong>
-			</div>
-			@endif
+            @if($cc != null)
+            <div class="blockquote-footer">
+                En copia a: <strong>{{$cc}}</strong>
+            </div>
+            @endif
 
 
 
@@ -239,7 +255,7 @@
 
   <script>
 
-  	 $(document).ready(function(){
+       $(document).ready(function(){
        var array = new Array;
       //  $("#ou").val( $lastEvent->from_user->organizationalUnit->id ); //select que se actualiza automáticamente
       //  $("#ou").trigger("change", [true]);
@@ -325,7 +341,7 @@
 
        });
 
-  	 });
+       });
 
      //función que permite funcionalidad asincrona (permite que termine la ejecución procedural del código antes de partir con el resto)
       function funcionDeferred(){
