@@ -22,7 +22,7 @@ class Holidays extends Component
     public $regions;
 
     /**
-    * moun
+    * mount
     */
     public function mount()
     {

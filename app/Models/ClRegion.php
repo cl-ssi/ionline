@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\HealthService;
 
 class ClRegion extends Model
 {
@@ -14,13 +15,18 @@ class ClRegion extends Model
     protected $fillable = [
         'id','name'
     ];
-
-    public function communes() {
-  		  return $this->hasMany('\App\Models\Parameters\Commune');
-    }
-
+    
     protected $dates = ['deleted_at'];
-
+    
     protected $table = 'cl_regions';
 
+    public function healthServices()
+    {
+        return $this->hasMany(HealthService::class);
+    }
+
+    /* TODO: fixear, dejar sólo una tabla comunas */
+    public function communes() {
+        return $this->hasMany('\App\Models\Parameters\Commune');
+    }
 }

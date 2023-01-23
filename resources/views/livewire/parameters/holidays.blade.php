@@ -20,7 +20,7 @@
             </div>
             <div class="col text-end">
                 <button class="btn btn-success float-right" wire:click="form()">
-                    <i class="bi bi-plus-circle"></i> Nuevo Feriado
+                    <i class="fas fa-plus"></i> Nuevo Feriado
                 </button>
             </div>
         </div>

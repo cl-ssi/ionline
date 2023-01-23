@@ -1022,6 +1022,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
     Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');
+    Route::get('/health-services', App\Http\Livewire\HealthServices::class)->name('health-services');
 
     Route::prefix('establishment/{establishment}/locations')->as('locations.')->group(function () {
         Route::get('/', [LocationController::class,'index'])->name('index');
