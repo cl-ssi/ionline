@@ -90,8 +90,17 @@ class SearchAllowances extends Component
 
         if($this->index == 'all'){
             return view('livewire.allowances.search-allowances', [
-                'allowances' => Allowance::
-                    latest()
+                'allowances' => Allowance::with([
+                        'userCreator',
+                        'userAllowance',
+                        'organizationalUnitCreator',
+                        'organizationalUnitAllowance',
+                        'allowanceSigns',
+                        'allowanceSigns.organizationalUnit',
+                        'originCommune',
+                        'destinationCommune',
+                    ])
+                    ->latest()
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance)

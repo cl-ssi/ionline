@@ -367,6 +367,7 @@ class AgreementController extends Controller
         }
 
         if($type == 'visators'){
+            /* TODO: Pasar a parametros */
             //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
             //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
