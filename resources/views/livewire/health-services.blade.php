@@ -37,11 +37,11 @@
     @else
         <div class="form-row">
             <div class="col">
-                <h3 class="mb-3">Listado de Feriados</h3>
+                <h3 class="mb-3">Listado de Servicios de Salud</h3>
             </div>
             <div class="col text-end">
                 <button class="btn btn-success float-right" wire:click="form()">
-                    <i class="fas fa-plus"></i> Nuevo Feriado
+                    <i class="fas fa-plus"></i> Nuevo Servicio de Salud
                 </button>
             </div>
         </div>
