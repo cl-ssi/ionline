@@ -17,19 +17,19 @@
             </div>
     </div>
 
-	@if($requirements)
-    	
-		@if($requirements->isNotEmpty())
-    	
-			<h4>Resultado de la busqueda</h4>
-			@include('requirements.partials.list')
+    @if($requirements)
+        
+        @if($requirements->isNotEmpty())
+        
+            <h4>Resultado de la busqueda</h4>
+            @include('requirements.partials.list')
 
-		@else
+        @else
 
-			<h4 class="text-danger text-center">Que penita, no se han encontrado resultados.</h4>
-			<hr>
+            <h4 class="text-danger text-center">No se han encontrado resultados.</h4>
+            <hr>
 
-		@endif
+        @endif
 
     @endif
 </div>
