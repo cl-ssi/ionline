@@ -250,6 +250,7 @@
 				<option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
 				<option value="9" @if($serviceRequest->weekly_hours == 9) selected @endif>9</option>
 				<option value="8.5" @if($serviceRequest->weekly_hours == 8.5) selected @endif>8.5</option>
+                <option value="8" @if($serviceRequest->weekly_hours == 8) selected @endif>8</option>
 				<option value="7.5" @if($serviceRequest->weekly_hours == 7.5) selected @endif>7.5</option>
 				<option value="5" @if($serviceRequest->weekly_hours == 5) selected @endif>5</option>
 				<option value="4" @if($serviceRequest->weekly_hours == 4) selected @endif>4</option>
