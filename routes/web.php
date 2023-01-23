@@ -503,6 +503,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_objectives', [JobPositionProfileController::class, 'update_objectives'])->name('update_objectives');
     Route::get('/{jobPositionProfile}/edit_organization', [JobPositionProfileController::class, 'edit_organization'])->name('edit_organization');
     Route::put('{jobPositionProfile}/update_organization', [JobPositionProfileController::class, 'update_organization'])->name('update_organization');
+    Route::get('{jobPositionProfile}/edit_liabilities', [JobPositionProfileController::class, 'edit_liabilities'])->name('edit_liabilities');
+    Route::post('{jobPositionProfile}/store_liabilities', [JobPositionProfileController::class, 'store_liabilities'])->name('store_liabilities');
+    Route::put('{jobPositionProfile}/update_liabilities', [JobPositionProfileController::class, 'update_liabilities'])->name('update_liabilities');
 });
 /** Inicio Perfil de Cargos */
 
