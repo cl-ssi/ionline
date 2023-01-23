@@ -147,9 +147,9 @@
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-md-6">
-                        <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                    <label for="for_recipients" data-toggle="tooltip" title="En caso que en distribución esté el correo del director director.ssi@redsalud.gob.cl este entrará automáticamente como parte">Destinatarios del documento (separados por coma)</label>
                         <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients"
-                                  rows="6"> {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>
+                                  rows="6" placeholder="En caso que en distribución esté el correo del director director.ssi@redsalud.gob.cl este entrará automáticamente como parte"> {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>
                     </fieldset>
                 </div>
             </div>
@@ -202,5 +202,12 @@
         });
 
     </script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+</script>
+
 
 @endsection
