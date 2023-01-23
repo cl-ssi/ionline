@@ -16,17 +16,8 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-        $organizationalUnits = OrganizationalUnit::with([
-            'childs',
-            'childs.childs',
-            'childs.childs.childs',
-            'childs.childs.childs.childs',
-            'childs.childs.childs.childs.childs',
-            ])
-            ->where('level', 1)
-            ->where('establishment_id', Auth::user()->organizationalUnit->establishment->id)
-            ->get();
-        return view('rrhh.organizationalunit.index', compact('organizationalUnits'));
+        $ouTree = auth()->user()->organizationalUnit->establishment->ouTree;
+        return view('rrhh.organizationalunit.index', compact('ouTree'));
     }
 
     /**
