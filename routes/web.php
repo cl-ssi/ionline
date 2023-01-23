@@ -2037,6 +2037,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemSerieController::class, 'index'])->name('index');
         Route::get('/create', [RemSerieController::class, 'create'])->name('create');
         Route::post('/store', [RemSerieController::class, 'store'])->name('store');
+        Route::delete('/{serie}/destroy', [RemSerieController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');
