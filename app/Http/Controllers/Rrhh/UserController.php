@@ -25,7 +25,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(50);
-        $users = User::getUsersBySearch($request->get('name'))->orderBy('name', 'Asc')->paginate(150);
+        $users = User::getUsersBySearch($request->get('name'))
+            ->with([
+                'organizationalUnit'
+            ])->orderBy('name', 'Asc')->paginate(150);
         return view('rrhh.index', compact('users'));
     }
 
