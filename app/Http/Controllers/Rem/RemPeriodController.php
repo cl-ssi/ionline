@@ -97,7 +97,7 @@ class RemPeriodController extends Controller
     public function destroy(RemPeriod $period)
     {
         if ($period->series->count() > 0) {
-            return redirect()->route('rem.periods.index')->with('error', 'No se puede eliminar el período ya que tiene REM asociados.');
+            return redirect()->route('rem.periods.index')->with('warning', 'No se puede eliminar el período ya que tiene REM asociados.');
         }
     
         $period->forceDelete();
