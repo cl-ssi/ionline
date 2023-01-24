@@ -99,7 +99,7 @@
         <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit_objectives', $jobPositionProfile) }}">
             <i class="fas fa-chevron-left"></i> III. Propósitos del Cargo
         </a>
-        <a class="btn btn-info float-right" href="{{-- route('job_position_profile.edit_organization', $jobPositionProfile) --}}">
+        <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_liabilities', $jobPositionProfile) }}">
             <i class="fas fa-chevron-right"></i> V. Responsabilidad del Cargo
         </a>
     </div>

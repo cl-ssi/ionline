@@ -78,21 +78,22 @@
 
             <a href="{{ route('rrhh.organizational-units.index') }}" class="btn btn-outline-dark">Cancelar</a>
 
-            @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
-            <form method="POST" action="{{ route('rrhh.organizational-units.destroy', $organizationalUnit->id) }}" class="d-inline">
-                {{ method_field('DELETE') }} {{ csrf_field() }}
-                <button class="btn btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
-            </form>
-            @endcan
+            @if($organizationalUnit->users()->exists())
+                <button class="btn btn-danger" title="No se puede eliminar la unidad, tiene usuarios dentro de ella" disabled>
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            @else
+                @cannot(['Service Request', 'Service Request: export sirh mantenedores'])
+                <form method="POST" action="{{ route('rrhh.organizational-units.destroy', $organizationalUnit->id) }}" class="d-inline">
+                    {{ method_field('DELETE') }} {{ csrf_field() }}
+                    <button class="btn btn-danger"><i class="fas fa-trash"></i> Eliminar</button>
+                </form>
+                @endcan
+            @endif
 
         </fieldset>
     </div>
 
-    @can('be god')
-    <br /><hr />
-    <div style="height: 300px; overflow-y: scroll;">
-        @include('partials.audit', ['audits' => $organizationalUnit->audits()] )
-    </div>
-    @endcan
+    @include('partials.audit', ['audits' => $organizationalUnit->audits()] )
 
 @endsection

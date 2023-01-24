@@ -1,6 +1,6 @@
 <div>
     <div class="dropdown">
-        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-tags"></i>
         </button>
 
@@ -23,7 +23,7 @@
         <span 
             class='badge badge-primary' 
             style='background-color: #{{ $label->color }};'>
-            {{ $label->name }}
+            <i class="fas fa-tag"></i> {{ $label->name }}
         </span>
         @endforeach
 

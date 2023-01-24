@@ -503,6 +503,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_objectives', [JobPositionProfileController::class, 'update_objectives'])->name('update_objectives');
     Route::get('/{jobPositionProfile}/edit_organization', [JobPositionProfileController::class, 'edit_organization'])->name('edit_organization');
     Route::put('{jobPositionProfile}/update_organization', [JobPositionProfileController::class, 'update_organization'])->name('update_organization');
+    Route::get('{jobPositionProfile}/edit_liabilities', [JobPositionProfileController::class, 'edit_liabilities'])->name('edit_liabilities');
+    Route::post('{jobPositionProfile}/store_liabilities', [JobPositionProfileController::class, 'store_liabilities'])->name('store_liabilities');
+    Route::put('{jobPositionProfile}/update_liabilities', [JobPositionProfileController::class, 'update_liabilities'])->name('update_liabilities');
 });
 /** Inicio Perfil de Cargos */
 
@@ -1022,6 +1025,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
     Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');
+    Route::get('/health-services', App\Http\Livewire\HealthServices::class)->name('health-services');
 
     Route::prefix('establishment/{establishment}/locations')->as('locations.')->group(function () {
         Route::get('/', [LocationController::class,'index'])->name('index');
@@ -2037,6 +2041,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemSerieController::class, 'index'])->name('index');
         Route::get('/create', [RemSerieController::class, 'create'])->name('create');
         Route::post('/store', [RemSerieController::class, 'store'])->name('store');
+        Route::delete('/{serie}/destroy', [RemSerieController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');

@@ -61,6 +61,18 @@
             href="{{ route('requirements.create') }}">
             <i class="fas fa-plus"></i> Evento
         </a>
+        @can('Requirements: delete')
+            @if($requirement->status == 'creado')
+            <form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-sm btn-outline-danger" 
+                    onclick="return confirm('¿Desea eliminar este requerimiento?')">
+                    <i class="fas fa-trash"></i><span>
+                </button>
+            </form>
+            @endif
+        @endcan
     </div>
     <div class="col-6 col-md-5">
         @livewire('requirements.set-label',['req' => $requirement])
@@ -71,25 +83,12 @@
     </div>
 
     <div class="col-6 col-md-1">
-        @can('Requirements: delete')
-            @if($requirement->status == 'creado')
-            <form method="POST" action="{{ route('requirements.destroy', $requirement) }}" class="d-inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-outline-danger" 
-                    onclick="return confirm('¿Desea eliminar este requerimiento?')">
-                    <i class="fas fa-trash"></i><span>
-                </button>
-            </form>
-            @endif
-        @endcan
-
         @if($requirement->archived->where('user_id',auth()->id())->isEmpty())
-        <a href="{{ route('requirements.archive_requirement',$requirement) }}" title="Archivar" class="btn btn-sm btn-outline-primary">
+        <a class="btn btn-outline-primary" href="{{ route('requirements.archive_requirement',$requirement) }}" title="Archivar">
             <i class="fas fa-fw fa-box-open"></i>
         </a>
         @else
-        <a href="{{ route('requirements.archive_requirement_delete',$requirement) }}" title="Desarchivar" class="btn btn-sm btn-outline-secondary">
+        <a class="btn btn-outline-secondary" href="{{ route('requirements.archive_requirement_delete',$requirement) }}" title="Desarchivar">
             <i class="fas fa-fw fa-box"></i>
         </a>
         @endif

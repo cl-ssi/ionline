@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CountrySeeder::class);
         $this->call(CommuneSeeder::class);
+        /** Falta seeder de cl_regions */
+        /** Falta seeder de cl_communes */
+        $this->call(HealthServiceSeeder::class);
         $this->call(EstablishmentTypeSeeder::class);
         $this->call(EstablishmentSeeder::class);
         $this->call(OrganizationalUnitSeeder::class);

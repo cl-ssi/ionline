@@ -52,7 +52,7 @@
 
                     @if($req->category_id)
                     <span class='badge badge-dark'>
-                        {{ optional($req->category)->name }}
+                        <i class="fas fa-copyright"></i> {{ optional($req->category)->name }}
                     </span>
                     @endif
                 </td>
