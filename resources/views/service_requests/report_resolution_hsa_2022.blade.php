@@ -386,7 +386,7 @@
         <p class="justify">
             <strong>OCTAVO:</strong>
 
-            @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
+            <!-- @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
 
                 En el desempeño de sus funciones, el prestador cumplió con
                 @livewire('service-request.show-total-hours', ['fulfillment' => $ServiceRequest->fulfillments->first(),'forResolution' => true]);
@@ -406,7 +406,16 @@
                 del mes siguiente, y
                 si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación
                 realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los
-                honorarios pactados.
+                honorarios pactados. -->
+
+                <!-- 24/01/2023: solicitado por nataly y fabian -->
+            @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" || 
+                    $ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" || 
+                    $ServiceRequest->programm_name == "Covid 2022" || 
+                    $ServiceRequest->programm_name == "PABELLON TARDE" || 
+                    $ServiceRequest->programm_name == "PABELLON GINE")
+
+                El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
 
             @else
 
