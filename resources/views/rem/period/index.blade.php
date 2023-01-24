@@ -21,6 +21,7 @@
             <th>Periodo</th>
             <th>Año</th>
             <th>Mes</th>
+            <th>Eliminar</th>
         </tr>
     </thead>
 
@@ -30,10 +31,17 @@
             <td>{{ $period->period->format('Y-m') }}</td>
             <td>{{ $period->year }}</td>
             <td>{{ $period->month }}</td>
+            <td>
+                <form method="POST" class="form-horizontal" action="{{ route('rem.periods.destroy', $period) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar el periodo ?' )"><i class="fas fa-trash-alt"></i></button>
+                </form>
+            </td>
         </tr>
         @endforeach
     </tbody>
-    
+
 </table>
 
 @endsection
