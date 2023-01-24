@@ -26,7 +26,15 @@ class ReceptionController extends Controller
      */
     public function index(Request $request)
     {
-        $receptions = Reception::with('documentPoliceUnit', 'partePoliceUnit', 'items')->Search($request->get('id'))->get();
+        $receptions = Reception::with([
+            'items',
+            'partePoliceUnit',
+            'documentPoliceUnit',
+            'destruction',
+            'haveItemsForDestruction'
+        ])
+        ->withCount(['items'])
+        ->Search($request->get('id'))->get();
         //dd($receptions);
         //$receptions = Reception::whereDate('created_at', '>', Carbon::today()->subDays(16))->latest()->get();
         //Reception::Reception::whereDate('created_at', '>', Carbon\Carbon::today()->subDays(16))->latest()->paginate(100);

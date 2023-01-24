@@ -53,16 +53,16 @@
             <td class="text-center">{{ $reception->document_number }}</td>
             <td>{{ $reception->documentPoliceUnit->name }}</td>
             <td>{{ $reception->partePoliceUnit->name }}</td>
-            <td>{{ $reception->items()->count() }}</td>
+            <td>{{ $reception->items->count() }}</td>
             <td>
-                @if( $reception->haveItems() )
+                @if( isset($reception->items) )
                 <a href="{{ route('drugs.receptions.record', $reception->id) }}" class="btn btn-outline-success btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                 @endif
             </td>
 
             <td style="text-align: center;">
-                @if($reception->haveItemsForDestruction() )
-                    @if($reception->wasDestructed())
+                @if( isset($reception->haveItemsForDestruction) )
+                    @if( isset($reception->destruction) )
                     <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}"
                         class="btn btn-outline-danger btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                     @else
