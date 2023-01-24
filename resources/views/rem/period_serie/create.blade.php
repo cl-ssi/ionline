@@ -2,6 +2,7 @@
 
 @section('content')
 @include('rem.nav')
+<h3 class="mb-3">Agregar Nuevo Periodo con la serie que corresponde</h3>
 <form method="POST" class="form-horizontal" action="{{ route('rem.periods_series.store') }}">
     @csrf
     @method('POST')
@@ -32,7 +33,7 @@
 
         <fieldset class="form-group col">
             <label for="for_serie_id">Tipo</label>
-            <select name="type" id="for_type" class="form-control selectpicker" title="Seleccione tipo" required>
+            <select name="type[]" id="for_type" class="form-control selectpicker" title="Seleccione tipo"  multiple required>
                 <option value="">Seleccionar Tipo</option>
                 <option value="CECOSF">CECOSF</option>
                 <option value="CESFAM">CESFAM</option>
