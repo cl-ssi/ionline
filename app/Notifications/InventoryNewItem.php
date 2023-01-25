@@ -60,7 +60,7 @@ class InventoryNewItem extends Notification
             'module'  => 'Inventario', // Opcional
             'icon'    => '<i class="fas fa-boxes"></i>',
             'subject' => 'Recepcionar ingreso de: '.$subject,
-            'action'  => route('inventories.check-transfer', $this->movement->id)
+            'action'  => route('inventories.check-transfer', $this->movement->id, false)
         ];
     }
 }

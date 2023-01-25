@@ -68,7 +68,7 @@ class NotificationRejectedRequest extends Notification
             'module'  => 'Solicitudes de Contratación',
             'icon'    => '<i class="far fa-id-card"></i>',
             'subject' => 'Se ha rechazado la solicitud ID: '.$this->requestReplacementStaff->id.' click más información',
-            'action'  => route($action)
+            'action'  => route($action, false)
         ];
     }
 }

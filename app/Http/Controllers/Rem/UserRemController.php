@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Establishment;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 
 class UserRemController extends Controller
 {
@@ -45,13 +48,33 @@ class UserRemController extends Controller
      */
     public function store(Request $request)
     {
-        $userRem = new UserRem($request->all());
-        $userRem->save();
-        $userRem->user->givePermissionTo('Rem: user');
+        $establishments = Establishment::whereIn('id', $request->establishment_id)->get();
+        foreach ($establishments as $establishment) {
+            $validator = Validator::make($request->all(), [
+                'user_id' => [
+                    'required',
+                    Rule::unique('rem_users')->where(function ($query) use ($establishment) {
+                        $query->where('establishment_id', $establishment->id);
+                    })
+                ],
+            ]);
+            if ($validator->fails()) {
+                $user = User::find($request->user_id);
+                session()->flash('warning', 'El usuario '. $user->fullName . ' ya está asignado al establecimiento ' . $establishment->name);
+                return redirect()->route('rem.users.index');
+            }
 
-        session()->flash('info', 'El usuario ' . $userRem->fullname . ' ha sido creado como usuario REM');
+            $userRem = new UserRem([
+                'user_id' => $request->user_id,
+                'establishment_id' => $establishment->id
+            ]);
+            $userRem->save();
+            $userRem->user->givePermissionTo('Rem: user');
+        }
+        session()->flash('info', 'El usuario ha sido asignado a los establecimientos seleccionados.');
         return redirect()->route('rem.users.index');
     }
+
 
     /**
      * Display the specified resource.

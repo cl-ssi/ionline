@@ -12,7 +12,7 @@
 
 <br />
 
-{{-- $notifications --}}
+<a class="btn btn-warning mb-3" href="/clear-notifications"><i class="fas fa-trash"></i> Marcar todas las notificaciones como leídas</a>
 
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-sm small">

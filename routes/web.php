@@ -262,6 +262,7 @@ Route::get('corrige_firmas',[ServiceRequestController::class,'corrige_firmas'])-
 
 Route::get('/open-notification/{notification}',[UserController::class,'openNotification'])->middleware('auth')->name('openNotification');
 Route::get('/all-notifications',[UserController::class,'allNotifications'])->middleware('auth')->name('allNotifications');
+Route::get('/clear-notifications',[UserController::class,'clearNotifications'])->middleware('auth')->name('clearNotifications');
 
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', [WebserviceController::class,'fonasa'])->middleware('auth')->name('fonasa');
@@ -2036,6 +2037,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodController::class, 'index'])->name('index');
         Route::get('/create', [RemPeriodController::class, 'create'])->name('create');
         Route::post('/store', [RemPeriodController::class, 'store'])->name('store');
+        Route::delete('/{period}/destroy', [RemPeriodController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('series')->as('series.')->middleware('auth')->group(function () {
         Route::get('/', [RemSerieController::class, 'index'])->name('index');
@@ -2046,7 +2048,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     Route::prefix('periods_series')->as('periods_series.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodSerieController::class, 'index'])->name('index');
         Route::get('/create', [RemPeriodSerieController::class, 'create'])->name('create');
-        Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');
+        Route::post('/store', [RemPeriodSerieController::class, 'store'])->name('store');        
     });
     Route::prefix('files')->as('files.')->middleware('auth')->group(function () {
         Route::get('/', [RemFileController::class, 'index'])->name('index');

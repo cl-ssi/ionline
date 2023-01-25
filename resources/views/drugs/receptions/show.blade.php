@@ -158,7 +158,7 @@
             @else
                 @include('drugs.receptions.partials.add_item')
 
-                @if( $reception->haveItemsForDestruction() )
+                @if( $reception->haveItemsForDestruction->isNotEmpty() )
                     @include('drugs.receptions.partials.create_destruction')
                 @else
                     <div class="alert alert-warning mt-4" role="alert">

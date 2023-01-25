@@ -60,7 +60,7 @@ class NotificationEndSigningProcess extends Notification
             'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
             'subject' => 'Fin proceso de firmas solicitud ID: '.$this->requestReplacementStaff->id,
-            'action'  => route('replacement_staff.request.index'),
+            'action'  => route('replacement_staff.request.index', false),
         ];
     }
 }
