@@ -1743,6 +1743,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
     Route::get('/export', [RequestFormController::class, 'export'])->name('export');
     Route::get('/{requestForm}/copy', [RequestFormController::class, 'copy'])->name('copy');
+    Route::get('/{requestForm}/rollback', [RequestFormController::class, 'rollback'])->name('rollback');
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');
