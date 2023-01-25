@@ -64,7 +64,7 @@ class TestNotification extends Notification
         $id = 34;
         return [
             'subject' => 'Staff: Nueva solciitud id:'.$id,
-            'action' => route('resources.computer.edit',15),
+            'action' => route('resources.computer.edit',15, false),
         ];
     }
 }
