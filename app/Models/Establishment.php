@@ -25,7 +25,11 @@ class Establishment extends Model implements Auditable
         'name',
         'type',
         'deis',
-        'sirh_code'
+        'sirh_code',
+        'dependency',
+        'official_name',
+        'administrative_dependency',
+        'level_of_care',
     ];
 
     /**

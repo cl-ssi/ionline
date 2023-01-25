@@ -1013,6 +1013,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     Route::prefix('establishments')->as('establishments.')->group(function () {
         Route::get('/', [EstablishmentController::class,'index'])->name('index');
+        Route::get('/create', [EstablishmentController::class,'create'])->name('create');
         Route::put('/{establishment}', [EstablishmentController::class,'update'])->name('update');
     });
 
