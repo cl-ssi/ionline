@@ -30,6 +30,7 @@ class ReceptionItem extends Model
         'result_number', 
         'result_date', 
         'result_substance_id',
+        'dispose_precursor',
     ];
 
     /**
@@ -45,6 +46,10 @@ class ReceptionItem extends Model
      * @var string
      */
     protected $table = 'drg_reception_items';
+
+    protected $casts = [
+        'dispose_precursor' => 'boolean',
+    ];
 
     public function reception()
     {

@@ -39,6 +39,7 @@
             <option @if ($substance->rama == "Alucinógenos") selected="selected" @endif value="Alucinógenos">Alucinógenos</option>
             <option @if ($substance->rama == "Estimulantes") selected="selected" @endif value="Estimulantes">Estimulantes</option>
             <option @if ($substance->rama == "Depresores") selected="selected" @endif value="Depresores">Depresores</option>
+            <option @if ($substance->rama == "Precursores") selected="selected" @endif value="Precursores">Precursores</option>
         </select>
     </fieldset>
 

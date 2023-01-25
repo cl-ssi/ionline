@@ -17,7 +17,7 @@ class CreateDrgSubstancesTable extends Migration
             $table->id('id');
             $table->boolean('presumed')->default(1);
             $table->string('name');
-            $table->enum('rama',['Alucinógenos','Estimulantes', 'Depresores'])->nullable();
+            $table->enum('rama',['Alucinógenos','Estimulantes', 'Depresores','Precursores'])->nullable();
             $table->enum('unit', ['Ampollas', 'Mililitros', 'Gramos', 'Unidades'])->nullable();
             $table->enum('laboratory',['SEREMI', 'ISP'])->nullable()->default(NULL);
             $table->boolean('isp')->nullable()->default(0);

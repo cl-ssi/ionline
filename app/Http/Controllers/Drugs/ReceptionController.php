@@ -183,6 +183,7 @@ class ReceptionController extends Controller
         }
         $request->request->set('destruct', $destruct);
         $receptionitem->fill($request->all());
+        $receptionitem->dispose_precursor = $request->input('dispose_precursor') == 'on' ? 1 : null;
         $receptionitem->save();
         session()->flash('success', 'El item nue: '.$receptionitem->nue.' ha sido actualizado.');
         return redirect()->route('drugs.receptions.show', $receptionitem->reception->id);
