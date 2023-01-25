@@ -501,6 +501,7 @@ class GenerateReception extends Component
     public function sendTechnicalRequest(Control $control)
     {
         $signatureTechnical = new SignatureService();
+        
         $signatureTechnical->addResponsible($this->store->visator);
         $signatureTechnical->addSignature(
             'Acta',
@@ -518,6 +519,7 @@ class GenerateReception extends Component
         $signatureTechnical->addVisators(collect([$this->store->visator]));
         $signatureTechnical->addSignatures(collect([]));
         $signatureTechnical = $signatureTechnical->sendRequest();
+
         $control->receptionSignature()->associate($signatureTechnical);
         $control->save();
     }
