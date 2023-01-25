@@ -198,8 +198,9 @@
                         <tr></tr>
                     </table>
                 </fieldset> -->
-
-                @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
+                <fieldset class="col">
+                    @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
+                </fieldset>
             </div>
             <button type="submit" class="btn btn-primary">Crear</button>
 
