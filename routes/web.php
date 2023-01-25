@@ -262,6 +262,7 @@ Route::get('corrige_firmas',[ServiceRequestController::class,'corrige_firmas'])-
 
 Route::get('/open-notification/{notification}',[UserController::class,'openNotification'])->middleware('auth')->name('openNotification');
 Route::get('/all-notifications',[UserController::class,'allNotifications'])->middleware('auth')->name('allNotifications');
+Route::get('/clear-notifications',[UserController::class,'clearNotifications'])->middleware('auth')->name('clearNotifications');
 
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', [WebserviceController::class,'fonasa'])->middleware('auth')->name('fonasa');
