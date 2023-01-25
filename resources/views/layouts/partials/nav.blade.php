@@ -557,7 +557,7 @@
                             </a>                            
 
 
-                            <a class="dropdown-item {{ active('parameters.establishments.index') }}"
+                            <a class="dropdown-item {{ active('parameters.establishment_types.index') }}"
                                 href="{{ route('parameters.establishment_types.index') }}">
                                 <i class="fas fa-th-list"></i> Tipos de Establecimientos
                             </a>
