@@ -55,14 +55,16 @@
             <td>{{ $reception->partePoliceUnit->name }}</td>
             <td>{{ $reception->items->count() }}</td>
             <td>
-                @if( isset($reception->items) )
+                @if( $reception->items->isNotEmpty() )
                 <a href="{{ route('drugs.receptions.record', $reception->id) }}" class="btn btn-outline-success btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                 @endif
             </td>
 
             <td style="text-align: center;">
-                @if( isset($reception->haveItemsForDestruction) )
-                    @if( isset($reception->destruction) )
+                @if( $reception->haveItemsForDestruction->isEmpty() )
+                    <i class="fas fa-ban" title="Sin items para destruir"></i>
+                @else
+                    @if( $reception->destruction )
                     <a href="{{ route('drugs.destructions.show', $reception->destruction->id) }}"
                         class="btn btn-outline-danger btn-sm" target="_blank"><i class="fas fa-fw fa-file-pdf"></i></a>
                     @else
@@ -70,8 +72,6 @@
                             {{ $reception->date->diffInDays(Carbon\Carbon::now()) -15 }}
                         </span>
                     @endif
-                @else
-                    <i class="fas fa-ban" title="Sin items para destruir"></i>
                 @endif
             </td>
             <td class="d-print-none">
