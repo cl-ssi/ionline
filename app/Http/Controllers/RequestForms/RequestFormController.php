@@ -616,6 +616,34 @@ class RequestFormController extends Controller {
         return redirect()->route('request_forms.edit', $newRequestForm);
     }
 
+    public function rollback(RequestForm $requestForm)
+    {
+        if($requestForm->status != 'approved'){
+            session()->flash('danger', 'No se puede revertir firmas para el formulario de requerimiento N° '.$requestForm->folio.'.');
+            return redirect()->back();
+        }
+
+        $requestForm->load('eventRequestForms');
+        foreach($requestForm->eventRequestForms->take(-2) as $event){
+            $event->update(['signer_user_id' => null, 'position_signer_user' => null, 'status' => 'pending', 'signature_date' => null]);
+        }
+        
+        if($requestForm->has_increased_expense){
+            $requestForm->has_increased_expense = null;
+            $requestForm->estimated_expense -= $requestForm->eventRequestForms->last()->purchaser_amount;
+            $requestForm->signatures_file_id = $requestForm->old_signatures_file_id;
+            $requestForm->old_signatures_file_id = null;
+        }else{
+            $requestForm->purchasers()->detach();
+            $requestForm->signatures_file_id = null;
+            $requestForm->status = 'pending';
+        }
+
+        $requestForm->save();
+        session()->flash('info', 'El formulario de requerimiento N° '.$requestForm->folio.' se ha sido revertido las firmas correctamente.');
+        return redirect()->route('request_forms.show', $requestForm);
+    }
+
     private function createFolio(){
         $startOfYear = Carbon::now()->startOfYear();
         $endOfYear = Carbon::now()->endOfYear();

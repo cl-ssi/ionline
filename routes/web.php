@@ -1154,6 +1154,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', [SignatureController::class,'showPdf'])->name('signatures.showPdf');
     Route::post('/showPdfFromFile', [SignatureController::class,'showPdfFromFile'])->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', [SignatureController::class,'showPdfAnexo'])->name('signatures.showPdfAnexo');
+    Route::get('/download-anexo/{anexo}', [SignatureController::class,'downloadAnexo'])->name('signatures.downloadAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', [SignatureController::class,'rejectSignature'])->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', [SignatureController::class,'signatureFlows'])->name('signatures.signatureFlows');
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class,'signModal'])->name('signatures.signModal');
@@ -1743,6 +1744,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
     Route::get('/export', [RequestFormController::class, 'export'])->name('export');
     Route::get('/{requestForm}/copy', [RequestFormController::class, 'copy'])->name('copy');
+    Route::get('/{requestForm}/rollback', [RequestFormController::class, 'rollback'])->name('rollback');
 
     Route::prefix('message')->as('message.')->middleware('auth')->group(function () {
         Route::post('/{requestForm}/store/{eventType}/{from}', [RequestFormMessageController::class, 'store'])->name('store');

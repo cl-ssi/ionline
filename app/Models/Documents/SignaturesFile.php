@@ -51,7 +51,7 @@ class SignaturesFile extends Model
      */
     public function getHasSignedFlowAttribute()
     {
-        return $this->signaturesFlows->where('status', 1)->count() > 0;
+        return $this->signaturesFlows()->where('status', 1)->count() > 0;
     }
 
     public function getHasRejectedFlowAttribute()
