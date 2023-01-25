@@ -1154,6 +1154,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', [SignatureController::class,'showPdf'])->name('signatures.showPdf');
     Route::post('/showPdfFromFile', [SignatureController::class,'showPdfFromFile'])->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', [SignatureController::class,'showPdfAnexo'])->name('signatures.showPdfAnexo');
+    Route::get('/download-anexo/{anexo}', [SignatureController::class,'downloadAnexo'])->name('signatures.downloadAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', [SignatureController::class,'rejectSignature'])->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', [SignatureController::class,'signatureFlows'])->name('signatures.signatureFlows');
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', [SignatureController::class,'signModal'])->name('signatures.signModal');
