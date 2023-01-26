@@ -1139,6 +1139,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
+        Route::get('/inbox-lw',App\Http\Livewire\Partes\Inbox::class)->name('inbox-lw');
         Route::get('/outbox', [ParteController::class,'outbox'])->name('outbox');
         Route::get('/download/{file}',  [ParteController::class,'download'])->name('download');
         Route::delete('/files/{file}', [ParteFileController::class,'destroy'])->name('files.destroy');
@@ -2071,7 +2072,45 @@ Route::view('/some', 'some');
 
 /** Test Routes */
 Route::get('/ous',[TestController::class,'ous']);
+Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
 // Route::get('/dev/get-ip',[TestController::class,'getIp']);
 // Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
 // Route::get('/info',[TestController::class,'info']);
+
+Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
+    $font_light = public_path('fonts/verdana-italic.ttf');
+    $font_bold = public_path('fonts/verdana-bold-2.ttf');
+    $font_regular = public_path('fonts/Verdana.ttf');
+    $marginTop  = 0.1;
+    $xAxis      = 5;
+    $yPading = 16;
+    $fontSize = ($size) ? $size : 6;
+    $im = @imagecreate(220, 84) or die("Cannot Initialize new GD image stream");
+    $background_color = imagecolorallocate($im, 204, 204, 204);
+    $white = imagecolorallocate($im, 255, 255, 255);
+    imagefilledrectangle($im, 1, 1, 218, 82, $white);
+    $text_color = imagecolorallocate($im, 0, 0, 0);
+    
+    imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
+        $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
+    
+    imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
+        $text_color, $font_bold, $user->shortName);
+
+    imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 0.3,
+        $text_color, $font_light, $user->organizationalUnit->name);
+
+    imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
+        $text_color, $font_regular, env('APP_SS'));
+    
+    imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
+        $text_color, $font_regular, now()->format('d-m-Y H:i:s'));
+    ob_start();
+    imagepng($im);
+    $firma = base64_encode(ob_get_clean());
+    imagedestroy($im);
+    echo "<img src=\"data:image/png;base64,$firma\" style=\"\"/>&nbsp;&nbsp;&nbsp;";
+    echo "<img src=\"data:image/png;base64,$firma\" />&nbsp;&nbsp;&nbsp;";
+    echo "<img src=\"data:image/png;base64,$firma\" />";
+});
