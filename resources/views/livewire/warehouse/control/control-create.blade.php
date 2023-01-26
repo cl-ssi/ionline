@@ -9,7 +9,7 @@
     </h5>
 
     @if($type == 'receiving')
-        @include('warehouse.controls.partials.form-receiving', [
+        @include('warehouse.controls.partials.form-receiving-create', [
             'control' => null,
             'store' => $store,
             'type' => $type,
@@ -29,7 +29,8 @@
     </button>
     <a
         class="btn btn-outline-primary"
-        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type, 'nav' => $nav]) }}">
+        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type, 'nav' => $nav]) }}"
+    >
         Cancelar
     </a>
 </div>

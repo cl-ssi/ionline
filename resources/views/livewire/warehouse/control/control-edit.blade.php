@@ -12,14 +12,14 @@
                     href="{{ route('request_forms.show', $control->requestForm) }}"
                     target="_blank"
                 >
-                    <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $control->requestForm->id }}
+                    <i class="fas fa-file-alt"></i> FR Folio #{{ $control->requestForm->folio }}
                 </a>
             @endif
         </div>
     </div>
 
     @if($type == 'receiving')
-        @include('warehouse.controls.partials.form-receiving', [
+        @include('warehouse.controls.partials.form-receiving-edit', [
             'control' => $control,
             'store' => $store,
             'type' => $type,
@@ -39,7 +39,8 @@
     </button>
     <a
         class="btn btn-outline-primary"
-        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type, 'nav' => $nav]) }}">
+        href="{{ route('warehouse.controls.index', ['store' => $store, 'type' => $type, 'nav' => $nav]) }}"
+    >
         Cancelar
     </a>
 </div>
