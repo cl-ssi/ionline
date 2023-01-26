@@ -116,7 +116,7 @@
                         Firmado electrónicamente de acuerdo a la ley Nº 19.799<br>
                         https://i.saludiquique.gob.cl/validador ID:2342-Xdf4 <br>
                     </p>
-                    <div class="numero-partes" style="padding-top: 40px;">23423</div>
+                    <div class="numero-partes" style="padding-top: 40px;">23.423</div>
                 </div>
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
