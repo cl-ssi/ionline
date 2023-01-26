@@ -59,6 +59,7 @@
                     <th class="text-center" style="width: 100px"></th>
                     <th>Ingreso</th>
                     <th class="text-center">Fecha Ingreso</th>
+                    <th class="text-center">Acta Ingreso Bodega</th>
                     <th>Facturas</th>
                 </tr>
             </thead>
@@ -68,14 +69,18 @@
                     wire:loading.class.remove="d-none"
                     wire:target="searchPurchaseOrder"
                 >
-                    <td class="text-center" colspan="4">
+                    <td class="text-center" colspan="6">
                         @include('layouts.partials.spinner')
                     </td>
                 </tr>
                 @forelse($controls as $control)
                     <tr wire:loading.remove wire:target="searchPurchaseOrder">
                         <td class="text-center">
-                            <div class="form-check" wire:loading.remove wire:target="searchPurchaseOrder">
+                            <div
+                                class="form-check"
+                                wire:loading.remove
+                                wire:target="searchPurchaseOrder"
+                            >
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
@@ -108,6 +113,32 @@
                         <td class="text-center">
                             {{ $control->date->format('Y-m-d') }}
                         </td>
+                        <td class="text-center">
+                            @if($control->technicalSignature && $control->technicalSignature->signaturesFlows->first()->isSigned())
+                                <a
+                                    href="{{ route('documents.signatures.showPdf', [
+                                        $control->technicalSignature->signaturesFlows->first()->signaturesFile->id, time()
+                                    ]) }}"
+                                    class="btn btn-sm btn-outline-success" target="_blank"
+                                    title="Ver documento"
+                                >
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
+                            @elseif($control->isConfirmed())
+                                <a
+                                    href="{{ route('warehouse.control.pdf', [
+                                        'store' => $store,
+                                        'control' => $control,
+                                        'act_type' => 'reception'
+                                    ]) }}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    target="_blank"
+                                    title="Acta Recepción Técnica"
+                                >
+                                    <i class="fas fa-file-pdf"></i>
+                                </a>
+                            @endif
+                        </td>
                         <td>
                             @foreach($control->invoices as $invoice)
                                 <li>{{ $invoice->number }}</li>
@@ -115,8 +146,12 @@
                         </td>
                     </tr>
                 @empty
-                    <tr class="text-center" wire:loading.remove wire:target="searchPurchaseOrder">
-                        <td colspan="4">
+                    <tr
+                        class="text-center"
+                        wire:loading.remove
+                        wire:target="searchPurchaseOrder"
+                    >
+                        <td colspan="6">
                             <em>No hay ingresos</em>
                         </td>
                     </tr>
@@ -126,7 +161,7 @@
     </div>
 
     <div class="form-row g-2">
-        <fieldset class="form-group col-sm-3">
+        <fieldset class="form-group col-sm-2">
             <label for="invoice-number">Número Factura</label>
             <input
                 class="form-control @error('number') is-invalid @enderror"
@@ -156,7 +191,22 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-4">
+        <fieldset class="form-group col-sm-2">
+            <label for="invoice-amount">Monto Factura</label>
+            <input
+                class="form-control @error('amount') is-invalid @enderror"
+                id="invoice-amount"
+                wire:model.debounce.1500ms="amount"
+                type="text"
+            >
+            @error('amount')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-sm-5">
             <label for="invoice-{{ $iteration }}">Archivo Factura</label>
             <input
                 class="form-control form-control-file @error('file') is-invalid @enderror"
