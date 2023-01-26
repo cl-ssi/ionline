@@ -23,9 +23,9 @@
 
 <div class="center">
     @if($act_type == 'technical')
-        <strong class="seis">Recepción Técnica</strong>
+        <strong class="seis">Acta Recepción Técnica</strong>
     @else
-        <strong class="seis">Recepción en Bodega</strong>
+        <strong class="seis">Acta Ingreso a Bodega</strong>
     @endif
 </div>
 
@@ -92,6 +92,7 @@
                 </td>
             </tr>
         @endforelse
+
         @if($control->isPurchaseOrder())
             <tr>
                 <td colspan="2"></td>
@@ -127,5 +128,23 @@
         @endif
     </tbody>
 </table>
+
+@if($control->receptionVisator)
+<div class="content-signature">
+    <div class="aprove">
+        <em>
+            Recepcionado digitalmente el {{ $control->created_at }} por:
+        </em>
+        <br>
+        <span style="font-size: 110%;">
+            <b>{{ $control->receptionVisator->full_name }} </b> <br>
+        </span>
+        <span style="font-size: 100%;">
+            {{ optional($control->receptionVisator)->organizationalUnit->name }} <br>
+        </span>
+        {{ optional($control->receptionVisator)->organizationalUnit->establishment->name }}<br>
+    </div>
+</div>
+@endif
 
 @endsection
