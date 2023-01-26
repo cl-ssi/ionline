@@ -84,6 +84,7 @@ use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Parameters\PurchaseTypeController;
 use App\Http\Controllers\Parameters\PurchaseUnitController;
 use App\Http\Controllers\Parameters\EstablishmentController;
+use App\Http\Controllers\Parameters\EstablishmentTypeController;
 use App\Http\Controllers\Parameters\InventoryLabelController;
 
 use App\Http\Controllers\Suitability\OptionsController;
@@ -214,6 +215,7 @@ use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Livewire\Inventory\InventoryManager;
 use App\Http\Livewire\Inventory\InventoryManageUsers;
+use App\Models\Parameters\EstablishmentType;
 
 /*
 |--------------------------------------------------------------------------
@@ -1007,6 +1009,15 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::prefix('establishments')->as('establishments.')->group(function () {
         Route::get('/', [EstablishmentController::class,'index'])->name('index');
         Route::put('/{establishment}', [EstablishmentController::class,'update'])->name('update');
+    });
+
+    Route::prefix('establishment_types')->as('establishment_types.')->group(function () {
+        Route::get('/', [EstablishmentTypeController::class,'index'])->name('index');
+        Route::get('/create', [EstablishmentTypeController::class, 'create'])->name('create');
+        Route::post('/store', [EstablishmentTypeController::class, 'store'])->name('store');
+        Route::get('/{establishmentType}/edit', [EstablishmentTypeController::class, 'edit'])->name('edit');
+        Route::put('/{establishmentType}/update', [EstablishmentTypeController::class, 'update'])->name('update');
+
     });
 
     Route::get('/holidays', App\Http\Livewire\Parameters\Holidays::class)->name('holidays');

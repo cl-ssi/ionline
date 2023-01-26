@@ -210,7 +210,7 @@
           </tr>
           <tr>
               <th align="left">Programa Asociado</th>
-              <td colspan="2">{{ $requestForm->associateProgram->alias_finance ?? $requestForm->program }}</td>
+              <td colspan="2">{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
           </tr>
           <tr>
               <th align="left">Justificación</th>

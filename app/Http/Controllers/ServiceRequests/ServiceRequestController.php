@@ -25,6 +25,10 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\User;
 use DB;
+use App\Exports\ConsolidatedDataExport;
+use App\Exports\ConsolidatedMasterDataExport;
+
+use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -754,22 +758,13 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
-    set_time_limit(7200);
-    ini_set('memory_limit', '2048M');
+    // set_time_limit(7200);
+    // ini_set('memory_limit', '2048M');
 
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
     $semester = $request->semester;
-
-    // dd(ServiceRequest::where('id',21713)->whereMonth('start_date',[11,12])->get());
-    // dd(ServiceRequest::where('id',21713)->where(function($query) {
-    //                                         $query->whereMonth('start_date',7)
-    //                                                 ->orWhereMonth('start_date',8)
-    //                                                 ->orWhereMonth('start_date',9)
-    //                                                 ->orWhereMonth('start_date',10)
-    //                                                 ->orWhereMonth('start_date',11)
-    //                                                 ->orWhereMonth('start_date',12);
-    //                                         })->get());
+    // $month = $request->month;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
@@ -781,8 +776,6 @@ class ServiceRequestController extends Controller
     ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
-    // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-    // ->where('start_date','>=','2023-01-01 00:00')
     ->whereYear('start_date',$request->year)
     ->when($semester == 1, function ($q) use ($semester) {
         // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
@@ -812,16 +805,16 @@ class ServiceRequestController extends Controller
                             ->orWhereMonth('start_date',12);
                 });
     })
+    // ->whereMonth('start_date',$month)
+    ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')
     ->get();
 
-
-
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-        $start_date = Carbon::parse($shiftControl->start_date);
-        $end_date = Carbon::parse($shiftControl->end_date);
-        $dateDiff = $start_date->diffInHours($end_date);
+        // $start_date = Carbon::parse($shiftControl->start_date);
+        // $end_date = Carbon::parse($shiftControl->end_date);
+        $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
         $serviceRequest->ControlHrs += $dateDiff;
       }
     }
@@ -866,16 +859,25 @@ class ServiceRequestController extends Controller
                             ->orWhereMonth('start_date',12);
                 });
     })
+    // ->whereMonth('start_date',$month)
+    ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')->get();
-
+    
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-        $start_date = Carbon::parse($shiftControl->start_date);
-        $end_date = Carbon::parse($shiftControl->end_date);
-        $dateDiff = $start_date->diffInHours($end_date);
+        // $start_date = Carbon::parse($shiftControl->start_date);
+        // $end_date = Carbon::parse($shiftControl->end_date);
+        $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
         $serviceRequest->ControlHrs += $dateDiff;
       }
     }
+    
+    // if($request->request->count()>0){
+    //     // return Excel::download(new ConsolidatedDataExport($request), 'consolidated-data.xlsx');
+    //     // return Excel::download(new ConsolidatedDeclineDataExport($request), 'consolidated-declined-data.xlsx');
+    //     return (new ConsolidatedMasterDataExport(2018))->download('consolidated-data.xlsx');
+    // }
+    // return view('service_requests.requests.consolidated_data', compact('request'));
 
     return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
   }

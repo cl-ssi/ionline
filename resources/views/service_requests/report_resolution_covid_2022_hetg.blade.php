@@ -378,13 +378,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
+        en que conste el cumplimiento de las labores estipuladas en el convenio.
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        10
+        El pago será efectuado los primeros 10 días hábiles desde que la boleta este en la plataforma 
         @else
-        5
+        El pago será efectuado el día 5 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano 
         @endif
-        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+        una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
         del Hospital Dr. Ernesto Torres Galdames de Iquique,
         el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
@@ -394,46 +394,46 @@
         En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada total es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
         Hospital Regional de Iquique,
 
-        en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
+        en que conste el cumplimiento de las labores estipuladas en el convenio.
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        10
+        El pago será efectuado los primeros 10 días hábiles desde que la boleta este en la plataforma 
         @else
-        5
+        El pago será efectuado el día 5 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano 
         @endif
-        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
       @endif
       @endif
       @endif
       @else
-      @if($ServiceRequest->program_contract_type == "Mensual")
-      <p class="justify">
-        <strong>SÉPTIMO:</strong>
-        El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
-      </p>
-      @elseif($ServiceRequest->program_contract_type == "Horas")
-      <p class="justify">
-        <strong>SÉPTIMO:</strong>
-        El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
-      </p>
-      @else
-      <strong>SÉPTIMO:</strong>
-      En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada total es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
-      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-      Hospital Regional de Iquique,
-      @else
-      Servicio de Salud Iquique,
-      @endif
-      en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
-      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-      10
-      @else
-      5
-      @endif
-      del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
-      del Hospital Dr. Ernesto Torres Galdames de Iquique,
-      el cual debe venir con las debidas observaciones de la Jefatura directa.
-      @endif
+        @if($ServiceRequest->program_contract_type == "Mensual")
+            <p class="justify">
+                <strong>SÉPTIMO:</strong>
+                El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
+            </p>
+        @elseif($ServiceRequest->program_contract_type == "Horas")
+            <p class="justify">
+                <strong>SÉPTIMO:</strong>
+                El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
+            </p>
+        @else
+            <strong>SÉPTIMO:</strong>
+            En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada total es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                    Hospital Regional de Iquique,
+                @else
+                    Servicio de Salud Iquique,
+                @endif
+            en que conste el cumplimiento de las labores estipuladas en el convenio.
+                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                    El pago será efectuado los primeros 10 días hábiles desde que la boleta este en la plataforma 
+                @else
+                    El pago será efectuado el día 5 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano 
+                @endif
+            una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+            del Hospital Dr. Ernesto Torres Galdames de Iquique,
+            el cual debe venir con las debidas observaciones de la Jefatura directa.
+        @endif
       @endif
 
 
