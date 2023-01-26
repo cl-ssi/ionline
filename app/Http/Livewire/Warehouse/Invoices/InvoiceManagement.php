@@ -19,6 +19,7 @@ class InvoiceManagement extends Component
     public $controls;
     public $number;
     public $date;
+    public $amount;
     public $file;
     public $iteration;
     public $search;
@@ -82,6 +83,7 @@ class InvoiceManagement extends Component
         $this->reset([
             'number',
             'date',
+            'amount',
             'file',
             'search',
         ]);
