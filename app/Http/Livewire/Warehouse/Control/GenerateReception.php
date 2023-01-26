@@ -37,8 +37,8 @@ class GenerateReception extends Component
     public $request_form_id;
     public $request_form;
     public $has_code_unspsc;
-    public $signer_id;
-    public $signer;
+    public $technical_signer_id;
+    public $technical_signature;
     public $disabled_program;
     public $po_code;
     public $po_date;
@@ -70,10 +70,6 @@ class GenerateReception extends Component
 
     public $type_product;
     public $wre_products;
-
-    protected $listeners = [
-        'signerId'
-    ];
 
     public function render()
     {
@@ -153,10 +149,10 @@ class GenerateReception extends Component
             $this->po_code = $purchaseOrder->code;
             $this->po_date = $purchaseOrder->date->format('Y-m-d H:i:s');
             $this->supplier_name = $purchaseOrder->supplier_name;
+            $this->request_form_id = $this->getRequestFormId();
             $this->program_id = $this->getProgramId();
             $this->disabled_program = $this->program_id ? true : false;
-            $this->request_form_id = $this->getRequestFormId();
-            $this->signer_id = $this->getSignerId();
+            $this->technical_signer_id = $this->getTechnicalSignatureId();
 
             if(count($this->po_items) == 0)
             {
@@ -169,10 +165,17 @@ class GenerateReception extends Component
 
     public function getProgramId()
     {
-        $control = Control::wherePoCode($this->po_search)->first();
-        $program_id = null;
-        if($control)
-            $program_id = $control->program_id;
+        if($this->request_form && $this->request_form->associateProgram)
+        {
+            $program_id = $this->request_form->associateProgram->id;
+        }
+        else
+        {
+            $control = Control::wherePoCode($this->po_search)->first();
+            $program_id = null;
+            if($control)
+                $program_id = $control->program_id;
+        }
         return $program_id;
     }
 
@@ -294,26 +297,18 @@ class GenerateReception extends Component
         return $request_form_id;
     }
 
-    public function getSignerId()
+    public function getTechnicalSignatureId()
     {
-        $this->signer = null;
-        $signer_id = null;
-        $authority = null;
-        $requestForm = ($this->request_form_id) ? RequestForm::find($this->request_form_id) : null;
+        $this->technical_signature = null;
+        $technical_signer_id = null;
 
-        if($requestForm && $requestForm->userOrganizationalUnit)
-            $authority = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, now()->format('Y-m-d'), 'manager');
-
-        if($authority)
+        if($this->request_form && $this->request_form->contractManager)
         {
-            $this->signer = $authority->user;
-            $signer_id = $this->signer->id;
+            $technical_signer_id = $this->request_form->contractManager->id;
+            $this->technical_signature = $this->request_form->contractManager;
         }
 
-        if($authority == null)
-            session()->flash('danger', 'La orden de compra no posee FR. Debe ingresar un firmante.');
-
-        return $signer_id;
+        return $technical_signer_id;
     }
 
     public function editProduct($index)
@@ -416,11 +411,6 @@ class GenerateReception extends Component
         return (count($newArray) == 0) ? true : false;
     }
 
-    public function signerId($value)
-    {
-        $this->signer_id = $value;
-    }
-
     public function finish()
     {
         $dataValidated = $this->validate($this->getRulesReception());
@@ -452,7 +442,8 @@ class GenerateReception extends Component
             'supplier_id' => $supplier->id,
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
-            'signer_id' => $this->signer_id,
+            'reception_visator_id' => $this->store->visator->id,
+            'technical_signer_id' => $this->technical_signer_id
         ]);
 
         foreach($this->po_items as $item)
@@ -474,7 +465,7 @@ class GenerateReception extends Component
             {
                 $lastBalance = Product::lastBalance($wreProduct, $program);
 
-                $controlItem = ControlItem::create([
+                ControlItem::create([
                     'quantity' => $item['quantity'],
                     'balance' => $item['quantity'] + $lastBalance,
                     'confirm' => true,
@@ -487,8 +478,11 @@ class GenerateReception extends Component
             }
         }
 
-        $this->sendReceptionRequest($control);
-        $this->sendTechnicalRequest($control);
+        if($this->technical_signature)
+        {
+            $this->sendTechnicalRequest($control);
+        }
+
         $this->emit('clearSearchUser', false);
         $this->resetInputProduct();
         $this->resetInputReception();
@@ -500,49 +494,25 @@ class GenerateReception extends Component
 
     public function sendTechnicalRequest(Control $control)
     {
-        $signatureTechnical = new SignatureService();
-        $signatureTechnical->addResponsible($this->store->visator);
-        $signatureTechnical->addSignature(
-            'Acta',
-            "Acta de Recepción en Bodega #$control->id",
-            "Recepción #$control->id",
-            'Visación en cadena de responsabilidad',
-            true
-        );
-        $signatureTechnical->addView('warehouse.pdf.report-reception', [
-            'type' => '',
-            'control' => $control,
-            'store' => $control->store,
-            'act_type' => 'reception'
-        ]);
-        $signatureTechnical->addVisators(collect([$this->store->visator]));
-        $signatureTechnical->addSignatures(collect([]));
-        $signatureTechnical = $signatureTechnical->sendRequest();
-        $control->receptionSignature()->associate($signatureTechnical);
-        $control->save();
-    }
-
-    public function sendReceptionRequest(Control $control)
-    {
-        $signatureReception = new SignatureService();
-        $signatureReception->addResponsible($this->store->visator);
-        $signatureReception->addSignature(
+        $technicalSignature = new SignatureService();
+        $technicalSignature->addResponsible($this->store->visator);
+        $technicalSignature->addSignature(
             'Acta',
             "Acta de Recepción Técnica #$control->id",
             "Recepción #$control->id",
             'Visación en cadena de responsabilidad',
             true
         );
-        $signatureReception->addView('warehouse.pdf.report-reception', [
+        $technicalSignature->addView('warehouse.pdf.report-reception', [
             'type' => '',
             'control' => $control,
             'store' => $control->store,
-            'act_type' => 'technical'
+            'act_type' => 'reception'
         ]);
-        $signatureReception->addVisators(collect([]));
-        $signatureReception->addSignatures(collect([$control->signer]));
-        $signatureReception = $signatureReception->sendRequest();
-        $control->technicalSignature()->associate($signatureReception);
+        $technicalSignature->addVisators(collect([]));
+        $technicalSignature->addSignatures(collect([$this->technical_signature]));
+        $technicalSignature = $technicalSignature->sendRequest();
+        $control->technicalSignature()->associate($technicalSignature);
         $control->save();
     }
 
@@ -586,8 +556,8 @@ class GenerateReception extends Component
         $this->note = null;
         $this->request_form = null;
         $this->request_form_id = null;
-        $this->signer_id = null;
-        $this->signer = null;
+        $this->technical_signature = null;
+        $this->technical_signer_id = null;
         $this->disabled_program = false;
     }
 }
