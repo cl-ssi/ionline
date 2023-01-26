@@ -80,4 +80,25 @@ class TestController extends Controller
     //     phpinfo();
     // }
 
+    /**
+    * No cargar 
+    */
+    public function loopLivewire()
+    {
+        $ous = OrganizationalUnit::all();
+
+        foreach($ous as $ou)
+        {
+            // @livewire( parametro ou)
+            $estab = Establishment::where('id', $ou->establishment_id)->first();
+            // echo $estab->id."<br>";
+            if($estab->type == 'HOSPITAL')
+            {
+                echo $estab->name."<br>";
+            } 
+            // fin de livewire
+        }
+
+    }
+
 }
