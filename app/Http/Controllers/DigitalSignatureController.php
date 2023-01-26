@@ -152,10 +152,10 @@ class DigitalSignatureController extends Controller
 
             $signaturesFlow->status = 1;
             $signaturesFlow->signature_date = now();
-            
+
             if($signaturesFlow->user_id != Auth::id())
                 $signaturesFlow->real_signer_id = Auth::id();
-            
+
             $signaturesFlow->save();
 
             if ($signaturesFlow->signaturesFile->signed_file) {
@@ -192,7 +192,7 @@ class DigitalSignatureController extends Controller
                 $destinatarios = $signaturesFlow->signature->recipients;
 
                 $dest_vec=array();
-                
+
 
 
                 if (strpos($destinatarios, ',') !== false) {
@@ -210,10 +210,10 @@ class DigitalSignatureController extends Controller
                     }
 
                 }
-                
+
                 // Entra en caso que tengo algun correo de dirección
                 if ($has_director_mail===true)
-                    {                        
+                    {
                         $generador = $signaturesFlow->signature->responsable->fullname;
                         $unidad = $signaturesFlow->signature->organizationalUnit->name;
 
@@ -255,7 +255,7 @@ class DigitalSignatureController extends Controller
                             ]);
                         }
                     }
-                
+
             }
 
             // Si es visación en cadena, se envía notificación por correo al siguiente firmante
