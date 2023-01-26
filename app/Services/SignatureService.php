@@ -22,6 +22,7 @@ class SignatureService
     public $visators;
 
     /**
+     * Add responsable
      * @param  \App\User  $responsible
      */
     public function addResponsible(User $responsible)
@@ -34,7 +35,7 @@ class SignatureService
      * @param  string  $subject
      * @param  string  $description
      * @param  string  $endorseType
-     * @param  bool   $visatorAsSignature
+     * @param  bool  $visatorAsSignature
      *
      * @return void
      */
@@ -85,7 +86,7 @@ class SignatureService
         $pdf = \PDF::loadView($this->view, $this->dataView);
         $pdf = $pdf->download('filename.pdf');
 
-        // Signature
+        /* Signature */
         $signature = Signature::create([
             'user_id' => $this->responsible->id,
             'responsable_id' => $this->responsible->id,
@@ -98,7 +99,7 @@ class SignatureService
             'visatorAsSignature' => $this->visatorAsSignature,
         ]);
 
-        // Signature File
+        /* Signature File */
         $signaturesFile = new SignaturesFile();
         $signaturesFile->md5_file = md5($pdf);
         $signaturesFile->file_type = 'documento';
@@ -131,7 +132,7 @@ class SignatureService
             ]);
         }
 
-        // Signers
+        /* Signers */
         foreach($this->signatures as $index => $signer)
         {
             $signaturesFlow = new SignaturesFlow();
