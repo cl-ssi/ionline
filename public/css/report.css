@@ -97,6 +97,20 @@ th, td {
   clear: both;
 }
 
+.aprove {
+    border: 1px solid #cccccc;
+    padding: 0 4px 0 4px;
+    font-size: 90%;
+    text-align: left;
+    width: 250;
+}
+
+.content-signature {
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 30px;
+}
+
 @media all {
     .page-break { display: none; }
 }
