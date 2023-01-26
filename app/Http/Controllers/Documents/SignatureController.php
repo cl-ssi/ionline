@@ -378,7 +378,7 @@ class SignatureController extends Controller
             'distribution' => ['nullable', new CommaSeparatedEmails],
             'recipients' => ['nullable', new CommaSeparatedEmails]
         ]);
-        
+
         $signature->fill($request->all());
         $signature->rejected_at = null;
         $signature->save();
