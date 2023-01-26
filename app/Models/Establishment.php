@@ -25,6 +25,7 @@ class Establishment extends Model implements Auditable
         'name',
         'type',
         'deis',
+        'new_deis',
         'sirh_code',
         'dependency',
         'official_name',
@@ -96,6 +97,11 @@ class Establishment extends Model implements Auditable
         }
 
         return $this->options;
+    }
+
+    public function getNewDeisWithoutFirstCharacterAttribute()
+    {
+        return substr($this->new_deis, 1);
     }
 
 

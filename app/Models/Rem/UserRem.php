@@ -13,6 +13,7 @@ class UserRem extends Model
 
     public $table = 'rem_users';
     protected $fillable = [
+        'id',
         'establishment_id',
         'user_id',        
     ];
