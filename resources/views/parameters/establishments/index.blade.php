@@ -40,6 +40,11 @@
             <td>{{ $establishment->level_of_care?? '' }}</td>
             <td>{{ $establishment->full_address ?? ''}} </td>
             <td>{{ $establishment->telephone??''}} </td>
+            <td>
+                <a href="{{ route('parameters.establishments.edit', $establishment) }}">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </td>
         </tr>
         @endforeach
     </tbody>

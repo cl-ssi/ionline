@@ -73,7 +73,12 @@ class EstablishmentController extends Controller
     public function edit(Establishment $establishment)
     {
         //
+        $establishmentTypes = EstablishmentType::all();
+        $communes = Commune::all();
+        $healthServices = HealthService::all();
+        return view('parameters/establishments/edit', compact('establishmentTypes', 'communes', 'healthServices', 'establishment'));
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -85,6 +90,8 @@ class EstablishmentController extends Controller
     public function update(Request $request, Establishment $establishment)
     {
         $establishment->fill($request->all());
+        $establishmentType = EstablishmentType::find($request->establishment_type_id);
+        $establishment->type = $establishmentType->name;
         $establishment->save();
 
         session()->flash('info', 'El establecimiento ' . $establishment->name . ' ha sido editado.');

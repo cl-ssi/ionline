@@ -1016,6 +1016,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('/create', [EstablishmentController::class,'create'])->name('create');
         Route::post('/store', [EstablishmentController::class, 'store'])->name('store');
         Route::put('/{establishment}', [EstablishmentController::class,'update'])->name('update');
+        Route::get('/{establishment}/edit', [EstablishmentController::class, 'edit'])->name('edit');
     });
 
     Route::prefix('establishment-types')->as('establishment_types.')->group(function () {
