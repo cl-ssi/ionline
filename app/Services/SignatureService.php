@@ -108,16 +108,9 @@ class SignatureService
 
         $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
         $signaturesFile->update(['file' => $filePath]);
-        if(config('app.env') === 'production')
-        {
-            Storage::disk('gcs')->put($filePath, $pdf);
-        }
-        else
-        {
-            Storage::disk('public')->put($filePath, $pdf);
-        }
+        Storage::disk('gcs')->put($filePath, $pdf);
 
-        // Visators
+        /* Visators */
         foreach($this->visators as $index => $visator)
         {
             $signaturesFlow = new SignaturesFlow();
