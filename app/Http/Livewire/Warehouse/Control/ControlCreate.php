@@ -22,7 +22,7 @@ class ControlCreate extends Component
     public $store_origin_id;
     public $store_destination_id;
     public $organizational_unit_id;
-    public $signer_id;
+    public $technical_signer_id;
     public $stores;
     public $programs;
     public $typeDispatches;
@@ -31,7 +31,7 @@ class ControlCreate extends Component
 
     protected $listeners = [
         'organizationalId',
-        'signerId'
+        'technicalSignerId',
     ];
 
     public $rulesReceiving = [
@@ -39,7 +39,7 @@ class ControlCreate extends Component
         'note'              => 'nullable|string|min:2|max:255',
         'program_id'        => 'nullable|exists:cfg_programs,id',
         'origin_id'         => 'required|integer|exists:wre_origins,id',
-        'signer_id'         => 'required|integer|exists:users,id'
+        'technical_signer_id' => 'required|integer|exists:users,id',
     ];
 
     public $rulesDispatch = [
@@ -79,6 +79,7 @@ class ControlCreate extends Component
         $dataValidated['store_id'] = $this->store->id;
         $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? TypeReception::receiving() : null;
+        $dataValidated['reception_visator_id'] = $this->store->visator->id ?? null;
 
         $control = Control::create($dataValidated);
 
@@ -122,8 +123,8 @@ class ControlCreate extends Component
         $this->organizational_unit_id = $value;
     }
 
-    public function signerId($value)
+    public function technicalSignerId($value)
     {
-        $this->signer_id = $value;
+        $this->technical_signer_id = $value;
     }
 }
