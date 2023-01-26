@@ -6,10 +6,20 @@
 
 @include('warehouse.' . $nav)
 
-@livewire('warehouse.control.control-index', [
-    'store' => $store,
-    'type'  => $type,
-    'nav'   => $nav,
-])
+@if($type == 'receiving')
+    @livewire('warehouse.control.control-receiving', [
+        'store' => $store,
+        'type'  => $type,
+        'nav'   => $nav,
+    ])
+@endif
+
+@if($type == 'dispatch')
+    @livewire('warehouse.control.control-dispatch', [
+        'store' => $store,
+        'type'  => $type,
+        'nav'   => $nav,
+    ])
+@endif
 
 @endsection
