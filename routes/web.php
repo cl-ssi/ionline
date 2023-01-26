@@ -2034,7 +2034,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
         Route::get('/create', [UserRemController::class, 'create'])->name('create');
         Route::post('/store', [UserRemController::class, 'store'])->name('store');
-        Route::delete('/{userRem}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}/destroy', [UserRemController::class, 'destroy'])->name('destroy');
     });
     Route::prefix('periods')->as('periods.')->middleware('auth')->group(function () {
         Route::get('/', [RemPeriodController::class, 'index'])->name('index');

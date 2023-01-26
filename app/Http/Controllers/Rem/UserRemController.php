@@ -20,9 +20,12 @@ class UserRemController extends Controller
      */
     public function index()
     {
-        $usersRem = UserRem::join('establishments', 'rem_users.establishment_id', '=', 'establishments.id')
-            ->orderBy('establishments.name', 'ASC')
-            ->get();
+        // $usersRem = UserRem::join('establishments', 'rem_users.establishment_id', '=', 'establishments.id')
+        //     ->whereNull('rem_users.deleted_at')
+        //     ->orderBy('establishments.name', 'ASC')
+        //     ->get();
+        $usersRem = UserRem::whereNull('deleted_at')->get();
+
 
         return view('rem.user.index', compact('usersRem'));
     }
@@ -116,12 +119,12 @@ class UserRemController extends Controller
      * @param  \App\Models\Rem\UserRem  $userRem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserRem $userRem)
+    public function destroy($id)
     {
+        $userRem = UserRem::findOrFail($id);
         $userRem->user->revokePermissionTo(['Rem: user']);
         $userRem->delete();
         session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
-
         return redirect()->route('rem.users.index');
     }
 }

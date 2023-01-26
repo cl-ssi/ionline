@@ -27,7 +27,7 @@
     <tbody>
         @foreach($usersRem as $userRem)
         <tr>
-            <td>{{ optional($userRem->user)->tinnyName }}</td>
+            <td>{{ optional($userRem->user)->fullname }}</td>
             <td>{{ $userRem->establishment->name ?? '' }}</td>
             <td>
                 <form method="POST" class="form-horizontal" action="{{ route('rem.users.destroy', $userRem->id) }}">
