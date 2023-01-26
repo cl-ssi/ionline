@@ -8,7 +8,7 @@
 
 <h4>{{ $control->type_format }} {{ $control->id }}: {{ $store->name }}</h4>
 
-@livewire('warehouse.control.control-details', [
+@include('warehouse.controls.details', [
     'control' => $control
 ])
 
