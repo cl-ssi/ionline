@@ -24,7 +24,7 @@
             <label for="type-dispatch">Tipo de Egreso</label>
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 value="{{ optional($control->typeDispatch)->name }}"
                 id="type-dispatch"
                 readonly
@@ -39,7 +39,7 @@
         <input
             type="date"
             id="date"
-            class="form-control @error('date') is-invalid @enderror"
+            class="form-control form-control-sm @error('date') is-invalid @enderror"
             value="{{ old('date', optional($control)->date) }}"
             wire:model.debounce.1500ms="date"
             required
@@ -55,7 +55,7 @@
         <label for="program-id">Programa</label>
         @if($mode == 'create')
             <select
-                class="form-control @error('program_id') is-invalid @enderror"
+                class="form-control form-control-sm @error('program_id') is-invalid @enderror"
                 wire:model.debounce.1500ms="program_id"
                 id="program-id"
             >
@@ -77,7 +77,7 @@
         @else
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 value="{{ $control->program_name }}"
                 readonly
             >
@@ -92,6 +92,7 @@
             @livewire('establishment-search', [
                 'tagId'         => 'establishment-id',
                 'placeholder'   => 'Ingrese un establecimiento',
+                'smallInput'    => true,
             ])
         </div>
 
@@ -102,6 +103,7 @@
                 'placeholder'   => 'Ingrese una unidad organizacional',
                 'component'     => ($mode == 'create') ? 'warehouse.control.control-create' : 'warehouse.control.control-edit',
                 'event'         => 'organizationalId',
+                'smallInput'    => true,
             ])
             <input
                 class="form-control @error('organizational_unit_id') is-invalid @enderror"
@@ -122,7 +124,7 @@
             <fieldset class="form-group col-md-4">
                 <label for="destination-id">Destino</label>
                 <select
-                    class="form-control @error('destination_id') is-invalid @enderror"
+                    class="form-control custom-control-sm @error('destination_id') is-invalid @enderror"
                     wire:model.debounce.1500ms="destination_id"
                     id="destination-id"
                 >
@@ -143,7 +145,7 @@
                 <label for="store-destination-id">Bodega Destino</label>
                 @if($mode == 'create')
                     <select
-                        class="form-control @error('store_destination_id') is-invalid @enderror"
+                        class="form-control custom-control-sm @error('store_destination_id') is-invalid @enderror"
                         wire:model.debounce.1500ms="store_destination_id"
                         id="store-destination-id"
                     >
@@ -160,7 +162,7 @@
                 @else
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         id="store-destination-id"
                         value="{{ optional($control->destinationStore)->name }}"
                         readonly
@@ -176,7 +178,7 @@
         <input
             type="text"
             id="note"
-            class="form-control @error('note') is-invalid @enderror"
+            class="form-control form-control-sm @error('note') is-invalid @enderror"
             value="{{ optional($control)->name }}"
             wire:model.debounce.1500ms="note"
             required
