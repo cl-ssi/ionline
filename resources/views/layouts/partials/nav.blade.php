@@ -481,8 +481,8 @@
                 @endcan
 
                 @can('Integrity: manage complaints')
-                <li class="nav-item {{ active('rrhh.integrity.complaints.*') }}">
-                    <a class="nav-link" href="{{ route('rrhh.integrity.complaints.index') }}">
+                <li class="nav-item {{ active('integrity.complaints.*') }}">
+                    <a class="nav-link" href="{{ route('integrity.complaints.index') }}">
                     <i class="fas fa-balance-scale"></i> Integridad</a>
                 </li>
                 @endcan
@@ -557,7 +557,7 @@
                             </a>                            
 
 
-                            <a class="dropdown-item {{ active('parameters.establishments.index') }}"
+                            <a class="dropdown-item {{ active('parameters.establishment_types.index') }}"
                                 href="{{ route('parameters.establishment_types.index') }}">
                                 <i class="fas fa-th-list"></i> Tipos de Establecimientos
                             </a>

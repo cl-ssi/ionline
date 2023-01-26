@@ -4,10 +4,11 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Establishment;
 
 class SelectOrganizationalUnit extends Component
 {
-    /** Uso: 
+    /** Uso:
      * @livewire('select-organizational-unit')
      * 
      * Se puede definir el nombre del campo que almacenará el id de unidad organizacional
@@ -18,59 +19,107 @@ class SelectOrganizationalUnit extends Component
      *
      * Si necesitas que aparezca precargada la unidad organizacional
      * @livewire('select-organizational-unit', ['establishment_id' => '38', 'organizational_unit_id' => '20'])
+     * 
+     * Todas las opciones:
+     * 
+     * 'organizational_unit_id' => '20',
+     * 'establishment_id' => '38',
+     * 'selected_id' => 'ou_id',
+     * 'readonlyEstablishment' => true,
      */
 
-    public $ouRoot;
-    public $ouRoots;
-    public $establishment_id;
     public $selected_id = 'organizational_unit_id';
-
+    public $establishment_id;
     public $organizational_unit_id;
+    public $readonlyEstablishment = false;
+    public $filter;
+
+    public $establishments;
+
+    public $options;
+    public $ous;
+
+    /**
+    * mount
+    */
+    public function mount()
+    {
+        /* TODO: Esperando que la tabla de establecimientos se pueda filtrar por establecimientos dependientes del ss */
+        $this->establishments = Establishment::whereIn('id',[1,38,41])->get();
+        $this->loadOus();
+
+        // app('debugbar')->log($this->readonlyEstablishment);
+    }
+
+    /**
+    * Load OUS from establishment_id
+    */
+    public function loadOus()
+    {
+        $this->options = array();
+
+        $ous = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
+            ->where('establishment_id',$this->establishment_id)
+            // ->orderBy('name')
+            ->get()
+            ->toArray();
+        if(!empty($ous)) {
+            $this->buildTree($ous, 'father_id', 'id');
+        }
+    }
 
     public function render()
     {
-        /** Single establishment */
-        if($this->establishment_id)
-        {
-            // $ous = OrganizationalUnit::where('establishment_id', $this->establishment_id)->orderByDesc('level')->get();
-            // $max_level = $ous->first()->level;
-
-            // for($i = $max_level; $i >= 1; $i--) {
-            //     foreach($ous->where('level',$i) as $ou) {
-            //         // app('debugbar')->log($ou);
-            //         if($ou->level != 1) {
-            //             $tree[$ou->organizational_unit_id] = ['id'=>$ou->id, 'name'=>$ou->name, 'level'=> $ou->level];
-            //         }
-            //     }
-            // }
-
-            // foreach($ous as $ou) {
-
-            //     // if($ou->level == 1) {
-            //     //     $tree[$ou->id]['name'] = $ou->name; 
-            //     // }
-            //     // else {
-            //     //     if($ou->level)
-            //     //     $tree[$ou->organizational_unit_id]['childs'][$ou->id]['name'] = $ou->name; 
-            //     // }
-            // }
-
-            // app('debugbar')->log($tree);
-
-            $this->ouRoot = OrganizationalUnit::where('level',1)->where('establishment_id', $this->establishment_id)->first();
-            if($this->ouRoot)
-            {
-                return view('livewire.select-organizational-unit');
-            }
-            else{
-                dd('No se econtró una unidad organizacional de nivel 1 para el establecimiento id: '.$this->establishment_id);
-            }
+        if($this->filter) {
+            $options = array_filter(
+                $this->options, 
+                fn($haystack) => str_contains(
+                    strtolower($haystack), strtolower($this->filter)
+                )
+            );
         }
-        /** Multi establishment */
-        else 
-        {
-            $this->ouRoots = OrganizationalUnit::where('level',1)->get();
-            return view('livewire.select-organizational-unit');
+        else {
+            $options = $this->options;
         }
+
+        /** Vacía el array ou antes de formar una con pares de valores id,name */
+        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
+        $this->ous = array();
+
+        foreach($options as $id => $option) {
+            $this->ous[] = array('id'=> $id, 'name' => $option);
+        }
+
+        // app('debugbar')->log($this->ous);
+
+        return view('livewire.select-organizational-unit');
+    }
+
+    /**
+     * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
+     */
+    function buildTree(array $flatList)
+    {
+        $grouped = [];
+        foreach ($flatList as $node){
+            if(!$node['father_id']) {
+                $node['father_id'] = 0;
+            }
+            $grouped[$node['father_id']][] = $node;
+        }
+
+        $fnBuilder = function($siblings) use (&$fnBuilder, $grouped) {
+            foreach ($siblings as $k => $sibling) {
+                $id = $sibling['id'];
+                $this->options[$id] = str_repeat("- ", $sibling['level']).$sibling['name'];
+                if(isset($grouped[$id])) {
+                    $sibling['children'] = $fnBuilder($grouped[$id]);
+                }
+                $siblings[$k] = $sibling;
+            }
+            return $siblings;
+        };
+
+        return $fnBuilder($grouped[0]);
     }
 }

@@ -23,6 +23,7 @@
 
     @else
     {{-- Muestra el campo de carga de archivo --}}
+    {{--
     <div class="input-group">
         <div class="custom-file">
             <input type="file" wire:model="file" id="for-file" class="custom-file-input" required>
@@ -30,11 +31,26 @@
                 <div wire:loading wire:target="file"><strong>Cargando</strong></div>
             </label>
             <div class="input-group-append">
-                <button type="button" wire:click="save" class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-save"></i>
+                <button type="button" wire:click="save" class="btn btn-primary btn-circle">
+                    <i class="fas fa-upload"></i>
                 </button>
             </div>
         </div>
+    </div>
+    --}}
+    <div class="input-group">
+        <div class="custom-file">
+            <input type="file" wire:model="file" id="for-file" class="custom-file-input" required>
+            <label class="custom-file-label form-control-sm" for="for-file" data-browse="Examinar" style="white-space: nowrap;">
+                <div wire:loading wire:target="file"><strong>Cargando</strong></div>
+            </label>
+        </div>
+        <div class="text-center">
+            <button type="button" wire:click="save" class="btn btn-primary btn-circle">
+                <i class="fas fa-upload"></i>
+            </button>
+        </div>
+
     </div>
     @endif
 
@@ -59,16 +75,16 @@
     </div>
 
     @if($isCorreccion && $remFiles->first()->filename)
-    {{-- Muestra el botón de descarga --}}    
+    {{-- Muestra el botón de descarga --}}
     <button type="button" style="width: 200px; height: 50px" wire:click="download" class="btn btn-sm btn-outline-secondary">
         <i class="fas fa-fw fa-file-excel text-success"></i> Descargar Archivo
-    </button>    
+    </button>
     <br>
     @if(!$remFiles->first()->locked && $remFiles->first()->filename && $isCorreccion)
     <button type="button" style="width: 200px; height: 50px" wire:click="deleteFile" class="btn btn-sm btn-danger" onclick="return confirm('¿está seguro que desea eliminar este Archivo?');">
         <i class="fas fa-fw fa-trash-alt"></i> Borrar Archivo
     </button>
-    @endif    
+    @endif
     <br>
     @endif
 </div>

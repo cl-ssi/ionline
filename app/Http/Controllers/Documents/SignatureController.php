@@ -195,7 +195,8 @@ class SignatureController extends Controller
                     $signaturesFile->save();
 
                     $documentFile = $annexed->openFile()->fread($documentFile->getSize());
-                    $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                    //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                    $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
                     $signaturesFile->update(['file' => $filePath,]);
                     Storage::disk('gcs')->put($filePath, $documentFile);
                 }
@@ -411,7 +412,8 @@ class SignatureController extends Controller
                 $signaturesFile->save();
 
                 $documentFile = $annexed->openFile()->fread($documentFile->getSize());
-                $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
                 $signaturesFile->update(['file' => $filePath,]);
                 Storage::disk('gcs')->put($filePath, $documentFile);
             }
@@ -529,6 +531,11 @@ class SignatureController extends Controller
     public function showPdfAnexo(SignaturesFile $anexo)
     {
         return Storage::disk('gcs')->response($anexo->file);
+    }
+
+    public function downloadAnexo(SignaturesFile $anexo)
+    {
+        return Storage::disk('gcs')->download($anexo->file);
     }
 
 

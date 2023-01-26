@@ -156,6 +156,8 @@ class AuthorityController extends Controller
     public function edit(Authority $authority)
     {
         switch($authority->organizationalUnit->level) {
+            case 6: $ouTopLevel = $authority->organizationalUnit->father->father->father->father->father; break;
+            case 5: $ouTopLevel = $authority->organizationalUnit->father->father->father->father; break;
             case 4: $ouTopLevel = $authority->organizationalUnit->father->father->father; break;
             case 3: $ouTopLevel = $authority->organizationalUnit->father->father; break;
             case 2: $ouTopLevel = $authority->organizationalUnit->father; break;

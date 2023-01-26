@@ -18,6 +18,8 @@ class SingleManager extends Component
      * 
      * Type puede ser de tipo User o Value
      *
+     * Obtener el valor de un parametro
+     * $value = Parameter::get('module','parameter');
      */
 
     public $module;
@@ -34,18 +36,17 @@ class SingleManager extends Component
 
     public function mount($module, $parameterName, $type)
     {
-        $this->parameter = Parameter::where('module',$module)
-            ->where('parameter',$parameterName)
-            ->first();
+        $this->parameter = Parameter::firstOrCreate([
+            'module' => $module,
+            'parameter' => $parameterName,
+        ]);
 
         $this->type = $type;
 
-        if($this->parameter)
-        {
-            if($type == 'user'){
-                $this->user = User::find($this->parameter->value);
-            }
+        if($type == 'user'){
+            $this->user = User::find($this->parameter->value);
         }
+
 
     }
 

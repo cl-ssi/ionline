@@ -69,6 +69,26 @@ class Parte extends Model
         return Carbon::parse($this->date)->format('d-m-Y');
     }
 
+    public function scopeFilter($query, $column, $value) {
+        switch($column) {
+            case 'number':
+            case 'origin':
+            case 'subject':
+                $query->where($column, 'LIKE', '%'.$value.'%');
+                break;
+            case 'id':
+            case 'type':
+                if(!empty($value)){
+                    $query->where($column, $value);
+                }
+                break;
+            case 'without_sgr':
+                $query->whereDoesntHave('requirements');
+                break;
+        }
+        app('debugbar')->log($value);
+    }
+
     public function scopeSearch($query, Request $request)
     {
         if($request->input('id') != "") {
@@ -89,6 +109,11 @@ class Parte extends Model
 
         if($request->input('subject') != "") {
             $query->where('subject', 'LIKE', '%'.$request->input('subject').'%' );
+        }
+        
+        if($request->input('without_sgr') != "") {
+            $query->whereDoesntHave('requirements');
+            $query->whereDate('created_at', '>=', date('Y') - 1 .'-01-01');
         }
 
         return $query;

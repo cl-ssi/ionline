@@ -4,41 +4,33 @@ namespace App\Http\Livewire\Requirements;
 
 use Livewire\Component;
 
-use App\Requirements\Category;
-use App\Requirements\Requirement;
-use App\Requirements\RequirementCategory;
-
 class SetCategory extends Component
 {
-    public $req;
+    public $requirement;
+    public $category_id;
 
-    public $reqCategories;
-    public $reqCategoriesArray;
-
-    public function setCategory($category_id)
+    /**
+    * mount
+    */
+    public function mount()
     {
-        if(in_array($category_id, $this->reqCategoriesArray))
-        {
-            /** este modelo no tiene ID hay que hacer la query para borrar */
-            RequirementCategory::where('requirement_id',$this->req->id)
-                ->where('category_id',$category_id)->delete();
+        $this->category_id = $this->requirement->category_id;
+    }
+
+    /**
+    * setCategory
+    */
+    public function setCategory()
+    {
+        if(empty($this->category_id)) {
+            $this->category_id = null;
         }
-        else
-        {
-            RequirementCategory::Create([
-                'requirement_id' => $this->req->id,
-                'category_id' => $category_id
-            ]);
-        }
-        
-        $this->req->refresh();
+        $this->requirement->category_id = $this->category_id;
+        $this->requirement->save();
     }
 
     public function render()
     {
-        $this->reqCategories = $this->req->categories->where('user_id',auth()->id());
-        $this->reqCategoriesArray = $this->reqCategories->pluck('id')->toArray();
-
         return view('livewire.requirements.set-category');
     }
 }

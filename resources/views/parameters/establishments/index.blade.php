@@ -1,63 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Establecimientos')
+@section('title', 'Establecimientos')
 
 @section('content')
 
 <h3 class="mb-3">Establecimientos</h3>
 
+<a class="btn btn-primary mb-3" href="{{ route('parameters.establishments.create') }}">Crear</a>
 <table class="table table-bordered table-sm">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Tipo</th>
             <th>Nombre</th>
-            <th>DEIS</th>
-            <th>CÓD. SIRH</th>
+            <th>Alias</th>
+            <th>Tipo</th>
+            <th>Deis</th>
+            <th>Deis Nuevo</th>
             <th>Comuna</th>
+            <th>Dependencia Jerarquica</th>
+            <th>Dependencia Administrativa</th>
+            <th>Nivel de Atención</th>
+            <th>Dirección</th>
+            <th>Fono</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach($establishments as $establishment)
-            <tr>
-                <td>{{ $establishment->id }}</td>
-                <td>{{ $establishment->type }}</td>
-                <td>{{ $establishment->name }}</td>
-                <td>{{ $establishment->deis }}</td>
-                <td>{{ $establishment->sirh_code }}</td>
-                <td>{{ $establishment->commune->name }}</td>
-                <td>
-                    <button class="btn btn-outline-primary" data-toggle="modal"
-                        data-target="#editModal"
-                        data-name="{{ $establishment->name }}"
-                        data-sirh="{{ $establishment->sirh_code }}"
-                        data-formaction="{{ route('parameters.establishments.update', $establishment->id)}}">
-                    <i class="fas fa-edit"></i></button>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ $establishment->id?? '' }}</td>
+            <td>{{ $establishment->name?? '' }}</td>
+            <td>{{ $establishment->alias?? '' }}</td>
+            <td>{{ $establishment->type?? '' }}</td>
+            <td>{{ $establishment->deis?? '' }}</td>
+            <td>{{ $establishment->new_deis?? '' }}</td>
+            <td>{{ $establishment->commune->name?? '' }}</td>
+            <td>{{ $establishment->dependency?? '' }}</td>
+            <td>{{ $establishment->administrative_dependency?? '' }}</td>
+            <td>{{ $establishment->level_of_care?? '' }}</td>
+            <td>{{ $establishment->address ?? ''}} </td>
+            <td>{{ $establishment->telephone??''}} </td>
+        </tr>
         @endforeach
     </tbody>
+
 </table>
 
-@include('parameters/establishments/modal_edit')
-
-@endsection
-
-@section('custom_js')
-<script type="text/javascript">
-    $('#editModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var modal = $(this)
-
-        var name = button.data('name')
-        var sirh = button.data('sirh')
-        modal.find('.modal-title').text('Editando ' + name)
-        modal.find('input[name="name"]').val(name)
-        modal.find('input[name="sirh"]').val(sirh)
-
-        var formaction  = button.data('formaction')
-        modal.find("#form-edit").attr('action', formaction)
-    })
-</script>
 @endsection

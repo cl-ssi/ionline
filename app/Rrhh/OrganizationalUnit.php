@@ -2,9 +2,10 @@
 
 namespace App\Rrhh;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\Requirements\Category;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -19,7 +20,13 @@ class OrganizationalUnit extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'name','level', 'organizational_unit_id','establishment_id','sirh_function','sirh_ou_id','sirh_cost_center'
+        'name',
+        'level',
+        'organizational_unit_id',
+        'establishment_id',
+        'sirh_function',
+        'sirh_ou_id',
+        'sirh_cost_center'
     ];
 
     /**
@@ -67,6 +74,20 @@ class OrganizationalUnit extends Model implements Auditable
     public function requestForms()
     {
       return $this->hasMany(RequestForm::class, 'applicant_ou_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+    
+
+    public function scopeSearch($query, $name)
+    {
+        if($name != "")
+        {
+            return $query->where('name', 'LIKE', '%'.$name.'%');
+        }
     }
 
     public function getInitialsAttribute()

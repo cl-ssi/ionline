@@ -3,10 +3,10 @@
     <div class="input-group mb-3">
         <input type="number" wire:model.debounce.600ms="req_id" class="form-control" placeholder="N°">
         <input type="text" wire:model.debounce.600ms="subject" class="form-control" placeholder="Asunto">
-        <select wire:model.debounce.600ms="category" class="form-control">
+        <select wire:model.debounce.600ms="label" class="form-control">
             <option></option>
-            @foreach(auth()->user()->reqCategories->pluck('name') as $category)
-            <option>{{ $category }}</option>
+            @foreach(auth()->user()->reqLabels->pluck('name') as $label)
+            <option>{{ $label }}</option>
             @endforeach
         </select>
         <input type="text" wire:model.debounce.600ms="user_involved" class="form-control" placeholder="Usuario involucrado">
@@ -17,19 +17,19 @@
             </div>
     </div>
 
-	@if($requirements)
-    	
-		@if($requirements->isNotEmpty())
-    	
-			<h4>Resultado de la busqueda</h4>
-			@include('requirements.partials.list')
+    @if($requirements)
+        
+        @if($requirements->isNotEmpty())
+        
+            <h4>Resultado de la busqueda</h4>
+            @include('requirements.partials.list')
 
-		@else
+        @else
 
-			<h4 class="text-danger text-center">Que penita, no se han encontrado resultados.</h4>
-			<hr>
+            <h4 class="text-danger text-center">No se han encontrado resultados.</h4>
+            <hr>
 
-		@endif
+        @endif
 
     @endif
 </div>

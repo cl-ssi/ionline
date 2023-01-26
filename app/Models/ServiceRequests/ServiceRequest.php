@@ -167,6 +167,16 @@ class ServiceRequest extends Model implements Auditable
       return $cont;
     }
 
+    public function status(){
+        if($this->SignatureFlows->where('status','===',0)->count() > 0){
+            return "Rechazada";
+        }elseif($this->SignatureFlows->whereNull('status')->count() > 0){
+            return "Pendiente";
+        }else{
+            return "Finalizada";
+        }
+    }
+
     public function signedBudgetAvailabilityCert()
     {
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signed_budget_availability_cert_id');

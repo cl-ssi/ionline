@@ -23,8 +23,8 @@ class SampleToIspController extends Controller
         $sampleToISP->fill($request->all());
         $sampleToISP->reception_id = $reception->id;
         $sampleToISP->user()->associate(Auth::user());
-        $sampleToISP->manager_id = Parameter::get('drugs','Jefe')->value;
-        $sampleToISP->lawyer_id  = Parameter::get('drugs','Mandatado')->value;
+        $sampleToISP->manager_id = Parameter::get('drugs','Jefe');
+        $sampleToISP->lawyer_id  = Parameter::get('drugs','Mandatado');
         $sampleToISP->save();
 
         session()->flash('info', 'Se ha creado envío a ISP con peso sobre de '
@@ -68,7 +68,7 @@ class SampleToIspController extends Controller
             $samples += $item->sample_number;
         }
 
-        $mandato = Parameter::get('drugs','MandatadoResolucion')->value;
+        $mandato = Parameter::get('drugs','MandatadoResolucion');
 
         return view('drugs.receptions.sample_to_isp', compact('reception','samples', 'items', 'mandato'));
     }

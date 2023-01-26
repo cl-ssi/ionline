@@ -16,7 +16,7 @@ class JobPositionProfile extends Model implements Auditable
     protected $fillable = [
         'name', 'charges_number', 'degree', 'subordinates', 'salary', 'law', 'dfl3', 'dfl29',
         'other_legal_framework', 'working_day', 'specific_requirement', 'training', 'experience',
-        'technical_competence', 'objective'
+        'technical_competence', 'objective', 'working_team'
     ];
 
     public function user() {

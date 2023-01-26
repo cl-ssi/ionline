@@ -49,7 +49,7 @@
             <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
 
             @foreach($signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank" data-toggle="tooltip" data-placement="top" data-original-title="">Anexo <i {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}} class="fas fa-paperclip"></i>&nbsp
+            <a href="{{route('documents.signatures.downloadAnexo', $anexo)}}" target="_blank" data-toggle="tooltip" data-placement="top" data-original-title="">Anexo <i {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}} class="fas fa-paperclip"></i>&nbsp
             </a>
             @endforeach
 

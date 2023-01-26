@@ -234,6 +234,7 @@ class DigitalSignatureController extends Controller
                             'type' => $this->tipo,
                             'date' => $signaturesFlow->signature->request_date,
                             'subject' => $signaturesFlow->signature->subject,
+                            'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
                             'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
                         ]);
 

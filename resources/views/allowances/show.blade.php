@@ -65,8 +65,8 @@
                     <tr>
                         <td>{{ $allowance->MeansOfTransportValue }}</td>
                         <td>{{ $allowance->RoundTripValue }}</td>
-                        <td>{{ $allowance->OvernightValue }}</td>
                         <td>{{ $allowance->PassageValue }}</td>
+                        <td>{{ $allowance->OvernightValue }}</td>
                     </tr>
                     <tr class="table-active">
                         <th>Desde</th>

@@ -27,6 +27,7 @@ class EstablishmentController extends Controller
     public function create()
     {
         //
+        return view('parameters/establishments/create');
     }
 
     /**

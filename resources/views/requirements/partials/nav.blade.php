@@ -18,37 +18,20 @@
 
 
     <li class="nav-item">
-        <a class="nav-link {{active('requirements.categories.index')}}"
-            href="{{ route('requirements.categories.index') }}">
-            <i class="fas fa-book"></i>
-            Categorias
+        <a class="nav-link {{active('requirements.labels.index')}}"
+            href="{{ route('requirements.labels.index') }}">
+            <i class="fas fa-tags"></i>
+            Etiquetas
         </a>
     </li>
     
     <li class="nav-item">
-        <a class="nav-link {{active('requirements.labels.index')}}"
-            href="{{ route('requirements.labels.index') }}">
-            <i class="fas fa-book"></i>
-            Etiquetas
+        <a class="nav-link {{active('requirements.categories')}}"
+            href="{{ route('requirements.categories') }}">
+            <i class="fas fa-copyright"></i>
+            Categorías
         </a>
     </li>
 
-    <!-- <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('requirements.outbox') }}">
-            <i class="fas fa-pencil-alt"></i>
-            Bandeja de salida
-        </a>
-    </li> -->
-
-    @if(Auth::user()->id == 9381231 || Auth::user()->id == 17430005 || Auth::user()->id == 15287582)
-    <li class="nav-item">
-        <a class="nav-link {{active('requirements.report1')}}"
-            href="{{ route('requirements.report1') }}">
-            <i class="fas fa-book"></i>
-            Reporte
-        </a>
-    </li>
-    @endif
 
 </ul>

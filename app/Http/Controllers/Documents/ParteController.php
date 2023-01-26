@@ -23,17 +23,21 @@ class ParteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {        
         $partes = Parte::query()
             ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
             ->search($request)
-            ->with(['requirements','files','requirements.events','requirements.events.to_user'])
+            ->with([
+                'requirements',
+                'files',
+                'requirements.events',
+                'requirements.events.to_user',
+                'files.signatureFile.signaturesFlows',
+                'files.signatureFile',
+                ])
             ->latest()->paginate('100');
-        //$d->events()->doesntHave('father')->get()
-        // $partes = Parte::whereHas('events', function ($query) {
-        //     $query->where('active', 1)
-        //           ->where('user_id', Auth::id());
-        // })->get();
+
+            session(['partes_origin' => session('partes_origin') ?? $request->input('origin')]);
         return view('documents.partes.index', compact('partes', 'request'));
     }
 

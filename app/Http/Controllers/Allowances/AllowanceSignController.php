@@ -14,6 +14,7 @@ use App\Notifications\Allowances\EndAllowance;
 use App\Notifications\Allowances\RejectedAllowance;
 use Illuminate\Http\Response;
 use App\Models\Documents\SignaturesFile;
+use App\Services\SignatureService;
 
 class AllowanceSignController extends Controller
 {
@@ -80,12 +81,45 @@ class AllowanceSignController extends Controller
     public function update(Request $request, AllowanceSign $allowanceSign, $status, Allowance $allowance)
     {
         if($status == 'accepted'){
+            foreach($allowance->allowanceSigns as $sign){
+                $signatureTechnical = new SignatureService();
+                dd($signatureTechnical);
+            }
+            $signs = $allowance->allowanceSigns;
+
+            // ------------------ FIRMA ---------------------
+            $signatureTechnical = new SignatureService();
+            $signatureTechnical->addResponsible($this->store->visator);
+            $signatureTechnical->addSignature(
+                'Acta',
+                "Acta de Recepción en Bodega #$control->id",
+                "Recepción #$control->id",
+                'Visación en cadena de responsabilidad',
+                true
+            );
+            $signatureTechnical->addView('warehouse.pdf.report-reception', [
+                'type' => '',
+                'control' => $control,
+                'store' => $control->store,
+                'act_type' => 'reception'
+            ]);
+            $signatureTechnical->addVisators(collect([$this->store->visator]));
+            $signatureTechnical->addSignatures(collect([]));
+            $signatureTechnical = $signatureTechnical->sendRequest();
+            $control->receptionSignature()->associate($signatureTechnical);
+            $control->save();
+            // -----------------------------------------------
+
+            dd($signs);
+            /*
             $AllowanceSignNotValid = false;
 
             //SI SOY AUTORIDAD EN LA PROXIMA FIRMA, SE CANCELA LA FIRMA ACTUAL
             $nextAllowanceSign = $allowanceSign->allowance->allowanceSigns->where('position', $allowanceSign->position + 1)->first();
             foreach(Authority::getAmIAuthorityFromOu(now(), 'manager', auth()->user()->id) as $authority){
                 if($authority->organizational_unit_id == $nextAllowanceSign->organizational_unit_id){
+                    dd('Autoridad Correlativa');
+
                     $allowanceSign->status = 'not valid';
                     $allowanceSign->save();
                     $AllowanceSignNotValid = true;
@@ -101,6 +135,7 @@ class AllowanceSignController extends Controller
 
             //SI NO SE CANCELÓ LA PRIMERA FIRMA SE REALIZA EL PROCESO NORMALMENTE
             if($AllowanceSignNotValid != true){
+                dd('Autoridad NO Correlativa');
 
                 $allowanceSign->user_id = Auth::user()->id;
                 $allowanceSign->status = $status;
@@ -136,6 +171,7 @@ class AllowanceSignController extends Controller
                 session()->flash('success', 'Estimado Usuario: Su solicitud de viático ha sido Aceptada en su totalidad.');
                 return redirect()->route('allowances.sign_index');
             }
+            */
 
         }
         if($status == 'rejected'){

@@ -23,8 +23,8 @@ class RecordToCourtController extends Controller
         $recordToCourt->fill($request->all());
         $recordToCourt->reception_id = $reception->id;
         $recordToCourt->user()->associate(Auth::user());
-        $recordToCourt->manager_id = Parameter::get('drugs','Jefe')->value;
-        $recordToCourt->lawyer_id  = Parameter::get('drugs','Mandatado')->value;
+        $recordToCourt->manager_id = Parameter::get('drugs','Jefe');
+        $recordToCourt->lawyer_id  = Parameter::get('drugs','Mandatado');
         $recordToCourt->save();
 
         session()->flash('info', 'Se ha creado oficio a fiscalía número: '
@@ -61,7 +61,7 @@ class RecordToCourtController extends Controller
 
         $recordToCourt = $reception->recordToCourt;
 
-        $mandato = Parameter::get('drugs','MandatadoResolucion')->value;
+        $mandato = Parameter::get('drugs','MandatadoResolucion');
 
         return view('drugs.receptions.record_to_court',
                     compact('reception', 'recordToCourt', 'itemsISP', 'itemsSEREMI','mandato'));

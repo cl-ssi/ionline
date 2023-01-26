@@ -63,7 +63,7 @@
 			<select name="establishment_id" class="form-control" required>
 				<option value=""></option>
 				@foreach($establishments as $key => $establishment)
-				<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
+				<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->type}} - {{$establishment->name}}</option>
 				@endforeach
 			</select>
 		</fieldset>
@@ -96,6 +96,7 @@
 				<option value="11">11</option>
 				<option value="9">9</option>
 				<option value="8.5">8.5</option>
+                <option value="8">8</option>
 				<option value="7.5">7.5</option>
 				<option value="5">5</option>
 				<option value="4">4</option>

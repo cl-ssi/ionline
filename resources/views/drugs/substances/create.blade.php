@@ -36,6 +36,7 @@
             <option value="Alucinógenos">Alucinógenos</option>
             <option value="Estimulantes">Estimulantes</option>
             <option value="Depresores">Depresores</option>
+            <option value="Precursores">Precursores</option>
         </select>
     </fieldset>
 

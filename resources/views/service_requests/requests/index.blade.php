@@ -131,8 +131,7 @@
 								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-								<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-									@else Finalizada @endif</td>
+								<td>{{$serviceRequest->status()}}</td>
 								<td nowrap>
 									<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}" class="btn btn-sm btn-outline-secondary">
 										<span class="fas fa-edit" aria-hidden="true"></span>
@@ -189,10 +188,7 @@
 								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-								<td>
-									@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-									@else Finalizada @endif</td>
+								<td>{{$serviceRequest->status()}}</td>
 								<td nowrap>
 									<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}" class="btn btn-sm btn-outline-secondary">
 										<span class="fas fa-edit" aria-hidden="true"></span>
@@ -278,10 +274,7 @@
 								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-								<td>
-									@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-									@else Finalizada @endif</td>
+								<td>{{$serviceRequest->status()}}</td>
 								<td nowrap>
 									<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}" class="btn btn-sm btn-outline-secondary">
 										<span class="fas fa-edit" aria-hidden="true"></span>
@@ -358,10 +351,7 @@
 								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-								<td>
-									@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
-									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-									@else Finalizada @endif</td>
+								<td>{{$serviceRequest->status()}}</td>
 								<td nowrap>
 									<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}" class="btn btn-sm btn-outline-secondary">
 										<span class="fas fa-edit" aria-hidden="true"></span>

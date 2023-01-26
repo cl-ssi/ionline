@@ -113,7 +113,9 @@ class RequirementReceivers extends Component
             $this->users = $users;
             //selecciona autoridad
             $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
-            $this->to_user_id = $this->authority->user_id;
+            if($this->authority!=null){
+                $this->to_user_id = $this->authority->user_id;
+            }
         }
 
         // se agrega para que deje todos los objetos del array del tipo User

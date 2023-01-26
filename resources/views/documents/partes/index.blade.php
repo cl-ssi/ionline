@@ -56,6 +56,14 @@
         </button>
 
     </div>
+    <div class="form-row">
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" name="without_sgr">
+            Solo aquellos sin derivación
+          </label>
+        </div>
+    </div>
 </form>
 
 

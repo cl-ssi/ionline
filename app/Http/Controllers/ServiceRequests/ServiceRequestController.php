@@ -115,9 +115,9 @@ class ServiceRequestController extends Controller
       $subQuery->where('responsable_id', $user_id);
       $subQuery->orwhere('user_id', $user_id);
     })
-      ->with("SignatureFlows")
-      ->orderBy('id', 'asc')
-      ->get();
+    ->with('SignatureFlows','responsabilityCenter','employee')
+    ->orderBy('id', 'asc')
+    ->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       //not rejected

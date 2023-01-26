@@ -93,8 +93,12 @@ class RemSerieController extends Controller
      * @param  \App\Models\Rem\RemSerie  $remSerie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RemSerie $remSerie)
+    public function destroy(RemSerie $serie)
     {
-        //
+        //        
+        $serie->delete();
+        session()->flash('success', 'Serie eliminada de REM');
+
+        return redirect()->route('rem.series.index');
     }
 }

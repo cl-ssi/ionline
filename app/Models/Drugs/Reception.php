@@ -103,7 +103,8 @@ class Reception extends Model implements Auditable
 
     public function haveItemsForDestruction()
     {
-        return $this->items->where('destruct', '>', 0)->count() != 0;
+        return $this->hasMany(ReceptionItem::class)->where('destruct', '>', 0);
+        // return $this->items()->where('destruct', '>', 0)->count() != 0;
     }
 
     public function haveItems()

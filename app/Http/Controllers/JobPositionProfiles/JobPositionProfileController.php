@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Parameters\StaffDecree;
 use App\Models\Parameters\StaffDecreeByEstament;
 use App\Models\JobPositionProfiles\Role;
-
-
+use App\Models\JobPositionProfiles\Liability;
+use App\Models\JobPositionProfiles\JobPositionProfileLiability;
 
 class JobPositionProfileController extends Controller
 {
@@ -44,7 +44,6 @@ class JobPositionProfileController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $jobPositionProfile = new JobPositionProfile($request->All());
         $jobPositionProfile->status = 'pending';
         $jobPositionProfile->user()->associate(Auth::user());
@@ -110,7 +109,19 @@ class JobPositionProfileController extends Controller
 
     public function edit_organization(JobPositionProfile $jobPositionProfile)
     {   
-        return view('job_position_profile.edit_organization', compact('jobPositionProfile'));
+        $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
+        return view('job_position_profile.edit_organization', compact('jobPositionProfile', 'tree'));
+    }
+
+    public function edit_liabilities(JobPositionProfile $jobPositionProfile)
+    {
+        $liabilities = Liability::all();
+
+        $jppLiabilities = JobPositionProfileLiability::
+            where('job_position_profile_id', $jobPositionProfile->id)
+            ->get();
+
+        return view('job_position_profile.edit_liabilities', compact('jobPositionProfile', 'liabilities', 'jppLiabilities'));
     }
 
     /**
@@ -132,7 +143,7 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile->save();
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado Exitosamente El Perfil de Cargo');
-        return redirect()->route('job_position_profile.edit', $jobPositionProfile);
+        return redirect()->route('job_position_profile.edit_formal_requirements', $jobPositionProfile);
     }
 
     public function update_objectives(Request $request, JobPositionProfile $jobPositionProfile)
@@ -152,6 +163,51 @@ class JobPositionProfileController extends Controller
         
         session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente los objetivos Perfil de Cargo');
         return redirect()->route('job_position_profile.edit_objectives', $jobPositionProfile);
+    }
+
+    public function update_organization(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $jobPositionProfile->fill($request->all());
+        $jobPositionProfile->save();
+        
+        session()->flash('success', 'Estimado Usuario, se ha actualizado exitosamente la organización y contexto del cargo');
+        return redirect()->route('job_position_profile.edit_organization', $jobPositionProfile);
+    }
+
+    public function store_liabilities(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        foreach($request->values as $key => $value){
+            $jppLiabilities = new JobPositionProfileLiability();            
+            $jppLiabilities->liability_id = $key;
+            $jppLiabilities->value = $request->values[$key];
+            $jppLiabilities->job_position_profile_id = $jobPositionProfile->id;
+
+            $jppLiabilities->save();
+        }
+    
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las responsabilidades del cargo');
+        return redirect()->route('job_position_profile.edit_liabilities', $jobPositionProfile);
+    }
+
+    public function update_liabilities(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $jppLiabilities = JobPositionProfileLiability::
+            where('job_position_profile_id', $jobPositionProfile->id)
+            ->get();
+
+        foreach($jppLiabilities as $jppLiability){
+            foreach($request->values as $key => $value){
+                // dd($key.' '.$jppLiability->liability_id, $value.' '.$jppLiability->value);
+                if($key == $jppLiability->liability_id && $value != $jppLiability->value){  
+                    // dd($jppLiability);  
+                    $jppLiability->value = $request->values[$key];
+                    $jppLiability->save();
+                }
+            }
+        }
+        
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las responsabilidades del cargo');
+        return redirect()->route('job_position_profile.edit_liabilities', $jobPositionProfile);
     }
 
     /**

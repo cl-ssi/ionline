@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Formulario de Requerimientos: Abastecimiento</title>
+    <title>Viático</title>
 
     <meta name="description" content="">
     <meta name="author" content="Servicio de Salud Iquique">
@@ -124,6 +124,13 @@
           clear: both;
         }
 
+        .aprove {
+            border: 1px solid #cccccc;
+            padding: 0 4px 0 4px;
+            font-size: 90%;
+            width: 230;
+        }
+
         @media all {
           .page-break {
             display: none;
@@ -152,7 +159,6 @@
             </div>
         </div>
 
-
         <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
 
         <div class="siete">VISTOS: Decreto Ley 2763/79 Salud, Art. 14 del Reglamento de los Servicios de Salud, 
@@ -179,7 +185,7 @@
 
             <tr>
                 <th rowspan="2">Sección II</th>
-                <th colspan="2">Cargo</th>
+                <th colspan="2">Cargo / Función</th>
                 <th colspan="2">Gr. Cat. horas</th>
             </tr>
             <tr align="center">
@@ -221,18 +227,18 @@
             <tr align="center">
                 <td>{{ $allowance->MeansOfTransportValue }}</td>
                 <td>{{ $allowance->RoundTripValue }}</td>
-                <td>{{ $allowance->OvernightValue }}</td>
                 <td>{{ $allowance->PassageValue }}</td>
+                <td>{{ $allowance->OvernightValue }}</td>
             </tr>
 
             <tr>
                 <th rowspan="2" style="width: 20%">Sección VI</th>
-                <th>Desde</th>
-                <th>Hasta</th>
+                <th colspan="2">Desde</th>
+                <th colspan="2">Hasta</th>
             </tr>
             <tr align="center">
-                <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                <td>{{ $allowance->to->format('d-m-Y') }}</td>
+                <td colspan="2">{{ $allowance->from->format('d-m-Y') }}</td>
+                <td colspan="2">{{ $allowance->to->format('d-m-Y') }}</td>
             </tr>
         </table>
 
@@ -338,6 +344,21 @@
             EL ANTICIPO DE VIATICO DEBERA REINTEGRARSE DENTRO DE LAS 48 HORAS DE REALIZADO EL COMETIDO. 
         </div>
     </div>
+
+    <br>
+
+    <!-- <div class="aprove">
+        <em>Aprobado digitalmentes el {{ now() }} por:</em><br>
+        <span style="font-size: 110%;">
+            <b>{{ auth()->user()->fullName }}</b> <br>
+        </span>
+        <span style="font-size: 100%;">
+            {{ optional(auth()->user()->organizationalUnit)->name }} <br>
+        </span>
+        {{ optional(auth()->user()->organizationalUnit)->establishment->name }}<br>
+    </div> -->
+
+
 </body>
 
 </html>

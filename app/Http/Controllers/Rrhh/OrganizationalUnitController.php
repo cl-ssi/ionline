@@ -16,8 +16,8 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-        $organizationalUnits = OrganizationalUnit::where('level', 1)->where('establishment_id', Auth::user()->organizationalUnit->establishment->id)->get();
-        return view('rrhh.organizationalunit.index', compact('organizationalUnits'));
+        $ouTree = auth()->user()->organizationalUnit->establishment->ouTree;
+        return view('rrhh.organizationalunit.index', compact('ouTree'));
     }
 
     /**
@@ -41,9 +41,9 @@ class OrganizationalUnitController extends Controller
     public function store(Request $request)
     {
         $organizationalUnit = new OrganizationalUnit($request->All());
-        if ($request->level != 1) {
-          $organizationalUnit->father()->associate($request->input('father'));
-        }
+        $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
+        $organizationalUnit->father()->associate($father);
+        $organizationalUnit->level = $father->level + 1;
         $organizationalUnit->save();
 
         session()->flash('info', 'La unidad organizacional '.$organizationalUnit->name.' ha sido creada.');
@@ -70,12 +70,8 @@ class OrganizationalUnitController extends Controller
      */
     public function edit(OrganizationalUnit $organizationalUnit)
     {
-
-        $organizationalUnits = OrganizationalUnit::where('establishment_id', $organizationalUnit->establishment_id)->get();
-        //$organizationalUnits = OrganizationalUnit::all();
         return view('rrhh/organizationalunit/edit')
-            ->withOrganizationalUnit($organizationalUnit)
-            ->withOrganizationalUnits($organizationalUnits);
+            ->withOrganizationalUnit($organizationalUnit);
     }
 
     /**
@@ -88,9 +84,10 @@ class OrganizationalUnitController extends Controller
     public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
         $organizationalUnit->fill($request->all());
-        if ($organizationalUnit->organizational_unit_id != null) {
-          $organizationalUnit->father()->associate($request->input('father'));
-        }
+        $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
+        $organizationalUnit->father()->associate($father);
+        $organizationalUnit->level = $father->level + 1;
+
         $organizationalUnit->save();
 
         session()->flash('info', 'La unidad organizacional '.$organizationalUnit->name.' ha sido actualizada.');

@@ -6,6 +6,7 @@
                 <!-- <select class="form-control" data-container="#for-bootstrap-select"> -->
                 <select class="form-control selectpicker" data-live-search="true" id="ou" name="to_ou_id" 
                         required data-size="5" wire:model.lazy="to_ou_id" data-container="#for-bootstrap-select">
+                        <option value=""></option>
                     @foreach($ouRoots as $ouRoot)
                         @if($ouRoot->name != 'Externos')
                             <option value="{{ $ouRoot->id }}">
@@ -47,7 +48,7 @@
             <div class="input-group">
                 <select class="form-control" name="to_user_id" id="user" required="" wire:model.defer="to_user_id" >
                     @foreach($users as $user)
-                        <option value="{{$user->id}}">{{$user->getTinnyNameAttribute()}}</option>
+                        <option value="{{$user->id}}">{{ $user->tinnyName }}</option>
                     @endforeach
                 </select>
                 <div class="input-group-append">
@@ -85,16 +86,16 @@
             @foreach($user_array as $user)
                 <tr><input type='hidden' name='users[]' value="{{$user->id}}">
                     <input type='hidden' name='enCopia[]' value='0'>
-                    <td>{{$user->organizationalUnit->name}}</td>
-                    <td>{{$user->getTinnyNameAttribute()}}</td>
+                    <td>{{ $user->organizationalUnit->name }}</td>
+                    <td>{{ $user->tinnyName }}</td>
                     <td><input class="form-check-input" type="checkbox" value=""></td>
                 </tr>
             @endforeach
             @foreach($user_cc_array as $user)
                 <tr><input type='hidden' name='users[]' value="{{$user->id}}">
                     <input type='hidden' name='enCopia[]' value='1'>
-                    <td>{{$user->organizationalUnit->name}}</td>
-                    <td>{{$user->getTinnyNameAttribute()}}</td>
+                    <td>{{ $user->organizationalUnit->name}}</td>
+                    <td>{{ $user->tinnyName }}</td>
                     <td><input class="form-check-input" type="checkbox" value="" checked></td>
                 </tr>
             @endforeach

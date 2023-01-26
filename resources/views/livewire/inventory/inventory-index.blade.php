@@ -9,6 +9,12 @@
         {{ $establishment->name }}: Inventario
     </h4>
 
+    @livewire('parameters.parameter.single-manager',[
+        'module' => 'inventory',
+        'parameterName' => 'Encargado de inventario',
+        'type' => 'user'
+    ])
+
     <div class="form-row g-2 my-3 d-print-none">
         <fieldset class="form-group col-md-3">
             <label for="products">Productos</label>
@@ -300,7 +306,7 @@
         @if($managerInventory)
             {{ $managerInventory->fullName }}
         @else
-            No existe una autoridad para la "Inventario", revise el módulo de autoridades.
+            No se ha definido el encardo de inventario.
         @endif
     </div>
 </div>

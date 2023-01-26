@@ -13,11 +13,62 @@
 
 <h6>Progreso</h5>
 
-
+<table class="table table-sm small text-center">
+    <thead class="table-info">
+        <tr>
+            <th>I. IDENTIFICACIÓN DEL CARGO</th>
+            <th>II. REQUISITOS FORMALES</th>
+            <th>III. PROPÓSITOS DEL CARGO</th>
+            <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
+            <th>V. RESPONSABILIDAD DEL CARGO</th>
+            <th>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <span style="color: green;">
+                    <i class="fas fa-check-circle fa-2x"></i>
+                </span>
+                <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
+            </td>
+            <td>
+                @if($jobPositionProfile->staff_decree_by_estament_id)
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_formal_requirements', $jobPositionProfile) }}">Ir</a>
+                @else
+                    <i class="fas fa-clock fa-2x"></i>
+                @endif
+            </td>
+            <td>
+                @if($jobPositionProfile->roles->count() > 0 && $jobPositionProfile->objective)
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_objectives', $jobPositionProfile) }}">Ir</a>
+                @else
+                    <i class="fas fa-clock fa-2x"></i>
+                @endif
+            </td>
+            <td>
+                @if($jobPositionProfile->working_team)
+                    <span style="color: green;">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </span>
+                    <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit_organization', $jobPositionProfile) }}">Ir</a>
+                @else
+                    <i class="fas fa-clock fa-2x"></i>
+                @endif
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <hr>
 
-<form method="POST" class="form-horizontal" action="{{-- route('job_position_profile.update_objectives', $jobPositionProfile) --}}" enctype="multipart/form-data"/>
+<form method="POST" class="form-horizontal" action="{{ route('job_position_profile.update_organization', $jobPositionProfile) }}" enctype="multipart/form-data"/>
     @csrf
     @method('PUT')
     <h6 class="small"><b>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO.</b></h6> 
@@ -48,11 +99,13 @@
         <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit_objectives', $jobPositionProfile) }}">
             <i class="fas fa-chevron-left"></i> III. Propósitos del Cargo
         </a>
-        <a class="btn btn-info float-right" href="{{-- route('job_position_profile.edit_organization', $jobPositionProfile) --}}">
-            <i class="fas fa-chevron-right"></i> 
+        <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_liabilities', $jobPositionProfile) }}">
+            <i class="fas fa-chevron-right"></i> V. Responsabilidad del Cargo
         </a>
     </div>
 </div>
+
+{{-- dd($tree) --}}
 
 <hr/>
 <div style="height: 300px; overflow-y: scroll;">
@@ -70,19 +123,14 @@
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
+            
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Name');
             data.addColumn('string', 'Manager');
             data.addColumn('string', 'ToolTip');
 
             // For each orgchart box, provide the name, manager, and tooltip to show.
-            data.addRows([
-            [{'v':'Mike', 'f':'Mike<div style="color:red; font-style:italic">President</div>'},'', 'The President'],
-            [{'v':'Jim', 'f':'Jim<div style="color:red; font-style:italic">Vice President</div>'}, 'Mike', 'VP'],
-            ['Alice', 'Mike', ''],
-            ['Bob', 'Jim', 'Bob Sponge'],
-            ['Carol', 'Bob', '']
-            ]);
+            data.addRows({!! $tree !!});
 
             // Create the chart.
             var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));

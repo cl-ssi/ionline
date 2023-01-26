@@ -25,7 +25,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(50);
-        $users = User::getUsersBySearch($request->get('name'))->orderBy('name', 'Asc')->paginate(150);
+        $users = User::getUsersBySearch($request->get('name'))
+            ->with([
+                'organizationalUnit'
+            ])->orderBy('name', 'Asc')->paginate(150);
         return view('rrhh.index', compact('users'));
     }
 
@@ -481,7 +484,7 @@ class UserController extends Controller
     public function openNotification($notification)
     {
         $notification = auth()->user()->notifications->find($notification);
-        $route = $notification->data['action'];
+        $route = config('app.url').$notification->data['action'];
         $notification->markAsRead();
         return redirect($route);
     }
@@ -490,6 +493,12 @@ class UserController extends Controller
     {
         // $notifications = auth()->user()->notifications;
         return view('notifications.index');
+    }
+
+    public function clearNotifications()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->route('allNotifications');
     }
 
     public function lastAccess()

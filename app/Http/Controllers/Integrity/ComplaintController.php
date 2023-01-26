@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Integrity;
 
-use App\Models\Integrity\Complaint;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Parameters\Parameter;
 use App\Models\Integrity\ComplaintValue;
 use App\Models\Integrity\ComplaintPrinciple;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Integrity\Complaint;
 use App\Mail\Confirmation;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
+
 
 class ComplaintController extends Controller
 {
@@ -33,7 +37,7 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        $complaints = Complaint::All()->sortByDesc('id');
+        $complaints = Complaint::latest()->paginate(25);
         return view('integrity.index')->withComplaints($complaints);
     }
 
@@ -57,19 +61,36 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'user_id' => ['required', 'exists:users,id'],
+        ];
+        
+        $messages = [
+            'user_id.exists' => 'El run :input digitado no es un funcionario válido, recordar que es sin puntos y sin digito verificador.',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules,$messages);
+        $validator->validate();
         $complaint = new Complaint($request->All());
         //$complaint->user_id = Auth::id();
         if($request->hasFile('file'))
-            $complaint->file = $request->file('file')->store('integrity');
+            $complaint->file = $request->file('file')->store('ionline/integrity', ['disk' => 'gcs']);
         $complaint->save();
 
-        //Auth::user()
-        Mail::to($complaint->email)->send(new Confirmation($complaint));
+        /* Enviar email al usuario sólo si es un mail bien formateado válido */
+        if (filter_var($complaint->email, FILTER_VALIDATE_EMAIL)) {
+            Mail::to($complaint->email)->send(new Confirmation($complaint));
+        }
 
         /* Correo al encargado de integridad y ética */
-        Mail::to('integridad_etica.ssi@redsalud.gob.cl')->send(new Confirmation($complaint));
+        $emailParameter = Parameter::get('integrity','email');
+        if($emailParameter) {
+            Mail::to($emailParameter)->send(new Confirmation($complaint));
+        }
 
-        return redirect()->route('rrhh.integrity.complaints.mail', [$complaint]);
+        return view('integrity.mails.confirmation')->withComplaint($complaint);
+
+        // return redirect()->route('integrity.complaints.mail', [$complaint]);
     }
 
     /**
@@ -91,8 +112,7 @@ class ComplaintController extends Controller
      */
     public function download(Complaint $complaint)
     {
-        /* TODO: #91 Mover a google storage */
-        return Storage::download($complaint->file);
+        return Storage::disk('gcs')->download($complaint->file);
     }
 
     /**
