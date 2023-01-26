@@ -26,6 +26,7 @@ class StoreInvoiceRequest extends FormRequest
         return [
             'number'            => 'required|unique:arq_invoices,number',
             'date'              => 'required|date_format:Y-m-d',
+            'amount'            => 'required|numeric|min:0',
             'file'              => 'required|mimes:pdf|max:10240',
             'selected_controls' => 'required|array|min:1',
         ];
