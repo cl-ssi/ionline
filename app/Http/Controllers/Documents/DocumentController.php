@@ -131,6 +131,10 @@ class DocumentController extends Controller
             //centrada la materia en negrita y sin de para
             return view('documents.circular')->withDocument($document);
         } else {
+            /** TODO Temporal para diseñar las nuevas firmas */
+            if($document->id == 13667) {
+                return view('documents.show_13667')->withDocument($document);
+            }
             return view('documents.show')->withDocument($document);
         }
     }
