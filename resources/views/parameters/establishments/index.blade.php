@@ -38,7 +38,7 @@
             <td>{{ $establishment->dependency?? '' }}</td>
             <td>{{ $establishment->administrative_dependency?? '' }}</td>
             <td>{{ $establishment->level_of_care?? '' }}</td>
-            <td>{{ $establishment->address ?? ''}} </td>
+            <td>{{ $establishment->full_address ?? ''}} </td>
             <td>{{ $establishment->telephone??''}} </td>
         </tr>
         @endforeach

@@ -23,14 +23,27 @@ class Establishment extends Model implements Auditable
      */
     protected $fillable = [
         'name',
+        'alias',
         'type',
+        'establishment_type_id',
         'deis',
         'new_deis',
         'sirh_code',
+        'commune_id',
         'dependency',
+        'health_services_id',
         'official_name',
         'administrative_dependency',
         'level_of_care',
+        'street_type',
+        'street_number',
+        'address',
+        'telephone',
+        'emergency_service',
+        'latitude',
+        'longitude',
+        'level_of_complexity',
+        'provider_type_health_system',
     ];
 
     /**
@@ -102,6 +115,11 @@ class Establishment extends Model implements Auditable
     public function getNewDeisWithoutFirstCharacterAttribute()
     {
         return substr($this->new_deis, 1);
+    }
+
+    public function getFullAddressAttribute()
+    {
+        return $this->street_type . ' ' . $this->address . ' ' . $this->street_number;
     }
 
 
