@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use function Livewire\str;
 
 class SignaturesFlow extends Model Implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+
+    protected $table = 'doc_signatures_flows';
+
+    protected $dates = ['signature_date'];
 
     /**
      * The attributes that are mass assignable.
@@ -33,11 +36,6 @@ class SignaturesFlow extends Model Implements Auditable
         'visator_type',
         'real_signer_id',
     ];
-
-    protected $table = 'doc_signatures_flows';
-
-    protected $dates = ['signature_date'];
-
 
     public function signaturesFile()
     {
@@ -59,7 +57,7 @@ class SignaturesFlow extends Model Implements Auditable
         return $this->signaturesFile->signature();
     }
 
-    /* FIXME: porque no usar la relación userSigner? si el usuario no existe explotará 
+    /* FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
      * puse un return a las relaciones para probar si todo anda bien, si no hay problemas
      * se pueden borrar y dejar entonces sólo las relaciones
      */
@@ -68,7 +66,7 @@ class SignaturesFlow extends Model Implements Auditable
         //return User::find($this->user_id)->TinnyName;
         return $this->userSigner->tinnyName;
     }
-    
+
     public function getRealSignerNameAttribute()
     {
         // return User::find($this->real_signer_id)->fullName;

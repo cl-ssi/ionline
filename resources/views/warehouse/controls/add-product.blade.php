@@ -8,8 +8,9 @@
 
 <div class="row">
     <div class="col">
-        <h4>{{ $control->type_format }} {{ $control->id }}: {{ $store->name }}</h4>
-
+        <h5>
+            {{ $control->type_format }} {{ $control->id }}: {{ $store->name }}
+        </h5>
     </div>
     <div class="col text-right">
         @if($control->requestForm)
@@ -18,15 +19,21 @@
                 href="{{ route('request_forms.show', $control->requestForm) }}"
                 target="_blank"
             >
-                <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $control->requestForm->id }}
+                <i class="fas fa-file-alt"></i> FR Folio #{{ $control->requestForm->folio }}
             </a>
         @endif
     </div>
 </div>
 
-@livewire('warehouse.control.control-details', [
-    'control' => $control
-])
+@if($control->isReceiving())
+    @include('warehouse.controls.details-receiving', [
+        'control' => $control
+    ])
+@else
+    @include('warehouse.controls.details-dispatch', [
+        'control' => $control
+    ])
+@endif
 
 @if($control->isOpen())
     <hr>

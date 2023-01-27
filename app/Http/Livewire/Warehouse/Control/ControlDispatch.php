@@ -6,7 +6,7 @@ use App\Models\Warehouse\Control;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ControlIndex extends Component
+class ControlDispatch extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -17,7 +17,7 @@ class ControlIndex extends Component
 
     public function render()
     {
-        return view('livewire.warehouse.control.control-index', [
+        return view('livewire.warehouse.control.control-dispatch', [
             'controls' => $this->getControls()
         ]);
     }
@@ -26,7 +26,7 @@ class ControlIndex extends Component
     {
         $controls = Control::query()
             ->whereStoreId($this->store->id)
-            ->whereType($this->type == 'receiving' ? 1 : 0)
+            ->whereType(0)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

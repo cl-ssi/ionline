@@ -13,6 +13,10 @@ class Signature extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
 
+    protected $table = 'doc_signatures';
+
+    protected $dates = ['request_date'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,25 +28,31 @@ class Signature extends Model implements Auditable
         'distribution', 'user_id', 'visatorAsSignature','url'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\User')->withTrashed();
     }
-    public function responsable(){
+
+    public function responsable()
+    {
         return $this->belongsTo('App\User','responsable_id')->withTrashed();
     }
 
-    public function organizationalUnit(){
+    public function organizationalUnit()
+    {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit','ou_id');
     }
 
-    public function signaturesFiles(){
+    public function signaturesFiles()
+    {
         return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
     }
 
     /**
      * @return mixed Retorna model
      */
-    public function getSignaturesFlowSignerAttribute(){
+    public function getSignaturesFlowSignerAttribute()
+    {
         return $this->signaturesFiles->where('file_type', 'documento')->first()
             ->signaturesFlows->where('type', 'firmante')->first();
     }
@@ -50,7 +60,8 @@ class Signature extends Model implements Auditable
     /**
      * @return mixed Retorna collection
      */
-    public function getSignaturesFlowVisatorAttribute(){
+    public function getSignaturesFlowVisatorAttribute()
+    {
         return $this->signaturesFiles->where('file_type', 'documento')->first()
             ->signaturesFlows->where('type', 'visador');
     }
@@ -59,7 +70,8 @@ class Signature extends Model implements Auditable
      * Obtiene flows para el archivo tipo documento
      * @return mixed
      */
-    public function getSignaturesFlowsAttribute(){
+    public function getSignaturesFlowsAttribute()
+    {
         return $this->signaturesFiles->where('file_type', 'documento')->first()
             ->signaturesFlows;
     }
@@ -83,8 +95,4 @@ class Signature extends Model implements Auditable
     {
         return $this->signaturesFiles->where('file_type', 'anexo');
     }
-
-    protected $table = 'doc_signatures';
-
-    protected $dates = ['request_date'];
 }

@@ -2,43 +2,48 @@
     @include('layouts.partials.flash_message')
 
     @if(! $store->visator)
-    <div class="alert alert-danger" role="alert">
-        La bodega no posee visador. Recuerde añadir uno.
-    </div>
+        <div class="alert alert-danger" role="alert">
+            La bodega no posee visador. Recuerde añadir uno.
+        </div>
     @endif
 
-
     <div class="mt-2">
-        <h4>Nuevo Ingreso: {{ $store->name }}</h4>
+        <h5>Nuevo Ingreso: {{ $store->name }}</h5>
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-sm-4 mb-0">
-            <div class="input-group input-group-sm has-validation">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Fecha de Ingreso</span>
-                </div>
-                <input
-                    class="form-control form-control-sm @error('date') is-invalid @enderror"
-                    id="date"
-                    wire:model.debounce.1500ms="date"
-                    type="date"
-                >
-                @error('date')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
+        <fieldset class="form-group col-sm-3 mb-0">
+            <label for="type-receiving">Tipo de Ingreso</label>
+            <input
+                class="form-control form-control-sm"
+                id="type-receiving"
+                value="Orden Compra"
+                type="text"
+                readonly
+            >
         </fieldset>
 
-        <fieldset class="form-group col-sm-5 mb-0">
+        <fieldset class="form-group col-sm-3 mb-0">
+            <label for="date">Fecha de Ingreso</label>
+            <input
+                class="form-control form-control-sm @error('date') is-invalid @enderror"
+                id="date"
+                wire:model.debounce.1500ms="date"
+                type="date"
+            >
+            @error('date')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-sm-4 mb-0">
+            <label for="po-search">Orden de Compra</label>
             <div class="input-group input-group-sm has-validation">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Orden de Compra</span>
-                </div>
                 <input
                     type="text"
+                    id="po-search"
                     class="form-control form-control-sm @error('po_search') is-invalid @enderror"
                     placeholder="Ingresa el código"
                     wire:model.debounce.1500ms="po_search"
@@ -93,14 +98,15 @@
             @endif
         </fieldset>
 
-        <fieldset class="form-group col-sm-3 mb-0">
-            @if($request_form_id)
+        <fieldset class="form-group col-sm-2 mb-0">
+            @if($request_form)
+                <label>&nbsp;</label>
                 <a
                     class="btn btn-sm btn-primary btn-block"
-                    href="{{ route('request_forms.show', $request_form_id) }}"
+                    href="{{ route('request_forms.show', $request_form) }}"
                     target="_blank"
                 >
-                    <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $request_form_id }}
+                    <i class="fas fa-file-alt"></i> FR Folio #{{ $request_form->folio }}
                 </a>
             @endif
         </fieldset>
@@ -224,37 +230,7 @@
         </fieldset>
 
         <fieldset class="form-group col-md-4">
-            <label for="signer-id" class="form-label">Firmante</label>
-            @if($signer)
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ $signer->full_name }}"
-                    readonly
-                >
-            @else
-                @livewire('users.search-user', [
-                    'smallInput' => true,
-                    'placeholder' => 'Ingrese un nombre',
-                    'eventName' => 'signerId',
-                    'tagId' => 'signer-id',
-                ])
-
-                <input
-                    class="form-control @error('signer_id') is-invalid @enderror"
-                    type="hidden"
-                >
-
-                @error('signer_id')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            @endif
-        </fieldset>
-
-        <fieldset class="form-group col-md-4">
-            <label for="visator-id" class="form-label">Visador</label>
+            <label for="visator-id" class="form-label">Visador Ingreso Bodega</label>
                 <input
                     id="visator-id"
                     type="text"
@@ -262,6 +238,16 @@
                     value="{{ $store->visator->full_name ?? 'La bodega no posee visador'  }}"
                     readonly
                 >
+        </fieldset>
+
+        <fieldset class="form-group col-md-4">
+            <label for="signer-id" class="form-label">Visador Recepción Técnica</label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                value="{{ $technical_signature->full_name ?? 'No posee Visador Recepción Técnica' }}"
+                readonly
+            >
         </fieldset>
     </div>
 
