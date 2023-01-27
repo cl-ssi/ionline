@@ -420,12 +420,14 @@
 
 						<fieldset class="form-group col">
 							<label for="for_type">Destinatario</label>
-							<select name="derive_user_id" id="derive_user_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
+							{{--<select name="derive_user_id" id="derive_user_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 								<option value=""></option>
 								@foreach($users as $key => $user)
 								<option value="{{$user->id}}">{{$user->shortName}}</option>
 								@endforeach
-							</select>
+							</select>--}}
+
+                            @livewire('search-select-user', ['required' => 'required', 'selected_id' => 'derive_user_id']) 
 						</fieldset>
 
 					</form>
