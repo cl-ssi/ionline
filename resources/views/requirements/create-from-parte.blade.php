@@ -5,30 +5,32 @@
 @section('content')
 
 
-<h4 class="mb-3">Derivando 
-    @if($parte->id <> 0)
-        parte <strong>{{ $parte->id }}</strong>
-        @if($parte->files != null)
-            @foreach($parte->files as $file)
-                <li>
-                    <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
-                        target="_blank" data-toggle="tooltip" data-placement="top"
-                        data-original-title="{{ $file->name }}">
-                        <i class="fas fa-paperclip"></i> {{ $file->name }}
-                    </a>
-                </li>
-            @endforeach
-        @endif
+<h4 class="mb-3">Derivando parte <strong>{{ $parte->id }}</strong></h4>
 
-    @endif
-</h4>
+@if($parte->files != null)
+    @foreach($parte->files as $file)
+        <li>
+            <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
+                target="_blank" data-toggle="tooltip" data-placement="top"
+                data-original-title="{{ $file->name }}">
+                <i class="fas fa-paperclip"></i> {{ $file->name }}
+            </a>
+        </li>
+    @endforeach
+@endif
+
+<br>
 
 
 <div class="form-row">
-    <div class="col-md-8 col-12">
+    <div class="col-md-8 col-12 d-none d-sm-block">
         @if($parte->files->first() != null)
             @foreach($parte->files as $file)
-                <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}">Link </a>
+                <object type="application/pdf"
+                        data="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
+                        width="100%"
+                        height="700px">
+                </object>
             @endforeach
         @endif
     </div>
