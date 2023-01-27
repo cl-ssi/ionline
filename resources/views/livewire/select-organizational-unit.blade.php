@@ -1,4 +1,4 @@
-<div class="input-group mb-3">
+<div class="{{ !$mobile ? 'input-group': '' }} mb-3">
     <select class="custom-select" 
         id="establishment_id" 
         name="establishment_id" 
@@ -12,7 +12,7 @@
         @endforeach
     </select>
 
-    <select class="custom-select"
+    <select class="{{ $selectpicker ? 'form-control selectpicker' : 'custom-select' }}"
         id="{{ $selected_id }}" 
         name="{{ $selected_id }}"
         wire:model="organizational_unit_id"

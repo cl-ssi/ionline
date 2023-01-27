@@ -41,6 +41,11 @@
 
             <input type="hidden" class="form-control" id="for_parte_id" name="parte_id" value="{{$parte->id}}" >
 
+            @livewire('select-organizational-unit', [
+                'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                'mobile' => true,
+                'selectpicker' => true,
+            ])
 
             @livewire('requirements.requirement-receivers',['parte_id' => $parte->id])
 
