@@ -1,4 +1,4 @@
-<div class="input-group mb-3">
+<div class="{{ !$mobile ? 'input-group': '' }} mb-3">
     <select class="custom-select" 
         id="establishment_id" 
         name="establishment_id" 

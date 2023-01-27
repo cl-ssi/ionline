@@ -15,6 +15,8 @@ use App\Notifications\Allowances\RejectedAllowance;
 use Illuminate\Http\Response;
 use App\Models\Documents\SignaturesFile;
 use App\Services\SignatureService;
+use App\User;
+use App\Models\Parameters\Parameter;
 
 class AllowanceSignController extends Controller
 {
@@ -81,36 +83,79 @@ class AllowanceSignController extends Controller
     public function update(Request $request, AllowanceSign $allowanceSign, $status, Allowance $allowance)
     {
         if($status == 'accepted'){
-            foreach($allowance->allowanceSigns as $sign){
-                $signatureTechnical = new SignatureService();
-                dd($signatureTechnical);
-            }
-            $signs = $allowance->allowanceSigns;
+            $allowanceSign->user_id = Auth::user()->id;
+            $allowanceSign->status = $status;
+            $allowanceSign->date_sign = Carbon::now();
+            $allowanceSign->save();
 
-            // ------------------ FIRMA ---------------------
-            $signatureTechnical = new SignatureService();
-            $signatureTechnical->addResponsible($this->store->visator);
-            $signatureTechnical->addSignature(
-                'Acta',
-                "Acta de Recepción en Bodega #$control->id",
-                "Recepción #$control->id",
+            $allowance->fill($request->All());
+
+            //VISADORES
+            $visators = collect(new User);
+            foreach($allowance->allowanceSigns->whereNotIn('event_type', array('sirh','chief financial officer')) as $sign){
+                $currentAuthority = Authority::getAuthorityFromDate($sign->organizational_unit_id, now(), 'manager');
+                $nextAllowanceSign = $allowance->allowanceSigns->where('position', $sign->position + 1)->first();
+                $nextAuthority = Authority::getAuthorityFromDate($nextAllowanceSign->organizational_unit_id, now(), 'manager');
+                
+                if($currentAuthority->user_id != $nextAuthority->user_id){
+                    $visators->push(Authority::getAuthorityFromDate($sign->organizational_unit_id, now(), 'manager')->user);
+                }
+            }   
+
+            $ou_finance = Parameter::where('parameter', 'FinanzasSSI')->get();
+            $signature = Authority::getAuthorityFromDate($ou_finance->first()->value, now(), 'manager')->user;
+
+            $signatureAllowance = new SignatureService();
+
+            $signatureAllowance->addResponsible($allowance->userCreator);
+            $signatureAllowance->addSignature(
+                'Viático',
+                'Viático N°'. $allowance->id.' '.$allowance->userAllowance->TinnyName,
+                'Viático N°'. $allowance->id.' '.$allowance->userAllowance->TinnyName,
                 'Visación en cadena de responsabilidad',
                 true
             );
-            $signatureTechnical->addView('warehouse.pdf.report-reception', [
-                'type' => '',
-                'control' => $control,
-                'store' => $control->store,
-                'act_type' => 'reception'
+            $signatureAllowance->addView('allowances.documents.allowance_document', [
+                'allowance' => $allowance
             ]);
-            $signatureTechnical->addVisators(collect([$this->store->visator]));
-            $signatureTechnical->addSignatures(collect([]));
-            $signatureTechnical = $signatureTechnical->sendRequest();
-            $control->receptionSignature()->associate($signatureTechnical);
-            $control->save();
+
+            $signatureAllowance->addVisators($visators);
+            $signatureAllowance->addSignatures(collect([$signature]));
+
+            $signatureAllowance = $signatureAllowance->sendRequest();
+
+            $allowance->allowanceSignature()->associate($signatureAllowance);
+            $allowance->save();
+            
+            session()->flash('success', 'Estimado usuario: Se ingresó correctamente el folio SIRH.');
+            return redirect()->route('allowances.sign_index');
+            
+            // $signs = $allowance->allowanceSigns;
+
+            // ------------------ FIRMA ---------------------
+            // $signatureTechnical = new SignatureService();
+            // $signatureTechnical->addResponsible($this->store->visator);
+            // $signatureTechnical->addSignature(
+            //     'Acta',
+            //     "Acta de Recepción en Bodega #$control->id",
+            //     "Recepción #$control->id",
+            //     'Visación en cadena de responsabilidad',
+            //     true
+            // );
+            // $signatureTechnical->addView('warehouse.pdf.report-reception', [
+            //     'type' => '',
+            //     'control' => $control,
+            //     'store' => $control->store,
+            //     'act_type' => 'reception'
+            // ]);
+            // $signatureTechnical->addVisators(collect([$this->store->visator]));
+            // $signatureTechnical->addSignatures(collect([]));
+            // $signatureTechnical = $signatureTechnical->sendRequest();
+            
+            // $control->receptionSignature()->associate($signatureTechnical);
+            // $control->save();
             // -----------------------------------------------
 
-            dd($signs);
             /*
             $AllowanceSignNotValid = false;
 

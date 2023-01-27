@@ -25,13 +25,16 @@ class SelectOrganizationalUnit extends Component
      * 'organizational_unit_id' => '20',
      * 'establishment_id' => '38',
      * 'selected_id' => 'ou_id',
-     * 'readonlyEstablishment' => true,
+     * 'readonlyEstablishment' => true or false,
+     * 'mobile' => true or false, // no agrupa los inputs
      */
 
     public $selected_id = 'organizational_unit_id';
     public $establishment_id;
     public $organizational_unit_id;
     public $readonlyEstablishment = false;
+    public $mobile = false;
+    public $selectpicker = false;
     public $filter;
 
     public $establishments;

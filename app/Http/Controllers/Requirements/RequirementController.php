@@ -652,6 +652,11 @@ class RequirementController extends Controller
         return view('requirements.create', compact('parte'));
     }
 
+    public function createFromParte(Parte $parte)
+    {
+        return view('requirements.create-from-parte', compact('parte'));
+    }
+
     public function create_requirement_sin_parte()
     {
         // set_time_limit(7200);

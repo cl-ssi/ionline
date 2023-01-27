@@ -152,7 +152,7 @@
 
         <div class="right" style="float: right; width: 340px;">
             <div class="left" style="padding-bottom: 6px;">
-                <strong>ID:</strong> {{ $allowance->folio_sirh }}
+                <strong>RESOLUCION EXENTA N°:</strong> {{ $allowance->folio_sirh }}
             </div>
             <div class="left" style="padding-bottom: 2px;">
                 <strong>Iquique, {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</strong>
@@ -279,52 +279,7 @@
                 </tr>
             </tbody>
         </table>
-
-        <div style="clear: both; padding-bottom: 3px">&nbsp;</div>
-
-        <div class="left"><b>3-. Gestión de víatico</b></div>
-        <br>
-
-        <table class="siete">
-            <tbody>
-                <tr>
-                    @foreach($allowance->AllowanceSigns->whereNotIn('status', ['not valid']) as $sign)
-                    <th>
-                        {{ $sign->organizationalUnit->name }}
-                        @if($sign->event_type == "sirh")
-                            SIRH
-                        @endif
-                    </th>
-                    @endforeach
-                </tr>
-                <tr align="center">
-                    @php 
-                        $signsCount = $allowance->AllowanceSigns->whereNotIn('status', ['not valid'])->count();
-                        $width = 100 / $signsCount;
-                    @endphp
-                    @foreach($allowance->AllowanceSigns->whereNotIn('status', ['not valid']) as $allowanceSign)
-                    <td style="{{$width}}%">
-                        @if($allowanceSign->event_type != 'chief financial officer')
-                            @if($allowanceSign->status == 'pending')
-                                Estado: {{ $allowanceSign->StatusValue }} <br><br>
-                            @endif
-                            @if($allowanceSign->status == 'accepted')
-                                Estado: {{ $allowanceSign->StatusValue }} <br>
-                                <b>{{ $allowanceSign->user->FullName }}</b><br>
-                                {{ $allowanceSign->date_sign->format('d-m-Y H:i') }}<br>
-                            @endif
-                        @else
-                            Estado: Aceptada <br>
-                            <b>{{ Auth::user()->FullName }}</b><br>
-                            {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}
-                        @endif
-
-                    </td>
-                    @endforeach
-                </tr>
-            </tbody>
-        </table>
-
+        
         <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
         <div class="siete">
