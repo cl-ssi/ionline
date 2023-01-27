@@ -545,10 +545,9 @@ class User extends Authenticatable implements Auditable
     /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
     public function getShortNameAttribute()
     {
-        $firstName = '';
         $names = explode(' ',trim(mb_convert_case($this->name,MB_CASE_TITLE, 'UTF-8')));
         $cantNames = count($names);
-        if($names[0] == 'María' or $names [0] == 'Maria') {
+        if($cantNames >=2 AND ($names[0] == 'María' OR $names [0] == 'Maria')) {
             if($cantNames >= 3 AND ($names[1] == 'De' OR $names[1] == 'Del')) {
                 if($cantNames >=4 AND ($names[2] == 'Los' OR $names[2] == 'Las')) {
                     $firstName = $names[0] . ' ' . $names[1] . ' ' . $names[2] . ' ' . $names[3];
