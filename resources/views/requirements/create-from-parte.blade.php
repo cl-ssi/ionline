@@ -26,12 +26,7 @@
     <div class="col-md-8 col-12">
         @if($parte->files->first() != null)
             @foreach($parte->files as $file)
-            
-                <iframe type="application/pdf"
-                        src="data:application/pdf;base64,{{ base64_encode(Storage::disk('gcs')->get($file->file)) }}"
-                        width="100%"
-                        height="700px">
-                </iframe>
+                <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}">Link </a>
             @endforeach
         @endif
     </div>
