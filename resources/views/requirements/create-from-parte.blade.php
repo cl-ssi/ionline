@@ -29,7 +29,7 @@
                 <object type="application/pdf"
                         data="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
                         width="100%"
-                        height="700px">
+                        height="850">
                 </object>
             @endforeach
         @endif

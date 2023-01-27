@@ -12,7 +12,7 @@
         @endforeach
     </select>
 
-    <select class="{{ $selectpicker ? 'form-control selectpicker' : 'custom-select' }}"
+    <select class="custom-select"
         id="{{ $selected_id }}" 
         name="{{ $selected_id }}"
         wire:model="organizational_unit_id"
