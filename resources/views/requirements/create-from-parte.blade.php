@@ -41,23 +41,28 @@
 
             <input type="hidden" class="form-control" id="for_parte_id" name="parte_id" value="{{$parte->id}}" >
 
-            @livewire('select-organizational-unit', [
-                'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
-                'mobile' => true,
-            ])
+            <div class="form-row">
+                <fieldset class="form-group col-12">
+                    <label for="for_organizationalUnit">Establecimiento / Unidad Organizacional</label>
+                    @livewire('select-organizational-unit', [
+                        'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                        'mobile' => true,
+                    ])
+                </fieldset>
+            </div>
 
-            @livewire('requirements.requirement-receivers',['parte_id' => $parte->id])
+            {{-- @livewire('requirements.requirement-receivers',['parte_id' => $parte->id]) --}}
 
 
             <div class="form-row">
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col @endif">
+                <fieldset class="form-group col-12">
                     <label for="for_date">Asunto</label>
                     <textarea name="subject" id="for_subject" class="form-control" rows="2" required>{{ $parte->subject }}</textarea>
                 </fieldset>
             </div>
             
             <div class="row">
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col @endif">
+                <fieldset class="form-group col-12">
                     <label for="for_date">Requerimiento</label>
                     <textarea class="form-control" id="for_body" name="body" rows="4" required></textarea>
                 </fieldset>
