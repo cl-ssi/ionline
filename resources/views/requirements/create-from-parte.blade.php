@@ -27,7 +27,7 @@
         @if($parte->files->first() != null)
             @foreach($parte->files as $file)
                 <object type="application/pdf"
-                        data="{{route('documents.partes.download', $file->id)}}"
+                        data="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
                         width="100%"
                         height="700">
                 </object>
