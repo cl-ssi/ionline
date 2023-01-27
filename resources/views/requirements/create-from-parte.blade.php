@@ -27,11 +27,11 @@
         @if($parte->files->first() != null)
             @foreach($parte->files as $file)
             
-                <object type="application/pdf"
+                <iframe type="application/pdf"
                         data="data:application/pdf;base64,{{ base64_encode(Storage::disk('gcs')->get($file->file)) }}"
                         width="100%"
                         height="700px">
-                </object>
+                </iframe>
             @endforeach
         @endif
     </div>
