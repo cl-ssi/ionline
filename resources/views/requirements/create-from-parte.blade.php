@@ -28,7 +28,7 @@
             @foreach($parte->files as $file)
             
                 <iframe type="application/pdf"
-                        data="data:application/pdf;base64,{{ base64_encode(Storage::disk('gcs')->get($file->file)) }}"
+                        src="data:application/pdf;base64,{{ base64_encode(Storage::disk('gcs')->get($file->file)) }}"
                         width="100%"
                         height="700px">
                 </iframe>
