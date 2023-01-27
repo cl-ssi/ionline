@@ -10,11 +10,13 @@
         parte <strong>{{ $parte->id }}</strong>
         @if($parte->files != null)
             @foreach($parte->files as $file)
-                <a href="{{ route('documents.partes.download', $file->id) }}"
-                    target="_blank" data-toggle="tooltip" data-placement="top"
-                    data-original-title="{{ $file->name }}">
-                    <i class="fas fa-paperclip"></i>
-                </a>
+                <li>
+                    <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
+                        target="_blank" data-toggle="tooltip" data-placement="top"
+                        data-original-title="{{ $file->name }}">
+                        <i class="fas fa-paperclip"></i> {{ $file->name }}
+                    </a>
+                </li>
             @endforeach
         @endif
 
