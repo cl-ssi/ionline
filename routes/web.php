@@ -1862,7 +1862,6 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 });
 
 Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {
-
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');

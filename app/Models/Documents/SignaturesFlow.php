@@ -57,6 +57,11 @@ class SignaturesFlow extends Model Implements Auditable
         return $this->signaturesFile->signature();
     }
 
+    public function organizationalUnit()
+    {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_id')->withTrashed();
+    }
+
     /* FIXME: porque no usar la relación userSigner? si el usuario no existe explotará
      * puse un return a las relaciones para probar si todo anda bien, si no hay problemas
      * se pueden borrar y dejar entonces sólo las relaciones
