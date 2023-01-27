@@ -70,7 +70,7 @@
 								<td>{{ $serviceRequest->type ?? '' }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
+								<td>{{ $serviceRequest->employee->shortName }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 								<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
@@ -128,7 +128,7 @@
 								<td>{{ $serviceRequest->responsabilityCenter->name }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
+								<td>{{ $serviceRequest->employee->shortName }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 								<td>{{$serviceRequest->status()}}</td>
@@ -185,7 +185,7 @@
 								<td>{{ $serviceRequest->responsabilityCenter->name }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
+								<td>{{ $serviceRequest->employee->shortName }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 								<td>{{$serviceRequest->status()}}</td>
@@ -271,7 +271,7 @@
 								<td>{{ $serviceRequest->responsabilityCenter->name }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
+								<td>{{ $serviceRequest->employee->shortName }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 								<td>{{$serviceRequest->status()}}</td>
@@ -348,7 +348,7 @@
 								<td>{{ $serviceRequest->responsabilityCenter->name }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-								<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
+								<td>{{ $serviceRequest->employee->shortName }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 								<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 								<td>{{$serviceRequest->status()}}</td>
@@ -423,7 +423,7 @@
 							<select name="derive_user_id" id="derive_user_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 								<option value=""></option>
 								@foreach($users as $key => $user)
-								<option value="{{$user->id}}">{{$user->getShortNameAttribute()}}</option>
+								<option value="{{$user->id}}">{{$user->shortName}}</option>
 								@endforeach
 							</select>
 						</fieldset>

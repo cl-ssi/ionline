@@ -542,13 +542,36 @@ class User extends Authenticatable implements Auditable
         return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, "UTF-8");
     }
 
-    /* TODO: Dejar solo una, ShortName (Nombre Apellido1) y eliminar tinnyName*/
+    /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
     public function getShortNameAttribute()
     {
-        return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
+        $names = explode(' ',trim(mb_convert_case($this->name,MB_CASE_TITLE, 'UTF-8')));
+        $cantNames = count($names);
+        if($names[0] == 'María' or $names [0] == 'Maria') {
+            if($cantNames >= 3 AND ($names[1] == 'De' OR $names[1] == 'Del')) {
+                if($cantNames >=4 AND ($names[2] == 'Los' OR $names[2] == 'Las')) {
+                    $firstName = $names[0] . ' ' . $names[1] . ' ' . $names[2] . ' ' . $names[3];
+                }
+                else {
+                    $firstName = $names[0] . ' ' . $names[1] . ' ' . $names[2];
+                }
+            }
+            else if($cantNames >=2 ) {
+                $firstName = $names[0] . ' ' . $names[1];
+            }
+        }
+        else {
+            $firstName = $names[0];
+        }
+
+        return implode(' ', array(
+            $firstName,
+            mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8'),
+            mb_convert_case($this->mothers_family,MB_CASE_TITLE, 'UTF-8')
+        ));
     }
 
-    /* TODO: Fusionar con la de arriba */
+    /* $user->tinyName (PrimerNombre Apellido1) */
     public function getTinnyNameAttribute()
     {
         if(!is_null($this->name))
@@ -562,8 +585,7 @@ class User extends Authenticatable implements Auditable
 
     public function getFirstNameAttribute()
     {
-        $names = explode(' ',trim($this->name));
-        return ucwords(strtolower("{$names[0]}"));
+        return strtok(mb_convert_case(trim($this->name), MB_CASE_TITLE, 'UTF-8'), " ");
     }
 
     public function getInitialsAttribute()
