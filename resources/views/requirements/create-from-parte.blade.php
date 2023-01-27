@@ -26,10 +26,11 @@
     <div class="col-md-8 col-12">
         @if($parte->files->first() != null)
             @foreach($parte->files as $file)
+            
                 <object type="application/pdf"
-                        data="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
+                        data="data:application/pdf;base64,{{ base64_encode(Storage::disk('gcs')->get($file->file)) }}"
                         width="100%"
-                        height="700">
+                        height="700px">
                 </object>
             @endforeach
         @endif
