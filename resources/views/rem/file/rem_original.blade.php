@@ -25,7 +25,7 @@
 
             @foreach($periods as $period)
             <td>
-                @forelse($period->series as $serie)                
+                @forelse($period->series as $serie)
                 @if($serie->type == $remEstablishment->establishment->type)
                 <ul>
                     Serie:{{$serie->serie->name??''}}
