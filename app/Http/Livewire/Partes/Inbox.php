@@ -29,19 +29,20 @@ class Inbox extends Component
         $this->parte_subject = session('parte_subject');
     }
 
-    public function search() {
-        session(['partes_id' => $this->parte_id]);
-        session(['partes_type' => $this->parte_type]);
-        session(['partes_number' => $this->parte_number]);
-        session(['partes_origin' => $this->parte_origin]);
-        session(['partes_subject' => $this->parte_subject]);
+    public function search() 
+    {
+        session(['parte_id' => $this->parte_id]);
+        session(['parte_type' => $this->parte_type]);
+        session(['parte_number' => $this->parte_number]);
+        session(['parte_origin' => $this->parte_origin]);
+        session(['parte_subject' => $this->parte_subject]);
     }
 
     public function render()
     {
         $partes = Parte::query()
             ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
-            // ->filter('id', $this->parte_id)
+            ->filter('id', $this->parte_id)
             ->filter('type', $this->parte_type)
             ->filter('number', $this->parte_number)
             ->filter('origin', $this->parte_origin)
@@ -54,7 +55,7 @@ class Inbox extends Component
                 'files.signatureFile.signaturesFlows',
                 'files.signatureFile',
                 ])
-            ->latest()->paginate('100');
+            ->latest()->paginate('25');
 
         return view('livewire.partes.inbox', ['partes' => $partes]);
     }

@@ -7,7 +7,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-1">
-            <label for="for_id">Cód Int</label>
+            <label for="for_id">ID</label>
             <input type="number" class="form-control" id="for_id" wire:model.defer="parte_id" autocomplete="off">
         </fieldset>
 
@@ -37,7 +37,7 @@
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_origin">Origen</label>
+            <label for="for_origin">Origen {{ session('parte_origin') }}</label>
             <input type="text" class="form-control" id="for_origin" wire:model.defer="parte_origin">
         </fieldset>
 
@@ -68,7 +68,7 @@
     <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr>
-                <th>N°</th>
+                <th>ID</th>
                 <th>Ingreso</th>
                 <th>Tipo</th>
                 <th nowrap>Fecha Doc.</th>

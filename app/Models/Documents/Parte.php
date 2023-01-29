@@ -70,23 +70,23 @@ class Parte extends Model
     }
 
     public function scopeFilter($query, $column, $value) {
-        switch($column) {
-            case 'number':
-            case 'origin':
-            case 'subject':
-                $query->where($column, 'LIKE', '%'.$value.'%');
-                break;
-            case 'id':
-            case 'type':
-                if(!empty($value)){
+        if(!empty($value)) {
+            switch($column) {
+                case 'origin':
+                case 'subject':
+                    $query->where($column, 'LIKE', '%'.$value.'%');
+                    break;
+                case 'id':
+                case 'number':
+                case 'type':
                     $query->where($column, $value);
-                }
-                break;
-            case 'without_sgr':
-                $query->whereDoesntHave('requirements');
-                break;
+                    break;
+                case 'without_sgr':
+                    $query->whereDoesntHave('requirements');
+                    break;
+            }
         }
-        app('debugbar')->log($value);
+
     }
 
     public function scopeSearch($query, Request $request)
