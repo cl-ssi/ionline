@@ -5,6 +5,7 @@
             <th>Estado</th>
             <th>Nombre</th>
             <th>Órden jerárquico</th>
+            <th>Unidad Organizacional</th>
             <th></th>
         </tr>
     </thead>
@@ -66,6 +67,7 @@
                 </td>
                 <td>{{ $subrogation->subrogant->fullName }}</td>
                 <td>{{ $subrogation->level }}</td>
+                <td>kaka</td>
                 <td>
                     <button
                         type="button"

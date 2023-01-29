@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', 'Calendario de Autoridades de la Unidad Organizacional')
 @section('content')
+<div>
+   @livewire('profile.subrogations')
+</div>
+<hr>
+
 <h1 class="mb-3">Calendario de Autoridades de la Unidad Organizacional {{ $ou->name }}</h1>
 <div id="legend">
     <p>
@@ -11,6 +16,9 @@
         <a href="{{ route('rrhh.new-authorities.create', $ou) }}" class="btn btn-success float-right">Crear Autoridad</a>
     </p>
 </div>
+
+
+
 <div id="calendar"></div>
 <!-- Modal para agregar una autoridad -->
 <div class="modal fade" id="addAuthorityModal" tabindex="-1" role="dialog" aria-labelledby="addAuthorityModalLabel" aria-hidden="true">
@@ -72,6 +80,7 @@
         backgroundColor: '#FF0000'
       });
     });
+
     @foreach($newAuthorities as $newAuthority)
     events.push({
       title: "{{ $newAuthority->user->tinnyName }}",
@@ -82,6 +91,26 @@
     });
     @endforeach
 
+    @foreach($newAuthoritiesDelegate as $newAuthorityDelegate)
+    events.push({
+      title: "{{ $newAuthorityDelegate->user->tinnyName }}",
+      start: "{{ $newAuthorityDelegate->date }}",
+      end: "{{ $newAuthorityDelegate->date }}",
+      allDay: true,
+      backgroundColor: '#0000FF'
+    });
+    @endforeach
+
+    @foreach($newAuthoritiesSecretary as $newAuthoritySecretary)
+    events.push({
+      title: "{{ $newAuthoritySecretary->user->tinnyName }}",
+      start: "{{ $newAuthoritySecretary->date }}",
+      end: "{{ $newAuthoritySecretary->date }}",
+      allDay: true,
+      backgroundColor: '#FFFF00'
+    });
+    @endforeach
+    
     if (events.length > 0) {
       $('#calendar').fullCalendar({
         lang: 'es',
