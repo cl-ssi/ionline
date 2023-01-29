@@ -1146,7 +1146,6 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::prefix('partes')->as('partes.')->group(function () {
         // Route::get('/',[ParteController::class,'index'])->name('index');
         Route::post('/',[ParteController::class,'store'])->name('store');
-        Route::get('/admin',[ParteController::class,'admin'])->name('admin');
         Route::get('/create',[ParteController::class,'create'])->name('create');
         Route::get('/download/{file}',  [ParteController::class,'download'])->name('download');
         Route::delete('/files/{file}', [ParteFileController::class,'destroy'])->name('files.destroy');

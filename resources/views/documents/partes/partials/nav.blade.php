@@ -26,14 +26,6 @@
     </li>
     @endcan
 
-    <!-- @canany(['Partes: user'])
-    <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('documents.partes.inbox') }}">
-            <i class="fas fa-inbox"></i> Bandeja de Entrada
-        </a>
-    </li>
-    @endcan -->
 
     @canany(['Partes: oficina'])
     <li class="nav-item">
@@ -52,13 +44,5 @@
         </a>
     </li>
     @endcan
-
-    @can('be god')
-    <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('documents.partes.admin') }}">
-            <i class="fas fa-cog"></i> Admin
-        </a>
-    </li>
-    @endcan
+    
 </ul>
