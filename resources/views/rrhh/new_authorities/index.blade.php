@@ -22,7 +22,7 @@
                                     <tr style="font-family:monospace;">
                                         <td>{{ $ou }}</td>
                                         <td>
-                                            <a href="{{ route('rrhh.new-authorities.calendar', $id) }}" 
+                                            <a href="{{ route('rrhh.new-authorities.calendar', $id) }}"
                                                 class="btn btn-outline-secondary btn-sm"
                                                 role="button"
                                                 aria-label="Ver calendario de la Unidad ">

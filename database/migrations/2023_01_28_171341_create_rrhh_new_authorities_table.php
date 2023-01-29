@@ -18,10 +18,13 @@ class CreateRrhhNewAuthoritiesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
-            $table->date('from')->nullable();
+            $table->date('date')->nullable();
+            $table->string('position')->nullable();
+            $table->string('type')->nullable();
+            $table->string('decree')->nullable();
             $table->time('from_time')->nullable();
-            $table->date('to')->nullable();
             $table->time('to_time')->nullable();
+            $table->foreignId('representation_id')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

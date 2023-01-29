@@ -16,10 +16,13 @@ class NewAuthority extends Model
     protected $fillable = [
         'user_id',
         'organizational_unit_id',
-        'from',
+        'date',
+        'position',
+        'type',
+        'decree',
         'from_time',
-        'to',
         'to_time',
+        'representation_id',
     ];
 
     public function organizationalUnit() {
