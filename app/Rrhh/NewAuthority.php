@@ -14,9 +14,12 @@ class NewAuthority extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'from', 'to', 'position', 'type',
-        'decree', 'organizational_unit_id', 'creator_id',
-        'representation_id'
+        'user_id',
+        'organizational_unit_id',
+        'from',
+        'from_time',
+        'to',
+        'to_time',
     ];
 
     public function organizationalUnit() {
@@ -116,7 +119,7 @@ class NewAuthority extends Model
         return $authorities;
     }
 
-    protected $table = 'rrhh_authorities';
+    protected $table = 'rrhh_new_authorities';
 
     /**
      * The attributes that should be mutated to dates.

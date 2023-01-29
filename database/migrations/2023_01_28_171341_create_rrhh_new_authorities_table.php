@@ -13,13 +13,15 @@ class CreateRrhhNewAuthoritiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('rrhh_new_authorities', function (Blueprint $table) {
+        Schema::create('rrhh_new_authorities', function (Blueprint $table) {
             //
             $table->id();
-            $table->date('from');
-            $table->time('from_time');
-            $table->date('to');
-            $table->date('to_time');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('organizational_unit_id')->nullable()->constrained('organizational_units');
+            $table->date('from')->nullable();
+            $table->time('from_time')->nullable();
+            $table->date('to')->nullable();
+            $table->time('to_time')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,8 +34,6 @@ class CreateRrhhNewAuthoritiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('rrhh_new_authorities', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('rrhh_new_authorities');
     }
 }

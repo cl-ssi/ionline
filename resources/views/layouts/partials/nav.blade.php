@@ -324,7 +324,7 @@
                         @endcan
 
                         @can('be god')
-                        <a class="dropdown-item {{ active('rrhh.authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
+                        <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
                             <i class="fas fa-chess-king fa-fw"></i> Nueva Autoridades
                         </a>
                         @endcan

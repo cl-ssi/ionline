@@ -34,13 +34,12 @@ class NewAuthorityController extends Controller
 
     public function calendar(OrganizationalUnit $organizationalUnit)
     {
-        $calendar = [];
-        $holidays = Holiday::all();        
+        $holidays = Holiday::all();
+        $newAuthorities = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->get();
         return view('rrhh.new_authorities.calendar', [
-            'calendar' => $calendar,
             'ou' => $organizationalUnit,
-            'holidays' => $holidays
+            'holidays' => $holidays,
+            'newAuthorities' => $newAuthorities
         ]);
     }
-
 }
