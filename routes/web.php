@@ -79,6 +79,7 @@ use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\AuthorityController;
+use App\Http\Controllers\Rrhh\NewAuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 
 use App\Http\Controllers\Resources\WingleController;
@@ -915,6 +916,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
 
     Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
+    Route::prefix('new-authorities')->name('new-authorities.')->middleware('auth')->group(function () {
+        Route::get('/', [NewAuthorityController::class,'index'])->name('index');
+        Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
+    });
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
         Route::get('/', [OrganizationalUnitController::class,'index'])->name('index')->middleware('auth');
