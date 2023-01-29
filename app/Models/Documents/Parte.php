@@ -83,6 +83,10 @@ class Parte extends Model
                     break;
                 case 'without_sgr':
                     $query->whereDoesntHave('requirements');
+                    $query->whereDate('created_at', '>=', date('Y') - 1 .'-01-01');
+                    break;
+                case 'important':
+                    $query->whereNotNull('important');
                     break;
             }
         }

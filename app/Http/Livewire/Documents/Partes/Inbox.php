@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Partes;
+namespace App\Http\Livewire\Documents\Partes;
 
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -16,6 +16,8 @@ class Inbox extends Component
     public $parte_number;
     public $parte_origin;
     public $parte_subject;
+    public $parte_without_sgr;
+    public $parte_important;
 
     /**
     * Mount
@@ -27,6 +29,8 @@ class Inbox extends Component
         $this->parte_number = session('parte_number');
         $this->parte_origin = session('parte_origin');
         $this->parte_subject = session('parte_subject');
+        $this->parte_without_sgr = session('parte_without_sgr');
+        $this->parte_important = session('parte_important');
     }
 
     public function search() 
@@ -36,6 +40,14 @@ class Inbox extends Component
         session(['parte_number' => $this->parte_number]);
         session(['parte_origin' => $this->parte_origin]);
         session(['parte_subject' => $this->parte_subject]);
+        session(['parte_without_sgr' => $this->parte_without_sgr]);
+        session(['parte_important' => $this->parte_important]);
+    }
+
+    public function removeFilter($filter)
+    {
+        session()->forget($filter);
+        $this->$filter = null;
     }
 
     public function render()
@@ -47,6 +59,8 @@ class Inbox extends Component
             ->filter('number', $this->parte_number)
             ->filter('origin', $this->parte_origin)
             ->filter('subject', $this->parte_subject)
+            ->filter('without_sgr', $this->parte_without_sgr)
+            ->filter('important', $this->parte_important)
             ->with([
                 'requirements',
                 'files',
@@ -55,8 +69,8 @@ class Inbox extends Component
                 'files.signatureFile.signaturesFlows',
                 'files.signatureFile',
                 ])
-            ->latest()->paginate('25');
+            ->latest()->paginate('100');
 
-        return view('livewire.partes.inbox', ['partes' => $partes]);
+        return view('livewire.documents.partes.inbox', ['partes' => $partes]);
     }
 }

@@ -57,15 +57,38 @@
     <div class="form-row">
         <div class="form-check">
             <label class="form-check-label">&nbsp;</label>
-            <input type="checkbox" class="form-check-input" name="without_sgr">
+            <input type="checkbox" class="form-check-input" wire:model.defer="parte_without_sgr">
             Solo aquellos sin derivación
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">&nbsp;</label>
+            <input type="checkbox" class="form-check-input" wire:model.defer="parte_important">
+            Marcados como urgentes
         </div>
     </div>
 
+    <h5 class="mt-3">
+        @foreach(array('parte_id','parte_type','parte_number','parte_origin','parte_subject') as $filter)
+            @if( session($filter) )
+            <a href="#" class="badge badge-secondary" wire:click="removeFilter('{{$filter}}')">
+                {{ session($filter) }} <i class="fas fa-trash text-light small"></i>
+            </a>
+            @endif
+        @endforeach
+        @if(session('parte_without_sgr'))
+            <a href="#" class="badge badge-secondary" wire:click="removeFilter('parte_without_sgr')">
+                Sin serivación <i class="fas fa-trash text-light small"></i>
+            </a>
+        @endif
+        @if(session('parte_important'))
+            <a href="#" class="badge badge-secondary" wire:click="removeFilter('parte_important')">
+                Marcados como urgentes <i class="fas fa-trash text-light small"></i>
+            </a>
+        @endif
+    </h5>
 
-    <h3 class="mt-3">Todos los partes</h3>
-
-    <table class="table table-sm table-bordered table-striped">
+    <table class="table table-sm table-bordered table-striped" wire:loading.class="d-none">
         <thead>
             <tr>
                 <th>ID</th>
@@ -191,7 +214,7 @@
             <tr class="text-center">
                 <td colspan="7">
                     <em>
-                        No hay partes
+                        No se encontraron partes con los filtros selecionados
                     </em>
                 </td>
             </tr>

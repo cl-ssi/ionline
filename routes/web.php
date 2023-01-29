@@ -1144,18 +1144,24 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
-        Route::get('/inbox-lw',App\Http\Livewire\Partes\Inbox::class)->name('inbox-lw');
-        Route::get('/outbox', [ParteController::class,'outbox'])->name('outbox');
+        // Route::get('/',[ParteController::class,'index'])->name('index');
+        Route::post('/',[ParteController::class,'store'])->name('store');
+        Route::get('/admin',[ParteController::class,'admin'])->name('admin');
+        Route::get('/create',[ParteController::class,'create'])->name('create');
         Route::get('/download/{file}',  [ParteController::class,'download'])->name('download');
         Route::delete('/files/{file}', [ParteFileController::class,'destroy'])->name('files.destroy');
-        Route::get('/admin', [ParteController::class,'admin'])->name('admin');
-        Route::get('/download/{parte}', [ParteController::class,'download'])->name('download');
-        Route::get('/view/{parte}', [ParteController::class,'view'])->name('view');
         Route::get('/inbox', [ParteController::class,'inbox'])->name('inbox');
-        Route::get('report-by-dates',App\Http\Livewire\Documents\Partes\ReportByDates::class)->name('report-by-dates');
-    });
 
-    Route::resource('partes', ParteController::class);
+        Route::get('/',App\Http\Livewire\Documents\Partes\Inbox::class)->name('index');
+        Route::get('/outbox', [ParteController::class,'outbox'])->name('outbox');
+        Route::get('report-by-dates',App\Http\Livewire\Documents\Partes\ReportByDates::class)->name('report-by-dates');
+        Route::get('/view/{parte}', [ParteController::class,'view'])->name('view');
+        Route::get('/{parte}', [ParteController::class,'show'])->name('show');
+        Route::put('/{parte}', [ParteController::class,'update'])->name('update');
+        Route::delete('/{parte}', [ParteController::class,'destroy'])->name('destroy');
+        Route::get('/{parte}/edit', [ParteController::class,'edit'])->name('edit');
+
+    });
 
     Route::get('signatures/index/{tab}', [SignatureController::class,'index'])->name('signatures.index');
     Route::get('signatures/create/{xAxis?}/{yAxis?}', [SignatureController::class,'create'])->name('signatures.create');
