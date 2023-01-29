@@ -9,6 +9,8 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class NewAuthorityController extends Controller
 {
@@ -18,17 +20,15 @@ class NewAuthorityController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $ouTopLevels = OrganizationalUnit::with([
-            'childs',
-            'childs.childs',
-            'childs.childs.childs.childs',
-            'childs.childs.childs.childs.childs'
-        ])->where('level', 1)->get();
-
-
+{
+    if (auth()->user()->can('Authorities: all')) {
+        $ouTopLevels = OrganizationalUnit::where('level', 1)->get();
         return view('rrhh.new_authorities.index', compact('ouTopLevels'));
+    } else {
+        $ouTopLevels = OrganizationalUnit::where('level', 1)->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)->get();
+        return view('rrhh.new_authorities.index', compact('ouTopLevels'));        
     }
+}
 
     public function calendar(OrganizationalUnit $organizationalUnit)
     {
