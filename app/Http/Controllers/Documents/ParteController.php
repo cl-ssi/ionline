@@ -37,7 +37,6 @@ class ParteController extends Controller
                 ])
             ->latest()->paginate('100');
 
-            session(['partes_origin' => session('partes_origin') ?? $request->input('origin')]);
         return view('documents.partes.index', compact('partes', 'request'));
     }
 
