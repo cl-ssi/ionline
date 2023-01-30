@@ -5,11 +5,14 @@
 @section('content')
 
 
-<h4 class="mb-3">Derivando parte <strong>{{ $parte->id }}</strong></h4>
+<h4 class="mb-3">
+    Derivando parte <strong>{{ $parte->id }}</strong>
+    <small>4 pendientes</small>
+</h4>
 
 @if($parte->files != null)
     @foreach($parte->files as $file)
-        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="600">
+        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="650">
     @endforeach
 @endif
 
@@ -39,7 +42,7 @@
                     <label for="for_organizationalUnit">Establecimiento / Unidad Organizacional</label>
                     @livewire('select-organizational-unit', [
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
-
+                        'mobile' => true
                     ])
                 </fieldset>
             </div>
@@ -50,7 +53,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-12">
                     <label for="for_date">Asunto</label>
-                    <textarea name="subject" id="for_subject" class="form-control" rows="2" required>{{ $parte->subject }}</textarea>
+                    <textarea name="subject" id="for_subject" class="form-control" rows="3" required>{{ $parte->subject }}</textarea>
                 </fieldset>
             </div>
             
