@@ -21,6 +21,8 @@
 
 <br>
 
+<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" width="500" height="375">
+
 
 <div class="form-row">
     <div class="col-md-8 col-12 d-none d-sm-block">
@@ -94,8 +96,10 @@
 
 @endsection
 
-@section('custom_js')
-  <script>
+@section('custom_css')
+<link href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.3.122/web/pdf_viewer.min.css" rel="stylesheet"></link>
+@endsection
 
-  </script>
+@section('custom_js')
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.3.122/build/pdf.min.js"></script>
 @endsection
