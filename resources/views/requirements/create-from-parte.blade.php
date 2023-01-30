@@ -4,31 +4,22 @@
 
 @section('content')
 
-
 <h4 class="mb-3">
     Derivando parte <strong>{{ $parte->id }}</strong>
-    <small>4 pendientes</small>
+    <span class="badge badge-info">4 pendientes</span>
 </h4>
 
-@if($parte->files != null)
-    @foreach($parte->files as $file)
-        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="650">
-    @endforeach
-@endif
+
 
 <br>
 
 <div class="form-row">
     <div class="col-md-8 col-12 d-none d-sm-block">
-        @if($parte->files->first() != null)
-            @foreach($parte->files as $file)
-                <object type="application/pdf"
-                        data="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
-                        width="100%"
-                        height="850">
-                </object>
-            @endforeach
-        @endif
+    @if($parte->files != null)
+        @foreach($parte->files as $file)
+            <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="700">
+        @endforeach
+    @endif
     </div>
     <div class="col-md-4 col-12">
         <form method="POST" class="form-horizontal" action="{{ route('requirements.store') }}" enctype="multipart/form-data">
@@ -44,6 +35,16 @@
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                         'mobile' => true
                     ])
+                </fieldset>
+            </div>
+
+            <div class="form-row">
+                <fieldset class="form-group col-12">
+                    <label for="for_users">Usuario</label>
+                    <select class="custom-select" name="user" id="user">
+                        <option value=""></option>
+                        <option value="">Alvaro Torres Fuchslocher</option>
+                    </select>
                 </fieldset>
             </div>
 
