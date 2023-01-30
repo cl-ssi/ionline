@@ -9,13 +9,7 @@
 
 @if($parte->files != null)
     @foreach($parte->files as $file)
-        <li>
-            <a href="https://docs.google.com/gview?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}"
-                target="_blank" data-toggle="tooltip" data-placement="top"
-                data-original-title="{{ $file->name }}">
-                <i class="fas fa-paperclip"></i> {{ $file->name }}
-            </a>
-        </li>
+        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="400" height="500">
     @endforeach
 @endif
 
