@@ -2,7 +2,9 @@
 @section('title', 'Calendario de Autoridades de la Unidad Organizacional')
 @section('content')
 <div>
-   @livewire('profile.subrogations')
+   @livewire('authorities.show-subrogees', [
+            'organizational_unit_id' => $ou->id,
+        ])
 </div>
 <hr>
 
