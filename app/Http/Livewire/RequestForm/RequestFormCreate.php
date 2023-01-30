@@ -121,7 +121,7 @@ class RequestFormCreate extends Component
       $this->contractManager    =   $this->requestForm->contractManager;
       $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
-      $this->program_id         =   $this->program ? 'other' : $this->requestForm->program_id;
+      $this->program_id         =   $this->requestForm->program_id ?? 'other';
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
       $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
