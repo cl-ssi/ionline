@@ -67,7 +67,7 @@
                 </td>
                 <td>{{ $subrogation->subrogant->fullName }}</td>
                 <td>{{ $subrogation->level }}</td>
-                <td>kaka</td>
+                <td>{{ optional($subrogation->organizationalUnit)->name }}</td>
                 <td>
                     <button
                         type="button"

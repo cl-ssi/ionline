@@ -12,11 +12,16 @@ class Subrogations extends Component
     public $view;
 
     public $subrogation;
-    public $user_id, $subrogant_id;
+    public $user_id, $subrogant_id, $organizational_unit_id;
 
     public $absent;
 
-    protected $listeners = ['searchedUser'];
+    protected $listeners = ['searchedUser','ouSelected'];
+ 
+    public function ouSelected($ou_id)
+    {
+        $this->organizational_unit_id = $ou_id;
+    }
 
     public function searchedUser($searchedUser)
     {
@@ -28,12 +33,14 @@ class Subrogations extends Component
         return [
             'user_id' => 'required',
             'subrogant_id' => 'required',
+            'organizational_unit_id' => 'required',
         ];
     }
 
     protected $messages = [
         'user_id.required' => 'El usuario es requerido.',
         'subrogant_id.required' => 'El subrogante es requerido.',
+        'organizational_unit_id.required' => 'La unidad organizacional es requerida.',
     ];
 
     public function mount()
@@ -55,6 +62,7 @@ class Subrogations extends Component
         $this->subrogation = null;
 
         $this->subrogant_id = null;
+        $this->organizational_unit_id = null;
     }
 
     public function store()
@@ -71,7 +79,9 @@ class Subrogations extends Component
         $this->view = 'edit';
         $this->subrogation = $subrogation;
 
+        /** cambair por subrogant_id */
         $this->subrogant_id = $subrogation->subrogant->id;
+        $this->organizational_unit_id = $subrogation->organizational_unit_id;
     }
 
     public function update(Subrogation $subrogation)

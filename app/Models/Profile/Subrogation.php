@@ -2,9 +2,10 @@
 
 namespace App\Models\Profile;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
+use App\Rrhh\OrganizationalUnit;
 
 class Subrogation extends Model
 {
@@ -16,7 +17,10 @@ class Subrogation extends Model
     * @var array
     */
     protected $fillable = [
-        'subrogant_id','user_id','level'
+        'subrogant_id',
+        'user_id',
+        'level',
+        'organizational_unit_id',
     ];
 
     /**
@@ -34,6 +38,11 @@ class Subrogation extends Model
     public function subrogant()
     {
         return $this->belongsTo(User::class,'subrogant_id');
+    }
+    
+    public function organizationalUnit()
+    {
+        return $this->belongsTo(OrganizationalUnit::class);
     }
     
 }
