@@ -21,8 +21,7 @@
 
 <br>
 
-<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" width="400" height="500">
-
+<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://storage.googleapis.com/saludiquique-storage/ionline/signatures/original/57260.pdf" width="400" height="500">
 
 <div class="form-row">
     <div class="col-md-8 col-12 d-none d-sm-block">
