@@ -21,7 +21,7 @@
 
 <br>
 
-<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" width="500" height="375">
+<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" width="400" height="500">
 
 
 <div class="form-row">
