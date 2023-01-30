@@ -6,15 +6,13 @@
 
 <h4 class="mb-3">
     Derivando parte <strong>{{ $parte->id }}</strong>
-    <span class="badge badge-info">4 pendientes</span>
+    <span class="badge badge-success">4 pendientes</span>
 </h4>
-
-
 
 <br>
 
 <div class="form-row">
-    <div class="col-md-8 col-12 d-none d-sm-block">
+    <div class="col-12 col-md-8">
     @if($parte->files != null)
         @foreach($parte->files as $file)
             <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="700">
@@ -43,7 +41,9 @@
                     <label for="for_users">Usuario</label>
                     <select class="custom-select" name="user" id="user">
                         <option value=""></option>
+                        <option value="">👑 José Donoso Carrera</option>
                         <option value="">Alvaro Torres Fuchslocher</option>
+                        <option value="">Esteban Rojas García</option>
                     </select>
                 </fieldset>
             </div>
