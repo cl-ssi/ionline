@@ -9,7 +9,7 @@
 
 @if($parte->files != null)
     @foreach($parte->files as $file)
-        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="400" height="500">
+        <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ Storage::disk('gcs')->url($file->file) }}" width="100%" height="600">
     @endforeach
 @endif
 
@@ -63,7 +63,7 @@
 
             <div class="form-row">
                 <fieldset class="form-group col-6">
-                    <label for="for_origin">Tipo</label>
+                    <label for="for_priority">Prioridad</label>
                     <select class="form-control" name="priority" id="priority" >
                         <option>Normal</option>
                         <option>Urgente</option>
@@ -71,13 +71,22 @@
                 </fieldset>
 
                 <fieldset class="form-group col-6">
-                    <label for="for_origin">Fecha límite</label>
+                    <label for="for_limit_at">Fecha límite</label>
                     <input type="datetime-local" class="form-control" id="for_limit_at"
                            name="limit_at">
                 </fieldset>
             </div>
 
-            <button type="submit" class="btn btn-primary form-control">Derivar y ver siguiente (4 pendientes)</button>
+            <div class="form-row">
+                <div class="col-7">
+                    <button type="submit" class="btn btn-success form-control">Derivar y siguiente</button>
+                </div>
+                <div class="col-5">
+                    <button type="submit" class="btn btn-primary form-control">Siguiente</button>
+                </div>
+            </div>
+
+            <p class="text-center">4 pendientes</p>
 
         </form>
     </div>
