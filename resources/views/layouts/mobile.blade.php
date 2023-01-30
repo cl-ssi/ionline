@@ -50,15 +50,15 @@
 </head>
 <body>
     <div id="app">
-
+        @include('layouts.partials.nav')
         <main class="container-fluid">
             <div class="d-none d-print-block">
                 <strong>{{ env('APP_SS') }}</strong><br>
                 Ministerio de Salud
             </div>
-            @include('layouts.partials.nav')
             @include('layouts.partials.errors')
             @include('layouts.partials.flash_message')
+
             @yield('content', $slot ?? '')
         </main>
 

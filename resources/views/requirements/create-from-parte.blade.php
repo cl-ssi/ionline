@@ -78,15 +78,20 @@
             </div>
 
             <div class="form-row">
-                <div class="col-7">
-                    <button type="submit" class="btn btn-success form-control">Derivar y siguiente</button>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary form-control">
+                        <i class="fas fa-arrow-circle-left"></i>
+                    </button>
                 </div>
-                <div class="col-5">
-                    <button type="submit" class="btn btn-primary form-control">Siguiente</button>
+                <div class="col-8">
+                    <button type="submit" class="btn btn-success form-control">Derivar (4 pendientes)</button>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary form-control">
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </button>
                 </div>
             </div>
-
-            <p class="text-center">4 pendientes</p>
 
         </form>
     </div>
