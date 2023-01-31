@@ -86,27 +86,29 @@
 
     @foreach($newAuthorities as $newAuthority)
     events.push({
-      title: "{{ $newAuthority->user->tinnyName }}",
+      title: "{{ strtoupper($newAuthority->user->tinnyName) }}",
       start: "{{ $newAuthority->date }}",
       end: "{{ $newAuthority->date }}",
       allDay: true,
-      backgroundColor: '#007bff'
+      backgroundColor: '#007bff',
+      className:'authorities'
     });
     @endforeach
 
     @foreach($newAuthoritiesDelegate as $newAuthorityDelegate)
     events.push({
-      title: "{{ $newAuthorityDelegate->user->tinnyName }}",
+      title: "{{ strtoupper($newAuthorityDelegate->user->tinnyName) }}",
       start: "{{ $newAuthorityDelegate->date }}",
       end: "{{ $newAuthorityDelegate->date }}",
       allDay: true,
-      backgroundColor: '#6c757d'
+      backgroundColor: '#6c757d',
+      className:'authorities'
     });
     @endforeach
 
     @foreach($newAuthoritiesSecretary as $newAuthoritySecretary)
     events.push({
-      title: "{{ $newAuthoritySecretary->user->tinnyName }}",
+      title: "{{ $newAuthoritySecretary->user->tinnyName }}".toLowerCase(),
       start: "{{ $newAuthoritySecretary->date }}",
       end: "{{ $newAuthoritySecretary->date }}",
       allDay: true,
@@ -129,7 +131,10 @@
           if (event.title.length > MAX_LENGTH) {
             shortText = event.title.substring(0, MAX_LENGTH) + '...';
           }
-          element.find('.fc-title').text(shortText);
+          element.find('.fc-title').text(shortText).css({
+    'text-align': 'center',
+    'font-size': '17px'
+  });
         }
       });
     }
