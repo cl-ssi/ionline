@@ -12,11 +12,12 @@
         @endforeach
     </select>
 
-    <select class="custom-select"
+    <select class="form-control {{ $selectpicker ? 'selectpicker' : '' }}"
         id="{{ $selected_id }}" 
         name="{{ $selected_id }}"
         wire:model="organizational_unit_id"
         style="font-family:monospace;"
+        data-live-search="true" id="ou" name="to_ou_id" data-size="10"
         required>
         
         <option></option>
@@ -25,8 +26,10 @@
         @endforeach
     </select>
     
+    @if(!$selectpicker)
     <input type="text" 
         class="form-control"
         placeholder="Filtrar listado de unidades" 
         wire:model.debounce400ms="filter">
+    @endif
 </div>

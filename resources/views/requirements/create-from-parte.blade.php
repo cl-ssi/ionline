@@ -31,7 +31,8 @@
                     <label for="for_organizationalUnit">Establecimiento / Unidad Organizacional</label>
                     @livewire('select-organizational-unit', [
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
-                        'mobile' => true
+                        'mobile' => true,
+                        'selectpicker' => true,
                     ])
                 </fieldset>
             </div>
@@ -39,12 +40,22 @@
             <div class="form-row">
                 <fieldset class="form-group col-12">
                     <label for="for_users">Usuario</label>
-                    <select class="custom-select" name="user" id="user">
-                        <option value=""></option>
-                        <option value="">👑 José Donoso Carrera</option>
-                        <option value="">Alvaro Torres Fuchslocher</option>
-                        <option value="">Esteban Rojas García</option>
-                    </select>
+                    <div class="input-group">
+                        <select class="custom-select" name="user" id="user">
+                            <option value=""></option>
+                            <option value="">👑 José Donoso Carrera</option>
+                            <option value="">Alvaro Torres Fuchslocher</option>
+                            <option value="">Esteban Rojas García</option>
+                        </select>
+                        <div class="input-group-append" id="button-addon4">
+                            <button class="btn btn-outline-primary" type="button">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                            <button class="btn btn-outline-primary" type="button">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
 
