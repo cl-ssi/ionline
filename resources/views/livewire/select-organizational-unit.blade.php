@@ -30,6 +30,6 @@
     <input type="text" 
         class="form-control"
         placeholder="Filtrar listado de unidades" 
-        wire:model.debounce400ms="filter">
+        wire:model.defer="filter">
     @endif
 </div>

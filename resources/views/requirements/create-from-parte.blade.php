@@ -32,7 +32,7 @@
                     @livewire('select-organizational-unit', [
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                         'mobile' => true,
-                        'selectpicker' => true,
+                        'selectpicker' => false,
                     ])
                 </fieldset>
             </div>
