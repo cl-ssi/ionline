@@ -32,7 +32,7 @@
         </div>
         <div class="text-center">
             <button type="button" wire:click="save" class="btn btn-primary btn-circle">
-                <i class="fas fa-upload"></i>
+                <i class="fas fa-save"></i>
             </button>
         </div>
 
