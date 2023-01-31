@@ -508,6 +508,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::get('{jobPositionProfile}/edit_liabilities', [JobPositionProfileController::class, 'edit_liabilities'])->name('edit_liabilities');
     Route::post('{jobPositionProfile}/store_liabilities', [JobPositionProfileController::class, 'store_liabilities'])->name('store_liabilities');
     Route::put('{jobPositionProfile}/update_liabilities', [JobPositionProfileController::class, 'update_liabilities'])->name('update_liabilities');
+    Route::get('{jobPositionProfile}/edit_expertise_map', [JobPositionProfileController::class, 'edit_expertise_map'])->name('edit_expertise_map');
+    Route::post('{jobPositionProfile}/store_expertises', [JobPositionProfileController::class, 'store_expertises'])->name('store_expertises');
+    Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
 });
 /** Inicio Perfil de Cargos */
 

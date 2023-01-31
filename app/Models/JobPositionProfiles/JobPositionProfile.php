@@ -47,6 +47,14 @@ class JobPositionProfile extends Model implements Auditable
         return $this->hasMany('App\Models\JobPositionProfiles\Role');
     }
 
+    public function jppLiabilities() {
+        return $this->hasMany('App\Models\JobPositionProfiles\JobPositionProfileLiability', 'job_position_profile_id');
+    }
+
+    public function jppExpertises() {
+        return $this->hasMany('App\Models\JobPositionProfiles\ExpertiseProfile', 'job_position_profile_id');
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
