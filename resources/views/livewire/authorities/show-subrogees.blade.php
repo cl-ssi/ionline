@@ -1,8 +1,11 @@
 <div>
+<h4><i class="fas fa-chess"></i> Subrrogancias de la Unidad Organizacional: </h4>
+<h4>Subrogantes de {{$organizational_unit_name }}</h4>
+
 <table class="table table-sm table-bordered small">
     <thead class="thead-light">
         <tr>
-            <th width="120"></th>
+            <th width="120">Activar/Desactivar</th>
             <th>Estado</th>
             <th>Nombre</th>
             <th>Órden jerárquico</th>
@@ -10,8 +13,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="table-{{ auth()->user()->subrogant == auth()->user() ? 'success' : 'warning'}}">
-            <td>
+        @foreach($subrogations as $subrogation)
+            <tr class="table-{{ auth()->user()->subrogant == $subrogation->subrogant ? 'success' : 'warning'}}">
+                <td>
                 @if($absent)
                     <button type="button" class="btn btn-sm btn-warning" wire:click="toggleAbsent()">
                         <i class="fas fa-cocktail"></i> Desactivar
@@ -20,29 +24,7 @@
                     <button type="button" class="btn btn-sm btn-success" wire:click="toggleAbsent()">
                         <i class="fas fa-building"></i> Activar
                     </button>
-                @endif
-            </td>
-            <td>
-                @if($absent)
-                    <i class="fas fa-cocktail"></i> Fuera de la oficina
-                @else
-                    <i class="fas fa-building"></i> En la oficina
-                @endif
-            </td>
-            <td>{{ auth()->user()->fullName }}</td>
-            <td>0</td>
-            <td></td>
-        </tr>
-        @foreach($subrogations as $subrogation)
-            <tr class="table-{{ auth()->user()->subrogant == $subrogation->subrogant ? 'success' : 'warning'}}">
-                <td>
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-danger"
-                        wire:click="delete({{ $subrogation }})"
-                    >
-                        <i class="fas fa-trash"></i>
-                    </button>
+                @endif                    
                 </td>
                 <td>
                     @if($subrogation->subrogant->absent)

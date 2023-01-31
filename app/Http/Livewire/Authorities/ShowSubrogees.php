@@ -11,12 +11,14 @@ class ShowSubrogees extends Component
     public $user_id;
     public $subrogations;
     public $organizational_unit_id;
+    public $organizational_unit_name;
 
 
-    public function mount()
+    public function mount($organizational_unit_name)
     {
         $this->user_id = auth()->id();
         $this->absent = auth()->user()->absent;
+        $this->organizational_unit_name = $organizational_unit_name;
         $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizational_unit_id)
             ->orderBy('level')
             ->get();

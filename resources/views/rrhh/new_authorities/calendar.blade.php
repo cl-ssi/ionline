@@ -4,6 +4,7 @@
 <div>
    @livewire('authorities.show-subrogees', [
             'organizational_unit_id' => $ou->id,
+            'organizational_unit_name' => $ou->name,
         ])
 </div>
 <hr>
@@ -12,9 +13,9 @@
 <div id="legend">
     <p>
         <span style="background-color: #FF0000;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Feriados
-        <span style="background-color: #00FF00;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Manager
-        <span style="background-color: #0000FF;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Delegate
-        <span style="background-color: #FFFF00;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Secretary
+        <span class="bg-primary text-white;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Manager
+        <span class="bg-secondary text-white;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Delegate
+        <span class="bg-warning text-dark;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Secretary
         <a href="{{ route('rrhh.new-authorities.create', $ou) }}" class="btn btn-success float-right">Crear Autoridad</a>
     </p>
 </div>
@@ -89,7 +90,7 @@
       start: "{{ $newAuthority->date }}",
       end: "{{ $newAuthority->date }}",
       allDay: true,
-      backgroundColor: '#00FF00'
+      backgroundColor: '#007bff'
     });
     @endforeach
 
@@ -99,7 +100,7 @@
       start: "{{ $newAuthorityDelegate->date }}",
       end: "{{ $newAuthorityDelegate->date }}",
       allDay: true,
-      backgroundColor: '#0000FF'
+      backgroundColor: '#6c757d'
     });
     @endforeach
 
@@ -109,7 +110,7 @@
       start: "{{ $newAuthoritySecretary->date }}",
       end: "{{ $newAuthoritySecretary->date }}",
       allDay: true,
-      backgroundColor: '#FFFF00'
+      backgroundColor: '#ffc107'
     });
     @endforeach
     
