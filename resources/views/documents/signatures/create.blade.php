@@ -201,6 +201,16 @@
 
         });
 
+        $('#for_annexed').bind('change', function() {
+            if((this.files[0].size / 1024 / 1024) > 45){
+                alert('No puede cargar un anexo de mas de 45 MB.');
+                $('#for_annexed').val('');
+                return false;
+            }
+        });
+
+        
+
     </script>
 
 <script>
