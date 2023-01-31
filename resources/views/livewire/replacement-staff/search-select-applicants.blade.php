@@ -4,7 +4,7 @@
             <fieldset class="form-group col-3">
                 <label for="for_name">Nombres / Identificación</label>
                 <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;"
-                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model="selectedSearch">
+                  placeholder="RUN (sin dígito verificador) / NOMBRE" wire:model.debounce.500ms="selectedSearch">
             </fieldset>
 
             <fieldset class="form-group col-2">
