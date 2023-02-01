@@ -1,5 +1,5 @@
 <div>
-<h4><i class="fas fa-chess"></i> Subrrogancias de la Unidad Organizacional: </h4>
+<h4><i class="fas fa-chess"></i> Subrogancias de la Unidad Organizacional: </h4>
 <h4>Subrogantes de {{$organizational_unit_name }}</h4>
 
 <table class="table table-sm table-bordered small">
@@ -24,7 +24,7 @@
                     <button type="button" class="btn btn-sm btn-success" wire:click="toggleAbsent()">
                         <i class="fas fa-building"></i> Activar
                     </button>
-                @endif                    
+                @endif
                 </td>
                 <td>
                     @if($subrogation->subrogant->absent)

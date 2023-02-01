@@ -25,42 +25,55 @@
 <div id="calendar"></div>
 <!-- Modal para agregar una autoridad -->
 <div class="modal fade" id="addAuthorityModal" tabindex="-1" role="dialog" aria-labelledby="addAuthorityModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addAuthorityModalLabel">Agregar Subrogante</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('rrhh.new-authorities.store') }}" method="POST">
-                    <div class="form-group">
-                        <label for="authoritySelect">Subrogante:</label>
-                        <select class="form-control" id="authoritySelect" name="user_id" required>
-                            <option value="">Seleccionar Subrogante</option>
-                            @foreach($subrogants as $subrogant)
-                            <option value="{{ $subrogant->subrogant->id }}">{{$subrogant->subrogant->fullname }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="authorityDate">Desde:</label>
-                        <input type="date" class="form-control" id="authorityDate" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="authorityDate">Hasta:</label>
-                        <input type="text" class="form-control datepicker" id="endDate" name="end_date" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="addAuthorityButton">Agregar</button>
-            </div>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addAuthorityModalLabel">Agregar Subrogante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
+        <div class="modal-body">
+            <form action="{{ route('rrhh.new-authorities.update',$ou) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="authoritySelect">Subrogante:</label>
+                    <select class="form-control" id="authoritySelect" name="user_id" required>
+                        <option value="">Seleccionar Subrogante</option>
+                        @foreach($subrogants as $subrogant)
+                        <option value="{{ $subrogant->subrogant->id }}">{{$subrogant->subrogant->fullname }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="authorityDate">Desde:</label>
+                    <input type="date" class="form-control" id="authorityDate" name="start_date" readonly required>
+                </div>
+
+                <div class="form-group">
+                    <label for="authorityDate">Hasta:</label>
+                    <input type="date" class="form-control datepicker" id="endDate" name="end_date" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="updateFutureEventsCheck" name="updateFutureEventsCheck">
+                        <label class="form-check-label" for="updateFutureEventsCheck">
+                            ¿Desea modificar este y todos los eventos posteriores?
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Agregar">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+        
     </div>
+</div>
+
 </div>
 
 
@@ -144,7 +157,11 @@
       var date = $('#authorityDate').val();
 
       $('#addAuthorityModal').modal('hide');
+
+      $("#endDate").attr("min", $('#authorityDate').val());
     });
+
+
 
   });
 </script>
