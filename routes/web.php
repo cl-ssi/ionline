@@ -924,6 +924,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/{organizationalUnit}/create', [NewAuthorityController::class,'create'])->name('create');
         Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
+        Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
     });
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {

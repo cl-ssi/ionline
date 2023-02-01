@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Rrhh\NewAuthority;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+
 
 class NewAuthorityController extends Controller
 {
@@ -117,5 +117,46 @@ class NewAuthorityController extends Controller
 
         session()->flash('info', 'El usuario ' . $newAuthority->user->fullname . ' ha sido creado como autoridad de la unidad organizacional para ' . $days . ' días.');
         return redirect()->route('rrhh.new-authorities.calendar', $newAuthority->organizational_unit_id);
+    }
+
+    public function update(Request $request, OrganizationalUnit $organizationalUnit)
+    {
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+        
+        $user = User::find($validatedData['user_id']);
+        $startDate = Carbon::parse($validatedData['start_date']);
+        $endDate = Carbon::parse($validatedData['end_date']);
+        $authorityThatDay = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('date', $startDate)->where('type', 'manager')->first();
+        if ($request->updateFutureEventsCheck == 1) {
+            $maxValue = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('type', 'manager')->where('user_id',$authorityThatDay->user_id)->max('date');
+            $maxDate = Carbon::parse($maxValue);
+            while ($startDate->lte($maxDate)) {
+                $updateAuthority = NewAuthority::where('date', $startDate)
+                ->where('user_id', $authorityThatDay->user_id)
+                ->where('type', 'manager')->first();
+                
+                if ($updateAuthority) {
+                    $updateAuthority->user_id = $user->id;
+                    $updateAuthority->save();
+                        }
+                $startDate->addDay();
+            }
+            session()->flash('info', 'El usuario  ' . $user->full_name . ' ha sido dejado como autoridad  para todos los eventos a futuro de la antigua autoridad ' . $authorityThatDay->user->full_name.' Siendo la última fecha que tenia asignado como autoridad'.$maxValue);
+        } else {
+            NewAuthority::where('organizational_unit_id', $organizationalUnit->id)
+                ->where('type', 'manager')
+                ->whereBetween('date', [$startDate, $endDate])
+                ->update([
+                    'user_id' => $user->id,
+                ]);
+    
+            session()->flash('info', 'El usuario subrogante ' . $user->full_name . ' ha sido dejado como subrogante desde ' . $validatedData['start_date'] . ' hasta ' . $validatedData['end_date']);
+            
+        }
+        return redirect()->route('rrhh.new-authorities.calendar', $organizationalUnit->id);
     }
 }

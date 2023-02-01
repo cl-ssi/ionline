@@ -126,6 +126,7 @@ class WordTestController extends Controller
         // $first_name = explode(' ',trim($agreements->director_signer->user->name))[0];
         $director = mb_strtoupper($agreements->director_signer->user->fullName);
         $directorApelativo = $agreements->director_signer->appellative;
+        if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
         $directorRut = mb_strtoupper($agreements->director_signer->user->runFormat());
         $directorDecreto = $agreements->director_signer->decree;
         $directorNationality = Str::contains($agreements->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
@@ -229,13 +230,13 @@ class WordTestController extends Controller
 
         // Parametros a imprimir en los archivos abiertos
         $periodoConvenio = $agreements->period;
-        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' del '.date('Y', strtotime($agreements->date));
+        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' del año '.date('Y', strtotime($agreements->date));
     	$numResolucion = $agreements->number;
         $yearResolucion = $agreements->resolution_date != NULL ? date('Y', strtotime($agreements->resolution_date)) : '';
-        $fechaResolucion = $agreements->resolution_date != NULL ? date('j', strtotime($agreements->resolution_date)).' de '.$meses[date('n', strtotime($agreements->resolution_date))-1].' del '.date('Y', strtotime($agreements->resolution_date)) : '';
+        $fechaResolucion = $agreements->resolution_date != NULL ? date('j', strtotime($agreements->resolution_date)).' de '.$meses[date('n', strtotime($agreements->resolution_date))-1].' del año '.date('Y', strtotime($agreements->resolution_date)) : '';
         $numResourceResolucion = $agreements->res_resource_number;
         $yearResourceResolucion = $agreements->res_resource_date != NULL ? date('Y', strtotime($agreements->res_resource_date)) : '';
-        $fechaResourceResolucion = $agreements->res_resource_date != NULL ? date('j', strtotime($agreements->res_resource_date)).' de '.$meses[date('n', strtotime($agreements->res_resource_date))-1].' del '.date('Y', strtotime($agreements->res_resource_date)) : '';
+        $fechaResourceResolucion = $agreements->res_resource_date != NULL ? date('j', strtotime($agreements->res_resource_date)).' de '.$meses[date('n', strtotime($agreements->res_resource_date))-1].' del año '.date('Y', strtotime($agreements->res_resource_date)) : '';
     	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
         $emailMunicipality = $municipality->email_municipality;
         $comuna = $agreements->Commune->name; 
@@ -269,6 +270,8 @@ class WordTestController extends Controller
         $mainTemplateProcessorEnd->setValue('periodoConvenio',$periodoConvenio);
         $mainTemplateProcessorEnd->setValue('ilustreTitulo',$ilustre);
         $mainTemplateProcessorEnd->setValue('comuna',$comuna);
+        $mainTemplateProcessorEnd->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
+        $mainTemplateProcessorEnd->setValue('totalConvenioLetras',$totalConvenioLetras);
         $mainTemplateProcessorEnd->setValue('emailMunicipality',$emailMunicipality);
         $mainTemplateProcessorEnd->setValue('emailReferrer',$emailReferrer);
        
