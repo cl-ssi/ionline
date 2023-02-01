@@ -4,6 +4,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
 
+{{-- 
 <div class="alert alert-info alert-sm" role="alert">
     <div class="row">
         <div class="col-sm">
@@ -25,6 +26,7 @@
         </div>
     </div>
 </div>
+--}}
 
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada</h4>
 
