@@ -339,12 +339,14 @@ class WordTestController extends Controller
 
         $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
         $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name," "), 1) : $addendum->agreement->program->name;
+        if($addendum->agreement->period >= 2022) $programa = mb_strtoupper($programa);
         $ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
         $municipalidad = $municipality->name_municipality;
         $fechaAddendum = $this->formatDate($addendum->date);
         $fechaConvenio = $this->formatDate($addendum->agreement->date);
         $fechaResolucionConvenio = $this->formatDate($addendum->agreement->res_exempt_date);
         $directorApelativo = $addendum->director_signer->appellative;
+        if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
         //construir nombre director
         // $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
         $director = mb_strtoupper($addendum->director_signer->user->fullName);
