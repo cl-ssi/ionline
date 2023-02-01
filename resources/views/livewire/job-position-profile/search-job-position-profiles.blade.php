@@ -74,9 +74,9 @@
                             @case('rejected')
                                 <span class="badge badge-danger">Rechazado</span>
                                 @break
-
-                            @default
-                                Default case...
+                            @case('review')
+                                <span class="badge badge-info">En revisión</span>
+                                @break
                         @endswitch    
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>

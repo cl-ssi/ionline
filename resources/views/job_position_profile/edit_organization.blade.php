@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</th>
+                <th>VI. MAPA DE COMPETENCIAS DEL S.S.I</th>
             </tr>
         </thead>
         <tbody>

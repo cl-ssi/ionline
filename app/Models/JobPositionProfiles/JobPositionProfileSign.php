@@ -7,29 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class ExpertiseProfile extends Model implements Auditable
+class JobPositionProfileSign extends Model implements Auditable
 {
     use HasFactory;
     use softDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'value' 
+        'position', 'event_type', 'status', 'observation', 'date_sign'
     ];
-
-    public function expertise() {
-        return $this->belongsTo('App\Models\JobPositionProfiles\Expertise', 'expertise_id');
-    }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
 
     protected $hidden = [
         'created_at', 'updated_at'
     ];
 
-    protected $table = 'jpp_expertises_profile';
+    protected $table = 'jpp_job_position_profile_signs';
 }

@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</th>
+                <th>VI. MAPA DE COMPETENCIAS DEL S.S.I</th>
             </tr>
         </thead>
         <tbody>
@@ -98,6 +98,8 @@
 <div class="alert alert-info" role="alert">
   El mapa de competencias se presenta de acuerdo al estamento <b>{{ $jobPositionProfile->estament->name }}</b> y área <b>{{ $jobPositionProfile->area->name }}</b>
 </div>
+
+{{-- dd($jobPositionProfile->jppExpertises->first()->expertise->name) --}}
 
 @if($jobPositionProfile->jppExpertises->count() > 0)
     <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.update_expertises', $jobPositionProfile) }}" enctype="multipart/form-data"/>
@@ -219,7 +221,13 @@
 
 <div class="row">
     <div class="col">
-        <a class="btn btn-success float-right"><i class="fas fa-share"></i> Enviar Formulario</a>
+        <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.store', $jobPositionProfile) }}" enctype="multipart/form-data"/>
+            @csrf
+            @method('POST')
+            <button class="btn btn-success float-right" type="submit">
+                <i class="fas fa-share"></i> Enviar Formulario
+            </button>
+        </form>
     </div>
 </div>
 
@@ -227,8 +235,8 @@
 
 <div class="row">
     <div class="col">
-        <a class="btn btn-info float-left" href="{{-- route('job_position_profile.edit_formal_requirements', $jobPositionProfile) --}}">
-            <i class="fas fa-chevron-left"></i> II. Requisitos Formales
+        <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit_liabilities', $jobPositionProfile) }}">
+            <i class="fas fa-chevron-left"></i> V. Responsabilidad del Cargo
         </a>
     </div>
 </div>

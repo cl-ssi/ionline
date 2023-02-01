@@ -158,8 +158,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
-
-        
+        Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
 
         // @role(
         //   'Replacement Staff: admin |

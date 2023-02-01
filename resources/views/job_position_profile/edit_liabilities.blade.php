@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</th>
+                <th>VI. MAPA DE COMPETENCIAS DEL S.S.I</th>
             </tr>
         </thead>
         <tbody>
@@ -195,7 +195,7 @@
 
 <div class="row">
     <div class="col">
-        <a class="btn btn-info float-left" href="{{-- route('job_position_profile.edit_formal_requirements', $jobPositionProfile) --}}">
+        <a class="btn btn-info float-left" href="{{ route('job_position_profile.edit_organization', $jobPositionProfile) }}">
             <i class="fas fa-chevron-left"></i> IV. Organización y Contexto del Cargo
         </a>
         <a class="btn btn-info float-right" href="{{ route('job_position_profile.edit_expertise_map', $jobPositionProfile) }}">
