@@ -74,21 +74,31 @@
     </div>
     @endif
 
+    @if(count($user_array)>0)
     <table id="tabla_funcionarios" class="table table-striped table-sm">
         <thead>
             <tr>
                 <th>Unidad Organizacional</th>
                 <th>Destinatario</th>
                 <th>En copia</th>
+                <th>Categoría</th>
             </tr>
         </thead>
         <tbody>
             @foreach($user_array as $user)
-                <tr><input type='hidden' name='users[]' value="{{$user->id}}">
+                <tr><input type='hidden' name='users[]' id="users" value="{{$user->id}}">
                     <input type='hidden' name='enCopia[]' value='0'>
                     <td>{{ $user->organizationalUnit->name }}</td>
                     <td>{{ $user->tinnyName }}</td>
-                    <td><input class="form-check-input" type="checkbox" value=""></td>
+                    <!-- <td><input class="form-check-input" type="checkbox" value=""></td> -->
+                    <td>No</td>
+                    <td>
+                        <select name="categories[]" id="" class="form-control">
+                            @foreach($user->organizationalUnit->categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
                 </tr>
             @endforeach
             @foreach($user_cc_array as $user)
@@ -96,9 +106,13 @@
                     <input type='hidden' name='enCopia[]' value='1'>
                     <td>{{ $user->organizationalUnit->name}}</td>
                     <td>{{ $user->tinnyName }}</td>
-                    <td><input class="form-check-input" type="checkbox" value="" checked></td>
+                    <!-- <td><input class="form-check-input" type="checkbox" value="" checked></td> -->
+                    <td>Sí</td>
+                    <td></td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    @endif
 </div>

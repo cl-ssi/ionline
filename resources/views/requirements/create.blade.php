@@ -202,7 +202,7 @@
                     @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
                 </fieldset>
             </div>
-            <button type="submit" class="btn btn-primary">Crear</button>
+            <button type="submit" class="btn btn-primary" id="submit">Crear</button>
 
         </form>
     </div>
@@ -214,6 +214,29 @@
 
 @section('custom_js')
   <script>
+
+    $(document).ready(function(){
+        
+
+        $("#submit").click(function(){
+            // alert(document.getElementById("users").value);
+            // if (document.getElementById("users").value == null){
+            //     alert("Debe ingresar por lo menos un usuario a quien para crear el requerimiento.");
+            // }
+            //Attempt to get the element using document.getElementById
+            var element = document.getElementById("users");
+
+            //If it isn't "undefined" and it isn't "null", then it exists.
+            if(typeof(element) != 'undefined' && element != null){
+                // alert('Element exists!');
+            } else{
+                alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+                return false;
+            }
+
+        });
+    });
+
 {{--
   	 $(document).ready(function(){
        var array = new Array;
