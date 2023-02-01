@@ -84,7 +84,7 @@
 
 <br>
 
-<h4><i class="fas fa-chess"></i> Mis subrrogancias</h4>
+<h4><i class="fas fa-chess"></i> Mis subrogancias</h4>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered small table-stripped">
