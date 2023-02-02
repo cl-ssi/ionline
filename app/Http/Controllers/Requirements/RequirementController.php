@@ -806,7 +806,10 @@ class RequirementController extends Controller
 
             //se crearán requerimientos según usuarios agregados en tabla dinámica.
             $users = array_unique($users_req); //distinct
-            $categories_array = array_unique($categories_array_); //distinct
+            $categories_array = null;
+            if($categories_array_){
+                $categories_array = array_unique($categories_array_); //distinct
+            }
             $flag = 0;
 
             //obtiene nro para agrupar requerimientos
@@ -842,7 +845,9 @@ class RequirementController extends Controller
                 $requirement->user()->associate(Auth::user());
                 $requirement->group_number = $group_number;
                 $requirement->to_authority = $isAnyManager;
-                $requirement->category_id = $categories_array[$key];
+                if($categories_array){
+                    $requirement->category_id = $categories_array[$key];
+                }
                 $requirement->save();
 
                 /** Asigna las labels al requerimiento */
