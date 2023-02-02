@@ -5,7 +5,7 @@
     <div style="text-align: justify;">
         <p>Junto con saludar cordialmente.</p>
         <p>Adjunto documento indicado para conocimiento y fines.</p>
-        <p> <strong>Tipo:</strong> {{ $signature->document_type }}</p>
+        <p> <strong>Tipo:</strong> {{ $signature->type->name }}</p>
         <p> <strong>Asunto:</strong> {{ $signature->subject }}</p>
         <br>
         Saludos cordiales.

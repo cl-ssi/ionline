@@ -31,7 +31,7 @@ class NewPsiRequest extends Mailable
      */
     public function build()
     {
-        //$subject = "{$this->signaturesFlow->signature->document_type} - {$this->signaturesFlow->signature->subject}";
+        //$subject = "{$this->signaturesFlow->signature->type->name} - {$this->signaturesFlow->signature->subject}";
         $subject = "Nueva Solicitud de idoneidad n°{$this->psirequest->id} del {$this->psirequest->school->name}";
         return $this->view('suitability.mails.new_psi_request_notification')
             ->subject($subject);

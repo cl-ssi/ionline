@@ -4,7 +4,7 @@
 
     <div style="text-align: justify;">
         <p>Se encuentra disponible un nuevo documento para su firma en iOnline.</p>
-        <p> <strong>Tipo:</strong> {{ $signaturesFlow->signature->document_type }}</p>
+        <p> <strong>Tipo:</strong> {{ $signaturesFlow->signature->type->name }}</p>
         <p> <strong>Número Solicitud:</strong> {{ $signaturesFlow->signature->id }}</p>
         <a href="{{route('documents.signatures.index', 'pendientes')}}">Ir a firmar</a>
         <br><br>
