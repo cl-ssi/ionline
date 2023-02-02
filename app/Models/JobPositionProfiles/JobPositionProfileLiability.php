@@ -18,7 +18,18 @@ class JobPositionProfileLiability extends Model implements Auditable
     ];
 
     public function liability() {
-        return $this->belongsTo('App\Models\JobPositionProfiles\Liability');
+        return $this->belongsTo('App\Models\JobPositionProfiles\Liability', 'liability_id');
+    }
+
+    public function getYesNoValueAttribute() {
+        switch($this->value) {
+          case '0':
+            return 'No';
+            break;
+          case '1':
+            return 'Sí';
+            break;
+        }
     }
 
     /**

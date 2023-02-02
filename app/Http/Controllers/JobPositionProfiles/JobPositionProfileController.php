@@ -28,6 +28,11 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.index');
     }
 
+    public function index_review()
+    {   
+        return view('job_position_profile.index_review');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -70,7 +75,7 @@ class JobPositionProfileController extends Controller
      */
     public function show(JobPositionProfile $jobPositionProfile)
     {
-        //
+        return view('job_position_profile.show', compact('jobPositionProfile'));
     }
 
     /**
