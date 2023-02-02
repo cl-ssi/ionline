@@ -30,7 +30,7 @@
   </li>
 
   @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value)
-  @if(Auth()->user()->organizational_unit_id == $ouSearch)
+  @if(Auth()->user()->organizational_unit_id == $ouSearch || Auth::user()->hasPermissionTo('Request Forms: purchaser'))
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-alt"></i> Abastecimiento
