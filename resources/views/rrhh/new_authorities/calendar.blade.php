@@ -162,8 +162,13 @@
     });
 
 
-
+    $("#updateFutureEventsCheck").change(function() {
+        if(this.checked) {
+            $("#endDate").prop("disabled", true);
+        } else {
+            $("#endDate").prop("disabled", false);
+        }
+    });
   });
 </script>
-
 @endsection
