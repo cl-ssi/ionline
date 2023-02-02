@@ -40,8 +40,11 @@
 
 <div class="row">
     <div class="col-md-6">
-        <b>+</b> <a href="{{ route('rrhh.users.directory') }}?ou={{$organizationalUnit->id}}">{{ $organizationalUnit->name }}</a>
         <ul class="small">
+            <li>
+                <a href="{{ route('rrhh.users.directory') }}?ou={{$organizationalUnit->id}}">{{ $organizationalUnit->name }}</a>
+            </li>
+            <ul>
             @foreach($organizationalUnit->childs as $child_level_1)
                 @if($child_level_1->name != 'Externos')
                     <li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
@@ -62,6 +65,7 @@
                     </ul>
                 @endif
             @endforeach
+            </ul>
         </ul>
     </div>
 
