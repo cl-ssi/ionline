@@ -13,10 +13,10 @@
 <div id="legend">
     <p>
         <span style="background-color: #FF0000;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Feriados
-        <span class="bg-primary text-white;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Manager
-        <span class="bg-secondary text-white;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Delegate
+        <span class="bg-primary text-dark;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Manager
+        <span class="bg-secondary text-dark;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Delegate
         <span class="bg-warning text-dark;">&nbsp;&nbsp;&nbsp;&nbsp;</span> Secretary
-        <a href="{{ route('rrhh.new-authorities.create', $ou) }}" class="btn btn-success float-right">Crear Autoridad</a>
+        <a href="{{ route('rrhh.new-authorities.create', $ou) }}" class="btn btn-warning float-right">Crear Autoridad</a>
     </p>
 </div>
 

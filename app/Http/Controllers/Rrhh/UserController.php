@@ -106,10 +106,12 @@ class UserController extends Controller
                 ->storeAs('public', $user->id . '.' . $request->file('photo')->clientExtension());
         }
 
-        $user->givePermissionTo('Users: must change password');
-        $user->givePermissionTo('Authorities: view');
-        $user->givePermissionTo('Calendar: view');
-        $user->givePermissionTo('Requirements: create');
+        foreach($request->input('permissions') as $permission) {
+            $user->givePermissionTo($permission);
+        }
+        // $user->givePermissionTo('Authorities: view');
+        // $user->givePermissionTo('Calendar: view');
+        // $user->givePermissionTo('Requirements: create');
 
 
         session()->flash('info', 'El usuario ' . $user->name . ' ha sido creado.');

@@ -83,7 +83,54 @@
         </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary">Crear</button>
+    <h5>Permisos iniciales</h5>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Authorities: view" checked>
+        <label class="form-check-label" for="defaultCheck2">
+            Authorities: view
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Calendar: view" checked>
+        <label class="form-check-label" for="defaultCheck2">
+            Calendar: view
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Requirements: create" checked>
+        <label class="form-check-label" for="defaultCheck2">
+            Requirements: create
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Documents: create">
+        <label class="form-check-label" for="defaultCheck2">
+            Documents: create
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Documents: edit">
+        <label class="form-check-label" for="defaultCheck2">
+            Documents: edit
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Documents: signatures and distribution" >
+        <label class="form-check-label" for="defaultCheck2">
+            Documents: signatures and distribution
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="permissions[]" value="Users: must change password" checked>
+        <label class="form-check-label" for="defaultCheck1">
+            Users: must change password
+        </label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary mt-3">Crear</button>
+
+
 
 </form>
 @endcan

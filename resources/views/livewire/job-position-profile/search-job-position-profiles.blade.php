@@ -109,6 +109,14 @@
                                     </a>
                                 @endif
                             @endif
+                            @if($index == 'review')
+                                @if($jobPositionProfile->status == 'review')
+                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Aprobar perfil de cargo">
+                                        <i class="fas fa-signature"></i>
+                                    </a>
+                                @endif    
+                            @endif
                         </td>
                     <tr>
                     @endforeach

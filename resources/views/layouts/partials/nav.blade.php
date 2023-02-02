@@ -296,7 +296,8 @@
                 'Replacement Staff: create request',
                 'Replacement Staff: view requests',
                 'Job Position Profile: create',
-                'Job Position Profile: all'])
+                'Job Position Profile: all',
+                'Job Position Profile: review'])
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -403,7 +404,7 @@
                         </a>
                         @endif
 
-                        @canany(['Job Position Profile: create', 'Job Position Profile: all'])
+                        @canany(['Job Position Profile: create', 'Job Position Profile: all', 'Job Position Profile: review'])
                         <a class="dropdown-item" href="{{ route('job_position_profile.index') }}">
                             <i class="fas fa-id-badge"></i> Perfil de Cargos
                         </a>

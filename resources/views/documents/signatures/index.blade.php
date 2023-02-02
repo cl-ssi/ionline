@@ -98,16 +98,20 @@
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
+                        @can('Documents: signatures and distribution')
                         <button type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignModalContent({{$pendingSignaturesFlow->id}})" title="Firmar documento">
                             <i class="fas fa-file-signature"></i>
                         </button>
+                        @endcan
                     </td>
                     <td>
+                        @can('Documents: signatures and distribution')
                         <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
                             data-target="#rejectSignature{{$pendingSignaturesFlow->id}}" title="Rechazar documento">
                             <i class="fas fa-times-circle"></i>
                         </button>
+                        @endcan
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"

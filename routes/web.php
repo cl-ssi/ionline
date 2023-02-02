@@ -497,8 +497,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 /* Replacepent Staff */
 Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
+    Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
+    Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
     Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
     Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
     Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
@@ -1573,6 +1575,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','drugs')->gr
 
     Route::get('rosters/analisis_to_admin',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'index'])->name('roster.analisis_to_admin.index');
     Route::get('rosters/analisis_to_admin/{id}',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'show'])->name('roster.analisis_to_admin.show');
+    Route::get('precursors', App\Http\Livewire\Drugs\Precursors::class)->name('precursors');
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class,'index'])->middleware('auth')->name('health_plan.index');
