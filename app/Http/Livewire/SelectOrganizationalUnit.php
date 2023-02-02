@@ -31,6 +31,7 @@ class SelectOrganizationalUnit extends Component
      */
 
     public $selected_id = 'organizational_unit_id';
+    public $required = true;
     public $establishment_id;
     public $organizational_unit_id;
     public $readonlyEstablishment = false;

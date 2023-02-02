@@ -21,17 +21,28 @@
 @endsection
 
 @section('content')
-<div>
-    <div class="float-left">
-        <h3>Usuarios
-            @can('Users: create')
-                <a href="{{ route('rrhh.users.create') }}" class="btn btn-primary">Crear</a>
-            @endcan
-        </h3><br>
-    </div>
 
-    <div>
-        <form class="form-inline float-right" method="GET" action="{{ route('rrhh.users.index') }}">
+<div class="row mb-3">
+    <div class="col-6">
+        <h3>Usuarios</h3>
+    </div>
+    <div class="col-6 text-right">
+        @can('Users: create')
+            <a href="{{ route('rrhh.users.create') }}" class="btn btn-primary">Crear</a>
+        @endcan
+    </div>
+</div>
+
+
+<form method="GET" action="{{ route('rrhh.users.index') }}">
+    <div class="form-row">
+        <fieldset class="col-8">
+            @livewire('select-organizational-unit', [
+                'establishment_id' => auth()->user()->organizationalUnit->establishment->id, 
+                'required' => false,
+            ])
+        </fieldset>
+        <fieldset class="col-4">
             <div class="input-group mb-3">
                 <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus autocomplete="off">
                 <div class="input-group-append">
@@ -40,15 +51,17 @@
                     </button>
                 </div>
             </div>
-        </form>
+        </fieldset>
     </div>
-</div>
+</form>
+
 
 <br>
 
 <table class="table table-responsive-xl table-striped table-sm">
     <thead class="thead-dark">
         <tr>
+            <th scope="col"></th>
             <th scope="col">RUN</th>
             <th scope="col">Nombre</th>
             <th scope="col">Unidad Organizacional</th>
@@ -59,39 +72,28 @@
     <tbody>
         @foreach($users as $user)
         <tr>
+            <th>
+                {!! $user->can('be god') ? '<i class="text-danger fas fa-chess-king" title="be god"></i>':'' !!}
+                {!! $user->can('Drugs') ? '<i class="text-danger fas fa-cannabis" title="Drugs"></i>':'' !!}
+                {!! $user->can('Users: delete') ? '<i class="fas fa-user-slash" title="Users: delete"></i>':'' !!}
+                {!! $user->can('Partes: director') ? '<i class="fas fa-file-import" title="Partes: director"></i>':'' !!}
+                {!! $user->can('Requirements: delete') ? '<i class="text-danger fas fa-rocket" title="Requirements: delete"></i>':'' !!}
+            </th>
             <th scope="row" nowrap>{{ $user->runFormat() }}</td>
-            <td nowrap>{{ $user->fullName }} {{ trashed($user) }}</td>
+            <td nowrap>{{ $user->shortName }} {{ trashed($user) }}</td>
             <td class="small">{{ @$user->organizationalUnit->name ?: ''}}</td>
             <td class="small">{{ $user->position }}</td>
             <td nowrap>
                 @unless($user->trashed())
-                @can('Users: edit')
-                    <a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
-                    <span class="fas fa-edit" aria-hidden="true"></span></a>
-                    @if(!$user->hasVerifiedEmail())
-                        @if($user->email_personal)
-                        <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
-                            @csrf
-                            <div class="tooltip-wrapper" data-title="Verificar correo electrónico personal">
-                            <button class="btn btn-outline-primary"><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                            </div>
-                        </form>
-                        @else
-                        <div class="tooltip-wrapper disabled" data-title="No existe registro de correo electrónico personal para ser verificada">
-                            <button class="btn btn-outline-primary" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                        </div>
-                        @endif
-                    @else
-                        <div class="tooltip-wrapper disabled" data-title="Correo electrónico personal verificada">
-                            <button class="btn btn-outline-success" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                        </div>
-                    @endif
-                @endcan
+                    @can('Users: edit')
+                        <a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
+                        <span class="fas fa-edit" aria-hidden="true"></span></a>
+                    @endcan
 
-                @role('god')
-                <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning">
-                <span class="fas fa-redo" aria-hidden="true"></span></a>
-                @endrole
+                    @role('god')
+                    <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning">
+                    <span class="fas fa-redo" aria-hidden="true"></span></a>
+                    @endrole
                 @endunless
             </td>
         </tr>
