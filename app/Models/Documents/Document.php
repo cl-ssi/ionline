@@ -2,11 +2,14 @@
 
 namespace App\Models\Documents;
 
-use App\Models\Establishment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Establishment;
+use App\Models\Documents\Type;
 
 class Document extends Model implements Auditable
 {
@@ -21,7 +24,8 @@ class Document extends Model implements Auditable
     protected $fillable = [
         'number',
         'date',
-        'type',
+        'type_id',
+        'reserved',
         'antecedent',
         'responsible',
         'subject',
@@ -54,64 +58,19 @@ class Document extends Model implements Auditable
         'date'
     ];
 
-    public function getFromHtmlAttribute()
+    public function type()
     {
-        return str_replace("/", "<br>", $this->from);
-    }
-
-    public function getFromHtmlSignAttribute()
-    {
-        /*
-         * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
-         * para evitar que salga duplicado en la firmante
-         */
-        $chars    = array("/", "SERVICIO DE SALUD IQUIQUE", "Servicio de Salud Iquique");
-        $htmlchar = array("<br>", "", "");
-
-        return str_replace($chars, $htmlchar, $this->from);
-    }
-
-    public function getForHtmlAttribute()
-    {
-        return str_replace("/", "<br>", $this->for);
-    }
-
-    public function getAntecedentHtmlAttribute()
-    {
-        return str_replace("/", "<br>", $this->antecedent);
-    }
-
-    public function getResponsiblesArrayAttribute()
-    {
-        return explode("\n",$this->responsible);
-    }
-
-    public function getResponsibleHtmlAttribute()
-    {
-        return str_replace("\n", "<br>", $this->responsible);
-    }
-
-    public function getContentHtmlAttribute()
-    {
-        return str_replace("<!-- pagebreak -->", '<div style="page-break-after: always;"></div>', $this->content);
-    }
-
-    public function getDistributionHtmlAttribute()
-    {
-        $chars    = array("<", ">", "\n");
-        $htmlchar = array("&lt;", "&gt;", "<br>");
-
-        return str_replace($chars, $htmlchar, $this->distribution);
+        return $this->belongsTo(Type::class)->withTrashed();
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function organizationalUnit()
     {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo(OrganizationalUnit::class);
     }
 
     public function reqEvents()
@@ -128,6 +87,76 @@ class Document extends Model implements Auditable
     {
         return $this->belongsTo(Establishment::class);
     }
+
+    /**
+    * Get View Name from document type
+    */
+    public function getViewNameAttribute()
+    {
+        /* Borra acéntos y convierte a snake_case para obtener
+        * el nombre de la vista del documento */
+        $accents ='àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
+        $noAccents = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+        if($this->type) {
+            return str_replace(' ', '_', strtolower(
+                strtr(utf8_decode($this->type->name), utf8_decode($accents), $noAccents)
+            ));
+        }
+        else {
+            return 'show';
+        }
+    }
+
+    public function getFromHtmlAttribute()
+    {
+        return $this->from ? str_replace("/", "<br>", $this->from) : '';
+    }
+
+    public function getFromHtmlSignAttribute()
+    {
+        /*
+         * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
+         * para evitar que salga duplicado en la firmante
+         */
+        $chars    = array("/", "SERVICIO DE SALUD IQUIQUE", "Servicio de Salud Iquique");
+        $htmlchar = array("<br>", "", "");
+
+        return str_replace($chars, $htmlchar, $this->from);
+    }
+
+    public function getForHtmlAttribute()
+    {
+        return $this->for ? str_replace("/", "<br>", $this->for) : '';
+    }
+
+    public function getAntecedentHtmlAttribute()
+    {
+        return str_replace("/", "<br>", $this->antecedent);
+    }
+
+    public function getResponsiblesArrayAttribute()
+    {
+        return explode("\n",$this->responsible);
+    }
+
+    public function getResponsibleHtmlAttribute()
+    {
+        return $this->responsible ? str_replace("\n", "<br>", $this->responsible) : '';
+    }
+
+    public function getContentHtmlAttribute()
+    {
+        return str_replace("<!-- pagebreak -->", '<div style="page-break-after: always;"></div>', $this->content);
+    }
+
+    public function getDistributionHtmlAttribute()
+    {
+        $chars    = array("<", ">", "\n");
+        $htmlchar = array("&lt;", "&gt;", "<br>");
+
+        return str_replace($chars, $htmlchar, $this->distribution);
+    }
+
 
     public function scopeSearch($query, Request $request)
     {

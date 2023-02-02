@@ -91,7 +91,7 @@
                 <small>{{ $parte->entered_at }}</small>
             </td>
             <td>
-                {{ $parte->type }}
+                {{ optional($parte->type)->name }}
                 @if($parte->important)
                      <i class="fas fa-exclamation" style="color: red;"></i>
                 @endif

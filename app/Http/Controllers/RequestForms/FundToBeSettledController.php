@@ -13,7 +13,7 @@ class FundToBeSettledController extends Controller
     public function download(FundToBeSettled $fundToBeSettled)
     {
         $document = Document::find($fundToBeSettled->document_id);
-        $filename = $document->type . ' ' .
+        $filename = $document->type->name . ' ' .
             $document->number . '.' .
             File::extension($document->file);
         return Storage::disk('gcs')->response($document->file, $filename);

@@ -2,10 +2,11 @@
 
 namespace App\Models\Documents;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Documents\Type;
 
 class Signature extends Model implements Auditable
 {
@@ -23,9 +24,20 @@ class Signature extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'ou_id', 'responsable_id', 'request_date', 'document_type',
-        'subject','description','endorse_type','recipients',
-        'distribution', 'user_id', 'visatorAsSignature','url'
+        'id',
+        'ou_id',
+        'responsable_id',
+        'request_date',
+        'type_id',
+        'reserved',
+        'subject',
+        'description',
+        'endorse_type',
+        'recipients',
+        'distribution',
+        'user_id', 
+        'visatorAsSignature',
+        'url'
     ];
 
     public function user()
@@ -47,6 +59,12 @@ class Signature extends Model implements Auditable
     {
         return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
     }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class)->withTrashed();
+    }
+    
 
     /**
      * @return mixed Retorna model

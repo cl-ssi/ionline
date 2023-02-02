@@ -94,7 +94,10 @@
                         <br>
                         {{ $pendingSignaturesFlow->type }}
                     </td>
-                    <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
+                        @if($pendingSignaturesFlow->signature->reserved)
+                            <i class="fas fa-user-secret"></i>
+                        @endif
+                        {{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
@@ -319,7 +322,11 @@
                     <td>{{ $signature->id }}</td>
                     {{--<td>{{ $signature->request_date->format('Y-m-d') }}</td>--}}
                     <td>{{ $signature->created_at->format('Y-m-d') }}</td>
-                    <td>{{ $signature->subject }}</td>
+                    <td>
+                        @if($signature->reserved)
+                            <i class="fas fa-user-secret"></i>
+                        @endif
+                        {{ $signature->subject }}</td>
                     <td>{{ $signature->description }}</td>
                     <td>
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())

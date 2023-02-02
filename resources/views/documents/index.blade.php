@@ -20,16 +20,11 @@
 
         <fieldset class="form-group col-8 col-md-2">
             <label for="for_type">Tipo</label>
-            <select name="type" id="for_type" class="form-control">
-                <option></option>
-                <option value="Memo">Memo</option>
-                <option value="Oficio">Oficio</option>
-                <!-- <option value="Ordinario">Ordinario</option> -->
-                <option value="Reservado">Reservado</option>
-                <option value="Circular">Circular</option>
-                <option value="Acta de recepción">Acta de recepción</option>
-                <option value="Resolución">Resolución</option>
-                <option value="Acta de Recepción Obras Menores">Acta de Recepción Obras Menores</option>
+            <select name="type_id" id="for_type_id" class="form-control">
+                <option value=""></option>
+                @foreach($types as $id => $type)
+                    <option value="{{ $id }}">{{ $type }}</option>
+                @endforeach
             </select>
         </fieldset>
 
@@ -90,14 +85,19 @@
         @foreach($ownDocuments as $doc)
         <tr class="small">
             <td>{{ $doc->id }}</td>
-            <td>{{ $doc->type }}</td>
+            <td>{{ optional($doc->type)->name }}</td>
             <td>
-                {{ $doc->number }}
+                @livewire('documents.enumerate',['document' => $doc])
             </td>
             <td nowrap>{{ $doc->date ? $doc->date->format('d-m-Y'): '' }}</td>
             <td>{{ $doc->antecedent }}</td>
             <!--td nowrap>{!! $doc->responsibleHtml !!}</td-->
-            <td>{{ $doc->subject }}</td>
+            <td>
+                @if($doc->reserved)
+                    <i class="fas fa-user-secret"></i>
+                @endif
+                {{ $doc->subject }}
+            </td>
             <td>{!! $doc->fromHtml !!}</td>
             <td>{!! $doc->forHtml !!}</td>
             <td class="small">
@@ -177,9 +177,9 @@
         @foreach($otherDocuments as $doc)
         <tr class="small">
             <td>{{ $doc->id }}</td>
-            <td>{{ $doc->type }}</td>
+            <td>{{ optional($doc->type)->name }}</td>
             <td>
-                {{ $doc->number }}
+               {{ $doc->number }}
             </td>
             <td nowrap>{{ $doc->date ? $doc->date->format('d-m-Y'): '' }}</td>
             <td>{{ $doc->antecedent }}</td>

@@ -74,21 +74,49 @@
                 @else
                 <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
                 @endif
-                <div class="siete" style="padding-bottom: 4px;">
-                {{ env('APP_SS') }}<br>
-                {{ $document->user->organizationalUnit->name }}
-                </div>
+                <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
 
-            <div class="right" style="float: right; width: 340px; padding-top: 76px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;">
-                    <strong style="text-transform: uppercase;">{{ $document->type }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
-                    <div style="padding-top:26px">Iquique.</div>
+            <div class="right" style="float: right; width: 300px; padding-top: 76px;">
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ optional($document->type)->name }} N°:</strong> {{ $document->number }}</div>
+                <div style="padding-top:26px"></div>
+                <div class="left" style="padding-bottom: 6px; text-align: justify;">
+                    <strong>ANT:</strong> {{ $document->antecedent }}
                 </div>
+                <div class="left" style="padding-bottom: 8px; text-align: justify;">
+                    <strong>MAT:</strong> {{ $document->subject }}
+                </div>
+                <div><br><p></div>
             </div>
 
             <div style="clear: both; padding-bottom: 10px"></div>
+
+            @switch($document->greater_hierarchy)
+                @case('from')
+                    <div style="width: 60px; float:left;"><strong>DE:</strong></div>
+                    <div style="weight: bold;float:left; text-transform: uppercase;"><strong>{!! $document->fromHtml !!}</strong></div>
+                    <div style="clear: both; padding-bottom: 10px"></div>
+
+                    <div style="width: 60px; float:left;"><strong>PARA:</strong></div>
+                    <div style="weight: bold; float:left; text-transform: uppercase;"><strong>{!! $document->forHtml !!}</strong></div>
+                    <div style="clear: both"></div>
+                    @break
+
+                @case('for')
+                    <div style="width: 60px; float:left;"><strong>PARA:</strong></div>
+                    <div style="weight: bold; float:left; text-transform: uppercase;"><strong>{!! $document->forHtml !!}</strong></div>
+                    <div style="clear: both; padding-bottom: 10px"></div>
+
+                    <div style="width: 60px; float:left;"><strong>DE:</strong></div>
+                    <div style="weight: bold;float:left; text-transform: uppercase;"><strong>{!! $document->fromHtml !!}</strong></div>
+                    <div style="clear: both"></div>
+                    @break
+
+            @endswitch
+
+
+            <div style="border-top: 1px solid #CCC; margin: 14px 0px 14px;"></div>
             <div>
                 {!! $document->contentHtml !!}
             </div>

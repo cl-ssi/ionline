@@ -216,7 +216,7 @@ class TransferController extends Controller
         // return view('pharmacies.products.transfer.auth', compact('establishment', 'pendings_by_product'));
         $document = new Document();
         $document->content = $content;
-        $document->type = 'Ordinario';
+        $document->type_id = 2; /* TODO: Parametrizar (2=oficio)*/
         $document->for = 'SEGÚN DISTRIBUCIÓN';
         $document->responsible = 'Referente Técnico de Rehabilitación';
         $document->distribution = "APS.SSI@REDSALUD.GOV.CL\nOFICINA DE PARTES";

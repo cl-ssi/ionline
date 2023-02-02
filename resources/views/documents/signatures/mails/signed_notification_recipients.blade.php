@@ -7,8 +7,6 @@
         <p>Adjunto documento indicado para conocimiento y fines.</p>
         <p> <strong>Tipo:</strong> {{ $signature->document_type }}</p>
         <p> <strong>Asunto:</strong> {{ $signature->subject }}</p>
-{{--        <p> <strong>Firma del documento: </strong> {{ $signature->signaturesFlowSigner->signature_date->format('d-m-Y') }} </p>--}}
-{{--        <p> <strong>Archivo:</strong> SSI_{{ $document->type }}_{{ $document->number }}.pdf</p>--}}
         <br>
         Saludos cordiales.
     </div>

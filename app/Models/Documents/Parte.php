@@ -2,11 +2,12 @@
 
 namespace App\Models\Documents;
 
-use App\Models\Establishment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Establishment;
+use App\Models\Documents\Type;
 
 class Parte extends Model
 {
@@ -19,7 +20,8 @@ class Parte extends Model
      */
     protected $fillable = [
         'date',
-        'type',
+        'type_id',
+        'reserved',
         'number',
         'origin',
         'subject',
@@ -63,6 +65,12 @@ class Parte extends Model
         return $this->belongsTo(Establishment::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class)->withTrashed();
+    }
+
+
     /* FIXME: Esto no es necesario */
     public function getCreationParteDateAttribute()
     {
@@ -78,7 +86,7 @@ class Parte extends Model
                     break;
                 case 'id':
                 case 'number':
-                case 'type':
+                case 'type_id':
                     $query->where($column, $value);
                     break;
                 case 'without_sgr':

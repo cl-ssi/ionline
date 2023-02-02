@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Http\Controllers\Controller;
-use App\Models\Documents\Document;
-use App\Models\Documents\Parte;
-use App\Models\Documents\ParteEvent;
-use App\Models\Documents\ParteFile;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Documents\Type;
+use App\Models\Documents\ParteFile;
+use App\Models\Documents\ParteEvent;
+use App\Models\Documents\Parte;
+use App\Models\Documents\Document;
+use App\Http\Controllers\Controller;
 
 class ParteController extends Controller
 {
@@ -51,7 +52,7 @@ class ParteController extends Controller
         $documents = Document::query()
             ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
             ->search($request)
-            ->where('type',['Ordinario','Circular'])
+            // ->where('type',['Ordinario','Circular'])
             ->latest()
             ->paginate('100');
         $users = User::orderBy('name')->orderBy('fathers_family')->get();
@@ -65,8 +66,9 @@ class ParteController extends Controller
      */
     public function create()
     {
+        $types = Type::pluck('name','id');
         $today = date("Y-m-j\T00:00:00");
-        return view('documents.partes.create', compact('today'));
+        return view('documents.partes.create', compact('today','types'));
     }
 
     /**
@@ -81,6 +83,8 @@ class ParteController extends Controller
         //dd($request);
         $parte = new Parte($request->All());
         $parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
+        $parte->important = $request->input('important') == 'on' ? 1 : null;
+        $parte->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $parte->save();
 
         //dd($parte);
@@ -118,7 +122,7 @@ class ParteController extends Controller
         $ous = OrganizationalUnit::all()->sortBy('name');
         $organizationalUnit = OrganizationalUnit::find(1);
         //$leafs = $parte->events()->doesntHave('childs')->get();
-        return view('documents.partes.show', compact('parte','leafs','ous','organizationalUnit','files'));
+        return view('documents.partes.show', compact('parte','ous','organizationalUnit','files'));
     }
 
     /**
@@ -129,7 +133,8 @@ class ParteController extends Controller
      */
     public function edit(Parte $parte)
     {
-        return view('documents.partes.edit', compact('parte'));
+        $types = Type::pluck('name','id');
+        return view('documents.partes.edit', compact('parte','types'));
     }
 
     /**
@@ -142,7 +147,8 @@ class ParteController extends Controller
     public function update(Parte $parte, Request $request)
     {
         $parte->fill($request->All());
-
+        $parte->important = $request->input('important') == 'on' ? 1 : null;
+        $parte->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $parte->save();
 
         if($request->hasFile('forfile')){

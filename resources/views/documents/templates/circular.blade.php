@@ -74,49 +74,31 @@
                 @else
                 <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
                 @endif
-                <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
+                <div class="siete" style="padding-bottom: 4px;">
+                {{ env('APP_SS') }}<br>
+                {{ $document->user->organizationalUnit->name }}
+                </div>
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
 
-            <div class="right" style="float: right; width: 300px; padding-top: 76px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
-                <div style="padding-top:26px"></div>
-                <div class="left" style="padding-bottom: 6px; text-align: justify;">
-                    <strong>ANT:</strong> {{ $document->antecedent }}
+            <div class="right" style="float: right; width: 340px; padding-top: 76px;">
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;">
+                    <div style="padding-top:26px">Iquique, {{ $document->date->day }} de 
+                        {{ $document->date->monthName }} de {{ $document->date->year }}</div>
                 </div>
-                <div class="left" style="padding-bottom: 8px; text-align: justify;">
-                    <strong>MAT:</strong> {{ $document->subject }}
-                </div>
-                <div><br><p></div>
             </div>
+            <br>
 
             <div style="clear: both; padding-bottom: 10px"></div>
 
-            @switch($document->greater_hierarchy)
-                @case('from')
-                    <div style="width: 60px; float:left;"><strong>DE:</strong></div>
-                    <div style="weight: bold;float:left; text-transform: uppercase;"><strong>{!! $document->fromHtml !!}</strong></div>
-                    <div style="clear: both; padding-bottom: 10px"></div>
+            
 
-                    <div style="width: 60px; float:left;"><strong>PARA:</strong></div>
-                    <div style="weight: bold; float:left; text-transform: uppercase;"><strong>{!! $document->forHtml !!}</strong></div>
-                    <div style="clear: both"></div>
-                    @break
+            <div class="center" style="float: center; text-transform: uppercase;">            
+            <strong style="text-transform: uppercase;">{{ optional($document->type)->name }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
+            
+            </div>
 
-                @case('for')
-                    <div style="width: 60px; float:left;"><strong>PARA:</strong></div>
-                    <div style="weight: bold; float:left; text-transform: uppercase;"><strong>{!! $document->forHtml !!}</strong></div>
-                    <div style="clear: both; padding-bottom: 10px"></div>
-
-                    <div style="width: 60px; float:left;"><strong>DE:</strong></div>
-                    <div style="weight: bold;float:left; text-transform: uppercase;"><strong>{!! $document->fromHtml !!}</strong></div>
-                    <div style="clear: both"></div>
-                    @break
-
-            @endswitch
-
-
-            <div style="border-top: 1px solid #CCC; margin: 14px 0px 14px;"></div>
+            <div style="clear: both; padding-bottom: 10px"></div>
             <div>
                 {!! $document->contentHtml !!}
             </div>
@@ -139,7 +121,7 @@
             </div>
             @endif
 
-            <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
+            <!-- <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
 
                 @if($document->responsible != null)
                 <table class="siete" style="margin-right: 0; margin-left: auto;">
@@ -155,7 +137,7 @@
                     @endforeach
                 </table>
                 @endif
-            </div>
+            </div> -->
 
 
             <div class="pie_pagina center seis">

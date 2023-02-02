@@ -83,20 +83,9 @@
 
             <div class="right" style="float: right; width: 340px; padding-top: 76px;">
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;">
-                    <!-- <strong style="text-transform: uppercase;">{{ $document->type }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br> -->
-                    <div style="padding-top:26px">Iquique, {{ $document->date->day }} de 
-                        {{ $document->date->monthName }} de {{ $document->date->year }}</div>
+                    <strong style="text-transform: uppercase;">{{ optional($document->type)->name }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
+                    <div style="padding-top:26px">Iquique.</div>
                 </div>
-            </div>
-            <br>
-
-            <div style="clear: both; padding-bottom: 10px"></div>
-
-            
-
-            <div class="center" style="float: center; text-transform: uppercase;">            
-            <strong style="text-transform: uppercase;">{{ $document->type }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
-            
             </div>
 
             <div style="clear: both; padding-bottom: 10px"></div>
@@ -122,7 +111,7 @@
             </div>
             @endif
 
-            <!-- <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
+            <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
 
                 @if($document->responsible != null)
                 <table class="siete" style="margin-right: 0; margin-left: auto;">
@@ -138,7 +127,7 @@
                     @endforeach
                 </table>
                 @endif
-            </div> -->
+            </div>
 
 
             <div class="pie_pagina center seis">
