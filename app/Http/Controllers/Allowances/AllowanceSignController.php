@@ -103,6 +103,7 @@ class AllowanceSignController extends Controller
             }   
 
             $ou_finance = Parameter::where('parameter', 'FinanzasSSI')->get();
+            //TODO: se va caer si no encuentra la autoridad OJO
             $signature = Authority::getAuthorityFromDate($ou_finance->first()->value, now(), 'manager')->user;
 
             $signatureAllowance = new SignatureService();
