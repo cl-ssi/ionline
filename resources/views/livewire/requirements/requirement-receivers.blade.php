@@ -94,6 +94,7 @@
                     <td>No</td>
                     <td>
                         <select name="categories[]" id="" class="form-control">
+                            <option value=""></option>
                             @foreach($user->organizationalUnit->categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>
                             @endforeach
