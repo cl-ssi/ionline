@@ -1573,6 +1573,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','drugs')->gr
 
     Route::get('rosters/analisis_to_admin',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'index'])->name('roster.analisis_to_admin.index');
     Route::get('rosters/analisis_to_admin/{id}',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'show'])->name('roster.analisis_to_admin.show');
+    Route::get('precursors', App\Http\Livewire\Drugs\Precursors::class)->name('precursors');
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class,'index'])->middleware('auth')->name('health_plan.index');
