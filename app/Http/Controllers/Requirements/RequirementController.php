@@ -654,7 +654,17 @@ class RequirementController extends Controller
 
     public function createFromParte(Parte $parte)
     {
-        return view('requirements.create-from-parte', compact('parte'));
+        // get previous user id
+        $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
+                        ->where('id', '<', $parte->id)->max('id');
+                        $previous = Parte::find($previous);
+
+        // get next user id
+        $next = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
+                        ->where('id', '>', $parte->id)->min('id');
+                        $next = Parte::find($next);
+
+        return view('requirements.create-from-parte', compact('parte','previous','next'));
     }
 
     public function create_requirement_sin_parte()

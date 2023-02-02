@@ -6,7 +6,9 @@
 
 <h4 class="mb-3">
     Derivando parte <strong>{{ $parte->id }}</strong>
-    <span class="badge badge-success">4 pendientes</span>
+    <span class="badge badge-success">
+        Pendientes por derivar: {{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}}
+    </span>
 </h4>
 
 <br>
@@ -33,34 +35,12 @@
                         'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                         'mobile' => true,
                         'selectpicker' => false,
+                        'emitToListener' => 'selectUser',
                     ])
                 </fieldset>
             </div>
 
-            <div class="form-row">
-                <fieldset class="form-group col-12">
-                    <label for="for_users">Usuario</label>
-                    <div class="input-group">
-                        <select class="custom-select" name="user" id="user">
-                            <option value=""></option>
-                            <option value="">👑 José Donoso Carrera</option>
-                            <option value="">Alvaro Torres Fuchslocher</option>
-                            <option value="">Esteban Rojas García</option>
-                        </select>
-                        <div class="input-group-append" id="button-addon4">
-                            <button class="btn btn-outline-primary" type="button">
-                                <i class="fas fa-user-plus"></i>
-                            </button>
-                            <button class="btn btn-outline-primary" type="button">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-
-            {{-- @livewire('requirements.requirement-receivers',['parte_id' => $parte->id]) --}}
-
+            @livewire('select-user')
 
             <div class="form-row">
                 <fieldset class="form-group col-12">
@@ -94,17 +74,24 @@
 
             <div class="form-row">
                 <div class="col-2">
-                    <button type="submit" class="btn btn-primary form-control">
-                        <i class="fas fa-arrow-circle-left"></i>
-                    </button>
+                    <a @if($previous) href="{{ route('requirements.createFormParte', $previous) }}" @endif>
+                        <button type="button" class="btn btn-primary form-control">
+                            <i class="fas fa-arrow-circle-left"></i>
+                        </button>
+                    </a>
                 </div>
                 <div class="col-8">
-                    <button type="submit" class="btn btn-success form-control">Derivar (4 pendientes)</button>
+                    <button type="submit" class="btn btn-success form-control">Derivar ({{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}} pendientes)</button>
                 </div>
                 <div class="col-2">
-                    <button type="submit" class="btn btn-primary form-control">
+                    <!-- <button type="submit" class="btn btn-primary form-control">
                         <i class="fas fa-arrow-circle-right"></i>
-                    </button>
+                    </button> -->
+                    <a @if($next) href="{{ route('requirements.createFormParte', $next) }}" @endif>
+                        <button type="button" class="btn btn-primary form-control">
+                            <i class="fas fa-arrow-circle-right"></i>
+                        </button>
+                    </a>
                 </div>
             </div>
 
@@ -117,9 +104,9 @@
 @endsection
 
 @section('custom_css')
-<link href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.3.122/web/pdf_viewer.min.css" rel="stylesheet"></link>
+
 @endsection
 
 @section('custom_js')
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.3.122/build/pdf.min.js"></script>
+
 @endsection
