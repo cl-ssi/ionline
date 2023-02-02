@@ -13,7 +13,7 @@
             <br>
             <br>
             <br>
-            <strong>Acta Nº:</strong> <br>
+            <strong>Número:</strong> <br>
             <strong>Fecha:</strong> {{ now()->toDateString() }}
         </div>
     </div>
@@ -22,7 +22,7 @@
     <div style="clear: both; padding-bottom: 10px"></div>
 
     <h3 class="mb-3 mt-3">
-        Lista de precursores
+        Precursores
     </h3>
 
     <table class="table table-sm table-bordered">
