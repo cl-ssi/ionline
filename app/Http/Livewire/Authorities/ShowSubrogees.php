@@ -21,6 +21,7 @@ class ShowSubrogees extends Component
         $this->absent = auth()->user()->absent;
         $this->organizational_unit_name = $organizational_unit_name;
         $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizational_unit_id)
+            ->where('type','manager')
             ->orderBy('level')
             ->get();
     }

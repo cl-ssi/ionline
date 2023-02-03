@@ -28,12 +28,72 @@
             <input type="number" class="form-control" id="for_level" name="level" autocomplete="off">
         </fieldset>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-
+    <div class="form-row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary float-left">Guardar</button>
+            <a href="{{ route('rrhh.new-authorities.calendar',$organizationalUnit->id) }}" class="btn btn-secondary float-right">Cancelar</a>
+        </div>
+    </div>
 </form>
-
-
 <hr>
-<h4>Actualmente los subrogantes de la {{$organizationalUnit->name }} son:</h4>
+<h4>Actualmente los subrogantes de tipo Encargado (Jefes):</h4>
+<div class="table-responsive">
+    <table class="table bg-primary text-dark">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Nivel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($subrogations->where('type', 'manager') as $subrogation)
+            <tr>
+                <td>{{ $subrogation->user->name }}</td>
+                <td>{{ $subrogation->level }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+</table>
+</div>
+
+<h4>Actualmente los subrogantes de tipo Delegado (Igual acceso que el jefe):</h4>
+<div class="table-responsive">
+    <table class="table bg-secondary text-dark">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Nivel</th>
+                </tr>
+        </thead>
+        <tbody>
+            @foreach($subrogations->where('type', 'delegate') as $subrogation)
+            <tr>
+                <td>{{ $subrogation->user->name }}</td>
+                <td>{{ $subrogation->level }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<h4>Actualmente los subrogantes de tipo Secretario/a:</h4>
+<div class="table-responsive">
+    <table class="table bg-warning text-dark">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Nivel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($subrogations->where('type', 'secretary') as $subrogation)
+            <tr>
+                <td>{{ $subrogation->user->name }}</td>
+                <td>{{ $subrogation->level }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
 @endsection

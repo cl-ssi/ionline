@@ -56,6 +56,7 @@ class NewAuthorityController extends Controller
 
         $subrogants = Subrogation::with(['subrogant'])
             ->where('organizational_unit_id', $organizationalUnit->id)
+            ->where('type', 'manager')
             ->select('id', 'subrogant_id')
             ->get();
 

@@ -14,7 +14,9 @@ class SubrogationController extends Controller
     //
     public function create(OrganizationalUnit $organizationalUnit)
     {
-        return view('rrhh.new_authorities.create_subrogant',compact('organizationalUnit'));
+        
+        $subrogations = Subrogation::where('organizational_unit_id',$organizationalUnit->id)->orderBy('level', 'asc')->get();
+        return view('rrhh.new_authorities.create_subrogant',compact('organizationalUnit','subrogations'));
     }
 
     public function store(Request $request)
