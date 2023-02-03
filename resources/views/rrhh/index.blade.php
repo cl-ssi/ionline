@@ -66,6 +66,7 @@
 
 <br>
 
+Total de registros: {{ $users->total() }}
 <table class="table table-responsive-xl table-striped table-sm">
     <thead class="thead-dark">
         <tr>
@@ -109,7 +110,6 @@
     </tbody>
 
 </table>
-
 {{ $users->links() }}
 
 @endsection
