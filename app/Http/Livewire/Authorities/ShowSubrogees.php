@@ -10,6 +10,7 @@ class ShowSubrogees extends Component
     public $absent;
     public $user_id;
     public $subrogations;
+    public $organizational_unit;
     public $organizational_unit_id;
     public $organizational_unit_name;
 

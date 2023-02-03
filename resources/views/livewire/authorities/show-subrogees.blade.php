@@ -1,7 +1,9 @@
 <div>
 <h4><i class="fas fa-chess"></i> Subrogancias de la Unidad Organizacional: </h4>
 <h4>Subrogantes de {{$organizational_unit_name }}</h4>
-
+<a class="btn btn-success" href="{{ route('rrhh.subrogations.create',$organizational_unit) }}">
+  <i class="fas fa-plus"></i> Añadir subrogante de autoridad
+</a>
 <table class="table table-sm table-bordered small">
     <thead class="thead-light">
         <tr>

@@ -159,4 +159,9 @@ class NewAuthorityController extends Controller
         }
         return redirect()->route('rrhh.new-authorities.calendar', $organizationalUnit->id);
     }
+
+    public function create_subrogant(OrganizationalUnit $organizationalUnit)
+    {
+        return view('rrhh.new_authorities.create_subrogant');
+    }
 }

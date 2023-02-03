@@ -80,6 +80,7 @@ use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\NewAuthorityController;
+use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\AttendanceController;
 
 use App\Http\Controllers\Resources\WingleController;
@@ -931,6 +932,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
         Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
+        Route::get('/{organizationalUnit}/create-subrogant', [NewAuthorityController::class,'create_subrogant'])->name('create_subrogant');
+    });
+    Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
+        Route::get('/{organizationalUnit}/create', [SubrogationController::class,'create'])->name('create');
+        Route::post('/store', [SubrogationController::class, 'store'])->name('store');
     });
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {

@@ -21,6 +21,7 @@ class Subrogation extends Model
         'user_id',
         'level',
         'organizational_unit_id',
+        'type',
     ];
 
     /**

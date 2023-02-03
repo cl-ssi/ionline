@@ -3,6 +3,7 @@
 @section('content')
 <div>
    @livewire('authorities.show-subrogees', [
+            'organizational_unit' => $ou,
             'organizational_unit_id' => $ou->id,
             'organizational_unit_name' => $ou->name,
         ])
