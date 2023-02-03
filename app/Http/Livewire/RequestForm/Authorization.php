@@ -44,6 +44,8 @@ class Authorization extends Component
       $this->program_id         = $requestForm->program_id;
       
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
+
+      // dd($authorities);
       
       foreach ($authorities as $authority){
         $iam_authorities_in[] = $authority->organizational_unit_id;
@@ -52,7 +54,13 @@ class Authorization extends Component
       $this->organizationalUnit = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->name;
       
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
-      $this->position           = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->authorities->where('type', 'manager')->where('from', '<=',Carbon::now())->where('to', '>=',Carbon::now())->last()->position ?? auth()->user()->position;
+      if($eventType == 'technical_review_event' && !empty($iam_authorities_in)){
+        $this->position           = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->authorities->where('type', 'manager')->where('from', '<=',Carbon::now())->where('to', '>=',Carbon::now())->last()->position ?? auth()->user()->position;
+      }
+      else{
+        $this->position = auth()->user()->position;
+      }
+      
       if($eventType=='supply_event'){
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         $this->lstSupervisorUser      = User::where('organizational_unit_id', $ouSearch)->get();

@@ -86,6 +86,16 @@ class EventRequestForm extends Model
         }
     }
 
+    public static function createTechnicalReviewEvent(RequestForm $requestForm){
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   $requestForm->technical_review_ou_id;
+        $event->cardinal_number     =   0;
+        $event->status              =   'pending';
+        $event->event_type          =   'technical_review_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+    }
+
     public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $requestForm->contract_manager_ou_id;
