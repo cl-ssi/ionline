@@ -287,7 +287,7 @@ class User extends Authenticatable implements Auditable
     public function scopeFilter($query, $column, $value) {
         if(isset($value)) {
             switch($column) {
-                case 'organizatinal_unit_id':
+                case 'organizational_unit_id':
                     $query->where($column,$value);
                     break;
                 case 'permission':
