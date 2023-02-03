@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Rrhh\storeUser;
-use App\Http\Requests\Rrhh\updatePassword;
-use App\Rrhh\Authority;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Rrhh\Authority;
 use App\Models\Rrhh\UserBankAccount;
 use App\Models\Parameters\AccessLog;
+use App\Http\Requests\Rrhh\updatePassword;
+use App\Http\Requests\Rrhh\storeUser;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -26,12 +27,15 @@ class UserController extends Controller
     {
         $users = User::getUsersBySearch($request->get('name'))
             ->filter('organizational_unit_id',$request->input('organizational_unit_id'))
+            ->filter('permission',$request->input('permission'))
             ->with([
                 'organizationalUnit',
                 'permissions',
                 'roles',
             ])->orderBy('name', 'Asc')->paginate(150);
-        return view('rrhh.index', compact('users'));
+        $permissions = Permission::orderBy('name')->pluck('name');
+        
+        return view('rrhh.index', compact('users','permissions'));
     }
 
     /**
