@@ -482,6 +482,8 @@ class RequestFormController extends Controller {
         // $newRequestForm->request_user_id = Auth::id();
         // $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
         $newRequestForm->estimated_expense = 0;
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'DireccionSSI')->first()->value;
+        if($requestForm->eventRequestForms()->where('event_type', 'superior_leader_ship_event')->where('ou_signer_user', $ouSearch)->count() > 0) $newRequestForm->superior_chief = null;
         $newRequestForm->has_increased_expense = null;
         $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
         $newRequestForm->sigfe = null;
