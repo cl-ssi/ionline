@@ -21,6 +21,7 @@ class Type extends Model
     */
     protected $fillable = [
         'name',
+        'doc_digital',
         'partes_exclusive',
         'description',
     ];
