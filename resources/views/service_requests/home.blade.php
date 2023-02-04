@@ -8,7 +8,7 @@
 
 <div class="jumbotron mt-3">
     <h1 class="display-6">Contratación de Honorarios</h1>
-    <p class="lead">Bienvenido al sistema de honorarios Phuqhaña, palabra Aymara que significa "Cumplir".</p>
+    <p class="lead">Bienvenido al módulo de honorarios de iOnline</p>
     <p>Si tiene alguna duda respecto a algún contrato, puedes ponerte en contacto con el área de RRHH El horario de atención es de 8:30 a 14:00.</p>
 
     <h4>Videos de ayuda</h4>
