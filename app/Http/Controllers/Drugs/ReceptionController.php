@@ -26,7 +26,15 @@ class ReceptionController extends Controller
      */
     public function index(Request $request)
     {
-        $receptions = Reception::with('documentPoliceUnit', 'partePoliceUnit', 'items')->Search($request->get('id'))->get();
+        $receptions = Reception::with([
+            'items',
+            'partePoliceUnit',
+            'documentPoliceUnit',
+            'destruction',
+            'haveItemsForDestruction'
+        ])
+        ->withCount(['items'])
+        ->Search($request->get('id'))->get();
         //dd($receptions);
         //$receptions = Reception::whereDate('created_at', '>', Carbon::today()->subDays(16))->latest()->get();
         //Reception::Reception::whereDate('created_at', '>', Carbon\Carbon::today()->subDays(16))->latest()->paginate(100);
@@ -175,6 +183,7 @@ class ReceptionController extends Controller
         }
         $request->request->set('destruct', $destruct);
         $receptionitem->fill($request->all());
+        $receptionitem->dispose_precursor = $request->input('dispose_precursor') == 'on' ? 1 : null;
         $receptionitem->save();
         session()->flash('success', 'El item nue: '.$receptionitem->nue.' ha sido actualizado.');
         return redirect()->route('drugs.receptions.show', $receptionitem->reception->id);

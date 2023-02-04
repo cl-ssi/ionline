@@ -31,7 +31,7 @@ class NewSignatureRequest extends Mailable
      */
     public function build()
     {
-        $subject = "{$this->signaturesFlow->signature->document_type} - {$this->signaturesFlow->signature->subject}";
+        $subject = "{$this->signaturesFlow->signature->type->name} - {$this->signaturesFlow->signature->subject}";
         return $this->view('documents.signatures.mails.new_signature_notification')
             ->subject($subject);
 

@@ -18,18 +18,18 @@
 <table class="table table-sm table-bordered">
     <thead>
         <tr>
-        <th>Usuario</th>
-        <th>Establecimiento</th>
-        <th>Eliminar</th>
+            <th>Usuario</th>
+            <th>Establecimiento</th>
+            <th>Eliminar</th>
         </tr>
     </thead>
 
     <tbody>
-    @foreach($usersRem as $userRem)
+        @foreach($usersRem as $userRem)
         <tr>
-        <td>{{ optional($userRem->user)->tinnyName }}</td>
-        <td>{{ $userRem->establishment->name ?? '' }}</td>
-        <td>
+            <td>{{ optional($userRem->user)->fullname }}</td>
+            <td>{{ $userRem->establishment->name ?? '' }}</td>
+            <td>
                 <form method="POST" class="form-horizontal" action="{{ route('rem.users.destroy', $userRem->id) }}">
                     @csrf
                     @method('DELETE')
@@ -37,7 +37,7 @@
                 </form>
             </td>
         </tr>
-     @endforeach
+        @endforeach
     </tbody>
 </table>
 

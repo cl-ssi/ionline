@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Requirements;
 
-use App\Http\Controllers\Controller;
-use App\Models\Parameters\Location;
-use App\Requirements\Label;
-use App\Rrhh\OrganizationalUnit;
+//use App\Requirements\RequirementLabel;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Requirements\Label;
+use Illuminate\Support\Facades\Auth;
 
 class LabelController extends Controller
 {
@@ -17,8 +17,9 @@ class LabelController extends Controller
      */
     public function index()
     {
-        $labels = Label::All();
-        return view('requirements.labels.index', compact('labels'));
+        $labels = Auth::User()->reqLabels;
+        //$labels = Label::where('user_id',Auth::id())
+        return view('requirements.labels.index',compact('labels'));
     }
 
     /**
@@ -28,8 +29,8 @@ class LabelController extends Controller
      */
     public function create()
     {
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        return view('requirements.labels.create', compact('ouRoots'));
+        //$establishments = Establishment::orderBy('name','ASC')->get();
+        return view('requirements.labels.create');
     }
 
     /**
@@ -40,23 +41,24 @@ class LabelController extends Controller
      */
     public function store(Request $request)
     {
-        $label = new Label($request->All());
+        $label = new Label($request->all());
+        //$dispatch->pharmacy_id = session('pharmacy_id');
+        $label->user_id = Auth::id();
         $label->save();
 
-        session()->flash('info', 'La etiqueta  '.$label->name.' ha sido creada.');
-
+        session()->flash('success', 'Se ha guardado la etiqueta.');
         return redirect()->route('requirements.labels.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Parameters\Location  $location
+     * @param  \App\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
-    public function show(Location $location)
+    public function show(Label $label)
     {
-
+        //
     }
 
     /**
@@ -67,8 +69,9 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        return view('requirements.labels.edit', compact('label', 'ouRoots'));
+        //$labels = Label::All();
+        //$programs = Program::All();
+        return view('requirements.labels.edit', compact('label'));
     }
 
     /**
@@ -83,18 +86,17 @@ class LabelController extends Controller
         $label->fill($request->all());
         $label->save();
 
-        session()->flash('info', 'La etiqueta  '.$label->name.' ha sido actualizada.');
-
+        session()->flash('info', 'La etiqueta '.$label->name.' ha sido editada.');
         return redirect()->route('requirements.labels.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Parameters\Location  $location
+     * @param  \App\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Location $location)
+    public function destroy(Label $label)
     {
         //
     }

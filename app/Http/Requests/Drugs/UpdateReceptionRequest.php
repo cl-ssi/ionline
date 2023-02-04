@@ -37,7 +37,7 @@ class UpdateReceptionRequest extends FormRequest
             'imputed'                   => 'nullable|string|max:255',
             'imputed_run'               => 'nullable|string|max:255',
             'observation'               => 'nullable|string|max:5000',
-            'date'                      => 'nullable|date_format:Y-m-d\TH:i|after:' . now()->subDays(3)->format('Y-m-d\TH:i') . '|before_or_equal:' . now()->format('Y-m-d\TH:i'),
+            'date'                      => 'nullable|date_format:Y-m-d\TH:i|after:' . now()->subDays(5)->format('Y-m-d\TH:i') . '|before_or_equal:' . now()->format('Y-m-d\TH:i'),
         ];
     }
 }

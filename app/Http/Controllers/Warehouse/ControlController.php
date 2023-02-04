@@ -18,7 +18,7 @@ class ControlController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Store $store, Request $request)
@@ -36,7 +36,7 @@ class ControlController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Store $store, Request $request)
@@ -55,7 +55,7 @@ class ControlController extends Controller
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function edit(Store $store, Control $control, Request $request)
@@ -72,7 +72,7 @@ class ControlController extends Controller
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function addProduct(Store $store, Control $control, Request $request)
@@ -86,7 +86,7 @@ class ControlController extends Controller
      *
      * @param  \App\Models\Warehouse\Store  $store
      * @param  \App\Models\Warehouse\Control  $control
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function pdf(Store $store, Control $control, Request $request)
@@ -104,7 +104,7 @@ class ControlController extends Controller
      * Generate Reception
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function generateReception(Store $store, Request $request)
@@ -117,7 +117,7 @@ class ControlController extends Controller
      * Invoice Manage
      *
      * @param  \App\Models\Warehouse\Store  $store
-     * @param  \Iluminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function invoiceManage(Store $store, Request $request)

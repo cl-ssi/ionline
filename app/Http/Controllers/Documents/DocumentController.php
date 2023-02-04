@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Http\Controllers\Controller;
-use App\Models\Documents\Document;
-use App\Models\Documents\Signature;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\Documents\Type;
 use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Signature;
+use App\Models\Documents\Document;
 use App\Models\Documents\Correlative;
 use App\Mail\SendDocument;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 
 class DocumentController extends Controller
 {
@@ -28,6 +29,9 @@ class DocumentController extends Controller
     {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(30);
         //$documents = Document::Search($request)->latest()->paginate(50);
+
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+
         if (Auth()->user()->organizational_unit_id) {
             $childs = array(Auth()->user()->organizational_unit_id);
 
@@ -38,6 +42,7 @@ class DocumentController extends Controller
 
             $ownDocuments = Document::with(
                 'user',
+                'type',
                 'user.organizationalUnit',
                 'organizationalUnit',
                 'fileToSign',
@@ -52,6 +57,7 @@ class DocumentController extends Controller
 
             $otherDocuments = Document::with(
                 'user',
+                'type',
                 'user.organizationalUnit',
                 'organizationalUnit',
                 'fileToSign',
@@ -60,12 +66,12 @@ class DocumentController extends Controller
                 ->Search($request)
                 ->latest()
                 ->where('user_id', '<>', Auth()->user()->id)
-                ->where('type', '<>', 'Reservado')
+                ->whereRelation('type','reserved', null)
                 ->whereIn('organizational_unit_id', $childs)
                 // ->withTrashed()
                 ->paginate(100);
 
-            return view('documents.index', compact('ownDocuments', 'otherDocuments', ));
+            return view('documents.index', compact('ownDocuments', 'otherDocuments', 'types'));
         }
         else {
             return redirect()->back()->with('danger', 'Usted no posee asignada una unidad organizacional favor contactar a su administrador');
@@ -80,10 +86,8 @@ class DocumentController extends Controller
     public function create()
     {
         $document = new Document();
-        $correlative_acta_menor = Correlative::where('type','Acta de Recepción Obras Menores')->first();
-        //dd($correlative_acta_menor);
-        //$correlative = new Document();
-        return view('documents.create', compact('document','correlative_acta_menor'));
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+        return view('documents.create', compact('document','types'));
     }
 
     /**
@@ -98,19 +102,7 @@ class DocumentController extends Controller
         $document->user()->associate(Auth::user());
         $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
-
-        /* Agrega uno desde el correlativo */
-        if (!$request->number) {
-            if (
-                $request->type == 'Memo' or
-                $request->type == 'Acta de recepción' or
-                $request->type == 'Circular' or
-                $request->type == 'Acta de Recepción Obras Menores'
-            ) {
-
-                $document->number = Correlative::getCorrelativeFromType($request->type);
-            }
-        }
+        $document->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $document->save();
         return redirect()->route('documents.index');
     }
@@ -123,16 +115,12 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        if ($document->type == 'Acta de recepción') {
-            return view('documents.reception')->withDocument($document);
-        } else if ($document->type == 'Resolución') {
-            return view('documents.resolution')->withDocument($document);
-        } else if ($document->type == 'Circular') {
-            //centrada la materia en negrita y sin de para
-            return view('documents.circular')->withDocument($document);
-        } else {
-            return view('documents.show')->withDocument($document);
+        /** Vista demo para firmas */
+        if($document->id == 13667) {
+            return view('documents.templates.show_13667')->withDocument($document);
         }
+        return view('documents.templates.'.$document->viewName)->withDocument($document);
+
     }
 
     /**
@@ -148,8 +136,10 @@ class DocumentController extends Controller
             session()->flash('danger', 'Lo siento, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
-        /* De lo contrario retorna para editar el documento */ else {
-            return view('documents.edit', compact('document'));
+        /* De lo contrario retorna para editar el documento */ 
+        else {
+            $types = Type::whereNull('partes_exclusive')->pluck('name','id');
+            return view('documents.edit', compact('document','types'));
         }
     }
 
@@ -163,21 +153,7 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $document->fill($request->all());
-        /* Agrega uno desde el correlativo */
-        if (!$request->number) {
-            if (
-                $request->type == 'Memo' or
-                $request->type == 'Acta de recepción' or
-                $request->type == 'Circular'
-            ) {
-
-                $document->number = Correlative::getCorrelativeFromType($request->type);
-            }
-        }
-        /* Si no viene con número agrega uno desde el correlativo */
-        //if(!$request->number and $request->type != 'Ordinario') {
-        //    $document->number = Correlative::getCorrelativeFromType($request->type);
-        //}
+        $document->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $document->save();
 
         session()->flash('info', 'El documento ha sido actualizado.
@@ -236,7 +212,7 @@ class DocumentController extends Controller
 
         if ($request->hasFile('file')) {
             $filename = $document->id . '-' .
-                $document->type . '_' .
+                $document->type->name . '_' .
                 $document->number . '.' .
                 $request->file->getClientOriginalExtension();
             $document->file = $request->file->storeAs('ionline/documents/documents', $filename, ['disk' => 'gcs']);
@@ -265,22 +241,21 @@ class DocumentController extends Controller
      */
     public function createFromPrevious(Request $request)
     {
-        $correlative_acta_menor = Correlative::where('type','Acta de Recepción Obras Menores')->first();
         $document = Document::findOrNew($request->document_id);
-        $document->type = null;
+        $document->type_id = null;
         if ($document->user_id != Auth::id()) {
             $document = new Document();
         }
+        $types = Type::whereNull('partes_exclusive')->pluck('name','id');
 
-        return view('documents.create', compact('document','correlative_acta_menor'));
+        return view('documents.create', compact('document','types'));
     }
 
     public function download(Document $document)
     {
-        $filename = $document->type . ' ' .
+        $filename = $document->type->name . ' ' .
             $document->number . '.' .
             File::extension($document->file);
-        //return Storage::download($document->file, $filename);
         return Storage::disk('gcs')->response($document->file, $filename);
     }
 
@@ -298,47 +273,51 @@ class DocumentController extends Controller
         $signature->request_date = Carbon::now();
         $signature->subject = $document->subject;
         $signature->description = $document->antecedent;
-        $signature->recipients = $document->distribution;
+        $signature->distribution = $document->distribution;
+        $signature->type_id = $document->type_id;
 
-        switch ($document->type) {
-            case 'Memo':
-                $signature->document_type = 'Memorando';
-                break;
-            case 'Ordinario':
-            case 'Reservado':
-            case 'Oficio':
-                $signature->document_type = 'Oficio';
-                break;
-            case 'Circular':
-                $signature->document_type = 'Circular';
-                break;
-            case 'Acta de recepción':
-                $signature->document_type = 'Acta';
-                break;
-            case 'Resolución':
-                $signature->document_type = 'Resoluciones';
-                break;
-        }
+        // switch ($document->type) {
+        //     case 'Acta de recepción': 
+        //         $image = base64_encode(file_get_contents(public_path('/images/logo_pluma.jpg'))); 
+        //         break;
+        //     default:
+        //         $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+        //         break;
+        // }
 
-        if ($signature->document_type = 'Memorando')
+        /** Cargar la imágen en base 64, ya que al generar el PDF no aparece */
+        $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
 
-            //        $signature->endorse_type = 'Visación en cadena de responsabilidad';
-            //        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+        /** Crear un pdf en base a una vista */
+        $documentFile = \PDF::loadView('documents.templates.'.$document->viewName, compact('document','image'));
 
-
-            if ($document->type == 'Acta de recepción') {
-                $image = base64_encode(file_get_contents(public_path('/images/logo_pluma.jpg')));
-                $documentFile = \PDF::loadView('documents.reception', compact('document'));
-            } else if ($document->type == 'Resolución') {
-                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
-                $documentFile = \PDF::loadView('documents.resolution', compact('document','image'));
-            } else if ($document->type == 'Circular') {
-                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
-                $documentFile = \PDF::loadView('documents.circular', compact('document','image'));
-            } else {
-                $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
-                $documentFile = \PDF::loadView('documents.show', compact('document','image'));
-            }
+        // switch ($document->type) {
+        //     case 'Memo':
+        //         $signature->document_type = 'Memorando';
+        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
+        //         break;
+        //     case 'Ordinario':
+        //     case 'Reservado':
+        //     case 'Oficio':
+        //         $signature->document_type = 'Oficio';
+        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
+        //         break;
+        //     case 'Circular':
+        //         $signature->document_type = 'Circular';
+        //         $documentFile = \PDF::loadView('documents.circular', compact('document','image'));
+        //         break;
+        //     case 'Acta de recepción':
+        //         $signature->document_type = 'Acta';
+        //         $documentFile = \PDF::loadView('documents.reception', compact('document','image'));
+        //         break;
+        //     case 'Resolución':
+        //         $signature->document_type = 'Resoluciones';
+        //         $documentFile = \PDF::loadView('documents.resolution', compact('document','image'));
+        //         break;
+        //     default:
+        //         $signature->document_type = $document->type->name;
+        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
+        // }
 
         $signaturesFile = new SignaturesFile();
         $signaturesFile->file = base64_encode($documentFile->output());

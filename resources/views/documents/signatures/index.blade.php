@@ -55,21 +55,21 @@
             <thead>
                 <tr>
                     <th scope="col">Sel.</th>
-                    <th scope="col">Id</th>
+                    <th scope="col">Id <i class="fas fa-signature"></i></th>
                     <th scope="col">Fecha de Solicitud</th>
                     <th scope="col">Firmante</th>
-                    <th scope="col">Materia de Resolución</th>
+                    <th scope="col">Materia</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Creador</th>
                     <th scope="col">Firmar</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col">
+                    <th scope="col">Rech.</th>
+                    <th scope="col">Firmas</th>
+                    <th scope="col">Ver</th>
+                    <th scope="col">Anexos
                         <div class="mx-4"></div>
                     </th>
 
-                    <th scope="col"></th>
+                    <th scope="col">Link</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,32 +94,41 @@
                         <br>
                         {{ $pendingSignaturesFlow->type }}
                     </td>
-                    <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
+                    <td>
+                        @if($pendingSignaturesFlow->signature->reserved)
+                            <i class="fas fa-user-secret"></i>
+                        @endif
+                        {{ $pendingSignaturesFlow->signature->subject }}
+                    </td>
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
+                        @can('Documents: signatures and distribution')
                         <button type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignModalContent({{$pendingSignaturesFlow->id}})" title="Firmar documento">
-                            <i class="fas fa-file-signature"></i>
+                            <i class="fas fa-fw fa-file-signature"></i>
                         </button>
+                        @endcan
                     </td>
                     <td>
+                        @can('Documents: signatures and distribution')
                         <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
                             data-target="#rejectSignature{{$pendingSignaturesFlow->id}}" title="Rechazar documento">
-                            <i class="fas fa-times-circle"></i>
+                            <i class="fas fa-fw fa-times-circle"></i>
                         </button>
+                        @endcan
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$pendingSignaturesFlow->signature->id}})"
-                            title="Ver circuito de firmas"><i class="fas fa-search"></i>
+                            title="Ver circuito de firmas"><i class="fas fa-fw fa-search"></i>
                         </button>
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
                            class="btn btn-sm btn-outline-secondary" target="_blank"
                            title="Ver documento">
-                            <span class="fas fa-file" aria-hidden="true"></span>
+                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
                         </a>
 
                         {{--                        <a href="https://storage.googleapis.com/{{env('app_env') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingsignaturesflow->signaturesfile->signed_file ?? $pendingsignaturesflow->signaturesfile->file }}"--}}
@@ -199,21 +208,19 @@
                     <th scope="col">Descripción</th>
                     <th scope="col">Creador</th>
                     <th scope="col">Estado Solicitud</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col">
+                    <th scope="col">Firmas</th>
+                    <th scope="col">Ver</th>
+                    <th scope="col">Anexos
                         <div class="mx-4"></div>
                     </th>
-                    <th scope="col"></th>
+
+                    <th scope="col">Link</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($signedSignaturesFlows as $signedSignaturesFlow)
                 <tr>
                     <td>{{ $signedSignaturesFlow->signature->id ?? '' }}</td>
-                    {{--<td>{{ $signedSignaturesFlow->signature ?
-                        $signedSignaturesFlow->signature->request_date->format('Y-m-d') : '' }}
-                    </td>--}}
                     <td>{{ $signedSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
                         <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
@@ -244,38 +251,24 @@
                         @if($signedSignaturesFlow->signature)
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})"
-                            title="Ver circuito de firmas"><i class="fas fa-search"></i>
+                            title="Ver circuito de firmas"><i class="fas fa-fw fa-search"></i>
                         </button>
                         @endif
                     </td>
                     <td>
-                        <!-- <a href="{{ route('documents.signatures.showPdf',
-                                [$signedSignaturesFlow->signaturesFile->id, time()]
-                                )
-                                }}"
-                                class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
-                                    <span class="fas fa-file" aria-hidden="true"></span>
-                                </a> -->
-
-
                         <a href="{{ route('documents.signatures.showPdf',[$signedSignaturesFlow->signaturesFile->id, time()])}}"
                            class="btn btn-sm btn-outline-secondary" target="_blank"
                            title="Ver documento">
-                            <span class="fas fa-file" aria-hidden="true"></span>
+                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
                         </a>
-
-{{--                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signedSignaturesFlow->signaturesFile->signed_file ?? $signedSignaturesFlow->signaturesFile->file}}"--}}
-{{--                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">--}}
-{{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
-{{--                        </a>--}}
                     </td>
-                    <td>@if($signedSignaturesFlow->signature)
-                        @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-
-                        <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
-                                class="fas fa-paperclip" title="anexo"></i>&nbsp
-                        </a>
-                        @endforeach
+                    <td>
+                        @if($signedSignaturesFlow->signature)
+                            @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}" target="_blank"><i
+                                    class="fas fa-paperclip" title="anexo"></i>&nbsp
+                            </a>
+                            @endforeach
                         @endif
                     </td>
                     <td>
@@ -303,7 +296,7 @@
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Estado Solicitud</th>
-                    <th scope="col"></th>
+                    <th scope="col">Doc</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -315,7 +308,11 @@
                     <td>{{ $signature->id }}</td>
                     {{--<td>{{ $signature->request_date->format('Y-m-d') }}</td>--}}
                     <td>{{ $signature->created_at->format('Y-m-d') }}</td>
-                    <td>{{ $signature->subject }}</td>
+                    <td>
+                        @if($signature->reserved)
+                            <i class="fas fa-user-secret"></i>
+                        @endif
+                        {{ $signature->subject }}</td>
                     <td>{{ $signature->description }}</td>
                     <td>
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())
@@ -329,24 +326,24 @@
                         <a href="{{ route('documents.signatures.showPdf',[$signature->signaturesFileDocument->id, time()])}}"
                            class="btn btn-sm btn-outline-secondary" target="_blank"
                            title="Ver documento">
-                            <span class="fas fa-file" aria-hidden="true"></span>
+                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>
                         </a>
 
 {{--                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$signature->signaturesFileDocument->signed_file ?? $signature->signaturesFileDocument->file}}"--}}
 {{--                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">--}}
-{{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+{{--                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>--}}
 {{--                        </a>--}}
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$signature->id}})" title="Ver circuito de firmas"><i
-                                class="fas fa-search"></i>
+                                class="fas fa-fw fa-search"></i>
                         </button>
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.edit', $signature) }}" class="btn btn-sm btn-outline-secondary"
                             title="Editar solicitud">
-                            <span class="fas fa-edit" aria-hidden="true"></span>
+                            <span class="fas fa-fw fa-edit" aria-hidden="true"></span>
                         </a>
                     </td>
                     <td>
@@ -354,7 +351,7 @@
                             Auth::id()) disabled @endif
                             data-toggle="modal"
                             data-target="#deleteSignature{{$signature->id}}">
-                            <i class="fas fa-trash"></i>
+                            <i class="fas fa-fw fa-trash"></i>
                         </a>
                     </td>
                 </tr>
@@ -395,8 +392,7 @@
     {{ $mySignatures->links() }}
 @endif
 
-{{--**************************** El pop up up up del
-OTP**************************************************************--}}
+{{-- ************************* El pop up up up del OTP ************************************** --}}
 <div class="modal fade" id="signModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

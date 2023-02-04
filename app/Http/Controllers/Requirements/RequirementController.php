@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Requirements;
 
+use Redirect;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Rrhh\Authority;
+use App\Requirements\RequirementStatus;
+use App\Requirements\RequirementCategory;
+use App\Requirements\Requirement;
+use App\Requirements\LabelRequirement;
+use App\Requirements\Label;
+use App\Requirements\File;
+use App\Requirements\EventStatus;
+use App\Requirements\EventDocument;
+use App\Requirements\Event;
+use App\Requirements\Category;
 use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Mail\RequirementNotification;
-use App\Requirements\Label;
-use App\Requirements\Requirement;
-use App\Requirements\Event;
-use App\Requirements\EventStatus;
-use App\Requirements\RequirementCategory;
-use App\Requirements\RequirementStatus;
-use App\Requirements\EventDocument;
-use App\Requirements\Category;
-use App\Requirements\File;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Rrhh\OrganizationalUnit;
-use App\Rrhh\Authority;
-use App\User;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
-use Redirect;
 
 class RequirementController extends Controller
 {
@@ -71,7 +72,7 @@ class RequirementController extends Controller
         /** Construyo la query de requerimientos */
         $requirements_query = Requirement::query();
         $requirements_query
-            ->with('archived','categories','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
+            ->with('archived','labels','category','events','ccEvents','parte','eventsViewed','events.from_user','events.to_user','events.from_ou', 'events.to_ou')
             ->whereHas('events', function ($query) use ($user) {
                 $query->where('from_user_id', $user->id)->orWhere('to_user_id', $user->id);
             });
@@ -168,7 +169,7 @@ class RequirementController extends Controller
                 return $query->Search($request);
             })
             ->when($request['request_cat'], function ($query, $request) {
-                return $query->whereHas('categories', function ($query) use ($request) {
+                return $query->whereHas('labels', function ($query) use ($request) {
                     $query->Search($request);
                 });
             })
@@ -211,7 +212,7 @@ class RequirementController extends Controller
                     return $query->Search($request);
                 })
                 ->when($request['request_cat'], function ($query, $request) {
-                    return $query->whereHas('categories', function ($query) use ($request) {
+                    return $query->whereHas('labels', function ($query) use ($request) {
                         $query->Search($request);
                     });
                 })
@@ -246,7 +247,7 @@ class RequirementController extends Controller
                     return $query->Search($request);
                 })
                 ->when($request['request_cat'], function ($query, $request) {
-                    return $query->whereHas('categories', function ($query) use ($request) {
+                    return $query->whereHas('labels', function ($query) use ($request) {
                         $query->Search($request);
                     });
                 })
@@ -429,7 +430,7 @@ class RequirementController extends Controller
                 return $query->Search($request);
             })
             ->when($request['request_cat'], function ($query, $request) {
-                return $query->whereHas('categories', function ($query) use ($request) {
+                return $query->whereHas('labels', function ($query) use ($request) {
                     $query->Search($request);
                 });
             })
@@ -472,7 +473,7 @@ class RequirementController extends Controller
                     return $query->Search($request);
                 })
                 ->when($request['request_cat'], function ($query, $request) {
-                    return $query->whereHas('categories', function ($query) use ($request) {
+                    return $query->whereHas('labels', function ($query) use ($request) {
                         $query->Search($request);
                     });
                 })
@@ -507,7 +508,7 @@ class RequirementController extends Controller
                     return $query->Search($request);
                 })
                 ->when($request['request_cat'], function ($query, $request) {
-                    return $query->whereHas('categories', function ($query) use ($request) {
+                    return $query->whereHas('labels', function ($query) use ($request) {
                         $query->Search($request);
                     });
                 })
@@ -645,10 +646,25 @@ class RequirementController extends Controller
         //        $organizationalUnit = OrganizationalUnit::Find(1);
         // $categories = Category::where('user_id', Auth::user()->id)->get();
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
-        $labels = Label::all();
+        // $labels = Label::all();
         // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
         // $categories = Category::where('user_id', Auth::user()->id)->get();
-        return view('requirements.create', compact('parte','labels'));
+        return view('requirements.create', compact('parte'));
+    }
+
+    public function createFromParte(Parte $parte)
+    {
+        // get previous user id
+        $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
+                        ->where('id', '<', $parte->id)->max('id');
+                        $previous = Parte::find($previous);
+
+        // get next user id
+        $next = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
+                        ->where('id', '>', $parte->id)->min('id');
+                        $next = Parte::find($next);
+
+        return view('requirements.create-from-parte', compact('parte','previous','next'));
     }
 
     public function create_requirement_sin_parte()
@@ -662,10 +678,10 @@ class RequirementController extends Controller
         
         // $ouRoots = OrganizationalUnit::where('level', 1)->get();
         // $categories = Category::where('user_id', Auth::user()->id)->get();
-        $labels = Label::all();
+        // $labels = Label::all();
         
         // return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents', 'categories', 'labels'));
-        return view('requirements.create', compact('parte','labels'));
+        return view('requirements.create', compact('parte'));
     }
 
     public function archive_requirement(Requirement $requirement)
@@ -677,7 +693,7 @@ class RequirementController extends Controller
         $requirementStatus->save();
 
         //return redirect()->route('requirements.outbox');
-        return redirect()->back()->with('success', 'Se han Archivado correctamente');
+        return redirect()->back()->with('success', 'El requerimiento ha sido archivado');
     }
 
     public function archive_requirement_delete(Requirement $requirement)
@@ -688,7 +704,7 @@ class RequirementController extends Controller
         $requirementStatus->delete();
 
         // return redirect()->route('requirements.outbox');
-        return redirect()->back()->with('success', 'Se han eliminado correctamente');
+        return redirect()->back()->with('success', 'El requerimiento ha sido desarchivado');
     }
 
 
@@ -700,7 +716,6 @@ class RequirementController extends Controller
      */
     public function store(Request $request)
     {
-        
         // $requirement = Requirement::find(15920);
         // $requirement->categories()->attach($request->input('category_id'));
         // dd("");
@@ -713,74 +728,86 @@ class RequirementController extends Controller
           return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
         }
 
-        //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
-        if ($request->users == null) {
-            $req = $request->All();
-            if ($request->limit_at <> null) {
-                $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
-            }
+        if(!$request->users){
+            return redirect()->back()->with('warning', 'Debe ingresar por lo menos un usuario a quien crear el requerimiento.');
+        }
+ 
+        // 30/01/2023: Atorres indica que desde ahora se deban agregar obligatoriamente los destinatarios y cc
+        // //si solo se manda desde la vista un solo usuario, sin usar la tabla dinámica
+        // if ($request->users == null) {
+        //     $req = $request->All();
+        //     if ($request->limit_at <> null) {
+        //         $req['limit_at'] = Carbon::createFromFormat('Y-m-d\TH:i', $request->limit_at)->format('Y-m-d H:i:00');
+        //     }
 
 
-            $requirement = new Requirement($req);
-            $requirement->user()->associate(Auth::user());
+        //     $requirement = new Requirement($req);
+        //     $requirement->user()->associate(Auth::user());
 
-            //Si el usuario destino es autoridad, se marca el requerimiento
-            $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
-            $isManager = ($request->to_user_id == $managerUserId);
-            $requirement->to_authority = $isManager;
+        //     //Si el usuario destino es autoridad, se marca el requerimiento
+        //     $managerUserId = Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager')->user_id;
+        //     $isManager = ($request->to_user_id == $managerUserId);
+        //     $requirement->to_authority = $isManager;
 
-            $requirement->save();
-            $requirement->categories()->attach($request->input('category_id'));
+        //     $requirement->save();
 
+        //     /** Asigna las labels al requerimiento */
+        //     $requirement->setLabels($request->input('label_id'));
 
-            //se guarda evento
-            $firstEvent = new Event($request->All());
-            $firstEvent->from_user()->associate(Auth::user());
-            $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
-            $firstEvent->requirement()->associate($requirement);
-            $firstEvent->to_authority = $isManager;
-            $firstEvent->save();
+        //     //se guarda evento
+        //     $firstEvent = new Event($request->All());
+        //     $firstEvent->from_user()->associate(Auth::user());
+        //     $firstEvent->from_ou_id = Auth::user()->organizationalUnit->id;
+        //     $firstEvent->requirement()->associate($requirement);
+        //     $firstEvent->to_authority = $isManager;
+        //     $firstEvent->save();
 
-            //asocia evento con documentos
-            if ($request->documents <> null) {
-                foreach ($request->documents as $key => $document_aux) {
-                    $document = Document::find($document_aux);
-                    $firstEvent->documents()->attach($document);
-                }
-            }
+        //     //asocia evento con documentos
+        //     if ($request->documents <> null) {
+        //         foreach ($request->documents as $key => $document_aux) {
+        //             $document = Document::find($document_aux);
+        //             $firstEvent->documents()->attach($document);
+        //         }
+        //     }
 
-            //guarda archivos
-            if ($request->hasFile('forfile')) {
-                foreach ($request->file('forfile') as $file) {
-                    $filename = $file->getClientOriginalName();
-                    $fileModel = new File;
-                    // $fileModel->file = $file->store('requirements');
-                    $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
-                    $fileModel->name = $filename;
-                    $fileModel->event_id = $firstEvent->id;
-                    $fileModel->save();
-                }
-            }
+        //     //guarda archivos
+        //     if ($request->hasFile('forfile')) {
+        //         foreach ($request->file('forfile') as $file) {
+        //             $filename = $file->getClientOriginalName();
+        //             $fileModel = new File;
+        //             // $fileModel->file = $file->store('requirements');
+        //             $fileModel->file = $file->store('ionline/requirements',['disk' => 'gcs']);
+        //             $fileModel->name = $filename;
+        //             $fileModel->event_id = $firstEvent->id;
+        //             $fileModel->save();
+        //         }
+        //     }
 
-            $requirement->events()->save($firstEvent);
+        //     $requirement->events()->save($firstEvent);
 
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $firstEvent->to_user->email, $emails);
-            if (env('APP_ENV') == 'production') {
-                Mail::to($emails[0])
-                    ->send(new RequirementNotification($requirement));
-            }
+        //     preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $firstEvent->to_user->email, $emails);
+        //     if (env('APP_ENV') == 'production') {
+        //         Mail::to($emails[0])
+        //             ->send(new RequirementNotification($requirement));
+        //     }
 
-             /** Marca los eventos como vistos */
-            $requirement->setEventsAsViewed;
+        //      /** Marca los eventos como vistos */
+        //     $requirement->setEventsAsViewed;
 
-            session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
-        } else {
+        //     session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
+        // } else {
+
             //encuentra cuales son usuarios para requerimientos, y cuales son en copia
             $users_req = null;
             $users_enCopia = null;
+            $categories_array_ = null;
             foreach ($request->enCopia as $key => $enCopia) {
                 if ($enCopia == 0) {
                     $users_req[] = $request->users[$key];
+                    // obtiene categorías seleccionadas
+                    if($request->categories!=null){
+                        $categories_array_[] = $request->categories[$key];
+                    }
                 }
                 if ($enCopia == 1) {
                     $users_enCopia[] = $request->users[$key];
@@ -789,6 +816,10 @@ class RequirementController extends Controller
 
             //se crearán requerimientos según usuarios agregados en tabla dinámica.
             $users = array_unique($users_req); //distinct
+            $categories_array = null;
+            if($categories_array_){
+                $categories_array = array_unique($categories_array_); //distinct
+            }
             $flag = 0;
 
             //obtiene nro para agrupar requerimientos
@@ -824,10 +855,16 @@ class RequirementController extends Controller
                 $requirement->user()->associate(Auth::user());
                 $requirement->group_number = $group_number;
                 $requirement->to_authority = $isAnyManager;
+                if($categories_array){
+                    $requirement->category_id = $categories_array[$key];
+                }
                 $requirement->save();
 
-				/** Marca los eventos como vistos */
-				$requirement->setEventsAsViewed;
+                /** Asigna las labels al requerimiento */
+                $requirement->setLabels($request->input('label_id'));
+
+				// /** Marca los eventos como vistos */
+				// $requirement->setEventsAsViewed;
 
                 //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
                 if ($users_enCopia <> null) {
@@ -903,42 +940,47 @@ class RequirementController extends Controller
                 }
 
                 $requirement->events()->save($firstEvent);
-                $requirement->categories()->attach($request->input('category_id'));
+
+                /** Marca los eventos como vistos */
+				$requirement->setEventsAsViewed;
+                
+                //$requirement->categories()->attach($request->input('category_id'));
                 //$requerimientos = $requerimientos + $firstEvent->id + ",";
             }
 
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $usersEmail, $emails);
-            Mail::to($emails[0])
-                ->send(new RequirementNotification($requirement));
+            if (env('APP_ENV') == 'production') {
+                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $usersEmail, $emails);
+                Mail::to($emails[0])
+                    ->send(new RequirementNotification($requirement));
+            }
 
             session()->flash('info', 'Los requerimientos han sido creados.');
-        }
+        // }
 
         /* Si es un requerimiento creado desde un parte envía a inbox de parte */
         if ($requirement->parte_id) $return = 'documents.partes.index';
-        else $return = 'requirements.outbox';
-
+        else $return = 'requirements.inbox';
 
         return redirect()->route($return);
     }
 
-    public function asocia_categorias(Request $request)
-    {
-        $req = RequirementCategory::where('requirement_id', $request->requirement_id);
-        $req->delete();
+    // public function asocia_categorias(Request $request)
+    // {
+    //     $req = RequirementCategory::where('requirement_id', $request->requirement_id);
+    //     $req->delete();
 
-        if ($request->category_id <> null) {
-            foreach ($request->category_id as $key => $category_id) {
+    //     if ($request->category_id <> null) {
+    //         foreach ($request->category_id as $key => $category_id) {
 
-                $RequirementCategory = new RequirementCategory();
-                $RequirementCategory->requirement_id = $request->requirement_id;
-                $RequirementCategory->category_id = $category_id;
-                $RequirementCategory->save();
-            }
-        }
+    //             $RequirementCategory = new RequirementCategory();
+    //             $RequirementCategory->requirement_id = $request->requirement_id;
+    //             $RequirementCategory->category_id = $category_id;
+    //             $RequirementCategory->save();
+    //         }
+    //     }
 
-        return Redirect::back();
-    }
+    //     return Redirect::back();
+    // }
 
     /**
      * Display the specified resource.
@@ -950,7 +992,18 @@ class RequirementController extends Controller
     {
 
         $ous = OrganizationalUnit::all()->sortBy('name');
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $ouRoots = OrganizationalUnit::with([
+            'childs',
+            'childs.childs',
+            'childs.childs.childs',
+            'childs.childs.childs.childs',
+            'childs.childs.childs.childs.childs',
+            'childs.establishment',
+            'childs.childs.establishment',
+            'childs.childs.childs.establishment',
+            'childs.childs.childs.childs.establishment',
+            'childs.childs.childs.childs.childs.establishment',
+            ])->where('level', 1)->get();
 
         $lastEvent = Event::where('requirement_id', $requirement->id)
             ->where('from_user_id', '<>', Auth::user()->id)->get()->last();

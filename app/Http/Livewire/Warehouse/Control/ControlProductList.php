@@ -138,9 +138,8 @@ class ControlProductList extends Component
             'status' => false,
         ]);
 
-        if($this->control->isReceiving())
+        if($this->control->isReceiving() && $this->control->technicalSigner)
         {
-            $this->sendReceptionRequest($this->control);
             $this->sendTechnicalRequest($this->control);
         }
 
@@ -153,51 +152,27 @@ class ControlProductList extends Component
         ]);
     }
 
-    public function sendReceptionRequest(Control $control)
-    {
-        $signatureTechnical = new SignatureService();
-        $signatureTechnical->addResponsible($this->store->visator);
-        $signatureTechnical->addSignature(
-            'Acta',
-            "Acta de Recepción en Bodega #$control->id",
-            "Recepción #$control->id",
-            'Visación en cadena de responsabilidad',
-            true
-        );
-        $signatureTechnical->addView('warehouse.pdf.report-reception', [
-            'type' => '',
-            'control' => $control,
-            'store' => $control->store,
-            'act_type' => 'reception'
-        ]);
-        $signatureTechnical->addVisators(collect([$this->store->visator]));
-        $signatureTechnical->addSignatures(collect([]));
-        $signatureTechnical = $signatureTechnical->sendRequest();
-        $control->receptionSignature()->associate($signatureTechnical);
-        $control->save();
-    }
-
     public function sendTechnicalRequest(Control $control)
     {
-        $signatureReception = new SignatureService();
-        $signatureReception->addResponsible($this->store->visator);
-        $signatureReception->addSignature(
+        $technicalSignature = new SignatureService();
+        $technicalSignature->addResponsible($this->store->visator);
+        $technicalSignature->addSignature(
             'Acta',
             "Acta de Recepción Técnica #$control->id",
             "Recepción #$control->id",
             'Visación en cadena de responsabilidad',
             true
         );
-        $signatureReception->addView('warehouse.pdf.report-reception', [
+        $technicalSignature->addView('warehouse.pdf.report-reception', [
             'type' => '',
             'control' => $control,
             'store' => $control->store,
-            'act_type' => 'technical'
+            'act_type' => 'reception'
         ]);
-        $signatureReception->addVisators(collect([]));
-        $signatureReception->addSignatures(collect([$control->signer]));
-        $signatureReception = $signatureReception->sendRequest();
-        $control->technicalSignature()->associate($signatureReception);
+        $technicalSignature->addVisators(collect([]));
+        $technicalSignature->addSignatures(collect([$control->technicalSigner]));
+        $technicalSignature = $technicalSignature->sendRequest();
+        $control->technicalSignature()->associate($technicalSignature);
         $control->save();
     }
 }

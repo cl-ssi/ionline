@@ -2,9 +2,10 @@
 
 namespace App\Rrhh;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\Requirements\Category;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -74,6 +75,12 @@ class OrganizationalUnit extends Model implements Auditable
     {
       return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+    
 
     public function scopeSearch($query, $name)
     {

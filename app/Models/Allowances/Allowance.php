@@ -10,7 +10,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\Signature;
 use App\User;
 
 class Allowance extends Model implements Auditable
@@ -73,8 +73,8 @@ class Allowance extends Model implements Auditable
         return $this->hasMany('App\Models\Allowances\AllowanceSign', 'allowance_id');
     }
 
-    public function signedAllowance(){
-        return $this->belongsTo(SignaturesFile::class, 'signatures_file_id');
+    public function allowanceSignature(){
+        return $this->belongsTo(Signature::class, 'signature_id');
     }
 
     public function getStatusValueAttribute() {

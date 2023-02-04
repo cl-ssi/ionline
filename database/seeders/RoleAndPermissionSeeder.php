@@ -73,6 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Authorities: view', 'description' => 'Permite tener acceso al módulo de autoridades']);
         Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear una autoridad']);
         Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad']);
+        Permission::create(['name' => 'Authorities: all', 'description' => 'Permite tener acceso a todas las autoridades del módulo de autoridades']);
 
         Permission::create(['name' => 'Requirements: create', 'description' => 'Acceso al SGR']);
 
@@ -157,8 +158,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
-
-        
+        Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
 
         // @role(
         //   'Replacement Staff: admin |

@@ -99,6 +99,10 @@ class RequestFormController extends Controller {
           $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
           if(Auth::user()->organizationalUnit->id == $ouSearch && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
         }
+        $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
+            ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
+            ->count();
+        if($ouTechnicalReview > 0) $events_type[] = 'technical_review_event';
 
         return $events_type;
     }
@@ -246,7 +250,16 @@ class RequestFormController extends Controller {
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
         }
 
-        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'pre_budget_event' => 'Nuevo presupuesto', 'budget_event' => 'Nuevo presupuesto'];
+        $eventTitles = [
+            'superior_leader_ship_event'    => 'Dirección', 
+            'leader_ship_event'             => 'Jefatura', 
+            'pre_finance_event'             => 'Refrendación Presupuestaria', 
+            'finance_event'                 => 'Finanzas', 
+            'supply_event'                  => 'Abastecimiento', 
+            'pre_budget_event'              => 'Nuevo presupuesto', 
+            'budget_event'                  => 'Nuevo presupuesto',
+            'technical_review_event'        => 'Revisión técnica'
+        ];
 
         $events_type_user = $this->get_events_type_user();
         // return $events_type_user;
@@ -482,6 +495,8 @@ class RequestFormController extends Controller {
         // $newRequestForm->request_user_id = Auth::id();
         // $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
         $newRequestForm->estimated_expense = 0;
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'DireccionSSI')->first()->value;
+        if($requestForm->eventRequestForms()->where('event_type', 'superior_leader_ship_event')->where('ou_signer_user', $ouSearch)->count() > 0) $newRequestForm->superior_chief = null;
         $newRequestForm->has_increased_expense = null;
         $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
         $newRequestForm->sigfe = null;
@@ -614,6 +629,34 @@ class RequestFormController extends Controller {
                                   Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento. <br>
                                   Guarde y envíe su formulario cuando esté listo para su tramitación en los departamentos correspondientes.');
         return redirect()->route('request_forms.edit', $newRequestForm);
+    }
+
+    public function rollback(RequestForm $requestForm)
+    {
+        if($requestForm->status != 'approved'){
+            session()->flash('danger', 'No se puede revertir firmas para el formulario de requerimiento N° '.$requestForm->folio.'.');
+            return redirect()->back();
+        }
+
+        $requestForm->load('eventRequestForms');
+        foreach($requestForm->eventRequestForms->take(-2) as $event){
+            $event->update(['signer_user_id' => null, 'position_signer_user' => null, 'status' => 'pending', 'signature_date' => null]);
+        }
+        
+        if($requestForm->has_increased_expense){
+            $requestForm->has_increased_expense = null;
+            $requestForm->estimated_expense -= $requestForm->eventRequestForms->last()->purchaser_amount;
+            $requestForm->signatures_file_id = $requestForm->old_signatures_file_id;
+            $requestForm->old_signatures_file_id = null;
+        }else{
+            $requestForm->purchasers()->detach();
+            $requestForm->signatures_file_id = null;
+            $requestForm->status = 'pending';
+        }
+
+        $requestForm->save();
+        session()->flash('info', 'El formulario de requerimiento N° '.$requestForm->folio.' se ha sido revertido las firmas correctamente.');
+        return redirect()->route('request_forms.show', $requestForm);
     }
 
     private function createFolio(){

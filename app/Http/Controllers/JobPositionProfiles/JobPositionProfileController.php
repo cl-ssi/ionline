@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Parameters\StaffDecree;
 use App\Models\Parameters\StaffDecreeByEstament;
 use App\Models\JobPositionProfiles\Role;
-
-
+use App\Models\JobPositionProfiles\Liability;
+use App\Models\JobPositionProfiles\JobPositionProfileLiability;
+use App\Models\JobPositionProfiles\Expertise;
+use App\Models\JobPositionProfiles\ExpertiseProfile;
 
 class JobPositionProfileController extends Controller
 {
@@ -24,6 +26,11 @@ class JobPositionProfileController extends Controller
     public function index()
     {   
         return view('job_position_profile.index');
+    }
+
+    public function index_review()
+    {   
+        return view('job_position_profile.index_review');
     }
 
     /**
@@ -44,7 +51,6 @@ class JobPositionProfileController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $jobPositionProfile = new JobPositionProfile($request->All());
         $jobPositionProfile->status = 'pending';
         $jobPositionProfile->user()->associate(Auth::user());
@@ -69,7 +75,7 @@ class JobPositionProfileController extends Controller
      */
     public function show(JobPositionProfile $jobPositionProfile)
     {
-        //
+        return view('job_position_profile.show', compact('jobPositionProfile'));
     }
 
     /**
@@ -112,6 +118,26 @@ class JobPositionProfileController extends Controller
     {   
         $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
         return view('job_position_profile.edit_organization', compact('jobPositionProfile', 'tree'));
+    }
+
+    public function edit_liabilities(JobPositionProfile $jobPositionProfile)
+    {
+        $liabilities = Liability::all();
+
+        $jppLiabilities = JobPositionProfileLiability::
+            where('job_position_profile_id', $jobPositionProfile->id)
+            ->get();
+
+        return view('job_position_profile.edit_liabilities', compact('jobPositionProfile', 'liabilities', 'jppLiabilities'));
+    }
+
+    public function edit_expertise_map(JobPositionProfile $jobPositionProfile)
+    {   
+        $expertises = Expertise::where('estament_id', $jobPositionProfile->estament_id)
+            ->where('area_id', $jobPositionProfile->area_id)
+            ->get();
+
+        return view('job_position_profile.edit_expertise_map', compact('jobPositionProfile', 'expertises'));
     }
 
     /**
@@ -162,6 +188,77 @@ class JobPositionProfileController extends Controller
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado exitosamente la organización y contexto del cargo');
         return redirect()->route('job_position_profile.edit_organization', $jobPositionProfile);
+    }
+
+    public function store_liabilities(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        foreach($request->values as $key => $value){
+            $jppLiabilities = new JobPositionProfileLiability();            
+            $jppLiabilities->liability_id = $key;
+            $jppLiabilities->value = $request->values[$key];
+            $jppLiabilities->job_position_profile_id = $jobPositionProfile->id;
+
+            $jppLiabilities->save();
+        }
+    
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las responsabilidades del cargo');
+        return redirect()->route('job_position_profile.edit_liabilities', $jobPositionProfile);
+    }
+
+    public function update_liabilities(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $jppLiabilities = JobPositionProfileLiability::
+            where('job_position_profile_id', $jobPositionProfile->id)
+            ->get();
+
+        foreach($jppLiabilities as $jppLiability){
+            foreach($request->values as $key => $value){
+                // dd($key.' '.$jppLiability->liability_id, $value.' '.$jppLiability->value);
+                if($key == $jppLiability->liability_id && $value != $jppLiability->value){  
+                    // dd($jppLiability);  
+                    $jppLiability->value = $request->values[$key];
+                    $jppLiability->save();
+                }
+            }
+        }
+        
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las responsabilidades del cargo');
+        return redirect()->route('job_position_profile.edit_liabilities', $jobPositionProfile);
+    }
+
+    public function store_expertises(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        foreach($request->values as $key => $value){
+            $expertiseProfile = new ExpertiseProfile();
+            $expertiseProfile->expertise_id = $key;        
+            $expertiseProfile->value = $request->values[$key];  
+            $expertiseProfile->job_position_profile_id = $jobPositionProfile->id;
+            $expertiseProfile->save();
+        }
+    
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las competencias vinculadas al S.S.I.');
+        return redirect()->route('job_position_profile.edit_expertise_map', $jobPositionProfile);
+    }
+
+    public function update_expertises(Request $request, JobPositionProfile $jobPositionProfile)
+    {
+        $expertisesProfile = ExpertiseProfile::
+            where('job_position_profile_id', $jobPositionProfile->id)
+            ->get();
+
+        foreach($expertisesProfile as $expertiseProfile){
+            foreach($request->values as $key => $value){
+                // dd($key.' '.$jppLiability->liability_id, $value.' '.$jppLiability->value);
+                if($key == $expertiseProfile->expertise_id && $value != $expertiseProfile->value){  
+                    // dd($jppLiability);  
+                    $expertiseProfile->value = $request->values[$key];
+                    $expertiseProfile->save();
+                }
+            }
+        }
+        
+        session()->flash('success', 'Estimado Usuario, se han actualizado exitosamente las competencias vinculadas al S.S.I.');
+        return redirect()->route('job_position_profile.edit_expertise_map', $jobPositionProfile);
     }
 
     /**

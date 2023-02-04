@@ -74,9 +74,9 @@
                             @case('rejected')
                                 <span class="badge badge-danger">Rechazado</span>
                                 @break
-
-                            @default
-                                Default case...
+                            @case('review')
+                                <span class="badge badge-info">En revisión</span>
+                                @break
                         @endswitch    
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
@@ -108,6 +108,14 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 @endif
+                            @endif
+                            @if($index == 'review')
+                                @if($jobPositionProfile->status == 'review')
+                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Aprobar perfil de cargo">
+                                        <i class="fas fa-signature"></i>
+                                    </a>
+                                @endif    
                             @endif
                         </td>
                     <tr>

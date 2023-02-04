@@ -89,9 +89,9 @@
         <td class="text-center">{{$created->id}}</td>
 				<td class="small">
                     {{$created->subject}}<br>
-                    @foreach($created->categories as $category)
-                        @if(Auth::user()->id == $category->user_id)
-                            <span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>
+                    @foreach($created->labels as $label)
+                        @if(Auth::user()->id == $label->user_id)
+                            <span class='badge badge-primary' style='background-color: #{{$label->color}};'>{{$label->name}}</span>
                         @endif
                     @endforeach
 										@if($created->parte)
@@ -234,9 +234,9 @@
 					<td class="text-center">{{$archived->id}}</td>
 					<td class="small">
                         {{$archived->subject}}<br>
-                        @foreach($archived->categories as $category)
-                            @if(Auth::user()->id == $category->user_id)
-                                <span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>
+                        @foreach($archived->labels as $label)
+                            @if(Auth::user()->id == $label->user_id)
+                                <span class='badge badge-primary' style='background-color: #{{$label->color}};'>{{$label->name}}</span>
                             @endif
                         @endforeach
 												@if($archived->parte)

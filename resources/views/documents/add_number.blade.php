@@ -23,16 +23,20 @@
 
 @if(isset($document))
 
-    <div class="row">
+    <div class="form-row">
+        <div class="col-12">
+            <label for="for-number"><strong>Número </strong></label>
+            @livewire('documents.enumerate',['document' => $document, 'delete' => true])
+        </div>
         <div class="col">
             <p> <strong>De:</strong> {!! $document->fromHtml !!} </p>
         </div>
         <div class="col">
-            <p> <strong>Tipo:</strong> {{ $document->type }}<br>
+            <p> <strong>Tipo:</strong> {{ optional($document->type)->name }}<br>
             <strong>Propietario:</strong> {{ $document->user->FullName }} </p>
         </div>
     </div>
-    <div class="row">
+    <div class="form-row">
         <div class="col">
             <p> <strong>Para:</strong> {!! $document->forHtml !!} </p>
         </div>
@@ -42,7 +46,7 @@
     </div>
 
     @if($document->file)
-        <div class="row">
+        <div class="form-row">
             <div class="col">
                 <strong>Distribución:</strong>
                 <pre>{{ $document->distribution }} </pre>
@@ -71,14 +75,14 @@
             @csrf
             @method('PUT')
 
-            <div class="row">
+            <div class="form-row">
                 <fieldset class="form-group col">
                     <label for="for-distribution"><strong>Distribución:</strong></label>
                     <textarea name="distribution" rows="10" class="form-control">{{ $document->distribution }}</textarea>
                 </fieldset>
             </div>
 
-            <div class="row">
+            <div class="form-row">
 
                 <fieldset class="form-group col-2">
                     <label for="for_number">Número</label>

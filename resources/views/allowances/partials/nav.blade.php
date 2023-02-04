@@ -16,10 +16,9 @@
                     <a class="dropdown-item {{ active(['allowances.all_index']) }}" href="{{ route('allowances.all_index') }}"><i class="fas fa-wallet"></i> Todos los víaticos</a>
                 @endcan
                 
-                @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
-                    Auth::user()->can('Allowances: sirh'))
+                @if(Auth::user()->can('Allowances: sirh'))
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}"><i class="fas fa-check-circle"></i> Gestión de viáticos</a>
+                    <a class="dropdown-item {{ active(['allowances.sign_index']) }}" href="{{ route('allowances.sign_index') }}"><i class="fas fa-keyboard"></i> Ingreso folio SIRH</a>
                 @endif
             </div>
         </li>

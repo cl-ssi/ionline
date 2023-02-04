@@ -34,18 +34,28 @@
             </h5>
             <div class="card-body">
                 <div class="form-row">
-                    <fieldset class="form-group col-6 col-md-3">
-                        <label for="for_request_date">Fecha Documento</label>
+                    <fieldset class="form-group col-6 col-md-2">
+                        <label for="for_request_date">Fecha Documento*</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date')}}" required>
                     </fieldset>
-                </div>
 
-                <div class="form-row">
-                    @livewire('signatures.document-types')
-                    
-                    <fieldset class="form-group col-12 col-md-9">
-                        <label for="for_subject">Materia o tema del documento</label>
+                    <fieldset class="form-group col-6 col-md-2">
+                        @livewire('signatures.document-types', ['type_id' => $signature->type_id ?? null])
+                    </fieldset>
+
+                    <fieldset class="form-group col-1">
+                        <label for="for_reserved">&nbsp;</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="reserved" id="for_reserved">
+                                <label class="form-check-label" for="for_reserved">Reserv.</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="form-group col-12 col-md-7">
+                        <label for="for_subject">Materia o tema del documento*</label>
                         <input type="text" class="form-control" id="for_subject" name="subject"
                             value="{{isset($signature) ? $signature->subject : old('subject')}}" required>
                     </fieldset>
@@ -65,8 +75,8 @@
                             <button name="id" class="btn btn-link" form="showPdf" formtarget="_blank">
                                 <i class="fas fa-paperclip"></i> Documento
                             </button>
-                            <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file }}">
-                            <input type="hidden" name="file_base_64" value="{{  $signature->signaturesFileDocument->file}}"
+                            <input type="hidden" name="file_base_64" value="{{ $signature->signaturesFileDocument->file }}">
+                            <input type="hidden" name="file_base_64" value="{{ $signature->signaturesFileDocument->file}}"
                                 form="showPdf">
                             <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
                         @else
@@ -148,8 +158,10 @@
 
                     <fieldset class="form-group col-12 col-md-6">
                         <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients"
-                                  rows="6"> {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>
+                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6" 
+                            placeholder="En caso que en distribución esté el correo del director director.ssi@redsalud.gob.cl 
+                                este entrará automáticamente como parte"
+                                > {{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : old('recipients')  }} </textarea>
                     </fieldset>
                 </div>
             </div>
@@ -201,6 +213,23 @@
 
         });
 
+        $('#for_annexed').bind('change', function() {
+            if((this.files[0].size / 1024 / 1024) > 45){
+                alert('No puede cargar un anexo de mas de 45 MB.');
+                $('#for_annexed').val('');
+                return false;
+            }
+        });
+
+        
+
     </script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+</script>
+
 
 @endsection

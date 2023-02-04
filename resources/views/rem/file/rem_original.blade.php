@@ -20,11 +20,12 @@
             <td class="text-center font-weight-bold">
                 {{$remEstablishment->establishment->name}}
                 ({{$remEstablishment->establishment->type}})
+                ({{$remEstablishment->establishment->new_deis_without_first_character}})
             </td>
 
             @foreach($periods as $period)
             <td>
-                @forelse($period->series as $serie)                
+                @forelse($period->series as $serie)
                 @if($serie->type == $remEstablishment->establishment->type)
                 <ul>
                     Serie:{{$serie->serie->name??''}}

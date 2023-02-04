@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Rem;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\Rem\RemPeriodSerie;
@@ -44,13 +45,19 @@ class RemPeriodSerieController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        //dd($request);
-        $remPeriodSerie = new RemPeriodSerie($request->all());
-        $remPeriodSerie->save();
+        $data = [];
+        foreach ($request->type as $type) {
+            $data[] = [
+                'period_id' => $request->period_id,
+                'serie_id' => $request->serie_id,
+                'type' => $type
+            ];
+        }
+        RemPeriodSerie::insert($data);
         session()->flash('info', 'La serie ha sido creada con éxito');
         return redirect()->route('rem.periods_series.index');
     }
+
 
     /**
      * Display the specified resource.

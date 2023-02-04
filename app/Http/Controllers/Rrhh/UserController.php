@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Rrhh\storeUser;
-use App\Http\Requests\Rrhh\updatePassword;
-use App\Rrhh\Authority;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Rrhh\Authority;
 use App\Models\Rrhh\UserBankAccount;
 use App\Models\Parameters\AccessLog;
+use App\Http\Requests\Rrhh\updatePassword;
+use App\Http\Requests\Rrhh\storeUser;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -24,9 +25,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(50);
-        $users = User::getUsersBySearch($request->get('name'))->orderBy('name', 'Asc')->paginate(150);
-        return view('rrhh.index', compact('users'));
+        $users = User::getUsersBySearch($request->get('name'))
+            ->filter('organizational_unit_id',$request->input('organizational_unit_id'))
+            ->filter('permission',$request->input('permission'))
+            ->with([
+                'organizationalUnit',
+                'permissions',
+                'roles',
+            ])->orderBy('name', 'Asc')->paginate(150);
+        $permissions = Permission::orderBy('name')->pluck('name');
+        
+        return view('rrhh.index', compact('users','permissions'));
     }
 
     /**
@@ -103,10 +112,12 @@ class UserController extends Controller
                 ->storeAs('public', $user->id . '.' . $request->file('photo')->clientExtension());
         }
 
-        $user->givePermissionTo('Users: must change password');
-        $user->givePermissionTo('Authorities: view');
-        $user->givePermissionTo('Calendar: view');
-        $user->givePermissionTo('Requirements: create');
+        foreach($request->input('permissions') as $permission) {
+            $user->givePermissionTo($permission);
+        }
+        // $user->givePermissionTo('Authorities: view');
+        // $user->givePermissionTo('Calendar: view');
+        // $user->givePermissionTo('Requirements: create');
 
 
         session()->flash('info', 'El usuario ' . $user->name . ' ha sido creado.');
@@ -481,7 +492,7 @@ class UserController extends Controller
     public function openNotification($notification)
     {
         $notification = auth()->user()->notifications->find($notification);
-        $route = $notification->data['action'];
+        $route = config('app.url').$notification->data['action'];
         $notification->markAsRead();
         return redirect($route);
     }
@@ -490,6 +501,12 @@ class UserController extends Controller
     {
         // $notifications = auth()->user()->notifications;
         return view('notifications.index');
+    }
+
+    public function clearNotifications()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return redirect()->route('allNotifications');
     }
 
     public function lastAccess()

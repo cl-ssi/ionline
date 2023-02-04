@@ -46,8 +46,17 @@ class Signer extends Component
             $this->users = [];
         }
 
-        return view('livewire.signatures.signer')
-            ->withOuRoots(OrganizationalUnit::where('level', 1)->whereIn('establishment_id', [38, 1])->get())
+        $ouRoots = OrganizationalUnit::with([
+                'childs',
+                'childs.childs',
+                'childs.childs.childs',
+                'childs.childs.childs.childs',
+            ])
+            ->where('level', 1)
+            ->whereIn('establishment_id', [38, 1])
+            ->get();
+
+        return view('livewire.signatures.signer',compact('ouRoots'))
             ->withSignaturesFlowSigner($this->signaturesFlowSigner);
     }
 }

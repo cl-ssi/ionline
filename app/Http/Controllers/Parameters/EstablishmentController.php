@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Parameters;
 
 use App\Models\Establishment;
+use App\Models\Commune;
+use App\Models\HealthService;
+use App\Models\Parameters\EstablishmentType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -27,6 +30,10 @@ class EstablishmentController extends Controller
     public function create()
     {
         //
+        $establishmentTypes = EstablishmentType::all();
+        $communes = Commune::all();
+        $healthServices = HealthService::all();
+        return view('parameters/establishments/create', compact('establishmentTypes', 'communes', 'healthServices'));
     }
 
     /**
@@ -38,6 +45,12 @@ class EstablishmentController extends Controller
     public function store(Request $request)
     {
         //
+        $establishment = new Establishment($request->All());
+        $establishmentType = EstablishmentType::find($request->establishment_type_id);
+        $establishment->type = $establishmentType->name;
+        $establishment->save();
+        session()->flash('success', 'Establecimiento creado exitosamente');
+        return redirect()->route('parameters.establishments.index');
     }
 
     /**
@@ -60,7 +73,12 @@ class EstablishmentController extends Controller
     public function edit(Establishment $establishment)
     {
         //
+        $establishmentTypes = EstablishmentType::all();
+        $communes = Commune::all();
+        $healthServices = HealthService::all();
+        return view('parameters/establishments/edit', compact('establishmentTypes', 'communes', 'healthServices', 'establishment'));
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -71,11 +89,13 @@ class EstablishmentController extends Controller
      */
     public function update(Request $request, Establishment $establishment)
     {
-      $establishment->fill($request->all());
-      $establishment->save();
+        $establishment->fill($request->all());
+        $establishmentType = EstablishmentType::find($request->establishment_type_id);
+        $establishment->type = $establishmentType->name;
+        $establishment->save();
 
-      session()->flash('info', 'El establecimiento '.$establishment->name.' ha sido editado.');
-      return redirect()->route('parameters.establishments.index');
+        session()->flash('info', 'El establecimiento ' . $establishment->name . ' ha sido editado.');
+        return redirect()->route('parameters.establishments.index');
     }
 
     /**
@@ -87,5 +107,6 @@ class EstablishmentController extends Controller
     public function destroy(Establishment $establishment)
     {
         //
+
     }
 }

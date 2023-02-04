@@ -2,11 +2,12 @@
 
 namespace App\Models\Documents;
 
-use App\Models\Establishment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Establishment;
+use App\Models\Documents\Type;
 
 class Parte extends Model
 {
@@ -19,7 +20,8 @@ class Parte extends Model
      */
     protected $fillable = [
         'date',
-        'type',
+        'type_id',
+        'reserved',
         'number',
         'origin',
         'subject',
@@ -63,10 +65,40 @@ class Parte extends Model
         return $this->belongsTo(Establishment::class);
     }
 
+    public function type()
+    {
+        return $this->belongsTo(Type::class)->withTrashed();
+    }
+
+
     /* FIXME: Esto no es necesario */
     public function getCreationParteDateAttribute()
     {
         return Carbon::parse($this->date)->format('d-m-Y');
+    }
+
+    public function scopeFilter($query, $column, $value) {
+        if(!empty($value)) {
+            switch($column) {
+                case 'origin':
+                case 'subject':
+                    $query->where($column, 'LIKE', '%'.$value.'%');
+                    break;
+                case 'id':
+                case 'number':
+                case 'type_id':
+                    $query->where($column, $value);
+                    break;
+                case 'without_sgr':
+                    $query->whereDoesntHave('requirements');
+                    $query->whereDate('created_at', '>=', date('Y') - 1 .'-01-01');
+                    break;
+                case 'important':
+                    $query->whereNotNull('important');
+                    break;
+            }
+        }
+
     }
 
     public function scopeSearch($query, Request $request)
@@ -93,6 +125,7 @@ class Parte extends Model
         
         if($request->input('without_sgr') != "") {
             $query->whereDoesntHave('requirements');
+            $query->whereDate('created_at', '>=', date('Y') - 1 .'-01-01');
         }
 
         return $query;

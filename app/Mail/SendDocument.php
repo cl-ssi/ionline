@@ -36,8 +36,8 @@ class SendDocument extends Mailable
      */
     public function build()
     {
-        $file_name = 'SSI_'.$this->document->type.'_'.$this->document->number.'.pdf';
-        $subject = $this->document->type.' N°:'.$this->document->number.': '.$this->document->subject;
+        $file_name = 'SSI_'.$this->document->type->name.'_'.$this->document->number.'.pdf';
+        $subject = $this->document->type->name.' N°:'.$this->document->number.': '.$this->document->subject;
         return $this->view('documents.mails.send')->subject($subject)
             ->attachFromStorageDisk('gcs',$this->document->file, $file_name, [
                                 'mime' => 'application/pdf'

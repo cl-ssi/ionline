@@ -72,7 +72,7 @@
 									<tr class="bg-warning">
 										@endif
 										<td>{{ optional($SignatureFlow->signature_date)->format('Y-m-d H:i')}}</td>
-										<td>{{ $SignatureFlow->user->getShortNameAttribute() }}</td>
+										<td>{{ $SignatureFlow->user->shortName }}</td>
 									</tr>
 									@endforeach
 								</tbody>

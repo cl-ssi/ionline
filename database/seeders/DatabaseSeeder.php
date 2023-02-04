@@ -16,12 +16,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CountrySeeder::class);
         $this->call(CommuneSeeder::class);
+        /** Falta seeder de cl_regions */
+        /** Falta seeder de cl_communes */
+        $this->call(HealthServiceSeeder::class);
         $this->call(EstablishmentTypeSeeder::class);
         $this->call(EstablishmentSeeder::class);
         $this->call(OrganizationalUnitSeeder::class);
         $this->call(RoleAndPermissionSeeder::class);
         $this->call(AddParametersPermissions::class);
         $this->call(UserSeeder::class);
+        // $this->call(TypeSeeder::class);
         $this->call(LocationSeeder::class);
         $this->call(CourtSeeder::class);
         $this->call(PoliceUnitSeeder::class);

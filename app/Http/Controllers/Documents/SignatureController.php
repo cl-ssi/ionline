@@ -164,6 +164,7 @@ class SignatureController extends Controller
             $signature->user_id = Auth::id();
             $signature->ou_id = Auth::user()->organizationalUnit->id;
             $signature->responsable_id = Auth::id();
+            $signature->reserved = $request->input('reserved') == 'on' ? 1 : null;
             $signature->save();
 
             $signaturesFile = new SignaturesFile();
@@ -195,7 +196,8 @@ class SignatureController extends Controller
                     $signaturesFile->save();
 
                     $documentFile = $annexed->openFile()->fread($documentFile->getSize());
-                    $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                    //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                    $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
                     $signaturesFile->update(['file' => $filePath,]);
                     Storage::disk('gcs')->put($filePath, $documentFile);
                 }
@@ -378,9 +380,10 @@ class SignatureController extends Controller
             'distribution' => ['nullable', new CommaSeparatedEmails],
             'recipients' => ['nullable', new CommaSeparatedEmails]
         ]);
-        
+
         $signature->fill($request->all());
         $signature->rejected_at = null;
+        $signature->reserved = $request->input('reserved') == 'on' ? 1 : null;
         $signature->save();
 
         if ($request->hasFile('document')) {
@@ -411,7 +414,8 @@ class SignatureController extends Controller
                 $signaturesFile->save();
 
                 $documentFile = $annexed->openFile()->fread($documentFile->getSize());
-                $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                //$filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+                $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.' . $annexed->extension();
                 $signaturesFile->update(['file' => $filePath,]);
                 Storage::disk('gcs')->put($filePath, $documentFile);
             }
@@ -442,8 +446,7 @@ class SignatureController extends Controller
             }
         }
 
-        $signatureFileDocumento->update(['signed_file' => null,
-        ]);
+        $signatureFileDocumento->update(['signed_file' => null]);
 
         session()->flash('info', "Los datos de la firma $signature->id han sido actualizados.");
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
@@ -529,6 +532,11 @@ class SignatureController extends Controller
     public function showPdfAnexo(SignaturesFile $anexo)
     {
         return Storage::disk('gcs')->response($anexo->file);
+    }
+
+    public function downloadAnexo(SignaturesFile $anexo)
+    {
+        return Storage::disk('gcs')->download($anexo->file);
     }
 
 

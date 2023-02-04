@@ -11,6 +11,8 @@ class SignaturesFile extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'doc_signatures_files';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,19 +41,17 @@ class SignaturesFile extends Model
         return $this->hasOne('App\Models\Suitability\Result', 'signed_certificate_id');
     }
 
-
     public function parteFile()
     {
         return $this->hasOne('App\Models\Documents\ParteFile', 'signature_file_id');
     }
-
 
     /**
      * @return bool
      */
     public function getHasSignedFlowAttribute()
     {
-        return $this->signaturesFlows->where('status', 1)->count() > 0;
+        return $this->signaturesFlows()->where('status', 1)->count() > 0;
     }
 
     public function getHasRejectedFlowAttribute()
@@ -71,6 +71,4 @@ class SignaturesFile extends Model
     {
         return $this->signaturesFlows->whereNull('status')->count() === 1;
     }
-
-    protected $table = 'doc_signatures_files';
 }

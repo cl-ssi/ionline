@@ -14,12 +14,12 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre*</label>
-            <input type="text" class="form-control" id="for_name" name="name" required>
+            <input type="text" class="form-control" id="for_name" name="name" autocomplete="off" required>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_description">Descripción</label>
-            <input type="text" class="form-control" id="for_description" name="description">
+            <input type="text" class="form-control" id="for_description" autocomplete="off" name="description">
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">

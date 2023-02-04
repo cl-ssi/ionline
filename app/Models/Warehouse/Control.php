@@ -43,9 +43,9 @@ class Control extends Model
         'po_id',
         'request_form_id',
         'organizational_unit_id',
-        'signer_id',
         'technical_signature_id',
-        'reception_signature_id',
+        'technical_signer_id',
+        'reception_visator_id',
     ];
 
     protected $dates = [
@@ -122,19 +122,28 @@ class Control extends Model
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
-    public function signer()
+    /**
+     * Recepción Técnica: Usuario Firmante
+     */
+    public function technicalSigner()
     {
-        return $this->belongsTo(User::class, 'signer_id');
+        return $this->belongsTo(User::class);
     }
 
+    /**
+     * Recepción Técnica: Firma Digital
+     */
     public function technicalSignature()
     {
         return $this->belongsTo(Signature::class);
     }
 
-    public function receptionSignature()
+    /**
+     * Recepción Digital: Usuario que da Ingreso a Bodega (visador de la bodega)
+     */
+    public function receptionVisator()
     {
-        return $this->belongsTo(Signature::class);
+        return $this->belongsTo(User::class);
     }
 
     public function isReceiving()

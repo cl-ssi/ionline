@@ -40,13 +40,75 @@ class JobPositionProfile extends Model implements Auditable
     }
 
     public function staffDecreeByEstament() {
-        return $this->belongsTo('App\Models\Parameters\StaffDecree', 'staff_decree_by_estament_id');
+        return $this->belongsTo('App\Models\Parameters\StaffDecreeByEstament', 'staff_decree_by_estament_id');
     }
 
     public function roles() {
         return $this->hasMany('App\Models\JobPositionProfiles\Role');
     }
 
+    public function jppLiabilities() {
+        return $this->hasMany('App\Models\JobPositionProfiles\JobPositionProfileLiability', 'job_position_profile_id');
+    }
+
+    public function jppExpertises() {
+        return $this->hasMany('App\Models\JobPositionProfiles\ExpertiseProfile', 'job_position_profile_id');
+    }
+
+    public function getSubordinatesValueAttribute() {
+        switch($this->subordinates) {
+          case '0':
+            return 'No';
+            break;
+          case '1':
+            return 'Sí';
+            break;
+        }
+    }
+
+    public function getLawValueAttribute() {
+        switch($this->law) {
+          case '18834':
+            return 'Ley N°18.834';
+            break;
+          case '19664':
+            return 'Ley N°19.664';
+            break;
+        }
+    }
+
+    public function getDfl3ValueAttribute() {
+        switch($this->dfl3) {
+          case '0':
+            return '';
+            break;
+          case '1':
+            return 'DFL N°03/17';
+            break;
+        }
+    }
+
+    public function getDfl29ValueAttribute() {
+        switch($this->dfl29) {
+          case '0':
+            return '';
+            break;
+          case '1':
+            return 'DFL N°29 (Estatuto Administrativo)';
+            break;
+        }
+    }
+
+    public function getOtherLegalFrameworkValueAttribute() {
+        switch($this->other_legal_framework) {
+          case '0':
+            return '';
+            break;
+          case '1':
+            return 'Otros (Ley N° 15.076) Urgencia 28 hrs.';
+            break;
+        }
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -57,9 +119,9 @@ class JobPositionProfile extends Model implements Auditable
         'created_at', 'updated_at'
     ];
 
-    // protected $dates = [
-    //     ''
-    // ];
+    protected $dates = [
+        'year'
+    ];
 
     // protected $casts = [
     //     'degree' => 'integer'

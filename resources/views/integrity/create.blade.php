@@ -33,17 +33,17 @@
     <fieldset class="form-group">
         <label for="for"><strong>Seleccione el tipo*</strong></label><br>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="type" id="forConsulta" value="Consulta" required>
+            <input class="form-check-input" type="radio" name="type" id="forConsulta" value="Consulta" {{ old('type') == 'Consulta' ? 'checked' : ''}}  required>
             <label class="form-check-label" for="forConsulta">Consulta</label>
         </div>
 
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="type" id="forDenuncia" value="Denuncia" required>
+            <input class="form-check-input" type="radio" name="type" id="forDenuncia" value="Denuncia" {{ old('type') == 'Denuncia' ? 'checked' : ''}} required>
             <label class="form-check-label" for="forDenuncia">Denuncia</label>
         </div>
 
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="type" id="forRiestoEtico" value="Riesgo ético" required>
+            <input class="form-check-input" type="radio" name="type" id="forRiestoEtico" value="Riesgo ético" {{ old('type') == 'Riesgo ético' ? 'checked' : ''}} required>
             <label class="form-check-label" for="forRiestoEtico">Riesgo ético</label>
         </div>
     </fieldset>
@@ -52,13 +52,13 @@
         <label for="for"><strong>Identifique el valor que más se ve representado con su Consulta/Denuncia/Riesgo Ético*</strong></label><br>
         @foreach($values as $value)
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="complaint_values_id" id="for{{ $value->name }}" value="{{ $value->id }}" required>
+                <input class="form-check-input" type="radio" name="complaint_values_id" id="for{{ $value->name }}" value="{{ $value->id }}" {{ old('complaint_values_id') == $value->id ? 'checked' : '' }} required>
                 <label class="form-check-label" for="for{{ $value->name }}">{{ $value->name }}</label>
             </div>
         @endforeach
 
         <div class="form-check form-check-inline">
-            <input type="text" class="form-control form-control-sm" id="other_value" placeholder="Identificar el otro valor" name="other_value" >
+            <input type="text" class="form-control form-control-sm" id="other_value" placeholder="Identificar el otro valor" name="other_value" value="{{ old('other_value') }}">
         </div>
 
     </fieldset>
@@ -69,7 +69,7 @@
             @foreach($principles as $principle)
             <div class="col-3">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="complaint_principles_id" id="for{{ $principle->name }}_p" value="{{ $principle->id }}" required>
+                    <input class="form-check-input" type="radio" name="complaint_principles_id" id="for{{ $principle->name }}_p" value="{{ $principle->id }}" {{ old('complaint_principles_id') == $principle->id ? 'checked' : ''}}  required>
                     <label class="form-check-label" for="for{{ $principle->name }}_p">{{ $principle->name }}</label>
                 </div>
             </div>
@@ -79,31 +79,31 @@
 
     <fieldset class="form-group">
         <label for="forComplaint"><strong>Describa en forma clara y objetiva su Consulta/Denuncia/Riesgo Ético*</strong></label>
-        <textarea rows="5" class="form-control" id="forComplaint" name="content" required></textarea>
+        <textarea rows="5" class="form-control" id="forComplaint" name="content" required>{{ old('content') }}</textarea>
     </fieldset>
 
     <fieldset class="form-group">
         <label for="forFile"><strong>Archivo (opcional)</strong></label>
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFileLang" name="file">
+          <input type="file" class="custom-file-input" id="customFileLang" name="file" value="{{ old('file') }}">
           <label class="custom-file-label" for="customFileLang">Adjuntar evidencia, puede incluir un archivo zip o rar</label>
         </div>
     </fieldset>
 
     <fieldset class="form-group">
         <label for="foremail"><strong>Email *</strong></label>
-        <input type="email" class="form-control" id="foremail" placeholder="Ingrese su email de respuesta" name="email" required="required">
+        <input type="email" class="form-control" id="foremail" placeholder="Ingrese su email de respuesta" name="email" value="{{ old('email') }}" required="required" autocomplete="off">
     </fieldset>
 
     <fieldset class="form-group">
         <label for="for"><strong>¿Conoce el <a target="_blank" href="http://ssiq.redsalud.gob.cl/wrdprss_minsal/wp-content/uploads/2018/06/1-REX-2534_31082017-APRUEBA-CODIGO-DE-ETICA-DEL-SSI.pdf">código de ética</a> de la institución?*</strong></label><br>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="know_code" id="forSi" value="1" required>
+            <input class="form-check-input" type="radio" name="know_code" id="forSi" value="1" {{ old('know_code') == 1 ? 'checked' : ''}} required>
             <label class="form-check-label" for="forSi">Si</label>
         </div>
 
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="know_code" id="forNo" value="0" required>
+            <input class="form-check-input" type="radio" name="know_code" id="forNo" value="0" {{ old('know_code') === 0 ? 'checked' : ''}} required>
             <label class="form-check-label" for="forNo">No, declaro formalmente mi desconocimiento del código de ética de la institución.</label>
         </div>
 
@@ -118,7 +118,7 @@
         </div>
 
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="identify" id="identifyNo" value="0" required>
+            <input class="form-check-input" type="radio" name="identify" id="identifyNo" value="0" {{ old('identify') == '0' ? 'checked' : ''}} required>
             <label class="form-check-label" for="identityNo">No</label>
         </div>
 
@@ -126,7 +126,7 @@
 
     <fieldset class="form-group" id="fieldrun">
         <label for="forRun">RUN Funcionario</label>
-        <input type="text" class="form-control" id="forRun" placeholder="Ingrese RUN sin puntos ni guión" name="user_id">
+        <input type="number" class="form-control" id="forRun" placeholder="Ingrese RUN sin puntos ni digito verificador ej:16055586" name="user_id" autocomplete="off">
     </fieldset>
 
     <input type="submit" value="Ingresar" class="btn btn-primary">
@@ -152,20 +152,21 @@
 </script>
 
 <script type="text/javascript">
+    $(document).ready(function(){
+        if($("input[name=identify]:checked").val() == "0"){
+            $("#fieldrun").show();
+        } else {
+            $("#fieldrun").hide();
+        }
 
-    $("#fieldrun").hide();
-
-    $("input[name=identify]").click(function() {
-        switch(this.value){
-            case "0":
+        $("input[name=identify]").click(function() {
+            if(this.value == "0"){
                 $("#fieldrun").show("slow");
-
-            break;
-            default:
+            } else {
                 $("#fieldrun").hide("slow");
                 document.getElementById("forRun").value = null;
-            break;
-        }
+            }
+        });
     });
 </script>
 

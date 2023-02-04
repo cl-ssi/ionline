@@ -54,7 +54,7 @@
                         <th>Motivo</th>
                         <th>Detalle</th>
                         <th colspan="2">Periodo</th>
-                        <th>Gestión</th>
+                        {{-- <th>Gestión</th> --}}
                         <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -110,6 +110,7 @@
                                 día
                             @endif
                         </td>
+                        {{--
                         <td class="text-center">
                             @foreach($allowance->allowanceSigns as $allowanceSign)
                                 @if($allowanceSign->status == 'pending' || $allowanceSign->status == NULL)
@@ -126,12 +127,13 @@
                                     </span>
                                 @endif
                             @endforeach
-                        </td>
+                        </td> 
+                        --}}
                         <td class="text-center">
                             @if($index == 'sign')
                                 <a href="{{ route('allowances.show', $allowance) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Aceptar o Declinar">
-                                    <i class="fas fa-signature"></i>
+                                    class="btn btn-outline-secondary btn-sm" title="Ingresar folio SIRH">
+                                    <i class="fas fa-keyboard"></i>
                                 </a>
                             @endif
                             @if($index == 'own')

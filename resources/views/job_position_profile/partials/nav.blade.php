@@ -18,6 +18,17 @@
             </div>
         </li>
 
+        @can('Job Position Profile: review')
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {{ active(['job.position.profile.index_review']) }}" href="#" id="navbardrop" data-toggle="dropdown">
+                <i class="fas fa-id-badge"></i> Revisión
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item {{ active(['job_position_profile.index_review']) }}" href="{{ route('job_position_profile.index_review') }}"><i class="fas fa-id-badge"></i> Pendientes de Revisión</a>
+            </div>
+        </li>
+        @endcan
+
         {{--
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">

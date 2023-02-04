@@ -51,12 +51,12 @@
                     <!-- <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
                     <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:"> -->
 
-                    <label for="category_id">Asignar categoría</label>
-                    <select name="category_id[]" id="category_id" class="form-control selectpicker"
-                        multiple title="Elige tus categorías" >
-                        @foreach(auth()->user()->reqCategories as $key => $category)
-                            <option value="{{$category->id}}"
-                            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                    <label for="label_id">Asignar etiqueta</label>
+                    <select name="label_id[]" id="label_id" class="form-control selectpicker"
+                        multiple title="Elige tus etiquetas" >
+                        @foreach(auth()->user()->reqLabels as $key => $label)
+                            <option value="{{$label->id}}"
+                            data-content="<span class='badge badge-primary' style='background-color: #{{$label->color}};'>{{$label->name}}</span>">
                             </option>
                         @endforeach
                     </select>
@@ -198,23 +198,11 @@
                         <tr></tr>
                     </table>
                 </fieldset> -->
-
-                @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
-
-                <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-3 @endif">
-                    <label for="for_label_id">Etiqueta</label>
-                    <select class="form-control" name="label_id" id="for_label_id">
-                        <option></option>
-                        @foreach($labels as $label)
-                            <option value="{{ $label->id }}">{{ $label->name }}</option>
-                        @endforeach
-                    </select>
+                <fieldset class="col">
+                    @livewire('requirements.events.associate-document',['parte_id' => $parte->id])
                 </fieldset>
             </div>
-
-
-
-            <button type="submit" class="btn btn-primary">Crear</button>
+            <button type="submit" class="btn btn-primary" id="submit">Crear</button>
 
         </form>
     </div>
@@ -226,6 +214,29 @@
 
 @section('custom_js')
   <script>
+
+    $(document).ready(function(){
+        
+
+        $("#submit").click(function(){
+            // alert(document.getElementById("users").value);
+            // if (document.getElementById("users").value == null){
+            //     alert("Debe ingresar por lo menos un usuario a quien para crear el requerimiento.");
+            // }
+            //Attempt to get the element using document.getElementById
+            var element = document.getElementById("users");
+
+            //If it isn't "undefined" and it isn't "null", then it exists.
+            if(typeof(element) != 'undefined' && element != null){
+                // alert('Element exists!');
+            } else{
+                alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+                return false;
+            }
+
+        });
+    });
+
 {{--
   	 $(document).ready(function(){
        var array = new Array;

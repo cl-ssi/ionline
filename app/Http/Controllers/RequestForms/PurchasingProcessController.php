@@ -34,23 +34,10 @@ class PurchasingProcessController extends Controller
     public function index()
     {
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-        if (Auth()->user()->organizational_unit_id != $ouSearch) {
-            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+        if (Auth()->user()->organizational_unit_id != $ouSearch && !Auth::user()->can('Request Forms: purchaser')) {
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
-
-        /*
-
-        $my_request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
-            ->where('status', 'approved')->whereNotNull('signatures_file_id')
-            ->whereHas('purchasers', function ($q) {
-                return $q->where('users.id', Auth()->user()->id);
-            })->latest('id')->paginate(15, ['*'], 'p1');
-
-        $request_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'purchasers')
-            ->where('status', 'approved')->whereNotNull('signatures_file_id')->latest('id')->paginate(15, ['*'], 'p2');
-        
-        */
 
         return view('request_form.purchase.index');
     }
@@ -58,44 +45,25 @@ class PurchasingProcessController extends Controller
     public function purchase(RequestForm $requestForm)
     {
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-        if (Auth()->user()->organizational_unit_id == $ouSearch) {
-            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
-            // return $requestForm;
-            $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
-            if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
-            $suppliers = Supplier::orderBy('name', 'asc')->get();
-            
-            
-            //$response = //Http::withHeaders(['otp' => $otp])->post($url, $data);
-            //dd($requestForm.purchasingProcess.details);
-            
-            //dd($requestForm->purchasingProcess->details->first()->immediatePurchase);
-            // $ticket = env('TICKET_MERCADO_PUBLICO');
-            // $responseoc = Http::get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo=1058052-14-AG22&ticket='.$ticket.'');
-            // $jsonoc = $responseoc->json();
-
-            // $objoc = json_decode($responseoc);
-            //dd($objoc);
-            // dd($objoc->Listado[0]);
-
-            //dd($json);
-
-            // return MercadoPublico::getTender('1077499-1-LE22');
-            // return MercadoPublico::getPurchaseOrder('1058052-14-AG22');
-            $objoc = null;
-
-            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending','objoc'));
-        } else {
-            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+        if (Auth()->user()->organizational_unit_id != $ouSearch && !Auth::user()->can('Request Forms: purchaser')) {
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertenece a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
+        
+        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+        // return $requestForm;
+        $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
+        if ($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
+        $suppliers = Supplier::orderBy('name', 'asc')->get();
+
+        return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending'));
     }
 
     public function edit(RequestForm $requestForm, PurchasingProcessDetail $purchasingProcessDetail)
     {
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-        if (Auth()->user()->organizational_unit_id != $ouSearch) {
-            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+        if (Auth()->user()->organizational_unit_id != $ouSearch && !Auth::user()->can('Request Forms: purchaser')) {
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento o no tiene los permisos de acceso.');
             return redirect()->route('request_forms.my_forms');
         }
         $result = $purchasingProcessDetail->getPurchasingType();
@@ -112,12 +80,12 @@ class PurchasingProcessController extends Controller
         return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending', 'result', 'result_details'));
     }
 
-    public function show(RequestForm $requestForm)
-    {
-        $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
-        // return $requestForm;
-        return view('request_form.purchase.show', compact('requestForm'));
-    }
+    // public function show(RequestForm $requestForm)
+    // {
+    //     $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'purchasingProcess.detailsPassenger', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children', 'father.requestFormFiles');
+    //     // return $requestForm;
+    //     return view('request_form.purchase.show', compact('requestForm'));
+    // }
 
     public function create(RequestForm $requestForm)
     {

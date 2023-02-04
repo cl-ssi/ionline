@@ -25,5 +25,14 @@ class SearchJobPositionProfiles extends Component
                     ->paginate(50)
             ]);
         }
+
+        if($this->index == 'review'){
+            return view('livewire.job-position-profile.search-job-position-profiles', [
+                'jobPositionProfiles' => JobPositionProfile::
+                    latest()
+                    ->Where('status', 'review')
+                    ->paginate(50)
+            ]);
+        }
     }
 }

@@ -92,7 +92,7 @@ class SearchRequests extends Component
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
-            'users' => User::where('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
+            'users' => User::permission('Request Forms: purchaser')->OrWhere('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
         ]);
     }
 

@@ -5,10 +5,10 @@
 <div style="text-align: justify;">
     <p>Junto con saludar cordialmente.</p>
     <p>Adjunto documento indicado para conocimiento y fines.</p>
-    <p> <strong>Tipo:</strong> {{ $document->type }}</p>
+    <p> <strong>Tipo:</strong> {{ optional($document->type)->name }}</p>
     <p> <strong>Número:</strong> {{ $document->number }}</p>
     <p> <strong>Fecha del documento: </strong> {{ $document->date->format('d-m-Y') }} </p>
-    <p> <strong>Archivo:</strong> SSI_{{ $document->type }}_{{ $document->number }}.pdf</p>
+    <p> <strong>Archivo:</strong> SSI_{{ optional($document->type)->name }}_{{ $document->number }}.pdf</p>
     <br>
     Saludos cordiales.
 </div>

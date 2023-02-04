@@ -1,4 +1,4 @@
-<div class="input-group mb-3">
+<div class="{{ !$mobile ? 'input-group': '' }} mb-3">
     <select class="custom-select" 
         id="establishment_id" 
         name="establishment_id" 
@@ -12,12 +12,13 @@
         @endforeach
     </select>
 
-    <select class="custom-select"
+    <select class="form-control {{ $selectpicker ? 'selectpicker' : '' }}"
         id="{{ $selected_id }}" 
         name="{{ $selected_id }}"
         wire:model="organizational_unit_id"
         style="font-family:monospace;"
-        required>
+        data-live-search="true" id="ou" name="to_ou_id" data-size="10"
+        {{ $required ? 'required' : '' }}>
         
         <option></option>
         @foreach($ous as $ou)
@@ -25,8 +26,10 @@
         @endforeach
     </select>
     
+    @if(!$selectpicker)
     <input type="text" 
         class="form-control"
         placeholder="Filtrar listado de unidades" 
-        wire:model.debounce400ms="filter">
+        wire:model.lazy="filter">
+    @endif
 </div>

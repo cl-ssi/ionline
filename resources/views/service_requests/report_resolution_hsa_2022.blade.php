@@ -335,21 +335,55 @@
                 @if($ServiceRequest->program_contract_type == "Mensual")
                     En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
                 @else
-                    @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" || 
-                        $ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" || 
-                        $ServiceRequest->programm_name == "Covid 2022" || 
-                        $ServiceRequest->programm_name == "PABELLON TARDE" || 
-                        $ServiceRequest->programm_name == "PABELLON GINE")
-                            En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada total es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
-                            Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el convenio.
+                 
+                    <!-- 26/01/2023: se agrega este if por solicitud de fabian, por problema con id 21625 -->
+                    @if($ServiceRequest->working_day_type == "TURNO DE REEMPLAZO")
+
+                        El
+                        @if($ServiceRequest->working_day_type == 'HORA EXTRA')
+                        valor total por horas extras del mes
+                        @else
+                        valor por hora
+                        @endif
+                        será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
+                        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                        Hospital Regional de Iquique,
+                        @else
+                        Servicio de Salud Iquique,
+                        @endif
+                        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+                        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                        10
+                        @else
+                        5
+                        @endif
+                        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. La entidad retendrá y pagará el impuesto correspondiente por los honorarios pactados.<br><br>
+                        <b>Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
                             @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                                El pago será efectuado los primeros 10 días hábiles desde que la boleta este en la plataforma
+                            Hospital Dr. Ernesto Torres Galdames de Iquique,
                             @else
-                                El pago será efectuado el día 5 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano 
+                            Servicio de salud Iquique,
                             @endif
-                            una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+                            el cual debe venir con las debidas observaciones de la Jefatura directa.
+                        </b>
+
                     @else
-                        En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+                        @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" || 
+                            $ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" || 
+                            $ServiceRequest->programm_name == "Covid 2022" || 
+                            $ServiceRequest->programm_name == "PABELLON TARDE" || 
+                            $ServiceRequest->programm_name == "PABELLON GINE")
+                                En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada total es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+                                Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el convenio.
+                                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                                    El pago será efectuado los primeros 10 días hábiles desde que la boleta este en la plataforma
+                                @else
+                                    El pago será efectuado el día 5 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano 
+                                @endif
+                                una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+                        @else
+                            En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+                        @endif
                     @endif
                 @endif     
             @else
@@ -386,7 +420,7 @@
         <p class="justify">
             <strong>OCTAVO:</strong>
 
-            @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
+            {{--@if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
 
                 En el desempeño de sus funciones, el prestador cumplió con
                 @livewire('service-request.show-total-hours', ['fulfillment' => $ServiceRequest->fulfillments->first(),'forResolution' => true]);
@@ -406,7 +440,16 @@
                 del mes siguiente, y
                 si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación
                 realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los
-                honorarios pactados.
+                honorarios pactados.--}}
+
+                <!-- 24/01/2023: solicitado por nataly y fabian -->
+            @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" || 
+                    $ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" || 
+                    $ServiceRequest->programm_name == "Covid 2022" || 
+                    $ServiceRequest->programm_name == "PABELLON TARDE" || 
+                    $ServiceRequest->programm_name == "PABELLON GINE")
+
+                El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
 
             @else
 

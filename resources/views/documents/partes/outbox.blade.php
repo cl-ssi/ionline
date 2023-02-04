@@ -10,16 +10,16 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('documents.partes.outbox') }}">
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-1">
             <label for="for_id">Cód Int</label>
             <input type="text" class="form-control" id="for_id" name="id">
         </fieldset>
 
-        <fieldset class="form-group col-2">
+        <!-- <fieldset class="form-group col-2">
             <label for="for_type">Tipo</label>
             <input type="text" class="form-control" id="for_type" name="type">
-        </fieldset>
+        </fieldset> -->
 
         <fieldset class="form-group col-3">
             <label for="for_subject">Materia</label>
@@ -31,29 +31,16 @@
             <input type="text" class="form-control" id="for_number" name="number">
         </fieldset>
 
-
-        <fieldset class="form-group col-3">
-            <label for="for_user_id">Usuario</label>
-            <select name="user_id" id="for_user_id" class="form-control">
-                <option value=""></option>
-                @foreach($users as $user)
-                <option value="{{ $user->id }}">{{ $user->fullName }}</option>
-                @endforeach
-            </select>
+        <fieldset>
+            <label for="">&nbsp;</label>
+            <button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i></button>
         </fieldset>
-
-
-        <button type="submit" class="btn btn-primary mt-4 mb-3"><i class="fas fa-search"></i></button>
 
     </div>
 
-
-
 </form>
 
-
 <h3 class="mt-3">Todos los partes</h3>
-
 
 <table class="table table-sm table-bordered table-striped">
     <thead>
@@ -64,16 +51,6 @@
             <th>Tipo</th>
             <th>Antec</th>
             <th>Responsable</th>
-            <th></th>
-            <!--<th>subject</th>
-            <th>greater_hierarchy</th>
-            <th>distribution</th>
-            <th>content</th>
-            <th>file</th>
-            <th>user_id</th>
-            <th>organizational_unit_id</th>
-            <th>created_at</th>
-            -->
         </tr>
     </thead>
     <tbody>
@@ -82,18 +59,9 @@
             <td rowspan="2">{{ $document->id }}</td>
             <td>{{ $document->number }}</td>
             <td nowrap>{{ $document->date ? $document->date->format('d-m-Y'): '' }}</td>
-            <td>{{ $document->type }}</td>
+            <td>{{ optional($document->type)->name }}</td>
             <td>{{ $document->antecedent }}</td>
             <td>{{ $document->responsible }}</td>
-            <!--<td>{{ $document->subject }}</td>
-            <td>{{ $document->greater_hierarchy }}</td>
-            <td>{{ $document->distribution }}</td>
-            <td>{{ $document->content }}</td>
-            <td>{{ $document->file }}</td>
-            <td>{{ $document->user_id }}</td>
-            <td>{{ $document->organizational_unit_id }}</td>
-            <td>{{ $document->created_at }}</td>
-            <td>{{ $document->updated_at }}</td>-->
             <td nowrap>
                 @if($document->file)
                     <a href="{{ route('documents.download', $document) }}" class="btn btn-sm btn-outline-primary" target="_blank">

@@ -32,14 +32,14 @@ class SignedDocument extends Mailable
      */
     public function build()
     {
-        $subject = "{$this->signature->document_type} - {$this->signature->subject}";
+        $subject = "{$this->signature->type->name} - {$this->signature->subject}";
         $file = Storage::disk('gcs')->get($this->signature->signaturesFileDocument->signed_file);
 //        $file = base64_decode($this->signature->signaturesFileDocument->signed_file);
 
         $email = $this->view('documents.signatures.mails.signed_notification_recipients')
             ->subject($subject)
             ->attachData($file,
-                "{$this->signature->document_type}.pdf",
+                "{$this->signature->type->name}.pdf",
                 ['mime' => 'application/pdf']);
 
         foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {

@@ -152,10 +152,10 @@ class DigitalSignatureController extends Controller
 
             $signaturesFlow->status = 1;
             $signaturesFlow->signature_date = now();
-            
+
             if($signaturesFlow->user_id != Auth::id())
                 $signaturesFlow->real_signer_id = Auth::id();
-            
+
             $signaturesFlow->save();
 
             if ($signaturesFlow->signaturesFile->signed_file) {
@@ -192,7 +192,7 @@ class DigitalSignatureController extends Controller
                 $destinatarios = $signaturesFlow->signature->recipients;
 
                 $dest_vec=array();
-                
+
 
 
                 if (strpos($destinatarios, ',') !== false) {
@@ -208,37 +208,39 @@ class DigitalSignatureController extends Controller
                     {
                         $has_director_mail=true;
                     }
-
                 }
-                
+
                 // Entra en caso que tengo algun correo de dirección
                 if ($has_director_mail===true)
-                    {                        
+                    {
                         $generador = $signaturesFlow->signature->responsable->fullname;
                         $unidad = $signaturesFlow->signature->organizationalUnit->name;
 
-                        switch ($signaturesFlow->signature->document_type) {
-                            case 'Memorando':
-                                $this->tipo = 'Memo';
-                                break;
-                            case 'Resoluciones':
-                                $this->tipo = 'Resolución';
-                                break;
-                            default:
-                                $this->tipo = $signaturesFlow->signature->document_type;
-                                break;
-                        }
+                        // switch ($signaturesFlow->signature->document_type) {
+                        //     case 'Memorando':
+                        //         $this->tipo = 'Memo';
+                        //         break;
+                        //     case 'Resoluciones':
+                        //         $this->tipo = 'Resolución';
+                        //         break;
+                        //     default:
+                        //         $this->tipo = $signaturesFlow->signature->document_type;
+                        //         break;
+                        // }
 
                         $parte = Parte::create([
                             'entered_at' => Carbon::now(),
-                            'type' => $this->tipo,
+                            'type_id' => $signaturesFlow->signature->type_id,
                             'date' => $signaturesFlow->signature->request_date,
                             'subject' => $signaturesFlow->signature->subject,
                             'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
                             'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
                         ]);
 
-                        $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'documento')->get();
+                        $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                                            ->where('file_type', 'documento')
+                                            ->get();
+
                         ParteFile::create([
                             'parte_id' => $parte->id,
                             'file' => $distribucion->first()->file,
@@ -246,7 +248,10 @@ class DigitalSignatureController extends Controller
                             'signature_file_id' => $distribucion->first()->id,
                         ]);
 
-                        $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'anexo')->get();
+                        $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                                                ->where('file_type', 'anexo')
+                                                ->get();
+
                         foreach ($signaturesFiles as $key => $sf) {
                             ParteFile::create([
                                 'parte_id' => $parte->id,
@@ -256,7 +261,7 @@ class DigitalSignatureController extends Controller
                             ]);
                         }
                     }
-                
+
             }
 
             // Si es visación en cadena, se envía notificación por correo al siguiente firmante

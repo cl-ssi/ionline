@@ -641,7 +641,7 @@
                         href="{{ route('request_forms.show', $request_form->id) }}"
                         target="_blank"
                     >
-                        <i class="fas fa-file-alt"></i> Formulario de Requerimiento #{{ $request_form->id }}
+                        <i class="fas fa-file-alt"></i> FR Folio #{{ $request_form->folio }}
                     </a>
                 </fieldset>
             @endif

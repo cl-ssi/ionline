@@ -21,31 +21,22 @@
             </p>
         </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_date">Fecha Documento</label>
+        <fieldset class="form-group col-2">
+            <label for="for_date">Fecha Documento *</label>
             <input type="date" class="form-control" id="for_date" name="date"
-                value="{{ $parte->date }}">
+                value="{{ optional($parte->date)->format('Y-m-d') }}" required>
         </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_type">Tipo</label>
-            <select name="type" id="for_type" class="form-control" required>
-                <option {{ ($parte->type == 'Carta')?'selected':'' }} value="Carta">Carta</option>
-                <option {{ ($parte->type == 'Circular')?'selected':'' }} value="Circular">Circular</option>
-                <option {{ ($parte->type == 'Decreto')?'selected':'' }} value="Decreto">Decreto</option>
-                <option {{ ($parte->type == 'Demanda')?'selected':'' }} value="Demanda">Demanda</option>
-                <option {{ ($parte->type == 'Informe')?'selected':'' }} value="Informe">Informe</option>
-                <option {{ ($parte->type == 'Memo')?'selected':'' }} value="Memo">Memo</option>
-                <option {{ ($parte->type == 'Oficio')?'selected':'' }} value="Oficio">Oficio</option>
-                <option {{ ($parte->type == 'Ordinario')?'selected':'' }} value="Ordinario">Ordinario</option>
-                <option {{ ($parte->type == 'Otro')?'selected':'' }} value="Otro">Otro</option>
-                <option {{ ($parte->type == 'Permiso gremial')?'selected':'' }} value="Permiso gremial">Permiso Gremial</option>
-                <option {{ ($parte->type == 'Reservado')?'selected':'' }} value="Reservado">Reservado</option>
-                <option {{ ($parte->type == 'Resolucion')?'selected':'' }} value="Resolucion">Resolución</option>
+        <fieldset class="form-group col-2">
+            <label for="for_type_id">Tipo *</label>
+            <select name="type_id" id="for_type_id" class="form-control" required>
+                @foreach($types as $id => $type)
+                    <option value="{{ $id }}" {{ $parte->type_id == $id ? 'selected': '' }}>{{ $type }}</option>
+                @endforeach
             </select>
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-2">
             <label for="for_number">Número</label>
             <input type="text" class="form-control" id="for_number"
                 name="number"
@@ -53,10 +44,22 @@
         </fieldset>
 
         <fieldset class="form-group col">
+            <label for="for_reserved">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" 
+                        name="reserved" id="for_reserved" @if ($parte->reserved) checked @endif > 
+                    <label class="form-check-label" for="for_reserved">Reservado</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-group col">
             <label for="for_important">&nbsp;</label>
             <div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="important" id="for_important" value="1" @if ($parte->important) checked @endif > 
+                    <input class="form-check-input" type="checkbox" 
+                        name="important" id="for_important" @if ($parte->important) checked @endif > 
                     <label class="form-check-label" for="for_important">Importante</label>
                 </div>
             </div>
