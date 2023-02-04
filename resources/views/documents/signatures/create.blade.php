@@ -35,7 +35,7 @@
             <div class="card-body">
                 <div class="form-row">
                     <fieldset class="form-group col-6 col-md-2">
-                        <label for="for_request_date">Fecha Documento</label>
+                        <label for="for_request_date">Fecha Documento*</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date')}}" required>
                     </fieldset>
@@ -55,7 +55,7 @@
                     </fieldset>
 
                     <fieldset class="form-group col-12 col-md-7">
-                        <label for="for_subject">Materia o tema del documento</label>
+                        <label for="for_subject">Materia o tema del documento*</label>
                         <input type="text" class="form-control" id="for_subject" name="subject"
                             value="{{isset($signature) ? $signature->subject : old('subject')}}" required>
                     </fieldset>
