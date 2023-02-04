@@ -14,9 +14,9 @@ class AddReservedToDocSignaturesTable extends Migration
      */
     public function up()
     {
-        Schema::table('doc_signatures', function (Blueprint $table) {
-            $table->boolean('reserved')->nullable()->after('document_type');
-        });
+        // Schema::table('doc_signatures', function (Blueprint $table) {
+        //     $table->boolean('reserved')->nullable()->after('document_type');
+        // });
 
         $signatures = Signature::withTrashed()->get();
         foreach($signatures as $signature) {

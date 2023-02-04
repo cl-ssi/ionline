@@ -94,7 +94,7 @@ class Document extends Model implements Auditable
     public function getViewNameAttribute()
     {
         /* Borra acéntos y convierte a snake_case para obtener
-        * el nombre de la vista del documento */
+        * el nombre de la vista del documento EJ: Acta de Recepción => acta_de_recepcion */
         $accents ='àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
         $noAccents = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
         if($this->type) {

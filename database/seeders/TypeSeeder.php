@@ -14,12 +14,12 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-        Type::create([ 'name' => 'Memo']); /* DocDigital (Momorando)*/
-        Type::create([ 'name' => 'Oficio']); /* DocDigital */
-        Type::create([ 'name' => 'Carta']); /* DocDigital */
-        Type::create([ 'name' => 'Circular']); /* DocDigital */
-        Type::create([ 'name' => 'Resolución']); /* DocDigital (Resoluciones) */
-        Type::create([ 'name' => 'Convenio', 'partes_exclusive' => true]); /* DocDigital (Convenios)*/
+        Type::create([ 'name' => 'Memo', 'doc_digital' => true]); /* DocDigital (Momorando)*/
+        Type::create([ 'name' => 'Oficio', 'doc_digital' => true]); /* DocDigital */
+        Type::create([ 'name' => 'Carta', 'doc_digital' => true]); /* DocDigital */
+        Type::create([ 'name' => 'Circular', 'doc_digital' => true]); /* DocDigital */
+        Type::create([ 'name' => 'Resolución', 'doc_digital' => true]); /* DocDigital (Resoluciones) */
+        Type::create([ 'name' => 'Convenio', 'doc_digital' => true, 'partes_exclusive' => true]); /* DocDigital (Convenios)*/
         
         Type::create([ 'name' => 'Ordinario']); /* De baja, reemplazado por Oficio */
         Type::create([ 'name' => 'Informe']);
