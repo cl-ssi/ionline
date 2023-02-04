@@ -18,7 +18,7 @@ class UpdateTypeIdOnDocuments extends Migration
      */
     public function up()
     {
-        $types = Type::pluck('id','name')->toArray();
+        $types = Type::withTrashed()->pluck('id','name')->toArray();
 
         $documents = Document::withTrashed()->get();
         //'Memo','Oficio','Ordinario','Reservado','Circular','Acta de recepción','Otros','Resolución','Acta de Recepción Obras Menores'
