@@ -18,10 +18,20 @@ class CreateDocTypesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->boolean('doc_digital')->nullable();
             $table->boolean('partes_exclusive')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
+
+
+        // Call seeder table
+        Artisan::call('db:seed', [
+            '--class' => 'TypeSeeder',
+            '--force' => true
+        ]);
+
+        Type::where('name','Ordinario')->first()->delete();
 
         Schema::table('documents', function (Blueprint $table) {
             $table->foreignId('type_id')->after('type')->nullable()->constrained('doc_types');
