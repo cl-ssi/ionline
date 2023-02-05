@@ -80,19 +80,35 @@ class Establishment extends Model implements Auditable
     }
 
     /**
-    * Organizational Unit tree
+    * Organizational Unit tree for google charts
     */
-    public function getTreeAttribute()
+    public function getTreeGoogleChartAttribute()
     {
-        return $this->organizationalUnits()
-            ->where('level',1)
-            ->with([
-                'childs',
-                'childs.childs',
-                'childs.childs.childs',
-                'childs.childs.childs.childs',
-                'childs.childs.childs.childs.childs',
-            ])->first();
+        $ous = $this->organizationalUnits()
+            ->with('father')
+            ->get();
+
+        foreach($ous as $ou) {
+            $array[] = array($ou->name, $ou->father->name ?? '', '');
+        }
+        return json_encode($array);
+    }
+
+    /**
+    * Organizational Unit tree array
+    */
+    public function getTreeArrayAttribute()
+    {
+        $ous = $this->organizationalUnits()
+            ->select('id','level','name','organizational_unit_id as father_id')
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+        
+        if(!empty($ous)) {
+            $array = $this->buildTree($ous, 'father_id', 'id');
+        }
+        return $array[0];
     }
 
     /**
