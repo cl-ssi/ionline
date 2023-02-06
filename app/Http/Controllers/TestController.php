@@ -15,29 +15,6 @@ use App\Models\WebService\MercadoPublico;
 
 class TestController extends Controller
 {
-    public function ous()
-    {
-        $estab = Establishment::find(38);
-        //dump($estab->tree->toArray());
-
-        $a = $estab->tree->toArray();
-
-        $this->printAll($a);
-
-    }
-
-    function printAll($a) {
-        echo str_repeat(" - ", $a['level']). $a['name'] . '<br>';
-        if (!is_array($a)) {
-            print_r($a);
-            return;
-        }
-    
-        foreach($a['childs'] as $k) {
-            $this->printAll($k);
-        }
-    }
-
     public function getIp()
     {
         if ( !empty($_SERVER['HTTP_CLIENT_IP']) ) {
@@ -75,10 +52,10 @@ class TestController extends Controller
         echo "Primer log";
     }
 
-    // public function info()
-    // {
-    //     phpinfo();
-    // }
+    public function info()
+    {
+        phpinfo();
+    }
 
     /**
     * No cargar 
