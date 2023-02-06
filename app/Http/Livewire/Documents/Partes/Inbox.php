@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Documents\Partes;
 
 use Livewire\WithPagination;
 use Livewire\Component;
+use App\Models\Documents\Type;
 use App\Models\Documents\Parte;
 
 class Inbox extends Component
@@ -11,8 +12,10 @@ class Inbox extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $types;
+
     public $parte_id;
-    public $parte_type;
+    public $parte_type_id;
     public $parte_number;
     public $parte_origin;
     public $parte_subject;
@@ -24,8 +27,10 @@ class Inbox extends Component
     */
     public function mount()
     {
+        $this->types = Type::pluck('name','id');
+
         $this->parte_id = session('parte_id');
-        $this->parte_type = session('parte_type');
+        $this->parte_type_id = session('parte_type_id');
         $this->parte_number = session('parte_number');
         $this->parte_origin = session('parte_origin');
         $this->parte_subject = session('parte_subject');
@@ -36,7 +41,7 @@ class Inbox extends Component
     public function search() 
     {
         session(['parte_id' => $this->parte_id]);
-        session(['parte_type' => $this->parte_type]);
+        session(['parte_type_id' => $this->parte_type_id]);
         session(['parte_number' => $this->parte_number]);
         session(['parte_origin' => $this->parte_origin]);
         session(['parte_subject' => $this->parte_subject]);
@@ -55,13 +60,14 @@ class Inbox extends Component
         $partes = Parte::query()
             ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
             ->filter('id', $this->parte_id)
-            ->filter('type', $this->parte_type)
+            ->filter('type_id', $this->parte_type_id)
             ->filter('number', $this->parte_number)
             ->filter('origin', $this->parte_origin)
             ->filter('subject', $this->parte_subject)
             ->filter('without_sgr', $this->parte_without_sgr)
             ->filter('important', $this->parte_important)
             ->with([
+                'type',
                 'requirements',
                 'files',
                 'requirements.events',

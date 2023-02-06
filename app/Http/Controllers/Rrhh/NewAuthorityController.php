@@ -21,6 +21,7 @@ class NewAuthorityController extends Controller
      */
     public function index(Request $request)
     {
+        //TODO Deberia ser al reves de los establecimientos a OU
         if (auth()->user()->can('Authorities: all')) {
             $ouTopLevels = OrganizationalUnit::where('level', 1)->get();
             return view('rrhh.new_authorities.index', compact('ouTopLevels'));
@@ -32,6 +33,7 @@ class NewAuthorityController extends Controller
 
     public function calendar(OrganizationalUnit $organizationalUnit)
     {
+        //TODO optimizar las query en una
         $holidays = Holiday::select('name', 'date')->get();
         $newAuthoritiesManager = NewAuthority::with(['user' => function ($query) {
             $query->select('id', 'name', 'fathers_family');
@@ -80,6 +82,7 @@ class NewAuthorityController extends Controller
 
     public function store(Request $request)
     {
+        //TODO tratar de no basarme en el copy paste del original y ocupar la validacion del update
         $from = Carbon::createFromFormat('Y-m-d', $request->from);
         $to = Carbon::createFromFormat('Y-m-d', $request->to);
 
@@ -93,6 +96,7 @@ class NewAuthorityController extends Controller
         for ($i = 0; $i < $days; $i++) {
             $date = $from->copy()->addDays($i);
 
+            //TODO deberia estar afuera la validacion de si existe autoridad
             $existingAuthority = NewAuthority::whereBetween('date', [$from, $to])
                 ->where('organizational_unit_id', $request->organizational_unit_id)
                 ->where('type', $request->type)
@@ -104,7 +108,8 @@ class NewAuthorityController extends Controller
                 session()->flash('warning', 'Ya existe una autoridad para la fecha ' . $date->format('Y-m-d') . ' y unidad organizacional seleccionada.');
                 return redirect()->back();
             }
-
+            
+            //buscar la diferencia de request->input('user_id) 
             $newAuthority = new NewAuthority();
             $newAuthority->user_id = $request->user_id;
             $newAuthority->representation_id = $request->representation_id;
@@ -116,7 +121,7 @@ class NewAuthorityController extends Controller
             $newAuthority->save();
         }
 
-        session()->flash('info', 'El usuario ' . $newAuthority->user->fullname . ' ha sido creado como autoridad de la unidad organizacional para ' . $days . ' días.');
+        session()->flash('info', 'El usuario ' . $newAuthority->user->fullName . ' ha sido creado como autoridad de la unidad organizacional para ' . $days . ' días.');
         return redirect()->route('rrhh.new-authorities.calendar', $newAuthority->organizational_unit_id);
     }
 
@@ -134,16 +139,18 @@ class NewAuthorityController extends Controller
         $authorityThatDay = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('date', $startDate)->where('type', 'manager')->first();
         if ($request->updateFutureEventsCheck == 1) {
             $maxValue = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('type', 'manager')->where('user_id',$authorityThatDay->user_id)->max('date');
+            //TODO quitar el maxdate
             $maxDate = Carbon::parse($maxValue);
             while ($startDate->lte($maxDate)) {
+                //TODO cambiar el comportamiento de que reemplace todo (hasta la fecha)
                 $updateAuthority = NewAuthority::where('date', $startDate)
-                ->where('user_id', $authorityThatDay->user_id)
-                ->where('type', 'manager')->first();
+                    ->where('user_id', $authorityThatDay->user_id)
+                    ->where('type', 'manager')->first();
                 
                 if ($updateAuthority) {
                     $updateAuthority->user_id = $user->id;
                     $updateAuthority->save();
-                        }
+                    }
                 $startDate->addDay();
             }
             session()->flash('info', 'El usuario  ' . $user->full_name . ' ha sido dejado como autoridad  para todos los eventos a futuro de la antigua autoridad ' . $authorityThatDay->user->full_name.' Siendo la última fecha que tenia asignado como autoridad'.$maxValue);
@@ -155,7 +162,7 @@ class NewAuthorityController extends Controller
                     'user_id' => $user->id,
                 ]);
     
-            session()->flash('info', 'El usuario subrogante ' . $user->full_name . ' ha sido dejado como subrogante desde ' . $validatedData['start_date'] . ' hasta ' . $validatedData['end_date']);
+            session()->flash('info', 'El usuario subrogante ' . $user->fullName . ' ha sido dejado como subrogante desde ' . $validatedData['start_date'] . ' hasta ' . $validatedData['end_date']);
             
         }
         return redirect()->route('rrhh.new-authorities.calendar', $organizationalUnit->id);

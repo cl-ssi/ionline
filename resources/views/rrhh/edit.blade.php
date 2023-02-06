@@ -48,30 +48,9 @@
             <label for="email">Correo</label>
             <input type="email" class="form-control" name="email" value="{{$user->email}}">
         </div>
-        <div class="form-group col-11 col-md-3">
+        <div class="form-group col-11 col-md-4">
             <label for="email">Correo Personal</label>
             <input type="email" class="form-control" name="email_personal" value="{{$user->email_personal}}">
-        </div>
-        <div class="form-group col-1">
-            @if(!$user->hasVerifiedEmail())
-                <label for="mail_verification">&nbsp;</label>
-                @if($user->email_personal)
-                <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
-                    @csrf
-                    <div class="tooltip-wrapper" data-title="Verificar correo electrónico personal">
-                    <button class="btn btn-outline-primary"><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                    </div>
-                </form>
-                @else
-                <div class="tooltip-wrapper disabled" data-title="No existe registro de correo electrónico personal para ser verificada">
-                    <button class="btn btn-outline-primary" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                </div>
-                @endif
-            @else
-                <div class="tooltip-wrapper disabled" data-title="Correo electrónico personal verificada">
-                    <button class="btn btn-outline-success" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
-                </div>
-            @endif
         </div>
     </div>
 
@@ -113,6 +92,25 @@
             <button class="btn btn-sm btn-outline-warning"><span class="fas fa-redo" aria-hidden="true"></span> Switch</button>
         </form>
         @endrole
+
+        @if(!$user->hasVerifiedEmail())
+            @if($user->email_personal)
+                <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-envelope" title="Verificar correo electrónico personal"></i>
+                    </button>
+                </form>
+            @else
+                <button class="btn btn-sm btn-secondary" disabled>
+                    <i class="fas fa-envelope" title="No tiene agregado correo electrónico personal"></i>
+                </button>
+            @endif
+        @else
+            <button class="btn btn-sm btn-outline-success" disabled>
+                <i class="fas fa-envelope" title="Correo electrónico personal verificada"></i>
+            </button>
+        @endif
 
     </div>
 

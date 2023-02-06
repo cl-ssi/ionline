@@ -45,6 +45,7 @@ class SelectOrganizationalUnit extends Component
 
     public $options;
     public $ous;
+    public $ous_backup;
 
     /**
     * mount
@@ -55,7 +56,9 @@ class SelectOrganizationalUnit extends Component
         $this->establishments = Establishment::whereIn('id',[1,38,41])->get();
         $this->loadOus();
 
-        // app('debugbar')->log($this->readonlyEstablishment);
+
+
+        // app('debugbar')->log($this->ous);
     }
 
     /**
@@ -64,47 +67,52 @@ class SelectOrganizationalUnit extends Component
     public function loadOus()
     {
         $this->options = array();
+        $this->ous = array();
 
         $ous = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
             ->where('establishment_id',$this->establishment_id)
-            // ->orderBy('name')
+            ->orderBy('name')
             ->get()
             ->toArray();
         if(!empty($ous)) {
             $this->buildTree($ous, 'father_id', 'id');
         }
+
+        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
+        foreach($this->options as $id => $option) {
+            $this->ous[] = array('id'=> $id, 'name' => $option);
+        }
+
+        /** Guardo una copia para restablecer el listado cada vez que se filtra */
+        $this->ous_backup = $this->ous;
+
     }
 
     public function render()
     {
-        if($this->filter) {
-            $options = array_filter(
-                $this->options, 
-                fn($haystack) => str_contains(
-                    strtolower($haystack), strtolower($this->filter)
-                )
-            );
-        }
-        else {
-            $options = $this->options;
-        }
-
         /** Si se seteo por parametro un listener, entonces le enviamos a ese listener la ou_id */
         if($this->emitToListener) {
             $this->emit($this->emitToListener,$this->organizational_unit_id);
         }
 
-        /** Vacía el array ou antes de formar una con pares de valores id,name */
-        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
-        $this->ous = array();
+        /** Restaura las ous en base a la copia */
+        $this->ous = $this->ous_backup;
 
-        foreach($options as $id => $option) {
-            $this->ous[] = array('id'=> $id, 'name' => $option);
+        /** Filtra el listado */
+        if($this->filter) {
+            $this->ous = array_filter(
+                $this->ous, 
+                fn($haystack) => str_contains(
+                    strtolower($this->stripAccents($haystack['name'])), strtolower($this->stripAccents($this->filter))
+                )
+            );
         }
 
-        // app('debugbar')->log($this->ous);
-
         return view('livewire.select-organizational-unit');
+    }
+
+    function stripAccents($str) {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
 
     /**

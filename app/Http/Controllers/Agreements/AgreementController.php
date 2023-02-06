@@ -345,7 +345,7 @@ class AgreementController extends Controller
 
         $signature = new Signature();
         $signature->request_date = $agreement->date;
-        $signature->document_type = 'Convenios';
+        $signature->type_id = Type::where('name','Convenio')->first()->id;
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
         $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;

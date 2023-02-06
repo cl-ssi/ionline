@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Rrhh\storeUser;
-use App\Http\Requests\Rrhh\updatePassword;
-use App\Rrhh\Authority;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Rrhh\Authority;
 use App\Models\Rrhh\UserBankAccount;
 use App\Models\Parameters\AccessLog;
+use App\Models\Establishment;
+use App\Http\Requests\Rrhh\updatePassword;
+use App\Http\Requests\Rrhh\storeUser;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -26,12 +28,15 @@ class UserController extends Controller
     {
         $users = User::getUsersBySearch($request->get('name'))
             ->filter('organizational_unit_id',$request->input('organizational_unit_id'))
+            ->filter('permission',$request->input('permission'))
             ->with([
                 'organizationalUnit',
                 'permissions',
                 'roles',
             ])->orderBy('name', 'Asc')->paginate(150);
-        return view('rrhh.index', compact('users'));
+        $permissions = Permission::orderBy('name')->pluck('name');
+        
+        return view('rrhh.index', compact('users','permissions'));
     }
 
     /**
@@ -39,34 +44,31 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function directory(Request $request)
+    public function directory(Request $request, Establishment $establishment = null, OrganizationalUnit $organizationalUnit = null)
     {
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+        
+        $establishments = Establishment::whereIn('id',$establishments_ids)->orderBy('official_name')->get();
+
         if ($request->input('name')) {
-            $users = User::getUsersBySearch($request->name)
-                ->orderBy('name', 'Asc')
-                ->with('OrganizationalUnit', 'Telephones')
+            $users = User::with('organizationalUnit','organizationalUnit.establishment','telephones')
+                ->findByUser($request->get('name'))
                 ->withTrashed(false)
+                ->orderBy('name')
                 ->paginate(50);
-        } else {
-            if ($request->get('ou')) {
-                $users = User::with('organizationalunit')
-                    ->where('organizational_unit_id', $request->get('ou'))
-                    ->withTrashed(false)
-                    ->with('OrganizationalUnit', 'Telephones')
-                    ->orderBy('name')
-                    ->paginate(50);
-                //$users = User::has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
-                //$users = $users->has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
-            } else {
-                //$users = User::has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
-                //$users = $users->has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
-                $users = collect();
-            }
+        }
+        elseif($organizationalUnit) {
+            $users = User::with('organizationalUnit','organizationalUnit.establishment','telephones')
+                ->where('organizational_unit_id',$organizationalUnit->id)
+                ->withTrashed(false)
+                ->orderBy('name')
+                ->paginate(50);
+        }
+        else {
+            $users = collect();
         }
 
-        /* Devuelve sólo Dirección, ya que de él dependen todas las unidades organizacionales hacia abajo */
-        $organizationalUnit = OrganizationalUnit::with('childs','childs.childs','childs.childs.childs','childs.childs.childs')->find(1);
-        return view('rrhh.directory')->withUsers($users)->withOrganizationalUnit($organizationalUnit);
+        return view('rrhh.directory', compact('establishments','establishment','users'));
     }
 
     /**

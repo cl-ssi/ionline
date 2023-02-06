@@ -174,7 +174,7 @@ class AddendumController extends Controller
 
         $signature = new Signature();
         $signature->request_date = $addendum->date;
-        $signature->document_type = 'Convenios';
+        $signature->type_id = Type::where('name','Convenio')->first()->id;
         $signature->type = $type;
         $signature->addendum_id = $addendum->id;
         $signature->subject = 'Addendum Convenio programa '.$programa.' comuna de '.$addendum->agreement->commune->name;

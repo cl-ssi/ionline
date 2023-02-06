@@ -31,7 +31,7 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('documents.add_number') }}">
-            <i class="fas fa-certificate"></i> Nuevo Egreso
+            <i class="fas fa-certificate"></i> Numerar y distribuir
         </a>
     </li>
     @endcan

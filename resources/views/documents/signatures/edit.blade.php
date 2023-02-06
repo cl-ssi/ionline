@@ -10,26 +10,35 @@
     @csrf
     @method('PUT')
     <div class="form-row">
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-2">
             <label for="for_request_date">Fecha Documento</label>
             <input type="date" class="form-control" id="for_request_date" name="request_date" required
                    value="{{ old('request_date', \Carbon\Carbon::parse($signature->request_date)->format('Y-m-d')) }}"
             >
         </fieldset>
-    </div>
+        
+        <fieldset class="form-group col-2">
+            @livewire('signatures.document-types', ['type_id' => $signature->type_id])
+        </fieldset>
 
-    <div class="form-row">
-        @livewire('signatures.document-types', ['selectedDocumentType' => $signature->document_type])
+        <fieldset class="form-group col-1">
+            <label for="for_reserved">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="reserved" id="for_reserved" {{ $signature->reserved ? 'checked':'' }}>
+                    <label class="form-check-label" for="for_reserved">Reserv.</label>
+                </div>
+            </div>
+        </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-7">
             <label for="for_subject">Materia o tema del documento</label>
             <input type="text" class="form-control" id="for_subject" name="subject" required value="{{ old('subject', $signature->subject) }}">
         </fieldset>
-
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-12">
             <label for="for_description">Descripción del documento</label>
             <input type="text" class="form-control" id="for_description" name="description" value="{{ old('description', $signature->description) }}">
         </fieldset>

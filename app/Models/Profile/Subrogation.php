@@ -33,12 +33,12 @@ class Subrogation extends Model
     
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
     
     public function subrogant()
     {
-        return $this->belongsTo(User::class,'subrogant_id');
+        return $this->belongsTo(User::class,'subrogant_id')->withTrashed();
     }
     
     public function organizationalUnit()

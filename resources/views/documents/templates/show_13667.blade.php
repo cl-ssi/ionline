@@ -118,7 +118,7 @@
                     </p>
                     <div class="numero-partes" style="padding-top: 40px;">23.423</div>
                 </div>
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ optional($document->type)->name }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
                 <div class="left" style="padding-bottom: 6px; text-align: justify;">
                     <strong>ANT:</strong> {{ $document->antecedent }}

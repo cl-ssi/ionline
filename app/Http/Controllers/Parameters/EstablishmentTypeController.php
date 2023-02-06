@@ -16,7 +16,7 @@ class EstablishmentTypeController extends Controller
     public function index()
     {
         //
-        $establishmentTypes = EstablishmentType::All();
+        $establishmentTypes = EstablishmentType::orderBy('name', 'asc')->get();
         return view('parameters.establishmenttypes.index', compact('establishmentTypes'));
     }
 

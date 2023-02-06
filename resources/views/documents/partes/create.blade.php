@@ -19,39 +19,41 @@
                 name="entered_at" value="{{ date('Y-m-d\TH:i') }}" required>
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-2">
             <label for="for_date">Fecha Documento*</label>
             <input type="date" class="form-control" id="for_date"name="date" required>
         </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_type">Tipo*</label>
-            <select name="type" id="for_type" class="form-control" required>
-                <option value="Carta">Carta</option>
-                <option value="Circular">Circular</option>
-                <option value="Decreto">Decreto</option>
-                <option value="Demanda">Demanda</option>
-                <option value="Informe">Informe</option>
-                <option value="Memo">Memo</option>
-                <option value="Oficio">Oficio</option>
-                <option value="Ordinario">Ordinario</option>
-                <option value="Otro">Otro</option>
-                <option value="Permiso Gremial">Permiso Gremial</option>
-                <option value="Reservado">Reservado</option>
-                <option value="Resolucion">Resolución</option>
+        <fieldset class="form-group col-2">
+            <label for="for_type_id">Tipo*</label>
+            <select name="type_id" id="for_type_id" class="form-control" required>
+                <option value=""></option>
+                @foreach($types as $id => $type)
+                    <option value="{{ $id }}">{{ $type }}</option>
+                @endforeach
             </select>
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-2">
             <label for="for_number">Número</label>
-            <input type="text" class="form-control" id="for_number" name="number">
+            <input type="number" class="form-control" id="for_number" name="number">
+        </fieldset>
+
+        <fieldset class="form-group col">
+            <label for="for_reserved">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="reserved" id="for_reserved">
+                    <label class="form-check-label" for="for_reserved">Reservado</label>
+                </div>
+            </div>
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_important">&nbsp;</label>
             <div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="important" id="for_important" value="1">
+                    <input class="form-check-input" type="checkbox" name="important" id="for_important">
                     <label class="form-check-label" for="for_important">Importante</label>
                 </div>
             </div>

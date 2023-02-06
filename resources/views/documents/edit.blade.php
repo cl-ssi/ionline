@@ -21,8 +21,7 @@
     <div class="form-row">
         <div class="form-group col-2">
             <label for="forNumber">Número</label>
-            <input type="text" class="form-control" id="forNumber" name="number"
-                value="{{ $document->number }}" readonly>
+            @livewire('documents.enumerate',['document' => $document])
         </div>
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
@@ -31,16 +30,23 @@
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type" id="formType" class="form-control" required>
-                <option value="Memo" {{ $document->type === 'Memo' ? 'selected' : '' }}>Memo</option>
-                <option value="Oficio" {{ $document->type === 'Oficio' ? 'selected' : '' }}>Oficio</option>
-                <option value="Ordinario" {{ $document->type === 'Ordinario' ? 'selected' : '' }} >Ordinario</option>
-                <option value="Reservado" {{ $document->type === 'Reservado' ? 'selected' : '' }}>Reservado</option>
-                <option value="Circular" {{ $document->type === 'Circular' ? 'selected' : '' }}>Circular</option>
-                <option value="Acta de recepción" {{ $document->type === 'Acta de recepción' ? 'selected' : '' }}>Acta de recepción</option>
-                <option value="Resolución" @if($document->type == 'Resolución') selected @endif>Resolución</option>
+            <select name="type_id" id="for_type_id" class="form-control" required>
+                <option value=""></option>
+                @foreach($types as $id => $type)
+                    <option value="{{ $id }}" {{ $document->type_id == $id ? 'selected' : '' }}>{{ $type }}</option>
+                @endforeach
             </select>
         </div>
+        <fieldset class="form-group col-1">
+            <label for="for_reserved">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" 
+                        name="reserved" id="for_reserved" {{ $document->reserved ? 'checked' : '' }}>
+                    <label class="form-check-label" for="for_reserved">Reservado</label>
+                </div>
+            </div>
+        </fieldset>
         <div class="form-group col">
             <label for="for_antecedent">Antecedente</label>
             <input type="text" class="form-control" id="for_antecedent"

@@ -107,6 +107,21 @@
                     <input class="form-control form-control-sm" wire:model.defer="fileRequests" id="for_fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                     <div wire:loading wire:target="fileRequests">Cargando archivo(s)...</div>
                 </fieldset>
+
+                <fieldset class="form-group col-12 col-md-4">
+                    <label for="for_technical_review_ou_id">
+                        U.O. Evaluación Técnica
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                            title="Completar este campo en caso de requerir Evaluación Técnica para este formulario">
+                            <span class="fas fa-info-circle"></span>
+                        </span>
+                    </label>
+                    @livewire('search-select-organizational-unit', [
+                        'emit_name'            => 'searchedTechnicalReviewOu',
+                        'selected_id'          => 'technical_review_ou_id',
+                        'small_option'         => true
+                    ])
+                </fieldset>
             </div>
 
             <div class="form-row">

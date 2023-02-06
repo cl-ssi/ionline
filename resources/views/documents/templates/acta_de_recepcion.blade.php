@@ -6,7 +6,7 @@
         <meta charset="utf-8">
         <title>Intranet {{ $document->number }} - {{ $document->subject }}</title>
         <meta name="description" content="Documento">
-        <meta name="author" content="Alvaro Torres F. <alvaro.torres@redsalud.gob.cl>">
+        <meta name="author" content="<sistemas.ssi@redsalud.gob.cl>">
 
         <style>
             body, table {

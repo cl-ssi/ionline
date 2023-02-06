@@ -321,7 +321,7 @@ class SuitabilityController extends Controller
             $signature->responsable_id = Auth::id();
             $signature->ou_id = Auth::user()->organizational_unit_id;
             $signature->request_date = now();
-            $signature->document_type = 'Carta';
+            $signature->type_id = Type::where('name','Carta')->first()->id;
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv}, Establecimiento:{$result->psirequest->school->name} ";
             //            $signature->endorse_type = 'Visación opcional';

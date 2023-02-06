@@ -36,13 +36,21 @@
 
 <form method="GET" action="{{ route('rrhh.users.index') }}">
     <div class="form-row">
-        <fieldset class="col-8">
+        <fieldset class="col-7">
             @livewire('select-organizational-unit', [
                 'establishment_id' => auth()->user()->organizationalUnit->establishment->id, 
                 'required' => false,
             ])
         </fieldset>
-        <fieldset class="col-4">
+        <fieldset class="col-2">
+            <select class="form-control" name="permission">
+                <option value="">Permisos</option>
+                @foreach($permissions as $permission)
+                    <option>{{ $permission }}</option>
+                @endforeach
+            </select>
+        </fieldset>
+        <fieldset class="col-3">
             <div class="input-group mb-3">
                 <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus autocomplete="off">
                 <div class="input-group-append">
@@ -58,6 +66,7 @@
 
 <br>
 
+Total de registros: {{ $users->total() }}
 <table class="table table-responsive-xl table-striped table-sm">
     <thead class="thead-dark">
         <tr>
@@ -101,7 +110,6 @@
     </tbody>
 
 </table>
-
 {{ $users->links() }}
 
 @endsection

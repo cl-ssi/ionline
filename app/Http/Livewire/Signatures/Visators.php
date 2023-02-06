@@ -49,9 +49,9 @@ class Visators extends Component
         }
     }
 
-    public function configureDocumentType($documentType)
+    public function configureDocumentType($type_id)
     {
-        $this->selectedDocumentType = $documentType;
+        $this->selectedDocumentType = $type_id;
     }
 
     public function add($i, $visatorType = 'visador')
@@ -85,7 +85,16 @@ class Visators extends Component
             }
         }
 
-        return view('livewire.signatures.visators')
-            ->withOuRoots(OrganizationalUnit::where('level', 1)->whereIn('establishment_id', [38, 1])->get());
+        $ouRoots = OrganizationalUnit::with([
+                'childs',
+                'childs.childs',
+                'childs.childs.childs',
+                'childs.childs.childs.childs',
+            ])
+            ->where('level', 1)
+            ->whereIn('establishment_id', [38, 1])
+            ->get();
+
+        return view('livewire.signatures.visators', compact('ouRoots'));
     }
 }

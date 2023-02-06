@@ -99,6 +99,10 @@ class RequestFormController extends Controller {
           $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
           if(Auth::user()->organizationalUnit->id == $ouSearch && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
         }
+        $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
+            ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
+            ->count();
+        if($ouTechnicalReview > 0) $events_type[] = 'technical_review_event';
 
         return $events_type;
     }
@@ -246,7 +250,16 @@ class RequestFormController extends Controller {
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
         }
 
-        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'pre_budget_event' => 'Nuevo presupuesto', 'budget_event' => 'Nuevo presupuesto'];
+        $eventTitles = [
+            'superior_leader_ship_event'    => 'Dirección', 
+            'leader_ship_event'             => 'Jefatura', 
+            'pre_finance_event'             => 'Refrendación Presupuestaria', 
+            'finance_event'                 => 'Finanzas', 
+            'supply_event'                  => 'Abastecimiento', 
+            'pre_budget_event'              => 'Nuevo presupuesto', 
+            'budget_event'                  => 'Nuevo presupuesto',
+            'technical_review_event'        => 'Revisión técnica'
+        ];
 
         $events_type_user = $this->get_events_type_user();
         // return $events_type_user;

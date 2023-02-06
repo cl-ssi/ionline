@@ -10,6 +10,7 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
 use App\User;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class RequestFormCreate extends Component
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
 
     public $name, $contractManagerId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM,
-            $program, $fileRequests = [], $justify, $totalDocument;
+            $program, $fileRequests = [], $justify, $totalDocument, $technicalReviewOuId;
 
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF, $savedFiles;
     public $budget_item_id, $lstPurchaseMechanism;
@@ -42,7 +43,7 @@ class RequestFormCreate extends Component
 
     public $form_status, $lstProgram, $program_id;
 
-    protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers', 'searchedContractManager'];
+    protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers', 'searchedContractManager', 'searchedTechnicalReviewOu'];
 
     protected function rules(){
       return [
@@ -350,6 +351,10 @@ class RequestFormCreate extends Component
 
         if($this->editRF){
           if($this->form_status == 'sent'){
+              if($this->technicalReviewOuId){
+                  $req->technical_review_ou_id = $this->technicalReviewOuId;
+                  EventRequestform::createTechnicalReviewEvent($req);
+              }
               EventRequestform::createLeadershipEvent($req);
               EventRequestform::createPreFinanceEvent($req);
               EventRequestform::createFinanceEvent($req);
@@ -397,6 +402,10 @@ class RequestFormCreate extends Component
         else{ // nuevo formulario de requerimiento
           $req->update(['folio' => $this->createFolio()]);
           if($this->form_status == 'sent'){
+              if($this->technicalReviewOuId){
+                  $req->technical_review_ou_id = $this->technicalReviewOuId;
+                  EventRequestform::createTechnicalReviewEvent($req);
+              }
               EventRequestform::createLeadershipEvent($req);
               EventRequestform::createPreFinanceEvent($req);
               EventRequestform::createFinanceEvent($req);
@@ -503,5 +512,9 @@ class RequestFormCreate extends Component
 
     public function searchedContractManager(User $user){
       $this->contractManagerId = $user->id;
-  }
+    }
+
+    public function searchedTechnicalReviewOu(OrganizationalUnit $organizationalUnit){
+      $this->technicalReviewOuId = $organizationalUnit->id;
+    }
 }

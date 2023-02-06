@@ -12,21 +12,12 @@
         </fieldset>
 
         <fieldset class="form-group col-2">
-            <label for="for_type">Tipo</label>
-            <select wire:model.defer="parte_type" id="for_type" class="form-control">
+            <label for="for_type_id">Tipo</label>
+            <select wire:model.defer="parte_type_id" id="for_type_id" class="form-control">
                 <option></option>
-                <option value="Carta">Carta</option>
-                <option value="Circular">Circular</option>
-                <option value="Decreto">Decreto</option>
-                <option value="Demanda">Demanda</option>
-                <option value="Informe">Informe</option>
-                <option value="Memo">Memo</option>
-                <option value="Oficio">Oficio</option>
-                <option value="Ordinario">Ordinario</option>
-                <option value="Otro">Otro</option>
-                <option value="Permiso Gremial">Permiso Gremial</option>
-                <option value="Reservado">Reservado</option>
-                <option value="Resolucion">Resolución</option>
+                @foreach($types as $id => $type)
+                    <option value="{{ $id }}">{{ $type }}</option>
+                @endforeach
             </select>
         </fieldset>
 
@@ -109,12 +100,15 @@
                     <small>{{ $parte->entered_at }}</small>
                 </td>
                 <td>
-                    {{ $parte->type }}
-                    @if($parte->important)
-                        <i class="fas fa-exclamation" style="color: red;"></i>
+                    @if($parte->reserved)
+                        <i class="fas fa-user-secret"></i>
                     @endif
+                    @if($parte->important)
+                        <i class="fas fa-exclamation"></i>
+                    @endif
+                    {{ $parte->type->name }}
                 </td>
-                <td nowrap>{{ $parte->CreationParteDate }}</td>
+                <td nowrap>{{ optional($parte->date)->format('d-m-Y') }}</td>
                 <td class="text-center">{{ $parte->number }}</td>
                 <td>{{ $parte->origin }}</td>
                 <td nowrap class="text-right">
