@@ -40,7 +40,7 @@
                 <th>Unidad Organizacional</th>
                 <th>Destinatario</th>
                 <th>En copia</th>
-                <th>Categoría</th>
+                <!-- <th>Categoría</th> -->
             </tr>
         </thead>
         <tbody>
@@ -51,14 +51,14 @@
                     <td>{{ $user->tinnyName }}</td>
                     <!-- <td><input class="form-check-input" type="checkbox" value=""></td> -->
                     <td>No</td>
-                    <td>
+                    <!-- <td>
                         <select name="categories[]" id="" class="form-control">
                             <option value=""></option>
                             @foreach($user->organizationalUnit->categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>
                             @endforeach
                         </select>
-                    </td>
+                    </td> -->
                 </tr>
             @endforeach
             @foreach($user_cc_array as $user)
@@ -68,7 +68,7 @@
                     <td>{{ $user->tinnyName }}</td>
                     <!-- <td><input class="form-check-input" type="checkbox" value="" checked></td> -->
                     <td>Sí</td>
-                    <td></td>
+                    <!-- <td></td> -->
                 </tr>
             @endforeach
         </tbody>
