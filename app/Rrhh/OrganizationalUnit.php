@@ -6,6 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Requirements\Category;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -174,7 +175,8 @@ class OrganizationalUnit extends Model implements Auditable
         $array_search = explode(' ', $searchText);
         foreach($array_search as $word){
             $organizationalUnits->where(function($q) use($word){
-                $q->where('name', 'LIKE', '%'.$word.'%');
+                $q->where('name', 'LIKE', '%'.$word.'%')
+                ->where('establishment_id', Auth::user()->organizationalUnit->establishment_id);
             });
         }
 
