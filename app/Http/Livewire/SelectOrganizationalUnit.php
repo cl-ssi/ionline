@@ -56,13 +56,7 @@ class SelectOrganizationalUnit extends Component
         $this->establishments = Establishment::whereIn('id',[1,38,41])->get();
         $this->loadOus();
 
-        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
-        foreach($this->options as $id => $option) {
-            $this->ous[] = array('id'=> $id, 'name' => $option);
-        }
 
-        /** Guardo una copia para restablecer el listado cada vez que se filtra */
-        $this->ous_backup = $this->ous;
 
         // app('debugbar')->log($this->ous);
     }
@@ -73,6 +67,7 @@ class SelectOrganizationalUnit extends Component
     public function loadOus()
     {
         $this->options = array();
+        $this->ous = array();
 
         $ous = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
             ->where('establishment_id',$this->establishment_id)
@@ -82,6 +77,15 @@ class SelectOrganizationalUnit extends Component
         if(!empty($ous)) {
             $this->buildTree($ous, 'father_id', 'id');
         }
+
+        /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
+        foreach($this->options as $id => $option) {
+            $this->ous[] = array('id'=> $id, 'name' => $option);
+        }
+
+        /** Guardo una copia para restablecer el listado cada vez que se filtra */
+        $this->ous_backup = $this->ous;
+
     }
 
     public function render()
