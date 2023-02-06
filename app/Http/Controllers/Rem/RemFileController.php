@@ -185,22 +185,25 @@ class RemFileController extends Controller
         // Iterar sobre los períodos
         foreach ($periods as $period) {
             // Verificar si existe un archivo en el período correspondiente y de tipo Original
-            $fileExists = $remFiles
-                ->where('period', $period->period)
+            
+            $fileExists = RemFile::
+                where('period', $period->period)
                 ->whereNotNull('filename')
                 ->where('type', 'Original')
                 ->first();
 
+                
+
             // Verificar si existe una autorización en el período correspondiente
-            $fileAutorizacion = $remFiles
-                ->where('period', $period->period)
+            $fileAutorizacion = RemFile::
+                where('period', $period->period)
                 ->whereNotNull('filename')
                 ->where('type', 'Autorizacion')
                 ->first();
 
             // Verificar si existe un archivo de correccion en el período correspondiente
-            $fileCorreccion = $remFiles
-                ->where('period', $period->period)
+            $fileCorreccion = RemFile::
+                where('period', $period->period)
                 ->whereNotNull('filename')
                 ->where('type', 'Correccion')
                 ->first();
@@ -235,4 +238,16 @@ class RemFileController extends Controller
     {
         return Storage::disk('gcs')->download($remFile->filename);
     }
+
+    public function destroy(RemFile $remFile)
+    {
+        $remFile->delete();
+        Storage::disk('gcs')->delete($remFile->filename);
+        session()->flash('danger', 'Su Archivo ha sido eliminado.');
+        // Redirigir a la misma página en la que se encuentra el componente
+        return redirect()->route('rem.files.rem_correccion');
+        
+    }
+
+
 }

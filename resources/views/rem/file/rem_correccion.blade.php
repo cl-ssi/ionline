@@ -26,8 +26,16 @@
             <td>
                 @if($filesExist[$key] && $filesExist[$key]->type == 'Original')
                 @if($filesAutorizacion[$key])
-                <span class="text-success">Existe archivo de Autorización por lo que puede Descargar la autorizacion o proceder a subir modificaciones a REM</span><br>
-                <a href="{{ route('rem.files.download', $filesAutorizacion[$key]->id) }}" class="btn btn-primary">Descargar</a>
+                <span class="text-success">Existe archivo de Autorización por lo que puede Descargar la autorizacion o proceder a subir modificaciones a REM</span>
+                <br>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('rem.files.download', $filesAutorizacion[$key]->id) }}" class="btn btn-primary">Descargar</a>
+                    <form method="POST" class="form-horizontal" action="{{ route('rem.files.destroy', $filesAutorizacion[$key]->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="form-horizontal btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar la autorización, recordar que no podrá  modificar los REM hasta que no tenga una autorización?' )"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
                 <br><br>
                 <ul>
                     Serie:{{$filesExist[$key]->periodSerie->serie->name??''}} <strong style="color: red;">Corrección</strong>

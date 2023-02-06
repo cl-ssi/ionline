@@ -35,7 +35,6 @@
                 <i class="fas fa-save"></i>
             </button>
         </div>
-
     </div>
     @endif
 
@@ -47,15 +46,15 @@
     {{-- Muestra el campo de carga de archivo --}}
     <div class="input-group">
         <div class="custom-file">
-            <input type="file" wire:model="file" id="for-file" class="custom-file-input" required>
+            <input type="file" wire:model="file" id="for-file" class="custom-file-input" accept=".xlsx,.xls" required>
             <label class="custom-file-label form-control-sm" for="for-file" data-browse="Examinar" style="white-space: nowrap;">
                 <div wire:loading wire:target="file"><strong>Cargando</strong></div>
             </label>
-            <div class="input-group-append">
-                <button type="button" wire:click="save" class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-save"></i>
-                </button>
-            </div>
+        </div>
+        <div class="text-center">
+            <button type="button" wire:click="save" class="btn btn-primary btn-circle">
+                <i class="fas fa-save"></i>
+            </button>
         </div>
     </div>
 

@@ -2090,6 +2090,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
         Route::get('/download/{remFile}', [RemFileController::class, 'download'])->name('download');
+        Route::delete('/{remFile}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
