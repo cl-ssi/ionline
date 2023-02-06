@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Rrhh\OrganizationalUnit;
 
-
 class SearchSelectOrganizationalUnit extends Component
 {
     /** Uso:
