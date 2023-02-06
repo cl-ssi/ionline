@@ -118,6 +118,7 @@ class Establishment extends Model implements Auditable
     {
         $ous = $this->organizationalUnits()
             ->select('id','level','name','organizational_unit_id as father_id')
+            ->orderBy('name')
             ->get()
             ->toArray();
         

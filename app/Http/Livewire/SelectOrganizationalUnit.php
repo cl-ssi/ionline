@@ -67,7 +67,7 @@ class SelectOrganizationalUnit extends Component
 
         $ous = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
             ->where('establishment_id',$this->establishment_id)
-            // ->orderBy('name')
+            ->orderBy('name')
             ->get()
             ->toArray();
         if(!empty($ous)) {
