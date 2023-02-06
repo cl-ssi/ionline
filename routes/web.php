@@ -1220,6 +1220,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
 
     Route::get('/create', [RequirementController::class,'show'])->name('create');
     Route::post('/', [RequirementController::class,'store'])->name('store');
+    Route::post('/directorStore', [RequirementController::class,'director_store'])->name('directorStore');
     Route::get('/{requirement}', [RequirementController::class,'show'])->name('show');
     Route::delete('/{requirement}', [RequirementController::class,'destroy'])->name('destroy');
 });

@@ -22,7 +22,7 @@
     @endif
     </div>
     <div class="col-md-4 col-12">
-        <form method="POST" class="form-horizontal" action="{{ route('requirements.store') }}" enctype="multipart/form-data">
+        <form method="POST" class="form-horizontal" action="{{ route('requirements.directorStore') }}" enctype="multipart/form-data">
             @csrf
             @method('POST')
 
@@ -36,6 +36,7 @@
                         'mobile' => true,
                         'selectpicker' => false,
                         'emitToListener' => 'selectUser',
+                        'selected_id' => 'to_ou_id',
                     ])
                 </fieldset>
             </div>
@@ -81,12 +82,9 @@
                     </a>
                 </div>
                 <div class="col-8">
-                    <button type="submit" class="btn btn-success form-control">Derivar ({{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}} pendientes)</button>
+                    <button type="submit" id="submit" class="btn btn-success form-control">Derivar ({{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}} pendientes)</button>
                 </div>
                 <div class="col-2">
-                    <!-- <button type="submit" class="btn btn-primary form-control">
-                        <i class="fas fa-arrow-circle-right"></i>
-                    </button> -->
                     <a @if($next) href="{{ route('requirements.createFormParte', $next) }}" @endif>
                         <button type="button" class="btn btn-primary form-control">
                             <i class="fas fa-arrow-circle-right"></i>
@@ -108,5 +106,24 @@
 @endsection
 
 @section('custom_js')
+<script>
+
+    $(document).ready(function(){
+        
+        $("#submit").click(function(){
+            //Attempt to get the element using document.getElementById
+            var element = document.getElementById("users");
+
+            //If it isn't "undefined" and it isn't "null", then it exists.
+            if(typeof(element) != 'undefined' && element != null){
+                // alert('Element exists!');
+            } else{
+                alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+                return false;
+            }
+        });
+    });
+
+</script>
 
 @endsection
