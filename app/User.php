@@ -487,16 +487,18 @@ class User extends Authenticatable implements Auditable
     public static function getUsersBySearch($searchText)
     {
         $users = User::query()->withTrashed();
-        $array_search = explode(' ', $searchText);
-        foreach($array_search as $word)
-        {
-            $users->where(function($q) use($word) {
-                $q->where('name', 'LIKE', '%'.$word.'%')
-                ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                ->orwhere('id','LIKE', '%'.$word.'%');
-                //->orwhere('dv','LIKE', '%'.$word.'%');
-            });
+        if($searchText) {
+            $array_search = explode(' ', $searchText);
+            foreach($array_search as $word)
+            {
+                $users->where(function($q) use($word) {
+                    $q->where('name', 'LIKE', '%'.$word.'%')
+                    ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                    ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                    ->orwhere('id','LIKE', '%'.$word.'%');
+                    //->orwhere('dv','LIKE', '%'.$word.'%');
+                });
+            }
         }
         return $users;
     }
