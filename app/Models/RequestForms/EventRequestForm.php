@@ -62,6 +62,9 @@ class EventRequestForm extends Model
 
     public function getEventTypeValueAttribute(){
         switch ($this->event_type) {
+            case "technical_review_event":
+                return 'Evaluación Técnica';
+                break;
             case "leader_ship_event":
                 return 'Jefatura Directa';
                 break;

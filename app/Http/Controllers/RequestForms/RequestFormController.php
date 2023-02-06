@@ -128,8 +128,8 @@ class RequestFormController extends Controller {
           }
 
           foreach($events_type as $event_type){
-              $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
-              // return $prev_event_type;
+              $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event', 'technical_review_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : ($event_type == 'leader_ship_event' ? 'technical_review_event' : null))));
+            //   return $prev_event_type;
               $result = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                   ->where('status', 'pending')
                   ->whereHas('eventRequestForms', function($q) use ($event_type, $iam_authorities_in){
