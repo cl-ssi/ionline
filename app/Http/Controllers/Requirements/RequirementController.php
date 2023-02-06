@@ -975,8 +975,6 @@ class RequirementController extends Controller
           return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
         }
 
-        // dd($request->users);
-
         if(!$request->users){
             return redirect()->back()->with('warning', 'Debe ingresar por lo menos un usuario a quien crear el requerimiento.');
         }
@@ -984,14 +982,11 @@ class RequirementController extends Controller
         //encuentra cuales son usuarios para requerimientos, y cuales son en copia
         $users_req = null;
         $users_enCopia = null;
-        $categories_array_ = null;
+        // dd($request->enCopia);
+
         foreach ($request->enCopia as $key => $enCopia) {
             if ($enCopia == 0) {
                 $users_req[] = $request->users[$key];
-                // obtiene categorías seleccionadas
-                if($request->categories!=null){
-                    $categories_array_[] = $request->categories[$key];
-                }
             }
             if ($enCopia == 1) {
                 $users_enCopia[] = $request->users[$key];
@@ -1000,10 +995,6 @@ class RequirementController extends Controller
 
         //se crearán requerimientos según usuarios agregados en tabla dinámica.
         $users = array_unique($users_req); //distinct
-        $categories_array = null;
-        if($categories_array_){
-            $categories_array = array_unique($categories_array_); //distinct
-        }
         $flag = 0;
 
         //obtiene nro para agrupar requerimientos
@@ -1036,9 +1027,6 @@ class RequirementController extends Controller
             $requirement->user()->associate(Auth::user());
             $requirement->group_number = $group_number;
             $requirement->to_authority = $isAnyManager;
-            if($categories_array){
-                $requirement->category_id = $categories_array[$key];
-            }
             $requirement->save();
 
             /** Asigna las labels al requerimiento */
@@ -1133,8 +1121,8 @@ class RequirementController extends Controller
 
         // get actual parte
         $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
-        ->where('id', '>', $request->parte_id)->min('id');
-        $parte = Parte::find($parte);
+            ->where('id', '>', $request->parte_id)->min('id');
+            $parte = Parte::find($parte);
 
         // get previous user id
         $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')

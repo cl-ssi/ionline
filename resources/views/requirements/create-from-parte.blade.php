@@ -110,18 +110,18 @@
 
     $(document).ready(function(){
         
-        $("#submit").click(function(){
-            //Attempt to get the element using document.getElementById
-            var element = document.getElementById("users");
+        // $("#submit").click(function(){
+        //     //Attempt to get the element using document.getElementById
+        //     var element = document.getElementById("users");
 
-            //If it isn't "undefined" and it isn't "null", then it exists.
-            if(typeof(element) != 'undefined' && element != null){
-                // alert('Element exists!');
-            } else{
-                alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
-                return false;
-            }
-        });
+        //     //If it isn't "undefined" and it isn't "null", then it exists.
+        //     if(typeof(element) != 'undefined' && element != null){
+        //         // alert('Element exists!');
+        //     } else{
+        //         alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+        //         return false;
+        //     }
+        // });
     });
 
 </script>
