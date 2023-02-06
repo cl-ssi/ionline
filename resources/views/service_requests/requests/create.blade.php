@@ -221,45 +221,45 @@
 			<label for="for_programm_name">Nombre Programa*</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
-				<option value=""></option>
-				<option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
-				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
-				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
-				<option value="Covid19 Médicos">Covid19 Médicos</option>
+                <option value=""></option>
+                <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
+                <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
+                <option value="Covid19 No Médicos">Covid19 No Médicos</option>
+                <option value="Covid19 Médicos">Covid19 Médicos</option>
 
 
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-				<option value="Covid 2022">Covid 2022</option>
-				<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
-				<option value="33 MIL HORAS">33 MIL HORAS</option>
-				<option value="DFL">DFL</option>
-				<option value="TURNOS VACANTES">TURNOS VACANTES</option>
-				<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
-				<option value="LEQ Fonasa">LEQ Fonasa</option>
-				<!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
-				<option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
-				<option value="PABELLON TARDE">PABELLON TARDE</option>
-				<option value="PABELLON GINE">PABELLON GINE</option>
-				<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
-				<option value="SENDA">SENDA</option>
-				@else
-				<option value="Covid 2022">Covid 2022</option>
-				<option value="PRAPS">PRAPS</option>
-				<option value="PESPI">PESPI</option>
-				<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
-				<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
-				<option value="LISTA ESPERA">LISTA ESPERA</option>
-				<!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
-				<option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
-		
-				<option value="ADP DIRECTOR">ADP DIRECTOR</option>
-				<option value="SENDA">SENDA</option>
-				<option value="LEY DE ALCOHOL">LEY DE ALCOHOL</option>
-				<option value="SENDA UHCIP">SENDA UHCIP</option>
-				<option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
-				<option value="SENADIS">SENADIS</option>
-				<option value="SUBT.31">SUBT.31</option>
-				@endif
+                @if(Auth::user()->organizationalUnit->establishment_id == 1)
+                    <option value="Covid 2022">Covid 2022</option>
+                    <option value="CONSULTORIO DE LLAMADA" disabled>CONSULTORIO DE LLAMADA</option>
+                    <option value="33 MIL HORAS">33 MIL HORAS</option>
+                    <option value="DFL" disabled>DFL</option>
+                    <option value="TURNOS VACANTES" disabled>TURNOS VACANTES</option>
+                    <option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
+                    <option value="LEQ Fonasa">LEQ Fonasa</option>
+                    <!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
+                    <option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
+                    <option value="PABELLON TARDE" disabled>PABELLON TARDE</option>
+                    <option value="PABELLON GINE">PABELLON GINE</option>
+                    <option value="TURNO DE RESIDENCIA" disabled>TURNO DE RESIDENCIA</option>
+                    <option value="SENDA">SENDA</option>
+                @else
+                    <option value="Covid 2022">Covid 2022</option>
+                    <option value="PRAPS">PRAPS</option>
+                    <option value="PESPI">PESPI</option>
+                    <option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
+                    <option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
+                    <option value="LISTA ESPERA">LISTA ESPERA</option>
+                    <!-- <option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option> -->
+                    <option value="CONTINGENCIA RESPIRATORIA">CONTINGENCIA RESPIRATORIA</option>
+            
+                    <option value="ADP DIRECTOR">ADP DIRECTOR</option>
+                    <option value="SENDA">SENDA</option>
+                    <option value="LEY DE ALCOHOL">LEY DE ALCOHOL</option>
+                    <option value="SENDA UHCIP">SENDA UHCIP</option>
+                    <option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
+                    <option value="SENADIS">SENADIS</option>
+                    <option value="SUBT.31">SUBT.31</option>
+                @endif
 			</select>
 		</fieldset>
 

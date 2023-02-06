@@ -10,12 +10,12 @@
   </fieldset>
 
   <fieldset class="form-group col-8 col-md-2">
-      <label for="for_type">Origen Financiamiento</label>
-      <select name="type" class="form-control" wire:model.lazy="type" required id="type">
-        <option value=""></option>
-        <option value="Suma alzada">Suma alzada</option>
-        <option value="Covid">Covid (Sólo 2021)</option>
-      </select>
+        <label for="for_type">Origen Financiamiento</label>
+        <select name="type" class="form-control" wire:model.lazy="type" required id="type">
+            <option value=""></option>
+            <option value="Suma alzada">Suma alzada</option>
+            <option value="Covid" disabled>Covid (Sólo 2021)</option>
+        </select>
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-4">
