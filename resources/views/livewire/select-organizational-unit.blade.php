@@ -12,24 +12,25 @@
         @endforeach
     </select>
 
-    <select class="form-control {{ $selectpicker ? 'selectpicker' : '' }}"
-        id="{{ $selected_id }}" 
-        name="{{ $selected_id }}"
-        wire:model="organizational_unit_id"
-        style="font-family:monospace;"
-        data-live-search="true" id="ou" name="to_ou_id" data-size="10"
-        {{ $required ? 'required' : '' }}>
-        
-        <option></option>
-        @foreach($ous as $ou)
-            <option value="{{ $ou['id'] }}">{{ $ou['name'] }}</option>
-        @endforeach
-    </select>
     
-    @if(!$selectpicker)
-    <input type="text" 
-        class="form-control"
-        placeholder="Filtrar listado de unidades" 
-        wire:model.lazy="filter">
-    @endif
+        <select class="form-control {{ $selectpicker ? 'selectpicker' : '' }}"
+            id="{{ $selected_id }}" 
+            name="{{ $selected_id }}"
+            wire:model="organizational_unit_id"
+            style="font-family:monospace;"
+            data-live-search="true" id="ou" name="to_ou_id" data-size="10"
+            {{ $required ? 'required' : '' }}>
+            
+            <option></option>
+            @foreach($ous as $ou)
+                <option value="{{ $ou['id'] }}">{{ $ou['name'] }}</option>
+            @endforeach
+        </select>
+        
+        @if(!$selectpicker)
+        <input type="text" 
+            class="form-control"
+            placeholder="Filtrar listado de unidades" 
+            wire:model.lazy="filter">
+        @endif
 </div>
