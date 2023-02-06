@@ -99,10 +99,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.9.34/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.9.34/charts.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/material.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/animated.js"></script>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css"

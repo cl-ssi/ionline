@@ -102,7 +102,7 @@
         </div>
 
         @if(isset($signature) && isset($signature->type))
-            @if($signature->type == 'visators')
+            {{-- @if($signature->type == 'visators') --}}
                 <div class="card mt-4">
                     <h5 class="card-header">
                         Visadores
@@ -111,7 +111,7 @@
                         @livewire('signatures.visators', ['signature' => $signature])
                     </div>
                 </div>
-            @else
+            {{-- @else  --}}
                 <div class="card mt-4">
                     <h5 class="card-header">
                         Firmante
@@ -120,7 +120,7 @@
                         @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
                     </div>
                 </div>
-            @endif
+            {{-- @endif --}}
         @else
 
             <div class="card mt-4">
