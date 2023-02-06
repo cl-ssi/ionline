@@ -58,10 +58,12 @@
 
 @section('custom_js')
 @if($law == '19813')
-<script src='{{asset('assets/amcharts/js/core.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/charts.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/material.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
+
+<script src="https://cdn.amcharts.com/lib/version/4.9.34/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/version/4.9.34/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/material.js"></script>
+<script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/animated.js"></script>
+
 <!-- Chart code -->
 <script>
     am4core.ready(function() {
