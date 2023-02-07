@@ -110,13 +110,10 @@
     <strong>TIP para pegar tablas de word o excel</strong>
     <p>
         <ol>
-            <li>Copiar la tabla desde el excel o word</li>
-            <li>Pegar la tabla en la herramienta limpiadora de tabla en el siguiente
-                <a href="https://www.r2h.nl/html-word-excel-table-code-cleaner/index.php">link</a>
-            </li>
-            <li>Presionar el boton "Clean code", luego "Select all" y luego copiar con "Control + C"</li>
-            <li>Volver a donde está haciendo el documento y en el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
-            <li>Finalmente pegar el texto con "Control + V" y guardar</li>
+            <li>Copiar y pegar la tabla desde el excel o word</li>
+            <li>En el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
+            <li>Buscar donde diga <strong>&lt;table width="XXX"&gt;</strong></li>
+            <li>Reemplazar por <strong>&lt;table style="border-collapse: collapse; width: 100%;" border="1"&gt;</strong></li>
         </ol>
     </p>
 </div>
