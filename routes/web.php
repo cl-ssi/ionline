@@ -925,9 +925,14 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         });
     });
 
+    /** 
+     * Reemplazar después por el nuevo
+     */
     Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
+
     Route::prefix('new-authorities')->name('new-authorities.')->middleware('auth')->group(function () {
         Route::get('/', [NewAuthorityController::class,'index'])->name('index');
+        Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
         Route::get('/{organizationalUnit}/create', [NewAuthorityController::class,'create'])->name('create');
         Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
