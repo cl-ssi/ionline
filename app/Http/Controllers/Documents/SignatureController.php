@@ -70,7 +70,7 @@ class SignatureController extends Controller
 
         if ($tab == 'mis_documentos') {
             //Firmas del usuario y del manager actual de ou
-            $mySignatures = Signature::whereIn('responsable_id', $users);
+            $mySignatures = Signature::with('signaturesFiles')->whereIn('responsable_id', $users);
 
             //Firmas de managers anteriores de la ou
             foreach ($myAuthorities as $myAuthority){

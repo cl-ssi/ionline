@@ -49,7 +49,7 @@
 @section('custom_js')
 
 <script>
-   $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip()
    
   // $(document).ready(function(){
   //   anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
