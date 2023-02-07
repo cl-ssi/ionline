@@ -44,14 +44,5 @@
         </a>
     </li>
     @endcan
-
-    @canany(['Partes: oficina'])
-    <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('requirements.createFormParte',null) }}">
-            <i class="fas fa-inbox"></i> Empezar a derivar
-        </a>
-    </li>
-    @endcan
     
 </ul>
