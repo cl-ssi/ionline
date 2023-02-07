@@ -35,13 +35,12 @@ class NewAuthorityController extends Controller
     {   
         $subrogants = Subrogation::with(['subrogant'])
             ->where('organizational_unit_id', $organizationalUnit->id)
-            ->where('type', 'manager')
-            ->select('id', 'subrogant_id')
+            ->select('id', 'subrogant_id', 'type')
             ->get();
 
         return view('rrhh.new_authorities.calendar', [
-            'ou' => $organizationalUnit,            
-            'subrogants' => $subrogants,
+            'ou' => $organizationalUnit,
+            'subrogants' => $subrogants,            
         ]);
     }
 
@@ -69,6 +68,7 @@ class NewAuthorityController extends Controller
                 'start' => $authority->date,
                 'end' => $authority->date,
                 'backgroundColor' => $backgroundColor,
+                'type' => $authority->type,
                 // agrega más campos aquí si los necesitas
             ];
             $events[] = $event;
@@ -82,6 +82,7 @@ class NewAuthorityController extends Controller
                 'start' => $holiday->date,
                 'end' => $holiday->date,
                 'backgroundColor' => '#FF0000',
+                
             ];
             $events[] = $event;
         }

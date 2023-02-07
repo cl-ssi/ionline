@@ -22,14 +22,13 @@
 </div>
 
 
-
 <div id="calendar"></div>
 <!-- Modal para agregar una autoridad -->
 <div class="modal fade" id="addAuthorityModal" tabindex="-1" role="dialog" aria-labelledby="addAuthorityModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="addAuthorityModalLabel">Agregar Subrogante</h5>
+            <h5 class="modal-title" id="addAuthorityModalLabel"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -43,9 +42,15 @@
                     <select class="form-control" id="authoritySelect" name="user_id" required>
                         <option value="">Seleccionar Subrogante</option>
                         @foreach($subrogants as $subrogant)
-                        <option value="{{ $subrogant->subrogant->id }}">{{$subrogant->subrogant->fullname }}</option>
+                            @if($subrogant->type == 'manager')
+                                <option value="{{ $subrogant->subrogant->id }}" style="background-color: #007bff; color: #fff;">{{$subrogant->subrogant->fullname}} ({{$subrogant->type}}) </option>
+                            @elseif($subrogant->type == 'delegate')
+                                <option value="{{ $subrogant->subrogant->id }}" style="background-color: #6c757d; color: #fff;">{{$subrogant->subrogant->fullname}} ({{$subrogant->type}}) </option>
+                            @elseif($subrogant->type == 'secretary')
+                                <option value="{{ $subrogant->subrogant->id }}" style="background-color: #ffc107; color: #000;">{{$subrogant->subrogant->fullname}} ({{$subrogant->type}}) </option>
+                            @endif
                         @endforeach
-                    </select>
+</select>
                 </div>
                 <div class="form-group">
                     <label for="authorityDate">Desde:</label>
@@ -61,7 +66,7 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="1" id="updateFutureEventsCheck" name="updateFutureEventsCheck">
                         <label class="form-check-label" for="updateFutureEventsCheck">
-                            ¿Desea modificar este y todos los eventos posteriores?
+                            ¿Desea modificar este y todos los eventos posteriores? (actualizara con el subrogane hasta la ultima fecha donde tenga evento el usuario seleccionado, actualizando todo lo que haya entre medio)
                         </label>
                     </div>
                 </div>
@@ -92,6 +97,9 @@
       firstDay: 1,
       events: '/rrhh/new-authorities/{{$ou->id}}/events',
       eventClick: function(event, jsEvent, view) {
+        eventType = event.type;
+        $selectedType = event.type;
+        $('#addAuthorityModalLabel').text('Agregar Subrogante para ' + event.title+' de tipo:\n'+event.type);
         $('#authorityDate').val(event.start.format());
         $('#addAuthorityModal').modal('show');
       },
@@ -108,9 +116,9 @@
       }
     });
 
-    $('#addAuthorityButton').click(function() {
+    $('#addAuthorityButton').click(function() {    
       var authorityId = $('#authoritySelect').val();
-      var date = $('#authorityDate').val();
+      var date = $('#authorityDate').val();      
 
       $('#addAuthorityModal').modal('hide');
 
