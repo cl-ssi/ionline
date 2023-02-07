@@ -1,18 +1,20 @@
 <div>
 
-    <div class="form-row">
+    <div class="form-row mb-4">
+        <div class="col-12 col-md-9">
+            <h4>
+                {{ $organizationalUnit->name }}
+            </h4>
+        </div>
         <div class="col-6 col-md-3">
-
-            <div class="form-group">
-                <label for="date">Selecione el mes</label>
-                <input class="form-control" type="month" wire:model="monthSelection">
-            </div>
+            <input class="form-control" type="month" wire:model="monthSelection">
         </div>
     </div>
 
-    @if($edit)
+    @if($editForm)
     <div class="card mb-4">
         <div class="card-body">
+            <h5 class="card-title">Editar autoridad para la fecha {{ $date }}</h5>
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">
@@ -33,7 +35,7 @@
                 <div class="col-1">
                     <div class="form-group">
                         <label for="">&nbsp;</label>
-                        <button class="btn btn-primary form-control">
+                        <button class="btn btn-primary form-control" wire:click="save()">
                             <i class="fas fa-save"></i>
                         </button>
                     </div>
@@ -43,6 +45,10 @@
     </div>
     @endif
 
+    <h5 clas="mb-3">
+        {{ ucfirst($startOfMonth->monthName) }} de {{ $startOfMonth->year }}
+    </h5>
+
     @for($i = 1; $i < $startOfMonth->dayOfWeek; $i++)
     <div class="dia_calendario small p-2 text-center">
         <br><br><br><br><br><br>
@@ -50,14 +56,18 @@
     @endfor
 
     @foreach($data as $date => $authority)
-        <div class="dia_calendario small p-2 text-center">
+        <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
 
             <span class="{{ ($authority['holliday'] OR $authority['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
-                {{ $date }}
+                {{ $date }} 
             </span>
 
-            <hr class="mt-1 mb-1" >
-            {{ optional($authority['manager'])->tinnyName }} <br>
+            <hr class="mt-1 mb-1">
+                <a href="#" class="link-primary" 
+                    wire:click="edit('{{ $date }}','manager')">
+                    {{ optional($authority['manager'])->tinnyName }}
+                </a>
+             <br>
             <em class="text-muted">{{ optional($authority['manager'])->position }}</em>
             
             <hr class="mt-1 mb-1" >
