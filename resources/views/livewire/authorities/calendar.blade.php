@@ -1,5 +1,6 @@
 <div>
 
+    <!-- Muestra como título el nombre de la OU y el selector de mes -->
     <div class="form-row mb-4">
         <div class="col-12 col-md-9">
             <h4>
@@ -11,6 +12,7 @@
         </div>
     </div>
 
+    <!-- Muestra el form para editar una autoridad -->
     @if($editForm)
     <div class="card mb-4">
         <div class="card-body">
@@ -45,16 +47,19 @@
     </div>
     @endif
 
+
+    <!-- Muestra el nombre del mes seleccionado (Ej: Febrero 2023) -->
     <h5 clas="mb-3">
         {{ ucfirst($startOfMonth->monthName) }} de {{ $startOfMonth->year }}
     </h5>
 
+
+    <!-- Rellena con cuadros en blanco para cuando el mes no comienza en el primer cuadro -->
     @for($i = 1; $i < $startOfMonth->dayOfWeek; $i++)
-    <div class="dia_calendario small p-2 text-center">
-        <br><br><br><br><br><br>
-    </div>
+        <div class="dia_calendario small p-2 text-center border-white"></div>
     @endfor
 
+    <!-- Muestra el calendario -->
     @foreach($data as $date => $authority)
         <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
 
@@ -77,6 +82,8 @@
         </div>
     @endforeach
 
+
+    <!-- CSS Custom para el calendario -->
     @section('custom_css')
     <style media="screen">
         .dia_calendario {
