@@ -652,17 +652,25 @@ class RequirementController extends Controller
         return view('requirements.create', compact('parte'));
     }
 
-    public function createFromParte(Parte $parte)
+    public function createFromParte(Parte $parte = null)
     {
+        if(!$parte){
+            $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->first();
+        }else{
+            
+        }
+
         // get previous user id
         $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
-                        ->where('id', '<', $parte->id)->max('id');
-                        $previous = Parte::find($previous);
+        ->where('id', '<', $parte->id)
+        ->max('id');
+        $previous = Parte::find($previous);
 
         // get next user id
         $next = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
-                        ->where('id', '>', $parte->id)->min('id');
-                        $next = Parte::find($next);
+        ->where('id', '>', $parte->id)
+        ->min('id');
+        $next = Parte::find($next);
 
         return view('requirements.create-from-parte', compact('parte','previous','next'));
     }

@@ -925,16 +925,19 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         });
     });
 
+    /** 
+     * Reemplazar después por el nuevo
+     */
     Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
+
     Route::prefix('new-authorities')->name('new-authorities.')->middleware('auth')->group(function () {
         Route::get('/', [NewAuthorityController::class,'index'])->name('index');
+        Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
         Route::get('/{organizationalUnit}/create', [NewAuthorityController::class,'create'])->name('create');
         Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
         Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
         Route::get('/{organizationalUnit}/create-subrogant', [NewAuthorityController::class,'create_subrogant'])->name('create_subrogant');
-        Route::get('/{organizationalUnit}/events', [NewAuthorityController::class,'getEvents'])->name('events');
-
     });
     Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class,'create'])->name('create');
@@ -1206,7 +1209,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('archive_requirement_delete/{requirement}', [RequirementController::class,'archive_requirement_delete'])->name('archive_requirement_delete');
     // Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
     Route::get('create_requirement/{parte}',  [RequirementController::class,'create_requirement'])->name('create_requirement');
-    Route::get('create-from-parte/{parte}',  [RequirementController::class,'createFromParte'])->name('createFormParte');
+    Route::get('createFormParte/{parte?}',  [RequirementController::class,'createFromParte'])->name('createFormParte');
     Route::get('create_requirement_sin_parte',  [RequirementController::class,'create_requirement_sin_parte'])->name('create_requirement_sin_parte');
     // Route::get('create_event/{req_id}',  [EventController::class,'create_event'])->name('create_event');
     Route::resource('labels', LabelController::class);
@@ -2092,7 +2095,6 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
         Route::get('/download/{remFile}', [RemFileController::class, 'download'])->name('download');
-        Route::delete('/{remFile}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');

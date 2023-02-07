@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('documents.partes.partials.nav')
+
 <h4 class="mb-3">
     Derivando parte <strong>{{ $parte->id }}</strong>
     <span class="badge badge-success">

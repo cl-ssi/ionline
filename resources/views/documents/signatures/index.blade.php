@@ -52,18 +52,18 @@
 
     <div class="table-responsive">
         <table class="table table-striped table-sm table-bordered small">
-            <thead>
+            <thead class="text-center">
                 <tr>
                     <th scope="col">Sel.</th>
                     <th scope="col">Id <i class="fas fa-signature"></i></th>
-                    <th scope="col">Fecha de Solicitud</th>
+                    <th scope="col" width="8%">Fecha de Solicitud</th>
                     <th scope="col">Firmante</th>
                     <th scope="col">Materia</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Creador</th>
                     <th scope="col">Firmar</th>
                     <th scope="col">Rech.</th>
-                    <th scope="col">Firmas</th>
+                    <th scope="col" width="10%">Firmas</th>
                     <th scope="col">Ver</th>
                     <th scope="col">Anexos
                         <div class="mx-4"></div>
@@ -118,11 +118,53 @@
                         </button>
                         @endcan
                     </td>
-                    <td>
+                    <td class="text-center" nowrap>
+                        {{--
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$pendingSignaturesFlow->signature->id}})"
                             title="Ver circuito de firmas"><i class="fas fa-fw fa-search"></i>
                         </button>
+                        --}}
+                        @foreach($pendingSignaturesFlow->signature->signaturesFlows as $key => $signatureFlow)
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                            por {{ $signatureFlow->signerName }}
+                                            el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s') }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span>&nbsp;
+                            @endif
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }}
+                                        Firma Subrogada por: {{ $signatureFlow->realSignerName }}
+                                        Fecha: {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span>&nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span>&nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }} - Rechazado por Subrogante: {{ $signatureFlow->realSignerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span>&nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === NULL)
+                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip" data-placement="top"
+                                    title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span>&nbsp;
+                            @endif
+
+                        @endforeach
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.showPdf',[$pendingSignaturesFlow->signaturesFile->id, time()])}}"
@@ -200,9 +242,9 @@
     <div class="table-responsive">
         <table class="table table-striped table-sm table-bordered small">
             <thead>
-                <tr>
+                <tr class="text-center">
                     <th scope="col">Id</th>
-                    <th scope="col">Fecha de Solicitud</th>
+                    <th scope="col" width="8%">Fecha de Solicitud</th>
                     <th scope="col">Firmante</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
@@ -240,20 +282,63 @@
                             {{ $signedSignaturesFlow->signature->responsable->tinnyName }}
                         @endif 
                     </td>
-                    <td>
+                    <td class="text-center">
                         @if($signedSignaturesFlow->status === 1)
                         <p class="text-success">Aceptada</p>
                         @elseif($signedSignaturesFlow->status === 0 or $signedSignaturesFlow->signature->rejected_at != null)
                         <p class="text-danger">Rechazada</p>
                         @else Pendiente @endif
                     </td>
-                    <td>
+                    <td class="text-center" nowrap>
+                        {{--
                         @if($signedSignaturesFlow->signature)
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})"
                             title="Ver circuito de firmas"><i class="fas fa-fw fa-search"></i>
                         </button>
                         @endif
+                        --}}
+
+                        @foreach($signedSignaturesFlow->signature->signaturesFlows as $key => $signatureFlow)
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                            por {{ $signatureFlow->signerName }}
+                                            el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s') }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }}
+                                        Firma Subrogada por: {{ $signatureFlow->realSignerName }}
+                                        Fecha: {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }} - Rechazado por Subrogante: {{ $signatureFlow->realSignerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === NULL)
+                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                        @endforeach
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.showPdf',[$signedSignaturesFlow->signaturesFile->id, time()])}}"
@@ -288,18 +373,17 @@
 @if($tab == 'mis_documentos')
     <h4>Mis Solicitudes</h4>
     <div class="table-responsive">
-        <table class="table table-striped table-sm table-bordered">
-            <thead>
+        <table class="table table-striped table-sm table-bordered small">
+            <thead class="text-center">
                 <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">Fecha de Solicitud</th>
+                    <th scope="col" width="8%">Fecha de Solicitud</th>
                     <th scope="col">Materia de Resolución</th>
                     <th scope="col">Descripción</th>
                     <th scope="col">Estado Solicitud</th>
                     <th scope="col">Doc</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
+                    <th scope="col">Firmas</th>
+                    <th scope="col" colspan="2"></th>
                 </tr>
             </thead>
             <tbody>
@@ -314,7 +398,7 @@
                         @endif
                         {{ $signature->subject }}</td>
                     <td>{{ $signature->description }}</td>
-                    <td>
+                    <td class="text-center">
                         @if($signature->signaturesFlows->count() === $signature->signaturesFlows->where('status', 1)->count())
                         <p class="text-success">Aceptada</p>
                         @elseif($signature->signaturesFlows->where('status', '===' , 0)->count() > 0)
@@ -334,19 +418,60 @@
 {{--                            <span class="fas fa-fw fa-file" aria-hidden="true"></span>--}}
 {{--                        </a>--}}
                     </td>
-                    <td>
-                        <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
+                    <td class="text-center" nowrap>
+                        <!-- <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                             onclick="getSignatureFlowsModal({{$signature->id}})" title="Ver circuito de firmas"><i
                                 class="fas fa-fw fa-search"></i>
-                        </button>
+                        </button> -->
+
+                        @foreach($signature->SignaturesFlows as $key => $signatureFlow)
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                            por {{ $signatureFlow->signerName }}
+                                            el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+                            @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }}
+                                        Firma Subrogada por: {{ $signatureFlow->realSignerName }}
+                                        Fecha: {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id === null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id != null)
+                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Firmante Asignado: {{ $signatureFlow->signerName }} - Rechazado por Subrogante: {{ $signatureFlow->realSignerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                            @if($signatureFlow->status === NULL)
+                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip"
+                                    title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
+                                    {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
+                                </span> &nbsp;
+                            @endif
+
+                        @endforeach
                     </td>
-                    <td>
+                    <td class="text-center">
                         <a href="{{ route('documents.signatures.edit', $signature) }}" class="btn btn-sm btn-outline-secondary"
                             title="Editar solicitud">
                             <span class="fas fa-fw fa-edit" aria-hidden="true"></span>
                         </a>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <a class="btn btn-sm btn-outline-danger" title="Eliminar solicitud" @if($signature->responsable_id !=
                             Auth::id()) disabled @endif
                             data-toggle="modal"
@@ -431,6 +556,10 @@
 @endsection
 
 @section('custom_js')
+<script>
+    $('[data-toggle="tooltip"]').tooltip()
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0/axios.min.js" integrity="sha512-26uCxGyoPL1nESYXHQ+KUmm3Maml7MEQNWU8hIt1hJaZa5KQAQ5ehBqK6eydcCOh6YAuZjV3augxu/5tY4fsgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     function getSignatureFlowsModal(idSignature) {
