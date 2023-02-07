@@ -25,6 +25,8 @@ class Establishment extends Model implements Auditable
         'name',
         'alias',
         'type',
+        'mother_code',
+        'new_mother_code',
         'establishment_type_id',
         'deis',
         'new_deis',
