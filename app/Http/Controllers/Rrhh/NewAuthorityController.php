@@ -33,44 +33,28 @@ class NewAuthorityController extends Controller
 
     public function calendar(OrganizationalUnit $organizationalUnit)
     {
-        //TODO optimizar las query en una
         $holidays = Holiday::select('name', 'date')->get();
-        $newAuthoritiesManager = NewAuthority::with(['user' => function ($query) {
+        $newAuthorities = NewAuthority::with(['user' => function ($query) {
             $query->select('id', 'name', 'fathers_family');
         }])
             ->where('organizational_unit_id', $organizationalUnit->id)
-            ->where('type', 'manager')
+            ->whereIn('type', ['manager', 'delegate', 'secretary'])
             ->get();
-
-        $newAuthoritiesDelegate = NewAuthority::with(['user' => function ($query) {
-            $query->select('id', 'name', 'fathers_family');
-        }])
-            ->where('organizational_unit_id', $organizationalUnit->id)
-            ->where('type', 'delegate')
-            ->get();
-
-        $newAuthoritiesSecretary = NewAuthority::with(['user' => function ($query) {
-            $query->select('id', 'name', 'fathers_family');
-        }])
-            ->where('organizational_unit_id', $organizationalUnit->id)
-            ->where('type', 'secretary')
-            ->get();
-
+    
         $subrogants = Subrogation::with(['subrogant'])
             ->where('organizational_unit_id', $organizationalUnit->id)
             ->where('type', 'manager')
             ->select('id', 'subrogant_id')
             ->get();
-
+    
         return view('rrhh.new_authorities.calendar', [
             'ou' => $organizationalUnit,
             'holidays' => $holidays,
-            'newAuthorities' => $newAuthoritiesManager,
-            'newAuthoritiesDelegate' => $newAuthoritiesDelegate,
-            'newAuthoritiesSecretary' => $newAuthoritiesSecretary,
+            'newAuthorities' => $newAuthorities,
             'subrogants' => $subrogants,
         ]);
     }
+    
 
 
     public function create(OrganizationalUnit $organizationalUnit)

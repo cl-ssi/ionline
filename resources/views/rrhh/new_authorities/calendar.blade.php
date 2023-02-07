@@ -99,36 +99,24 @@
     });
 
     @foreach($newAuthorities as $newAuthority)
-    events.push({
-      title: "{{ strtoupper($newAuthority->user->tinnyName) }}",
-      start: "{{ $newAuthority->date }}",
-      end: "{{ $newAuthority->date }}",
-      allDay: true,
-      backgroundColor: '#007bff',
-      className:'authorities'
-    });
-    @endforeach
+        var backgroundColor = '';
+        if("{{ $newAuthority->type }}" === 'manager'){
+            backgroundColor = '#007bff';
+        } else if("{{ $newAuthority->type }}" === 'delegate'){
+            backgroundColor = '#6c757d';
+        } else if("{{ $newAuthority->type }}" === 'secretary'){
+            backgroundColor = '#ffc107';
+        }
 
-    @foreach($newAuthoritiesDelegate as $newAuthorityDelegate)
-    events.push({
-      title: "{{ strtoupper($newAuthorityDelegate->user->tinnyName) }}",
-      start: "{{ $newAuthorityDelegate->date }}",
-      end: "{{ $newAuthorityDelegate->date }}",
-      allDay: true,
-      backgroundColor: '#6c757d',
-      className:'authorities'
-    });
-    @endforeach
-
-    @foreach($newAuthoritiesSecretary as $newAuthoritySecretary)
-    events.push({
-      title: "{{ $newAuthoritySecretary->user->tinnyName }}".toLowerCase(),
-      start: "{{ $newAuthoritySecretary->date }}",
-      end: "{{ $newAuthoritySecretary->date }}",
-      allDay: true,
-      backgroundColor: '#ffc107'
-    });
-    @endforeach
+        events.push({
+            title: "{{ strtoupper($newAuthority->user->tinnyName) }}",
+            start: "{{ $newAuthority->date }}",
+            end: "{{ $newAuthority->date }}",
+            allDay: true,
+            backgroundColor: backgroundColor,
+            className:'authorities'
+        });
+    @endforeach 
     
     if (events.length > 0) {
       $('#calendar').fullCalendar({
