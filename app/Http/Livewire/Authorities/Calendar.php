@@ -4,8 +4,11 @@ namespace App\Http\Livewire\Authorities;
 
 use Livewire\Component;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Rrhh\NewAuthority;
+use App\Models\Parameters\Holiday;
 
 class Calendar extends Component
 {
@@ -19,6 +22,9 @@ class Calendar extends Component
     /** Primer día del mes seleccionado */
     public $startOfMonth;
 
+    /** Último día del mes seleccionado */
+    public $endOfMonth;
+
     /** Array con los datos para imprimir el calendario */
     public $data;
 
@@ -28,8 +34,8 @@ class Calendar extends Component
     public $today;
 
     /**
-    * Mount
-    */
+     * Mount
+     */
     public function mount(OrganizationalUnit $organizationalUnit)
     {
         $this->monthSelection = date('Y-m');
@@ -37,21 +43,21 @@ class Calendar extends Component
     }
 
     /**
-    * Muestra formulario para editar una autoridad en una fecha
-    */
-    public function edit($date,$type)
-    {        
+     * Muestra formulario para editar una autoridad en una fecha
+     */
+    public function edit($date, $type)
+    {
         $this->date = $date;
         $this->type = $type;
 
-        
+
         /** Muestra el formulario de edición */
         $this->editForm = true;
     }
 
     /**
-    * Guarda la edición de una autoridad
-    */
+     * Guarda la edición de una autoridad
+     */
     public function save()
     {
         /** Codigo para guardar un cambio */
@@ -63,9 +69,41 @@ class Calendar extends Component
 
     public function render()
     {
-
-        $this->startOfMonth = Carbon::createFromFormat('Y-m', $this->monthSelection)->startOfMonth();
         
+        $this->data = [];
+        $this->startOfMonth = Carbon::createFromFormat('Y-m', $this->monthSelection)->startOfMonth();
+        $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
+        $holidays = Holiday::whereBetween('date', [$this->startOfMonth, $this->endOfMonth])->get();
+        $newAuthorities = NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)->whereBetween('date', [$this->startOfMonth, $this->endOfMonth])->get();
+
+                
+        foreach (CarbonPeriod::create($this->startOfMonth, '1 day', $this->endOfMonth) as $day) {
+            $this->data[$day->format('Y-m-d')] = array(
+                'holiday' => false,
+                'date' => $day,
+                'manager' => false,
+                'delegate' => false,
+                'secretary' => false,
+            );
+        }
+        foreach ($holidays as $holiday) {
+            $this->data[$holiday->date->format('Y-m-d')]['holiday'] = true;
+        }
+
+        foreach ($newAuthorities as $authority) {
+            $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
+        }
+
+        //dd($this->data);
+
+        
+
+
+        return view('livewire.authorities.calendar');
+    }
+}
+
+
         /** Array de prueba */
 
         // array:6 [▼
@@ -106,56 +144,88 @@ class Calendar extends Component
         //         "secretary" => App\User {#3378 ▶}
         //     ]
         // ]
-        $this->data = array();
 
-        $date = $this->startOfMonth->copy();
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
 
-        $date = $this->startOfMonth->copy()->addDays(1);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = true;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-        
-        $date = $this->startOfMonth->copy()->addDays(2);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
 
-        $date = $this->startOfMonth->copy()->addDays(3);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
 
-        $date = $this->startOfMonth->copy()->addDays(4);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+        // for ($date = $datestart; $date->lte($dateend); $date->addDay()) {
+        //     $newAuthority = NewAuthority::where('date', $date->toDateString())->where('organizational_unit_id', $this->organizationalUnit->id)->first();
 
-        $date = $this->startOfMonth->copy()->addDays(5);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+        //     if ($this->type === 'manager') {
+        //         $manager_id = $newAuthority->user_id;
+        //     } else if ($this->type === 'delegate') {
+        //         $delegate_id = $newAuthority->user_id;
+        //     } else if ($this->type === 'secretary') {
+        //         $secretary_id = $newAuthority->user_id;
 
-        $date = $this->startOfMonth->copy()->addDays(6);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+        //     if ($newAuthority) {
+        //         $this->data[$date->toDateString()] = [
+        //             'date' => $date,
+        //             'holliday' => $newAuthority->holliday,
+        //             'manager' => User::find($newAuthority->manager_id),
+        //             'delegate' => User::find($newAuthority->manager_id),
+        //             'secretary' => User::find($newAuthority->secretary_id),
+        //         ];
+        //     } else {
+        //         $this->data[$date->toDateString()] = [
+        //             'date' => $date,
+        //             'holliday' => false,
+        //             'manager' => null,
+        //             'secretary' => null,
+        //         ];
+        //     }
+        // }
 
-        $date = $this->startOfMonth->copy()->addDays(7);
-        $this->data[$date->format('Y-m-d')]['date'] = $date;
-        $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
 
-        return view('livewire.authorities.calendar');
-    }
-}
+
+
+
+
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(1);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = true;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(2);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(3);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(4);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(5);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(6);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+        // $date = $this->startOfMonth->copy()->addDays(7);
+        // $this->data[$date->format('Y-m-d')]['date'] = $date;
+        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
+        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
+        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
+
+    

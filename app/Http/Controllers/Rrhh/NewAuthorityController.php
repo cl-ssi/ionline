@@ -40,7 +40,7 @@ class NewAuthorityController extends Controller
 
         return view('rrhh.new_authorities.calendar', [
             'ou' => $organizationalUnit,
-            'subrogants' => $subrogants,            
+            'subrogants' => $subrogants,
         ]);
     }
 

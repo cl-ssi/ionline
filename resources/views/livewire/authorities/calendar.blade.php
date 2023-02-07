@@ -63,9 +63,10 @@
     @foreach($data as $date => $authority)
         <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
 
-            <span class="{{ ($authority['holliday'] OR $authority['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
-                {{ $date }} 
-            </span>
+        <span class="{{ ($authority['holiday'] OR ($authority['date'] instanceof Carbon && $authority['date']->dayOfWeek == 0)) ? 'text-danger': '' }}">
+            {{ $date }} 
+        </span>
+
 
             <hr class="mt-1 mb-1">
                 <a href="#" class="link-primary" 

@@ -129,5 +129,5 @@ class NewAuthority extends Model
      *
      * @var array
      */
-    protected $dates = ['from','to'];
+    protected $dates = ['date'];
 }
