@@ -32,9 +32,7 @@ class Calendar extends Component
     */
     public function mount(OrganizationalUnit $organizationalUnit)
     {
-        $this->organizationalUnit = $organizationalUnit;
         $this->monthSelection = date('Y-m');
-
         $this->today = now()->format('Y-m-d');
     }
 
@@ -42,10 +40,13 @@ class Calendar extends Component
     * Muestra formulario para editar una autoridad en una fecha
     */
     public function edit($date,$type)
-    {
-        $this->editForm = true;
+    {        
         $this->date = $date;
         $this->type = $type;
+
+        
+        /** Muestra el formulario de edición */
+        $this->editForm = true;
     }
 
     /**
@@ -53,6 +54,10 @@ class Calendar extends Component
     */
     public function save()
     {
+        /** Codigo para guardar un cambio */
+
+
+        /** Oculta el formulario de edición */
         $this->editForm = false;
     }
 
