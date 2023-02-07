@@ -933,6 +933,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
         Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
         Route::get('/{organizationalUnit}/create-subrogant', [NewAuthorityController::class,'create_subrogant'])->name('create_subrogant');
+        Route::get('/{organizationalUnit}/events', [NewAuthorityController::class,'getEvents'])->name('events');
+
     });
     Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class,'create'])->name('create');

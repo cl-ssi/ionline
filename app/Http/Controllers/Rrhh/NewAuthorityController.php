@@ -32,27 +32,61 @@ class NewAuthorityController extends Controller
     }
 
     public function calendar(OrganizationalUnit $organizationalUnit)
+    {   
+        $subrogants = Subrogation::with(['subrogant'])
+            ->where('organizational_unit_id', $organizationalUnit->id)
+            ->where('type', 'manager')
+            ->select('id', 'subrogant_id')
+            ->get();
+
+        return view('rrhh.new_authorities.calendar', [
+            'ou' => $organizationalUnit,            
+            'subrogants' => $subrogants,
+        ]);
+    }
+
+    public function getEvents(OrganizationalUnit $organizationalUnit)
     {
-        $holidays = Holiday::select('name', 'date')->get();
         $newAuthorities = NewAuthority::with(['user' => function ($query) {
             $query->select('id', 'name', 'fathers_family');
         }])
             ->where('organizational_unit_id', $organizationalUnit->id)
             ->whereIn('type', ['manager', 'delegate', 'secretary'])
             ->get();
+        $events = [];
     
-        $subrogants = Subrogation::with(['subrogant'])
-            ->where('organizational_unit_id', $organizationalUnit->id)
-            ->where('type', 'manager')
-            ->select('id', 'subrogant_id')
-            ->get();
+        foreach ($newAuthorities as $authority) {
+            $backgroundColor = '';
+            if ($authority->type == 'delegate') {
+              $backgroundColor = '#6c757d';
+            } elseif ($authority->type == 'secretary') {
+              $backgroundColor = '#ffc107';
+            } elseif ($authority->type == 'manager') {
+              $backgroundColor = '#007bff';
+            }
+            $event = [
+                'title' => $authority->user->tinnyName,
+                'start' => $authority->date,
+                'end' => $authority->date,
+                'backgroundColor' => $backgroundColor,
+                // agrega más campos aquí si los necesitas
+            ];
+            $events[] = $event;
+        }
+        
+        $holidays = Holiday::select('name', 'date')->get();
+        
+        foreach ($holidays as $holiday) {
+            $event = [
+                'title' => $holiday->name,
+                'start' => $holiday->date,
+                'end' => $holiday->date,
+                'backgroundColor' => '#FF0000',
+            ];
+            $events[] = $event;
+        }
     
-        return view('rrhh.new_authorities.calendar', [
-            'ou' => $organizationalUnit,
-            'holidays' => $holidays,
-            'newAuthorities' => $newAuthorities,
-            'subrogants' => $subrogants,
-        ]);
+        return json_encode($events);
     }
     
 
@@ -92,7 +126,7 @@ class NewAuthorityController extends Controller
                 session()->flash('warning', 'Ya existe una autoridad para la fecha ' . $date->format('Y-m-d') . ' y unidad organizacional seleccionada.');
                 return redirect()->back();
             }
-            
+
             //buscar la diferencia de request->input('user_id) 
             $newAuthority = new NewAuthority();
             $newAuthority->user_id = $request->user_id;
@@ -116,13 +150,13 @@ class NewAuthorityController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-        
+
         $user = User::find($validatedData['user_id']);
         $startDate = Carbon::parse($validatedData['start_date']);
         $endDate = Carbon::parse($validatedData['end_date']);
         $authorityThatDay = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('date', $startDate)->where('type', 'manager')->first();
         if ($request->updateFutureEventsCheck == 1) {
-            $maxValue = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('type', 'manager')->where('user_id',$authorityThatDay->user_id)->max('date');
+            $maxValue = NewAuthority::where('organizational_unit_id', $organizationalUnit->id)->where('type', 'manager')->where('user_id', $authorityThatDay->user_id)->max('date');
             //TODO quitar el maxdate
             $maxDate = Carbon::parse($maxValue);
             while ($startDate->lte($maxDate)) {
@@ -130,14 +164,14 @@ class NewAuthorityController extends Controller
                 $updateAuthority = NewAuthority::where('date', $startDate)
                     ->where('user_id', $authorityThatDay->user_id)
                     ->where('type', 'manager')->first();
-                
+
                 if ($updateAuthority) {
                     $updateAuthority->user_id = $user->id;
                     $updateAuthority->save();
-                    }
+                }
                 $startDate->addDay();
             }
-            session()->flash('info', 'El usuario  ' . $user->full_name . ' ha sido dejado como autoridad  para todos los eventos a futuro de la antigua autoridad ' . $authorityThatDay->user->full_name.' Siendo la última fecha que tenia asignado como autoridad'.$maxValue);
+            session()->flash('info', 'El usuario  ' . $user->full_name . ' ha sido dejado como autoridad  para todos los eventos a futuro de la antigua autoridad ' . $authorityThatDay->user->full_name . ' Siendo la última fecha que tenia asignado como autoridad' . $maxValue);
         } else {
             NewAuthority::where('organizational_unit_id', $organizationalUnit->id)
                 ->where('type', 'manager')
@@ -145,9 +179,8 @@ class NewAuthorityController extends Controller
                 ->update([
                     'user_id' => $user->id,
                 ]);
-    
+
             session()->flash('info', 'El usuario subrogante ' . $user->fullName . ' ha sido dejado como subrogante desde ' . $validatedData['start_date'] . ' hasta ' . $validatedData['end_date']);
-            
         }
         return redirect()->route('rrhh.new-authorities.calendar', $organizationalUnit->id);
     }

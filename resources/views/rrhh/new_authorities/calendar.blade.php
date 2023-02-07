@@ -74,7 +74,6 @@
         
     </div>
 </div>
-
 </div>
 
 
@@ -86,60 +85,28 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
 <script>
   $(document).ready(function() {
-    var holidays = @json($holidays);
-    var events = [];
-    holidays.forEach(function(holiday) {
-      events.push({
-        title: holiday.name,
-        start: holiday.date,
-        end: holiday.date,
-        allDay: true,
-        backgroundColor: '#FF0000'
-      });
-    });
-
-    @foreach($newAuthorities as $newAuthority)
-        var backgroundColor = '';
-        if("{{ $newAuthority->type }}" === 'manager'){
-            backgroundColor = '#007bff';
-        } else if("{{ $newAuthority->type }}" === 'delegate'){
-            backgroundColor = '#6c757d';
-        } else if("{{ $newAuthority->type }}" === 'secretary'){
-            backgroundColor = '#ffc107';
+    $('#calendar').fullCalendar({
+      defaultView: 'month',
+      allDayDefault: true,
+      lang: 'es',
+      firstDay: 1,
+      events: '/rrhh/new-authorities/{{$ou->id}}/events',
+      eventClick: function(event, jsEvent, view) {
+        $('#authorityDate').val(event.start.format());
+        $('#addAuthorityModal').modal('show');
+      },
+      eventRender: function(event, element) {
+        var MAX_LENGTH = 30; // tamaño máximo de la cadena
+        var shortText = event.title;
+        if (event.title.length > MAX_LENGTH) {
+          shortText = event.title.substring(0, MAX_LENGTH) + '...';
         }
-
-        events.push({
-            title: "{{ strtoupper($newAuthority->user->tinnyName) }}",
-            start: "{{ $newAuthority->date }}",
-            end: "{{ $newAuthority->date }}",
-            allDay: true,
-            backgroundColor: backgroundColor,
-            className:'authorities'
+        element.find('.fc-title').text(shortText).css({
+          'text-align': 'center',
+          'font-size': '17px'
         });
-    @endforeach 
-    
-    if (events.length > 0) {
-      $('#calendar').fullCalendar({
-        lang: 'es',
-        firstDay: 1,
-        events: events,
-        eventClick: function(event, jsEvent, view) {
-          $('#authorityDate').val(event.start.format());
-          $('#addAuthorityModal').modal('show');
-        },
-        eventRender: function(event, element) {
-          var MAX_LENGTH = 30; // tamaño máximo de la cadena
-          var shortText = event.title;
-          if (event.title.length > MAX_LENGTH) {
-            shortText = event.title.substring(0, MAX_LENGTH) + '...';
-          }
-          element.find('.fc-title').text(shortText).css({
-    'text-align': 'center',
-    'font-size': '17px'
-  });
-        }
-      });
-    }
+      }
+    });
 
     $('#addAuthorityButton').click(function() {
       var authorityId = $('#authoritySelect').val();
@@ -149,7 +116,6 @@
 
       $("#endDate").attr("min", $('#authorityDate').val());
     });
-
 
     $("#updateFutureEventsCheck").change(function() {
         if(this.checked) {
