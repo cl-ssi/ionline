@@ -164,8 +164,8 @@ class Document extends Model implements Auditable
             $query->where('id', $request->input('id') );
         }
 
-        if($request->input('type') != "") {
-            $query->where('type', 'LIKE', '%'.$request->input('type').'%' );
+        if($request->input('type_id') != "") {
+            $query->where('type_id', '=', $request->input('type_id') );
         }
 
         if($request->input('number') != "") {
