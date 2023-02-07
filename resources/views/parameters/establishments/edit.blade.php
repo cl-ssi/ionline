@@ -47,6 +47,18 @@
     </div>
 
     <div class="form-group row">
+        <div class="col-4 col-md-4">
+            <label for="mother_code">Código Madre</label>
+            <input type="text" class="form-control" id="mother_code" name="mother_code" value="{{ $establishment->mother_code }}">
+        </div>
+
+        <div class="col-4 col-md-4">
+            <label for="new_mother_code">Nuevo Código Madre</label>
+            <input type="text" class="form-control" id="new_mother_code" name="new_mother_code" value="{{ $establishment->new_mother_code}}">
+        </div>
+    </div>
+
+    <div class="form-group row">
         <div class="col-2 col-md-2">
             <label for="sirh_code">Código SIRH</label>
             <input type="number" class="form-control" id="sirh_code" name="sirh_code" value="{{ $establishment->sirh_code }}" autocomplete="off">
@@ -171,6 +183,7 @@
         <div class="col-4 col-md-4">
             <label for="level_of_complexity">Nivel de Complejidad</label>
             <select class="form-control" id="level_of_complexity" name="level_of_complexity" required>
+                <option value="">Seleccione una opción</option>
                 <option value="Alta Complejidad" @if($establishment->level_of_complexity == "Alta Complejidad") selected @endif>Alta Complejidad</option>
                 <option value="Mediana Complejidad" @if($establishment->level_of_complexity == "Mediana Complejidad") selected @endif>Mediana Complejidad</option>
                 <option value="Baja Complejidad" @if($establishment->level_of_complexity == "Baja Complejidad") selected @endif>Baja Complejidad</option>
@@ -181,6 +194,7 @@
         <div class="col-3 col-md-3">
             <label for="provider_type_health_system">Tipo de Prestador</label>
             <select class="form-control" id="provider_type_health_system" name="provider_type_health_system" required>
+                <option value="">Seleccione una opción</option>
                 <option value="Público" @if($establishment->provider_type_health_system == "Público") selected @endif>Público</option>
                 <option value="Privado" @if($establishment->provider_type_health_system == "Privado") selected @endif>Privado</option>
                 <option value="Fuerzas Armadas y de Orden" @if($establishment->provider_type_health_system == "Fuerzas Armadas y de Orden") selected @endif>Fuerzas Armadas y de Orden</option>
@@ -190,6 +204,7 @@
         <div class="col-2 col-md-2">
             <label for="emergency_service">Serv de Urgencia</label>
             <select class="form-control" id="emergency_service" name="emergency_service" required>
+                <option value="">Seleccione una opción</option>
                 <option value="SI" @if($establishment->emergency_service == "SI") selected @endif>SI</option>
                 <option value="NO" @if($establishment->emergency_service == "NO") selected @endif>NO</option>
             </select>

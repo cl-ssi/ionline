@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\Parameters\EstablishmentType;
 use App\Models\Commune;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Warehouse\Store;
@@ -25,6 +26,8 @@ class Establishment extends Model implements Auditable
         'name',
         'alias',
         'type',
+        'mother_code',
+        'new_mother_code',
         'establishment_type_id',
         'deis',
         'new_deis',
@@ -60,6 +63,11 @@ class Establishment extends Model implements Auditable
     public function commune()
     {
         return $this->belongsTo(Commune::class);
+    }
+
+    public function establishmentType()
+    {
+        return $this->belongsTo(establishmentType::class);
     }
 
     public function organizationalUnits()

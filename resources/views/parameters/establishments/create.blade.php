@@ -43,6 +43,18 @@
     </div>
 
     <div class="form-group row">
+        <div class="col-4 col-md-4">
+            <label for="mother_code">Código Madre</label>
+            <input type="text" class="form-control" id="mother_code" name="mother_code" >
+        </div>
+
+        <div class="col-4 col-md-4">
+            <label for="new_mother_code">Nuevo Código Madre</label>
+            <input type="text" class="form-control" id="new_mother_code" name="new_mother_code">
+        </div>
+    </div>
+
+    <div class="form-group row">
         <div class="col-2 col-md-2">
             <label for="sirh_code">Código SIRH</label>
             <input type="number" class="form-control" id="sirh_code" name="sirh_code" autocomplete="off">
@@ -160,7 +172,7 @@
                 <option value="Alta Complejidad">Alta Complejidad</option>
                 <option value="Mediana Complejidad">Mediana Complejidad</option>
                 <option value="Baja Complejidad">Baja Complejidad</option>
-                <option value="No Aplica">No Aplica</option>                
+                <option value="No Aplica">No Aplica</option>
             </select>
         </div>
 

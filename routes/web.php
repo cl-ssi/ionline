@@ -933,6 +933,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
         Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
         Route::get('/{organizationalUnit}/create-subrogant', [NewAuthorityController::class,'create_subrogant'])->name('create_subrogant');
+        Route::get('/{organizationalUnit}/events', [NewAuthorityController::class,'getEvents'])->name('events');
+
     });
     Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class,'create'])->name('create');
@@ -2090,6 +2092,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
         Route::post('/store', [RemFileController::class, 'store'])->name('store');
         Route::post('/autorizacion_store', [RemFileController::class, 'autorizacion_store'])->name('autorizacion_store');
         Route::get('/download/{remFile}', [RemFileController::class, 'download'])->name('download');
+        Route::delete('/{remFile}/destroy', [RemFileController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');

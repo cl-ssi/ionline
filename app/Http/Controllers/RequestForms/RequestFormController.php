@@ -639,7 +639,8 @@ class RequestFormController extends Controller {
         }
 
         $requestForm->load('eventRequestForms');
-        foreach($requestForm->eventRequestForms->take(-2) as $event){
+        $counter = $requestForm->has_increased_expense ? -1 : -2;
+        foreach($requestForm->eventRequestForms->take($counter) as $event){
             $event->update(['signer_user_id' => null, 'position_signer_user' => null, 'status' => 'pending', 'signature_date' => null]);
         }
         

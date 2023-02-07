@@ -6,12 +6,12 @@
     <h3 class="mb-3">Bandeja de entrada</h3>
 
     <div class="form-row">
-        <fieldset class="form-group col-1">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_id">ID</label>
             <input type="number" class="form-control" id="for_id" wire:model.defer="parte_id" autocomplete="off">
         </fieldset>
 
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_type_id">Tipo</label>
             <select wire:model.defer="parte_type_id" id="for_type_id" class="form-control">
                 <option></option>
@@ -22,17 +22,17 @@
         </fieldset>
 
 
-        <fieldset class="form-group col-1">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_number">Número</label>
             <input type="number" class="form-control" id="for_number" wire:model.defer="parte_number" autocomplete="off">
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-12 col-md-2">
             <label for="for_origin">Origen {{ session('parte_origin') }}</label>
             <input type="text" class="form-control" id="for_origin" wire:model.defer="parte_origin">
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_subject">Asunto</label>
             <input type="text" class="form-control" id="for_subject" wire:model.defer="parte_subject">
         </fieldset>
@@ -78,6 +78,10 @@
             </a>
         @endif
     </h5>
+
+    <div class="text-center" wire:loading>
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+    </div>
 
     <table class="table table-sm table-bordered table-striped" wire:loading.class="d-none">
         <thead>
@@ -216,6 +220,8 @@
         </tbody>
     </table>
 
-    {{ $partes->appends(request()->query())->links() }}
+    <div wire:loading.class="d-none">
+        {{ $partes->appends(request()->query())->links() }}
+    </div>
 
 </div>
