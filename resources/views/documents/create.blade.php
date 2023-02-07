@@ -112,7 +112,7 @@
         <ol>
             <li>Copiar y pegar la tabla desde el excel o word</li>
             <li>En el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
-            <li>Buscar donde diga <strong>&lt;table width=XXX&gt;</strong></li>
+            <li>Buscar donde diga <strong>&lt;table width="XXX"&gt;</strong></li>
             <li>Reemplazar por <strong>&lt;table style="border-collapse: collapse; width: 100%;" border="1"&gt;</strong></li>
         </ol>
     </p>
