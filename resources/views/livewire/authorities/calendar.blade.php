@@ -16,7 +16,7 @@
     @if($editForm)
     <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title">Editar autoridad para la fecha {{ $date }}</h5>
+            <h5 class="card-title">Editar autoridad para la fecha {{ $date }} y tipo {{ $type }}</h5>
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">

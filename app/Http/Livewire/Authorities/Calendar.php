@@ -10,6 +10,8 @@ use App\Rrhh\OrganizationalUnit;
 class Calendar extends Component
 {
     public $organizationalUnit;
+    public $date = null;
+    public $type = null;
 
     /** Input selector de mes */
     public $monthSelection;
@@ -22,7 +24,6 @@ class Calendar extends Component
 
     /** Flag para mostrar o no el cuadro de editar */
     public $editForm = false;
-    public $date = null;
 
     public $today;
 
@@ -43,7 +44,8 @@ class Calendar extends Component
     public function edit($date,$type)
     {
         $this->editForm = true;
-        $this->date = $type;
+        $this->date = $date;
+        $this->type = $type;
     }
 
     /**
