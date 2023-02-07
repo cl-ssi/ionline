@@ -106,6 +106,20 @@
     </div>
 </form>
 
+<div class="alert alert-info" role="alert">
+    <strong>TIP para pegar tablas de word o excel</strong>
+    <p>
+        <ol>
+            <li>Copiar la tabla desde el excel o word</li>
+            <li>Pegar la tabla en la herramienta limpiadora de tabla en el siguiente
+                <a href="https://www.r2h.nl/html-word-excel-table-code-cleaner/index.php">link</a>
+            </li>
+            <li>Presionar el boton "Clean code", luego "Select all" y luego copiar con "Control + C"</li>
+            <li>Volver a donde está haciendo el documento y en el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
+            <li>Finalmente pegar el texto con "Control + V" y guardar</li>
+        </ol>
+    </p>
+</div>
 
 @endsection
 
