@@ -31,7 +31,7 @@
             <td>{{ $establishment->id?? '' }}</td>
             <td>{{ $establishment->name?? '' }}</td>
             <td>{{ $establishment->alias?? '' }}</td>
-            <td>{{ $establishment->type?? '' }}</td>
+            <td>{{ $establishment->establishmentType->name?? '' }}</td>
             <td>{{ $establishment->deis?? '' }}</td>
             <td>{{ $establishment->new_deis?? '' }}</td>
             <td>{{ $establishment->commune->name?? '' }}</td>
