@@ -276,48 +276,11 @@ class DocumentController extends Controller
         $signature->distribution = $document->distribution;
         $signature->type_id = $document->type_id;
 
-        // switch ($document->type) {
-        //     case 'Acta de recepción': 
-        //         $image = base64_encode(file_get_contents(public_path('/images/logo_pluma.jpg'))); 
-        //         break;
-        //     default:
-        //         $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
-        //         break;
-        // }
-
         /** Cargar la imágen en base 64, ya que al generar el PDF no aparece */
         $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
 
         /** Crear un pdf en base a una vista */
         $documentFile = \PDF::loadView('documents.templates.'.$document->viewName, compact('document','image'));
-
-        // switch ($document->type) {
-        //     case 'Memo':
-        //         $signature->document_type = 'Memorando';
-        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
-        //         break;
-        //     case 'Ordinario':
-        //     case 'Reservado':
-        //     case 'Oficio':
-        //         $signature->document_type = 'Oficio';
-        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
-        //         break;
-        //     case 'Circular':
-        //         $signature->document_type = 'Circular';
-        //         $documentFile = \PDF::loadView('documents.circular', compact('document','image'));
-        //         break;
-        //     case 'Acta de recepción':
-        //         $signature->document_type = 'Acta';
-        //         $documentFile = \PDF::loadView('documents.reception', compact('document','image'));
-        //         break;
-        //     case 'Resolución':
-        //         $signature->document_type = 'Resoluciones';
-        //         $documentFile = \PDF::loadView('documents.resolution', compact('document','image'));
-        //         break;
-        //     default:
-        //         $signature->document_type = $document->type->name;
-        //         $documentFile = \PDF::loadView('documents.show', compact('document','image'));
-        // }
 
         $signaturesFile = new SignaturesFile();
         $signaturesFile->file = base64_encode($documentFile->output());
