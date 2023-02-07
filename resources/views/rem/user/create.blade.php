@@ -14,7 +14,7 @@
             <select name="establishment_id[]" id="for_establishment_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Establecimiento" multiple required>
                 <option value="">Seleccionar Establecimiento</option> 
                 @foreach($establishments as $establishment)
-                <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>
+                <option value="{{ $establishment->id }}">{{ $establishment->official_name }}</option>
                 @endforeach
             </select>
         </fieldset>

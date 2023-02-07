@@ -11,7 +11,7 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Nombre</th>
+            <th>Nombre Oficial</th>
             <th>Alias</th>
             <th>Tipo</th>
             <th>Deis</th>
@@ -29,7 +29,7 @@
         @foreach($establishments as $establishment)
         <tr>
             <td>{{ $establishment->id?? '' }}</td>
-            <td>{{ $establishment->name?? '' }}</td>
+            <td>{{ $establishment->official_name?? '' }}</td>
             <td>{{ $establishment->alias?? '' }}</td>
             <td>{{ $establishment->establishmentType->name?? '' }}</td>
             <td>{{ $establishment->deis?? '' }}</td>

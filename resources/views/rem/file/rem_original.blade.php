@@ -18,8 +18,8 @@
         @foreach(auth()->user()->remEstablishments as $remEstablishment)
         <tr>
             <td class="text-center font-weight-bold">
-                {{$remEstablishment->establishment->name}}
-                ({{$remEstablishment->establishment->type}})
+                {{$remEstablishment->establishment->official_name}}
+                ({{$remEstablishment->establishment->establishmentType->name}})
                 ({{$remEstablishment->establishment->new_deis_without_first_character}})
             </td>
 
