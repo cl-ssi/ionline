@@ -513,4 +513,53 @@ class RequestReplacementStaffController extends Controller
     {
         return Storage::disk('gcs')->download($requestReplacementStaff->request_verification_file);
     }
+
+    public function request_by_dates(Request $request){
+        $totalRequestByDates = collect(new RequestReplacementStaff);
+        $pending    = 0;
+        $complete   = 0;
+        $rejected   = 0;
+
+        // $replacementStaff = ReplacementStaff::where('run', $request->run)->first();
+
+        // if($replacementStaff){
+        //     $applicants = Applicant::where('replacement_staff_id', $replacementStaff->id)
+        //         ->where('selected', 1)
+        //         ->get();
+        //     return view('replacement_staff.reports.replacement_staff_historical', compact('request', 'replacementStaff', 'applicants'));
+        // }
+        return view('replacement_staff.reports.request_by_dates', compact('totalRequestByDates', 'request', 'pending', 'complete', 'rejected'));
+    }
+
+    public function search_request_by_dates(Request $request){
+        $totalRequestByDates = RequestReplacementStaff::whereBetween('created_at', [$request->start_date_search, $request->end_date_search." 23:59:59"])->get();
+        // $arrayRequests = [
+        //     'Estado de Solicitud' => 'Cantidad',
+        //     'pending'   => 0,
+        //     'complete'  => 0,
+        //     'rejected'  => 0
+        // ];
+        
+        $pending    = 0;
+        $complete   = 0;
+        $rejected   = 0;
+
+        foreach($totalRequestByDates as $totalRequestByDate){
+            if($totalRequestByDate->request_status == 'pending'){
+                //$arrayRequests['pending'] = $arrayRequests['pending'] + 1;
+                $pending = $pending + 1;
+            }
+            if($totalRequestByDate->request_status == 'complete'){
+                //$arrayRequests['complete'] = $arrayRequests['complete'] + 1;
+                $complete = $complete + 1;
+            }
+            if($totalRequestByDate->request_status == 'rejected'){
+                // $arrayRequests['rejected'] = $arrayRequests['rejected'] + 1;
+                $rejected = $rejected + 1;
+            }
+        }
+
+        return view('replacement_staff.reports.request_by_dates', compact('totalRequestByDates', 'request', 'pending', 'complete', 'rejected'));
+    }
+    
 }
