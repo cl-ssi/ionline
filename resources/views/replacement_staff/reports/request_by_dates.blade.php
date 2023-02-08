@@ -97,7 +97,7 @@
           ['Estado', 'Cantidad'],
           ['Pendientes',  {!! $pending !!}],
           ['Finalizados', {!! $complete !!}],
-          ['Rechazadaos', {!! $rejected !!}]
+          ['Rechazadas', {!! $rejected !!}]
         ]);
 
         var options = {
