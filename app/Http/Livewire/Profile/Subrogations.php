@@ -16,6 +16,8 @@ class Subrogations extends Component
 
     public $absent;
 
+    public $organizationalUnit = null;
+
     protected $listeners = ['searchedUser','ouSelected'];
  
     public function ouSelected($ou_id)
@@ -46,7 +48,17 @@ class Subrogations extends Component
     public function mount()
     {
         $this->user_id = auth()->id();
-        $this->subrogations = Subrogation::where('user_id',$this->user_id)->orderBy('level')->get();
+        if($this->organizationalUnit) {
+            $this->subrogations = Subrogation::with('user')
+                ->where('organizational_unit_id', $this->organizationalUnit->id)
+                ->where('type','manager')
+                ->get();
+        }
+        else {
+            $this->subrogations = Subrogation::with('user')
+                ->where('user_id',$this->user_id)->orderBy('level')->get();
+                app('debugbar')->log('else');
+        }
         $this->view = 'index';
         $this->absent = auth()->user()->absent;
     }

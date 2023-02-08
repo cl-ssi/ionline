@@ -16,10 +16,13 @@ class Calendar extends Component
     public $organizationalUnit;
     public $subrogations;
     public $date = null;
-    public $startDate = null;
     public $type = null;
-    public $subrogation;
+    
+    /** atributos de modelo authority */
+    public $user_id;
+    public $startDate;
     public $endDate;
+    public $position;
 
 
     /** Input selector de mes */
@@ -39,6 +42,23 @@ class Calendar extends Component
 
     public $today;
 
+
+    protected function rules()
+    {
+        return [
+            'user_id' => 'required',
+            'position' => 'required',
+            'endDate' => 'required|date|after:start_date',
+        ];
+    }
+
+    protected $messages = [
+        'user_id.required' => 'El campo de usuario es requerido',
+        'position.required' => 'El campo de cargo es requerido',
+        'endDate.required' => 'El campo de fecha final es requerido',
+        'endDate.after' => 'La fecha final debe ser posterior a la fecha de inicio',
+    ];
+
     /**
      * Mount
      */
@@ -53,12 +73,13 @@ class Calendar extends Component
      */
     public function edit($date, $type)
     {
-        
         $this->date = $date;
         $this->startDate = $date;
         $this->type = $type;
-        $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)->where('type',$this->type)->get();
 
+        $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)
+            ->where('type',$this->type)
+            ->get();
 
         /** Muestra el formulario de edición */
         $this->editForm = true;
@@ -69,38 +90,18 @@ class Calendar extends Component
      */
     public function save()
     {
-        $validator = Validator::make([
-            'user_id' => $this->subrogation,
-            'end_date' => $this->endDate,
-        ], [
-            'user_id' => 'required',
-            'end_date' => 'required|date|after:start_date',
-        ], [
-            'user_id.required' => 'El campo de usuario es requerido',
-            'end_date.required' => 'El campo de fecha final es requerido',
-            'end_date.after' => 'La fecha final debe ser posterior a la fecha de inicio',
-        ]);
-    
-        if ($validator->fails()) {
-            /** Devuelve errores */
-            return $this->emit('validationError', $validator->errors());
-        }
-    
-        /** Código para guardar un cambio */
-        $user_id = $this->subrogation;
-        $endDate = $this->endDate;
+        $this->validate();
     
         NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)
-        ->where('type', $this->type)
-        ->whereBetween('date', [$this->date, $endDate])
-        ->update([
-            'user_id' => $user_id,
-        ]);
+            ->where('type', $this->type)
+            ->whereBetween('date', [$this->date, $this->endDate])
+            ->update([
+                'user_id' => $this->user_id,
+            ]);
 
         /** Agrega un mensaje de éxito */
-        $this->emit('saveSuccess', 'Cambio guardado con éxito');
-    
-    
+        session()->flash('info', 'El usuario  ha sido creado.');
+
         /** Oculta el formulario de edición */
         $this->editForm = false;
     }
