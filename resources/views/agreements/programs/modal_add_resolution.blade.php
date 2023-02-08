@@ -29,14 +29,14 @@
                         <label for="fordirector">Director/a a cargo</label>
                         <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required>
                             @foreach($signers as $signer)
-                            <option value="{{$signer->id}}">{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
+                            <option value="{{$signer->id}}">{{ Str::limit($signer->appellative.' '.$signer->user->fullName.', '.$signer->decree, 155) }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="forestablishment">Establecimiento</label>
-                        @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.', 'CGU. Hector Reyno'))
+                        @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.'))
                         <select name="establishment" class="form-control selectpicker" title="Seleccione..." required>
                             @foreach($establishments as $establishment)
                             <option value="{{$establishment}}">{{$establishment}}</option>
