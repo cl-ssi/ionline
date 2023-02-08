@@ -26,7 +26,7 @@
                             <label for="for_year">Año:</label>
                             <select name="year" class="form-control form-control-sm">
                                 <option value="">Seleccione...</option>
-                                @foreach(range($requestForm->created_at->year, $requestForm->created_at->year + 2) as $year)
+                                @foreach(range($requestForm->created_at->year, now()->year + 1) as $year)
                                 <option value="{{$year}}">{{$year}}</option>
                                 @endforeach
                             </select>
