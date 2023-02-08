@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 use App\Mail\NewPsiRequest;
+use App\Models\Documents\Type;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\Authority;
 
