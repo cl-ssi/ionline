@@ -1,5 +1,7 @@
 <div>
 
+
+
     <!-- Muestra como título el nombre de la OU y el selector de mes -->
     <div class="form-row mb-4">
         <div class="col-12 col-md-9">
@@ -21,17 +23,18 @@
                 <div class="col">
                     <div class="form-group">
                         <label for="">Usuario</label>
-                        <select name="" id="" class="form-control">
-                            <option value="">Alvaro Torres</option>
-                            <option value="">Esteban Miranda</option>
-                            <option value="">Alvaro Lupa</option>
+                        <select name="subrogation" wire:model="subrogation" class="form-control" required>
+                            <option value="">Seleccionar Subrogante</option>
+                            @foreach($subrogations as $subrogation)
+                            <option value="{{ $subrogation->user->id }}">{{ $subrogation->user->tinnyName }} ({{$subrogation->type}})</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="">Desde</label>
-                        <input type="text" class="form-control">
+                        <label for="">Hasta</label>
+                        <input type="date" name="endDate" wire:model="endDate" class="form-control" required>
                     </div>
                 </div>
                 <div class="col-1">
@@ -48,54 +51,62 @@
     @endif
 
 
+
     <!-- Muestra el nombre del mes seleccionado (Ej: Febrero 2023) -->
     <h5 clas="mb-3">
         {{ ucfirst($startOfMonth->monthName) }} de {{ $startOfMonth->year }}
     </h5>
+    <!-- Mensaje de éxito -->
+    <div wire:loading.remove>
+        @if(session()->has('saveSuccess'))
+        <div class="alert alert-success mt-3">
+            {{ session('saveSuccess') }}
+        </div>
+        @endif
+    </div>
 
 
     <!-- Rellena con cuadros en blanco para cuando el mes no comienza en el primer cuadro -->
     @for($i = 1; $i < $startOfMonth->dayOfWeek; $i++)
         <div class="dia_calendario small p-2 text-center border-white"></div>
-    @endfor
+        @endfor
 
-    <!-- Muestra el calendario -->
-    @foreach($data as $date => $authority)
+        <!-- Muestra el calendario -->
+        @foreach($data as $date => $authority)
         <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
 
-        <span class="{{ ($authority['holiday'] OR ($authority['date'] instanceof Carbon && $authority['date']->dayOfWeek == 0)) ? 'text-danger': '' }}">
-            {{ $date }} 
-        </span>
+            <span class="{{ ($authority['holiday'] OR ($authority['date'] instanceof Carbon && $authority['date']->dayOfWeek == 0)) ? 'text-danger': '' }}">
+                {{ $date }}
+            </span>
 
 
             <hr class="mt-1 mb-1">
-                <a href="#" class="link-primary" 
-                    wire:click="edit('{{ $date }}','manager')">
-                    {{ optional($authority['manager'])->tinnyName }}
-                </a>
-             <br>
+            <a href="#" class="link-primary" wire:click="edit('{{ $date }}','manager')">
+                {{ optional($authority['manager'])->tinnyName }}
+            </a>
+            <br>
             <em class="text-muted">{{ optional($authority['manager'])->position }}</em>
-            
-            <hr class="mt-1 mb-1" >
+
+            <hr class="mt-1 mb-1">
             {{ optional($authority['secretary'])->tinnyName }} <br>
             <em class="text-muted">{{ optional($authority['secretary'])->position }}</em>
 
         </div>
-    @endforeach
+        @endforeach
 
 
-    <!-- CSS Custom para el calendario -->
-    @section('custom_css')
-    <style media="screen">
-        .dia_calendario {
-            display: inline-block;
-            border: solid 1px rgb(0, 0, 0, 0.125);
-            border-radius: 0.25rem;
-            width: 13.9%;
-            /* width: 154px; */
-            text-align: center;
-            margin-bottom: 5px;
-        }
-    </style>
-    @endsection
+        <!-- CSS Custom para el calendario -->
+        @section('custom_css')
+        <style media="screen">
+            .dia_calendario {
+                display: inline-block;
+                border: solid 1px rgb(0, 0, 0, 0.125);
+                border-radius: 0.25rem;
+                width: 13.9%;
+                /* width: 154px; */
+                text-align: center;
+                margin-bottom: 5px;
+            }
+        </style>
+        @endsection
 </div>

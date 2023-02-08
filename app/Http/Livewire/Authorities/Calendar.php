@@ -5,16 +5,22 @@ namespace App\Http\Livewire\Authorities;
 use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\NewAuthority;
 use App\Models\Parameters\Holiday;
+use App\Models\Profile\Subrogation;
+use Illuminate\Support\Facades\Validator;
 
 class Calendar extends Component
 {
     public $organizationalUnit;
+    public $subrogations;
     public $date = null;
+    public $startDate = null;
     public $type = null;
+    public $subrogation;
+    public $endDate;
+
 
     /** Input selector de mes */
     public $monthSelection;
@@ -47,8 +53,11 @@ class Calendar extends Component
      */
     public function edit($date, $type)
     {
+        
         $this->date = $date;
+        $this->startDate = $date;
         $this->type = $type;
+        $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)->where('type',$this->type)->get();
 
 
         /** Muestra el formulario de edición */
@@ -60,12 +69,43 @@ class Calendar extends Component
      */
     public function save()
     {
-        /** Codigo para guardar un cambio */
+        $validator = Validator::make([
+            'user_id' => $this->subrogation,
+            'end_date' => $this->endDate,
+        ], [
+            'user_id' => 'required',
+            'end_date' => 'required|date|after:start_date',
+        ], [
+            'user_id.required' => 'El campo de usuario es requerido',
+            'end_date.required' => 'El campo de fecha final es requerido',
+            'end_date.after' => 'La fecha final debe ser posterior a la fecha de inicio',
+        ]);
+    
+        if ($validator->fails()) {
+            /** Devuelve errores */
+            return $this->emit('validationError', $validator->errors());
+        }
+    
+        /** Código para guardar un cambio */
+        $user_id = $this->subrogation;
+        $endDate = $this->endDate;
+    
+        NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)
+        ->where('type', $this->type)
+        ->whereBetween('date', [$this->date, $endDate])
+        ->update([
+            'user_id' => $user_id,
+        ]);
 
-
+        /** Agrega un mensaje de éxito */
+        $this->emit('saveSuccess', 'Cambio guardado con éxito');
+    
+    
         /** Oculta el formulario de edición */
         $this->editForm = false;
     }
+    
+    
 
     public function render()
     {
@@ -94,138 +134,7 @@ class Calendar extends Component
             $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
         }
 
-        //dd($this->data);
-
-        
-
-
         return view('livewire.authorities.calendar');
     }
 }
 
-
-        /** Array de prueba */
-
-        // array:6 [▼
-        //     "2023-02-01" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675220400 {#3274 ▶}
-        //         "holliday" => false
-        //         "manager" => App\User {#3296 ▶}
-        //         "secretary" => App\User {#3303 ▶}
-        //     ]
-        //     "2023-02-02" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675306800 {#3246 ▶}
-        //         "holliday" => true
-        //         "manager" => App\User {#3311 ▶}
-        //         "secretary" => App\User {#3318 ▶}
-        //     ]
-        //     "2023-02-03" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675393200 {#3255 ▶}
-        //         "holliday" => false
-        //         "manager" => App\User {#3326 ▶}
-        //         "secretary" => App\User {#3333 ▶}
-        //     ]
-        //     "2023-02-04" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675479600 {#3304 ▶}
-        //         "holliday" => false
-        //         "manager" => App\User {#3341 ▶}
-        //         "secretary" => App\User {#3348 ▶}
-        //     ]
-        //     "2023-02-05" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675566000 {#3319 ▶}
-        //         "holliday" => false
-        //         "manager" => App\User {#3356 ▶}
-        //         "secretary" => App\User {#3363 ▶}
-        //     ]
-        //     "2023-02-06" => array:4 [▼
-        //         "date" => Carbon\Carbon @1675652400 {#3334 ▶}
-        //         "holliday" => false
-        //         "manager" => App\User {#3371 ▶}
-        //         "secretary" => App\User {#3378 ▶}
-        //     ]
-        // ]
-
-
-
-
-        // for ($date = $datestart; $date->lte($dateend); $date->addDay()) {
-        //     $newAuthority = NewAuthority::where('date', $date->toDateString())->where('organizational_unit_id', $this->organizationalUnit->id)->first();
-
-        //     if ($this->type === 'manager') {
-        //         $manager_id = $newAuthority->user_id;
-        //     } else if ($this->type === 'delegate') {
-        //         $delegate_id = $newAuthority->user_id;
-        //     } else if ($this->type === 'secretary') {
-        //         $secretary_id = $newAuthority->user_id;
-
-        //     if ($newAuthority) {
-        //         $this->data[$date->toDateString()] = [
-        //             'date' => $date,
-        //             'holliday' => $newAuthority->holliday,
-        //             'manager' => User::find($newAuthority->manager_id),
-        //             'delegate' => User::find($newAuthority->manager_id),
-        //             'secretary' => User::find($newAuthority->secretary_id),
-        //         ];
-        //     } else {
-        //         $this->data[$date->toDateString()] = [
-        //             'date' => $date,
-        //             'holliday' => false,
-        //             'manager' => null,
-        //             'secretary' => null,
-        //         ];
-        //     }
-        // }
-
-
-
-
-
-
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(1);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = true;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(2);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(3);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(4);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(5);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(6);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-        // $date = $this->startOfMonth->copy()->addDays(7);
-        // $this->data[$date->format('Y-m-d')]['date'] = $date;
-        // $this->data[$date->format('Y-m-d')]['holliday'] = false;
-        // $this->data[$date->format('Y-m-d')]['manager'] = User::find(15287582);
-        // $this->data[$date->format('Y-m-d')]['secretary'] = User::find(15287582);
-
-    
