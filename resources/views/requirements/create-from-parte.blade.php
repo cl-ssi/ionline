@@ -79,7 +79,7 @@
             <div class="form-row">
                 <div class="col-2">
                     <a @if($previous) href="{{ route('requirements.createFromParte', $previous) }}" @endif>
-                        <button type="button" class="btn btn-primary form-control">
+                        <button type="button" class="btn btn-primary form-control" @if(!$previous) disabled @endif>
                             <i class="fas fa-arrow-circle-left"></i>
                         </button>
                     </a>
@@ -89,7 +89,7 @@
                 </div>
                 <div class="col-2">
                     <a @if($next) href="{{ route('requirements.createFromParte', $next) }}" @endif>
-                        <button type="button" class="btn btn-primary form-control">
+                        <button type="button" class="btn btn-primary form-control" @if(!$next) disabled @endif>
                             <i class="fas fa-arrow-circle-right"></i>
                         </button>
                     </a>
