@@ -47,6 +47,7 @@ class Inbox extends Component
         session(['parte_subject' => $this->parte_subject]);
         session(['parte_without_sgr' => $this->parte_without_sgr]);
         session(['parte_important' => $this->parte_important]);
+        $this->resetPage();
     }
 
     public function removeFilter($filter)
