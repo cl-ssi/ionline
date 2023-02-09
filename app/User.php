@@ -636,23 +636,32 @@ class User extends Authenticatable implements Auditable
 
     public function getIAmSubrogantOfAttribute()
     {
-        $users = collect();
+        // $users = collect();
 
-        $subrogations = Subrogation::query()
-            ->with('user')
-            ->where('subrogant_id',$this->id)
-            ->whereRelation('user','absent',true)
-            ->get();
+        // $subrogations = Subrogation::query()
+        //     //->with('user')
+        //     ->where('subrogant_id',$this->id)
+        //     //->whereRelation('user','absent',true)
+        //     ->get();
 
-        foreach($subrogations as $subrogation)
-        {
-            if($subrogation->user->subrogant == $this)
-            {
-                unset($subrogation->user->subrogations);
-                $users[] = $subrogation->user;
-            }
-        }
-        return $users;
+        // foreach($subrogations as $subrogation)
+        // {
+        //     if($subrogation->user->subrogant == $this)
+        //     {
+        //         unset($subrogation->user->subrogations);
+        //         $users[] = $subrogation->user;
+        //     }
+        // }
+        // return $users;
+    }
+
+    public function getIAmSubrogantNoAuthorityAttribute()
+    {        
+        return Subrogation::where('organizational_unit_id',null)
+        ->where('type',null)
+        ->where('subrogant_id',auth()->user()->id)
+        ->get();
+        
     }
 
     /**

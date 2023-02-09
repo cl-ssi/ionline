@@ -4,6 +4,8 @@
         @livewire('search-select-user')
         @error('subrogant_id') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
+
+    {{--
     @if(!$organizationalUnit)
     <fieldset class="col-12 col-md-8">
         <label for="for-name">Unidar Organizacional</label>
@@ -15,4 +17,5 @@
         @error('organizational_unit_id') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
     @endif
+     --}}
 </div>

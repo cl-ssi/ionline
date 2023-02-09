@@ -59,7 +59,11 @@ class Subrogations extends Component
                 ->get();
         } else {
             $this->subrogations = Subrogation::with('user')
-                ->where('user_id', $this->user_id)->orderBy('level')->get();
+                ->where('user_id', $this->user_id)
+                ->where('organizational_unit_id', null)
+                ->where('type', null)
+                ->orderBy('level')
+                ->get();
         }
         $this->view = 'index';
         $this->absent = auth()->user()->absent;
@@ -94,9 +98,20 @@ class Subrogations extends Component
                 ]
             );
         } else {
-            $dataValidated = $this->validate();
-            $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
-            Subrogation::create($dataValidated);
+            // dd('entre aca');
+            // $dataValidated = $this->validate();
+            // $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
+            // Subrogation::create($dataValidated);
+            Subrogation::firstOrCreate(
+                [
+                    'user_id' => $this->user_id,
+                    'subrogant_id' => $this->subrogant_id,
+                ],
+                [
+                    
+                    'level' => Subrogation::whereUserId($this->user_id)->where('organizational_unit_id', null)->where('type', null)->count() + 1
+                ]
+            );
         }
 
         $this->mount();

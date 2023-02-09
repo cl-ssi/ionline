@@ -5,13 +5,15 @@
             <th>Estado</th>
             <th>Nombre</th>
             <th>Órden jerárquico</th>
+            @if($organizationalUnit)
             <th>Unidad Organizacional</th>
+            @endif
             <th></th>
         </tr>
     </thead>
     <tbody>
         @if(!$organizationalUnit)
-            <tr class="table-{{ auth()->user()->subrogant == auth()->user() ? 'success' : 'warning'}}">            
+            <tr class="table-{{ auth()->user()->subrogant == auth()->user() ? 'success' : 'warning'}}">
                 <td>
                     @if($absent)
                         <button type="button" class="btn btn-sm btn-success"
@@ -34,7 +36,7 @@
             </tr>
         @endif
         @foreach($subrogations as $subrogation)
-            <tr class="table-{{ auth()->user()->subrogant == $subrogation->subrogant ? 'success' : 'warning'}}">
+            <tr class="table-{{ $type == 'manager' ? 'primary' : 'secondary'}}">
                 <td>
                     <button
                         type="button"
@@ -69,7 +71,9 @@
                 </td>
                 <td>{{ $subrogation->subrogant->fullName }}</td>
                 <td>{{ $subrogation->level }}</td>
+                @if($organizationalUnit)
                 <td>{{ optional($subrogation->organizationalUnit)->name }}</td>
+                @endif
                 <td>
                     <button
                         type="button"
@@ -88,25 +92,25 @@
 
 
 @if(!$hide_own_subrogation)
-<h4><i class="fas fa-chess"></i> Mis subrogancias</h4>
+<h4><i class="fas fa-chess"></i> ¿De quienes soy subrogante?</h4>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered small table-stripped">
         <thead class="thead-light">
             <tr>
                 <th width="120"></th>
-                <th>Nombre</th>
-                <th>Unidad Organizacional</th>
-                <th>Órden jerárquico</th>
+                <th>Mi Nombre</th>
+                <th>A Quien Subrogo</th>
+                <th>En que orden jerárquico</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(Auth::user()->getIAmSubrogantOfAttribute() as $key => $user)
+            @foreach(Auth::user()->getIAmSubrogantNoAuthorityAttribute() as $key => $subrogation)
                 <tr>
                     <td>{{ $key+1 }}</td>
-                    <td>{{ $user->TinnyName }}</td>
-                    <td>{{ $user->organizationalUnit->name }}</td>
-                    <td>{{ $user->subrogations->first()->level }}</td>
+                    <td>{{ Auth::user()->TinnyName }}</td>
+                    <td>{{ $subrogation->user->TinnyName }}</td>
+                    <td>{{ $subrogation->level }}</td>
                 </tr>
             @endforeach
         </tbody>
