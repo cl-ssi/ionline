@@ -933,6 +933,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
 
     Route::prefix('new-authorities')->name('new-authorities.')->middleware('auth')->group(function () {
+        Route::get('/test', [NewAuthorityController::class,'test'])->name('test');
         Route::get('/', [NewAuthorityController::class,'index'])->name('index');
         Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
         Route::get('/{organizationalUnit}/create', [NewAuthorityController::class,'create'])->name('create');

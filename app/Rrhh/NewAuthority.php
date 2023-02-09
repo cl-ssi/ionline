@@ -63,17 +63,16 @@ class NewAuthority extends Model
 
 
     public static function getAuthorityFromDate($ou_id, $date, $type) {
-        $authority = Self::where('')->get();
-        if (!is_string($date)) {
-          $date = $date->format('Y-m-d');
-        }
-
-        return Authority::with('user','organizationalUnit')
+        return NewAuthority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
-            ->when($type, function ($q) use ($type) {
-                is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
-              })
-            ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
+            ->where('date',$date)
+            ->where('type', $type)
+            ->first();
+        
+    }
+
+    public static function getTodayAuthorityManagerFromDate($ou_id) {
+        return self::getAuthorityFromDate($ou_id, today(), 'manager');        
     }
 
     public static function getAuthorityFromAllTime($ou_id, $type) {
