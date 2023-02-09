@@ -42,6 +42,8 @@ class Calendar extends Component
 
     public $today;
 
+    /** Cantidad de cuadros en blanco antes del primer día del mes */
+    public $blankDays;
 
     protected function rules()
     {
@@ -110,14 +112,19 @@ class Calendar extends Component
 
     public function render()
     {
-        
         $this->data = [];
         $this->startOfMonth = Carbon::createFromFormat('Y-m', $this->monthSelection)->startOfMonth();
         $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
-        $holidays = Holiday::whereBetween('date', [$this->startOfMonth, $this->endOfMonth])->get();
-        $newAuthorities = NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)->whereBetween('date', [$this->startOfMonth, $this->endOfMonth])->get();
 
-                
+        $this->blankDays = ($this->startOfMonth->dayOfWeek == 0) ? 7 : $this->startOfMonth->dayOfWeek;
+
+        $holidays = Holiday::whereBetween('date', [$this->startOfMonth, $this->endOfMonth])
+            ->get();
+
+        $newAuthorities = NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)
+            ->whereBetween('date', [$this->startOfMonth, $this->endOfMonth])
+            ->get();
+
         foreach (CarbonPeriod::create($this->startOfMonth, '1 day', $this->endOfMonth) as $day) {
             $this->data[$day->format('Y-m-d')] = array(
                 'holiday' => false,
@@ -127,6 +134,7 @@ class Calendar extends Component
                 'secretary' => false,
             );
         }
+
         foreach ($holidays as $holiday) {
             $this->data[$holiday->date->format('Y-m-d')]['holiday'] = true;
         }

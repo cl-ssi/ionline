@@ -10,6 +10,7 @@
     'organizationalUnit' => $ou,
     'hide_own_subrogation' => true,
 ])
+
 <hr>
 
 @livewire('authorities.calendar', ['organizationalUnit' => $ou])

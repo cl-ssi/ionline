@@ -2,55 +2,36 @@
     <!-- Muestra como título el nombre de la OU y el selector de mes -->
     <div class="form-row mb-4">
         <div class="col-12 col-md-9">
-            <h4>
-                {{ $organizationalUnit->name }}
-            </h4>
+            <!-- Muestra el nombre del mes seleccionado (Ej: Febrero 2023) -->
+            <h5 clas="mb-3">
+                {{ ucfirst($startOfMonth->monthName) }} de {{ $startOfMonth->year }}
+            </h5>
         </div>
         <div class="col-6 col-md-3">
             <input class="form-control" type="month" wire:model="monthSelection">
         </div>
     </div>
 
+    <!-- Mensaje de éxito -->
+    @include('layouts.partials.flash_message')
+
     <!-- Muestra el form para editar una autoridad -->
     @if($editForm)
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Editar autoridad para la fecha {{ $date }} y tipo {{ $type }}</h5>
+
             <div class="form-row">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
                     <div class="form-group">
-                        <label for="">Usuario*</label>
-                        <select name="subrogation" wire:model="user_id" class="form-control" required>
-                            <option value="">Seleccionar Subrogante</option>
+                        <label for="for_user_id">Usuario*</label>
+                        <select wire:model="user_id" class="form-control" required>
+                            <option value=""></option>
                             @foreach($subrogations as $subrogation)
-                            <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->tinnyName }} ({{$subrogation->type}})</option>
+                            <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->shortName }} ({{ $subrogation->type }})</option>
                             @endforeach
                         </select>
                         @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                        <label for="">En representación de (opcional)</label>
-                        <input type="text" class="form-control">
-                        @error('xxx') <span class="text-danger">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="col-4 col-md-2">
-                    <div class="form-group">
-                        <label for="">Desde*</label>
-                        <input type="date" wire:model="startDate" class="form-control" disabled required>
-                        @error('startDate') <span class="text-danger">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="col-4 col-md-2">
-                    <div class="form-group">
-                        <label for="">Hasta*</label>
-                        <input type="date" wire:model="endDate" class="form-control" required>
-                        @error('endDate') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
@@ -84,36 +65,53 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-12">
+
+                <div class="col-4 col-md-2">
                     <div class="form-group">
-                        <label for="">Decreto</label>
+                        <label for="">Desde*</label>
+                        <input type="date" wire:model="startDate" class="form-control" disabled required>
+                        @error('startDate') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div class="col-4 col-md-2">
+                    <div class="form-group">
+                        <label for="">Hasta*</label>
+                        <input type="date" wire:model="endDate" class="form-control" required>
+                        @error('endDate') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-7">
+                    <div class="form-group">
+                        <label for="for_decree">Decreto</label>
                         <input type="text" class="form-control">
                     </div>
                 </div>
-                <div class="col-1">
+
+                <div class="col-12 col-md-4">
                     <div class="form-group">
-                        <label for="">&nbsp;</label>
-                        <button class="btn btn-primary form-control" wire:click="save()">
-                            <i class="fas fa-save"></i>
-                        </button>
+                        <label for="">En representación de (opcional)</label>
+                        @livewire('search-select-user', ['selected_id' => 'representation_id'])
+                        @error('xxx') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                 </div>
             </div>
+
+            <button class="btn btn-primary" wire:click="save()">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+
+            <button class="btn btn-outline-secondary" wire:click="cancel()">
+                Cancelar
+            </button>
+
         </div>
     </div>
     @endif
 
-    <!-- Mensaje de éxito -->
-    @include('layouts.partials.flash_message')
-
-
-    <!-- Muestra el nombre del mes seleccionado (Ej: Febrero 2023) -->
-    <h5 clas="mb-3">
-        {{ ucfirst($startOfMonth->monthName) }} de {{ $startOfMonth->year }}
-    </h5>
-
     <!-- Rellena con cuadros en blanco para cuando el mes no comienza en el primer cuadro -->
-    @for($i = 1; $i < $startOfMonth->dayOfWeek; $i++)
+    @for($i = 1; $i < $blankDays; $i++)
         <div class="dia_calendario small p-2 text-center border-white"></div>
     @endfor
 
@@ -124,7 +122,6 @@
             <span class="{{ ($authority['holiday'] OR $authority['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
                 {{ $date }}
             </span>
-
 
             <hr class="mt-1 mb-1">
             {{ optional($authority['manager'])->tinnyName }}
