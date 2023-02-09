@@ -99,6 +99,7 @@ class Calendar extends Component
             ->whereBetween('date', [$this->date, $this->endDate])
             ->update([
                 'user_id' => $this->user_id,
+                'position' => $this->position,
             ]);
 
         /** Agrega un mensaje de éxito */
@@ -132,6 +133,7 @@ class Calendar extends Component
                 'manager' => false,
                 'delegate' => false,
                 'secretary' => false,
+                
             );
         }
 
@@ -141,6 +143,8 @@ class Calendar extends Component
 
         foreach ($newAuthorities as $authority) {
             $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
+            $this->data[$authority->date->format('Y-m-d')][$authority->type]['position'] = $authority->position;
+            
         }
 
         return view('livewire.authorities.calendar');
