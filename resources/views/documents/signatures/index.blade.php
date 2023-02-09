@@ -127,7 +127,7 @@
                         --}}
                         @foreach($pendingSignaturesFlow->signature->signaturesFlows as $key => $signatureFlow)
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
-                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
                                             por {{ $signatureFlow->signerName }}
                                             el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s') }}">
@@ -135,7 +135,7 @@
                                 </span>&nbsp;
                             @endif
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
-                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }}
                                         Firma Subrogada por: {{ $signatureFlow->realSignerName }}
                                         Fecha: {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
@@ -144,21 +144,21 @@
                             @endif
 
                             @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id === null)
-                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-danger text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span>&nbsp;
                             @endif
 
                             @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id != null)
-                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-danger text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }} - Rechazado por Subrogante: {{ $signatureFlow->realSignerName }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span>&nbsp;
                             @endif
 
                             @if($signatureFlow->status === NULL)
-                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip" data-placement="top"
+                                <span class="d-inline-bloc img-thumbnail border-dark rounded-circle" tabindex="0" data-toggle="tooltip" data-placement="top"
                                     title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span>&nbsp;
@@ -308,6 +308,7 @@
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
                             @endif
+                            
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
                                 <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }}
@@ -332,7 +333,7 @@
                             @endif
 
                             @if($signatureFlow->status === NULL)
-                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
@@ -426,7 +427,7 @@
 
                         @foreach($signature->SignaturesFlows as $key => $signatureFlow)
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
-                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
                                             por {{ $signatureFlow->signerName }}
                                             el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
@@ -434,7 +435,7 @@
                                 </span> &nbsp;
                             @endif
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
-                                <span class="d-inline-bloc img-thumbnail border-success rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }}
                                         Firma Subrogada por: {{ $signatureFlow->realSignerName }}
                                         Fecha: {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
@@ -443,21 +444,21 @@
                             @endif
 
                             @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id === null)
-                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-danger text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Rechazado por {{ $signatureFlow->signerName }} - Motivo: {{ $signatureFlow->observation }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
                             @endif
 
                             @if($signatureFlow->status === 0 && $signatureFlow->real_signer_id != null)
-                                <span class="d-inline-bloc img-thumbnail border-danger rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark bg-danger text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }} - Rechazado por Subrogante: {{ $signatureFlow->realSignerName }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
                             @endif
 
                             @if($signatureFlow->status === NULL)
-                                <span class="d-inline-bloc img-thumbnail border-secondary rounded-circle" tabindex="0" data-toggle="tooltip"
+                                <span class="d-inline-bloc img-thumbnail border-dark rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Pendiente {{ $signatureFlow->type == 'firmante' ? 'firma ' : 'visación ' }} de {{ $signatureFlow->signerName }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
