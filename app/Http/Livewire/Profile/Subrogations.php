@@ -21,8 +21,8 @@ class Subrogations extends Component
 
     public $organizationalUnit = null;
 
-    protected $listeners = ['searchedUser','ouSelected'];
- 
+    protected $listeners = ['searchedUser', 'ouSelected'];
+
     public function ouSelected($ou_id)
     {
         $this->organizational_unit_id = $ou_id;
@@ -51,15 +51,15 @@ class Subrogations extends Component
     public function mount()
     {
         $this->user_id = auth()->id();
-        if($this->organizationalUnit and $this->type) {
+        if ($this->organizationalUnit and $this->type) {
             $this->subrogations = Subrogation::with('user')
                 ->where('organizational_unit_id', $this->organizationalUnit->id)
-                ->where('type',$this->type)
-                ->get();                
-        }
-        else {
+                ->where('type', $this->type)
+                ->orderBy('level')
+                ->get();
+        } else {
             $this->subrogations = Subrogation::with('user')
-                ->where('user_id',$this->user_id)->orderBy('level')->get();
+                ->where('user_id', $this->user_id)->orderBy('level')->get();
         }
         $this->view = 'index';
         $this->absent = auth()->user()->absent;
@@ -81,24 +81,22 @@ class Subrogations extends Component
 
     public function store()
     {
-        if($this->organizationalUnit and $this->type)
-        {
-            $subrogation = Subrogation::firstOrCreate(
-                ['user_id' => $this->subrogant_id,
-                'subrogant_id' => $this->subrogant_id,
-                'organizational_unit_id' => $this->organizationalUnit->id,
-            ],
-            ['type' => $this->type]
+        if ($this->organizationalUnit and $this->type) {
+            Subrogation::firstOrCreate(
+                [
+                    'user_id' => $this->subrogant_id,
+                    'subrogant_id' => $this->subrogant_id,
+                    'organizational_unit_id' => $this->organizationalUnit->id,
+                ],
+                [
+                    'type' => $this->type,
+                    'level' => Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)->where('type', $this->type)->count() + 1
+                ]
             );
-            //TODO consultar al Torres, el where deberia ser un count del orgizational con el type y despues el +1, pero se pierde en caso que la persona desee subrogantes. ¿añadir otra columna?
-            $subrogation->level = $subrogation->whereUserId($this->subrogant_id)->count() + 1;
-            $subrogation->save();
-        }
-        else
-        {
-        $dataValidated = $this->validate();
-        $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
-        Subrogation::create($dataValidated);
+        } else {
+            $dataValidated = $this->validate();
+            $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
+            Subrogation::create($dataValidated);
         }
 
         $this->mount();
@@ -129,8 +127,7 @@ class Subrogations extends Component
             ->where('level', '>', $subrogation->level)
             ->get();
 
-        foreach($subrogations as $itemSubrogation)
-        {
+        foreach ($subrogations as $itemSubrogation) {
             $itemSubrogation->update([
                 'level' => $itemSubrogation->level - 1
             ]);
@@ -149,36 +146,66 @@ class Subrogations extends Component
 
     public function up(Subrogation $subrogation)
     {
-        $subrogationUp = Subrogation::query()
-            ->whereUserId(Auth::id())
-            ->whereLevel($subrogation->level - 1)
-            ->first();
+        if ($subrogation->organizational_unit_id) {
+            $subrogationUp = Subrogation::query()
+                ->where('organizational_unit_id', $subrogation->organizational_unit_id)
+                ->whereType($subrogation->type)
+                ->whereLevel($subrogation->level - 1)
+                ->first();
 
-        $subrogation->update([
-            'level' => $subrogation->level - 1,
-        ]);
+            $subrogation->update([
+                'level' => $subrogation->level - 1,
+            ]);
 
-        $subrogationUp->update([
-            'level' => $subrogationUp->level + 1,
-        ]);
+            $subrogationUp->update([
+                'level' => $subrogationUp->level + 1,
+            ]);
+        } else {
+            $subrogationUp = Subrogation::query()
+                ->whereUserId(Auth::id())
+                ->whereLevel($subrogation->level - 1)
+                ->first();
 
+            $subrogation->update([
+                'level' => $subrogation->level - 1,
+            ]);
+
+            $subrogationUp->update([
+                'level' => $subrogationUp->level + 1,
+            ]);
+        }
         $this->mount();
     }
 
     public function down(Subrogation $subrogation)
     {
-        $subrogationDown = Subrogation::query()
-            ->whereUserId(Auth::id())
-            ->whereLevel($subrogation->level + 1)
-            ->first();
+        if ($subrogation->organizational_unit_id) {
+            $subrogationDown = Subrogation::query()
+                ->where('organizational_unit_id', $subrogation->organizational_unit_id)
+                ->whereType($subrogation->type)
+                ->whereLevel($subrogation->level + 1)
+                ->first();
 
-        $subrogation->update([
-            'level' => $subrogation->level + 1,
-        ]);
+            $subrogation->update([
+                'level' => $subrogation->level + 1,
+            ]);
+            $subrogationDown->update([
+                'level' => $subrogationDown->level - 1,
+            ]);
+        } else {
+            $subrogationDown = Subrogation::query()
+                ->whereUserId(Auth::id())
+                ->whereLevel($subrogation->level + 1)
+                ->first();
 
-        $subrogationDown->update([
-            'level' => $subrogationDown->level - 1,
-        ]);
+            $subrogation->update([
+                'level' => $subrogation->level + 1,
+            ]);
+
+            $subrogationDown->update([
+                'level' => $subrogationDown->level - 1,
+            ]);
+        }
 
         $this->mount();
     }
