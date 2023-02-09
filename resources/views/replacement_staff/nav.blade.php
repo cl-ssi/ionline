@@ -98,7 +98,8 @@
             <i class="fas fa-file"></i> Reportes
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ route('replacement_staff.reports.replacement_staff_historical') }}">Staff: Historico por Persona</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.reports.replacement_staff_historical') }}">Historico por Persona</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.reports.request_by_dates') }}">Consolidado por fecha</a>
         </div>
    </li>
    @endcan

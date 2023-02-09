@@ -70,7 +70,8 @@ class SignatureController extends Controller
 
         if ($tab == 'mis_documentos') {
             //Firmas del usuario y del manager actual de ou
-            $mySignatures = Signature::with('signaturesFiles')->whereIn('responsable_id', $users);
+            $mySignatures = Signature::with('signaturesFiles')
+                ->whereIn('responsable_id', $users);
 
             //Firmas de managers anteriores de la ou
             foreach ($myAuthorities as $myAuthority){
@@ -84,7 +85,8 @@ class SignatureController extends Controller
 
         if ($tab == 'pendientes') {
             //Firmas del usuario y del manager actual de ou
-            $pendingSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
+            $pendingSignaturesFlows = SignaturesFlow::with('signaturesFile', 'userSigner')
+                ->whereIn('user_id', $users)
                 ->whereNull('status')
                 ->whereHas('signaturesFile.signature', function ($q) {
                     $q->whereNull('rejected_at');
@@ -104,7 +106,8 @@ class SignatureController extends Controller
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
             //Firmas del usuario y del manager actual de ou
-            $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
+            $signedSignaturesFlows = SignaturesFlow::with('signaturesFile', 'userSigner')
+                ->whereIn('user_id', $users)
                 ->where(function ($q) {
                     $q->whereNotNull('status')
                         ->orWhereHas('signaturesFile.signature', function ($q) {

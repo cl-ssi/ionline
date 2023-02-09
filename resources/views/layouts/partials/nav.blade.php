@@ -141,7 +141,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        @if(auth()->user()->organizationalUnit && auth()->user()->organizationalUnit->establishment_id == 38)
+                        @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, [38,41]))
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>

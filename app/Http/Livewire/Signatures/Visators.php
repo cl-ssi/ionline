@@ -92,7 +92,7 @@ class Visators extends Component
                 'childs.childs.childs.childs',
             ])
             ->where('level', 1)
-            ->whereIn('establishment_id', [38, 1])
+            ->whereIn('establishment_id', [38, 1, 41])
             ->get();
 
         return view('livewire.signatures.visators', compact('ouRoots'));

@@ -10,27 +10,29 @@
         </tr>
     </thead>
     <tbody>
-        <tr class="table-{{ auth()->user()->subrogant == auth()->user() ? 'success' : 'warning'}}">
-            <td>
-                @if($absent)
-                    <button type="button" class="btn btn-sm btn-success"
-                    wire:click="toggleAbsent()"><i class="fas fa-building"></i> Activar</button>
-                @else
-                    <button type="button" class="btn btn-sm btn-warning"
-                    wire:click="toggleAbsent()"><i class="fas fa-cocktail"></i> Desactivar</button>
-                @endif
-            </td>
-            <td>
-                @if($absent)
-                    <i class="fas fa-cocktail"></i> Fuera de la oficina
-                @else
-                    <i class="fas fa-building"></i> En la oficina
-                @endif
-            </td>
-            <td>{{ auth()->user()->fullName }}</td>
-            <td> 0 </td>
-            <td></td>
-        </tr>
+        @if(!$organizationalUnit)
+            <tr class="table-{{ auth()->user()->subrogant == auth()->user() ? 'success' : 'warning'}}">            
+                <td>
+                    @if($absent)
+                        <button type="button" class="btn btn-sm btn-success"
+                        wire:click="toggleAbsent()"><i class="fas fa-building"></i> Activar</button>
+                    @else
+                        <button type="button" class="btn btn-sm btn-warning"
+                        wire:click="toggleAbsent()"><i class="fas fa-cocktail"></i> Desactivar</button>
+                    @endif
+                </td>
+                <td>
+                    @if($absent)
+                        <i class="fas fa-cocktail"></i> Fuera de la oficina
+                    @else
+                        <i class="fas fa-building"></i> En la oficina
+                    @endif
+                </td>
+                <td>{{ auth()->user()->fullName }}</td>
+                <td> 0 </td>
+                <td></td>
+            </tr>
+        @endif
         @foreach($subrogations as $subrogation)
             <tr class="table-{{ auth()->user()->subrogant == $subrogation->subrogant ? 'success' : 'warning'}}">
                 <td>
@@ -84,6 +86,8 @@
 
 <br>
 
+
+@if(!$hide_own_subrogation)
 <h4><i class="fas fa-chess"></i> Mis subrogancias</h4>
 
 <div class="table-responsive">
@@ -108,3 +112,4 @@
         </tbody>
     </table>
 </div>
+@endif

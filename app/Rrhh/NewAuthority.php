@@ -3,8 +3,10 @@
 namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Rrhh\OrganizationalUnit;
 use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Rrhh\NewAuthority;
+use App\Agreements\Agreement;
 
 class NewAuthority extends Model
 {
@@ -26,26 +28,42 @@ class NewAuthority extends Model
     ];
 
     public function organizationalUnit() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+        return $this->belongsTo(OrganizationalUnit::class);
     }
 
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function creator() {
-        return $this->belongsTo('App\User','creator_id')->withTrashed();
+        return $this->belongsTo(User::class,'creator_id')->withTrashed();
     }
     
     public function represents() {
-        return $this->belongsTo('App\User','representation_id')->withTrashed();
+        return $this->belongsTo(User::class,'representation_id')->withTrashed();
     }
 
     public function agreement() {
-        return $this->hasMany('App\Agreements\Agreement');
+        return $this->hasMany(Agreement::class);
     }
 
+    /**
+    * The primary key associated with the table.
+    *
+    * @var string
+    */
+    protected $table = 'rrhh_new_authorities';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['date'];
+
+
     public static function getAuthorityFromDate($ou_id, $date, $type) {
+        $authority = Self::where('')->get();
         if (!is_string($date)) {
           $date = $date->format('Y-m-d');
         }
@@ -122,12 +140,4 @@ class NewAuthority extends Model
         return $authorities;
     }
 
-    protected $table = 'rrhh_new_authorities';
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['from','to'];
 }

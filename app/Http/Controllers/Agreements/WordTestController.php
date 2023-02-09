@@ -452,9 +452,9 @@ class WordTestController extends Controller
         $totalSubtitulo21 = $subtitulo21->sum('amount');
         $totalSubtitulo22 = $subtitulo22->sum('amount');
 
-    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/resolucionprogram2021.docx'));
-
+        
     	$periodo = $program_resolution->date->format('Y');
+    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/resolucionprogram'.$periodo.'.docx'));
 
     	$numResolucion = $program_resolution->res_exempt_number;
         $yearResolucion = $program_resolution->res_exempt_date ? $program_resolution->res_exempt_date->format('Y') : '';
@@ -465,18 +465,31 @@ class WordTestController extends Controller
         
         $first_word = explode(' ',trim($program_resolution->program->name))[0];
         $programa = $first_word == 'Programa' ? substr(strstr($program_resolution->program->name," "), 1) : $program_resolution->program->name;
+        
+        $establecimiento = $program_resolution->establishment;
+        
+        if($periodo >= 2023){
+            $subtituloEtiqueta = 'Subtítulo ' . ($subtitulo22->count() > 0 ? '22' : '') . ($subtitulo22->isNotEmpty() && $subtitulo21->isNotEmpty() ? ' y ' : '') . ($subtitulo21->count() > 0 ? '21' : '');
+            $subtitulos = ($subtitulo22->count() > 0 ? 'Subtítulo 22 destinado a compra de Bienes y Servicios de Consumo' : '') . ($subtitulo22->isNotEmpty() && $subtitulo21->isNotEmpty() ? ' y ' : '') . ($subtitulo21->count() > 0 ? 'Subtítulo 21 destinado a Contratación de Personal' : '');
 
-        $subtituloEtiqueta = 'Subtítulo ' . ($subtitulo21->count() > 0 ? '21' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? '22' : '');
-        $subtitulos = ($subtitulo21->count() > 0 ? 'Subtítulo 21 destinado a Gastos en Personal' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? 'Subtítulo 22 destinado a Bienes y Servicios de Consumo' : '');
-
+            //CLONE BLOCK SEGUN ESTABLECIMIENTO
+            if($establecimiento == 'Servicio de Salud Iquique'){
+                $templateProcesor->cloneBlock('SSI_OPTION_BLOCK', 1, true, false);
+                $templateProcesor->cloneBlock('HETG_OPTION_BLOCK', 0);
+            }else{
+                $templateProcesor->cloneBlock('HETG_OPTION_BLOCK', 1, true, false);
+                $templateProcesor->cloneBlock('SSI_OPTION_BLOCK', 0);
+            }
+        }else{
+            $subtituloEtiqueta = 'Subtítulo ' . ($subtitulo21->count() > 0 ? '21' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? '22' : '');
+            $subtitulos = ($subtitulo21->count() > 0 ? 'Subtítulo 21 destinado a Gastos en Personal' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? 'Subtítulo 22 destinado a Bienes y Servicios de Consumo' : '');
+        }
         $componentesSubtitulo21 = $subtitulo21->pluck('program_component.name')->map(function($item, $key){ return '"'.$item.'"'; })->join(', ', ' y ');
         $componentesSubtitulo22 = $subtitulo22->pluck('program_component.name')->map(function($item, $key){ return '"'.$item.'"'; })->join(', ', ' y ');
         $componentes = ($componentesSubtitulo21 ? 'Subtítulo 21 '.$componentesSubtitulo21 : '') . ($componentesSubtitulo21 && $componentesSubtitulo22 ? ' y ' : '') . ($componentesSubtitulo22 ? 'Subtítulo 22 '.$componentesSubtitulo22 : '');
         
         $directorDecreto = $program_resolution->director_signer->decree;
         $directorApelativo = $program_resolution->director_signer->appellative;
-
-        $establecimiento = $program_resolution->establishment;
 
         $emailReferrer = $program_resolution->referrer != null ? $program_resolution->referrer->email : '';
 
@@ -501,36 +514,78 @@ class WordTestController extends Controller
         $templateProcesor->setValue('punto4', $punto4);
         $templateProcesor->setValue('emailReferrer', $emailReferrer);
 
-        $table = new Table(array('align' => 'center', 'borderSize' => 10, 'width' => 100 * 50, 'unit' => 'pct'));
-        $table->addRow();
-        $table->addCell(700)->addText('COMPONENTE', ['bold' => true]);
-        $table->addCell(300)->addText('RECURSOS', ['bold' => true], ['align' => 'center']);
-        foreach($subtitulo21 as $item){
+        if($periodo >= 2023){
+            if($subtitulo22->isNotEmpty()){
+                $table = new Table(array('align' => 'center', 'borderSize' => 10, 'width' => 100 * 50, 'unit' => 'pct'));
+                $table->addRow();
+                $table->addCell(700)->addText('Componente', ['bold' => true], ['align' => 'center']);
+                $table->addCell(300)->addText('Subtítulo 22', ['bold' => true], ['align' => 'center']);
+ 
+                foreach($subtitulo22 as $item){
+                    $table->addRow();
+                    $table->addCell(700)->addText($item->program_component->name);
+                    $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+                }
+
+                $table->addRow();
+                $table->addCell(700)->addText('Total', ['bold' => true], ['align' => 'left']);
+                $table->addCell(300)->addText('$ '.number_format($totalSubtitulo22,0,",","."), null, ['align' => 'right']);
+
+                $templateProcesor->setComplexBlock('table', $table);
+            }
+
+            if($subtitulo21->isNotEmpty()){
+                $table2 = new Table(array('align' => 'center', 'borderSize' => 10, 'width' => 100 * 50, 'unit' => 'pct'));
+                $table2->addRow();
+                $table2->addCell(700)->addText('Componente', ['bold' => true], ['align' => 'center']);
+                $table2->addCell(300)->addText('Subtítulo 21', ['bold' => true], ['align' => 'center']);
+                
+                foreach($subtitulo21 as $item){
+                    $table2->addRow();
+                    $table2->addCell(700)->addText($item->program_component->name);
+                    $table2->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+                }
+
+                $table2->addRow();
+                $table2->addCell(700)->addText('Total', ['bold' => true], ['align' => 'left']);
+                $table2->addCell(300)->addText('$ '.number_format($totalSubtitulo21,0,",","."), null, ['align' => 'right']);
+
+                $templateProcesor->setComplexBlock('table2', $table2);
+            }
+
+
+        }else{
+            $table = new Table(array('align' => 'center', 'borderSize' => 10, 'width' => 100 * 50, 'unit' => 'pct'));
             $table->addRow();
-            $table->addCell(700)->addText($item->program_component->name);
-            $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+            $table->addCell(700)->addText('COMPONENTE', ['bold' => true]);
+            $table->addCell(300)->addText('RECURSOS', ['bold' => true], ['align' => 'center']);
+            foreach($subtitulo21 as $item){
+                $table->addRow();
+                $table->addCell(700)->addText($item->program_component->name);
+                $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+            }
+
+            foreach($subtitulo22 as $item){
+                $table->addRow();
+                $table->addCell(700)->addText($item->program_component->name);
+                $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+            }
+
+            if($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty()){
+                $table->addRow();
+                $table->addCell(700)->addText('TOTAL POR SUBTITULO 21', ['bold' => true], ['align' => 'right']);
+                $table->addCell(300)->addText('$ '.number_format($totalSubtitulo21,0,",","."), null, ['align' => 'right']);
+                $table->addRow();
+                $table->addCell(700)->addText('TOTAL POR SUBTITULO 22', ['bold' => true], ['align' => 'right']);
+                $table->addCell(300)->addText('$ '.number_format($totalSubtitulo22,0,",","."), null, ['align' => 'right']);
+            }
+
+            $table->addRow();
+            $table->addCell(700)->addText('TOTAL', ['bold' => true], ['align' => 'right']);
+            $table->addCell(300)->addText('$ '.number_format($totalResolucion,0,",","."), ['bold' => true], ['align' => 'right']);
+
+            $templateProcesor->setComplexBlock('table', $table);
         }
-
-        foreach($subtitulo22 as $item){
-            $table->addRow();
-            $table->addCell(700)->addText($item->program_component->name);
-            $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
-        }
-
-        if($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty()){
-            $table->addRow();
-            $table->addCell(700)->addText('TOTAL POR SUBTITULO 21', ['bold' => true], ['align' => 'right']);
-            $table->addCell(300)->addText('$ '.number_format($totalSubtitulo21,0,",","."), null, ['align' => 'right']);
-            $table->addRow();
-            $table->addCell(700)->addText('TOTAL POR SUBTITULO 22', ['bold' => true], ['align' => 'right']);
-            $table->addCell(300)->addText('$ '.number_format($totalSubtitulo22,0,",","."), null, ['align' => 'right']);
-        }
-
-        $table->addRow();
-        $table->addCell(700)->addText('TOTAL', ['bold' => true], ['align' => 'right']);
-        $table->addCell(300)->addText('$ '.number_format($totalResolucion,0,",","."), ['bold' => true], ['align' => 'right']);
-
-        $templateProcesor->setComplexBlock('table', $table);
 
         // // CLONE BLOCK PARA LISTAR COMPONENTES
         // if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);

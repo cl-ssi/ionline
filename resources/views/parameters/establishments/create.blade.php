@@ -9,19 +9,19 @@
 <form method="POST" action="{{ route('parameters.establishments.store') }}">
     @csrf
 
-    <div class="form-group row">
-        <div class="col-9 col-md-9">
+    <div class="form-row">
+        <div class="form-group col-9 col-md-9">
             <label for="name">Nombre*</label>
             <input type="text" class="form-control" id="name" name="name" autocomplete="off" required>
         </div>
-        <div class="col-3 col-md-3">
+        <div class="form-group col-3 col-md-3">
             <label for="alias">Alias</label>
             <input type="text" class="form-control" id="alias" name="alias">
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-4 col-md-4">
+    <div class="form-row">
+        <div class="form-group col-4 col-md-4">
             <label for="establishment_type_id">Tipo de establecimiento*</label>
             <select class="form-control" id="establishment_type_id" name="establishment_type_id" required>
                 <option value="">Seleccione una opción</option>
@@ -31,36 +31,36 @@
             </select>
         </div>
 
-        <div class="col-4 col-md-4">
+        <div class="form-group col-4 col-md-4">
             <label for="deis">DEIS</label>
             <input type="text" class="form-control" id="deis" name="deis">
         </div>
 
-        <div class="col-4 col-md-4">
+        <div class="form-group col-4 col-md-4">
             <label for="new_deis">Nuevo DEIS</label>
             <input type="number" class="form-control" id="new_deis" name="new_deis" required>
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-4 col-md-4">
+    <div class="form-row">
+        <div class="form-group col-4 col-md-4">
             <label for="mother_code">Código Madre</label>
-            <input type="text" class="form-control" id="mother_code" name="mother_code" >
+            <input type="text" class="form-control" id="mother_code" name="mother_code">
         </div>
 
-        <div class="col-4 col-md-4">
+        <div class="form-group col-4 col-md-4">
             <label for="new_mother_code">Nuevo Código Madre</label>
             <input type="text" class="form-control" id="new_mother_code" name="new_mother_code">
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-2 col-md-2">
+    <div class="form-row">
+        <div class="form-group col-2 col-md-2">
             <label for="sirh_code">Código SIRH</label>
             <input type="number" class="form-control" id="sirh_code" name="sirh_code" autocomplete="off">
         </div>
 
-        <div class="col-4 col-md-4">
+        <div class="form-group col-4 col-md-4">
             <label for="commune_id">Comuna</label>
             <select class="form-control" id="commune_id" name="commune_id" required>
                 <option value="">Seleccione una opción</option>
@@ -95,16 +95,16 @@
 
 
 
-    <div class="form-group row">
-        <div class="col-12 col-md-12">
+    <div class="form-row">
+        <div class="form-group col-12 col-md-12">
             <label for="official_name">Nombre oficial</label>
             <input type="text" class="form-control" id="official_name" name="official_name" autocomplete="off">
         </div>
     </div>
 
 
-    <div class="form-group row">
-        <div class="col-6 col-md-6">
+    <div class="form-row">
+        <div class="form-group col-6 col-md-6">
             <label for="administrative_dependency">Dependencia administrativa</label>
             <select class="form-control" id="administrative_dependency" name="administrative_dependency" required>
                 <option value="">Seleccione una opción</option>
@@ -113,7 +113,7 @@
             </select>
         </div>
 
-        <div class="col-6 col-md-6">
+        <div class="form-group col-6 col-md-6">
             <label for="level_of_care">Nivel de atención</label>
             <select class="form-control" id="level_of_care" name="level_of_care" required>
                 <option value="">Seleccione una opción</option>
@@ -125,8 +125,8 @@
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-3 col-md-3">
+    <div class="form-row">
+        <div class="form-group col-3 col-md-3">
             <label for="street_type">Tipo de calle*</label>
             <select class="form-control" id="street_type" name="street_type" required>
                 <option value="">Seleccione una opción</option>
@@ -136,36 +136,36 @@
             </select>
         </div>
 
-        <div class="col-6 col-md-6">
+        <div class="form-group col-6 col-md-6">
             <label for="address">Dirección*</label>
             <input type="text" class="form-control" id="address" name="address" required>
         </div>
 
-        <div class="col-3 col-md-3">
+        <div class="form-group col-3 col-md-3">
             <label for="street_number">Número de calle*</label>
             <input type="text" class="form-control" id="street_number" name="street_number" required>
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-6 col-md-6">
+    <div class="form-row">
+        <div class="form-group col-6 col-md-6">
             <label for="latitude">Latitud</label>
             <input type="text" class="form-control" id="latitude" name="latitude">
         </div>
 
-        <div class="col-6 col-md-6">
+        <div class="form-group col-6 col-md-6">
             <label for="longitude">Longitud</label>
             <input type="text" class="form-control" id="longitude" name="longitude">
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-3 col-md-3">
+    <div class="form-row">
+        <div class="form-group col-3 col-md-3">
             <label for="telephone">Teléfono</label>
             <input type="text" class="form-control" id="telephone" name="telephone" required>
         </div>
 
-        <div class="col-4 col-md-4">
+        <div class="form-group col-4 col-md-4">
             <label for="level_of_complexity">Nivel de Complejidad</label>
             <select class="form-control" id="level_of_complexity" name="level_of_complexity" required>
                 <option value="">Seleccione una opción</option>
@@ -176,17 +176,17 @@
             </select>
         </div>
 
-        <div class="col-3 col-md-3">
+        <div class="form-group col-3 col-md-3">
             <label for="provider_type_health_system">Tipo de Prestador</label>
             <select class="form-control" id="provider_type_health_system" name="provider_type_health_system" required>
                 <option value="">Seleccione una opción</option>
                 <option value="Público">Público</option>
                 <option value="Privado">Privado</option>
-                <option value="Fuerzas Armadas y de Orden">Fuerzas Armadas y de Orden</option>                
+                <option value="Fuerzas Armadas y de Orden">Fuerzas Armadas y de Orden</option>
             </select>
         </div>
 
-        <div class="col-2 col-md-2">
+        <div class="form-group col-2 col-md-2">
             <label for="emergency_service">Serv de Urgencia</label>
             <select class="form-control" id="emergency_service" name="emergency_service" required>
                 <option value="">Seleccione una opción</option>
@@ -196,11 +196,8 @@
         </div>
     </div>
 
+    <button type="submit" class="btn btn-primary">Crear Establecimiento</button>
+    <a href="{{ route('parameters.establishments.index') }}" class="btn btn-secondary ml-4">Cancelar</a>
 
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Crear Establecimiento</button>
-        <a href="{{ route('parameters.establishments.index') }}" class="btn btn-secondary">Cancelar</a>
-    </div>
 </form>
 @endsection

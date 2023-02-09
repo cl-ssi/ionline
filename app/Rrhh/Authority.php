@@ -68,6 +68,7 @@ class Authority extends Model
           $date = $date->format('Y-m-d');
         }
 
+        /* FIXME: por qué pija se llama u1? */
         $u1 = User::find($rut);
 
         $result = Authority::with('user','organizationalUnit')
@@ -76,6 +77,7 @@ class Authority extends Model
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
         if($result == null)
         {
+            /* FIXME: No es necesario hacer una query, $u1 es un usuario, basta $us->organizationalUnit */
             $oujefe = OrganizationalUnit::find($u1->organizational_unit_id);
             return Authority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $oujefe->father->id)

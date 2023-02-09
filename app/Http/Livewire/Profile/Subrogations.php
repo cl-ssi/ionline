@@ -16,6 +16,11 @@ class Subrogations extends Component
 
     public $absent;
 
+    public $hide_own_subrogation;
+    public $type;
+
+    public $organizationalUnit = null;
+
     protected $listeners = ['searchedUser','ouSelected'];
  
     public function ouSelected($ou_id)
@@ -32,21 +37,30 @@ class Subrogations extends Component
     {
         return [
             'user_id' => 'required',
-            'subrogant_id' => 'required',
-            'organizational_unit_id' => 'required',
+            //'subrogant_id' => 'required',
+            //'organizational_unit_id' => 'required',
         ];
     }
 
     protected $messages = [
         'user_id.required' => 'El usuario es requerido.',
-        'subrogant_id.required' => 'El subrogante es requerido.',
-        'organizational_unit_id.required' => 'La unidad organizacional es requerida.',
+        //'subrogant_id.required' => 'El subrogante es requerido.',
+        //'organizational_unit_id.required' => 'La unidad organizacional es requerida.',
     ];
 
     public function mount()
     {
         $this->user_id = auth()->id();
-        $this->subrogations = Subrogation::where('user_id',$this->user_id)->orderBy('level')->get();
+        if($this->organizationalUnit and $this->type) {
+            $this->subrogations = Subrogation::with('user')
+                ->where('organizational_unit_id', $this->organizationalUnit->id)
+                ->where('type',$this->type)
+                ->get();                
+        }
+        else {
+            $this->subrogations = Subrogation::with('user')
+                ->where('user_id',$this->user_id)->orderBy('level')->get();
+        }
         $this->view = 'index';
         $this->absent = auth()->user()->absent;
     }
@@ -67,9 +81,26 @@ class Subrogations extends Component
 
     public function store()
     {
+        if($this->organizationalUnit and $this->type)
+        {
+            $subrogation = Subrogation::firstOrCreate(
+                ['user_id' => $this->subrogant_id,
+                'subrogant_id' => $this->subrogant_id,
+                'organizational_unit_id' => $this->organizationalUnit->id,
+            ],
+            ['type' => $this->type]
+            );
+            //TODO consultar al Torres, el where deberia ser un count del orgizational con el type y despues el +1, pero se pierde en caso que la persona desee subrogantes. ¿añadir otra columna?
+            $subrogation->level = $subrogation->whereUserId($this->subrogant_id)->count() + 1;
+            $subrogation->save();
+        }
+        else
+        {
         $dataValidated = $this->validate();
         $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
         Subrogation::create($dataValidated);
+        }
+
         $this->mount();
         $this->view = 'index';
     }
