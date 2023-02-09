@@ -15,6 +15,8 @@ class NewUploadRem extends Component
     use WithFileUploads;
 
     public $folder = 'ionline/rem/';
+    public $folderOriginal = 'ionline/rem/original/';
+    public $folderCorreccion = 'ionline/rem/correccion/';
     public $remFile;
     public $remFileNew;
     public $file;
@@ -49,8 +51,8 @@ class NewUploadRem extends Component
 
         // Establecer la variable $hasFile en true si hay al menos un registro en la colección
         $this->hasFile = $remFiles->count() > 0;
-        $this->isOriginal = $remFiles->where('type','Original')->count() > 0;
-        $this->isCorreccion = $remFiles->where('type','Correccion')->count() > 0;
+        $this->isOriginal = $remFiles->where('type', 'Original')->count() > 0;
+        $this->isCorreccion = $remFiles->where('type', 'Correccion')->count() > 0;
     }
 
     public function download()
@@ -82,7 +84,14 @@ class NewUploadRem extends Component
 
     public function save()
     {
-        // // Creación del archivo con formato personalizado ej: 2022-11_cerro_esmeralda(102-701)_B.pdf */
+        
+        if ($this->type == 'Original') {
+            $this->folder = $this->folderOriginal;
+        } else {
+            $this->folder = $this->folderCorreccion;
+        }
+
+        // // Creación del archivo con formato según cometado por chicos de estadisticas, se guardará en diferentes carpetas ya que quieren tener el mismo nombre
         $filename = $this->period->period->format('Y-m') . '_';
         $filename .= Str::snake($this->remEstablishment->establishment->name);
         $filename .= '(' . $this->remEstablishment->establishment->deis . ')_';
@@ -113,11 +122,11 @@ class NewUploadRem extends Component
 
 
         // Redirigir a la misma página en la que se encuentra el componente
-        if ($this->type=='Original') {
+        if ($this->type == 'Original') {
             session()->flash('success', 'Archivo de REM Subido Exitosamente');
             return redirect()->route('rem.files.rem_original');
-        } elseif ($this->type=='Correccion') {
-            
+        } elseif ($this->type == 'Correccion') {
+
             session()->flash('success', 'Archivo de Correccion de REM subido exitosamente');
             return redirect()->route('rem.files.rem_correccion');
         }
