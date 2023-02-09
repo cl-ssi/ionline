@@ -116,10 +116,8 @@
                         @endif
                     </td>
                     <td>
-                        {{ $controlItem->product->product->name }}
-                        <br>
                         <small>
-                            {{ optional($controlItem->product)->name }}
+                            {{ $controlItem->product->name }}
                         </small>
                     </td>
                     <td>{{ $controlItem->program_name }}</td>
