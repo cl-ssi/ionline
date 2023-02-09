@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class RequirementStatus extends Model
   ];
 
   public function Requirements() {
-      return $this->belongsTo('App\Requirements\Requirement');
+      return $this->belongsTo('App\Models\Requirements\Requirement');
   }
 
   public function User() {

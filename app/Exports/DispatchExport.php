@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Pharmacies\Dispatch;
+use App\Models\Pharmacies\Dispatch;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;

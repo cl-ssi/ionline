@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Pharmacies;
 
-use App\Pharmacies\DispatchItem;
+use App\Models\Pharmacies\DispatchItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Dispatch;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Dispatch;
+use App\Models\Pharmacies\Product;
 
 class DispatchItemController extends Controller
 {

@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Pharmacies\PurchaseItem;
-use App\Pharmacies\Batch;
+use App\Models\Pharmacies\PurchaseItem;
+use App\Models\Pharmacies\Batch;
 
 class PurchaseItemObserver
 {

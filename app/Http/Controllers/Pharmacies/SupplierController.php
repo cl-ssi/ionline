@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pharmacies;
 
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Supplier;
+use App\Models\Pharmacies\Supplier;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -51,7 +51,7 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pharmacies\Supplier  $supplier
+     * @param  \App\Models\Pharmacies\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function show(Supplier $supplier)
@@ -62,7 +62,7 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pharmacies\Supplier  $supplier
+     * @param  \App\Models\Pharmacies\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function edit(Supplier $supplier)
@@ -74,7 +74,7 @@ class SupplierController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pharmacies\Supplier  $supplier
+     * @param  \App\Models\Pharmacies\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Supplier $supplier)
@@ -89,7 +89,7 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pharmacies\Supplier  $supplier
+     * @param  \App\Models\Pharmacies\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
     public function destroy(Supplier $supplier)

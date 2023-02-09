@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 
-use App\Pharmacies\Dispatch;
+use App\Models\Pharmacies\Dispatch;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;

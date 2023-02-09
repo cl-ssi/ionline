@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Requirements\Event;
+use App\Models\Requirements\Event;
 use Illuminate\Support\Facades\Storage;
 
 class RequerimentsFiles extends Command

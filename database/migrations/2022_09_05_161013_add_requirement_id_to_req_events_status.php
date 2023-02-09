@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Requirements\EventStatus;
+use App\Models\Requirements\EventStatus;
 
 class AddRequirementIdToReqEventsStatus extends Migration
 {

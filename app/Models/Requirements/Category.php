@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Rrhh\OrganizationalUnit;
-use App\Requirements\Requirement;
+use App\Models\Requirements\Requirement;
 
 class Category extends Model
 {

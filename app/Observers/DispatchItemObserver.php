@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Pharmacies\DispatchItem;
-use App\Pharmacies\Batch;
+use App\Models\Pharmacies\DispatchItem;
+use App\Models\Pharmacies\Batch;
 
 class DispatchItemObserver
 {

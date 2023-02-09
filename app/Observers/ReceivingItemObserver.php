@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Pharmacies\ReceivingItem;
-use App\Pharmacies\Batch;
+use App\Models\Pharmacies\ReceivingItem;
+use App\Models\Pharmacies\Batch;
 
 class ReceivingItemObserver
 {

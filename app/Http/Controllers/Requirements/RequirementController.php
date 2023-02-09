@@ -10,16 +10,16 @@ use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
-use App\Requirements\RequirementStatus;
-use App\Requirements\RequirementCategory;
-use App\Requirements\Requirement;
-use App\Requirements\LabelRequirement;
-use App\Requirements\Label;
-use App\Requirements\File;
-use App\Requirements\EventStatus;
-use App\Requirements\EventDocument;
-use App\Requirements\Event;
-use App\Requirements\Category;
+use App\Models\Requirements\RequirementStatus;
+use App\Models\Requirements\RequirementCategory;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\LabelRequirement;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\File;
+use App\Models\Requirements\EventStatus;
+use App\Models\Requirements\EventDocument;
+use App\Models\Requirements\Event;
+use App\Models\Requirements\Category;
 use App\Models\Documents\Parte;
 use App\Models\Documents\Document;
 use App\Mail\RequirementNotification;
@@ -1166,7 +1166,7 @@ class RequirementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Requirements\Requirement $requirement
+     * @param \App\Models\Requirements\Requirement $requirement
      * @return \Illuminate\Http\Response
      */
     public function show(Requirement $requirement)
@@ -1299,7 +1299,7 @@ class RequirementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Requirements\Requirement $requirement
+     * @param \App\Models\Requirements\Requirement $requirement
      * @return \Illuminate\Http\Response
      */
     public function edit(Requirement $requirement)
@@ -1312,7 +1312,7 @@ class RequirementController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Requirements\Requirement $requirement
+     * @param \App\Models\Requirements\Requirement $requirement
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Requirement $requirement)
@@ -1323,7 +1323,7 @@ class RequirementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Requirements\Requirement $requirement
+     * @param \App\Models\Requirements\Requirement $requirement
      * @return \Illuminate\Http\Response
      */
     public function destroy(Requirement $requirement)

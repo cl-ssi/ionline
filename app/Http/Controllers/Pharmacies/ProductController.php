@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Pharmacies;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Pharmacies\Product;
-use App\Pharmacies\Category;
-use App\Pharmacies\Program;
-use App\Pharmacies\Unit;
-use App\Pharmacies\Supplier;
-use App\Pharmacies\Establishment;
-use App\Pharmacies\Receiving;
-use App\Pharmacies\Dispatch;
-use App\Pharmacies\PurchaseItem;
-use App\Pharmacies\Purchase;
+use App\Models\Pharmacies\Product;
+use App\Models\Pharmacies\Category;
+use App\Models\Pharmacies\Program;
+use App\Models\Pharmacies\Unit;
+use App\Models\Pharmacies\Supplier;
+use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Receiving;
+use App\Models\Pharmacies\Dispatch;
+use App\Models\Pharmacies\PurchaseItem;
+use App\Models\Pharmacies\Purchase;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -67,7 +67,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pharmacies\Product  $product
+     * @param  \App\Models\Pharmacies\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
@@ -78,7 +78,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pharmacies\Product  $product
+     * @param  \App\Models\Pharmacies\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -92,7 +92,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pharmacies\Product  $product
+     * @param  \App\Models\Pharmacies\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
@@ -107,7 +107,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pharmacies\Product  $product
+     * @param  \App\Models\Pharmacies\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Rrhh\Authority;
-use App\Requirements\LabelRequirement;
-use App\Requirements\EventStatus;
-use App\Requirements\Event;
-use App\Requirements\Category;
+use App\Models\Requirements\LabelRequirement;
+use App\Models\Requirements\EventStatus;
+use App\Models\Requirements\Event;
+use App\Models\Requirements\Category;
 
 
 class Requirement extends Model implements Auditable
@@ -39,15 +39,15 @@ class Requirement extends Model implements Auditable
     ];
 
     public function events() {
-        return $this->hasMany('App\Requirements\Event');
+        return $this->hasMany('App\Models\Requirements\Event');
     }
 
     public function eventsWithoutCC() {
-        return $this->hasMany('App\Requirements\Event')->where('status','<>','en copia');
+        return $this->hasMany('App\Models\Requirements\Event')->where('status','<>','en copia');
     }
 
     public function ccEvents() {
-        return $this->hasMany('App\Requirements\Event')->where('status','en copia');
+        return $this->hasMany('App\Models\Requirements\Event')->where('status','en copia');
     }
 
     public function user() {
@@ -59,7 +59,7 @@ class Requirement extends Model implements Auditable
     }
 
     public function labels() {
-        return $this->belongsToMany('App\Requirements\Label','req_labels_requirements');
+        return $this->belongsToMany('App\Models\Requirements\Label','req_labels_requirements');
     }
 
     public function category()
@@ -74,7 +74,7 @@ class Requirement extends Model implements Auditable
     }
 
     public function eventsViewed() {
-        return $this->hasMany('App\Requirements\EventStatus')->where('user_id',auth()->id());
+        return $this->hasMany('App\Models\Requirements\EventStatus')->where('user_id',auth()->id());
     }
 
     /** Setea las labels de un requerimiento en base a un array de ids de labels */
@@ -116,7 +116,7 @@ class Requirement extends Model implements Auditable
     /* FIXME: viewed hace referencia a los archivados y no a los vistos
      */
     public function archived() {
-        return $this->hasMany('App\Requirements\RequirementStatus')
+        return $this->hasMany('App\Models\Requirements\RequirementStatus')
             ->where('status','viewed');
     }
 
@@ -134,7 +134,7 @@ class Requirement extends Model implements Auditable
      * sin embargo esa popiedad ya existe
      */
     public function requirementStatus() {
-        return $this->hasMany('App\Requirements\RequirementStatus');
+        return $this->hasMany('App\Models\Requirements\RequirementStatus');
     }
 
     /**

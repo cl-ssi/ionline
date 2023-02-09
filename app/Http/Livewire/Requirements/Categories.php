@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Requirements;
 
 use Livewire\Component;
-use App\Requirements\Category;
+use App\Models\Requirements\Category;
 
 class Categories extends Component
 {

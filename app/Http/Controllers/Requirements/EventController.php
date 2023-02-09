@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Requirements;
 use App\Models\Documents\Document;
 use App\Mail\RequirementEventNotification;
 use App\Mail\RequirementNotification;
-use App\Requirements\Requirement;
-use App\Requirements\Event;
-use App\Requirements\File;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\Event;
+use App\Models\Requirements\File;
 use App\Rrhh\Authority;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -219,7 +219,7 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Requirements\RequirementEvent $requirementEvent
+     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
      * @return \Illuminate\Http\Response
      */
     public function show(RequirementEvent $requirementEvent)
@@ -230,7 +230,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Requirements\RequirementEvent $requirementEvent
+     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
      * @return \Illuminate\Http\Response
      */
     public function edit(RequirementEvent $requirementEvent)
@@ -242,7 +242,7 @@ class EventController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Requirements\RequirementEvent $requirementEvent
+     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, RequirementEvent $requirementEvent)
@@ -253,7 +253,7 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Requirements\RequirementEvent $requirementEvent
+     * @param \App\Models\Requirements\RequirementEvent $requirementEvent
      * @return \Illuminate\Http\Response
      */
     public function destroy(RequirementEvent $requirementEvent)

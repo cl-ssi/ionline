@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Warehouse\Control;
 
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
-use App\Pharmacies\Program;
+use App\Models\Pharmacies\Program;
 use Livewire\Component;
 
 class ControlReport extends Component

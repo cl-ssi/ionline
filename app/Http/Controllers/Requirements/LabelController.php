@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Requirements;
 
-//use App\Requirements\RequirementLabel;
+//use App\Models\Requirements\RequirementLabel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Requirements\Label;
+use App\Models\Requirements\Label;
 use Illuminate\Support\Facades\Auth;
 
 class LabelController extends Controller
@@ -53,7 +53,7 @@ class LabelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Requirements\Label  $label
+     * @param  \App\Models\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
     public function show(Label $label)
@@ -64,7 +64,7 @@ class LabelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Requirements\Label  $label
+     * @param  \App\Models\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
     public function edit(Label $label)
@@ -78,7 +78,7 @@ class LabelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Requirements\Label  $label
+     * @param  \App\Models\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Label $label)
@@ -93,7 +93,7 @@ class LabelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Requirements\Label  $label
+     * @param  \App\Models\Requirements\Label  $label
      * @return \Illuminate\Http\Response
      */
     public function destroy(Label $label)

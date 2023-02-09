@@ -4,9 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-use App\Pharmacies\Dispatch;
-use App\Pharmacies\Purchase;
-use App\Pharmacies\Receiving;
+use App\Models\Pharmacies\Dispatch;
+use App\Models\Pharmacies\Purchase;
+use App\Models\Pharmacies\Receiving;
 
 class PharmacyDeleteItemsFromCab extends Migration
 {

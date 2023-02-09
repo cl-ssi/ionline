@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,17 +23,17 @@ class Receiving extends Model
   //relaciones
   public function pharmacy()
   {
-    return $this->belongsTo('App\Pharmacies\Pharmacy');
+    return $this->belongsTo('App\Models\Pharmacies\Pharmacy');
   }
 
   public function receivingItems()
   {
-    return $this->hasMany('App\Pharmacies\ReceivingItem');
+    return $this->hasMany('App\Models\Pharmacies\ReceivingItem');
   }
 
   public function establishment()
   {
-    return $this->belongsTo('App\Pharmacies\Establishment');
+    return $this->belongsTo('App\Models\Pharmacies\Establishment');
   }
 
   public function user()

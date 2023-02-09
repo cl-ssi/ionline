@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Pharmacies\Unit;
+use App\Models\Pharmacies\Unit;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -28,42 +28,42 @@ class Product extends Model
     //relaciones
     public function pharmacy()
     {
-      return $this->belongsTo('App\Pharmacies\Pharmacy');
+      return $this->belongsTo('App\Models\Pharmacies\Pharmacy');
     }
 
     public function category()
     {
-      return $this->belongsTo('App\Pharmacies\Category');
+      return $this->belongsTo('App\Models\Pharmacies\Category');
     }
 
     public function program()
     {
-      return $this->belongsTo('App\Pharmacies\Program');
+      return $this->belongsTo('App\Models\Pharmacies\Program');
     }
 
     public function receivingItems()
     {
-      return $this->hasMany('App\Pharmacies\ReceivingItem');
+      return $this->hasMany('App\Models\Pharmacies\ReceivingItem');
     }
 
     public function purchaseItems()
     {
-      return $this->hasMany('App\Pharmacies\PurchaseItem');
+      return $this->hasMany('App\Models\Pharmacies\PurchaseItem');
     }
 
     public function dispatchItems()
     {
-      return $this->hasMany('App\Pharmacies\DispatchItem');
+      return $this->hasMany('App\Models\Pharmacies\DispatchItem');
     }
 
     public function batchs()
     {
-      return $this->hasMany('App\Pharmacies\Batch');
+      return $this->hasMany('App\Models\Pharmacies\Batch');
     }
 
     public function establishments()
     {
-      return $this->belongsToMany('App\Pharmacies\Establishment', 'frm_establishments_products')
+      return $this->belongsToMany('App\Models\Pharmacies\Establishment', 'frm_establishments_products')
                               ->withPivot('id', 'stock', 'critic_stock', 'max_stock')
                               ->withTimestamps();
     }

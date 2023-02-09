@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Requirements\Label;
-use App\Requirements\Category;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\Category;
 
 class SwitchLabelForCategoryOnSgr extends Migration
 {

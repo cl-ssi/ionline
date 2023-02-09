@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,12 +15,12 @@ class Deliver extends Model
 
     public function establishment()
     {
-        return $this->belongsTo('App\Pharmacies\Establishment');
+        return $this->belongsTo('App\Models\Pharmacies\Establishment');
     }
 
     public function product()
     {
-        return $this->belongsTo('App\Pharmacies\Product');
+        return $this->belongsTo('App\Models\Pharmacies\Product');
     }
 
     public function document()

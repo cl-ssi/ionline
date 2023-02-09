@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use App\Rrhh\Authority;
 use Illuminate\Database\Eloquent\Model;
@@ -42,22 +42,22 @@ class Event extends Model
     }
 
     public function requirement() {
-        return $this->belongsTo('App\Requirements\Requirement');
+        return $this->belongsTo('App\Models\Requirements\Requirement');
     }
 
     public function files() {
-        return $this->hasMany('App\Requirements\File');
+        return $this->hasMany('App\Models\Requirements\File');
     }
 
     public function eventStatus() {
-        return $this->hasMany('App\Requirements\EventStatus');
+        return $this->hasMany('App\Models\Requirements\EventStatus');
     }
 
     public function viewed() {
-        return $this->hasOne('App\Requirements\EventStatus')->where('user_id',auth()->id());
+        return $this->hasOne('App\Models\Requirements\EventStatus')->where('user_id',auth()->id());
     }
     // public function documents() {
-    //     return $this->belongsToMany('App\Requirements\EventDocument');
+    //     return $this->belongsToMany('App\Models\Requirements\EventDocument');
     // }
     public function documents() {
         return $this->belongsToMany('App\Models\Documents\Document','req_documents_events');

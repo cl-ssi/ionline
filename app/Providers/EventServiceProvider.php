@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Inv\InventoryLabel;
-use App\Pharmacies\PurchaseItem;
-use App\Pharmacies\ReceivingItem;
-use App\Pharmacies\DispatchItem;
+use App\Models\Pharmacies\PurchaseItem;
+use App\Models\Pharmacies\ReceivingItem;
+use App\Models\Pharmacies\DispatchItem;
 use App\Observers\PurchaseItemObserver;
 use App\Observers\ReceivingItemObserver;
 use App\Observers\DispatchItemObserver;

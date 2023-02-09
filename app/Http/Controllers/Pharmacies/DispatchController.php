@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Dispatch;
-use App\Pharmacies\DispatchVerificationMailing;
-use App\Pharmacies\Establishment;
-use App\Pharmacies\File;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Dispatch;
+use App\Models\Pharmacies\DispatchVerificationMailing;
+use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\File;
+use App\Models\Pharmacies\Product;
 
 use Illuminate\Support\Facades\Storage;
 use App\Exports\DispatchExport;

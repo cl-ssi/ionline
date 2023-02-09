@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +17,7 @@ class EventStatus extends Model
 	];
 
 	public function event() {
-		return $this->belongsTo('App\Requirements\Event');
+		return $this->belongsTo('App\Models\Requirements\Event');
 	}
 
 	public function requirement() {

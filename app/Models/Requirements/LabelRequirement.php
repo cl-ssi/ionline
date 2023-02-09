@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requirements;
+namespace App\Models\Requirements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,11 +18,11 @@ class LabelRequirement extends Model
   ];
 
   public function labels() {
-      return $this->belongsToMany('App\Requirements\Label');
+      return $this->belongsToMany('App\Models\Requirements\Label');
   }
 
   public function requirements() {
-      return $this->belongsToMany('App\Requirements\Requirement');
+      return $this->belongsToMany('App\Models\Requirements\Requirement');
   }
 
   /**

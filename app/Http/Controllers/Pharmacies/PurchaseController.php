@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Purchase;
-use App\Pharmacies\Supplier;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Purchase;
+use App\Models\Pharmacies\Supplier;
+use App\Models\Pharmacies\Product;
 use App\Models\Documents\SignaturesFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -69,7 +69,7 @@ class PurchaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pharmacies\Purchase  $purchase
+     * @param  \App\Models\Pharmacies\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
     public function show(Purchase $purchase)
@@ -83,7 +83,7 @@ class PurchaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pharmacies\Purchase  $purchase
+     * @param  \App\Models\Pharmacies\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
     public function edit(Purchase $purchase)
@@ -99,7 +99,7 @@ class PurchaseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pharmacies\Purchase  $purchase
+     * @param  \App\Models\Pharmacies\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Purchase $purchase)
@@ -121,7 +121,7 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pharmacies\Purchase  $purchase
+     * @param  \App\Models\Pharmacies\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
     public function destroy(Purchase $purchase)

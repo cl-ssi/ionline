@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PurchaseItem extends Model
+class ReceivingItem extends Model
 {
   /**
    * The attributes that are mass assignable.
@@ -13,25 +13,24 @@ class PurchaseItem extends Model
    * @var array
    */
   protected $fillable = [
-      'id', 'barcode', 'purchase_id', 'product_id', 'amount', 'unity', 'unit_cost', 'due_date',
-      'establishments_id',
-      //'serial_number' ,
+      'id', 'barcode', 'receiving_id', 'product_id', 'amount', 'unity', 'due_date',
+      //'serial_number',
       'batch','batch_id','created_at'
   ];
 
   use SoftDeletes;
 
-  protected $table = 'frm_purchases_items';
+  protected $table = 'frm_receiving_items';
 
   //relaciones
-  public function purchase()
+  public function receiving()
   {
-    return $this->belongsTo('App\Pharmacies\Purchase');
+    return $this->belongsTo('App\Models\Pharmacies\Receiving','receiving_id');
   }
 
   public function product()
   {
-    return $this->belongsTo('App\Pharmacies\Product')->withTrashed();
+    return $this->belongsTo('App\Models\Pharmacies\Product','product_id')->withTrashed();
   }
 
   /**

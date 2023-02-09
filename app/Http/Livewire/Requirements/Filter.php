@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Requirements;
 
 use Livewire\Component;
-use App\Requirements\Requirement;
+use App\Models\Requirements\Requirement;
 use App\User;
 //use Livewire\WithPagination;
 

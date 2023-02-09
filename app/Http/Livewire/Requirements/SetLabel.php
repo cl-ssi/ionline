@@ -4,9 +4,9 @@ namespace App\Http\Livewire\Requirements;
 
 use Livewire\Component;
 
-use App\Requirements\Label;
-use App\Requirements\Requirement;
-use App\Requirements\LabelRequirement;
+use App\Models\Requirements\Label;
+use App\Models\Requirements\Requirement;
+use App\Models\Requirements\LabelRequirement;
 
 class SetLabel extends Component
 {

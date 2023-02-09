@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,32 +23,32 @@ class Pharmacy extends Model
     //relaciones
     public function disptachs()
     {
-      return $this->hasMany('App\Pharmacies\Dispatch');
+      return $this->hasMany('App\Models\Pharmacies\Dispatch');
     }
 
     public function purchases()
     {
-      return $this->hasMany('App\Pharmacies\Purchase');
+      return $this->hasMany('App\Models\Pharmacies\Purchase');
     }
 
     public function receivings()
     {
-      return $this->hasMany('App\Pharmacies\Receiving');
+      return $this->hasMany('App\Models\Pharmacies\Receiving');
     }
 
     public function establishments()
     {
-      return $this->hasMany('App\Pharmacies\Establishment');
+      return $this->hasMany('App\Models\Pharmacies\Establishment');
     }
 
     public function suppliers()
     {
-      return $this->hasMany('App\Pharmacies\Supplier');
+      return $this->hasMany('App\Models\Pharmacies\Supplier');
     }
 
     public function products()
     {
-      return $this->hasMany('App\Pharmacies\Product');
+      return $this->hasMany('App\Models\Pharmacies\Product');
     }
 
     public function users()

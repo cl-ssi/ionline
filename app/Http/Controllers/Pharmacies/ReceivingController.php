@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Receiving;
-use App\Pharmacies\Establishment;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Receiving;
+use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Product;
 use Illuminate\Support\Facades\Auth;
 
 class ReceivingController extends Controller

@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Pharmacies\Batch;
-use App\Pharmacies\DispatchItem;
+use App\Models\Pharmacies\Batch;
+use App\Models\Pharmacies\DispatchItem;
 
 class AddDispatchItem extends Command
 {

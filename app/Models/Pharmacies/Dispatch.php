@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,17 +23,17 @@ class Dispatch extends Model
   //relaciones
   public function pharmacy()
   {
-    return $this->belongsTo('App\Pharmacies\Pharmacy');
+    return $this->belongsTo('App\Models\Pharmacies\Pharmacy');
   }
 
   public function dispatchItems()
   {
-    return $this->hasMany('App\Pharmacies\DispatchItem');
+    return $this->hasMany('App\Models\Pharmacies\DispatchItem');
   }
 
   public function establishment()
   {
-    return $this->belongsTo('App\Pharmacies\Establishment');
+    return $this->belongsTo('App\Models\Pharmacies\Establishment');
   }
 
   public function user()
@@ -43,12 +43,12 @@ class Dispatch extends Model
 
   public function files()
   {
-    return $this->hasMany('App\Pharmacies\File');
+    return $this->hasMany('App\Models\Pharmacies\File');
   }
 
   public function verificationMailings()
   {
-    return $this->hasMany('App\Pharmacies\DispatchVerificationMailing');
+    return $this->hasMany('App\Models\Pharmacies\DispatchVerificationMailing');
   }
 
   protected $dates = ['date'];

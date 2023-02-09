@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Establishment;
+use App\Models\Pharmacies\Establishment;
 use App\User;
 
 class EstablishmentController extends Controller
@@ -51,7 +51,7 @@ class EstablishmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pharmacies\Establishment  $establishment
+     * @param  \App\Models\Pharmacies\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function show(Establishment $establishment)
@@ -62,7 +62,7 @@ class EstablishmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pharmacies\Establishment  $establishment
+     * @param  \App\Models\Pharmacies\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function edit(Establishment $establishment)
@@ -78,7 +78,7 @@ class EstablishmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pharmacies\Establishment  $establishment
+     * @param  \App\Models\Pharmacies\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Establishment $establishment)
@@ -95,7 +95,7 @@ class EstablishmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pharmacies\Establishment  $establishment
+     * @param  \App\Models\Pharmacies\Establishment  $establishment
      * @return \Illuminate\Http\Response
      */
     public function destroy(Establishment $establishment)

@@ -128,7 +128,7 @@
                 <li class="nav-item {{ active('requirements.*') }}">
                     <a class="nav-link" href="{{ route('requirements.inbox') }}">
                         <i class="fas fa-rocket"></i> SGR
-                        <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span>
+                        <span class="badge badge-secondary">{{ App\Models\Requirements\Requirement::getPendingRequirements() }}</span>
                     </a>
                 </li>
                 @endcan

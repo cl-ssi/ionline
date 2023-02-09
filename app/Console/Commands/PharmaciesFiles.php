@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Pharmacies\Dispatch;
+use App\Models\Pharmacies\Dispatch;
 use Illuminate\Support\Facades\Storage;
 
 class PharmaciesFiles extends Command

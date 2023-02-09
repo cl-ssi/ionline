@@ -5,7 +5,7 @@ namespace App\Rrhh;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use App\Requirements\Category;
+use App\Models\Requirements\Category;
 use Illuminate\Support\Facades\Auth;
 
 class OrganizationalUnit extends Model implements Auditable

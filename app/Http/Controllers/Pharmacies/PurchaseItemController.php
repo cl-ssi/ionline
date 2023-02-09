@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Pharmacies;
 
-use App\Pharmacies\PurchaseItem;
+use App\Models\Pharmacies\PurchaseItem;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Product;
 
 class PurchaseItemController extends Controller
 {
@@ -57,7 +57,7 @@ class PurchaseItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pharmacies\PurchaseItem  $purchaseItem
+     * @param  \App\Models\Pharmacies\PurchaseItem  $purchaseItem
      * @return \Illuminate\Http\Response
      */
     public function show(PurchaseItem $purchaseItem)
@@ -68,7 +68,7 @@ class PurchaseItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pharmacies\PurchaseItem  $purchaseItem
+     * @param  \App\Models\Pharmacies\PurchaseItem  $purchaseItem
      * @return \Illuminate\Http\Response
      */
     public function edit(PurchaseItem $purchaseItem)
@@ -80,7 +80,7 @@ class PurchaseItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pharmacies\PurchaseItem  $purchaseItem
+     * @param  \App\Models\Pharmacies\PurchaseItem  $purchaseItem
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, PurchaseItem $purchaseItem)
@@ -91,7 +91,7 @@ class PurchaseItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pharmacies\PurchaseItem  $purchaseItem
+     * @param  \App\Models\Pharmacies\PurchaseItem  $purchaseItem
      * @return \Illuminate\Http\Response
      */
     public function destroy(PurchaseItem $purchaseItem)

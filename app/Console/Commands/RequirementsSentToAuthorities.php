@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
-use App\Requirements\Requirement;
+use App\Models\Requirements\Requirement;
 use Illuminate\Console\Command;
 
 /**

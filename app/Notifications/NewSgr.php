@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Requirements\Requirement;
+use App\Models\Requirements\Requirement;
 
 class NewSgr extends Notification
 {

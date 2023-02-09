@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +24,7 @@ class DispatchVerificationMailing extends Model
     //relaciones
     public function dispatch()
     {
-      return $this->belongsTo('App\Pharmacies\Dispatch');
+      return $this->belongsTo('App\Models\Pharmacies\Dispatch');
     }
 
     protected $dates = ['delivery_date','confirmation_date'];

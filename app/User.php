@@ -128,7 +128,7 @@ class User extends Authenticatable implements Auditable
     public function pharmacies()
     {
         /* return $this->belongsToMany('\App\Models\Pharmacies\Pharmacy'); */
-        return$this->belongsToMany('\App\Pharmacies\Pharmacy', 'frm_pharmacy_user')->withTimestamps();
+        return$this->belongsToMany('\App\Models\Pharmacies\Pharmacy', 'frm_pharmacy_user')->withTimestamps();
     }
 
     public function bankAccount()
@@ -184,47 +184,47 @@ class User extends Authenticatable implements Auditable
 
     public function reqLabels()
     {
-        return $this->hasMany('App\Requirements\Label');
+        return $this->hasMany('App\Models\Requirements\Label');
     }
 
     public function requirementStatus()
     {
-        return $this->hasMany('App\Requirements\RequirementStatus');
+        return $this->hasMany('App\Models\Requirements\RequirementStatus');
     }
 
     public function requirements()
     {
-        return $this->hasMany('App\Requirements\Requirement');
+        return $this->hasMany('App\Models\Requirements\Requirement');
     }
 
     public function requirementsEventsFrom()
     {
-        return $this->hasMany('App\Requirements\Event','from_user_id');
+        return $this->hasMany('App\Models\Requirements\Event','from_user_id');
     }
 
     public function requirementsEventsTo()
     {
-        return $this->hasMany('App\Requirements\Event','to_user_id');
+        return $this->hasMany('App\Models\Requirements\Event','to_user_id');
     }
 
     public function purchases()
     {
-        return $this->hasMany('App\Pharmacies\Purchase');
+        return $this->hasMany('App\Models\Pharmacies\Purchase');
     }
 
     public function dispatches()
     {
-        return $this->hasMany('App\Pharmacies\Dipatch');
+        return $this->hasMany('App\Models\Pharmacies\Dipatch');
     }
 
     public function receivings()
     {
-        return $this->hasMany('App\Pharmacies\Receiving');
+        return $this->hasMany('App\Models\Pharmacies\Receiving');
     }
 
     public function establishments()
     {
-        return $this->belongsToMany('\App\Pharmacies\Establishment', 'frm_establishments_users')
+        return $this->belongsToMany('\App\Models\Pharmacies\Establishment', 'frm_establishments_users')
                     ->withTimestamps();
     }
 

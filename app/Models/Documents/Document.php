@@ -75,7 +75,7 @@ class Document extends Model implements Auditable
 
     public function reqEvents()
     {
-        return $this->belongsToMany('App\Requirements\Event','req_documents_events');
+        return $this->belongsToMany('App\Models\Requirements\Event','req_documents_events');
     }
 
     public function fileToSign()

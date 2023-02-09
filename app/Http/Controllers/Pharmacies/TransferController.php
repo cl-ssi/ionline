@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Pharmacies;
 use App\Models\Documents\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Deliver;
-use App\Pharmacies\Product;
-use App\Pharmacies\Establishment;
-use App\Pharmacies\Transfer;
+use App\Models\Pharmacies\Deliver;
+use App\Models\Pharmacies\Product;
+use App\Models\Pharmacies\Establishment;
+use App\Models\Pharmacies\Transfer;
 use Illuminate\Support\Facades\Auth;
 
 class TransferController extends Controller

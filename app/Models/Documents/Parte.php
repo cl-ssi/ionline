@@ -52,7 +52,7 @@ class Parte extends Model
 
     public function requirements()
     {
-        return $this->hasMany('\App\Requirements\Requirement');
+        return $this->hasMany('\App\Models\Requirements\Requirement');
     }
 
     public function files()

@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Program extends Model
 {
     //
     protected $fillable = [
         'name'
     ];
 
-    protected $table = 'frm_categories';
+    protected $table = 'frm_programs';
 
     //relaciones
     public function products()
     {
-      return $this->hasMany('App\Pharmacies\Product');
+      return $this->hasMany('App\Models\Pharmacies\Product');
     }
 }

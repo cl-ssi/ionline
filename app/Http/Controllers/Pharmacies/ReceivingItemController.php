@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\ReceivingItem;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\ReceivingItem;
+use App\Models\Pharmacies\Product;
 
 class ReceivingItemController extends Controller
 {

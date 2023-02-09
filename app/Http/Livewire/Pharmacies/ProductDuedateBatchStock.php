@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Pharmacies;
 
 use Livewire\Component;
-use App\Pharmacies\Product;
+use App\Models\Pharmacies\Product;
 
 class ProductDuedateBatchStock extends Component
 {

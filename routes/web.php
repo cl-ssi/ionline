@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\User;
 
 /** Un modelo? */
-use App\Pharmacies\Purchase;
+use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
 
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;

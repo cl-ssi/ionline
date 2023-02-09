@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,17 +14,17 @@ class Transfer extends Model
 
     public function establishment_from()
     {
-        return $this->belongsTo('App\Pharmacies\Establishment', 'from');
+        return $this->belongsTo('App\Models\Pharmacies\Establishment', 'from');
     }
 
     public function establishment_to()
     {
-        return $this->belongsTo('App\Pharmacies\Establishment', 'to');
+        return $this->belongsTo('App\Models\Pharmacies\Establishment', 'to');
     }
 
     public function product()
     {
-        return $this->belongsTo('App\Pharmacies\Product');
+        return $this->belongsTo('App\Models\Pharmacies\Product');
     }
 
     public function user()

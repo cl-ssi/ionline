@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Requirements\Event;
+use App\Models\Requirements\Event;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;

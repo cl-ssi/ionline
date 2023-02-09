@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Pharmacies;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Pharmacies\Program;
+use App\Models\Pharmacies\Program;
 
 class ProgramController extends Controller
 {

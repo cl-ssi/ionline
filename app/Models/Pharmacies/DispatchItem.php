@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pharmacies;
+namespace App\Models\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,12 +23,12 @@ class DispatchItem extends Model
   //relaciones
   public function dispatch()
   {
-    return $this->belongsTo('App\Pharmacies\Dispatch');
+    return $this->belongsTo('App\Models\Pharmacies\Dispatch');
   }
 
   public function product()
   {
-    return $this->belongsTo('App\Pharmacies\Product')->withTrashed();
+    return $this->belongsTo('App\Models\Pharmacies\Product')->withTrashed();
   }
 
   /**
