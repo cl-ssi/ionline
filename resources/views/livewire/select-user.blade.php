@@ -45,7 +45,7 @@
         </thead>
         <tbody>
             @foreach($user_array as $user)
-                <tr><input type='hidden' name='users[]' value="{{$user->id}}">
+                <tr><input type='hidden' name='users[]' id="users" value="{{$user->id}}">
                     <input type='hidden' name='enCopia[]' value='0'>
                     <td>{{ $user->organizationalUnit->name }}</td>
                     <td>{{ $user->tinnyName }}</td>

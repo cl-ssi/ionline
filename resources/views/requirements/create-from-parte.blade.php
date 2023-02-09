@@ -7,7 +7,7 @@
 @include('documents.partes.partials.nav')
 
 <h4 class="mb-3">
-    Derivando parte <strong>{{ $parte->id }}</strong>
+    @if($parte) Derivando parte <strong>{{ $parte->id }}</strong> @endif
     <span class="badge badge-success">
         Pendientes por derivar: {{ $totalPending }}
     </span>
@@ -15,6 +15,7 @@
 
 <br>
 
+@if($parte)
 <div class="form-row">
     <div class="col-12 col-md-8">
     @if($parte->files != null)
@@ -77,7 +78,7 @@
 
             <div class="form-row">
                 <div class="col-2">
-                    <a @if($previous) href="{{ route('requirements.createFormParte', $previous) }}" @endif>
+                    <a @if($previous) href="{{ route('requirements.createFromParte', $previous) }}" @endif>
                         <button type="button" class="btn btn-primary form-control">
                             <i class="fas fa-arrow-circle-left"></i>
                         </button>
@@ -87,7 +88,7 @@
                     <button type="submit" id="submit" class="btn btn-success form-control">Derivar ({{ $totalPending }} pendientes)</button>
                 </div>
                 <div class="col-2">
-                    <a @if($next) href="{{ route('requirements.createFormParte', $next) }}" @endif>
+                    <a @if($next) href="{{ route('requirements.createFromParte', $next) }}" @endif>
                         <button type="button" class="btn btn-primary form-control">
                             <i class="fas fa-arrow-circle-right"></i>
                         </button>
@@ -98,8 +99,7 @@
         </form>
     </div>
 </div>
-
-
+@endif
 
 @endsection
 
@@ -112,18 +112,29 @@
 
     $(document).ready(function(){
         
-        // $("#submit").click(function(){
-        //     //Attempt to get the element using document.getElementById
-        //     var element = document.getElementById("users");
+        $("#submit").click(function(){
+            // //Attempt to get the element using document.getElementById
+            // const name = form.querySelector("input[name='users']");
+            // console.log(name);
 
-        //     //If it isn't "undefined" and it isn't "null", then it exists.
-        //     if(typeof(element) != 'undefined' && element != null){
-        //         // alert('Element exists!');
-        //     } else{
-        //         alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
-        //         return false;
-        //     }
-        // });
+            // var element = document.getElementsByName("users");
+            // console.log(element);
+
+            // //If it isn't "undefined" and it isn't "null", then it exists.
+            // if(typeof(element) != 'undefined' && element != null){
+            //     // alert('Element exists!');
+            // } else{
+            //     alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+            //     return false;
+            // }
+
+            if($('#users').val() == undefined){
+                alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+                return false;
+            }
+
+        });
+        
     });
 
 </script>

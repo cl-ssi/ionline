@@ -1211,7 +1211,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('archive_requirement_delete/{requirement}', [RequirementController::class,'archive_requirement_delete'])->name('archive_requirement_delete');
     // Route::get('asocia_categorias', [RequirementController::class,'asocia_categorias'])->name('asocia_categorias');
     Route::get('create_requirement/{parte}',  [RequirementController::class,'create_requirement'])->name('create_requirement');
-    Route::get('createFormParte/{parte?}',  [RequirementController::class,'createFromParte'])->name('createFormParte');
+    Route::get('create-from-parte/{parte?}',  [RequirementController::class,'createFromParte'])->name('createFromParte');
     Route::get('create_requirement_sin_parte',  [RequirementController::class,'create_requirement_sin_parte'])->name('create_requirement_sin_parte');
     // Route::get('create_event/{req_id}',  [EventController::class,'create_event'])->name('create_event');
     Route::resource('labels', LabelController::class);

@@ -655,25 +655,30 @@ class RequirementController extends Controller
     public function createFromParte(Parte $parte = null)
     {
         if(!$parte){
-            $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-02-09')->first();
+            $parte = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')->first();
         }
 
-        // get previous user id
-        $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-02-09')
+        $previous = null;
+        $next = null;
+        if($parte){
+
+            // get previous user id
+            $previous = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')
             ->where('id', '<', $parte->id)
             ->max('id');
 
-        $previous = Parte::find($previous);
-        
-        // get next user id
-        $next = Parte::whereDoesntHave('requirements')
-            ->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
-            ->where('id', '>', $parte->id)
-            ->min('id');
-        
-        $next = Parte::find($next);
+            $previous = Parte::find($previous);
             
-        $totalPending = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-02-09')->count();
+            // get next user id
+            $next = Parte::whereDoesntHave('requirements')
+                ->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')
+                ->where('id', '>', $parte->id)
+                ->min('id');
+            
+            $next = Parte::find($next);
+        }
+        
+        $totalPending = Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') .'-01-01')->count();
 
         return view('requirements.create-from-parte', compact('parte','previous','next','totalPending'));
     }
@@ -1145,7 +1150,8 @@ class RequirementController extends Controller
             ->where('id', '>', $parte->id)->min('id');
             $next = Parte::find($next);
 
-    return view('requirements.create-from-parte', compact('parte','previous','next'));
+    // return view('requirements.create-from-parte', compact('parte','previous','next'));
+    return redirect()->route('requirements.createFromParte', $parte);
 }
 
     // public function asocia_categorias(Request $request)
