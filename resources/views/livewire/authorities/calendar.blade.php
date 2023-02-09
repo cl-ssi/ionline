@@ -84,7 +84,7 @@
 
                 <div class="col-12 col-md-7">
                     <div class="form-group">
-                        <label for="for_decree">Decreto</label>
+                        <label for="for_decree">Decreto (opcional)</label>
                         <input type="text" class="form-control">
                     </div>
                 </div>

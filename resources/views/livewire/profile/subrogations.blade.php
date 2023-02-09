@@ -5,7 +5,7 @@
 
         @case('index')
             <h3 class="mb-3">
-                <i class="fas fa-chess"></i> Subrogantes
+                <i class="fas fa-chess"></i> Subrogantes @if($organizationalUnit) de Autoridad @endif de tipo @if($type) {{$type}} @endif
                 <button class="btn btn-success float-right"
                     wire:click="create"><i class="fas fa-plus"></i> Agregar nuevo</button>
             </h3>
@@ -13,7 +13,7 @@
             @break
 
         @case('create')
-            <h3>Crear nueva subrogancia</h3>
+            <h3>Crear nueva subrogancia @if($type)de tipo {{$type}} @endif</h3>
             @include('profile.subrogation.form')
             <button type="button" class="btn btn-primary"
                 wire:click="store">Crear</button>

@@ -9,6 +9,13 @@
 @livewire('profile.subrogations', [
     'organizationalUnit' => $ou,
     'hide_own_subrogation' => true,
+    'type' => 'manager',
+])
+
+@livewire('profile.subrogations', [
+    'organizationalUnit' => $ou,
+    'hide_own_subrogation' => true,
+    'type' => 'secretary',
 ])
 
 <hr>

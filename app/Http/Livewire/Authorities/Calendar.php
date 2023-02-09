@@ -145,5 +145,10 @@ class Calendar extends Component
 
         return view('livewire.authorities.calendar');
     }
+    public function cancel()
+    {
+        $this->editForm = false;
+
+    }
 }
 
