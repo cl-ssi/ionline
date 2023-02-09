@@ -45,11 +45,11 @@
     </li>
     @endcan
 
-    @canany(['Partes: oficina'])
+    @canany(['Partes: director'])
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('requirements.createFromParte') }}">
-            <i class="fas fa-inbox"></i> Empezar a derivar
+            <i class="fas fa-hands"></i> Derivar Pendientes
         </a>
     </li>
     @endcan
