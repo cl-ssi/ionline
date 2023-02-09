@@ -25,6 +25,7 @@ class Signature extends Model implements Auditable
      */
     protected $fillable = [
         'id',
+        'status',
         'ou_id',
         'responsable_id',
         'request_date',

@@ -183,6 +183,10 @@ class DigitalSignatureController extends Controller
             //Si ya firmaron todos se envía por correo a destinatarios del doc
             $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
             if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
+                //Se cambia status de Signature a 'completed'
+                $signaturesFlow->signature->status = 'completed';
+                $signaturesFlow->signature->save();
+
                 $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);

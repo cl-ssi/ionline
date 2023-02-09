@@ -142,7 +142,6 @@
 <br>
 
 @if($allowance->allowanceSigns->first()->status == 'pending')
-
     <i class="fas fa-check-circle"></i> Gestión de víatico.
     <div class="table-responsive">
         <table class="table table-sm table-bordered small">
@@ -327,24 +326,18 @@
         <table class="table table-sm table-bordered small">
             <thead>
                 <tr class="text-center">
-                    <th class="table-active">
-                        {{ $allowance->allowanceSigns->first()->organizationalUnit->name }}<br>
-                        SIRH
-                    </th>
-                    @if($allowance->allowanceSigns->first()->status == 'accepted')
-                    @foreach($allowance->allowanceSignature->signaturesFlows as $flow)
-                    <th class="table-active">
-                        {{ $flow->organizationalUnit->name }}
-                    </th>
-                    @endforeach
-                    @endif
-                    @if($allowance->allowanceSigns->first()->status == 'rejected')
-                    @foreach($allowance->AllowanceSigns->whereNotIn('event_type', ['sirh']) as $sign)
-                    <th class="table-active">
-                        {{ $sign->organizationalUnit->name }}
+                    @php 
+                        $signsCount = $allowance->AllowanceSigns->whereNotIn('status', ['not valid'])->count();
+                        $width = 100 / $signsCount;
+                    @endphp
+                    @foreach($allowance->AllowanceSigns as $sign)
+                    <th class="table-active" width="{{ $width }}">
+                        {{ $sign->organizationalUnit->name }}<br>
+                        @if($sign->event_type == "sirh")
+                            SIRH
+                        @endif
                     </th>
                     @endforeach
-                    @endif
                 </tr>
             </thead>
             <tbody>

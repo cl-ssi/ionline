@@ -39,9 +39,9 @@ class SignatureService
      *
      * @return void
      */
-    public function addSignature($documentType, $subject, $description, $endorseType, $visatorAsSignature)
+    public function addSignature($type_id, $subject, $description, $endorseType, $visatorAsSignature)
     {
-        $this->documentType = $documentType;
+        $this->type_id = $type_id;
         $this->subject = $subject;
         $this->description = $description;
         $this->endorseType = $endorseType;
@@ -88,11 +88,12 @@ class SignatureService
 
         /* Signature */
         $signature = Signature::create([
+            'status' => 'pending',
             'user_id' => $this->responsible->id,
             'responsable_id' => $this->responsible->id,
             'ou_id' => $this->responsible->organizational_unit_id,
             'request_date' => now(),
-            'document_type' => $this->documentType,
+            'type_id' => $this->type_id,
             'subject' => $this->subject,
             'description' => $this->description,
             'endorse_type' => $this->endorseType,
@@ -108,7 +109,7 @@ class SignatureService
 
         $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
         $signaturesFile->update(['file' => $filePath]);
-        if(config('app.env') === 'production')
+        if(config('app.env') === 'production' || config('app.env') === 'local')
         {
             Storage::disk('gcs')->put($filePath, $pdf);
         }
@@ -125,6 +126,7 @@ class SignatureService
             $signaturesFlow->type = 'visador';
             $signaturesFlow->user_id = $visator->id;
             $signaturesFlow->ou_id = $visator->organizational_unit_id;
+            $signaturesFlow->sign_position = $index + 1;
             $signaturesFlow->save();
 
             $signature->update([

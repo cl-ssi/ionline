@@ -4,13 +4,11 @@
 
 @section('content')
 
-{{--
 <div style="width: 49%; display: inline-block;">
     <div class="siete">
-        {{ env('APP_SS') }}
+        
     </div>
 </div>
---}}
 
 <div class="right" style="width: 50%; display: inline-block;">
     <b>RESOLUCION EXENTA N°</b>: {{ $allowance->folio_sirh }} <br>

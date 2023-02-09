@@ -110,7 +110,7 @@ class AllowanceSignController extends Controller
 
             $signatureAllowance->addResponsible($allowance->userCreator);
             $signatureAllowance->addSignature(
-                'Viático',
+                5,
                 'Viático N°'. $allowance->id.' '.$allowance->userAllowance->TinnyName,
                 'Viático N°'. $allowance->id.' '.$allowance->userAllowance->TinnyName,
                 'Visación en cadena de responsabilidad',

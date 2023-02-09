@@ -165,6 +165,7 @@ class SignatureController extends Controller
 
         try {
             $signature = new Signature($request->All());
+            $signature->status = 'pending';
             $signature->user_id = Auth::id();
             $signature->ou_id = Auth::user()->organizationalUnit->id;
             $signature->responsable_id = Auth::id();
@@ -584,7 +585,10 @@ class SignatureController extends Controller
             'observation' => $request->observacion,
             'real_signer_id' => (Auth::user()->id == $user_signer_id) ? null : Auth::user()->id,
         ]);
-        $signatureFlow->signature()->update(['rejected_at' => now()]);
+        $signatureFlow->signature()->update([
+            'status'        => 'rejected',
+            'rejected_at'   => now()
+        ]);
 
         session()->flash('success', "La solicitud ha sido rechazada");
         return redirect()->route('documents.signatures.index', ['pendientes']);
