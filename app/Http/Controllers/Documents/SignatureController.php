@@ -61,6 +61,7 @@ class SignatureController extends Controller
             $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
             $allTimeAuthorities = Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager');
 
+            //TODO Despues de que esté estable el modulo nueva autoridad quitar este foreach ya que no debería ser necesario
             foreach($allTimeAuthorities as $allTimeAuthority){
                 if(!in_array($allTimeAuthority->user_id, $users)){
                     $myAuthorities->push($allTimeAuthority);

@@ -27,7 +27,7 @@ $period = \Carbon\CarbonPeriod::create($firstDay, $lastDayofMonth);
         @endforeach
     </tr>
     @for ($i = 0; $i < 10; $i++)
-    <tr><td>Persona {{ $i }}</td></tr>    
+    <tr><td>Persona {{ $i }}</td></tr>
     @endfor
     
 </table>

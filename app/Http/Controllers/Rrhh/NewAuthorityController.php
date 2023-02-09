@@ -14,6 +14,29 @@ use Carbon\Carbon;
 
 class NewAuthorityController extends Controller
 {
+    
+    
+    /**
+     * Display a listing of the resource.
+     *
+     Código para probar si se implemento bien los cambios de funciones a newAuthority
+     */
+    public function test()
+    {
+        $ou_id = 20; // cambiar por el id de una unidad organizacional válida
+
+        $authority = NewAuthority::getTodayAuthorityManagerFromDate($ou_id);
+
+        if ($authority) {
+            echo "Se ha encontrado un jefe de hoy para la unidad organizacional con id " . $ou_id . ":";
+            echo "\nNombre: " . $authority->user->fullname;
+            echo "\nCargo: " . $authority->position;
+        } else {
+            echo "No se ha encontrado un jefe para hoy para la unidad organizacional con id " . $ou_id;
+        }
+    }
+    
+    
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +65,11 @@ class NewAuthorityController extends Controller
             'ou' => $organizationalUnit,
             'subrogants' => $subrogants,
         ]);
+        // $newauthority = new NewAuthority();
+        //dd(NewAuthority::TodayAuthorityManagerFromDate(20));
     }
+
+
 
     public function getEvents(OrganizationalUnit $organizationalUnit)
     {

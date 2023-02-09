@@ -139,6 +139,7 @@
             </a>
             <br>
             <em class="text-muted">{{ optional($authority['secretary'])->position }}</em>
+            
 
         </div>
     @endforeach
