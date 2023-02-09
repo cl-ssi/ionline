@@ -116,6 +116,8 @@
                         @endif
                     </td>
                     <td>
+                        {{ $controlItem->product->product->name }}
+                        <br>
                         <small>
                             {{ $controlItem->product->name }}
                         </small>
