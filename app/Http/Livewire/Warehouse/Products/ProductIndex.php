@@ -40,7 +40,8 @@ class ProductIndex extends Component
             })
             ->whereStoreId($this->store->id)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->withTrashed()
+            ->paginate(25);
 
         return $products;
     }
