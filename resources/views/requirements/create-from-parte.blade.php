@@ -9,7 +9,7 @@
 <h4 class="mb-3">
     Derivando parte <strong>{{ $parte->id }}</strong>
     <span class="badge badge-success">
-        Pendientes por derivar: {{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}}
+        Pendientes por derivar: {{ $totalPending }}
     </span>
 </h4>
 
@@ -84,7 +84,7 @@
                     </a>
                 </div>
                 <div class="col-8">
-                    <button type="submit" id="submit" class="btn btn-success form-control">Derivar ({{ App\Models\Documents\Parte::whereDoesntHave('requirements')->whereDate('created_at', '>=', date('Y') - 1 .'-01-01')->count()}} pendientes)</button>
+                    <button type="submit" id="submit" class="btn btn-success form-control">Derivar ({{ $totalPending }} pendientes)</button>
                 </div>
                 <div class="col-2">
                     <a @if($next) href="{{ route('requirements.createFormParte', $next) }}" @endif>
