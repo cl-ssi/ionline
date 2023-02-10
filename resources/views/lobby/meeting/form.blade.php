@@ -117,6 +117,61 @@
 </div>
 
 <div class="form-row mb-3">
+    <fieldset class="col-md-6 col-12">
+        <label for="compromises" class="form-label">
+            {{ __('Nombre Compromiso') }}
+        </label>
+        
+        <input wire:model.defer="compromises" type="text" id="compromises" 
+            class="form-control @error('compromises') is-invalid @enderror" 
+            autocomplete="compromises" 
+            minlength="1" maxlength="255" 
+            placeholder="agregar 1 a n compromisos, falta la fecha del compromiso"> 
+        
+        @error('compromises') 
+            <span class="invalid-feedback" role="alert"> 
+                <strong>{{ $message }}</strong> 
+            </span> 
+        @enderror 
+    </fieldset>
+    <fieldset class="col-md-4 col-12">
+        <label for="compromises" class="form-label">
+            {{ __('Fecha compromiso') }}
+        </label>
+        
+        <input wire:model.defer="compromises" type="text" id="compromises" 
+            class="form-control @error('compromises') is-invalid @enderror" 
+            autocomplete="compromises" 
+            minlength="1" maxlength="255" 
+            placeholder="agregar 1 a n compromisos, falta la fecha del compromiso"> 
+        
+        @error('compromises') 
+            <span class="invalid-feedback" role="alert"> 
+                <strong>{{ $message }}</strong> 
+            </span> 
+        @enderror 
+    </fieldset>
+    <fieldset class="col-md-2 col-4">
+        <label for="status" class="form-label">
+            {{ __('Estado') }}
+        </label>
+        
+        <select name="status" id="status"
+            class="form-control @error('meeting.status') is-invalid @enderror">
+            <option value="0">Pendiente</option>
+            <option value="1">Terminada</option>
+
+        </select>
+        
+        @error('meeting.status')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </fieldset>
+</div>
+
+<div class="form-row mb-3">
     <fieldset class="col-md-2 col-4">
         <label for="status" class="form-label">
             {{ __('Estado') }}
