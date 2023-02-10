@@ -131,17 +131,17 @@
             @foreach($compromises as $key => $compromise)
             <tr>
                 <td>
-                    <input type="text" wire:model="compromises.{{$key}}.name" class="form-control" required>
+                    <input type="text" wire:model="compromises.{{$key}}.name" class="form-control" value="{{$compromise['name']}}" required>
                 </td>
                 <td>
-                    <input type="date" wire:model="compromises.{{$key}}.date" class="form-control" required>
+                    <input type="date" wire:model="compromises.{{$key}}.date" class="form-control" value="{{$compromise['date']}}" required>
                 </td>
                 <td>
                     <select wire:model="compromises.{{$key}}.status" class="form-control" required>
                         <option value="">Seleccione estado</option>
-                        <option value="pendiente">Pendiente</option>
-                        <option value="en curso">En curso</option>
-                        <option value="terminado">Terminado</option>
+                        <option value="pendiente" {{ $compromise['status'] == 'pendiente' ? 'selected' : '' }}>pendiente</option>
+                        <option value="en curso" {{ $compromise['status'] == 'en curso' ? 'selected' : '' }}>en curso</option>
+                        <option value="terminado" {{ $compromise['status'] == 'terminado' ? 'selected' : '' }}>terminado</option>
                     </select>
                 </td>
                 <td>

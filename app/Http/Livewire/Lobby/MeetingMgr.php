@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\User;
 use App\Models\Lobby\Meeting;
 use App\Models\Lobby\Compromise;
+use Carbon\Carbon;
 
 class MeetingMgr extends Component
 {
@@ -18,10 +19,12 @@ class MeetingMgr extends Component
     public $form = false;
 
     public $meeting;
+    public $meeting_id;
     public $compromises = [];
     public $participants = [];
 
     public $filter = [];
+
 
     protected $listeners = [
         'userSelected',
@@ -42,8 +45,9 @@ class MeetingMgr extends Component
             'meeting.responsible_id' => 'required',
             'meeting.petitioner' => 'required',
             'meeting.date' => 'required|date_format:Y-m-d',
-            'meeting.start_at' => 'date_format:H:i',
-            'meeting.end_at' => 'date_format:H:i|after:meeting.start_at',
+            //TODO ver la validacion de H:i en el edit trae el segundo de la BD y aun no me funciona            
+            'meeting.start_at' => 'required',
+            'meeting.end_at' => 'required',
             'meeting.mecanism' => 'required',
             'meeting.subject' => 'required',
             'meeting.exponents' => 'string',
@@ -102,11 +106,13 @@ class MeetingMgr extends Component
     public function form(Meeting $meeting)
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
+        $this->compromises = Compromise::where('meeting_id', $meeting->id)->get()->toArray();        
         $this->form = true;
     }
 
     public function save()
     {
+
         $this->validate();
         $this->meeting->save();
 
@@ -118,14 +124,15 @@ class MeetingMgr extends Component
         }
 
         /** Guardar los compromisos */
+
         foreach ($this->compromises as $compromise) {
-            $newCompromise = new Compromise;
-            $newCompromise->meeting_id = $this->meeting->id;
-            $newCompromise->name = $compromise['name'];
-            $newCompromise->date = $compromise['date'];
-            $newCompromise->status = $compromise['status'];
-            $newCompromise->save();
-        }        
+            Compromise::updateOrCreate(
+                ['meeting_id' => $this->meeting->id, 'name' => $compromise['name']],
+                ['date' => $compromise['date'], 'status' => $compromise['status']]
+            );
+        }
+
+
         $this->compromises = [];
         $this->index();
     }

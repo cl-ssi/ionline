@@ -11,6 +11,21 @@ class Compromise extends Model
     use HasFactory;
 
     /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+
+
+    protected $fillable = [
+        'id',
+        'meeting_id',
+        'name',
+        'date',
+        'status',
+    ];
+
+    /**
     * The primary key associated with the table.
     *
     * @var string
