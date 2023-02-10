@@ -8,7 +8,7 @@
                 <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus">
                     <option value="">Seleccione...</option>
                     <option value="pending">Pendiente</option>
-                    <option value="complete">Finalizado</option>
+                    <option value="completed">Finalizado</option>
                     <option value="rejected">Rechazado</option>
                 </select>
             </fieldset>  
@@ -63,25 +63,29 @@
                     <tr>
                         <th>
                             {{ $allowance->id }} <br>
-                            @if($allowance->folio_sirh) 
+
+                            @if($allowance->allowanceSignature && $allowance->folio_sirh)
                                 <span class="badge badge-secondary">{{ $allowance->folio_sirh }}</span> <br>
+                                @if($allowance->allowanceSignature->status == 'pending')
+                                    <span class="badge badge-warning">Pendiente</span>
+                                @endif
+                                
+                                @if($allowance->allowanceSignature->status == 'completed')
+                                    <span class="badge badge-success">Finalizado</span>
+                                @endif
+
+                                @if($allowance->allowanceSignature->status == 'rejected')
+                                    <span class="badge badge-danger">Rechazado</span>
+                                @endif
+                            @else
+                                @if($allowance->status == 'pending')
+                                    <span class="badge badge-warning">Pendiente</span>
+                                @endif
+
+                                @if($allowance->status == 'rejected')
+                                    <span class="badge badge-danger">Rechazado</span>
+                                @endif
                             @endif
-                            @switch($allowance->status)
-                            @case('pending')
-                                <span class="badge badge-warning">Pendiente</span>
-                                @break
-
-                            @case('complete')
-                                <span class="badge badge-success">Finalizado</span>
-                                @break
-
-                            @case('rejected')
-                                <span class="badge badge-danger">Rechazado</span>
-                                @break
-
-                            @default
-                                Default case...
-                        @endswitch    
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
@@ -156,14 +160,17 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            @if($allowance->signatures_file_id)
-                                <a class="btn btn-outline-primary btn-sm" title="Ver viático firmado" 
-                                    href="{{ route('allowances.show_file', $allowance) }}" target="_blank">
-                                    <i class="fas fa-file-pdf"></i>
+                            @if($allowance->allowanceSignature && $allowance->allowanceSignature->status == "completed")
+                                <a href="{{ route('documents.signatures.showPdf',[$allowance->allowanceSignature->signaturesFileDocument->id, time()])}}"
+                                    class="btn btn-sm btn-outline-primary " target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
                                 </a>
                             @else
-                                <a class="btn btn-outline-primary btn-sm disabled" title="Ver viático firmado">
-                                    <i class="fas fa-file-pdf"></i>
+                                <a href=""
+                                    class="btn btn-sm btn-outline-secondary disabled" target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
                                 </a>
                             @endif
                         </td>

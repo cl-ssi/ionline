@@ -81,10 +81,11 @@
             </table>
         </div>
 
-        @if($allowance->signatures_file_id)
-            <a class="btn btn-primary float-right" title="Ver viático firmado" 
-                href="{{ route('allowances.show_file', $allowance) }}" target="_blank">
-                <i class="fas fa-file-pdf"></i> Viático Firmado
+        @if($allowance->allowanceSignature && $allowance->allowanceSignature->status == "completed")
+            <a href="{{ route('documents.signatures.showPdf',[$allowance->allowanceSignature->signaturesFileDocument->id, time()])}}"
+                class="btn btn-primary float-right" target="_blank"
+                title="Ver documento">
+                <span class="fas fa-file-pdf" aria-hidden="true"></span> Viático Firmado
             </a>
         @endif
     </div>
