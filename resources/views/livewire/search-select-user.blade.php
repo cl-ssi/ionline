@@ -27,13 +27,16 @@
     
     <input type="text" name="{{ $selected_id }}" value="{{ optional($user)->id }}" style="display:none;" {{ $required }}>
     
+    <!-- TODO revisar si es necesario en los modulos o en que parte traer los eliminados para cambiar el comportamiento del modelo y evitar este if(!$user->trashed()) -->
     @if(!empty($query))
         <ul class="list-group col-12" style="z-index: 3; position: absolute;">
             @if( count($users) >= 1 )
                 @foreach($users as $user)
+                    @if(!$user->trashed())
                     <a wire:click="setUser({{$user->id}})" wire:click.prevent="addSearchedUser({{ $user }})"
                         class="list-group-item list-group-item-action"
                     >{{ $user->fullName }} </a>
+                    @endif
                 @endforeach
             @elseif($msg_too_many)
                 <div class="list-group-item list-group-item-info">Hemos encontrado muchas coincidencias</div>
