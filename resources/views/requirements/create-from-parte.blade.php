@@ -7,10 +7,14 @@
 @include('documents.partes.partials.nav')
 
 <h4 class="mb-3">
-    @if($parte) Derivando parte <strong>{{ $parte->id }}</strong> @endif
+    @if($parte) Derivando parte <strong>{{ $parte->id }}</strong>
     <span class="badge badge-success">
         Pendientes por derivar: {{ $totalPending }}
-    </span>
+    </span><br>
+    <small>Origen: {{$parte->origin}}</small><br>
+    <small>F.Ingreso: {{$parte->entered_at}}</small><br>
+    @endif
+    
 </h4>
 
 <br>
