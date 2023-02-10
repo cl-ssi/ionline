@@ -19,7 +19,9 @@ class MeetingMgr extends Component
 
     public $meeting;
     public $compromises = [];
-    public $participants = array();
+    public $participants = [];
+
+    public $filter = [];
 
     protected $listeners = [
         'userSelected',
@@ -134,11 +136,18 @@ class MeetingMgr extends Component
     }
 
     public function render()
-    {
-        app('debugbar')->log($this->participants);
-        $meetings = Meeting::latest()->paginate(25);
+    {        
+        $meetings = Meeting::filter($this->filter)
+            ->latest()
+            ->paginate(25);
+
         return view('livewire.lobby.meeting-mgr', [
             'meetings' => $meetings
         ]);
+    }
+
+    public function search()
+    {
+        $this->resetPage();
     }
 }

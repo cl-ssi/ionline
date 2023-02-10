@@ -1,7 +1,36 @@
+<div class="form-row mb-4">
+    <div class="col-6 col-md-3">
+        <label for="responsible">Responsable</label>
+        <input type="text" wire:model.defer="filter.responsible" class="form-control">
+    </div>
+
+    <div class="col-6 col-md-3">
+        <label for="subject">Asunto</label>
+        <input type="text" wire:model.defer="filter.subject" class="form-control">
+    </div>
+
+    <div class="col-6 col-md-2">
+        <label for="status">Estado</label>
+        <select wire:model.defer="filter.status" class="form-control">
+            <option value=""></option>
+            <option value="0">Terminado</option>
+            <option value="1">Pendiente</option>
+        </select>
+    </div>
+
+    <div class="col-1">
+        <label for="buscar">&nbsp</label>
+        <button class="btn btn-primary form-control" wire:click="search">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
+
 <table class="table table-sm table-bordered">
     <thead>
         <tr>
             <th>Fecha</th>
+            <th>Responsable</th>
             <th>Solicitante</th>
             <th>Asunto</th>
             <th></th>
@@ -11,8 +40,14 @@
         @foreach($meetings as $meeting)
             <tr>
                 <td>{{ $meeting->date }}</td>
+                <td>{{ $meeting->responsible->shortName }}</td>
                 <td>{{ $meeting->petitioner }}</td>
                 <td>{{ $meeting->subject }}</td>
+                <td>
+                    @foreach($meeting->participants as $participant)
+                        <li>{{ $participant->shortName }} </li>
+                    @endforeach
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-primary" 
                         wire:click="form({{$meeting}})"><i class="fas fa-edit"></i></button>

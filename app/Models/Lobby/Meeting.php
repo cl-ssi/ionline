@@ -54,5 +54,31 @@ class Meeting extends Model
     {
         return $this->hasMany(Compromise::class);
     }
+
+    public function scopeFilter($query, $filter)
+    {
+        foreach($filter as $type => $value) {
+            switch($type) {
+                case 'subject':
+                    $query->where('subject','LIKE','%'.$value.'%');
+                    break;
+                case 'responsible':
+                    $array_search = explode(' ', $value);
+                    foreach($array_search as $word)
+                    {
+                        $query->whereRelation('responsible',function($q) use($word) {
+                            $q->where('name', 'LIKE', '%'.$word.'%')
+                            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                            ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                            ->orwhere('id','LIKE', '%'.$word.'%');
+                        });
+                    }
+                    break;
+                case 'status':
+                    $query->where('status',$value);
+                    break;
+            }
+        }
+    }
     
 }
