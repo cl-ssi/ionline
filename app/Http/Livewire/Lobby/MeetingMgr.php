@@ -44,10 +44,9 @@ class MeetingMgr extends Component
         return [
             'meeting.responsible_id' => 'required',
             'meeting.petitioner' => 'required',
-            'meeting.date' => 'required|date_format:Y-m-d',
-            //TODO ver la validacion de H:i en el edit trae el segundo de la BD y aun no me funciona            
-            'meeting.start_at' => 'required',
-            'meeting.end_at' => 'required',
+            'meeting.date' => 'required|date_format:Y-m-d',            
+            'meeting.start_at' => 'date_format:H:i',
+            'meeting.end_at' => 'date_format:H:i|after:meeting.start_at',
             'meeting.mecanism' => 'required',
             'meeting.subject' => 'required',
             'meeting.exponents' => 'string',
@@ -106,7 +105,7 @@ class MeetingMgr extends Component
     public function form(Meeting $meeting)
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
-        $this->compromises = Compromise::where('meeting_id', $meeting->id)->get()->toArray();        
+        $this->compromises = Compromise::where('meeting_id', $meeting->id)->get()->toArray();
         $this->form = true;
     }
 
