@@ -88,7 +88,9 @@ class AllowanceSignController extends Controller
             $allowanceSign->date_sign = Carbon::now();
             $allowanceSign->save();
 
+            //Se agrega folio SIRH
             $allowance->fill($request->All());
+            $allowance->status = NULL;
 
             //VISADORES
             $visators = collect(new User);

@@ -99,6 +99,7 @@ class SearchAllowances extends Component
                         'allowanceSigns.organizationalUnit',
                         'originCommune',
                         'destinationCommune',
+                        'allowanceSignature'
                     ])
                     ->latest()
                     ->search($this->selectedStatus,
@@ -110,7 +111,7 @@ class SearchAllowances extends Component
     }
 
     public function searchedUserAllowance(User $user){
-        dd($user);
+        // dd($user);
         $this->userAllowanceId = $user->id;
     }
 

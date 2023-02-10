@@ -163,9 +163,16 @@ class Allowance extends Model implements Auditable
 
     public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
         if ($status_search OR $search_id OR $user_allowance_search) {
-            if($status_search != ''){
-                $query->where(function($q) use($status_search){
-                    $q->where('status', $status_search);
+            if($status_search != '' &&  ($status_search == 'pending' || $status_search == 'rejected')){
+                $query->whereHas('allowanceSignature' ,function($query) use($status_search){
+                    $query->where('status', $status_search);
+                })
+                ->orWhere('status', $status_search);
+            }
+
+            if($status_search != '' &&  $status_search == 'completed'){
+                $query->whereHas('allowanceSignature' ,function($query) use($status_search){
+                    $query->where('status', $status_search);
                 });
             }
 
