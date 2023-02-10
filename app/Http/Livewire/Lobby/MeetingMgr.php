@@ -25,6 +25,8 @@ class MeetingMgr extends Component
 
     public $filter = [];
 
+    public $delete_compromises = [];
+
 
     protected $listeners = [
         'userSelected',
@@ -44,7 +46,7 @@ class MeetingMgr extends Component
         return [
             'meeting.responsible_id' => 'required',
             'meeting.petitioner' => 'required',
-            'meeting.date' => 'required|date_format:Y-m-d',            
+            'meeting.date' => 'required|date_format:Y-m-d',
             'meeting.start_at' => 'date_format:H:i',
             'meeting.end_at' => 'date_format:H:i|after:meeting.start_at',
             'meeting.mecanism' => 'required',
@@ -86,9 +88,11 @@ class MeetingMgr extends Component
 
     public function removeCompromise($index)
     {
+
+        $compromise_id = $this->compromises[$index]['id'];
+        $this->delete_compromises[] = $compromise_id;
         array_splice($this->compromises, $index, 1);
     }
-
 
     public function removeParticipant($key)
     {
@@ -111,7 +115,7 @@ class MeetingMgr extends Component
 
     public function save()
     {
-
+        $this->deleteCommitment($this->delete_compromises);
         $this->validate();
         $this->meeting->save();
 
@@ -123,7 +127,6 @@ class MeetingMgr extends Component
         }
 
         /** Guardar los compromisos */
-
         foreach ($this->compromises as $compromise) {
             Compromise::updateOrCreate(
                 ['meeting_id' => $this->meeting->id, 'name' => $compromise['name']],
@@ -131,9 +134,18 @@ class MeetingMgr extends Component
             );
         }
 
-
         $this->compromises = [];
         $this->index();
+    }
+
+    public function deleteCommitment($ids)
+    {
+        foreach ($ids as $id) {
+            $compromise = Compromise::find($id);
+            if ($compromise) {
+                $compromise->delete();
+            }
+        }
     }
 
     public function delete(Meeting $meeting)
@@ -142,7 +154,7 @@ class MeetingMgr extends Component
     }
 
     public function render()
-    {        
+    {
         $meetings = Meeting::filter($this->filter)
             ->latest()
             ->paginate(25);

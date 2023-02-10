@@ -145,7 +145,7 @@
                     </select>
                 </td>
                 <td>
-                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm">Eliminar</button>
+                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm">Eliminar Compromiso</button>
                 </td>
             </tr>
             @endforeach
