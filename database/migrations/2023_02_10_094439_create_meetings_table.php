@@ -18,8 +18,8 @@ class CreateMeetingsTable extends Migration
             $table->foreignId('responsible_id')->constrained('users');
             $table->string('petitioner');
             $table->date('date');
-            $table->datetime('start_at')->nullable();
-            $table->datetime('end_at')->nullable();
+            $table->time('start_at')->nullable();
+            $table->time('end_at')->nullable();
             $table->string('mecanism');
             $table->text('subject');
             $table->text('exponents')->nullable();

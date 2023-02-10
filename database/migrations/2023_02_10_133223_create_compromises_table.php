@@ -18,7 +18,9 @@ class CreateCompromisesTable extends Migration
             $table->foreignId('meeting_id')->constrained('lobby_meetings');
             $table->string('name');
             $table->date('date');
+            $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

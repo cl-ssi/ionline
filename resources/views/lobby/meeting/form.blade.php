@@ -16,7 +16,7 @@
         <select class="form-control" wire:model.defer="meeting.mecanism">
             <option value=""></option>
             <option>Videoconferencia</option>
-            <option>Precencial</option>
+            <option>Presencial</option>
         </select>
         @error('meeting.mecanism') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
