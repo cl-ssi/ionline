@@ -53,15 +53,13 @@
         <label for="exponents" class="form-label">
             {{ __('Exponentes') }} (Relacionado con el solicitante)
         </label>
-        
-        <textarea wire:model.defer="meeting.exponents" id="exponents" 
-            class="form-control @error('meeting.exponents') is-invalid @enderror"
-            autocomplete="exponents"></textarea>
-        
+
+        <textarea wire:model.defer="meeting.exponents" id="exponents" class="form-control @error('meeting.exponents') is-invalid @enderror" autocomplete="exponents"></textarea>
+
         @error('meeting.exponents')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
         @enderror
     </fieldset>
 </div>
@@ -75,7 +73,7 @@
 
         <table class="table table-sm table-bordered">
             <tbody>
-                @foreach($participants as $key => $participant)                    
+                @foreach($participants as $key => $participant)
                 <tr>
                     <td>{{ $participant['name'] }}</td>
                     <td>{{ $participant['position'] }}</td>
@@ -91,9 +89,9 @@
             </tbody>
         </table>
         @error('meeting.participants')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
         @enderror
     </fieldset>
 </div>
@@ -103,91 +101,79 @@
         <label for="fot_details" class="form-label">
             {{ __('Detalle') }}
         </label>
-        
-        <textarea id="details" wire:model.defer="meeting.details" 
-            class="form-control @error('meeting.details') is-invalid @enderror"
-            autocomplete="details"></textarea>
-        
+
+        <textarea id="details" wire:model.defer="meeting.details" class="form-control @error('meeting.details') is-invalid @enderror" autocomplete="details"></textarea>
+
         @error('meeting.details')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
         @enderror
     </fieldset>
 </div>
 
 <div class="form-row mb-3">
-    <fieldset class="col-md-6 col-12">
+    <fieldset class="col-md-12 col-12">
         <label for="compromises" class="form-label">
-            {{ __('Nombre Compromiso') }}
+            {{ __('Compromisos') }}
         </label>
-        
-        <input wire:model.defer="compromises" type="text" id="compromises" 
-            class="form-control @error('compromises') is-invalid @enderror" 
-            autocomplete="compromises" 
-            minlength="1" maxlength="255" 
-            placeholder="agregar 1 a n compromisos, falta la fecha del compromiso"> 
-        
-        @error('compromises') 
-            <span class="invalid-feedback" role="alert"> 
-                <strong>{{ $message }}</strong> 
-            </span> 
-        @enderror 
     </fieldset>
-    <fieldset class="col-md-4 col-12">
-        <label for="compromises" class="form-label">
-            {{ __('Fecha compromiso') }}
-        </label>
-        
-        <input wire:model.defer="compromises" type="text" id="compromises" 
-            class="form-control @error('compromises') is-invalid @enderror" 
-            autocomplete="compromises" 
-            minlength="1" maxlength="255" 
-            placeholder="agregar 1 a n compromisos, falta la fecha del compromiso"> 
-        
-        @error('compromises') 
-            <span class="invalid-feedback" role="alert"> 
-                <strong>{{ $message }}</strong> 
-            </span> 
-        @enderror 
-    </fieldset>
-    <fieldset class="col-md-2 col-4">
-        <label for="status" class="form-label">
-            {{ __('Estado') }}
-        </label>
-        
-        <select name="status" id="status"
-            class="form-control @error('meeting.status') is-invalid @enderror">
-            <option value="0">Pendiente</option>
-            <option value="1">Terminada</option>
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre Compromiso</th>
+                <th>Fecha compromiso</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($compromises as $key => $compromise)
+            <tr>
+                <td>
+                    <input type="text" wire:model="compromises.{{$key}}.name" class="form-control" required>
+                </td>
+                <td>
+                    <input type="date" wire:model="compromises.{{$key}}.date" class="form-control" required>
+                </td>
+                <td>
+                    <select wire:model="compromises.{{$key}}.status" class="form-control" required>
+                        <option value="">Seleccione estado</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en curso">En curso</option>
+                        <option value="terminado">Terminado</option>
+                    </select>
+                </td>
+                <td>
+                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm">Eliminar</button>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-        </select>
-        
-        @error('meeting.status')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+    <fieldset class="col-md-12 col-12">
+        <button wire:click="addCompromise" class="btn btn-primary btn-sm">Añadir compromiso</button>
     </fieldset>
 </div>
+
 
 <div class="form-row mb-3">
     <fieldset class="col-md-2 col-4">
         <label for="status" class="form-label">
             {{ __('Estado') }}
         </label>
-        
-        <select name="status" id="status"
-            class="form-control @error('meeting.status') is-invalid @enderror">
+
+        <select name="status" id="status" class="form-control @error('meeting.status') is-invalid @enderror">
             <option value="0">Pendiente</option>
             <option value="1">Terminada</option>
 
         </select>
-        
+
         @error('meeting.status')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
         @enderror
     </fieldset>
 

@@ -6,6 +6,7 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\User;
 use App\Models\Lobby\Meeting;
+use App\Models\Lobby\Compromise;
 
 class MeetingMgr extends Component
 {
@@ -17,6 +18,7 @@ class MeetingMgr extends Component
     public $form = false;
 
     public $meeting;
+    public $compromises = [];
     public $participants = array();
 
     protected $listeners = [
@@ -26,11 +28,10 @@ class MeetingMgr extends Component
 
 
     /**
-    * mount
-    */
+     * mount
+     */
     public function mount()
     {
-
     }
 
     protected function rules()
@@ -53,11 +54,13 @@ class MeetingMgr extends Component
         'meeting.date.required' => 'La fecha desde es requerida',
     ];
 
-    public function userSelected($userSelected) {
+    public function userSelected($userSelected)
+    {
         $this->meeting->responsible_id = $userSelected;
     }
 
-    public function addParticipant(User $user) {
+    public function addParticipant(User $user)
+    {
         $this->participants[] = [
             'user_id' => $user->id,
             'name' => $user->shortName,
@@ -67,7 +70,23 @@ class MeetingMgr extends Component
         ];
     }
 
-    public function removeParticipant($key) {
+    public function addCompromise()
+    {
+        $this->compromises[] = [
+            'name' => '',
+            'date' => '',
+            'status' => '',
+        ];
+    }
+
+    public function removeCompromise($index)
+    {
+        array_splice($this->compromises, $index, 1);
+    }
+
+
+    public function removeParticipant($key)
+    {
         unset($this->participants[$key]);
         $this->participants = array_values($this->participants);
     }
@@ -80,7 +99,7 @@ class MeetingMgr extends Component
 
     public function form(Meeting $meeting)
     {
-        $this->meeting = Meeting::firstOrNew([ 'id' => $meeting->id]);
+        $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
         $this->form = true;
     }
 
@@ -90,11 +109,22 @@ class MeetingMgr extends Component
         $this->meeting->save();
 
         /** Guardar los participantes */
-        foreach($this->participants as $user) {
+        foreach ($this->participants as $user) {
             $this->meeting->participants()->attach([
                 'user_id' => $user['user_id']
             ]);
         }
+
+        /** Guardar los compromisos */
+        foreach ($this->compromises as $compromise) {
+            $newCompromise = new Compromise;
+            $newCompromise->meeting_id = $this->meeting->id;
+            $newCompromise->name = $compromise['name'];
+            $newCompromise->date = $compromise['date'];
+            $newCompromise->status = $compromise['status'];
+            $newCompromise->save();
+        }        
+        $this->compromises = [];
         $this->index();
     }
 
@@ -107,7 +137,7 @@ class MeetingMgr extends Component
     {
         app('debugbar')->log($this->participants);
         $meetings = Meeting::latest()->paginate(25);
-        return view('livewire.lobby.meeting-mgr',[
+        return view('livewire.lobby.meeting-mgr', [
             'meetings' => $meetings
         ]);
     }
