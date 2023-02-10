@@ -49,11 +49,14 @@
                     @endforeach
                 </td>
                 <td>
+                    <a class="btn btn-sm btn-outline-primary" target="_blank" href="{{ route('documents.lobby.show', $meeting) }}">
+                        <i class="fas fa-fw fa-file"></i>
+                    </a>
                     <button type="button" class="btn btn-sm btn-primary" 
-                        wire:click="form({{$meeting}})"><i class="fas fa-edit"></i></button>
+                        wire:click="form({{$meeting}})"><i class="fas fa-fw fa-edit"></i></button>
                     <button type="button" class="btn btn-sm btn-danger" 
                         onclick="confirm('¿Está seguro que desea borrar la reunión {{ $meeting->subject }}?') || event.stopImmediatePropagation()" 
-                        wire:click="delete({{$meeting}})"><i class="fas fa-trash"></i>
+                        wire:click="delete({{$meeting}})"><i class="fas fa-fw fa-trash"></i>
                     </button>
                 </td>
             </tr>

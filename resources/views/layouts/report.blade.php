@@ -10,7 +10,7 @@
         <div class="content">
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
-            @yield('content')
+            @yield('content', $slot ?? '')
 
             <div class="pie_pagina seis center">
                 <span class="uppercase">{{ env('APP_SS') }}</span><br>
