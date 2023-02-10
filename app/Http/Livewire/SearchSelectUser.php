@@ -27,9 +27,10 @@ class SearchSelectUser extends Component
     public $selected_id = 'user_id';
     public $msg_too_many;
     public $required = '';
-
+    
     public $emit_name;
     public $small_option = false;
+    public $addUsers = false;
 
     public function resetx()
     {
@@ -53,6 +54,13 @@ class SearchSelectUser extends Component
         $this->selectedName = $user->fullName;
         /** Emite a cualquier otro componente que user_id seleccionó */
         $this->emit('userSelected',$user->id);
+    }
+
+    public function addUser()
+    {
+        /** Emite a cualquier otro componente que user_id seleccionó */
+        $this->emit('addUser',$this->user);
+        $this->resetx();
     }
 
     public function updatedQuery()

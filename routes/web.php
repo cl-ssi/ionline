@@ -7,8 +7,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\User;
 
 /** Un modelo? */
-use App\Models\Pharmacies\Purchase;
 use App\Models\WebService\MercadoPublico;
+use App\Models\Pharmacies\Purchase;
 
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\TicResources;
@@ -23,6 +23,7 @@ use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
 
 use App\Http\Livewire\Parameters\MaintainerPlaces;
 
+use App\Http\Livewire\Lobby\MeetingMgr;
 use App\Http\Livewire\Inventory\RegisterInventory;
 use App\Http\Livewire\Inventory\PendingMovements;
 use App\Http\Livewire\Inventory\MaintainerPlaces as InventoryMaintainerPlaces;
@@ -35,35 +36,35 @@ use App\Http\Livewire\Inventory\InventoryEdit;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
-use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 
+use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\Warehouse\StoreController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
-use App\Http\Controllers\Warehouse\OriginController;
 
+use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
-use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Unspsc\ProductController;
-use App\Http\Controllers\Unspsc\FamilyController;
 
+use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
+
 use App\Http\Controllers\Suitability\SchoolsController;
 
 use App\Http\Controllers\Suitability\SchoolUserController;
-
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
-use App\Http\Controllers\Suitability\CategoriesController;
 
+use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
@@ -73,27 +74,27 @@ use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
-use App\Http\Controllers\ServiceRequests\AttachmentController;
 
+use App\Http\Controllers\ServiceRequests\AttachmentController;
 use App\Http\Controllers\Rrhh\UserController;
+use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
-use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\NewAuthorityController;
-use App\Http\Controllers\Rrhh\SubrogationController;
-use App\Http\Controllers\Rrhh\AttendanceController;
+use App\Http\Controllers\Rrhh\AuthorityController;
 
+use App\Http\Controllers\Rrhh\AttendanceController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\TelephoneController;
 use App\Http\Controllers\Resources\PrinterController;
 use App\Http\Controllers\Resources\MobileController;
-use App\Http\Controllers\Resources\ComputerController;
 
+use App\Http\Controllers\Resources\ComputerController;
 use App\Http\Controllers\Requirements\RequirementController;
 use App\Http\Controllers\Requirements\LabelController;
 use App\Http\Controllers\Requirements\EventController;
-use App\Http\Controllers\Requirements\CategoryController;
 
+use App\Http\Controllers\Requirements\CategoryController;
 use App\Http\Controllers\RequestForms\RequestFormMessageController;
 use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormEventController;
@@ -106,8 +107,8 @@ use App\Http\Controllers\RequestForms\ItemRequestFormController;
 use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
 use App\Http\Controllers\RequestForms\EventRequestFormFileController;
-use App\Http\Controllers\RequestForms\AttachedFilesController;
 
+use App\Http\Controllers\RequestForms\AttachedFilesController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
@@ -124,17 +125,17 @@ use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\ContactRecordController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
-use App\Http\Controllers\ReplacementStaff\ApplicantController;
 
+use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\Rem\UserRemController;
 use App\Http\Controllers\Rem\RemSerieController;
 use App\Http\Controllers\Rem\RemPeriodSerieController;
 use App\Http\Controllers\Rem\RemPeriodController;
+
 use App\Http\Controllers\Rem\RemFileController;
-
 use App\Http\Controllers\RNIdb\RNIdbController;
-use App\Http\Controllers\QualityAps\QualityApsController;
 
+use App\Http\Controllers\QualityAps\QualityApsController;
 use App\Http\Controllers\Programmings\TrainingsItemController;
 use App\Http\Controllers\Programmings\ReviewItemController;
 use App\Http\Controllers\Programmings\ProgrammingReviewController;
@@ -151,8 +152,8 @@ use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
-use App\Http\Controllers\Programmings\ActionTypeController;
 
+use App\Http\Controllers\Programmings\ActionTypeController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
 use App\Http\Controllers\Parameters\UnitOfMeasurementController;
@@ -165,28 +166,28 @@ use App\Http\Controllers\Parameters\PhraseOfTheDayController;
 use App\Http\Controllers\Parameters\PermissionController;
 use App\Http\Controllers\Parameters\ParameterController;
 use App\Http\Controllers\Parameters\LogController;
+
 use App\Http\Controllers\Parameters\LocationController;
 
-use App\Http\Controllers\Parameters\InventoryLabelController;
-
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Parameters\InventoryLabelController;
 use App\Http\Controllers\Parameters\EstablishmentTypeController;
 use App\Http\Controllers\Parameters\EstablishmentController;
 use App\Http\Controllers\Parameters\CommuneController;
 use App\Http\Controllers\Parameters\BudgetItemController;
-use App\Http\Controllers\MunicipalityController;
 
+use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Mammography\MammographyController;
-use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
+use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
-use App\Http\Controllers\HomeController;
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
@@ -210,8 +211,8 @@ use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
 use App\Http\Controllers\Agreements\WordMandateAgreeController;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
 
+use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 use App\Http\Controllers\Agreements\ProgramController;
 use App\Http\Controllers\Agreements\AgreementController;
@@ -1158,6 +1159,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
+    Route::get('lobby',MeetingMgr::class)->name('lobby');
     Route::post('/create_from_previous', [DocumentController::class,'createFromPrevious'])->name('createFromPrevious');
     Route::get('/{document}/download', [DocumentController::class,'download'])->name('download');
     Route::put('/{document}/store_number', [DocumentController::class,'storeNumber'])->name('store_number');

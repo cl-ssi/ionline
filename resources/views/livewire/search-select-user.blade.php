@@ -16,6 +16,10 @@
         />
 
         <div class="input-group-append">
+            @if($addUsers)
+            <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="addUser">
+                <i class="fas fa-user"></i></a>
+            @endif
             <a class="btn btn-outline-secondary {{ $small_option ? 'btn-sm' : '' }}" wire:click="resetx">
                 <i class="fas fa-eraser"></i></a>
         </div>

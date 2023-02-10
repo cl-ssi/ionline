@@ -2,21 +2,22 @@
 
 namespace App;
 
-use App\Models\Establishment;
-use App\Models\Inv\EstablishmentUser;
-use App\Models\Parameters\AccessLog;
-use App\Models\Profile\Subrogation;
-use App\Models\RequestForms\RequestForm;
-use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\Suitability\Result;
-use App\Models\Warehouse\Store;
-use App\Models\Warehouse\StoreUser;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use OwenIt\Auditing\Contracts\Auditable;
-use Spatie\Permission\Traits\HasRoles;
+use App\Models\Warehouse\StoreUser;
+use App\Models\Warehouse\Store;
+use App\Models\Suitability\Result;
+use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\RequestForms\RequestForm;
+use App\Models\Profile\Subrogation;
+use App\Models\Parameters\AccessLog;
+use App\Models\Lobby\Meeting;
+use App\Models\Inv\EstablishmentUser;
+use App\Models\Establishment;
 
 class User extends Authenticatable implements Auditable
 {
@@ -237,6 +238,12 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany('App\Models\Rem\UserRem');
     }
+
+    public function lobbyMeetings()
+    {
+        return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
+    }
+    
 
     public function stores()
     {
