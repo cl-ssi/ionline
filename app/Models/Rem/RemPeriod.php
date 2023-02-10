@@ -24,11 +24,18 @@ class RemPeriod extends Model
         'period' => 'date',
     ];
 
-
     public function series()
     {
         return $this->hasMany(RemPeriodSerie::class, 'period_id', 'id');
         
+    }
+
+    public static function getPivot($user_id, $date) {
+        $user = User::find($user_id);
+        if($user)
+        {
+            return self::getAuthorityFromDate($user->organizational_unit_id, $date, 'manager');
+        }
     }
     
 

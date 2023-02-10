@@ -25,10 +25,11 @@ class NewUploadRem extends Component
     public $rem_period_series_id;
     public $rem_period_series;
     public $serie;
-    public $type;
+    public $type=null;
     public $hasFile = false;
     public $isOriginal = false;
     public $isCorreccion = false;
+    public $isAutorizacion = false;
 
     protected $rules = [
         'file'  => 'required'
@@ -43,7 +44,7 @@ class NewUploadRem extends Component
     public function mount(RemFile $remFiles)
     {
         // Filtrar los registros que deseas obtener
-        $remFiles = RemFile::where('rem_period_series_id', $this->rem_period_series->id)->where('establishment_id', $this->remEstablishment->establishment->id)->get();
+        $remFiles = RemFile::where('rem_period_series_id', $this->rem_period_series->id)->where('establishment_id', $this->remEstablishment->establishment->id)->where('type',$this->type)->get();
 
         // Asignar el resultado a una propiedad del componente Livewire
         $this->remFiles = $remFiles;
@@ -53,6 +54,7 @@ class NewUploadRem extends Component
         $this->hasFile = $remFiles->count() > 0;
         $this->isOriginal = $remFiles->where('type', 'Original')->count() > 0;
         $this->isCorreccion = $remFiles->where('type', 'Correccion')->count() > 0;
+        $this->isAutorizacion = $remFiles->where('type', 'Autorizacion')->count() > 0;
     }
 
     public function download()
@@ -90,15 +92,11 @@ class NewUploadRem extends Component
         } else {
             $this->folder = $this->folderCorreccion;
         }
-
         // // Creación del archivo con formato según cometado por chicos de estadisticas, se guardará en diferentes carpetas ya que quieren tener el mismo nombre
-        $filename = $this->period->period->format('Y-m') . '_';
-        $filename .= Str::snake($this->remEstablishment->establishment->name);
-        $filename .= '(' . $this->remEstablishment->establishment->deis . ')_';
-        $filename .= $this->rem_period_series->serie->name;
-        $filename .= '_' . $this->type;
+        $filename = $this->remEstablishment->establishment->new_deis_without_first_character;
+        $filename .= strtoupper($this->rem_period_series->serie->name);
+        $filename .= '01';
         $filename .= '.' . $this->file->extension();
-
         $this->remFileNew = RemFile::updateOrCreate(
             [
                 'period' => $this->period->period,

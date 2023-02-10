@@ -30,9 +30,16 @@
                 <ul>
                     Serie:{{$serie->serie->name??''}}
                     <br>
-                    @livewire('rem.new-upload-rem',['period'=>$period,'serie'=>$serie, 'remEstablishment'=>$remEstablishment,'rem_period_series'=>$serie, 'type'=>'Original'])
+                    @livewire('rem.new-upload-rem',
+                    [
+                    'period'=>$period,
+                    'serie'=>$serie, 
+                    'remEstablishment'=>$remEstablishment,
+                    'rem_period_series'=>$serie, 
+                    'type'=>'Original'
+                    ])
                 </ul>
-                @endif()
+                @endif
                 @empty
                 <h6>No Existen Series asociado a este periodo, Favor asociar Serie al periodo</h6>
                 @endforelse

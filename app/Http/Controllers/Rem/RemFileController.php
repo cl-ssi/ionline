@@ -80,15 +80,15 @@ class RemFileController extends Controller
         $establishment_id = $data['establishment_id'];
         $establishment = Establishment::find($establishment_id);
 
-        $rem_period_series_id = $data['rem_period_series_id'];
-        $remperiodserie = RemPeriodSerie::find($rem_period_series_id);
+        //$rem_period_series_id = $data['rem_period_series_id'];
+        //$remperiodserie = RemPeriodSerie::find($rem_period_series_id);
 
 
         // Creación del archivo con formato personalizado ej: 2022-11_cerro_esmeralda(102-701)_B.pdf */
         $filename = Carbon::parse($data['period'])->format('Y-m') . '_';
         $filename .= Str::snake($establishment->name);
         $filename .= '(' . $establishment->deis . ')_';
-        $filename .= $remperiodserie->serie->name;
+        //$filename .= $remperiodserie->serie->name;
         $filename .= '_Autorizacion';
         $filename .= '.' . $request->file->extension();
 
@@ -96,7 +96,7 @@ class RemFileController extends Controller
         $remFile = RemFile::updateOrCreate(
             [
                 'period' => $data['period'],
-                'rem_period_series_id' => $data['rem_period_series_id'],
+                //'rem_period_series_id' => $data['rem_period_series_id'],
                 'establishment_id' => $data['establishment_id'],
                 'type' => 'Autorizacion'
             ],
