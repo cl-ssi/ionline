@@ -7,7 +7,6 @@ use Livewire\Component;
 use App\User;
 use App\Models\Lobby\Meeting;
 use App\Models\Lobby\Compromise;
-use Carbon\Carbon;
 
 class MeetingMgr extends Component
 {
@@ -110,6 +109,15 @@ class MeetingMgr extends Component
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
         $this->compromises = Compromise::where('meeting_id', $meeting->id)->get()->toArray();
+        $this->participants = $meeting->participants->map(function($participant) {
+            return [
+                'user_id' => $participant->id,
+                'name' => $participant->shortName,
+                'organizationalUnit' => $participant->organizationalUnit->name,
+                'position' => $participant->position,
+                'establishment' => $participant->organizationalUnit->establishment->alias,
+            ];
+        })->toArray();
         $this->form = true;
     }
 
@@ -121,9 +129,12 @@ class MeetingMgr extends Component
 
         /** Guardar los participantes */
         foreach ($this->participants as $user) {
-            $this->meeting->participants()->attach([
-                'user_id' => $user['user_id']
-            ]);
+            $existingParticipant = $this->meeting->participants()->where('user_id', $user['user_id'])->first();
+            if (!$existingParticipant) {
+                $this->meeting->participants()->attach([
+                    'user_id' => $user['user_id']
+                ]);
+            }
         }
 
         /** Guardar los compromisos */
@@ -134,6 +145,7 @@ class MeetingMgr extends Component
             );
         }
 
+        $this->participants= [];
         $this->compromises = [];
         $this->index();
     }
