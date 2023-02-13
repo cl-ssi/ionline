@@ -138,9 +138,9 @@ class RequirementController extends Controller
         $ous_secretary = [];
 
         // 14/06/2022: Esteban Rojas - Quitar requerimientos como secretaria (Se creó una nueva bandeja para ello)
-        // $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+        // $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
         // foreach ($ous_secretary as $secretary) {
-        //     $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        //     $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
         // }
 
         //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
@@ -399,9 +399,9 @@ class RequirementController extends Controller
     public function secretary_outbox(Request $request)
     {
         $ous_secretary = [];
-        $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+        $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
-            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
         }
 
         //Si usuario actual es secretary, se muestran los requerimientos que tengan to_authority en true
