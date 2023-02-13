@@ -76,7 +76,7 @@ class RequestFormController extends Controller {
 
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
 
-        if(count($authorities) > 0){
+        if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
           }
@@ -94,7 +94,8 @@ class RequestFormController extends Controller {
           if(in_array($ouSearch, $iam_authorities_in)) $events_type[] = 'supply_event';
 
         }
-        else{
+        else {
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
           $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
           $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
           if(Auth::user()->organizationalUnit->id == $ouSearch && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
@@ -118,7 +119,7 @@ class RequestFormController extends Controller {
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
         $secretaries = Authority::getAmIAuthorityFromOu(Carbon::now(), 'secretary', Auth::id());
 
-        // if(count($authorities) > 0){
+        // if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
           }
@@ -402,6 +403,7 @@ class RequestFormController extends Controller {
                 $now = Carbon::now();
                 //manager
                 $type = 'manager';
+                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                 $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
 
                 $emails = [$mail_notification_ou_manager->user->email];

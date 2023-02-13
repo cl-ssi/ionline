@@ -633,7 +633,10 @@ class User extends Authenticatable implements Auditable
     {
         if($this->absent)
         {
-            return $this->subrogations->where('subrogant.absent',false)->first()->subrogant ?? collect();
+            return $this->subrogations
+                ->where('subrogant.absent',false)
+                ->first()
+                ->subrogant ?? collect();
         }
         else
         {
@@ -641,12 +644,14 @@ class User extends Authenticatable implements Auditable
         }
     }
 
+    /* Este debería devolver si soy subrogante de tipo autoridad */
     public function getIAmSubrogantOfAttribute()
     {
         $users = collect();
 
         $subrogations = Subrogation::query()
             ->with('user')
+            ->where('type',null)
             ->where('subrogant_id',$this->id)
             ->whereRelation('user','absent',true)
             ->get();
@@ -662,12 +667,17 @@ class User extends Authenticatable implements Auditable
         return $users;
     }
 
+    /** Devuelve si soy subrogante de alguien, que no es un subrogancia
+     * de autoridad, si no subrogancia de simple persona, 
+     * ej: C. Caronna con Pricilla
+     * Rojas Con Toby
+     */
     public function getIAmSubrogantNoAuthorityAttribute()
     {        
         return Subrogation::where('organizational_unit_id',null)
-        ->where('type',null)
-        ->where('subrogant_id',auth()->user()->id)
-        ->get();
+            ->where('type',null)
+            ->where('subrogant_id',auth()->user()->id)
+            ->get();
         
     }
 

@@ -173,6 +173,7 @@ class ApplicantController extends Controller
         $type = 'manager';
         $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, $now, $type);
 
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
         $ou_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
 
         $emails = [$mail_request,
@@ -184,6 +185,7 @@ class ApplicantController extends Controller
           ->send(new EndSelectionNotification($technicalEvaluation));
 
         //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
         $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, $now, 'manager');
         $notification_reclutamiento_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'reclutamiento'));
         //SE NOTIFICA A USUARIO QUE CREA  
@@ -193,6 +195,7 @@ class ApplicantController extends Controller
             $technicalEvaluation->requestReplacementStaff->requesterUser->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'requester'));
         }
         //SE NOTIFICA A UNIDAD DE PERSONAL
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
         $notification_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
         $notification_personal_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'personal'));
 

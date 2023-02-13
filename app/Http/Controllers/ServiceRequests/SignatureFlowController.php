@@ -75,7 +75,7 @@ class SignatureFlowController extends Controller
       //saber la organizationalUnit que tengo a cargo
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
       $employee = Auth::user()->position;
-      if ($authorities != null) {
+      if ($authorities->isNotEmpty()) {
         $employee = $authorities[0]->position; // . " - " . $authorities[0]->organizationalUnit->name;
         $ou_id = $authorities[0]->organizational_unit_id;
       } else {

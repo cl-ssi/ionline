@@ -203,7 +203,7 @@
 
 <div class="row">
     <div class="col">
-        @if($requestReplacementStaff->technicalEvaluation &&
+        @if($requestReplacementStaff->technicalEvaluation && $requestReplacementStaff->request_id == NULL &&
             $requestReplacementStaff->end_date < now()->toDateString() &&
                 $requestReplacementStaff->technicalEvaluation->date_end != null &&
                     ($requestReplacementStaff->user_id == Auth::user()->id || 

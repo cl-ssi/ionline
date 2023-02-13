@@ -10,6 +10,10 @@ use App\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+
 
 class Calendar extends Component
 {
@@ -17,7 +21,7 @@ class Calendar extends Component
     public $subrogations;
     public $date = null;
     public $type = null;
-    
+
     /** atributos de modelo authority */
     public $user_id;
     public $startDate;
@@ -80,7 +84,7 @@ class Calendar extends Component
         $this->type = $type;
 
         $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)
-            ->where('type',$this->type)
+            ->where('type', $this->type)
             ->get();
 
         /** Muestra el formulario de edición */
@@ -93,23 +97,28 @@ class Calendar extends Component
     public function save()
     {
         $this->validate();
-    
-        Authority::where('organizational_unit_id', $this->organizationalUnit->id)
-            ->where('type', $this->type)
-            ->whereBetween('date', [$this->date, $this->endDate])
-            ->update([
+        $dates = CarbonPeriod::create($this->date, $this->endDate);
+        foreach ($dates as $date) {
+            Authority::updateOrCreate([
+                'organizational_unit_id' => $this->organizationalUnit->id,
+                'type' => $this->type,
+                'date' => $date->format('Y-m-d'),
+            ], [
                 'user_id' => $this->user_id,
-                'position' => $this->position,
+                'position' => $this->position
             ]);
+        }
 
         /** Agrega un mensaje de éxito */
-        session()->flash('info', 'El usuario  ha sido creado.');
+        session()->flash('info', 'La autoridad ha sido modificada/creada para las fechas correspondiente');
 
-        /** Oculta el formulario de edición */
+        /** Oculta el formulario de edición  */
+        $this->clearForm();
         $this->editForm = false;
     }
-    
-    
+
+
+
 
     public function render()
     {
@@ -133,7 +142,7 @@ class Calendar extends Component
                 'manager' => false,
                 'delegate' => false,
                 'secretary' => false,
-                
+
             );
         }
 
@@ -144,15 +153,24 @@ class Calendar extends Component
         foreach ($newAuthorities as $authority) {
             $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
             $this->data[$authority->date->format('Y-m-d')][$authority->type]['position'] = $authority->position;
-            
         }
 
         return view('livewire.authorities.calendar');
     }
+
     public function cancel()
     {
+        $this->clearForm();
         $this->editForm = false;
+    }
+
+    public function clearForm()
+    {
+        /* Limpia las variables de los formularios */
+        $this->endDate = null;
+        $this->type = null;
+        $this->position = null;
+        $this->user_id = null;
 
     }
 }
-

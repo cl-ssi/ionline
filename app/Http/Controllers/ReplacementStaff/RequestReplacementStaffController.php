@@ -133,17 +133,16 @@ class RequestReplacementStaffController extends Controller
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {
-        $date = Carbon::now();
         $type = 'manager';
         $user_id = Auth::user()->id;
 
-        $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
 
         foreach ($authorities as $authority){
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
 
-        if(!empty($authorities)){
+        if($authorities->isNotEmpty()){
             $pending_requests_to_sign = RequestReplacementStaff::latest()
                 ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
                     $q->Where('organizational_unit_id', $iam_authorities_in)
@@ -250,6 +249,11 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->save();
 
             /* SE CONSULTA UO DEL USUARIO QUE REGISTRA */
+            /* FIXME: @mirandaljorge porque haces una query utilizando get y last?
+             * El resultado esperado que es? no es lo mismo que la relación:
+             * $ou_request = $request_replacement->organizationalUnit ? 
+             * o se busca algo diferente a la relación que ya tiene RequestReplacementStaff con organizationalUnit?
+             * */
             $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
                 ->get()
                 ->last();
@@ -260,14 +264,13 @@ class RequestReplacementStaffController extends Controller
                     for ($i = 1; $i <= 4; $i++) {
                         $request_sing = new RequestSign();
 
-                        $date = Carbon::now()->format('Y_m_d_H_i_s');
                         $type = 'manager';
                         $type_adm = 'secretary';
                         $user_id = Auth::user()->id;
 
-                        $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+                        $iam_authority = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
 
-                        if(!empty($iam_authority)){
+                        if($iam_authority->isNotEmpty()){
                             if($i == 1){
                                 $request_sing->position = '1';
                                 $request_sing->ou_alias = 'leadership';
@@ -286,10 +289,11 @@ class RequestReplacementStaffController extends Controller
 
                                 //manager
                                 $type = 'manager';
-                                $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
+                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+                                $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
                                 //secretary
                                 $type_adm = 'secretary';
-                                $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type_adm);
+                                $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type_adm);
 
                                 $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
 
@@ -318,7 +322,8 @@ class RequestReplacementStaffController extends Controller
                                 $request_sing->request_status = 'pending';
 
                                 //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-                                $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+                                $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
                                 $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
                             }
                             if ($i == 2) {
@@ -344,7 +349,8 @@ class RequestReplacementStaffController extends Controller
             }
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
             $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
 
@@ -397,7 +403,8 @@ class RequestReplacementStaffController extends Controller
         $request_sing->save();
 
         //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now()->format('Y_m_d_H_i_s'), 'manager');
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), 'manager');
         $notification_ou_manager->user->notify(new NotificationSign($newRequestReplacementStaff));
 
         $request_sing_uni_per = new RequestSign();
@@ -409,7 +416,8 @@ class RequestReplacementStaffController extends Controller
         $request_sing_uni_per->save();
 
         //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
         $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($newRequestReplacementStaff, 'reclutamiento'));
         $newRequestReplacementStaff->requesterUser->notify(new NotificationNewRequest($newRequestReplacementStaff, 'requester'));
 

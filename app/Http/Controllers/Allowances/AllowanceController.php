@@ -138,7 +138,7 @@ class AllowanceController extends Controller
                 $iam_authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', $allowance->userAllowance->id);
 
                 //AUTORIDAD
-                if(!empty($iam_authorities)){
+                if($iam_authorities->isNotEmpty()){
                     foreach($iam_authorities as $iam_authority){
                         if($allowance->userAllowance->organizationalUnit->id == $iam_authority->organizational_unit_id){
                             //SE RESTA UNA U.O. POR SER AUTORIDAD

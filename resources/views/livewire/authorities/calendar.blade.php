@@ -28,7 +28,7 @@
                         <select wire:model="user_id" class="form-control" required>
                             <option value=""></option>
                             @foreach($subrogations as $subrogation)
-                            <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->shortName }} ({{ $subrogation->type }})</option>
+                            <option value="{{ $subrogation->user_id }}">{{ $subrogation->user->shortName }}</option>
                             @endforeach
                         </select>
                         @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
