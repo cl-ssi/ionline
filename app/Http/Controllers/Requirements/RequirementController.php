@@ -43,7 +43,7 @@ class RequirementController extends Controller
         $authority_secretary = Authority::getAmIAuthorityFromOu(now(), 'secretary', $auth_user->id);
 
         /** Si soy secretary entonces obtengo la(s) autoridad(es) en $allowed_users */
-        if(!empty($authority_secretary))
+        if($authority_secretary->isNotEmpty())
         {
             foreach($authority_secretary as $authority)
             {

@@ -143,7 +143,7 @@ class RequestReplacementStaffController extends Controller
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
 
-        if(!empty($authorities)){
+        if($authorities->isNotEmpty()){
             $pending_requests_to_sign = RequestReplacementStaff::latest()
                 ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
                     $q->Where('organizational_unit_id', $iam_authorities_in)
@@ -267,7 +267,7 @@ class RequestReplacementStaffController extends Controller
 
                         $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
 
-                        if(!empty($iam_authority)){
+                        if($iam_authority->isNotEmpty()){
                             if($i == 1){
                                 $request_sing->position = '1';
                                 $request_sing->ou_alias = 'leadership';

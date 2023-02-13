@@ -369,7 +369,7 @@ class ServiceRequestController extends Controller
         // dd(User::find($user)->id);
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', User::find($user)->id);
         $employee = User::find($user)->position;
-        if ($authorities != null) {
+        if ($authorities->isNotEmpty()) {
           $employee = $authorities[0]->position;
           $ou_id = $authorities[0]->organizational_unit_id;
         } else {
@@ -510,7 +510,7 @@ class ServiceRequestController extends Controller
     //get responsable_id organization in charge
     $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
     $employee = User::find($request->responsable_id)->position;
-    if ($authorities != null) {
+    if ($authorities->isNotEmpty()) {
       $employee = $authorities[0]->position; // . " - " . $authorities[0]->organizationalUnit->name;
       $ou_id = $authorities[0]->organizational_unit_id;
     } else {
@@ -537,7 +537,7 @@ class ServiceRequestController extends Controller
         //saber la organizationalUnit que tengo a cargo
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', User::find($user)->id);
         $employee = User::find($user)->position;
-        if ($authorities != null) {
+        if ($authorities->isNotEmpty()) {
           $employee = $authorities[0]->position;
           $ou_id = $authorities[0]->organizational_unit_id;
         } else {
@@ -646,7 +646,8 @@ class ServiceRequestController extends Controller
     //saber la organizationalUnit que tengo a cargo
     $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
     $employee = Auth::user()->position;
-    if ($authorities != null) {
+    if ($authorities->isNotEmpty()) {
+        /* FIX: es una colección puede haber más de un authority */
       $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
     }
 

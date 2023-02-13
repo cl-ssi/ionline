@@ -179,7 +179,7 @@ class RequestReplacementStaff extends Model implements Auditable
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
 
-        if(!empty($authorities)){
+        if($authorities->isNotEmpty()){
             foreach ($authorities as $authority) {
                 $request_to_sign = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){

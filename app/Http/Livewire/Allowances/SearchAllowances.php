@@ -37,7 +37,7 @@ class SearchAllowances extends Component
             }
 
             $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::user()->id);
-            if($authorities){
+            if($authorities->isNotEmpty()){
                 foreach ($authorities as $authority){
                     $iam_authorities_in[] = $authority->organizational_unit_id;
                 }
