@@ -110,7 +110,7 @@ class Calendar extends Component
         }
 
         /** Agrega un mensaje de éxito */
-        session()->flash('info', 'El usuario ha sido creado o actualizado.');
+        session()->flash('info', 'La autoridad ha sido modificada/creada para las fechas correspondiente');
 
         /** Oculta el formulario de edición  */
         $this->clearForm();
