@@ -10,6 +10,10 @@ use App\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+
 
 class Calendar extends Component
 {
@@ -93,21 +97,48 @@ class Calendar extends Component
     public function save()
     {
         $this->validate();
+        $start_date = $this->date;
+        $end_date = $this->endDate;
+        $organizational_unit_id = $this->organizationalUnit->id;
+        $type = $this->type;
+        $user_id = $this->user_id;
+        $position = $this->position;
     
-        Authority::where('organizational_unit_id', $this->organizationalUnit->id)
-            ->where('type', $this->type)
-            ->whereBetween('date', [$this->date, $this->endDate])
+        $updated = Authority::where('organizational_unit_id', $organizational_unit_id)
+            ->where('type', $type)
+            ->whereBetween('date', [$start_date, $end_date])
             ->update([
-                'user_id' => $this->user_id,
-                'position' => $this->position,
+                'user_id' => $user_id,
+                'position' => $position,
             ]);
-
+    
+        if (! $updated) {
+            $end_date = (new DateTime($end_date))->format('Y-m-d');
+            $end_date = date('Y-m-d', strtotime($end_date . ' +1 day'));
+            $dates = collect(new DatePeriod(
+                new DateTime($start_date),
+                new DateInterval('P1D'),
+                new DateTime($end_date)
+            ))->map(function ($date) use ($organizational_unit_id, $type, $user_id, $position) {
+                return new Authority([
+                    'organizational_unit_id' => $organizational_unit_id,
+                    'type' => $type,
+                    'date' => $date->format('Y-m-d'),
+                    'user_id' => $user_id,
+                    'position' => $position
+                ]);
+            });
+    
+            Authority::insert($dates->toArray());
+        }
+    
         /** Agrega un mensaje de éxito */
-        session()->flash('info', 'El usuario  ha sido creado.');
-
+        session()->flash('info', 'El usuario ha sido creado o actualizado.');
+    
         /** Oculta el formulario de edición */
         $this->editForm = false;
     }
+    
     
     
 
