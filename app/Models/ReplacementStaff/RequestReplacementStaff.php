@@ -10,6 +10,7 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 
+
 class RequestReplacementStaff extends Model implements Auditable
 {
     use HasFactory;

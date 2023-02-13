@@ -3,14 +3,40 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Rrhh\Authority;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 use App\Rrhh\OrganizationalUnit;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Parameters\Holiday;
+use App\Models\Profile\Subrogation;
+use Carbon\Carbon;
+
 
 class AuthorityController extends Controller
 {
+    
+    
+    /**
+     * Display a listing of the resource.
+     *
+     Código para probar si se implemento bien los cambios de funciones a newAuthority
+     */
+    public function test()
+    {
+        $ou_id = 20; // cambiar por el id de una unidad organizacional válida
+
+        $authority = Authority::getTodayAuthorityManagerFromDate($ou_id);
+
+        if ($authority) {
+            echo "Se ha encontrado un jefe de hoy para la unidad organizacional con id " . $ou_id . ":";
+            echo "\nNombre: " . $authority->user->fullname;
+            echo "\nCargo: " . $authority->position;
+        } else {
+            echo "No se ha encontrado un jefe para hoy para la unidad organizacional con id " . $ou_id;
+        }
+    }
+    
+    
     /**
      * Display a listing of the resource.
      *
@@ -18,179 +44,175 @@ class AuthorityController extends Controller
      */
     public function index(Request $request)
     {
-        $ouTopLevels = OrganizationalUnit::with([
-            'childs',
-            'childs.childs',
-            'childs.childs.childs.childs',
-            'childs.childs.childs.childs.childs'
-            ])->where('level', 1)->get();
-        if($request->date) {
-            $today = new \DateTime($request->date);
-        }
-        else {
-            $today = new \DateTime();
-        }
-
-        $authorities = null;
-        $calendar = array();
-        if($request->ou) {
-            $ou = OrganizationalUnit::Find($request->ou);
-
-            $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
-            //print_r($begin);
-
-            $end   = (clone $today)->modify('+13 days')->modify('+'.(8-$today->format('w')).' days');
-            //print_r($end);
-
-            $authorities = Authority::with('user', 'creator')
-                            ->where('from', '<=', $end)
-                            ->where('to','>=', $begin)
-                            ->where('organizational_unit_id',$request->ou)
-                            ->latest('id')
-                            ->get();
-            //return $authorities;
-
-            for($i = $begin; $i <= $end; $i->modify('+1 day')){
-                $calendar[] = [
-                    'date' => $i->format("Y-m-d"), 
-                    'manager' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager'), 
-                    'delegate' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'delegate'), 
-                    'secretary' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'secretary')
-                ]; 
-                // $calendar[$i->format("Y-m-d")] = Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager');
-                // echo $i->format("Y-m-d"). '
-                // ';
-            }
+        //TODO Deberia ser al reves de los establecimientos a OU
+        if (auth()->user()->can('Authorities: all')) {
+            $ouTopLevels = OrganizationalUnit::where('level', 1)->get();
+            return view('rrhh.new_authorities.index', compact('ouTopLevels'));
         } else {
-            $ou = false;
+            $ouTopLevels = OrganizationalUnit::where('level', 1)->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)->get();
+            return view('rrhh.new_authorities.index', compact('ouTopLevels'));
         }
-
-
-        // print_r($calendar);
-        // die();
-        // $period = CarbonPeriod::create('2018-12-01', '2018-12-20');
-        //
-        // // Iterate over the period
-        // foreach ($period as $date) {
-        //     $calendar[$date->format('Y-m-d')] = Authority::getAuthorityFromDate($date->format('Y-m-d'),'manager');
-        //     //echo $date->format('Y-m-d');
-        // }
-
-        // get the current time
-        //$current = Carbon::now();
-
-        //$begin = $current->subDays(7);
-        //$end = $current->addDays(7);
-
-        //for($i = $begin; $i <= $end; $i->addDays(1)){
-            //$calendar[$i->format("Y-m-d")] = Authority::getAuthorityFromDate($i->format("Y-m-d"),'manager');
-            //echo $i->format("Y-m-d");
-        //}
-        //echo date('Y-m-d', strtotime($date . ' -7 days'))
-        //$todayDate = date("Y-m-d");
-        //$calendar[$todayDate] = Authority::getAuthorityFromDate($todayDate,'manager');
-        //die($ou);
-        return view('rrhh.authorities.index',compact('authorities','ouTopLevels','calendar','today','ou'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    //public function create($establishment_id)
-    public function create(Request $request)
+    public function calendar(OrganizationalUnit $organizationalUnit)
+    {   
+        $subrogants = Subrogation::with(['subrogant'])
+            ->where('organizational_unit_id', $organizationalUnit->id)
+            ->select('id', 'subrogant_id', 'type')
+            ->get();
+
+        return view('rrhh.new_authorities.calendar', [
+            'ou' => $organizationalUnit,
+            'subrogants' => $subrogants,
+        ]);        
+    }
+
+
+
+    public function getEvents(OrganizationalUnit $organizationalUnit)
     {
-        //dd($request->establishment_id);
-        if($request->establishment_id)
-        {
-            //$users = User::orderBy('name')->orderBy('fathers_family')->get();
-            $ous = OrganizationalUnit::All();
-            //$ouTopLevel = OrganizationalUnit::Find(1);
-            $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
-            //dd($ouTopLevel);
-            return view('rrhh.authorities.create', compact('ous','ouTopLevel'))->withOu($request->ou_id);
+        $newAuthorities = Authority::with(['user' => function ($query) {
+            $query->select('id', 'name', 'fathers_family');
+        }])
+            ->where('organizational_unit_id', $organizationalUnit->id)
+            ->whereIn('type', ['manager', 'delegate', 'secretary'])
+            ->get();
+        $events = [];
+    
+        foreach ($newAuthorities as $authority) {
+            $backgroundColor = '';
+            if ($authority->type == 'delegate') {
+              $backgroundColor = '#6c757d';
+            } elseif ($authority->type == 'secretary') {
+              $backgroundColor = '#ffc107';
+            } elseif ($authority->type == 'manager') {
+              $backgroundColor = '#007bff';
+            }
+            $event = [
+                'title' => $authority->user->tinnyName,
+                'start' => $authority->date,
+                'end' => $authority->date,
+                'backgroundColor' => $backgroundColor,
+                'type' => $authority->type,
+                // agrega más campos aquí si los necesitas
+            ];
+            $events[] = $event;
         }
-        else
-        {
-            session()->flash('warning', 'Debe seleccionar primero una unidad organizacional');
-            return redirect()->route('rrhh.authorities.index');
+        
+        $holidays = Holiday::select('name', 'date')->get();
+        
+        foreach ($holidays as $holiday) {
+            $event = [
+                'title' => $holiday->name,
+                'start' => $holiday->date,
+                'end' => $holiday->date,
+                'backgroundColor' => '#FF0000',
+                
+            ];
+            $events[] = $event;
         }
+    
+        return json_encode($events);
+    }
+    
 
+
+    public function create(OrganizationalUnit $organizationalUnit)
+    {
+        return view('rrhh.new_authorities.create', [
+            'ou' => $organizationalUnit,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $authority = new Authority($request->all());
-        $authority->creator()->associate(Auth::user());
-        $authority->save();
+        //TODO tratar de no basarme en el copy paste del original y ocupar la validacion del update
+        $from = Carbon::createFromFormat('Y-m-d', $request->from);
+        $to = Carbon::createFromFormat('Y-m-d', $request->to);
 
-        session()->flash('info', 'La autoridad '.$authority->position.' ha sido creada.');
-
-        return redirect()->route('rrhh.authorities.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Rrhh\Authority  $authority
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Authority $authority)
-    {
-        $authority = Authority::where('start','<=',$q)->where('end','>=',$q)->get()->last();
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Rrhh\Authority  $authority
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Authority $authority)
-    {
-        switch($authority->organizationalUnit->level) {
-            case 6: $ouTopLevel = $authority->organizationalUnit->father->father->father->father->father; break;
-            case 5: $ouTopLevel = $authority->organizationalUnit->father->father->father->father; break;
-            case 4: $ouTopLevel = $authority->organizationalUnit->father->father->father; break;
-            case 3: $ouTopLevel = $authority->organizationalUnit->father->father; break;
-            case 2: $ouTopLevel = $authority->organizationalUnit->father; break;
-            case 1: $ouTopLevel = $authority->organizationalUnit; break; 
+        if ($from > $to) {
+            session()->flash('warning', 'La fecha "Desde" no puede ser mayor que la fecha "Hasta".');
+            return redirect()->back();
         }
-        return view('rrhh.authorities.edit', compact('ouTopLevel','authority'));
+
+        $days = $to->diffInDays($from) + 1;
+
+        for ($i = 0; $i < $days; $i++) {
+            $date = $from->copy()->addDays($i);
+
+            //TODO deberia estar afuera la validacion de si existe autoridad
+            $existingAuthority = Authority::whereBetween('date', [$from, $to])
+                ->where('organizational_unit_id', $request->organizational_unit_id)
+                ->where('type', $request->type)
+                ->first();
+
+
+
+            if ($existingAuthority) {
+                session()->flash('warning', 'Ya existe una autoridad para la fecha ' . $date->format('Y-m-d') . ' y unidad organizacional seleccionada.');
+                return redirect()->back();
+            }
+
+            //buscar la diferencia de request->input('user_id) 
+            $newAuthority = new Authority();
+            $newAuthority->user_id = $request->user_id;
+            $newAuthority->representation_id = $request->representation_id;
+            $newAuthority->date = $date;
+            $newAuthority->position = $request->position;
+            $newAuthority->type = $request->type;
+            $newAuthority->organizational_unit_id = $request->organizational_unit_id;
+            $newAuthority->decree = $request->decree;
+            $newAuthority->save();
+        }
+
+        session()->flash('info', 'El usuario ' . $newAuthority->user->fullName . ' ha sido creado como autoridad de la unidad organizacional para ' . $days . ' días.');
+        return redirect()->route('rrhh.new-authorities.calendar', $newAuthority->organizational_unit_id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rrhh\Authority  $authority
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Authority $authority)
+    public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
-        $authority->fill($request->all());
-        $authority->save();
-        session()->flash('success', 'La autoridad '.$authority->user->fullName.' ha sido actualizada.');
-        return redirect()->route('rrhh.authorities.index');
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $user = User::find($validatedData['user_id']);
+        $startDate = Carbon::parse($validatedData['start_date']);
+        $endDate = Carbon::parse($validatedData['end_date']);
+        $authorityThatDay = Authority::where('organizational_unit_id', $organizationalUnit->id)->where('date', $startDate)->where('type', 'manager')->first();
+        if ($request->updateFutureEventsCheck == 1) {
+            $maxValue = Authority::where('organizational_unit_id', $organizationalUnit->id)->where('type', 'manager')->where('user_id', $authorityThatDay->user_id)->max('date');
+            //TODO quitar el maxdate
+            $maxDate = Carbon::parse($maxValue);
+            while ($startDate->lte($maxDate)) {
+                //TODO cambiar el comportamiento de que reemplace todo (hasta la fecha)
+                $updateAuthority = Authority::where('date', $startDate)
+                    ->where('user_id', $authorityThatDay->user_id)
+                    ->where('type', 'manager')->first();
+
+                if ($updateAuthority) {
+                    $updateAuthority->user_id = $user->id;
+                    $updateAuthority->save();
+                }
+                $startDate->addDay();
+            }
+            session()->flash('info', 'El usuario  ' . $user->full_name . ' ha sido dejado como autoridad  para todos los eventos a futuro de la antigua autoridad ' . $authorityThatDay->user->full_name . ' Siendo la última fecha que tenia asignado como autoridad' . $maxValue);
+        } else {
+            Authority::where('organizational_unit_id', $organizationalUnit->id)
+                ->where('type', 'manager')
+                ->whereBetween('date', [$startDate, $endDate])
+                ->update([
+                    'user_id' => $user->id,
+                ]);
+
+            session()->flash('info', 'El usuario subrogante ' . $user->fullName . ' ha sido dejado como subrogante desde ' . $validatedData['start_date'] . ' hasta ' . $validatedData['end_date']);
+        }
+        return redirect()->route('rrhh.new-authorities.calendar', $organizationalUnit->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Rrhh\Authority  $authority
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Authority $authority)
+    public function create_subrogant(OrganizationalUnit $organizationalUnit)
     {
-        $authority->delete();
-        session()->flash('success', 'La autoridad '.$authority->user->fullName.' ha sido eliminada');
-        return redirect()->route('rrhh.authorities.index');
+        return view('rrhh.new_authorities.create_subrogant');
     }
 }

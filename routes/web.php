@@ -81,7 +81,7 @@ use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
-use App\Http\Controllers\Rrhh\NewAuthorityController;
+//use App\Http\Controllers\Rrhh\NewAuthorityController;
 
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
@@ -932,17 +932,17 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     /** 
      * Reemplazar después por el nuevo
      */
-    Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
+    //Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
 
-    Route::prefix('new-authorities')->name('new-authorities.')->middleware('auth')->group(function () {
-        Route::get('/test', [NewAuthorityController::class,'test'])->name('test');
-        Route::get('/', [NewAuthorityController::class,'index'])->name('index');
+    Route::prefix('authorities')->name('new-authorities.')->middleware('auth')->group(function () {
+        Route::get('/test', [AuthorityController::class,'test'])->name('test');
+        Route::get('/', [AuthorityController::class,'index'])->name('index');
         Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
-        Route::get('/{organizationalUnit}/create', [NewAuthorityController::class,'create'])->name('create');
-        Route::get('/{organizationalUnit}/calendar', [NewAuthorityController::class,'calendar'])->name('calendar');
-        Route::post('/store', [NewAuthorityController::class, 'store'])->name('store');
-        Route::put('/{organizationalUnit}/update', [NewAuthorityController::class, 'update'])->name('update');
-        Route::get('/{organizationalUnit}/create-subrogant', [NewAuthorityController::class,'create_subrogant'])->name('create_subrogant');
+        Route::get('/{organizationalUnit}/create', [AuthorityController::class,'create'])->name('create');
+        Route::get('/{organizationalUnit}/calendar', [AuthorityController::class,'calendar'])->name('calendar');
+        Route::post('/store', [AuthorityController::class, 'store'])->name('store');
+        Route::put('/{organizationalUnit}/update', [AuthorityController::class, 'update'])->name('update');
+        Route::get('/{organizationalUnit}/create-subrogant', [AuthorityController::class,'create_subrogant'])->name('create_subrogant');
     });
     Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class,'create'])->name('create');

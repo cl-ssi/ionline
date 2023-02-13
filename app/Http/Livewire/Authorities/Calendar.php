@@ -6,7 +6,7 @@ use Livewire\Component;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Rrhh\OrganizationalUnit;
-use App\Rrhh\NewAuthority;
+use App\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
 use Illuminate\Support\Facades\Validator;
@@ -94,7 +94,7 @@ class Calendar extends Component
     {
         $this->validate();
     
-        NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)
+        Authority::where('organizational_unit_id', $this->organizationalUnit->id)
             ->where('type', $this->type)
             ->whereBetween('date', [$this->date, $this->endDate])
             ->update([
@@ -122,7 +122,7 @@ class Calendar extends Component
         $holidays = Holiday::whereBetween('date', [$this->startOfMonth, $this->endOfMonth])
             ->get();
 
-        $newAuthorities = NewAuthority::where('organizational_unit_id', $this->organizationalUnit->id)
+        $newAuthorities = Authority::where('organizational_unit_id', $this->organizationalUnit->id)
             ->whereBetween('date', [$this->startOfMonth, $this->endOfMonth])
             ->get();
 

@@ -270,7 +270,6 @@
 
 
                         {{-- @if(Auth::user()->can('Allowances: create') ||
-                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
                             Auth::user()->can('Allowances: all') ||
                             Auth::user()->can('Allowances: reports')) --}}
 
@@ -316,17 +315,11 @@
                         <a class="dropdown-item {{ active('rrhh.organizational-units.*') }}" href="{{ route('rrhh.organizational-units.index') }}">
                             <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                         </a>
-                        @endcan
+                        @endcan                        
 
                         @canany(['Authorities: view', 'Authorities: create'])
-                        <a class="dropdown-item {{ active('rrhh.authorities.*') }}" href="{{ route('rrhh.authorities.index') }}">
-                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
-                        </a>
-                        @endcan
-
-                        @can('be god')
                         <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
-                            <i class="fas fa-chess-king fa-fw"></i> Nueva Autoridades
+                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
                         </a>
                         @endcan
 
