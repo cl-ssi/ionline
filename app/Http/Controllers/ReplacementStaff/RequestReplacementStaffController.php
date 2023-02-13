@@ -290,10 +290,10 @@ class RequestReplacementStaffController extends Controller
                                 //manager
                                 $type = 'manager';
                                 /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-                                $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
+                                $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
                                 //secretary
                                 $type_adm = 'secretary';
-                                $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type_adm);
+                                $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type_adm);
 
                                 $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
 
@@ -350,7 +350,7 @@ class RequestReplacementStaffController extends Controller
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
             $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
 
