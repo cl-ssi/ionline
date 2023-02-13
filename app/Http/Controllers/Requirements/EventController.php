@@ -68,6 +68,12 @@ class EventController extends Controller
             }
         }
 
+        /* FIX: @sickiqq, esto está en el EVENT Controller, que pasó si se creo el REQ? tiene un return.
+         * Se crea el req y no se crean los eventos?
+         * Porque mejor validar en el req y no dentro de los eventos, ya que por ejemplo
+         * podría crear eventos para usuarios que si tengan manager
+         * y el último no tener, que pasaría ahí? se crearian todos los primero y el último no?
+         * o se cae la creación completa del Req? */
         // validación existencia autoridad en ou
         if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
           return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');

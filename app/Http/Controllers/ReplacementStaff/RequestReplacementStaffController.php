@@ -137,7 +137,7 @@ class RequestReplacementStaffController extends Controller
         $type = 'manager';
         $user_id = Auth::user()->id;
 
-        $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
 
         foreach ($authorities as $authority){
             $iam_authorities_in[] = $authority->organizational_unit_id;
@@ -265,7 +265,7 @@ class RequestReplacementStaffController extends Controller
                         $type_adm = 'secretary';
                         $user_id = Auth::user()->id;
 
-                        $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+                        $iam_authority = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
 
                         if($iam_authority->isNotEmpty()){
                             if($i == 1){
@@ -286,6 +286,7 @@ class RequestReplacementStaffController extends Controller
 
                                 //manager
                                 $type = 'manager';
+                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                                 $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
                                 //secretary
                                 $type_adm = 'secretary';
@@ -318,6 +319,7 @@ class RequestReplacementStaffController extends Controller
                                 $request_sing->request_status = 'pending';
 
                                 //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
+                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                                 $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
                                 $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
                             }
@@ -344,6 +346,7 @@ class RequestReplacementStaffController extends Controller
             }
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
             $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
             $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
@@ -397,7 +400,8 @@ class RequestReplacementStaffController extends Controller
         $request_sing->save();
 
         //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now()->format('Y_m_d_H_i_s'), 'manager');
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), 'manager');
         $notification_ou_manager->user->notify(new NotificationSign($newRequestReplacementStaff));
 
         $request_sing_uni_per = new RequestSign();
@@ -409,7 +413,8 @@ class RequestReplacementStaffController extends Controller
         $request_sing_uni_per->save();
 
         //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
         $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($newRequestReplacementStaff, 'reclutamiento'));
         $newRequestReplacementStaff->requesterUser->notify(new NotificationNewRequest($newRequestReplacementStaff, 'requester'));
 

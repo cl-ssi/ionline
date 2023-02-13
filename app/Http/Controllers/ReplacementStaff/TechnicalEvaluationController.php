@@ -150,6 +150,7 @@ class TechnicalEvaluationController extends Controller
         $type = 'manager';
         $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), $type);
 
+        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer. Parametrizar el 46 */
         $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
 
         $emails = [$mail_request,

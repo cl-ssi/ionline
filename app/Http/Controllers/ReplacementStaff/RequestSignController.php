@@ -94,6 +94,7 @@ class RequestSignController extends Controller
                 $nextRequestSign->request_status = 'pending';
                 $nextRequestSign->save();
 
+                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                 $notification_ou_manager = Authority::getAuthorityFromDate($nextRequestSign->organizational_unit_id, $requestSign->date_sign, 'manager');
                 $users = [$notification_ou_manager->user]; 
 
@@ -117,6 +118,7 @@ class RequestSignController extends Controller
                 return redirect()->route('replacement_staff.request.to_sign');
             }
             else{
+                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                 $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
                 $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
 
@@ -136,6 +138,7 @@ class RequestSignController extends Controller
             $requestReplacementStaff->save();
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
+            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer, parametrizar el "48" */
             $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
             $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'reclutamiento'));
             $requestReplacementStaff->requesterUser->notify(new NotificationRejectedRequest($requestReplacementStaff, 'requester'));
