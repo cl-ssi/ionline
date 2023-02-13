@@ -18,10 +18,10 @@ class SelectUser extends Component
     public $users;
     public $authority;
     public $to_user_id = '';
-    public $user_array = [];
-    public $user_cc_array = [];
+    public $users_array = [];
     public $message = '';
     public $parte_id;
+    public $enCopia = [];
  
     public function selectUser($organizational_unit_id)
     {
@@ -32,13 +32,7 @@ class SelectUser extends Component
     {
         // validación
         $this->message = '';
-        foreach($this->user_array as $item){
-            if($this->to_user_id == $item['id']){
-                $this->message = "El usuario ya se ingresó";
-                return;
-            }
-        }
-        foreach($this->user_cc_array as $item){
+        foreach($this->users_array as $item){
             if($this->to_user_id == $item['id']){
                 $this->message = "El usuario ya se ingresó";
                 return;
@@ -46,24 +40,19 @@ class SelectUser extends Component
         }
 
         $user = User::find($this->to_user_id);
-        array_push($this->user_array, $user);
+        array_push($this->users_array, $user);
+        array_push($this->enCopia, 0);   
     }
 
     public function add_cc()
     {
         // validaciones
         $this->message = '';
-        if(count($this->user_array) == 0){
+        if(count($this->users_array) == 0){
             $this->message = "Debe existir a lo menos un destinatario para agregar en copia.";
             return;
         }
-        foreach($this->user_array as $item){
-            if($this->to_user_id == $item['id']){
-                $this->message = "El usuario ya se ingresó";
-                return;
-            }
-        }
-        foreach($this->user_cc_array as $item){
+        foreach($this->users_array as $item){
             if($this->to_user_id == $item['id']){
                 $this->message = "El usuario ya se ingresó";
                 return;
@@ -71,7 +60,8 @@ class SelectUser extends Component
         }
 
         $user = User::find($this->to_user_id);
-        array_push($this->user_cc_array, $user);
+        array_push($this->users_array, $user);
+        array_push($this->enCopia, 1);   
     }
 
     public function render()
@@ -112,14 +102,9 @@ class SelectUser extends Component
         }
 
         // se agrega para que deje todos los objetos del array del tipo User
-        foreach($this->user_array as $key => $item){
+        foreach($this->users_array as $key => $item){
             if(!$item instanceof Collection) {
-                $this->user_array[$key] = User::find($item['id']);  
-            }
-        }
-        foreach($this->user_cc_array as $key => $item){
-            if(!$item instanceof Collection) {
-                $this->user_cc_array[$key] = User::find($item['id']);  
+                $this->users_array[$key] = User::find($item['id']);  
             }
         }
 

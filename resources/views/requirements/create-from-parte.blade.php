@@ -132,7 +132,7 @@
             //     return false;
             // }
 
-            if($('#users').val() == undefined){
+            if($('.users').val() == undefined){
                 alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
                 return false;
             }

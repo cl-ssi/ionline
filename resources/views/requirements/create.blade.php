@@ -216,20 +216,23 @@
   <script>
 
     $(document).ready(function(){
-        
-
         $("#submit").click(function(){
             // alert(document.getElementById("users").value);
             // if (document.getElementById("users").value == null){
             //     alert("Debe ingresar por lo menos un usuario a quien para crear el requerimiento.");
             // }
             //Attempt to get the element using document.getElementById
-            var element = document.getElementById("users");
+            // var element = document.getElementById("users");
 
-            //If it isn't "undefined" and it isn't "null", then it exists.
-            if(typeof(element) != 'undefined' && element != null){
-                // alert('Element exists!');
-            } else{
+            // //If it isn't "undefined" and it isn't "null", then it exists.
+            // if(typeof(element) != 'undefined' && element != null){
+            //     // alert('Element exists!');
+            // } else{
+            //     alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
+            //     return false;
+            // }
+
+            if($('.users').val() == undefined){
                 alert("Debe ingresar por lo menos un usuario a quien crear el requerimiento.");
                 return false;
             }
