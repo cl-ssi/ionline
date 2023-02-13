@@ -160,6 +160,14 @@ class RequestReplacementStaff extends Model implements Auditable
     }
 
     public static function getPendingRequestToSign(){
+        /* FIX: @mirandaljorge esta funcion se llama dos veces 
+         * en el nav principal, puedes hacer que se llame 
+         * sólo una vez por favor.
+         * Ahora tiene return 0 porque esta dando eshrrror
+         */
+        return 0;
+
+
         $date = Carbon::now();
         $type = 'manager';
         $user_id = Auth::user()->id;
@@ -177,6 +185,7 @@ class RequestReplacementStaff extends Model implements Auditable
                         $q->Where('organizational_unit_id', $iam_authorities_in)
                         ->Where('request_status', 'pending');
                     })
+                    /* FIX: @mirandaljorge Para que lo paginas? si solo los vas a contar */
                     ->paginate(10)
                     ->count();
             }
@@ -189,6 +198,7 @@ class RequestReplacementStaff extends Model implements Auditable
                     $q->Where('organizational_unit_id', 46)
                     ->Where('request_status', 'pending');
                 })
+                /* FIX: @mirandaljorge Para que lo paginas? si solo los vas a contar */
                 ->paginate(10)
                 ->count();
 
