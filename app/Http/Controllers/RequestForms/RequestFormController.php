@@ -76,7 +76,7 @@ class RequestFormController extends Controller {
 
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
 
-        if(count($authorities) > 0){
+        if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
           }
@@ -118,7 +118,7 @@ class RequestFormController extends Controller {
         $authorities = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', Auth::id());
         $secretaries = Authority::getAmIAuthorityFromOu(Carbon::now(), 'secretary', Auth::id());
 
-        // if(count($authorities) > 0){
+        // if($authorities->isNotEmpty()){
           foreach ($authorities as $authority){
               $iam_authorities_in[] = $authority->organizational_unit_id;
           }
