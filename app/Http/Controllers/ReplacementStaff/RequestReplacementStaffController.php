@@ -133,7 +133,6 @@ class RequestReplacementStaffController extends Controller
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {
-        $date = Carbon::now();
         $type = 'manager';
         $user_id = Auth::user()->id;
 
@@ -250,6 +249,11 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->save();
 
             /* SE CONSULTA UO DEL USUARIO QUE REGISTRA */
+            /* FIXME: @mirandaljorge porque haces una query utilizando get y last?
+             * El resultado esperado que es? no es lo mismo que la relación:
+             * $ou_request = $request_replacement->organizationalUnit ? 
+             * o se busca algo diferente a la relación que ya tiene RequestReplacementStaff con organizationalUnit?
+             * */
             $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
                 ->get()
                 ->last();
@@ -260,7 +264,6 @@ class RequestReplacementStaffController extends Controller
                     for ($i = 1; $i <= 4; $i++) {
                         $request_sing = new RequestSign();
 
-                        $date = Carbon::now()->format('Y_m_d_H_i_s');
                         $type = 'manager';
                         $type_adm = 'secretary';
                         $user_id = Auth::user()->id;
@@ -320,7 +323,7 @@ class RequestReplacementStaffController extends Controller
 
                                 //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
                                 /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-                                $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                                $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
                                 $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
                             }
                             if ($i == 2) {
