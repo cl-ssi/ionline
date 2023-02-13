@@ -206,7 +206,7 @@ class EventController extends Controller
         }
 
         //Envía correo si destinatario es director
-        $directorAuthority = Authority::getAuthorityFromDate(1, date('Y-m-d'), 'manager');
+        $directorAuthority = Authority::getAuthorityFromDate(1, today(), 'manager');
         if ($request->to_user_id == $directorAuthority->user_id) {
             Mail::to($directorAuthority->user->email)
                 ->send(new RequirementEventNotification($requirementEvent));

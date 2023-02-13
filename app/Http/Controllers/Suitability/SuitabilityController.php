@@ -296,7 +296,7 @@ class SuitabilityController extends Controller
         $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
 
         //Firmante
-        // $userSigner = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager')->user; //Subdirección Gestión y Desarrollo de las Personas
+        // $userSigner = Authority::getAuthorityFromDate(44, today(), 'manager')->user; //Subdirección Gestión y Desarrollo de las Personas
 
         //Visadores
         // $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
@@ -305,9 +305,9 @@ class SuitabilityController extends Controller
         // $signer = Signer::query()
         //     ->where('type', 'signer')
         //     ->first();
-        //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
 
-        $signer = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager');
+        $signer = Authority::getAuthorityFromDate(44, today(), 'manager');
         //dd($signer);
 
         $visators = Signer::query()
