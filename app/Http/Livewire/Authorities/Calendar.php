@@ -21,7 +21,7 @@ class Calendar extends Component
     public $subrogations;
     public $date = null;
     public $type = null;
-    
+
     /** atributos de modelo authority */
     public $user_id;
     public $startDate;
@@ -84,7 +84,7 @@ class Calendar extends Component
         $this->type = $type;
 
         $this->subrogations = Subrogation::where('organizational_unit_id', $this->organizationalUnit->id)
-            ->where('type',$this->type)
+            ->where('type', $this->type)
             ->get();
 
         /** Muestra el formulario de edición */
@@ -97,50 +97,28 @@ class Calendar extends Component
     public function save()
     {
         $this->validate();
-        $start_date = $this->date;
-        $end_date = $this->endDate;
-        $organizational_unit_id = $this->organizationalUnit->id;
-        $type = $this->type;
-        $user_id = $this->user_id;
-        $position = $this->position;
-    
-        $updated = Authority::where('organizational_unit_id', $organizational_unit_id)
-            ->where('type', $type)
-            ->whereBetween('date', [$start_date, $end_date])
-            ->update([
-                'user_id' => $user_id,
-                'position' => $position,
+        $dates = CarbonPeriod::create($this->date, $this->endDate);
+        foreach ($dates as $date) {
+            Authority::updateOrCreate([
+                'organizational_unit_id' => $this->organizationalUnit->id,
+                'type' => $this->type,
+                'date' => $date->format('Y-m-d'),
+            ], [
+                'user_id' => $this->user_id,
+                'position' => $this->position
             ]);
-    
-        if (! $updated) {
-            $end_date = (new DateTime($end_date))->format('Y-m-d');
-            $end_date = date('Y-m-d', strtotime($end_date . ' +1 day'));
-            $dates = collect(new DatePeriod(
-                new DateTime($start_date),
-                new DateInterval('P1D'),
-                new DateTime($end_date)
-            ))->map(function ($date) use ($organizational_unit_id, $type, $user_id, $position) {
-                return new Authority([
-                    'organizational_unit_id' => $organizational_unit_id,
-                    'type' => $type,
-                    'date' => $date->format('Y-m-d'),
-                    'user_id' => $user_id,
-                    'position' => $position
-                ]);
-            });
-    
-            Authority::insert($dates->toArray());
         }
-    
+
         /** Agrega un mensaje de éxito */
         session()->flash('info', 'El usuario ha sido creado o actualizado.');
-    
-        /** Oculta el formulario de edición */
+
+        /** Oculta el formulario de edición  */
+        $this->clearForm();
         $this->editForm = false;
     }
-    
-    
-    
+
+
+
 
     public function render()
     {
@@ -164,7 +142,7 @@ class Calendar extends Component
                 'manager' => false,
                 'delegate' => false,
                 'secretary' => false,
-                
+
             );
         }
 
@@ -175,15 +153,24 @@ class Calendar extends Component
         foreach ($newAuthorities as $authority) {
             $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
             $this->data[$authority->date->format('Y-m-d')][$authority->type]['position'] = $authority->position;
-            
         }
 
         return view('livewire.authorities.calendar');
     }
+
     public function cancel()
     {
+        $this->clearForm();
         $this->editForm = false;
+    }
+
+    public function clearForm()
+    {
+        /* Limpia las variables de los formularios */
+        $this->endDate = null;
+        $this->type = null;
+        $this->position = null;
+        $this->user_id = null;
 
     }
 }
-
