@@ -21,9 +21,11 @@
             <label for="for_origin">Destinatario</label>
             <div class="input-group">
                 <select class="form-control" name="to_user_id" id="user" required="" wire:model.defer="to_user_id" >
-                    @foreach($users as $user)
-                        <option value="{{$user->id}}">@if($to_user_id == $user->id)👑@endif {{ $user->tinnyName }}</option>
-                    @endforeach
+                    @if($users)
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}">@if($this->authority != null && $this->authority->user_id == $user->id)👑@endif {{ $user->tinnyName }}</option>
+                        @endforeach
+                    @endif
                 </select>
                 <div class="input-group-append">
                     <button type="button" class="btn btn-outline-primary add-destinatario"
@@ -59,20 +61,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($users_array as $key => $user)
-                    <tr><input type='hidden' name='users[]' class='users' value='{{$user->id}}'>
+                @foreach($users_array as $key => $user_key)
+                    <tr><input type='hidden' name='users[]' class='users' value='{{$user_key->id}}'>
                         <input type='hidden' name='enCopia[]' value='{{$enCopia[$key]}}'>
-                        <td>{{ $user->organizationalUnit->name }}</td>
-                        <td>{{ $user->tinnyName }}</td>
+                        <td>{{ $user_key->organizationalUnit->name }}</td>
+                        <td>{{ $user_key->tinnyName }}</td>
                         <td>
                             @if($enCopia[$key]==1)Sí
                             @else No @endif
                         </td>
                         <td>
                             @if($enCopia[$key]==0)
-                                <select name="categories[]" id="" class="form-control">
+                                <select name="category{{$key}}" id="" class="form-control">
                                     <option value=""></option>
-                                    @foreach($user->organizationalUnit->categories as $category)
+                                    @foreach($user_key->organizationalUnit->categories as $category)
                                         <option value="{{$category->id}}">{{$category->name}}</option>
                                     @endforeach
                                 </select>
@@ -80,7 +82,7 @@
                                 <select id="" class="form-control" disabled>
                                     <option value=""></option>
                                 </select>
-                                <input type="hidden" name="categories[]">
+                                <input type="hidden" name="category{{$key}}" value="">
                             @endif
                         </td>
                     </tr>

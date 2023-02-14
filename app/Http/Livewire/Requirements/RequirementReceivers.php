@@ -48,7 +48,7 @@ class RequirementReceivers extends Component
                 return;
             }
         }
-
+        
         $user = User::find($this->to_user_id);
         array_push($this->users_array, $user);
         array_push($this->enCopia, 0);   
@@ -79,24 +79,35 @@ class RequirementReceivers extends Component
         if($this->to_ou_id){
 
             //obtiene usuarios de ou
-            $authority = null;
-            $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
-            if($current_authority) {
-                $authority = $current_authority->user;
-            }
+            // $this->to_user_id = null;
 
             $users = User::where('organizational_unit_id', $this->to_ou_id)
                         ->orderBy('name')
                         ->get();
-            if ($authority <> null) {
-                if(!$users->find($authority)) {
-                    $users->push($authority);
-                }}
+            if($users->count()>0){
+                $this->to_user_id = $users->first()->id;
+            }else{
+                $this->to_user_id = ''; 
+            }
+            
             $this->users = $users;
-            //selecciona autoridad
-            $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
-            if($this->authority!=null){
-                $this->to_user_id = $this->authority->user_id;
+            // dd($this->users_array);
+
+            $authority = null;
+            $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+            if($current_authority) {
+                $authority = $current_authority->user;
+
+                if ($authority <> null) {
+                    if(!$users->find($authority)) {
+                        $users->push($authority);
+                    }
+                }
+
+                $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+                if($this->authority!=null){
+                    $this->to_user_id = $this->authority->user_id;
+                }
             }
         }
 

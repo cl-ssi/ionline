@@ -79,25 +79,54 @@ class SelectUser extends Component
             //                                                                             ->get();
 
             //obtiene usuarios de ou
-            $authority = null;
-            $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
-            if($current_authority) {
-                $authority = $current_authority->user;
-            }
+            // $authority = null;
+            // $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+            // if($current_authority) {
+            //     $authority = $current_authority->user;
+            // }
+
+            // $users = User::where('organizational_unit_id', $this->to_ou_id)
+            //             ->orderBy('name')
+            //             ->get();
+            // if ($authority <> null) {
+            //     if(!$users->find($authority)) {
+            //         $users->push($authority);
+            //     }}
+            // $this->users = $users;
+
+            // //selecciona autoridad
+            // $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+            // if($this->authority!=null){
+            //     $this->to_user_id = $this->authority->user_id;
+            // }
 
             $users = User::where('organizational_unit_id', $this->to_ou_id)
                         ->orderBy('name')
                         ->get();
-            if ($authority <> null) {
-                if(!$users->find($authority)) {
-                    $users->push($authority);
-                }}
+            if($users->count()>0){
+                $this->to_user_id = $users->first()->id;
+            }else{
+                $this->to_user_id = ''; 
+            }
+            
             $this->users = $users;
+            // dd($this->users_array);
 
-            //selecciona autoridad
-            $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
-            if($this->authority!=null){
-                $this->to_user_id = $this->authority->user_id;
+            $authority = null;
+            $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+            if($current_authority) {
+                $authority = $current_authority->user;
+
+                if ($authority <> null) {
+                    if(!$users->find($authority)) {
+                        $users->push($authority);
+                    }
+                }
+
+                $this->authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
+                if($this->authority!=null){
+                    $this->to_user_id = $this->authority->user_id;
+                }
             }
         }
 
