@@ -77,6 +77,19 @@ class Requirement extends Model implements Auditable
         return $this->hasMany('App\Models\Requirements\EventStatus')->where('user_id',auth()->id());
     }
 
+    public static function getNextGroupNumber() {
+        $lastReqWithGroupNumber = Requirement::whereNotNull('group_number')
+            ->latest()
+            ->first();
+
+        if($lastReqWithGroupNumber) {
+            return $lastReqWithGroupNumber->group_number + 1;
+        }
+        else {
+            return 1;
+        }
+    }
+
     /** Setea las labels de un requerimiento en base a un array de ids de labels */
     public function setLabels($labels) {
         if(is_array($labels)){
