@@ -813,30 +813,34 @@ class RequirementController extends Controller
         //     session()->flash('info', 'El requerimiento ' . $requirement->id . ' ha sido creado.');
         // } else {
 
+            // dd($request->categories, $request->enCopia, $request->users);
             //encuentra cuales son usuarios para requerimientos, y cuales son en copia
+            // dd($request->categories, $request->users, $request->enCopia);
             $users_req = null;
             $users_enCopia = null;
-            $categories_array_ = null;
+            $categories_array = null;
             foreach ($request->enCopia as $key => $enCopia) {
                 if ($enCopia == 0) {
                     $users_req[] = $request->users[$key];
                     // obtiene categorías seleccionadas
                     if($request->categories!=null){
-                        $categories_array_[] = $request->categories[$key];
+                        $categories_array[] = $request->categories[$key];
                     }
                 }
                 if ($enCopia == 1) {
                     $users_enCopia[] = $request->users[$key];
                 }
             }
+            // dd($categories_array);
 
             //se crearán requerimientos según usuarios agregados en tabla dinámica.
             $users = array_unique($users_req); //distinct
-            $categories_array = null;
-            if($categories_array_){
-                $categories_array = array_unique($categories_array_); //distinct
-            }
+            // $categories_array = null;
+            // if($categories_array_){
+            //     $categories_array = array_unique($categories_array_); //distinct
+            // }
             $flag = 0;
+            // dd($categories_array);
 
             //obtiene nro para agrupar requerimientos
             if (Requirement::whereNotNull('group_number')->count() === 0) {
