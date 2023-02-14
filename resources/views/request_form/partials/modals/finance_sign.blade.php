@@ -10,7 +10,7 @@
       </div>
       <div class="modal-body">
 
-          <object type="application/pdf" data="{{ route('request_forms.create_view_document', [$requestForm, $requestForm->has_increased_expense ?? 0]) }}" width="100%" height="400" style="height: 85vh;"><a href="{{-- route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) --}}" target="_blank">
+          <object type="application/pdf" data="{{ route('request_forms.create_view_document', [$requestForm, $has_increased_expense ?? 0]) }}" width="100%" height="400" style="height: 85vh;"><a href="{{-- route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) --}}" target="_blank">
                         <i class="fas fa-file"></i> Ver documento</a></object>
       </div>
       <div class="modal-footer">
@@ -20,9 +20,8 @@
         {{--modal firmador--}}
         @php 
             $idModelModal = $requestForm->id;
-            $has_increase_expense = $requestForm->has_increased_expense ?? 0;
-            $routePdfSignModal = "/request_forms/create_form_document/$idModelModal/$has_increase_expense";
-            $routeCallbackSignModal = $requestForm->has_increased_expense ? 'request_forms.callbackSignNewBudget' : 'request_forms.callbackSign';
+            $routePdfSignModal = "/request_forms/create_form_document/$idModelModal/".($has_increase_expense ?? 0);
+            $routeCallbackSignModal = $has_increased_expense ? 'request_forms.callbackSignNewBudget' : 'request_forms.callbackSign';
         @endphp
 
         @include('documents.signatures.partials.sign_file')

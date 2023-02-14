@@ -24,7 +24,7 @@ class Authorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment, $program, $program_id, $lstProgram;
     public $lstSupervisorUser, $supervisorUser, $title, $route, $sigfe, $financial_type;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
-    public $estimated_expense, $new_estimated_expense, $purchaser_observation, $files;
+    public $estimated_expense, $new_estimated_expense, $purchaser_observation, $files, $has_increased_expense;
 
     protected $rules = [
         'comment' => 'required|min:6',
@@ -81,6 +81,8 @@ class Authorization extends Component
           $this->title = 'Autorización Dirección';
       }elseif(in_array($eventType, ['pre_budget_event', 'budget_event'])){
           $this->title = 'Autorización nuevo presupuesto';
+          $this->has_increased_expense = true;
+          $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
           $this->estimated_expense = $requestForm->symbol_currency.number_format($requestForm->estimated_expense, $requestForm->precision_currency, ',', '.');
           $this->new_estimated_expense = $requestForm->symbol_currency.number_format($requestForm->new_estimated_expense, $requestForm->precision_currency, ',', '.');
           $this->purchaser_observation = $requestForm->firstPendingEvent()->purchaser_observation;
