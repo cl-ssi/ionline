@@ -881,7 +881,7 @@ class RequirementController extends Controller
                 /* TODO: Que hace el isAnyManager o cual es la diferencia con el isManager */
                 if ($isManager) $isAnyManager = true;
 
-//              dump($user, $isManager);
+                //dump($user, $isManager);
 
                 //se crea requerimiento
                 $requirement = new Requirement($req);
@@ -914,7 +914,7 @@ class RequirementController extends Controller
                             $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
                             $isManager = ($user_ == $managerUserId);
                             if ($isManager) $isAnyManager = true;
-//                          dump($user_, $isManager);
+                            //dump($user_, $isManager);
 
                             /* FIXME: se carga una coleccion de user, pero, solo se usar para obtener la ou_id */
                             $user_aux = User::where('id', $user_)->get();
@@ -1012,117 +1012,86 @@ class RequirementController extends Controller
 
     public function store2(Request $request) {
         //dd($request->all());
-        /* Esto es lo que viene de la vista:
-        array:14 [▼
-            "parte_id" => "13664"
-            "label_id" => array:1 [▼
-                0 => "8"
-            ]
-            "to_ou_id" => "232"
-            "to_user_id" => "9186139"
-            "users" => array:4 [▼
-                0 => "14093235"
-                1 => "15343100"
-                2 => "16057392"
-                3 => "9186139"
-            ]
-            "enCopia" => array:4 [▼
-                0 => "0"
-                1 => "0"
-                2 => "1"
-                3 => "1"
-            ]
-            "categories" => array:4 [▼
-                0 => null
-                1 => null
-                2 => null
-                3 => null
-            ]
-            "subject" => "PERMISO 08, 09 Y 10.02.2023"
-            "body" => "saDAs"
-            "priority" => "Normal"
-            "limit_at" => "2023-02-14T15:37"
-            "documents" => "1,319"
-        ]
+
+        /*
+            $request = 
+            [
+                "parte_id" => "13664",
+                "label_id" => [
+                    0 => "8"
+                ],
+                "to_ou_id" => "232", // No sirve
+                "to_user_id" => "9186139", // No sirve
+                "users" => [
+                    0 => "14093235",
+                    1 => "15343100",
+                    2 => "16057392",
+                    3 => "9186139",
+                ],
+                "enCopia" => [
+                    0 => "0",
+                    1 => "0",
+                    2 => "1",
+                    3 => "1",
+                ],
+                "categories" => [
+                    0 => null,
+                    1 => null,
+                    2 => null,
+                    3 => 1,
+                ],
+                "subject" => "PERMISO 08, 09 Y 10.02.2023",
+                "body" => "saDAs",
+                "priority" => "Normal",
+                "limit_at" => "2023-02-14T15:37",
+                "documents" => "1,319",
+            ];
         */
 
-        $request = 
-        [
-            "parte_id" => "13664",
-            "label_id" => [
-                0 => "8"
-            ],
-            "to_ou_id" => "232", // No sirve
-            "to_user_id" => "9186139", // No sirve
-            "users" => [
-                0 => "14093235",
-                1 => "15343100",
-                2 => "16057392",
-                3 => "9186139",
-            ],
-            "enCopia" => [
-                0 => "0",
-                1 => "0",
-                2 => "1",
-                3 => "1",
-            ],
-            "categories" => [
-                0 => null,
-                1 => null,
-                2 => null,
-                3 => 1,
-            ],
-            "subject" => "PERMISO 08, 09 Y 10.02.2023",
-            "body" => "saDAs",
-            "priority" => "Normal",
-            "limit_at" => "2023-02-14T15:37",
-            "documents" => "1,319",
-        ];
-
-        /* Arma un nuevo array, con la combinación de users, enCopia y categories */
-        foreach($request['users'] as $key => $user_id) {
-            $users[$key]['user_id'] = $user_id; 
-            $users[$key]['enCopia'] = ($request['enCopia'][$key] == 1) ? true:false; 
-            $users[$key]['category'] = $request['categories'][$key]; 
+        /* Arma dos array, con la combinación de users, enCopia y categories */
+        foreach($request->users as $key => $user_id) {
+            if($request->enCopia[$key] == 1) {
+                $copias[$key]['user_id'] = $user_id;
+                $copias[$key]['category'] = $request->categories[$key]; 
+            }
+            else {
+                $users[$key]['user_id'] = $user_id;
+                $users[$key]['category'] = $request->categories[$key]; 
+            }
         }
 
         /*
-        array:4 [▼
-            0 => array:3 [▼
-                "user_id" => "14093235"
-                "enCopia" => false
-                "category" => null
+            USERS
+            array:2 [▼
+                0 => array:2 [▼
+                    "user_id" => "14093235"
+                    "category" => null
+                ]
+                1 => array:2 [▼
+                    "user_id" => "15343100"
+                    "category" => null
+                ]
             ]
-            1 => array:3 [▼
-                "user_id" => "15343100"
-                "enCopia" => false
-                "category" => null
-            ]
-            2 => array:3 [▼
-                "user_id" => "16057392"
-                "enCopia" => true
-                "category" => null
-            ]
-            3 => array:3 [▼
-                "user_id" => "9186139"
-                "enCopia" => true
-                "category" => null
-            ]
-        ]
-        */
-        
-        /** Tareas comunes para todos los requerimientos */
 
+            COPIAS
+            array:2 [▼
+                2 => array:2 [▼
+                    "user_id" => "16057392"
+                    "category" => null
+                ]
+                3 => array:2 [▼
+                    "user_id" => "9186139"
+                    "category" => 1
+                ]
+            ]
+        */
+
+
+        /** Tareas comunes para todos los requerimientos */
         /** Obtener el siguiente número de grupo */
         $group_number = Requirement::getNextGroupNumber();
         /** Generar un array con los id de documentos */
-        $documents_ids = explode(",",$request['documents']); /* que sucede si viene null ?*/
-
-        /** Esta variable es confusa, basta que alguno de los que esté en el array se una autoridad
-         * para que se marque como positiva, sin embargo puede ser autoridad en una OU distinta.
-         */
-        $isAnyManager = false;
-
+        $documents_ids = ($request->documents) ? explode(",",$request->documents) : null;
         /** Cadena vacía para armar el listado de correos */
         $emails = '';
 
@@ -1133,50 +1102,58 @@ class RequirementController extends Controller
             /** Chequea que el usuario sea autoridad de su OU */
             $to_authority = Authority::getAmIAuthorityOfMyOu(today(),'manager',$user['user_id']);
 
-            /** Si es autoridad, marca en true el global AnyManager */
-            if($to_authority) {
-                $isAnyManager = true;
-            }
-
             /** Crear el requerimiento */
-            $requirement = new Requirement([
-                'subject' => $request['subject'],
-                'priority' => $request['priority'],
-                'status' => 'creado', // Cómo se llena este en el otro store?
-                'limit_at' => $request['limit_at'], // que formato trae de la vista?
+            $requirement = Requirement::create([
+                'subject' => $request->subject,
+                'priority' => $request->priority,
+                'status' => 'creado', // Cómo se llena en el otro store?
+                'limit_at' => $request->limit_at,
                 'user_id' => auth()->id(),
-                'parte_id' => $request['parte_id'],
+                'parte_id' => $request->parte_id,
                 'group_number' => $group_number,
                 'to_authority' => $to_authority,
                 'category_id' => $user['category'],
             ]);
-            $requirement->save();
 
             /** Setear las categorias */
-            $requirement->setLabels($request['label_id']);
+            $requirement->setLabels($request->label_id);
 
 
+            /** No sé porque, pero ...primero hay que crear 
+             * todos los eventos de tipo copia. */
+            foreach($copias as $copia) {
+                /** Modelo User al que va dirigido la copia */
+                $toCopia = User::find($copia['user_id']);
+
+                $event = Event::create([
+                    'body' => $request->body,
+                    'status' => 'en copia',
+                    'from_user_id' => auth()->id(),
+                    'form_ou_id' => auth()->user()->organizational_unit_id,
+                    'to_user_id' => $toCopia->id,
+                    'to_ou_id' => $toCopia->organizational_unit_id,
+                    'requirement_id' => $requirement->id,
+                    'to_authority' => $to_authority,
+                ]);
+            }
 
 
-
-            /** Crear el primer Evento */
-            $firstEvent = Event::create([
-                'body' => $request['body'],
-                'status' => ($user['enCopia']) ? 'en copia':'creado',
+            /** A continuación Crea el primer evento */
+            $event = Event::create([
+                'body' => $request->body,
+                'status' => 'creado',
                 'from_user_id' => auth()->id(),
                 'form_ou_id' => auth()->user()->organizational_unit_id,
                 'to_user_id' => $toUser->id,
                 'to_ou_id' => $toUser->organizational_unit_id,
                 'requirement_id' => $requirement->id,
-                //'limit_at' => null, // no se carga acá
                 'to_authority' => $to_authority,
             ]);
-            $firstEvent->save();
 
             /** Asociar documentos */
             if($documents_ids) {
                 foreach($documents_ids as $document_id) {
-                    $firstEvent->documents()->attach($document_id);
+                    $event->documents()->attach($document_id);
                 }
             }
 
