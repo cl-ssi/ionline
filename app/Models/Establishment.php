@@ -137,21 +137,6 @@ class Establishment extends Model implements Auditable
         return $this->options;
     }
 
-    /* FIXME: @sickiqq Se llama Out Tree, debería ser Ou Tree */
-    public function getOutTreeWithEstablishmentNameAttribute(){
-        $ous = $this->organizationalUnits()
-            ->select('id','level','name','organizational_unit_id as father_id')
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-        
-        if(!empty($ous)) {
-            $this->buildTreeWithEstablishmentName($ous, 'father_id', 'id');
-        }
-
-        return $this->options;
-    }
-
     public function getOuTreeWithAliasAttribute()
     {
         $ous = $this->organizationalUnits()
@@ -208,32 +193,4 @@ class Establishment extends Model implements Auditable
         return $fnBuilder($grouped[0]);
     }
 
-
-    /**
-     * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
-     */
-    function buildTreeWithEstablishmentName(array $flatList)
-    {
-        $grouped = [];
-        foreach ($flatList as $node){
-            if(!$node['father_id']) {
-                $node['father_id'] = 0;
-            }
-            $grouped[$node['father_id']][] = $node;
-        }
-
-        $fnBuilder = function($siblings) use (&$fnBuilder, $grouped) {
-            foreach ($siblings as $k => $sibling) {
-                $id = $sibling['id'];
-                $this->options[$id] = str_repeat("- ", $sibling['level']).$this->alias."-".$sibling['name'];
-                if(isset($grouped[$id])) {
-                    $sibling['children'] = $fnBuilder($grouped[$id]);
-                }
-                $siblings[$k] = $sibling;
-            }
-            return $siblings;
-        };
-
-        return $fnBuilder($grouped[0]);
-    }
 }

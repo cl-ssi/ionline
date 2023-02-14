@@ -34,6 +34,7 @@ class Requirement extends Model implements Auditable
         'limit_at',
         'user_id',
         'parte_id',
+        'group_number',
         'to_authority',
         'category_id'
     ];

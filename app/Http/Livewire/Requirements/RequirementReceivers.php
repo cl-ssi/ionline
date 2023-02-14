@@ -26,42 +26,11 @@ class RequirementReceivers extends Component
 
     public function mount()
     {
-        // $this->ouRoots = null;
-        // $this->ouRoots = OrganizationalUnit::where('level', 1)->with('establishment',
-        //                                                              'childs','childs.establishment',
-        //                                                              'childs.childs','childs.childs.establishment',
-        //                                                              'childs.childs.childs','childs.childs.childs.establishment',
-        //                                                              'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
-        //                                                              'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
-        //                                                              'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
-        //                                                              ->get();
-        // $this->to_ou_id = 1;
-
-
-
-
-        // $this->options = array();
-        // $this->ouRoots = array();
-        
-        // $ouRoots = OrganizationalUnit::select('id','level','name','organizational_unit_id as father_id')
-        //     ->whereIn('establishment_id',explode(',',env('APP_SS_ESTABLISHMENTS')))
-        //     ->orderBy('name')
-        //     ->get()
-        //     ->toArray();
-        // if(!empty($ouRoots)) {
-        //     $this->buildTree($ouRoots, 'father_id', 'id');
-        // }
-
-        // /** Necesito formar este array poque sino livewire me los ordena por key los options y me quedan desordenados */
-        // foreach($this->options as $id => $option) {
-        //     dd($option);
-        //     $this->ouRoots[] = array('id'=> $id, 'name' => $option);
-        // }
-
         $this->ouRoots = array();
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-        foreach($establishments_ids as $establishment){
-            foreach(Establishment::find($establishment)->outTreeWithEstablishmentName as $key => $outree){
+        foreach($establishments_ids as $establishment) {
+            $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
+            foreach($ouTree as $key => $outree){
                 $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
             }
         }
@@ -109,15 +78,6 @@ class RequirementReceivers extends Component
     {
         if($this->to_ou_id){
 
-            // $this->ouRoots = OrganizationalUnit::where('level', $this->to_ou_id)->with('establishment',
-            //                                                                             'childs','childs.establishment',
-            //                                                                             'childs.childs','childs.childs.establishment',
-            //                                                                             'childs.childs.childs','childs.childs.childs.establishment',
-            //                                                                             'childs.childs.childs.childs','childs.childs.childs.childs.establishment',
-            //                                                                             'childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.establishment',
-            //                                                                             'childs.childs.childs.childs.childs.childs','childs.childs.childs.childs.childs.childs.establishment')
-            //                                                                             ->get();
-
             //obtiene usuarios de ou
             $authority = null;
             $current_authority = Authority::getAuthorityFromDate($this->to_ou_id,Carbon::now(),'manager');
@@ -150,36 +110,36 @@ class RequirementReceivers extends Component
         return view('livewire.requirements.requirement-receivers');
     }
 
-    function stripAccents($str) {
-        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
-    }
+    // function stripAccents($str) {
+    //     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+    // }
 
-    /**
-     * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
-     */
-    function buildTree(array $flatList)
-    {
-        $grouped = [];
-        foreach ($flatList as $node){
-            if(!$node['father_id']) {
-                $node['father_id'] = 0;
-            }
-            $grouped[$node['father_id']][] = $node;
-        }
+    // /**
+    //  * @param array $flatList - a flat list of tree nodes; a node is an array with keys: id, parentID, name.
+    //  */
+    // function buildTree(array $flatList)
+    // {
+    //     $grouped = [];
+    //     foreach ($flatList as $node){
+    //         if(!$node['father_id']) {
+    //             $node['father_id'] = 0;
+    //         }
+    //         $grouped[$node['father_id']][] = $node;
+    //     }
 
-        $fnBuilder = function($siblings) use (&$fnBuilder, $grouped) {
-            foreach ($siblings as $k => $sibling) {
-                $id = $sibling['id'];
-                // $this->options[$id] = str_repeat("- ", $sibling['level']).OrganizationalUnit::find($sibling['id'])->establishment->alias.'-'.$sibling['name'];
-                $this->options[$id] = str_repeat("- ", $sibling['level']).$sibling['name'];
-                if(isset($grouped[$id])) {
-                    $sibling['children'] = $fnBuilder($grouped[$id]);
-                }
-                $siblings[$k] = $sibling;
-            }
-            return $siblings;
-        };
+    //     $fnBuilder = function($siblings) use (&$fnBuilder, $grouped) {
+    //         foreach ($siblings as $k => $sibling) {
+    //             $id = $sibling['id'];
+    //             // $this->options[$id] = str_repeat("- ", $sibling['level']).OrganizationalUnit::find($sibling['id'])->establishment->alias.'-'.$sibling['name'];
+    //             $this->options[$id] = str_repeat("- ", $sibling['level']).$sibling['name'];
+    //             if(isset($grouped[$id])) {
+    //                 $sibling['children'] = $fnBuilder($grouped[$id]);
+    //             }
+    //             $siblings[$k] = $sibling;
+    //         }
+    //         return $siblings;
+    //     };
 
-        return $fnBuilder($grouped[0]);
-    }
+    //     return $fnBuilder($grouped[0]);
+    // }
 }
