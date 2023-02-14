@@ -221,30 +221,27 @@
         </div>
     </div>
 
-    @if($groupedRequirements != null && $groupedRequirements->count() != 0 && $loop->last)
-        <div class="card mb-3">
-            <div class="card-body">
-                <footer class="blockquote-footer">
-                    Requerimiento enviado también a
-                    <ul>
-                           @foreach($groupedRequirements as $groupedRequirement)
-                               @foreach($groupedRequirement->events as $event)
-                                   @if($event->status == "creado")
-                                    <li> <strong> {{$event->to_user->getFullNameAttribute() }} </strong> </li>
-                                   @endif
-                               @endforeach
-                           @endforeach
-                    </ul>
-                </footer>
-            </div>
-        </div>
-    @endif
-
   @endif
 
 @endforeach
+
+@if($groupedRequirements != null AND $groupedRequirements->count() != 0)
+    <footer class="blockquote-footer">
+        Requerimiento enviado también a
+        <ul>
+                @foreach($groupedRequirements as $groupedRequirement)
+                    @foreach($groupedRequirement->events as $event)
+                        @if($event->status == "creado")
+                        <li> <strong> {{$event->to_user->getFullNameAttribute() }} </strong> </li>
+                        @endif
+                    @endforeach
+                @endforeach
+        </ul>
+    </footer>
+@endif
+
 <div id="page-loader" style="display: none">
-  <span class="preloader-interior"></span>
+    <span class="preloader-interior"></span>
 </div>
 @endsection
 
