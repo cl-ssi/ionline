@@ -68,8 +68,8 @@ class Authority extends Model implements Auditable
     public static function getAuthorityFromDate($ou_id, $date, $type) {
         return self::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
-            ->where('date', $date->startOfDay())
-            ->where('type', $type)
+            ->where('date',$date->startOfDay())
+            ->where('type',$type)
             ->first();
         
     }
@@ -80,13 +80,12 @@ class Authority extends Model implements Auditable
 
     public static function getAuthorityFromAllTime($ou_id, $type) {
 
-        return self::with('user', 'organizationalUnit')
+        return self::with('user','organizationalUnit')
             ->where('organizational_unit_id',$ou_id)
             ->where('type',$type)
             ->groupBy('user_id')
             ->get();
     }
-
 
     public static function getBossFromUser($user_id, $date) {
         $user = User::find($user_id);
@@ -97,11 +96,27 @@ class Authority extends Model implements Auditable
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
-        return self::with('user', 'organizationalUnit')
+        return self::with('user','organizationalUnit')
             ->where('user_id',$user_id)
             ->where('date',$date->startOfDay())
             ->where('type',$type)
             ->get();
+    }
+
+    public static function getAmIAuthorityOfMyOu($date, $type, $user_id) {
+        $user = User::find($user_id);
+
+        if($user AND $user->organizational_unit_id != null) {
+            return self::with('user','organizationalUnit')
+                ->where('user_id',$user_id)
+                ->where('date',$date->startOfDay())
+                ->where('type',$type)
+                ->where('organizational_unit_id',$user->organizational_unit_id)
+                ->exists();
+        }
+        else {
+            return false;
+        }
     }
 
 }
