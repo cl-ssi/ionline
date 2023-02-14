@@ -734,16 +734,19 @@ class RequirementController extends Controller
     {
         // $requirement = Requirement::find(15920);
         // $requirement->categories()->attach($request->input('category_id'));
-        // dd("");
+        //dd($request->all());
 
+        /* TODO: si no tengo OU_ID no debería entrar al SGR; es posible que esté controlado ya en el create */
         //se setea variables documents, que ahora viene separada por coma, y no en un array.
         $request->documents = explode(",",$request->documents);
 
         // validación existencia autoridad en ou
+        /* FIXME: Esto no debería estar. */
         if (Authority::getAuthorityFromDate($request->to_ou_id, now(), 'manager') == null) {
           return redirect()->back()->with('warning', 'La unidad organizacional seleccionada no tiene asignada una autoridad. Favor contactar a secretaria de dicha unidad para regularizar.');
         }
 
+        /** Contraldo por JS? */
         if(!$request->users){
             return redirect()->back()->with('warning', 'Debe ingresar por lo menos un usuario a quien crear el requerimiento.');
         }
@@ -823,6 +826,7 @@ class RequirementController extends Controller
                 if ($enCopia == 0) {
                     $users_req[] = $request->users[$key];
                     // obtiene categorías seleccionadas
+                    /* TODO: Revisa  que pasa si tiene nulos, el array queda más pequeño? */
                     if($request->categories!=null){
                         $categories_array[] = $request->categories[$key];
                     }
@@ -834,6 +838,7 @@ class RequirementController extends Controller
             // dd($categories_array);
 
             //se crearán requerimientos según usuarios agregados en tabla dinámica.
+            /* TODO: esto elimina duplicados, si llega a entrar acá, no coinciden las keys con los otros arrays  */
             $users = array_unique($users_req); //distinct
             // $categories_array = null;
             // if($categories_array_){
@@ -842,7 +847,8 @@ class RequirementController extends Controller
             $flag = 0;
             // dd($categories_array);
 
-            //obtiene nro para agrupar requerimientos
+            /* obtiene nro para agrupar requerimientos */
+            /* TODO: Dejar una query, se hace dos veces una para preguntar si es igual a cero y la otra para obetener el siguiente */
             if (Requirement::whereNotNull('group_number')->count() === 0) {
                 $group_number = 1;
             } else {
@@ -864,8 +870,15 @@ class RequirementController extends Controller
 
                 //Si algún usuario destino es autoridad, se marca el requerimiento
                 $userModel = User::find($user);
+
+                /* FIXME: si no tiene manager, no puede obtener ->user_id */
+                /** Para saber si un usuario es autoridad de su propia unidad organizacional */
                 $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
+
+                /* FIXME: siempre el anyManager se basará en el último user */
                 $isManager = ($user == $managerUserId);
+
+                /* TODO: Que hace el isAnyManager o cual es la diferencia con el isManager */
                 if ($isManager) $isAnyManager = true;
 
 //              dump($user, $isManager);
@@ -875,6 +888,8 @@ class RequirementController extends Controller
                 $requirement->user()->associate(Auth::user());
                 $requirement->group_number = $group_number;
                 $requirement->to_authority = $isAnyManager;
+
+                /* TODO: los indices coinciden? */
                 if($categories_array){
                     $requirement->category_id = $categories_array[$key];
                 }
@@ -886,18 +901,22 @@ class RequirementController extends Controller
 				// /** Marca los eventos como vistos */
 				// $requirement->setEventsAsViewed;
 
-                //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
+                /* se ingresa una sola vez: se guardan posibles usuarios en copia. */
+                /* Se agregan primero que otros eventos del requerimiento, para que no queden como "last()" */
                 if ($users_enCopia <> null) {
                     if ($flag == 0) {
                         $isAnyManager = false;
+                        /* FIXME: ambos se llaman key, deberian ser diferentes, esto está dentro de otro foreach con otro key */
                         foreach ($users_enCopia as $key => $user_) {
                             //Si algún usuario en copia es autoridad, se marca el requerimiento y evento
                             $userModel = User::find($user_);
+
                             $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
                             $isManager = ($user_ == $managerUserId);
                             if ($isManager) $isAnyManager = true;
 //                          dump($user_, $isManager);
 
+                            /* FIXME: se carga una coleccion de user, pero, solo se usar para obtener la ou_id */
                             $user_aux = User::where('id', $user_)->get();
                             $firstEvent = new Event($request->All());
                             $firstEvent->to_user_id = $user_;
@@ -912,6 +931,7 @@ class RequirementController extends Controller
                             $requirement->events()->save($firstEvent);
                         }
                         $flag = 1;
+                        /* FIXME: siempre quedará con el el estado del útlimo en copia */
                         $requirement->update(['to_authority' => $isAnyManager]);
                     }
                 }
@@ -919,6 +939,8 @@ class RequirementController extends Controller
                 //se ingresan los otros tipos de eventos (que no sean "en copia")
                 $firstEvent = new Event($request->All());
                 //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
+
+                /* FIXME: ya está antes */
                 $user_aux = User::find($user);
                 if ($user_aux) {
                     $firstEvent->to_user_id = $user_aux->id;
@@ -935,12 +957,16 @@ class RequirementController extends Controller
                 $firstEvent->requirement()->associate($requirement);
                 $firstEvent->save();
 
-                //Obtiene emails
+                /* FIXME: esto obtiene el primer usuario de la BD
+                 * Obtiene emails
+                 * */
                 $usersEmail .= $user_aux->first()->email . ',';
 
                 //asocia evento con documentos
+                /* FIXME: al parecer no es necesario la KEY y si fuese, no debería llamarse igual a la del foreach */
                 if ($request->documents <> null) {
                     foreach ($request->documents as $key => $document_aux) {
+                        /* FIXME: no se necesita cargar el modelo documento, se puede asociar directamente el $document_aux en el attach */
                         $document = Document::find($document_aux);
                         $firstEvent->documents()->attach($document);
                     }
@@ -1085,6 +1111,8 @@ class RequirementController extends Controller
             //se ingresan los otros tipos de eventos (que no sean "en copia")
             $firstEvent = new Event($request->All());
             //$firstEvent->organizational_unit_id = $user_aux->first()->organizational_unit_id;
+
+            /* FIXME: Esta consulta esta dos veces, está al comienzo del req y se llama userModel*/
             $user_aux = User::find($user);
             if ($user_aux) {
                 $firstEvent->to_user_id = $user_aux->id;
