@@ -137,6 +137,7 @@ class Establishment extends Model implements Auditable
         return $this->options;
     }
 
+    /* FIXME: @sickiqq Se llama Out Tree, debería ser Ou Tree */
     public function getOutTreeWithEstablishmentNameAttribute(){
         $ous = $this->organizationalUnits()
             ->select('id','level','name','organizational_unit_id as father_id')
@@ -148,6 +149,23 @@ class Establishment extends Model implements Auditable
             $this->buildTreeWithEstablishmentName($ous, 'father_id', 'id');
         }
 
+        return $this->options;
+    }
+
+    public function getOuTreeWithAliasAttribute()
+    {
+        $ous = $this->organizationalUnits()
+            ->select('id','level','name','organizational_unit_id as father_id')
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+        
+        if(!empty($ous)) {
+            $this->buildTree($ous, 'father_id', 'id');
+        }
+        foreach ($this->options as $key => $option) {
+            $this->options[$key] = $this->alias . ' ' .$option;
+        }
         return $this->options;
     }
 
