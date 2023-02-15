@@ -74,7 +74,7 @@
 
                 <fieldset class="form-group col-3">
                     <label for="forestablishment">Establecimiento</label>
-                    @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.', 'CGU. Hector Reyno'))
+                    @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.', 'Hospital de Alto Hospicio'))
                     <select name="establishment" class="form-control selectpicker" title="Seleccione..." required>
                         @foreach($establishments as $establishment)
                         <option value="{{$establishment}}" @if(isset($program_resolution->establishment) && $establishment == $program_resolution->establishment) selected @endif>{{$establishment}}</option>
