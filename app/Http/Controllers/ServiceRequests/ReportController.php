@@ -469,6 +469,7 @@ class ReportController extends Controller
 
   public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
   {
+
     $formatter = new NumeroALetras();
     $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
