@@ -142,7 +142,7 @@
             <div class="content">
                 <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
                 <div class="siete" style="padding-top: 3px;">
-                    HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+                    HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
                 </div>
                 <br><br>
                 <div class="titulo">

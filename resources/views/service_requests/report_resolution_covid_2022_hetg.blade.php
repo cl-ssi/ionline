@@ -144,7 +144,7 @@
 
 
       <div class="siete" style="padding-top: 3px;">
-        HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+        HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
 
         SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
       </div>
@@ -698,7 +698,7 @@
               <br>
               <span style="text-transform:uppercase">{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>
               <br>
-              HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+              HOSPITAL DR ERNESTO TORRES GALDAMES<br>
             </strong>
 
             <br style="padding-bottom: 4px;">

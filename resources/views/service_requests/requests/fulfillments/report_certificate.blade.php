@@ -125,7 +125,7 @@
 
 <div class="siete" style="padding-top: 3px;">
     @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 1)
-      HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+      HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
     @else
       SERVICIO SALUD IQUIQUE<br>
     @endif
@@ -440,7 +440,7 @@
             SERVICIO SALUD IQUIQUE<br>
           @endif
         @else
-          HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+          HOSPITAL DR ERNESTO TORRES GALDAMES<br>
         @endif
         </strong>
     </div>

@@ -154,7 +154,7 @@
 
       <div class="siete" style="padding-top: 3px;">
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+        HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
         @else
 
         @endif
@@ -456,7 +456,7 @@
             <br>
               <span style="text-transform:uppercase">{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>
             <br>
-            HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+            HOSPITAL DR ERNESTO TORRES GALDAMES<br>
           </strong>
 
           <br style="padding-bottom: 4px;">
