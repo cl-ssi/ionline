@@ -475,9 +475,11 @@ class WordTestController extends Controller
             //CLONE BLOCK SEGUN ESTABLECIMIENTO
             if($establecimiento == 'Servicio de Salud Iquique'){
                 $templateProcesor->cloneBlock('SSI_OPTION_BLOCK', 1, true, false);
-                $templateProcesor->cloneBlock('HETG_OPTION_BLOCK', 0);
+                $templateProcesor->cloneBlock('HOSPITAL_OPTION_BLOCK', 0);
             }else{
-                $templateProcesor->cloneBlock('HETG_OPTION_BLOCK', 1, true, false);
+                $nombreHospital = $establecimiento == 'Hospital Dr. Ernesto Torres G.' ? 'Hospital Regional de Iquique “Dr. Ernesto Torres Galdames”' : 'Hospital de Alto Hospicio';
+                $templateProcesor->setValue('nombreHospital', $nombreHospital);
+                $templateProcesor->cloneBlock('HOSPITAL_OPTION_BLOCK', 1, true, false);
                 $templateProcesor->cloneBlock('SSI_OPTION_BLOCK', 0);
             }
         }else{

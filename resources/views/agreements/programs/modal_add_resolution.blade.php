@@ -36,7 +36,7 @@
 
                     <div class="form-group">
                         <label for="forestablishment">Establecimiento</label>
-                        @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.'))
+                        @php($establishments = array('Servicio de Salud Iquique', 'Hospital Dr. Ernesto Torres G.', 'Hospital de Alto Hospicio'))
                         <select name="establishment" class="form-control selectpicker" title="Seleccione..." required>
                             @foreach($establishments as $establishment)
                             <option value="{{$establishment}}">{{$establishment}}</option>
