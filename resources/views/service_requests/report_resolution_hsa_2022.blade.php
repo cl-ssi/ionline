@@ -419,29 +419,6 @@
         @elseif($ServiceRequest->program_contract_type == "Horas")
         <p class="justify">
             <strong>OCTAVO:</strong>
-
-            {{--@if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa")
-
-                En el desempeño de sus funciones, el prestador cumplió con
-                @livewire('service-request.show-total-hours', ['fulfillment' => $ServiceRequest->fulfillments->first(),'forResolution' => true]);
-                se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Emergencia Hospitalaria, dependiente
-                del
-                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                Hospital Regional de Iquique,
-                @else
-                Servicio de Salud Iquique,
-                @endif
-                en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
-                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                10
-                @else
-                5
-                @endif
-                del mes siguiente, y
-                si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación
-                realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los
-                honorarios pactados.--}}
-
                 <!-- 24/01/2023: solicitado por nataly y fabian -->
             @if($ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA" || 
                     $ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" || 
@@ -452,38 +429,36 @@
                 El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
 
             @else
-
-              El
-              @if($ServiceRequest->working_day_type == 'HORA EXTRA')
-              valor total por horas extras del mes
-              @else
-              valor por hora
-              @endif
-              será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
-              @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-              Hospital Regional de Iquique,
-              @else
-              Servicio de Salud Iquique,
-              @endif
-              en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
-              @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-              10
-              @else
-              5
-              @endif
-              del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. La entidad retendrá y pagará el impuesto correspondiente por los honorarios pactados.
-
-            @endif
-
-            <br><br>
-            <b>Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
-                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                Hospital Dr. Ernesto Torres Galdames de Iquique,
+                El
+                @if($ServiceRequest->working_day_type == 'HORA EXTRA')
+                valor total por horas extras del mes
                 @else
-                Servicio de salud Iquique,
+                valor por hora
                 @endif
-                el cual debe venir con las debidas observaciones de la Jefatura directa.
-            </b>
+                será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
+                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                Hospital Regional de Iquique,
+                @else
+                Servicio de Salud Iquique,
+                @endif
+                en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+                @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                10
+                @else
+                5
+                @endif
+                del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. La entidad retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+
+                <br><br>
+                <b>Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
+                    @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                    Hospital Dr. Ernesto Torres Galdames de Iquique,
+                    @else
+                    Servicio de salud Iquique,
+                    @endif
+                    el cual debe venir con las debidas observaciones de la Jefatura directa.
+                </b>
+            @endif
         </p>
 
         @endif
