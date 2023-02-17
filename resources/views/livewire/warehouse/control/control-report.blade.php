@@ -12,7 +12,7 @@
             <input class="form-control" type="date" wire:model.debounce.1500ms="end_date" id="end-date">
         </fieldset>
 
-        <fieldset class="form-group col-md-4">
+        <fieldset class="form-group col-md-3">
             <label for="product-id">Producto</label>
             <select wire:model.debounce.1500ms="product_id" id="product-id" class="form-control">
                 <option value="">Todos</option>
@@ -24,7 +24,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-4">
+        <fieldset class="form-group col-md-3">
             <label for="program-id">Programa</label>
             <select wire:model.debounce.1500ms="program_id" id="program-id" class="form-control">
                 <option value="">Todos</option>
@@ -32,6 +32,15 @@
                 @foreach($programs as $program)
                     <option value="{{ $program->id }}">{{ $program->name }}</option>
                 @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="program-id">Tipo</label>
+            <select wire:model.debounce.1500ms="type" id="type" class="form-control">
+                <option value=""></option>
+                <option value="false">Egreso</option>
+                <option value="1">Ingreso</option>
             </select>
         </fieldset>
     </div>

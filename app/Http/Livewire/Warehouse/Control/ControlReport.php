@@ -17,6 +17,7 @@ class ControlReport extends Component
     public $program_id;
     public $start_date;
     public $end_date;
+    public $type;
 
     protected $listeners = [
         'myProductId'
@@ -48,6 +49,7 @@ class ControlReport extends Component
 
     public function getControlItems()
     {
+        app('debugbar')->log($this->type);
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
                 $query->whereStoreId($this->store->id)
@@ -68,6 +70,9 @@ class ControlReport extends Component
             })
             ->when($this->product_id, function($query) {
                 $query->where('product_id', $this->product_id);
+            })
+            ->when($this->type, function($query) {
+                $query->whereRelation('control','type', $this->type);
             })
             ->whereConfirm(true)
             ->orderBy('created_at', 'desc')

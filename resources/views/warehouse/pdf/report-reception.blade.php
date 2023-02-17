@@ -8,26 +8,20 @@
     <div class="siete">
         {{ env('APP_SS') }}
     </div>
-    <div class="siete" style="padding-top: 3px;">
+    <!-- <div class="siete" style="padding-top: 3px;">
         <i>correo@redsalud.gob.cl</i>
-    </div>
+    </div> -->
 </div>
 
-<div class="right" style="width: 50%; display: inline-block;">
+
+<div class="right" style="width: 50%; display: inline-block; padding-bottom: 10px;">
     Iquique, {{ $control->format_date }}<br>
 </div>
 
 <div class="titulo">
-    ACTA DE INGRESO N° {{ $control->id }}
+    ACTA DE INGRESO Y RECEPCIÓN CONFORME N° {{ $control->id }}
 </div>
 
-<div class="center">
-    @if($act_type == 'technical')
-        <strong class="seis">Acta Recepción Técnica</strong>
-    @else
-        <strong class="seis">Acta Ingreso a Bodega</strong>
-    @endif
-</div>
 
 <div style="padding-bottom: 8px;">
     <strong>Bodega:</strong> {{ optional($control->store)->name }}<br>
@@ -56,7 +50,8 @@
             <th>Código</th>
             <th>Cant.</th>
             <th>Producto</th>
-            <th>Fecha</th>
+            <th>Precio</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
@@ -81,8 +76,11 @@
                         {{ optional($item->product)->name }}
                     </small>
                 </td>
-                <td class="center" style="vertical-align: top;">
-                    {{ $control->date->format('d/m/Y')}}
+                <td class="right" style="vertical-align: top;">
+                    {{ money($item->unit_price) }}
+                </td>
+                <td class="right" style="vertical-align: top;">
+                    {{ money($item->unit_price * $item->quantity) }}
                 </td>
             </tr>
         @empty
@@ -95,7 +93,7 @@
 
         @if($control->isPurchaseOrder())
             <tr>
-                <td colspan="2"></td>
+                <td colspan="3"></td>
                 <td class="right">
                     <strong>NETO</strong>
                 </td>
@@ -104,8 +102,8 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
-                <td class="right">
+                <td colspan="3"></td>
+                <td class="right" nowrap>
                     @if($control->purchaseOrder)
                         <strong>
                             IVA {{ optional($control->purchaseOrder)->tax_percentage }}%
@@ -117,7 +115,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
+                <td colspan="3"></td>
                 <td class="right">
                     <strong>TOTAL</strong>
                 </td>
