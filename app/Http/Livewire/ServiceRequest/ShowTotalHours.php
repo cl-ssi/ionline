@@ -471,8 +471,57 @@ class ShowTotalHours extends Component
                 foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
 
                     //18/01/2023: Solicitado por fabián, solicita que solo para otros programas hospital, se considere el otro cálculo 
-                    if($this->fulfillment->serviceRequest->programm_name == 'OTROS PROGRAMAS HETG'){
-                        $hoursDayString = 0;
+                    // if($this->fulfillment->serviceRequest->programm_name == 'OTROS PROGRAMAS HETG'){
+                    //     $hoursDayString = 0;
+                    //     $start_hour = $shiftControl->start_date;
+                    //     while ($start_hour < $shiftControl->end_date) {
+                    //         if (in_array($start_hour->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && 
+                    //             $shiftControl->start_date->isWeekday() &&
+                    //             !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
+                    //             $hoursDayString = $hoursDayString + 1;
+                    //         }
+                    //         $start_hour = $start_hour->addMinute();
+                    //     }
+                    //     $hoursDay = round(($hoursDayString/60),2);
+
+                    //     $hoursNightString = 0;
+                    //     $start_hour = $shiftControl->start_date;
+                    //     while ($start_hour < $shiftControl->end_date) {
+                    //         if (in_array($start_hour->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                    //         ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray))) {
+                    //             $hoursNightString = $hoursNightString + 1;
+                    //         }
+                    //         $start_hour = $start_hour->addMinute();
+                    //     }
+                    //     $hoursNight = round(($hoursNightString/60),2);
+
+                    // }else{
+                        
+                    //     $hoursDay = 0;
+                    //     if (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) &&
+                    //         $shiftControl->start_date->isWeekday() &&
+                    //         !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
+                    //         if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
+                    //             $minutesDay = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                    //             $total_minutes = $total_minutes + $minutesDay;
+                    //             $hoursDay = round($minutesDay/60,2);
+                    //         }
+                    //     }
+        
+                    //     $hoursNight = 0;
+                    //     if (in_array($shiftControl->start_date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                    //         (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray)))) {
+                    //         if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
+                    //             $minutesNight = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                    //             $total_minutes = $total_minutes + $minutesNight;
+                    //             $hoursNight = round($minutesNight/60,2);
+                    //         }
+                    //     }
+                    // }
+
+                    // 17/02/2023: Nataly indica que debe ser el mismo cálculo para ambos casos.
+                    // hace la salvedad que en el cálculo con el valor, existen diferencias entre tipos de programas.
+                    $hoursDayString = 0;
                         $start_hour = $shiftControl->start_date;
                         while ($start_hour < $shiftControl->end_date) {
                             if (in_array($start_hour->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && 
@@ -494,29 +543,6 @@ class ShowTotalHours extends Component
                             $start_hour = $start_hour->addMinute();
                         }
                         $hoursNight = round(($hoursNightString/60),2);
-
-                    }else{
-                        $hoursDay = 0;
-                        if (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) &&
-                            $shiftControl->start_date->isWeekday() &&
-                            !in_array($shiftControl->start_date->toDateString(), $holidaysArray)) {
-                            if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
-                                $minutesDay = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
-                                $total_minutes = $total_minutes + $minutesDay;
-                                $hoursDay = round($minutesDay/60,2);
-                            }
-                        }
-        
-                        $hoursNight = 0;
-                        if (in_array($shiftControl->start_date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
-                            (in_array($shiftControl->start_date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray)))) {
-                            if ($shiftControl->start_date->diffInMinutes($shiftControl->end_date) >= 30) {
-                                $minutesNight = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
-                                $total_minutes = $total_minutes + $minutesNight;
-                                $hoursNight = round($minutesNight/60,2);
-                            }
-                        }
-                    }
                     
     
                     $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
