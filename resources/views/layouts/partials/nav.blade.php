@@ -323,6 +323,14 @@
                         </a>
                         @endcan
 
+
+                        @can('be god')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('wellness.loans.index') }}">
+                            <i class="fas fa-money-check"></i> Bienestar/Prestamos
+                        </a>
+                        @endcan
+
                         <div class="dropdown-divider"></div>
 
                         @can('Suitability: ssi')
