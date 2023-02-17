@@ -339,7 +339,9 @@ class Product extends Model
       $products = Product::where('pharmacy_id',session('pharmacy_id'))
                          ->when($category_id, function ($query, $category_id) {
                               return $query->where('category_id', $category_id);
-                           })->get();
+                           })
+                           ->with('category')
+                           ->get();
 
       //obtiene entregas
       $dispatchItems= DispatchItem::whereHas('dispatch', function ($query) use ($year, $establishment_id) {
@@ -352,7 +354,9 @@ class Product extends Model
                                              $query->when($category_id, function ($query, $category_id) {
                                                         return $query->where('category_id', $category_id);
                                                      });
-                                    })->get();
+                                    })
+                                    ->with('dispatch','product')
+                                    ->get();
       $matrix = null;
       //para setear valores en cero
       foreach ($products as $key => $product) {

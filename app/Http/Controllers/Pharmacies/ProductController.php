@@ -26,7 +26,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                           ->orderBy('name', 'ASC')->get();//->paginate(30);
+                            ->with('category','program')
+                            ->orderBy('name', 'ASC')
+                            ->get();//->paginate(30);
         return view('pharmacies.products.index', compact('products'));
     }
 
@@ -285,34 +287,34 @@ class ProductController extends Controller
     }
 
     public function repProduct(Request $request){
-      //dd($request->get('year'));
-      /*$matrix = Product::SearchConsumosHistoricos($request->get('year'),
-                                                  $request->get('category_id'),
-                                                  $request->get('establishment_id'));
+        //dd($request->get('year'));
+        /*$matrix = Product::SearchConsumosHistoricos($request->get('year'),
+                                                    $request->get('category_id'),
+                                                    $request->get('establishment_id'));
 
-      $categories = Category::orderBy('name','ASC')->get();
-      $establishments = Establishment::orderBy('name','ASC')->get();
-      */
-      // dd($request);
+        $categories = Category::orderBy('name','ASC')->get();
+        $establishments = Establishment::orderBy('name','ASC')->get();
+        */
+        // dd($request);
 
-      // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
-      // set_time_limit(3600);
-      // ini_set('memory_limit', '1024M');
+        // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
+        // set_time_limit(3600);
+        // ini_set('memory_limit', '1024M');
 
-      // $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
+        // $matrix = Product::SearchProducts($request->get('product_id'), $request->get('program'));
+        $products = Product::where('pharmacy_id',session('pharmacy_id'))
+                            ->orderBy('name','ASC')
+                            ->get();
 
-      $products = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->orderBy('name','ASC')
-                         ->get();
-
-      $product_id = $request->product_id;
-      $products_data = Product::where('pharmacy_id',session('pharmacy_id'))
-                         ->when($product_id, function ($q, $product_id) {
-                            return $q->where('id', $product_id);
-                         })
-                         ->orderBy('name','ASC')
-                         ->get();
-      return view('pharmacies.reports.products', compact('request','products','products_data'));
-      // ,'matrix'));
+        $product_id = $request->product_id;
+        $products_data = Product::where('pharmacy_id',session('pharmacy_id'))
+                            ->when($product_id, function ($q, $product_id) {
+                                return $q->where('id', $product_id);
+                            })
+                            ->with('program')
+                            ->orderBy('name','ASC')
+                            ->get();
+        return view('pharmacies.reports.products', compact('request','products','products_data'));
+        // ,'matrix'));
     }
 }

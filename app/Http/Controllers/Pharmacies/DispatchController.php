@@ -57,7 +57,9 @@ class DispatchController extends Controller
 
 
       $dispatchs = Dispatch::where('pharmacy_id',session('pharmacy_id'))
-                           ->orderBy('id','DESC')->paginate(200);
+                            ->with('establishment')
+                            ->orderBy('id','DESC')
+                            ->paginate(200);
                            // dd($dispatchs);
       return view('pharmacies.products.dispatch.index', compact('dispatchs'));
     }

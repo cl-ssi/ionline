@@ -31,7 +31,9 @@ class ReceivingController extends Controller
     public function index()
     {
         $receivings = Receiving::where('pharmacy_id',session('pharmacy_id'))
-                               ->orderBy('id','DESC')->paginate(200);
+                                ->with('establishment')
+                                ->orderBy('id','DESC')
+                                ->paginate(200);
         return view('pharmacies.products.receiving.index', compact('receivings'));
     }
 
