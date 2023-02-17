@@ -73,6 +73,24 @@ class SearchRequests extends Component
                 ->paginate(50);
         }
 
+        if($this->typeIndex == 'ou'){
+
+            $requests = RequestReplacementStaff::latest()
+                ->where('user_id', Auth::user()->id)
+                ->orWhere('requester_id', Auth::user()->id)
+                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
+                ->search($this->selectedStatus,
+                    $this->selectedId,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedName,
+                    $this->selectedFundament,
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace
+                )
+                ->paginate(50);
+        }
+
         return view('livewire.replacement-staff.search-requests',[
             'fundaments' => RstFundamentManage::all(),
             'requests' => $requests,

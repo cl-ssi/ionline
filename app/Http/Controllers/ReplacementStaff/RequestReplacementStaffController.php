@@ -109,26 +109,26 @@ class RequestReplacementStaffController extends Controller
 
     public function ou_index()
     {
-        $ou_pending_requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
-              $q->where('user_id', Auth::user()->id)
-                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
-            })
-            ->where('request_status', 'pending')
-            ->get();
+        // $ou_pending_requests = RequestReplacementStaff::latest()
+        //     ->where(function ($q){
+        //       $q->where('user_id', Auth::user()->id)
+        //         ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
+        //     })
+        //     ->where('request_status', 'pending')
+        //     ->get();
 
-        $ou_requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
-              $q->where('user_id', Auth::user()->id)
-                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
-            })
-            ->where(function ($q){
-              $q->where('request_status', 'complete')
-                ->orWhere('request_status', 'rejected');
-            })
-            ->paginate(10);
+        // $ou_requests = RequestReplacementStaff::latest()
+        //     ->where(function ($q){
+        //       $q->where('user_id', Auth::user()->id)
+        //         ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
+        //     })
+        //     ->where(function ($q){
+        //       $q->where('request_status', 'complete')
+        //         ->orWhere('request_status', 'rejected');
+        //     })
+        //     ->paginate(10);
 
-        return view('replacement_staff.request.ou_index', compact('ou_pending_requests', 'ou_requests'));
+        return view('replacement_staff.request.ou_index');
     }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
