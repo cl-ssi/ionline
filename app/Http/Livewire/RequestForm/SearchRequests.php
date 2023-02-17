@@ -54,7 +54,19 @@ class SearchRequests extends Component
     {
         if($this->inbox == 'all'){
             $query = RequestForm::query();
+
+            if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+                $query->whereHas('userOrganizationalUnit', function ($q) {
+                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                    ->orWhere('request_user_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
+                })
+                ->orWhereHas('contractOrganizationalUnit', function ($q) {
+                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                    ->orWhere('contract_manager_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
+                });
+            }
         }
+
         if($this->inbox == 'purchase'){
             $query = RequestForm::query();
             
