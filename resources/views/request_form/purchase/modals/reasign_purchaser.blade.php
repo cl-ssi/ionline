@@ -17,9 +17,7 @@
                             <fieldset class="form-group col-sm">
                                 <label>Comprador Actual:</label><br>
                                 <select name="" class="form-control form-control-sm" disabled>
-                                    @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ ($requestForm->purchasers->first()->id==$user->id)?'selected':''}}>{{ ucfirst(trans($user->FullName)) }}</option>
-                                    @endforeach
+                                    <option value="{{ $requestForm->purchasers->first()->id }}">{{ ucfirst(trans($requestForm->purchasers->first()->tinnyName ?? '')) }}</option>
                                 </select>
                             </fieldset>
 
