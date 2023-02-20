@@ -24,7 +24,7 @@ class Program extends Model
      */
     public function components()
     {
-        return $this->hasMany('App\Agreements\ProgramComponent');
+        return $this->hasMany('App\Agreements\ProgramComponent')->withTrashed();
     }
     /**
      * The attributes that are mass assignable.
