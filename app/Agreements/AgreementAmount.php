@@ -11,7 +11,7 @@ class AgreementAmount extends Model
     }
 
     public function program_component() {
-        return $this->belongsTo('App\Agreements\ProgramComponent');
+        return $this->belongsTo('App\Agreements\ProgramComponent')->withTrashed();
     }
 
     /**
