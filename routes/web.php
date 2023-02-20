@@ -222,6 +222,10 @@ use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 
 
+use App\Http\Controllers\Wellness\LoanController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -2109,6 +2113,15 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
     Route::get('/rem_original', [RemFileController::class, 'rem_original'])->name('files.rem_original');
     Route::get('/rem_correccion', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
+});
+
+/* Rutas de Módulo de Binestar */
+Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function () {
+    Route::prefix('loans')->as('loans.')->group(function () {
+        Route::get('/', [LoanController::class, 'index'])->name('index');
+        Route::post('/import', [LoanController::class, 'import'])->name('import');
+    });
+
 });
 
 
