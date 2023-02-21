@@ -22,5 +22,7 @@ class RstFundamentDetailSeeder extends Seeder
         FundamentDetailManage::Create(['name'=>'internal announcement']);
         FundamentDetailManage::Create(['name'=>'mixed announcement']);
         FundamentDetailManage::Create(['name'=>'other']);
+        FundamentDetailManage::Create(['name'=>'remote working']);
+        FundamentDetailManage::Create(['name'=>'administrative leave']);
     }
 }

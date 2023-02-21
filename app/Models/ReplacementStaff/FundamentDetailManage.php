@@ -45,6 +45,9 @@ class FundamentDetailManage extends Model
             case 'remote working':
               return 'Teletrabajo (Funciones no habituales)';
               break;
+            case 'administrative leave':
+              return 'Permiso administrativo';
+              break;
             case '':
               return '';
               break;

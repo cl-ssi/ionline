@@ -140,8 +140,8 @@
                         <i class="fas fa-money-check"></i> SDA
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                        @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, [38,41]))
+                        @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
+                        @if(auth()->user()->organizationalUnit && in_array(auth()->user()->organizationalUnit->establishment_id, explode(',', $ouSearch)))
                         <a class="dropdown-item {{ active('request_forms.my_forms') }}" href="{{ route('request_forms.my_forms') }}">
                             <i class="fas fa-fw fa-shopping-cart"></i> Abastecimiento
                         </a>
@@ -320,6 +320,14 @@
                         @canany(['Authorities: view', 'Authorities: create'])
                         <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
                             <i class="fas fa-chess-king fa-fw"></i> Autoridades
+                        </a>
+                        @endcan
+
+
+                        @can('be god')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('wellness.loans.index') }}">
+                            <i class="fas fa-money-check"></i> Bienestar/Prestamos
                         </a>
                         @endcan
 

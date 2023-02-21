@@ -62,8 +62,11 @@ class Authorization extends Component
       }
       
       if($eventType=='supply_event'){
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-        $this->lstSupervisorUser      = User::where('organizational_unit_id', $ouSearch)->get();
+        // $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $estab = Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value;
+        $parameters = Auth()->user()->organizationalUnit->establishment_id == $estab ? ['AdquisicionesHAH'] : ['AbastecimientoSSI', 'AdquisicionesHAH'];
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', $parameters)->pluck('value')->toArray();
+        $this->lstSupervisorUser      = User::whereIn('organizational_unit_id', $ouSearch)->get();
         //$this->lstPurchaseType        = PurchaseType::all();
         $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;
         $this->lstPurchaseType        = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();

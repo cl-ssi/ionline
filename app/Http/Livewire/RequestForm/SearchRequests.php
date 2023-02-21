@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Rrhh\OrganizationalUnit;
+use Illuminate\Support\Facades\Auth;
 
 class SearchRequests extends Component
 {
@@ -54,17 +55,6 @@ class SearchRequests extends Component
     {
         if($this->inbox == 'all'){
             $query = RequestForm::query();
-
-            if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
-                $query->whereHas('userOrganizationalUnit', function ($q) {
-                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
-                    ->orWhere('request_user_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
-                })
-                ->orWhereHas('contractOrganizationalUnit', function ($q) {
-                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
-                    ->orWhere('contract_manager_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
-                });
-            }
         }
 
         if($this->inbox == 'purchase'){
@@ -76,7 +66,19 @@ class SearchRequests extends Component
                 })
                 ->latest('approved_at');
         }
-        //$query = RequestForm::query();
+
+        // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
+        if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+            $query->whereHas('userOrganizationalUnit', function ($q) {
+                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                ->orWhere('request_user_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
+            })
+            ->orWhereHas('contractOrganizationalUnit', function ($q) {
+                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                ->orWhere('contract_manager_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
+            });
+        }
+
         $query->search($this->selectedStatus,
         $this->selectedStatusPurchase,
         $this->selectedId,
@@ -101,10 +103,13 @@ class SearchRequests extends Component
 
     public function render()
     {   
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $estab = Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value;
+        $parameters = Auth()->user()->organizationalUnit->establishment_id == $estab ? ['AdquisicionesHAH'] : ['AbastecimientoSSI', 'AdquisicionesHAH'];
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', $parameters)->pluck('value')->toArray();
+        // dd($ouSearch);
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
-            'users' => User::permission('Request Forms: purchaser')->OrWhere('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
+            'users' => User::permission('Request Forms: purchaser')->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
         ]);
     }
 
