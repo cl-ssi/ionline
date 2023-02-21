@@ -35,10 +35,15 @@
 <br>
 
 @if($totalRequestByDates->count() > 0)
+
+<div class="row">
+    <div class="col-sm">
+        <h5>1-. Total de Solicitudes por Estado</h5>
+    </div>
+</div>
     
 <div class="row">
     <div class="col-sm">
-        <h6>Total de Solicitudes: {{ $totalRequestByDates->count() }}</h6>
         <div id="piechart"></div>
     </div>
     <div class="col-sm">
@@ -64,11 +69,59 @@
                         <th width="60%">Rechazadas</th>
                         <td width="40%">{{ $rejected }}</td>
                     </tr>
+                    <tr>
+                        <th width="60%">Total</th>
+                        <td width="40%"><b>{{ $totalRequestByDates->count() }}</b></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<br>
+<hr>
+<br>
+
+<div class="row">
+    <div class="col-sm">
+        <h5>2-. Total por Tipo de Solicitudes (Primer Formulario o Continuidad)</h5>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm">
+        <div id="piechart_by_type"></div>
+    </div>
+    <div class="col-sm">
+        <h6>Resumen</h6>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-sm">
+                <thead class="text-center">
+                    <tr>
+                        <th width="60%">Formulario</th>
+                        <th width="40%">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <th width="60%">Primera Solicitud</th>
+                        <td width="40%">{{ $firstRequest }}</td>
+                    </tr>
+                    <tr>
+                        <th width="60%">Continuidad</th>
+                        <td width="40%">{{ $continuity }}</td>
+                    </tr>
+                    <tr>
+                        <th width="60%">Total</th>
+                        <td width="40%"><b>{{ $totalRequestByDates->count() }}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 @else
 <div class="row">
     <div class="col">
@@ -86,32 +139,58 @@
 
 @section('custom_js')
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+        function drawChart() {
 
-        var data = google.visualization.arrayToDataTable([
-          ['Estado', 'Cantidad'],
-          ['Pendientes',  {!! $pending !!}],
-          ['Finalizados', {!! $complete !!}],
-          ['Rechazadas', {!! $rejected !!}]
-        ]);
+            var data = google.visualization.arrayToDataTable([
+            ['Estado', 'Cantidad'],
+            ['Pendientes',  {!! $pending !!}],
+            ['Finalizados', {!! $complete !!}],
+            ['Rechazadas', {!! $rejected !!}]
+            ]);
 
-        var options = {
-          title: 'Solicitudes por estado',
-          is3D: true,
-          colors: ['#0000ff', '#008F39', '#FF0000'],
-          height: 400,
-          backgroundColor: '#f8fafc',
-        };
+            var options = {
+            title: 'Solicitudes por estado',
+            is3D: true,
+            colors: ['#0000ff', '#008F39', '#FF0000'],
+            height: 400,
+            backgroundColor: '#f8fafc',
+            };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
-        chart.draw(data, options);
-      }
+            chart.draw(data, options);
+        }
+    </script>
+
+<script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Tipo', 'Cantidad'],
+            ['Primera Solicitud',  {!! $firstRequest !!}],
+            ['Continuidad', {!! $continuity !!}]
+            ]);
+
+            var options = {
+            title: 'Solicitudes por estado',
+            is3D: true,
+            colors: ['#0000ff', '#008F39', '#FF0000'],
+            height: 400,
+            backgroundColor: '#f8fafc',
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_by_type'));
+
+            chart.draw(data, options);
+        }
     </script>
 
 @endsection
