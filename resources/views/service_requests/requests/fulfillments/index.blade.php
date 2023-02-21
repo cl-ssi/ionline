@@ -114,7 +114,7 @@
           <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
-          <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
+          <td>@if($serviceRequest->responsabilityCenter) {{ $serviceRequest->responsabilityCenter->name }} @endif</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
     			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
