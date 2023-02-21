@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Notifications\ReplacementStaff\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationNewRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Parameters\Parameter;
 
 
 class RequestReplacementStaffController extends Controller
@@ -30,7 +31,6 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-
         return view('replacement_staff.request.index');
     }
 
@@ -224,7 +224,7 @@ class RequestReplacementStaffController extends Controller
             $request_replacement = new RequestReplacementStaff($request->All());
             $request_replacement->form_type = $formType;
             $request_replacement->user()->associate(Auth::user());
-            $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
+            $request_replacement->organizationalUnit()->associate(Auth::user()->organizationalUnit);
             $request_replacement->requesterUser()->associate($request->requester_id);
 
             /* CONDICIÓN DE CONVOCATORIA INTERNA O MIXTA */
@@ -247,20 +247,11 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
 
             $request_replacement->save();
-
-            /* SE CONSULTA UO DEL USUARIO QUE REGISTRA */
-            /* FIXME: @mirandaljorge porque haces una query utilizando get y last?
-             * El resultado esperado que es? no es lo mismo que la relación:
-             * $ou_request = $request_replacement->organizationalUnit ? 
-             * o se busca algo diferente a la relación que ya tiene RequestReplacementStaff con organizationalUnit?
-             * */
-            $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
-                ->get()
-                ->last();
             
             if($request_replacement->form_type == 'replacement'){
                 //UO Nivel 3 Deptos. bajo SUB Direcciones.
-                if($uo_request->level == 3){
+                if($request_replacement->organizationalUnit->level == 3){
+                    $position = 1;
                     for ($i = 1; $i <= 4; $i++) {
                         $request_sing = new RequestSign();
 
@@ -282,7 +273,7 @@ class RequestReplacementStaffController extends Controller
                             if ($i == 2) {
                                 $request_sing->position = '2';
                                 $request_sing->ou_alias = 'sub';
-                                $request_sing->organizational_unit_id = $uo_request->father->id;
+                                $request_sing->organizational_unit_id = $request_replacement->organizationalUnit->father->id;
                                 $request_sing->request_status = 'pending';
                                 
                                 // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
@@ -316,42 +307,52 @@ class RequestReplacementStaffController extends Controller
                         }
                         else{
                             if($i == 1){
-                                $request_sing->position = '1';
+                                $request_sing->position = $position;
                                 $request_sing->ou_alias = 'leadership';
                                 $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
                                 $request_sing->request_status = 'pending';
 
                                 //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
                                 $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
-                                $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
+                                if($notification_ou_manager){
+                                    $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
+                                } 
                             }
+                            
                             if ($i == 2) {
-                            $request_sing->position = '2';
-                            $request_sing->ou_alias = 'sub';
-                            $request_sing->organizational_unit_id = $uo_request->father->id;
+                                if($request_replacement->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
+                                    $request_sing->position = $position;
+                                    $request_sing->ou_alias = 'sub';
+                                    $request_sing->organizational_unit_id = $request_replacement->organizationalUnit->father->id;
+                                }
+                                else{
+                                    $i++;
+                                }
                             }
                             if ($i == 3) {
-                                $request_sing->position = '3';
+                                $request_sing->position = $position;
                                 $request_sing->ou_alias = 'uni_per';
                                 $request_sing->organizational_unit_id = 46;
                             }
                             if ($i == 4) {
-                                $request_sing->position = '4';
+                                $request_sing->position = $position;
                                 $request_sing->ou_alias = 'sub_rrhh';
                                 $request_sing->organizational_unit_id = 44;
                             }
                         }
                         $request_sing->request_replacement_staff_id = $request_replacement->id;
                         $request_sing->save();
+
+                        $position = $position + 1;
                     }
                 }
             }
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
             $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
-            $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
+            if($notification_reclutamiento_manager){
+                $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
+            }
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
@@ -416,9 +417,10 @@ class RequestReplacementStaffController extends Controller
         $request_sing_uni_per->save();
 
         //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
         $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
-        $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($newRequestReplacementStaff, 'reclutamiento'));
+        if($notification_reclutamiento_manager){
+            $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($newRequestReplacementStaff, 'reclutamiento'));
+        }
         $newRequestReplacementStaff->requesterUser->notify(new NotificationNewRequest($newRequestReplacementStaff, 'requester'));
 
         session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud de Extensión Exitosamente');

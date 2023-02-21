@@ -85,7 +85,7 @@
 
 <div class="row">
     <div class="col-sm">
-        <h5>2-. Total por Tipo de Solicitudes (Primer Formulario o Continuidad)</h5>
+        <h5>2-. Total por Tipo de Solicitudes (Primera Solicitud o Continuidad)</h5>
     </div>
 </div>
 
