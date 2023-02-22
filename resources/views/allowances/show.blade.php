@@ -35,7 +35,8 @@
                     </tr>
                     <tr class="text-center">
                         <td colspan="2">{{ $allowance->position }}</td>
-                        <td colspan="2">{{ $allowance->allowanceValue->name }}</td>
+                        <td>{{ $allowance->allowanceValue->name }}</td>
+                        <td>{{ $allowance->grade }}</td>
                     </tr>
                     <tr class="table-active">
                         <th colspan="2">Establecimiento</th>
