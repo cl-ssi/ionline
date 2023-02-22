@@ -33,6 +33,9 @@ class ParameterIndex extends Component
     {
         $search = "%$this->search%";
 
+        /** Resetea la paginación */
+        $this->resetPage();
+
         $parameters = Parameter::query()
             ->when($this->module_selected != '', function($query) {
                 $query->whereModule($this->module_selected);
