@@ -34,6 +34,14 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
+            @livewire('allowances.show-position',[
+                'position' => $allowance->position
+            ])
+        </fieldset>
+    </div>
+    
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_allowance_value_id">Grado</label>
             <select name="allowance_value_id" class="form-control" required>
                 <option value="">Seleccione...</option>
@@ -41,6 +49,11 @@
                     <option value="{{ $allowanceValue->id }}" {{ ($allowance->allowance_value_id == $allowanceValue->id)?'selected':'' }}>{{ $allowanceValue->name }}</option>
                 @endforeach
             </select>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_place">Grado Específico</label>
+            <input class="form-control" type="text" autocomplete="off" name="grade" value="{{ $allowance->grade }}" required>
         </fieldset>
     </div>
 

@@ -24,8 +24,9 @@
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_allowance_id">Funcionario:</label>
             @livewire('search-select-user', [
-                'selected_id' => 'user_allowance_id',
-                'required' => 'required'
+                'selected_id'   => 'user_allowance_id',
+                'required'      => 'required',
+                'emit_name'     => 'searchedUser'
             ])
         </fieldset>
 
@@ -39,13 +40,24 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_allowance_value_id">Grado</label>
+            @livewire('allowances.show-position')
+        </fieldset>
+    </div>
+    
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_allowance_value_id">Grado E.U.S.</label>
             <select name="allowance_value_id" class="form-control" required>
                 <option value="">Seleccione...</option>
                 @foreach($allowanceValues as $allowanceValue)
                     <option value="{{ $allowanceValue->id }}">{{ $allowanceValue->name }}</option>
                 @endforeach
             </select>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_place">Grado Específico</label>
+            <input class="form-control" type="text" autocomplete="off" name="grade" required>
         </fieldset>
     </div>
 
