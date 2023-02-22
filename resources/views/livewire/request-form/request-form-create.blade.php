@@ -95,7 +95,7 @@
                 <fieldset class="form-group col-sm-4">
                     <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                     <div class="mt-1 ml-4">
-                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if(optional($requestForm)->status != 'saved' && $editRF) disabled @endif>
+                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if((optional($requestForm)->status != 'saved' && $editRF) || $isHAH) disabled @endif >
                         <label class="form-check-label" for="flexCheckDefault">
                             Sí
                         </label>

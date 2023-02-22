@@ -100,17 +100,22 @@ class EventRequestForm extends Model
     }
 
     public static function createLeadershipEvent(RequestForm $requestForm){
+        $contractManagerBelongsHAH  = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value;
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $requestForm->contract_manager_ou_id;
+        $event->ou_signer_user      =   $contractManagerBelongsHAH 
+                                        ? ($requestForm->contractOrganizationalUnit->level > 2 ? $requestForm->contractOrganizationalUnit->getOrganizationalUnitByLevel(2)->id : $requestForm->contractOrganizationalUnit->father->id ) 
+                                        : $requestForm->contract_manager_ou_id;
         $event->cardinal_number     =   1;
         $event->status              =   'pending';
         $event->event_type          =   'leader_ship_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
 
-        if($requestForm->superior_chief == 1){
+        if($requestForm->superior_chief == 1 || $contractManagerBelongsHAH){
             $event                      =   new EventRequestForm();
-            $event->ou_signer_user      =   $requestForm->contractOrganizationalUnit->father->id;
+            $event->ou_signer_user      =   $contractManagerBelongsHAH
+                                            ? Parameter::where('parameter', 'SDAHAH')->first()->value 
+                                            : $requestForm->contractOrganizationalUnit->father->id;
             $event->cardinal_number     =   2;
             $event->status              =   'pending';
             $event->event_type          =   'superior_leader_ship_event';
@@ -146,7 +151,8 @@ class EventRequestForm extends Model
     }
 
     public static function createSupplyEvent(RequestForm $requestForm){
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $parameter = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
@@ -159,9 +165,10 @@ class EventRequestForm extends Model
 
     public static function createNewBudgetEvent(RequestForm $requestForm)
     {
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $parameter = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'AbastecimientoHAH' : 'AbastecimientoSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event = new EventRequestForm();
-        $event->ou_signer_user      =   $ouSearch; // Abastecimiento
+        $event->ou_signer_user      =   $ouSearch; // Abastecimiento SSI o HAH
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
         $event->event_type          =   'pre_budget_event';

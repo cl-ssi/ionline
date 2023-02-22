@@ -103,9 +103,7 @@ class SearchRequests extends Component
 
     public function render()
     {   
-        $estab = Parameter::where('module', 'establishment')->where('parameter', 'HospitalAltoHospicio')->first()->value;
-        $parameters = Auth()->user()->organizationalUnit->establishment_id == $estab ? ['AdquisicionesHAH'] : ['AbastecimientoSSI', 'AdquisicionesHAH'];
-        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', $parameters)->pluck('value')->toArray();
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
         // dd($ouSearch);
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),

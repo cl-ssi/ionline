@@ -182,4 +182,10 @@ class OrganizationalUnit extends Model implements Auditable
 
         return $organizationalUnits;
     }
+
+    public function getOrganizationalUnitByLevel($level)
+    {
+        if($this->level == $level) return $this;
+        return $this->father->getOrganizationalUnitByLevel($level);
+    }
 }
