@@ -263,7 +263,7 @@ class PurchasingProcessController extends Controller
         $fundToBeSettled                          = new FundToBeSettled();
         $fundToBeSettled->date                    = Carbon::now();
         $fundToBeSettled->amount                  = $request->amount;
-        $fundToBeSettled->document_id             = Document::where('number', $request->memo_number)->where('type', 'Memo')->first()->id;
+        $fundToBeSettled->document_id             = $request->document_id;
         $fundToBeSettled->save();
 
         $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
