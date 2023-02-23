@@ -54,8 +54,8 @@ class Authorization extends Component
       $this->organizationalUnit = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->name;
       
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
-      if($eventType == 'technical_review_event' && !empty($iam_authorities_in)){
-        $this->position           = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->authorities->where('type', 'manager')->where('from', '<=',Carbon::now())->where('to', '>=',Carbon::now())->last()->position ?? auth()->user()->position;
+      if(!empty($iam_authorities_in)){
+        $this->position = $this->requestForm->eventRequestForms->where('status', 'pending')->first()->signerOrganizationalUnit->currentManager->position ?? auth()->user()->position;
       }
       else{
         $this->position = auth()->user()->position;

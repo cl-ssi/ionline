@@ -392,9 +392,10 @@ class RequestFormController extends Controller {
             $requestForm = RequestForm::find($modelId);
 
             //ACTUALIZAO EVENTO DE FINANZAS
-            $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
+            $event = $requestForm->eventRequestForms->where('event_type', 'finance_event')->first();
+            $event->update([
               'signature_date'       => Carbon::now(),
-              'position_signer_user' => auth()->user()->position,
+              'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
               'signer_user_id'       => auth()->id()
             ]);
@@ -442,7 +443,7 @@ class RequestFormController extends Controller {
             $event = $requestForm->eventRequestForms->where('event_type', 'budget_event')->where('status', 'pending')->first();
             $event->update([
               'signature_date'       => Carbon::now(),
-              'position_signer_user' => auth()->user()->position,
+              'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
               'signer_user_id'       => auth()->id()
             ]);
