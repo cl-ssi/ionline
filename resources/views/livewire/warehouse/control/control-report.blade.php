@@ -92,7 +92,7 @@
                                         {{ optional($controlItem->control->destination)->name }}
                                         @break
                                     @case(\App\Models\Warehouse\TypeDispatch::adjustInventory())
-                                        {{ optional($controlItem->control->typeDispatch)->name }}
+                                        {{ optional($controlItem->control->typeDispatch)->name }} - En Negativo
                                         @break
                                     @case(\App\Models\Warehouse\TypeDispatch::sendToStore())
                                         {{ optional($controlItem->control->destinationStore)->name }}
@@ -115,6 +115,9 @@
                                         @break
                                     @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                                         {{ $controlItem->control->po_code }}
+                                        @break
+                                    @case(\App\Models\Warehouse\TypeReception::adjustInventory())
+                                        {{ optional($controlItem->control->typeReception)->name }} - En Positivo
                                         @break
                                 @endswitch
                                 <br>

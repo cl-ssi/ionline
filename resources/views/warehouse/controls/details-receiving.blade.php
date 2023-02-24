@@ -114,28 +114,39 @@
     @if($control->isPurchaseOrder())
         <div class="form-row">
             <fieldset class="form-group col-md-2">
-                <label for="guide-date">Fecha Guía</label>
+                <label for="document-type">Tipo Documento</label>
                 <input
-                    type="date"
-                    id="guide-date"
+                    type="text"
+                    id="document-type"
                     class="form-control form-control-sm"
-                    value="{{ $control->guide_date }}"
+                    value="{{ $control->document_type_translate }}"
                     readonly
                 >
             </fieldset>
 
             <fieldset class="form-group col-md-2">
-                <label for="guide-number">Nro. Guía</label>
+                <label for="document-date">Fecha Documento</label>
                 <input
-                    type="text"
-                    id="guide-number"
+                    type="date"
+                    id="document-date"
                     class="form-control form-control-sm"
-                    value="{{ $control->guide_number }}"
+                    value="{{ $control->document_date }}"
                     readonly
                 >
             </fieldset>
 
-            <fieldset class="form-group col-md-3">
+            <fieldset class="form-group col-md-2">
+                <label for="document-number">Nro. Documento</label>
+                <input
+                    type="text"
+                    id="document-number"
+                    class="form-control form-control-sm"
+                    value="{{ $control->document_number }}"
+                    readonly
+                >
+            </fieldset>
+
+            <fieldset class="form-group col-md-2">
                 <label for="program-id">Programa</label>
                 <input
                     type="text"
@@ -146,7 +157,7 @@
                 >
             </fieldset>
 
-            <fieldset class="form-group col-md-5">
+            <fieldset class="form-group col-md-4">
                 <label for="note">Nota</label>
                 <input
                     type="text"

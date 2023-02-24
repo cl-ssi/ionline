@@ -1,13 +1,20 @@
 <div class="form-row">
     <fieldset class="form-group col-md-4">
         <label for="type-receiving">Tipo de Ingreso</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            value="Ingreso Normal"
+        <select
+            class="form-control custom-select-sm @error('type_reception_id') is-invalid @enderror"
+            wire:model.debounce.1500ms="type_reception_id"
             id="type-receiving"
-            readonly
         >
+            <option value="">Seleccione un tipo</option>
+            <option value="1">Ingreso Normal</option>
+            <option value="5">Ajuste de Inventario</option>
+        </select>
+        @error('type_reception_id')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
     </fieldset>
 
     <fieldset class="form-group col-md-4">

@@ -130,38 +130,6 @@
             >
         </fieldset>
     </div>
-
-    <div class="form-row">
-        <fieldset class="form-group col-md-3">
-            <label for="guide-date">Fecha Guía</label>
-            <input
-                type="date"
-                id="guide-date"
-                class="form-control form-control-sm @error('guide_date') is-invalid @enderror"
-                wire:model.debounce.1500ms="guide_date"
-            >
-            @error('guide_date')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-md-3">
-            <label for="guide-number">Número Guía</label>
-            <input
-                type="text"
-                id="guide-number"
-                class="form-control form-control-sm @error('guide_number') is-invalid @enderror"
-                wire:model.debounce.1500ms="guide_number"
-            >
-            @error('guide_number')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-    </div>
 @endif
 
 <div class="form-row">

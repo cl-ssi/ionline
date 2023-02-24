@@ -1,4 +1,6 @@
 <div>
+    @include('layouts.partials.flash_message')
+
     <div class="row">
         <div class="col my-2">
             <h5>
@@ -49,6 +51,7 @@
                     <th class="text-center">Estado</th>
                     <th class="text-center">Acta Ingreso Bodega</th>
                     <th>Facturas</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +62,7 @@
                 </tr>
                 @forelse($controls as $control)
                 <tr>
-                    <td class="text-center">
+                    <td class="text-center" nowrap>
                         <a
                             @if($control->isClose())
                                 href="{{ route('warehouse.control.add-product', [
@@ -95,6 +98,9 @@
                                 @break
                             @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                                 {{ $control->po_code }}
+                                @break
+                            @case(\App\Models\Warehouse\TypeReception::adjustInventory())
+                                {{ optional($control->typeReception)->name }}
                                 @break
                         @endswitch
                         <br>
@@ -143,14 +149,27 @@
                                 target="_blank"
                                 title="Ver Factura {{ $invoice->number }}"
                             >
-                                <span class="fas fa-file-invoice-dollar" aria-hidden="true"></span>
+                                <span class="fas fa-file-invoice-dollar" aria-hidden="true">
+                                </span>
                             </a>
                         @endforeach
+                    </td>
+                    <td class="text-center">
+                        <button
+                            class="btn btn-sm btn-outline-primary"
+                            wire:click="sendTechnicalRequest({{ $control }})"
+                            title="Enviar Firma Tecnica"
+                            @if(!$control->technicalSigner || $control->technicalSignature || $control->items->count() == 0)
+                                disabled
+                            @endif
+                        >
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </td>
                 </tr>
                 @empty
                     <tr class="text-center">
-                        <td colspan="9">
+                        <td colspan="10">
                             <em>No hay resultados</em>
                         </td>
                     </tr>
