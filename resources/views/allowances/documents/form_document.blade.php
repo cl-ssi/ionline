@@ -189,8 +189,9 @@
                 <th colspan="2">Gr. Cat. horas</th>
             </tr>
             <tr align="center">
-                <td colspan="2"></td>
-                <td colspan="2">{{ $allowance->allowanceValue->name }}</td>
+                <td colspan="2">{{ $allowance->position }}</td>
+                <td>{{ $allowance->allowanceValue->name }}</td>
+                <td>{{ $allowance->grade }}</td>
             </tr>
 
             <tr>

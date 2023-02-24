@@ -11,9 +11,9 @@
           </fieldset>
 
           <fieldset class="form-group col-2">
-              <label for="for_memo_number">N° Memo</label>
-              <input type="number" class="form-control form-control-sm" id="for_memo_number" name="memo_number"
-                  value="{{ old('memo_number') }}" required>
+              <label for="for_document_id">Código interno Memo</label>
+              <input type="number" class="form-control form-control-sm" id="for_document_id" name="document_id"
+                  value="{{ old('document_id') }}" required>
           </fieldset>
 
           <fieldset class="form-group col-2">

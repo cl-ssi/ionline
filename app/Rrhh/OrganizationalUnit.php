@@ -81,7 +81,30 @@ class OrganizationalUnit extends Model implements Auditable
     {
         return $this->hasMany(Category::class);
     }
-    
+
+    public function currentManager()
+    {
+        return $this->hasOne(Authority::class)
+            ->with('user','organizationalUnit')
+            ->where('date',today())
+            ->where('type','manager');
+    }
+
+    public function currentDelegate()
+    {
+        return $this->hasOne(Authority::class)
+            ->with('user','organizationalUnit')
+            ->where('date',today())
+            ->where('type','delegate');
+    }
+
+    public function currentSecretary()
+    {
+        return $this->hasOne(Authority::class)
+            ->with('user','organizationalUnit')
+            ->where('date',today())
+            ->where('type','secretary');
+    }
 
     public function scopeSearch($query, $name)
     {
@@ -181,5 +204,11 @@ class OrganizationalUnit extends Model implements Auditable
         }
 
         return $organizationalUnits;
+    }
+
+    public function getOrganizationalUnitByLevel($level)
+    {
+        if($this->level == $level) return $this;
+        return $this->father->getOrganizationalUnitByLevel($level);
     }
 }

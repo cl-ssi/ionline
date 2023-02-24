@@ -21,6 +21,7 @@ use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
 use App\Mail\RequestFormSignNotification;
+use App\Models\Parameters\Parameter;
 use App\Models\Parameters\Program;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -31,7 +32,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
 
-    public $name, $contractManagerId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM,
+    public $name, $contractManagerId, $contractManager, $superiorChief, $purchaseMechanism, $messagePM, $isHAH,
             $program, $fileRequests = [], $justify, $totalDocument, $technicalReviewOuId;
 
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF, $savedFiles;
@@ -88,6 +89,10 @@ class RequestFormCreate extends Component
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       $this->lstProgram             = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      if(auth()->user()->OrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+        $this->superiorChief = 1;
+        $this->isHAH = true;
+      }
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
@@ -259,7 +264,9 @@ class RequestFormCreate extends Component
                 //contractManagerId
                 //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
                 //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-                'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
+                'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value 
+                                            ? User::find($this->contractManagerId)->organizational_unit_id
+                                            : Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
                 'name'                  =>  $this->name,
                 'superior_chief'        =>  $this->superiorChief,
                 'justification'         =>  $this->justify,

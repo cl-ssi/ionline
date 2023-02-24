@@ -90,9 +90,12 @@ class RequestFormController extends Controller {
           $events_type[] = 'leader_ship_event';
           $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
           if(in_array($ouSearch, $iam_authorities_in)) $events_type[] = 'finance_event';
-          $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
-          if(in_array($ouSearch, $iam_authorities_in)) $events_type[] = 'supply_event';
-
+          $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
+          foreach($ousSearch as $ouSearch)
+            if(in_array($ouSearch, $iam_authorities_in)){
+                $events_type[] = 'supply_event';
+                break;
+            }
         }
         else {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
@@ -183,9 +186,9 @@ class RequestFormController extends Controller {
         }
 
         // return $new_budget_pending_to_sign;
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'AbastecimientoSSI')->first()->value;
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
         foreach($events_type as $event_type){
-            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || Auth::user()->organizationalUnit->id == $ouSearch){
+            if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || in_array(Auth::user()->organizationalUnit->id, $ouSearch)){
                 $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
                         ->where('status', '!=', 'pending')->latest('id')->paginate(15, ['*'], 'p1');
             }
@@ -389,9 +392,10 @@ class RequestFormController extends Controller {
             $requestForm = RequestForm::find($modelId);
 
             //ACTUALIZAO EVENTO DE FINANZAS
-            $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
+            $event = $requestForm->eventRequestForms->where('event_type', 'finance_event')->first();
+            $event->update([
               'signature_date'       => Carbon::now(),
-              'position_signer_user' => auth()->user()->position,
+              'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
               'signer_user_id'       => auth()->id()
             ]);
@@ -439,7 +443,7 @@ class RequestFormController extends Controller {
             $event = $requestForm->eventRequestForms->where('event_type', 'budget_event')->where('status', 'pending')->first();
             $event->update([
               'signature_date'       => Carbon::now(),
-              'position_signer_user' => auth()->user()->position,
+              'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
               'signer_user_id'       => auth()->id()
             ]);
