@@ -13,6 +13,7 @@ class ControlCreate extends Component
 {
     public $store;
     public $type;
+    public $type_reception_id;
     public $date;
     public $note;
     public $program_id;
@@ -39,6 +40,7 @@ class ControlCreate extends Component
         'note'              => 'nullable|string|min:2|max:255',
         'program_id'        => 'nullable|exists:cfg_programs,id',
         'origin_id'         => 'required|integer|exists:wre_origins,id',
+        'type_reception_id' => 'required|integer|exists:wre_type_receptions,id',
         'technical_signer_id' => 'required|integer|exists:users,id',
     ];
 
@@ -78,7 +80,7 @@ class ControlCreate extends Component
         $dataValidated['type'] = ($this->type == 'receiving') ? 1 : 0;
         $dataValidated['store_id'] = $this->store->id;
         $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
-        $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? TypeReception::receiving() : null;
+        $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? $dataValidated['type_reception_id'] : null;
         $dataValidated['reception_visator_id'] = $this->store->visator->id ?? null;
 
         $control = Control::create($dataValidated);
