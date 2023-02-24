@@ -7,7 +7,7 @@
 @include('wellness.nav')
 
 <h3>Carga de archivos TXT</h3>
-<form method="POST" action="#" enctype="multipart/form-data">
+<form method="POST" action="{{ route('wellness.dosfile.import') }}" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="file">Archivo TXT:</label>

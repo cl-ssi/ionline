@@ -15,7 +15,6 @@ class LoanController extends Controller
     {
         $loans = Loan::paginate(100);
         return view('wellness.loans.index', compact('loans'));
-
     }
 
     public function import(Request $request)

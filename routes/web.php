@@ -2127,7 +2127,7 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
 
     Route::prefix('dosfile')->as('dosfile.')->group(function () {
         Route::get('/', [WellnessController::class, 'dosindex'])->name('index');
-        //Route::post('/import', [LoanController::class, 'import'])->name('import');
+        Route::post('/import', [WellnessController::class, 'dosimport'])->name('import');
     });
 
 });
