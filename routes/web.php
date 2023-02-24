@@ -223,6 +223,7 @@ use App\Http\Controllers\Agreements\AccountabilityController;
 
 
 use App\Http\Controllers\Wellness\LoanController;
+use App\Http\Controllers\Wellness\WellnessController;
 
 
 
@@ -2117,9 +2118,16 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
 /* Rutas de Módulo de Binestar */
 Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function () {
+    Route::get('/', [WellnessController::class, 'index'])->name('index');
+
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');
         Route::post('/import', [LoanController::class, 'import'])->name('import');
+    });
+
+    Route::prefix('dosfile')->as('dosfile.')->group(function () {
+        Route::get('/', [WellnessController::class, 'dosindex'])->name('index');
+        //Route::post('/import', [LoanController::class, 'import'])->name('import');
     });
 
 });

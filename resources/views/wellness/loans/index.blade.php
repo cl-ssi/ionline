@@ -4,7 +4,9 @@
 
 @section('content')
 
-<h3>Carga de Prestamos</h3>
+@include('wellness.nav')
+
+<h3>Carga de Prestamos SIRH</h3>
 <form method="POST" action="{{ route('wellness.loans.import') }}" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
@@ -50,4 +52,5 @@
         @endforeach
     </tbody>
 </table>
+{{ $loans->links() }}
 @endsection

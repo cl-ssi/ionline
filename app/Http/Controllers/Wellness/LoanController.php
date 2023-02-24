@@ -13,8 +13,9 @@ class LoanController extends Controller
 
     public function index()
     {
-        $loans = Loan::all();
+        $loans = Loan::paginate(100);
         return view('wellness.loans.index', compact('loans'));
+
     }
 
     public function import(Request $request)
@@ -32,9 +33,7 @@ class LoanController extends Controller
                 $loan->rut = $row[1];
                 $loan->names = $row[2];
                 //TODO Ver el archivo original como trae el formato de fecha si con / o -
-                //dd($row);
                 $loan->date = date('Y-m-d', strtotime(str_replace('/','-',$row[3])));
-
                 $loan->number = $row[4];
                 $loan->late_number = $row[5];
                 $loan->late_interest = $row[6];
