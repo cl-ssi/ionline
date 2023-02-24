@@ -36,4 +36,9 @@ class TypeReception extends Model
     {
         return 4;
     }
+
+    public static function adjustInventory()
+    {
+        return 5;
+    }
 }
