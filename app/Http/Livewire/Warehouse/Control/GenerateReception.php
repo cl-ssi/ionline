@@ -10,15 +10,12 @@ use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PurchasingProcessDetail;
-use App\Models\RequestForms\RequestForm;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
-use App\Rrhh\Authority;
-use App\Services\SignatureService;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
@@ -42,8 +39,9 @@ class GenerateReception extends Component
     public $disabled_program;
     public $po_code;
     public $po_date;
-    public $guide_number;
-    public $guide_date;
+    public $document_number;
+    public $document_date;
+    public $document_type;
     public $supplier_name;
     public $branch_code;
     public $branch_name;
@@ -434,8 +432,9 @@ class GenerateReception extends Component
             'date' => $dataValidated['date'],
             'po_date' => Carbon::parse($dataValidated['po_date'])->format('Y-m-d H:i:s'),
             'po_code' => $dataValidated['po_code'],
-            'guide_number' => $dataValidated['guide_number'],
-            'guide_date' => $dataValidated['guide_date'],
+            'document_type' => $dataValidated['document_type'],
+            'document_number' => $dataValidated['document_number'],
+            'document_date' => $dataValidated['document_date'],
             'type_reception_id' => TypeReception::purchaseOrder(),
             'store_id' => $this->store->id,
             'program_id' => $program ? $program->id : null,
@@ -478,11 +477,6 @@ class GenerateReception extends Component
             }
         }
 
-        if($this->technical_signature)
-        {
-            $this->sendTechnicalRequest($control);
-        }
-
         $this->emit('clearSearchUser', false);
         $this->resetInputProduct();
         $this->resetInputReception();
@@ -490,30 +484,6 @@ class GenerateReception extends Component
         $this->po_items = [];
 
         session()->flash('success', 'El nuevo ingreso fue guardado exitosamente.');
-    }
-
-    public function sendTechnicalRequest(Control $control)
-    {
-        $technicalSignature = new SignatureService();
-        $technicalSignature->addResponsible($this->store->visator);
-        $technicalSignature->addSignature(
-            'Acta',
-            "Acta de Recepción Técnica #$control->id",
-            "Recepción #$control->id",
-            'Visación en cadena de responsabilidad',
-            true
-        );
-        $technicalSignature->addView('warehouse.pdf.report-reception', [
-            'type' => '',
-            'control' => $control,
-            'store' => $control->store,
-            'act_type' => 'reception'
-        ]);
-        $technicalSignature->addVisators(collect([]));
-        $technicalSignature->addSignatures(collect([$this->technical_signature]));
-        $technicalSignature = $technicalSignature->sendRequest();
-        $control->technicalSignature()->associate($technicalSignature);
-        $control->save();
     }
 
     public function clearAll()
@@ -550,8 +520,9 @@ class GenerateReception extends Component
         $this->supplier_name = null;
         $this->po_code = null;
         $this->po_date = null;
-        $this->guide_number = null;
-        $this->guide_date = null;
+        $this->document_type = null;
+        $this->document_number = null;
+        $this->document_date = null;
         $this->program_id = null;
         $this->note = null;
         $this->request_form = null;

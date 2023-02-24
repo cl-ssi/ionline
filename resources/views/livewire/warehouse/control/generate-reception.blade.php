@@ -99,14 +99,23 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-2 mb-0">
+            <label>&nbsp;</label>
             @if($request_form)
-                <label>&nbsp;</label>
                 <a
                     class="btn btn-sm btn-primary btn-block"
                     href="{{ route('request_forms.show', $request_form) }}"
                     target="_blank"
                 >
                     <i class="fas fa-file-alt"></i> FR Folio #{{ $request_form->folio }}
+                </a>
+            @endif
+            @if($request_form == null && !$error )
+                <a
+                    class="btn btn-sm btn-danger btn-block disabled"
+                    href="#"
+                    target="_blank"
+                >
+                    <i class="fas fa-exclamation-triangle"></i> No hay FR relacionada
                 </a>
             @endif
         </fieldset>
@@ -161,14 +170,17 @@
 
     <div class="form-row">
         <fieldset class="form-group col-sm-2">
-            <label for="guide-date">Fecha Guía</label>
-            <input
-                class="form-control form-control-sm @error('guide_date') is-invalid @enderror"
-                id="guide-date"
-                wire:model.debounce.1500ms="guide_date"
-                type="date"
+            <label for="document-type">Tipo Documento</label>
+            <select
+                wire:model.debounce.1500ms="document_type"
+                id="document-type"
+                class="form-control form-control-sm @error('document_type') is-invalid @enderror"
             >
-            @error('guide_date')
+                <option value="">Seleccione un tipo</option>
+                <option value="guide">Guia</option>
+                <option value="invoice">Factura</option>
+            </select>
+            @error('document_number')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -176,14 +188,29 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-2">
-            <label for="guide-number">Nro. Guía</label>
+            <label for="guide-date">Fecha Documento</label>
             <input
-                class="form-control form-control-sm @error('guide_number') is-invalid @enderror"
+                class="form-control form-control-sm @error('document_date') is-invalid @enderror"
+                id="guide-date"
+                wire:model.debounce.1500ms="document_date"
+                type="date"
+            >
+            @error('document_date')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-sm-2">
+            <label for="guide-number">Número Documento</label>
+            <input
+                class="form-control form-control-sm @error('document_number') is-invalid @enderror"
                 id="guide-number"
-                wire:model.debounce.1500ms="guide_number"
+                wire:model.debounce.1500ms="document_number"
                 type="text"
             >
-            @error('guide_number')
+            @error('document_number')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -214,7 +241,7 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-sm-5">
+        <fieldset class="form-group col-sm-3">
             <label for="note">Nota</label>
             <input
                 class="form-control form-control-sm @error('note') is-invalid @enderror"

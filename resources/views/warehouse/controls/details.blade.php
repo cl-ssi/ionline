@@ -4,7 +4,7 @@
             <label for="type">Tipo de {{ $control->type_format }}</label>
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 @if($control->isDispatch())
                     value="{{ optional($control->typeDispatch)->name }}"
                 @else
@@ -21,7 +21,7 @@
             <label for="date">Fecha {{ $control->type_format }}</label>
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 value="{{ $control->date_format }}"
                 id="date"
                 readonly
@@ -32,7 +32,7 @@
             <label for="program-id">Programa</label>
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 value="{{ $control->program_name }}"
                 id="program-id"
                 readonly
@@ -45,7 +45,7 @@
                     <label for="establishment-id">Establecimiento</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->organizationalUnit)->establishment->name }}"
                         id="establishment-id"
                         readonly
@@ -55,7 +55,7 @@
                     <label for="organizational-unit-id">Unidad Organizacional</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->organizationalUnit)->name }}"
                         id="organizational-unit-id"
                         readonly
@@ -67,7 +67,7 @@
                     <label for="destination-id">Destino</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->destination)->name }}"
                         id="destination-id"
                         readonly
@@ -79,7 +79,7 @@
                     <label for="store-destination-id">Bodega Destino</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->destinationStore)->name }}"
                         id="store-destination-id"
                         readonly
@@ -94,7 +94,7 @@
                     <label for="origin-id">Origen</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->origin)->name }}"
                         id="origin-id"
                         readonly
@@ -106,7 +106,7 @@
                     <label for="store-origin-id">Bodega Origen</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ optional($control->originStore)->name }}"
                         id="store-origin-id"
                         readonly
@@ -118,7 +118,7 @@
                     <label for="purchase-order-code">Código OC</label>
                     <input
                         type="text"
-                        class="form-control"
+                        class="form-control form-control-sm"
                         value="{{ $control->po_code }}"
                         id="purchase-order-code"
                         readonly
@@ -135,7 +135,7 @@
                 <input
                     type="text"
                     id="po-date"
-                    class="form-control"
+                    class="form-control form-control-sm"
                     value="{{ $control->po_date }}"
                     readonly
                 >
@@ -145,32 +145,8 @@
                 <input
                     type="text"
                     id="supplier-name"
-                    class="form-control"
+                    class="form-control form-control-sm"
                     value="{{ optional($control->supplier)->name }}"
-                    readonly
-                >
-            </fieldset>
-        </div>
-
-        <div class="form-row">
-            <fieldset class="form-group col-md-3">
-                <label for="guide-date">Fecha Guía</label>
-                <input
-                    type="date"
-                    id="guide-date"
-                    class="form-control"
-                    value="{{ $control->guide_date }}"
-                    readonly
-                >
-            </fieldset>
-
-            <fieldset class="form-group col-md-3">
-                <label for="guide-number">Número Guía</label>
-                <input
-                    type="text"
-                    id="guide-number"
-                    class="form-control"
-                    value="{{ $control->guide_number }}"
                     readonly
                 >
             </fieldset>
@@ -183,7 +159,7 @@
                 <label for="signer-id">Firmante</label>
                 <input
                     type="text"
-                    class="form-control"
+                    class="form-control form-control-sm"
                     value="{{ optional($control->signer)->full_name }}"
                     id="signer-id"
                     readonly
@@ -195,7 +171,7 @@
             <label for="note">Nota</label>
             <input
                 type="text"
-                class="form-control"
+                class="form-control form-control-sm"
                 value="{{ $control->note }}"
                 id="note"
                 readonly

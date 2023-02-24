@@ -28,8 +28,9 @@ class Control extends Model
         'confirm',
         'po_code',
         'po_date',
-        'guide_number',
-        'guide_date',
+        'document_type',
+        'document_number',
+        'document_date',
         'status',
         'store_id',
         'origin_id',
@@ -263,5 +264,23 @@ class Control extends Model
     public function getFormatDateAttribute()
     {
         return $this->date->day . ' de ' . $this->date->monthName . ' del ' . $this->date->year;
+    }
+
+    public function getDocumentTypeTranslateAttribute()
+    {
+        switch ($this->document_type) {
+            case 'invoice':
+                $documentType = "Factura";
+                break;
+
+            case 'guide':
+                $documentType = "Guía";
+                break;
+
+            default:
+                $documentType = "";
+                break;
+        }
+        return $documentType;
     }
 }
