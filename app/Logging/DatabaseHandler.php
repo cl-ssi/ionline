@@ -19,7 +19,7 @@ class DatabaseHandler extends AbstractProcessingHandler{
     protected function write(array $record):void
     {
        $data = array(
-           'user_id'       => auth()->user()->id ?? '',
+           'user_id'       => auth()->user()->id ?? null,
            'message'       => $record['message'],
            'uri'           => $_SERVER['REQUEST_URI'] ?? '',
            'formatted'     => $record['formatted'],
