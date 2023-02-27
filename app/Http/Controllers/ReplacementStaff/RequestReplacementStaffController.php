@@ -14,8 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-// use App\Mail\NewRequestReplacementStaff;
-// use App\Mail\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationNewRequest;
 use Illuminate\Support\Facades\Storage;

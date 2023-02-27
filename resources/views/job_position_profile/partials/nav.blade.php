@@ -6,10 +6,8 @@
             </a>
 
             <div class="dropdown-menu">
-                {{-- @if(Auth::user()->can('Allowances: create') || App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)) --}}
-                    <a class="dropdown-item {{ active(['job_position_profile.index']) }}" href="{{ route('job_position_profile.index') }}"><i class="fas fa-id-badge"></i> Mis Perfiles de Cargos</a>
-                    <a class="dropdown-item {{ active(['job_position_profile.create']) }}" href="{{ route('job_position_profile.create') }}"><i class="fas fa-plus"></i> Nuevo Perfil de Cargo</a>
-                {{-- @endif --}}
+                <a class="dropdown-item {{ active(['job_position_profile.index']) }}" href="{{ route('job_position_profile.own_index') }}"><i class="fas fa-id-badge"></i> Mis Perfiles de Cargos</a>
+                <a class="dropdown-item {{ active(['job_position_profile.create']) }}" href="{{ route('job_position_profile.create') }}"><i class="fas fa-plus"></i> Nuevo Perfil de Cargo</a>
 
                 {{-- @can('Allowances: all') --}}
                     <div class="dropdown-divider"></div>

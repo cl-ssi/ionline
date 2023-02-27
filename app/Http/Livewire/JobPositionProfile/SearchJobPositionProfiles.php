@@ -19,9 +19,6 @@ class SearchJobPositionProfiles extends Component
                     latest()
                     ->Where('user_creator_id', Auth::user()->id)
                     ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
-                    // ->search($this->selectedStatus,
-                    //     $this->selectedId,
-                    //     $this->selectedUserAllowance)
                     ->paginate(50)
             ]);
         }
