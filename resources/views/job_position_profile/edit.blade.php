@@ -10,7 +10,7 @@
 
 <br>
 
-<h6>Progreso</h5>
+<h5>Progreso</h5>
 
 <div class="table-responsive">
     <table class="table table-sm small text-center">
@@ -106,6 +106,28 @@
     </div>
 </div>
 
+<hr />
+
+
+
+<div class="row">
+    <div class="col-md-3">
+        <h6><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h6>
+    </div>
+    <div class="col-md-9">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-plus"></i> Agregar Mensaje
+        </button>
+    </div>
+</div>
+
+@include('job_position_profile.modals.message')
+
+<br>
+
+@livewire('job-position-profile.show-messages', [
+    'jobPositionProfile'    => $jobPositionProfile
+])
 
 @can(['Job Position Profile: audit'])
 <hr/>

@@ -49,15 +49,15 @@ class TechnicalEvaluationController extends Controller
     public function store(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
         if($requestReplacementStaff->assignEvaluations->count() > 0){
-          $previous_assign = $requestReplacementStaff->assignEvaluations->last();
-          $previous_assign->status = NULL;
-          $previous_assign->save();
+            $previous_assign = $requestReplacementStaff->assignEvaluations->last();
+            $previous_assign->status = NULL;
+            $previous_assign->save();
 
-          $assign_evaluation = new AssignEvaluation($request->All());
-          $assign_evaluation->user()->associate(Auth::user());
-          $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
-          $assign_evaluation->status = 'assigned';
-          $assign_evaluation->save();
+            $assign_evaluation = new AssignEvaluation($request->All());
+            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
+            $assign_evaluation->status = 'assigned';
+            $assign_evaluation->save();
         }
         else{
             $assign_evaluation = new AssignEvaluation($request->All());

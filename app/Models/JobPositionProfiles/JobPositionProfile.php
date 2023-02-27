@@ -55,6 +55,10 @@ class JobPositionProfile extends Model implements Auditable
         return $this->hasMany('App\Models\JobPositionProfiles\ExpertiseProfile', 'job_position_profile_id');
     }
 
+    public function jobPositionProfileSigns() {
+        return $this->hasMany('App\Models\JobPositionProfiles\JobPositionProfileSign');
+    }
+
     public function getSubordinatesValueAttribute() {
         switch($this->subordinates) {
           case '0':

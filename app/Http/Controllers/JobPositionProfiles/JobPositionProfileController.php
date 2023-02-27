@@ -28,6 +28,11 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.index');
     }
 
+    public function own_index()
+    {   
+        return view('job_position_profile.own_index');
+    }
+
     public function index_review()
     {   
         return view('job_position_profile.index_review');
@@ -270,5 +275,12 @@ class JobPositionProfileController extends Controller
     public function destroy(JobPositionProfile $jobPositionProfile)
     {
         //
+    }
+
+    public function create_document(JobPositionProfile $jobPositionProfile){
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('job_position_profile.documents.document', compact('jobPositionProfile'));
+
+        return $pdf->stream('mi-archivo.pdf');
     }
 }

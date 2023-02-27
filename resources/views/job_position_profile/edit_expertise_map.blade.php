@@ -91,6 +91,34 @@
 <hr>
 <br>
 
+@if($jobPositionProfile->staff_decree_by_estament_id == NULL || 
+    ($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL) ||
+    $jobPositionProfile->working_team == NULL ||
+    $jobPositionProfile->jppLiabilities->count() <= 0 ||
+    $jobPositionProfile->jppExpertises->count() <= 0)
+    <div class="alert alert-danger alert-dismissible fade show">
+        Estimado Usuario: Favor completar la siguiente información: <br><br>
+        @if($jobPositionProfile->staff_decree_by_estament_id == NULL)
+            <b>II. REQUISITOS FORMALES</b><br>
+        @endif
+        @if($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL)
+            <b>III. PROPÓSITOS DEL CARGO</b><br>
+        @endif
+        @if($jobPositionProfile->working_team == NULL)
+            <b>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</b><br>
+        @endif
+        @if($jobPositionProfile->jppLiabilities->count() <= 0)
+            <b>V. RESPONSABILIDAD DEL CARGO</b><br>
+        @endif
+        @if($jobPositionProfile->jppExpertises->count() <= 0)
+            <b>VI. MAPA DE COMPETENCIAS DEL S.S.I</b><br>
+        @endif
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
 <h6 class="small"><b>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</b></h6> 
 
 <br>
@@ -219,6 +247,7 @@
 
 <br>
 
+@if($jobPositionProfile->JobPositionProfileSigns->count() == 0)
 <div class="row">
     <div class="col">
         <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.store', $jobPositionProfile) }}" enctype="multipart/form-data"/>
@@ -230,6 +259,7 @@
         </form>
     </div>
 </div>
+@endif
 
 <hr />
 
