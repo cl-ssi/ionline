@@ -33,6 +33,7 @@ class SearchRequests extends Component
     public $selectedProgram = null;
     public $selectedPo = null;
     public $selectedTender = null;
+    public $selectedSupplier = null;
     public $result = null;
     public $inbox;
 
@@ -42,7 +43,7 @@ class SearchRequests extends Component
 
     protected $queryString = ['selectedStatus', 'selectedStatusPurchase', 'selectedId', 'selectedFolio',
         'selectedName', 'selectedStartDate', 'selectedEndDate', 'selectedRequester', 'selectedRequesterOuName',
-        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo'
+        'selectedAdmin', 'selectedAdminOuName', 'selectedPurchaser', 'selectedProgram', 'selectedPo', 'selectedSupplier'
     ];
 
     public function mount() {
@@ -93,7 +94,8 @@ class SearchRequests extends Component
         $this->selectedPurchaser,
         $this->selectedProgram,
         $this->selectedPo,
-        $this->selectedTender
+        $this->selectedTender,
+        $this->selectedSupplier
         )
         ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
@@ -186,6 +188,10 @@ class SearchRequests extends Component
     }
 
     public function updatingPo(){
+        $this->resetPage();
+    }
+
+    public function updatingSupplier(){
         $this->resetPage();
     }
 }

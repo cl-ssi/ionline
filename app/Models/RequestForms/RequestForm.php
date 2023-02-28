@@ -439,11 +439,11 @@ class RequestForm extends Model implements Auditable
 
     public function scopeSearch($query, $status_search, $status_purchase_search, $id_search, $folio_search, $name_search,
         $start_date_search, $end_date_search, $requester_search, $requester_ou_id, $admin_search, $admin_ou_id, $purchaser_search, 
-        $program_search, $purchase_order_search, $tender_search)
+        $program_search, $purchase_order_search, $tender_search, $supplier_search)
     {
         if ($status_search OR $status_purchase_search OR $id_search OR $folio_search OR $name_search 
             OR $start_date_search OR $end_date_search OR $requester_search OR $requester_ou_id OR $admin_search 
-            OR $admin_ou_id OR $purchaser_search OR $program_search OR $purchase_order_search OR $tender_search) {
+            OR $admin_ou_id OR $purchaser_search OR $program_search OR $purchase_order_search OR $tender_search OR $supplier_search) {
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('status', $status_search);
@@ -532,6 +532,37 @@ class RequestForm extends Model implements Auditable
                              ->where('arq_tenders.tender_number', '=', $tender_search);
                     });
                 });
+            }
+
+            if($supplier_search != ''){
+
+                $query->whereHas('purchasingProcess.details', function($q) use ($supplier_search){
+                    $q->join('arq_immediate_purchases', function ($join) use ($supplier_search) {
+                        $join->on('arq_purchasing_process_detail.immediate_purchase_id', '=', 'arq_immediate_purchases.id')
+                             ->where('arq_immediate_purchases.po_supplier_name', 'LIKE', '%'.$supplier_search.'%');
+                             //->orwhere('arq_immediate_purchases.po_supplier_office_run','LIKE', '%'.$supplier_search.'%');
+                    });
+                }) 
+
+                ->orWhereHas('purchasingProcess.details', function($q) use ($supplier_search){
+                    $q->join('arq_internal_purchase_orders', function ($join) use ($supplier_search) {
+                        $join->on('arq_purchasing_process_detail.internal_purchase_order_id', '=', 'arq_internal_purchase_orders.id')
+                            ->join('cfg_suppliers', function ($join) use ($supplier_search) {
+                                $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
+                                    ->where('cfg_suppliers.name', 'LIKE', '%'.$supplier_search.'%');
+                                    //->orwhere('arq_immediate_purchases.po_supplier_office_run','LIKE', '%'.$supplier_search.'%');
+                            });
+                    });
+                });
+                
+
+                // ->join('cfg_suppliers', function ($join) use ($supplier_search) {
+                //     $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
+                //         ->where('arq_immediate_purchases.po_supplier_name', 'LIKE', '%'.$supplier_search.'%');
+                // });
+
+
+                /* Proveedores de las OC Interna */
             }
         }
     }
