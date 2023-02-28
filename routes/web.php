@@ -2127,6 +2127,9 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 /* Rutas de Módulo de Binestar */
 Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function () {
     Route::get('/', [WellnessController::class, 'index'])->name('index');
+    Route::get('/ingresos', [WellnessController::class, 'ingresos'])->name('ingresos');
+    Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
+    Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');

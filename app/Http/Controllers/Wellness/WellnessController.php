@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wellness;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Wellness\Balance;
 
 class WellnessController extends Controller
 {
@@ -11,6 +12,24 @@ class WellnessController extends Controller
     public function index()
     {
         return view('wellness.index');
+    }
+
+    public function balances()
+    {
+        $balances = Balance::all();
+        return view('wellness.balance', compact('balances'));
+    }
+
+    public function ingresos()
+    {
+        $balances = Balance::where('tipo', 'ingresos')->get();
+        return view('wellness.balance', compact('balances'));
+    }
+
+    public function gastos()
+    {
+        $balances = Balance::where('tipo', 'gastos')->get();
+        return view('wellness.balance', compact('balances'));
     }
 
 
@@ -21,51 +40,89 @@ class WellnessController extends Controller
     }
 
     public function dosimport(Request $request)
-{
-    /*1 INGRESOS Y 2 EGRESOS
-    aclarar dudas con Moreno
-    */
-    // Obtener el archivo que se cargó en el formulario
-    $file = $request->file('file');
+    {
+        // Obtener el archivo que se cargó en el formulario
+        $file = $request->file('file');
 
-    // Inicializar arreglos de ingresos y gastos
-    $ingresos = array();
-    $gastos = array();
-    
-    // Establecer banderas para ingresos y gastos
-    $en_ingresos = false;
-    $en_gastos = false;
+        // Inicializar arreglos de ingresos y gastos
+        $ingresos = array();
+        $gastos = array();
 
-    // Leer el archivo de texto línea por línea
-    $handle = fopen($file, "r");
-    if ($handle) {
-        while (($line = fgets($handle)) !== false) {
-            // Buscar la línea de inicio de ingresos
-            if (strpos($line, ';I N G R E S O S;') !== false) {
-                $en_ingresos = true;
-                continue;
+        // Abrir el archivo y leer línea por línea
+        $handle = fopen($file->getPathname(), "r");
+
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+
+                // Encontrar la sección de ingresos
+                if (strpos($line, "I N G R E S O S;INICIAL;PRESUPUESTO;AJUSTADO;EJECUTADO;PRESUPUEST.") !== false) {
+                    // Leer líneas hasta encontrar la sección de gastos
+                    while (($line = fgets($handle)) !== false && strpos($line, "G A S T O S ;INICIAL;PRESUPUESTO;AJUSTADO;EJECUTADO;PRESUPUEST") === false) {
+                        // Agregar la línea a los ingresos
+                        if (preg_match('/^(?!(;{3})).*?;.*?;.*?;.*?;.*?;.*?;.*?$/', $line) && substr_count($line, ';') == 7) {
+                            $ingresos[] = $line;
+                        }
+                    }
+                }
+
+                // Encontrar la sección de gastos
+                if (strpos($line, "G A S T O S ;INICIAL;PRESUPUESTO;AJUSTADO;EJECUTADO;PRESUPUEST") !== false) {
+                    // Leer líneas hasta el final del archivo
+                    while (($line = fgets($handle)) !== false) {
+                        // Agregar la línea a los gastos
+                        if (preg_match('/^(?!(;{3})).*?;.*?;.*?;.*?;.*?;.*?;.*?$/', $line) && substr_count($line, ';') == 7) {
+                            $gastos[] = $line;
+                        }
+                    }
+                }
             }
-            
-            // Agregar cada línea al arreglo de ingresos mientras se esté en la sección de ingresos
-            if ($en_ingresos) {
-                $ingresos[] = $line;
-            }
-            
-            // Buscar la línea de inicio de gastos
-            if (strpos($line, ';;GASTOS') !== false) {
-                $en_ingresos = false;
-                $en_gastos = true;
-                continue;
-            }
-            
-            // Agregar cada línea al arreglo de gastos mientras se esté en la sección de gastos
-            if ($en_gastos) {
-                $gastos[] = $line;
-            }
+
+            // Cerrar el archivo
+            fclose($handle);
         }
-        fclose($handle);
-    }
-    dd($ingresos);
-}
 
+        // Recorrer los vectores de ingresos y gastos y actualizar o crear los registros correspondientes
+        foreach ($ingresos as $line) {
+            // Parsear la línea de ingresos
+            $data = explode(';', $line);
+            // Separar el valor del campo 'codigo' en tres partes
+            $codigo_parts = explode('.', $data[1]);
+            Balance::updateOrCreate([
+                'tipo' => 'ingresos',
+                'codigo' => $data[1],
+                'titulo' => $codigo_parts[0],
+                'item' => $codigo_parts[1],
+                'asignacion' => $codigo_parts[2],
+                'glosa' => $data[2],
+                'inicial' => $data[3],
+                'traspaso' => $data[4],
+                'ajustado' => $data[5],
+                'ejecutado' => $data[6],
+                'saldo' => $data[7],
+            ]);
+        }
+
+        foreach ($gastos as $line) {
+            // Parsear la línea de gastos
+            $data = explode(';', $line);
+            // Separar el valor del campo 'codigo' en tres partes
+            $codigo_parts = explode('.', $data[1]);
+            Balance::updateOrCreate([
+                'tipo' => 'gastos',
+                'codigo' => $data[1],
+                'titulo' => $codigo_parts[0],
+                'item' => $codigo_parts[1],
+                'asignacion' => $codigo_parts[2],
+                'glosa' => $data[2],
+                'inicial' => $data[3],
+                'traspaso' => $data[4],
+                'ajustado' => $data[5],
+                'ejecutado' => $data[6],
+                'saldo' => $data[7],
+            ]);
+        }
+
+        // Agregar mensaje flash y redireccionar a la página anterior
+        return redirect()->back()->with('success', 'Archivo cargado exitosamente.');
+    }
 }
