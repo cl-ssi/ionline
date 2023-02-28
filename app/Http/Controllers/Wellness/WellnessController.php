@@ -44,6 +44,11 @@ class WellnessController extends Controller
         // Obtener el archivo que se cargó en el formulario
         $file = $request->file('file');
 
+        // Obtener el mes y el año del formulario
+        $mes = $request->input('month');
+        $ano = $request->input('year');
+
+
         // Inicializar arreglos de ingresos y gastos
         $ingresos = array();
         $gastos = array();
@@ -88,6 +93,8 @@ class WellnessController extends Controller
             // Separar el valor del campo 'codigo' en tres partes
             $codigo_parts = explode('.', $data[1]);
             Balance::updateOrCreate([
+                'ano' => $ano,
+                'mes' => $mes,
                 'tipo' => 'ingresos',
                 'codigo' => $data[1],
                 'titulo' => $codigo_parts[0],
@@ -108,6 +115,8 @@ class WellnessController extends Controller
             // Separar el valor del campo 'codigo' en tres partes
             $codigo_parts = explode('.', $data[1]);
             Balance::updateOrCreate([
+                'ano' => $ano,
+                'mes' => $mes,
                 'tipo' => 'gastos',
                 'codigo' => $data[1],
                 'titulo' => $codigo_parts[0],
