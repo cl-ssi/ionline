@@ -30,6 +30,7 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
         "spatie/laravel-permission": "^3.13",
+        "stackkit/laravel-google-cloud-scheduler": "^2.0",
         "superbalist/laravel-google-cloud-storage": "^2.2"
     },
     "require-dev": {
