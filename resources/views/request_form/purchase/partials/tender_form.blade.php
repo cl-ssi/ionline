@@ -129,6 +129,13 @@
                     <label for="for_resol_adjudication">Nº Resol. de Adjudicación:</label>
                     <input type="text" class="form-control form-control-sm" id="for_resol_adjudication" name="resol_adjudication" value="{{ old('resol_adjudication') }}">
                 </fieldset>
+
+                <fieldset class="form-check" style="display:flex;align-items:center;">
+                <input class="form-check-input" type="checkbox" id="for_is_lower_amount" name="is_lower_amount" {{ old('is_lower_amount') ? 'checked' : '' }}>
+                <label class="form-check-label" for="for_is_lower_amount">
+                    Licitación monto menor a 1000 UTM
+                </label>
+                </fieldset>
             </div>
             <div class="form-row">
                 <!-- Licitacion LP/LQ -->
