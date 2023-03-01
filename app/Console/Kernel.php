@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\BirthdayGreeting;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,9 +27,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('clean:tempDir')->daily();
-        $schedule->command('change:staffStatus')->daily();
-        $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
+        if(env('OLD_SERVER')){
+            $schedule->command('clean:tempDir')->daily();
+            $schedule->command('change:staffStatus')->daily();
+            $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
+        }else{
+            $schedule->command('command:birthdayGretting')->daily();
+        }
     }
 
     /**
