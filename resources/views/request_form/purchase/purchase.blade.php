@@ -119,7 +119,7 @@
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending  || $requestForm->has_increased_expense) disabled @endif >
-                    Solicitar presupuesto
+                    Cambiar presupuesto
                 </button>
 
                 @include('request_form.purchase.modals.request_new_budget')
@@ -907,16 +907,63 @@
             </div>
         </div>
     </div>
-    @if($requestForm->purchasingProcess)
     <div class="card">
         <div class="card-header" id="headingThree">
             <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Información de la Compra
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                        data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Firmas
                 </button>
             </h2>
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+                <h6 class="mt-3 mt-4">Historial de cambios</h6>
+                <div class="table-responsive-md">
+                    <table class="table table-sm small text-muted mt-3">
+                        <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Modificaciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($requestForm->eventRequestForms as $eventRequestForm)
+                            @if($eventRequestForm->audits->count() > 0)
+                                @foreach($eventRequestForm->audits->sortByDesc('updated_at') as $audit)
+                                    <tr>
+                                        <td nowrap>{{ $audit->created_at }}</td>
+                                        <td nowrap>{{ optional($audit->user)->fullName }}</td>
+                                        <td>
+                                            @foreach($audit->getModified() as $attribute => $modified)
+                                                @if(isset($modified['old']) OR isset($modified['new']))
+                                                    <strong>{{ $attribute }}</strong>
+                                                    :  {{ isset($modified['old']) ? $modified['old'] : '' }}
+                                                    => {{ $modified['new'] }};
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if($requestForm->purchasingProcess)
+    <div class="card">
+        <div class="card-header" id="headingFour">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Información de la Compra
+                </button>
+            </h2>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
             <div class="card-body">
                 <h6 class="mt-3 mt-4">Historial de cambios</h6>
                 <div class="table-responsive-md">
@@ -953,14 +1000,14 @@
         </div>
     </div>
     <div class="card">
-        <div class="card-header" id="headingFour">
+        <div class="card-header" id="headingFive">
             <h2 class="mb-0">
-                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                     Historial de Procesos de Compra
                 </button>
             </h2>
         </div>
-        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
             <div class="card-body">
                 <h6 class="mt-3 mt-4">Historial de cambios</h6>
                 <div class="table-responsive-md">
@@ -1049,9 +1096,10 @@
     var year = new Date().getFullYear();
 
     // se imprime valor % boleta de honorarios que corresponda segun el año vigente
-    $('#for_tax option[value=bh]').text("Boleta de Honorarios " + (withholding_tax[year] ? withholding_tax[year] * 100 : withholding_tax[Object.keys(withholding_tax).pop()] * 100) + "%");
+    $('#for_tax option[value=bh],#for_new_tax option[value=bh]').text("Boleta de Honorarios " + (withholding_tax[year] ? withholding_tax[year] * 100 : withholding_tax[Object.keys(withholding_tax).pop()] * 100) + "%");
 
     calculateAmount();
+    calculateNewAmount();
     @if(isset($result_details))
     calculateAmount(true);
     @endif
@@ -1121,6 +1169,17 @@
         if(checked && for_po_discounts == 0 && for_po_charges == 0) $('#for_amount').val(total.toFixed(2));
     }
 
+    function calculateNewAmount() {
+        var total = 0;
+        $('input[name="new_item_total[]').each(function() {
+            var val = Math.round(this.value * 100) / 100;
+            if (!isNaN(val))
+                total += val;
+        });
+
+        $('#total_new_amount').val(total.toFixed(2));
+    }
+
     // Calcular fecha de entrega a partir de la suma de dias habiles o corridos con la fecha de la OC aceptada
     $('#for_po_accepted_date,#for_days_delivery,#for_days_type_delivery').on('change keyup', function() {
         var fechaAceptada = $('#for_po_accepted_date').val();
@@ -1188,6 +1247,11 @@
     $('#for_has_taking_of_reason').change(function() {
         $('input[name=taking_of_reason_file]').prop('required', this.checked);
         $('input[name=taking_of_reason_file]').prop('disabled', !this.checked);
+    });
+
+    $('#for_is_lower_amount').change(function() {
+        $('input[name=resol_contract],input[name=guarantee_ticket],input[name=guarantee_ticket_exp_date],input[name=resol_contract_file],input[name=guarantee_ticket_file],input[name=has_taking_of_reason],input[name=taking_of_reason_date],input[name=memo_number],input[name=memo_file]').prop('required', !this.checked);
+        $('input[name=resol_contract],input[name=guarantee_ticket],input[name=guarantee_ticket_exp_date],input[name=resol_contract_file],input[name=guarantee_ticket_file],input[name=has_taking_of_reason],input[name=taking_of_reason_date],input[name=memo_number],input[name=memo_file]').prop('disabled', this.checked);
     });
 
     $('#for_status').change(function() {
@@ -1422,6 +1486,18 @@
 
 
 
+    });
+
+    //NEW BUDGET EVENTS
+    $('#for_new_quantity,#for_new_unit_value,#for_new_tax').on('change keyup', function() {
+        var tr = $(this).closest('tr')
+        var qty = tr.find('input[name="new_quantity[]"]')
+        var price = tr.find('input[name="new_unit_value[]"]')
+        var tax = tr.find('select[name="new_tax[]"] option:selected')
+        var total = tr.find('input[name="new_item_total[]"]')
+
+        total.val((totalValueWithTaxes(qty.val() * price.val(), tax.val())).toFixed(2));
+        calculateNewAmount()
     });
 </script>
 

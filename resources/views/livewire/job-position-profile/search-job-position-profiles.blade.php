@@ -30,8 +30,6 @@
 
     </div>
 
-    {{-- dd($jobPositionProfiles->first()) --}}
-
     @if($jobPositionProfiles->count() > 0)
         <div class="row">
             <div class="col">
@@ -116,6 +114,26 @@
                                         <i class="fas fa-signature"></i>
                                     </a>
                                 @endif    
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($jobPositionProfile->status == "completed")
+                                
+                            @else
+                                <a href="{{ route('job_position_profile.document.create_document', $jobPositionProfile) }}"
+                                    class="btn btn-sm btn-outline-secondary" 
+                                    target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
+                                </a>
+                                {{--
+                                <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+                                    class="btn btn-info btn-sm float-right" 
+                                    title="Selección" 
+                                    target="_blank">
+                                    Exportar Resumen <i class="fas fa-file"></i>
+                                </a>
+                                --}}
                             @endif
                         </td>
                     <tr>

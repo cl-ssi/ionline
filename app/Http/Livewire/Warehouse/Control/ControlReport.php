@@ -49,7 +49,6 @@ class ControlReport extends Component
 
     public function getControlItems()
     {
-        app('debugbar')->log($this->type);
         $controlItems = ControlItem::query()
             ->whereHas('control', function($query) {
                 $query->whereStoreId($this->store->id)

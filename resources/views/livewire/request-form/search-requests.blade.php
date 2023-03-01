@@ -104,6 +104,11 @@
                 <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder=""
                     name="tender_search" wire:model.debounce.500ms="selectedTender">
             </fieldset>
+            <fieldset class="form-group col-12 col-md-4">
+                <label for="for_supplier">Proveedor</label>
+                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE"
+                    name="supplier_search" wire:model.debounce.500ms="selectedSupplier">
+            </fieldset>
             @endif
         </div>
     </div>

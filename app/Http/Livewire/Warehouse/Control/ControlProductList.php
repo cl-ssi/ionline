@@ -6,7 +6,6 @@ use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Warehouse\Product;
 use App\Models\Warehouse\TypeReception;
-use App\Services\SignatureService;
 use Livewire\Component;
 
 class ControlProductList extends Component
@@ -138,11 +137,6 @@ class ControlProductList extends Component
             'status' => false,
         ]);
 
-        if($this->control->isReceiving() && $this->control->technicalSigner)
-        {
-            $this->sendTechnicalRequest($this->control);
-        }
-
         session()->flash('success', 'El ' . $this->control->type_format . ' fue cargado exitosamente.');
 
         return redirect()->route('warehouse.controls.index', [
@@ -150,29 +144,5 @@ class ControlProductList extends Component
             'type' => $this->control->isReceiving() ? 'receiving' : 'dispatch',
             'nav' => $this->nav,
         ]);
-    }
-
-    public function sendTechnicalRequest(Control $control)
-    {
-        $technicalSignature = new SignatureService();
-        $technicalSignature->addResponsible($this->store->visator);
-        $technicalSignature->addSignature(
-            'Acta',
-            "Acta de Recepción Técnica #$control->id",
-            "Recepción #$control->id",
-            'Visación en cadena de responsabilidad',
-            true
-        );
-        $technicalSignature->addView('warehouse.pdf.report-reception', [
-            'type' => '',
-            'control' => $control,
-            'store' => $control->store,
-            'act_type' => 'reception'
-        ]);
-        $technicalSignature->addVisators(collect([]));
-        $technicalSignature->addSignatures(collect([$control->technicalSigner]));
-        $technicalSignature = $technicalSignature->sendRequest();
-        $control->technicalSignature()->associate($technicalSignature);
-        $control->save();
     }
 }

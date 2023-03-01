@@ -17,6 +17,10 @@ class JobPositionProfileSign extends Model implements Auditable
         'position', 'event_type', 'status', 'observation', 'date_sign'
     ];
 
+    public function organizationalUnit() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];

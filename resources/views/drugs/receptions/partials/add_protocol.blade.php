@@ -1,4 +1,5 @@
 @can('Drugs: add protocols')
+    <!-- TODO: Parametrizar -->
     @if($item->substance->id == 2 OR
         $item->substance->id == 10 OR
         $item->substance->id == 21 OR
@@ -8,7 +9,7 @@
         <div class="card mt-4 d-print-none">
             <div class="card-body">
 
-                <h5 class="card-title">Agregar protocolo a item id: {{ $item->id }} {{ $item->substance->name }} Nue: {{ $item->nue }}</h5>
+                <h5 class="card-title">Agregar protocolo a ítem id: {{ $item->id }} {{ $item->substance->name }} Nue: {{ $item->nue }}</h5>
 
                 @for ($i = 1; $i <= $item->sample_number; $i++)
                     @php($existe = false)

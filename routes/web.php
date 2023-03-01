@@ -181,6 +181,7 @@ use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\Mammography\MammographyController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
+use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\Indicators\SingleParameterController;
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\IaapsController;
@@ -223,6 +224,7 @@ use App\Http\Controllers\Agreements\AccountabilityController;
 
 
 use App\Http\Controllers\Wellness\LoanController;
+use App\Http\Controllers\Wellness\WellnessController;
 
 
 
@@ -506,6 +508,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 /* Replacepent Staff */
 Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
+    Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
@@ -525,6 +528,12 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
     Route::prefix('sign')->name('sign.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [JobPositionProfileSignController::class, 'store'])->name('store');
+    });
+    Route::prefix('message')->name('message.')->group(function(){
+        Route::post('/{jobPositionProfile}/store', [MessageController::class, 'store'])->name('store');
+    });
+    Route::prefix('document')->name('document.')->group(function(){
+        Route::get('/create_document/{jobPositionProfile}', [JobPositionProfileController::class, 'create_document'])->name('create_document');
     });
 });
 /** Inicio Perfil de Cargos */
@@ -2117,9 +2126,19 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
 /* Rutas de Módulo de Binestar */
 Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function () {
+    Route::get('/', [WellnessController::class, 'index'])->name('index');
+    Route::get('/ingresos', [WellnessController::class, 'ingresos'])->name('ingresos');
+    Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
+    Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
+
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');
         Route::post('/import', [LoanController::class, 'import'])->name('import');
+    });
+
+    Route::prefix('dosfile')->as('dosfile.')->group(function () {
+        Route::get('/', [WellnessController::class, 'dosindex'])->name('index');
+        Route::post('/import', [WellnessController::class, 'dosimport'])->name('import');
     });
 
 });

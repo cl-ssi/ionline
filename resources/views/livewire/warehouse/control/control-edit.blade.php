@@ -14,6 +14,14 @@
                 >
                     <i class="fas fa-file-alt"></i> FR Folio #{{ $control->requestForm->folio }}
                 </a>
+            @else
+                <a
+                    class="btn btn-sm btn-danger disabled"
+                    href="#"
+                    target="_blank"
+                >
+                    <i class="fas fa-exclamation-triangle"></i> No hay FR relacionada
+                </a>
             @endif
         </div>
     </div>

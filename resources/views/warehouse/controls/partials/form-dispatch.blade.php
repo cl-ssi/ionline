@@ -124,7 +124,7 @@
             <fieldset class="form-group col-md-4">
                 <label for="destination-id">Destino</label>
                 <select
-                    class="form-control custom-control-sm @error('destination_id') is-invalid @enderror"
+                    class="form-control form-control-sm @error('destination_id') is-invalid @enderror"
                     wire:model.debounce.1500ms="destination_id"
                     id="destination-id"
                 >
@@ -145,7 +145,7 @@
                 <label for="store-destination-id">Bodega Destino</label>
                 @if($mode == 'create')
                     <select
-                        class="form-control custom-control-sm @error('store_destination_id') is-invalid @enderror"
+                        class="form-control form-control-sm @error('store_destination_id') is-invalid @enderror"
                         wire:model.debounce.1500ms="store_destination_id"
                         id="store-destination-id"
                     >

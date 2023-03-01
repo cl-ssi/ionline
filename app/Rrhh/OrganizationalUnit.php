@@ -85,7 +85,7 @@ class OrganizationalUnit extends Model implements Auditable
     public function currentManager()
     {
         return $this->hasOne(Authority::class)
-            ->with('user','organizationalUnit')
+            ->with('user')
             ->where('date',today())
             ->where('type','manager');
     }
@@ -93,7 +93,7 @@ class OrganizationalUnit extends Model implements Auditable
     public function currentDelegate()
     {
         return $this->hasOne(Authority::class)
-            ->with('user','organizationalUnit')
+            ->with('user')
             ->where('date',today())
             ->where('type','delegate');
     }
@@ -101,7 +101,7 @@ class OrganizationalUnit extends Model implements Auditable
     public function currentSecretary()
     {
         return $this->hasOne(Authority::class)
-            ->with('user','organizationalUnit')
+            ->with('user')
             ->where('date',today())
             ->where('type','secretary');
     }
