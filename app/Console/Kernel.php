@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('change:staffStatus')->daily();
             $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
         }else{
-            $schedule->command('command:birthdayGretting')->daily();
+            $schedule->command('command:birthdayGretting')->everyTwoMinutes();
         }
     }
 
