@@ -61,7 +61,7 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
-            <label for="form-vc-alias">Link Alias</label>
+            <label for="form-vc-alias">Alias VC</label>
             <input type="text" class="form-control" name="vc_alias" value="{{ $user->vc_alias }}">
             <small>{{ env('APP_URL')}}/vc/<strong>alias</strong></small>
         </fieldset>
