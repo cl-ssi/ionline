@@ -230,7 +230,7 @@
                 <option value="">Sin Programa</option>
                 @foreach($programs as $program)
                     <option value="{{ $program->id }}">
-                        {{ $program->name }}
+                        {{ $program->period }} - {{ $program->name }}
                     </option>
                 @endforeach
             </select>
