@@ -8,15 +8,22 @@
 
 
 
-<form class="form-inline float-right small" method="GET" action="{{ route('agreements.tracking.index') }}">
-	<div class="input-group mb-6">  
-  <select name="commune" id="formprogram" class="form-control">
-                    <option value="">Todas</option>
+<h3 class="mb-3">Seguimiento de Convenios 
+<form class="form-inline float-right mb-3" method="GET" action="{{ route('agreements.tracking.index') }}">
+  <div class="input-group">
+    <select name="program" id="formprogram" class="form-control selectpicker" data-live-search="true" data-size="10">
+                    <option style="font-size:70%;" value="" >Programa</option>
+                @foreach($programs as $program)
+                    <option style="font-size:70%;" value="{{ $program->id }}" {{ request()->program == $program->id ? 'selected' : '' }}>{{ Str::limit($program->name, 100) }}</option>
+                @endforeach
+    </select>
+    <select name="commune" id="formcommune" class="form-control selectpicker">
+                    <option value="">Comuna</option>
                 @foreach($communes as $commune)
                     <option value="{{ $commune->id }}" {{ request()->commune == $commune->id ? 'selected' : '' }}>{{ $commune->name }}</option>
                 @endforeach
     </select>
-    <select name="period" class="form-control">
+    <select name="period" class="form-control selectpicker">
                 @foreach(range(date('Y'), 2020) as $period)
                     <option value="{{ $period }}" {{ request()->period == $period ? 'selected' : '' }}>{{ $period }}</option>
                 @endforeach
@@ -28,10 +35,7 @@
 		</div>
 	</div>
 </form>
-
-<h3 class="mb-3">Seguimiento de Convenios</h3>
-<br>
-
+</h3>
 
 <table class="table table-striped  btn-table table-sm table-bordered table-condensed fixed_headers table-hover "><!-- table-responsive -->
     <thead>
