@@ -82,6 +82,7 @@ class ControlCreate extends Component
         $dataValidated['program_id'] = ($dataValidated['program_id'] != '') ? $dataValidated['program_id'] : null;
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? $dataValidated['type_reception_id'] : null;
         $dataValidated['reception_visator_id'] = $this->store->visator->id ?? null;
+        $dataValidated['completed_invoices'] = false;
 
         $control = Control::create($dataValidated);
 
