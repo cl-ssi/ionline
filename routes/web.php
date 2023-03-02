@@ -354,6 +354,10 @@ Route::get('/validador', [SignatureController::class,'verify'])->name('verifyDoc
 Route::get('/test-firma/{otp}', [DigitalSignatureController::class,'test']);
 
 
+/** Link para VCs */
+Route::get('vc/{alias}', [UserController::class,'getVcLink'])->name('vc');
+
+
 Route::prefix('profile')->as('profile.')->middleware('auth')->group(function(){
     Route::get('/subrogations', App\Http\Livewire\Profile\Subrogations::class)->name('subrogations');
 });
@@ -2130,6 +2134,7 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
     Route::get('/ingresos', [WellnessController::class, 'ingresos'])->name('ingresos');
     Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
     Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
+    Route::get('/report', [WellnessController::class, 'report'])->name('report');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');

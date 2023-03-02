@@ -30,8 +30,8 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('suitability.report') }}">
-            <i class="fas fa-chart-bar"></i> Reportes
+        <a class="nav-link" href="{{ route('wellness.report') }}">
+            <i class="fas fa-chart-bar"></i> Gráficos
         </a>
     </li>
 </ul>

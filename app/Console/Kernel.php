@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Jobs\BirthdayGreeting;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,9 +27,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('clean:tempDir')->daily();
-        $schedule->command('change:staffStatus')->daily();
-        $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
+        /* TODO: Esto es para el servidor azul, se tiene que eliminar cuando esté funcionando en Cloud Run, que está en el else */
+        if(env('OLD_SERVER')){
+            $schedule->command('clean:tempDir')->daily();
+            $schedule->command('change:staffStatus')->daily();
+            $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
+        }else{
+            /* TODO: Esto es para la versión en Cloud Run (Verde) */
+            $schedule->command('command:birthdayGretting')->daily();
+        }
     }
 
     /**

@@ -1249,6 +1249,11 @@
         $('input[name=taking_of_reason_file]').prop('disabled', !this.checked);
     });
 
+    $('#for_is_lower_amount').change(function() {
+        $('input[name=resol_contract],input[name=guarantee_ticket],input[name=guarantee_ticket_exp_date],input[name=resol_contract_file],input[name=guarantee_ticket_file],input[name=has_taking_of_reason],input[name=taking_of_reason_date],input[name=memo_number],input[name=memo_file]').prop('required', !this.checked);
+        $('input[name=resol_contract],input[name=guarantee_ticket],input[name=guarantee_ticket_exp_date],input[name=resol_contract_file],input[name=guarantee_ticket_file],input[name=has_taking_of_reason],input[name=taking_of_reason_date],input[name=memo_number],input[name=memo_file]').prop('disabled', this.checked);
+    });
+
     $('#for_status').change(function() {
         if ($(this).val() == 'adjudicada') {
             $('#adjudicada').show().prop('required', true);

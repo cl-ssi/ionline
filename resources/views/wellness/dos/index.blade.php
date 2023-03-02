@@ -46,7 +46,7 @@
                                 <label for="for_year">{{ __('Año') }}</label>
                                 <select name="year" class="form-control selectpicker required>
                                     <option value=""></option>
-                                    @foreach(range(2022, now()->year) as $year)
+                                    @foreach(range((now()->year)-1, now()->year) as $year)
                                     <option value=" {{ $year }}">{{ $year }}</option>
                                     @endforeach
                                 </select>

@@ -310,6 +310,8 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $tender = new Tender($request->all());
+        $tender->is_lower_amount = $request->has('is_lower_amount');
+        $tender->has_taking_of_reason = $request->has('has_taking_of_reason');
         $tender->save();
 
         $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;

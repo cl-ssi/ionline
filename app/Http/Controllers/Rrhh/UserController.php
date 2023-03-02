@@ -214,6 +214,19 @@ class UserController extends Controller
     }
 
     /**
+     * Redirect to VC link if is set
+     *
+     * @param  $alias  $user->alias
+     * @return \Illuminate\Http\Redirect
+     */
+    public function getVcLink($alias) 
+    {
+        $user = User::where('vc_alias',$alias)->first();
+        return ($user AND $user->vc_link) ? redirect($user->vc_link) : abort(404);
+    }
+
+
+    /**
      * Show the form for change password.
      *
      * @param  \App\User  $user

@@ -19,7 +19,7 @@
         <fieldset class="form-group col-md-4">
             <select
                 class="form-control"
-                wire:model.debounce.1000ms="module_selected"
+                wire:model.defer="module_selected"
                 id="module-selected"
             >
                 <option value="">Todos</option>
@@ -35,10 +35,12 @@
 
         <fieldset class="form-group col-md-8">
             <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Buscar</span>
+                <input type="text" class="form-control" wire:model.defer="search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" wire:click="filter">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
                 </div>
-                <input type="text" class="form-control" wire:model.debounce.1500ms="search">
             </div>
         </fieldset>
     </div>

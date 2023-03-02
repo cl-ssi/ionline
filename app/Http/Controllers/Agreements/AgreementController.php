@@ -57,12 +57,14 @@ class AgreementController extends Controller
 
     public function indexTracking(Request $request)
     {
+        $programs = Program::orderBy('name')->get();
         $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums.fileToEndorse.signaturesFlows','commune', 'fileToEndorse.signaturesFlows')
+                               ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
                                ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
                                ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
         // return $agreements;
-        $communes = Commune::All()->SortBy('name');
-        return view('agreements/agreements/trackingIndicator', compact('agreements', 'communes'));
+        $communes = Commune::orderBy('name')->get();
+        return view('agreements.agreements.trackingIndicator', compact('programs', 'agreements', 'communes'));
     }
 
     /**
@@ -77,7 +79,7 @@ class AgreementController extends Controller
         $referrers = User::all()->sortBy('name');
         $signers = Signer::all();
         $quota_options = $this->getQuotaOptions();
-        return view('agreements/agreements/create', compact('programs', 'communes', 'referrers', 'quota_options', 'signers'));
+        return view('agreements.agreements.create', compact('programs', 'communes', 'referrers', 'quota_options', 'signers'));
     }
 
     /**
@@ -149,7 +151,7 @@ class AgreementController extends Controller
         $establishment_list = unserialize($agreement->establishment_list);
         $referrers = User::all()->sortBy('name');
         $signers = Signer::with('user')->get();
-        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list', 'referrers', 'signers'));
+        return view('agreements.agreements.show', compact('agreement', 'municipality', 'establishment_list', 'referrers', 'signers'));
     }
 
     /**
@@ -162,7 +164,7 @@ class AgreementController extends Controller
     {
         $agreements = Agreement::All();
         $commune = Commune::All();
-        return view('agreements/agreements/edit')->withAgreements($agreements)->withCommunes($commune)->withAgreement($agreement);
+        return view('agreements.agreements.edit')->withAgreements($agreements)->withCommunes($commune)->withAgreement($agreement);
     }
 
     /**

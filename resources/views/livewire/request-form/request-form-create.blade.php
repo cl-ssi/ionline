@@ -110,9 +110,9 @@
 
                 <fieldset class="form-group col-12 col-md-4">
                     <label for="for_technical_review_ou_id">
-                        U.O. Evaluación Técnica
+                        U.O. Evaluación Técnica (opcional)
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
-                            title="Completar este campo en caso de requerir Evaluación Técnica para este formulario">
+                            title="Completar este campo en caso de requerir autorización de unidad organizacional competente">
                             <span class="fas fa-info-circle"></span>
                         </span>
                     </label>

@@ -209,6 +209,10 @@
                             <!-- Licitacion LP/LQ -->
                             @if(in_array($detail->pivot->tender->purchase_type_id, [14,15,16,17,18]))
                             <tr>
+                                <th class="table-active" style="width: 33%">Licitación menor a 1000 UTM</th>
+                                <td>{{ $detail->pivot->tender->is_lower_amount ? 'SÍ' : 'NO' }}</td>
+                            </tr>
+                            <tr>
                                 <th class="table-active" style="width: 33%">Nº Resol. de Contrato</th>
                                 <td>{{ $detail->pivot->tender->resol_contract }}</td>
                             </tr>
