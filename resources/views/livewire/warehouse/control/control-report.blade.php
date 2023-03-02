@@ -36,7 +36,7 @@
         </fieldset>
 
         <fieldset class="form-group col-md-2">
-            <label for="program-id">Tipo @json($type)</label>
+            <label for="program-id">Tipo</label>
             <select wire:model.debounce.1500ms="type" id="type" class="form-control">
                 <option value="">Todos</option>
                 <option value="1">Ingreso</option>
@@ -52,7 +52,6 @@
                 @elseif($type === "false")
                     Egreso
                 @endif
-                @json($type_control)
             </label>
             <select wire:model.debounce.1500ms="type_control" id="type-control" class="form-control">
                 <option value="">Todos</option>
