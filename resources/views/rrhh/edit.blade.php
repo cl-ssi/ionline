@@ -55,6 +55,19 @@
     </div>
 
     <div class="form-row">
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="form-vc-link">Link VC</label>
+            <input type="link" class="form-control" name="vc_link" value="{{ $user->vc_link }}">
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="form-vc-alias">Link Alias</label>
+            <input type="text" class="form-control" name="vc_alias" value="{{ $user->vc_alias }}">
+            <small>{{ env('APP_URL')}}/vc/<strong>alias</strong></small>
+        </fieldset>
+    </div>
+
+    <div class="form-row">
         <fieldset class="form-group col-md-12">
             <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
                 @livewire('select-organizational-unit', [

@@ -354,6 +354,10 @@ Route::get('/validador', [SignatureController::class,'verify'])->name('verifyDoc
 Route::get('/test-firma/{otp}', [DigitalSignatureController::class,'test']);
 
 
+/** Link para VCs */
+Route::get('vc/{alias}', [UserController::class,'getVcLink'])->name('vc');
+
+
 Route::prefix('profile')->as('profile.')->middleware('auth')->group(function(){
     Route::get('/subrogations', App\Http\Livewire\Profile\Subrogations::class)->name('subrogations');
 });

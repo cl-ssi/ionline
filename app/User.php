@@ -48,6 +48,8 @@ class User extends Authenticatable implements Auditable
         'email',
         'password',
         'birthday',
+        'vc_link',
+        'vc_alias',
         'position',
         'active',
         'gravatar',
