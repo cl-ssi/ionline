@@ -546,7 +546,7 @@
                 wire:click="finish"
                 wire:loading.attr="disabled"
                 wire:target="finish"
-                @if($po_code == null || !$store->visator)
+                @if($po_code == null || !$store->visator || !$request_form)
                     disabled
                 @endif
             >

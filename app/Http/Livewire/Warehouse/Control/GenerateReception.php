@@ -158,6 +158,16 @@ class GenerateReception extends Component
                 $this->msg = 'Todos los productos de la orden de compra fueron recibidos.';
                 $this->resetInputReception();
             }
+
+            /**
+             * La OC debe tener un FR relacionado.
+             * No se admite OC sin FR.
+             * Se debe relacionar el FR a la OC en caso de no tener FR.
+             */
+            if(!$this->request_form)
+            {
+                session()->flash('danger', 'La Orden de Compra no tiene un FR relacionado.');
+            }
         }
     }
 
