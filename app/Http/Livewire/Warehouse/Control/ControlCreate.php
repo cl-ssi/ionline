@@ -61,8 +61,8 @@ class ControlCreate extends Component
         $this->type_dispatch_id = 1;
         $this->typeDispatches = TypeDispatch::orderByRaw("FIELD(id, '1', '4', '2', '3') ASC")->get();
         $this->typeReceptions = TypeReception::all();
-        $this->programs = Program::orderBy('name', 'asc')->get();
         $this->stores = Store::whereNotIn('id', [$this->store->id])->get();
+        $this->programs = $this->getPrograms();
     }
 
     public function render()
@@ -93,6 +93,17 @@ class ControlCreate extends Component
             'type' => $control->isReceiving() ? 'receiving' : 'dispatch',
             'nav' => $this->nav,
         ]);
+    }
+
+    public function getPrograms()
+    {
+        $programs = Program::query()
+            ->orderByDesc('period')
+            ->orderBy('name')
+            ->onlyValid()
+            ->get(['id', 'name', 'period']);
+
+        return $programs;
     }
 
     public function getConfirm()

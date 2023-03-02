@@ -77,7 +77,7 @@ class GenerateReception extends Component
     public function mount()
     {
         $this->type_product = 1;
-        $this->programs = Program::orderBy('name')->get(['id', 'name']);
+        $this->programs = $this->getPrograms();
         $this->wre_products = collect([]);
         $this->po_items = [];
         $this->error = false;
@@ -307,6 +307,17 @@ class GenerateReception extends Component
         }
 
         return $technical_signer_id;
+    }
+
+    public function getPrograms()
+    {
+        $programs = Program::query()
+            ->orderByDesc('period')
+            ->orderBy('name')
+            ->onlyValid()
+            ->get(['id', 'name', 'period']);
+
+        return $programs;
     }
 
     public function editProduct($index)
