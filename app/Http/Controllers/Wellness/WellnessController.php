@@ -134,4 +134,20 @@ class WellnessController extends Controller
         // Agregar mensaje flash y redireccionar a la página anterior
         return redirect()->back()->with('success', 'Archivo cargado exitosamente.');
     }
+
+    /*Reporte con gráficos de Torta*/
+    public function report()
+    {
+        $ingreso = Balance::select('inicial', 'traspaso', 'ajustado', 'ejecutado', 'saldo')
+            ->where('ano', 2022)
+            ->where('codigo', 'like', '10.000.00%')
+            ->first();
+
+        $gasto = Balance::select('inicial', 'traspaso', 'ajustado', 'ejecutado', 'saldo')
+            ->where('ano', 2022)
+            ->where('codigo', 'like', '20.000.00%')
+            ->first();
+
+        return view('wellness.report',compact('ingreso', 'gasto'));
+    }
 }

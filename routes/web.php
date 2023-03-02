@@ -2130,6 +2130,7 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
     Route::get('/ingresos', [WellnessController::class, 'ingresos'])->name('ingresos');
     Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
     Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
+    Route::get('/report', [WellnessController::class, 'report'])->name('report');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');
