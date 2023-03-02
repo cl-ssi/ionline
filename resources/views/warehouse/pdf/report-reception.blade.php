@@ -41,6 +41,17 @@
             <strong>Código OC:</strong> {{ $control->po_code }}<br>
             @break
     @endswitch
+    <strong>
+        Facturas:
+    </strong>
+    @if($control->invoices->count() > 0)
+        @foreach($control->invoices as $index => $invoice)
+            {{ $invoice->number }} del {{ $invoice->date->format('Y-m-d') }}@if($index < $control->invoices->count() - 1),@else.@endif
+        @endforeach
+    @else
+        No posee
+    @endif
+    <br>
     <strong>Nota:</strong> {{ $control->note }}<br>
 </div>
 
