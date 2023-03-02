@@ -463,7 +463,8 @@ class GenerateReception extends Component
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
             'reception_visator_id' => $this->store->visator->id,
-            'technical_signer_id' => $this->technical_signer_id
+            'technical_signer_id' => $this->technical_signer_id,
+            'completed_invoices' => false,
         ]);
 
         foreach($this->po_items as $item)
