@@ -23,18 +23,7 @@ class ParameterIndex extends Component
 
     public function render()
     {
-        return view('livewire.parameters.parameter.parameter-index', [
-            'parameters' => $this->getParameters()
-        ])
-        ->extends('layouts.app');
-    }
-
-    public function getParameters()
-    {
         $search = "%$this->search%";
-
-        /** Resetea la paginación */
-        $this->resetPage();
 
         $parameters = Parameter::query()
             ->when($this->module_selected != '', function($query) {
@@ -45,8 +34,16 @@ class ParameterIndex extends Component
             })
             ->orderBy('module')
             ->orderBy('parameter')
-            ->paginate(10);
+            ->paginate(15);
 
-        return $parameters;
+        return view('livewire.parameters.parameter.parameter-index', [
+            'parameters' => $parameters
+        ]);
+    }
+
+    public function filter()
+    {
+        /** Resetea la paginación */
+        $this->resetPage();
     }
 }
