@@ -51,7 +51,6 @@
                     <th class="text-center">Estado</th>
                     <th class="text-center">Acta Ingreso Bodega</th>
                     <th>Facturas</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,8 +143,8 @@
                     <td>
                         @foreach($control->invoices as $invoice)
                             <a
-                                href="https://storage.googleapis.com/{{ $invoice->url }}"
-                                class="btn btn-sm btn-danger"
+                                href="{{ $invoice->link }}"
+                                class="btn btn-sm @if($control->completed_invoices) btn-success @else btn-danger @endif"
                                 target="_blank"
                                 title="Ver Factura {{ $invoice->number }}"
                             >
@@ -154,22 +153,10 @@
                             </a>
                         @endforeach
                     </td>
-                    <td class="text-center">
-                        <button
-                            class="btn btn-sm btn-outline-primary"
-                            wire:click="sendTechnicalRequest({{ $control }})"
-                            title="Enviar Firma Tecnica"
-                            @if(!$control->technicalSigner || $control->technicalSignature || $control->items->count() == 0)
-                                disabled
-                            @endif
-                        >
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </td>
                 </tr>
                 @empty
                     <tr class="text-center">
-                        <td colspan="10">
+                        <td colspan="9">
                             <em>No hay resultados</em>
                         </td>
                     </tr>
