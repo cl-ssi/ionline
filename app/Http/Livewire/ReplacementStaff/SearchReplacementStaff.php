@@ -26,7 +26,9 @@ class SearchReplacementStaff extends Component
     {
         return view('livewire.replacement-staff.search-replacement-staff', [
             'profileManage' => ProfileManage::orderBy('name', 'ASC')->get(),
-            'replacementStaff' => ReplacementStaff::latest()
+            'replacementStaff' => ReplacementStaff::
+                with(['profiles', 'profiles.profile_manage', 'profiles.profession_manage'])
+                ->latest()
                 ->search($this->selectedSearch, 
                     $this->selectedProfile, 
                     $this->selectedProfession, 
