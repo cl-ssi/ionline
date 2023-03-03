@@ -286,12 +286,14 @@ class RequestReplacementStaffController extends Controller
                     
                     if($lastSign->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
                         $request_sing = new RequestSign();
-                        $request_sing = new RequestSign();
                         $request_sing->position = $position;
                         $request_sing->ou_alias = 'sub';
                         $request_sing->organizationalUnit()->associate($lastSign->organizationalUnit->father->id);
                         $request_sing->requestReplacementStaff()->associate($request_replacement->id);
                         $request_sing->save();
+                    }
+                    else{
+                        $position = $position - 1;
                     }
                     
                     /*  APROBACION UNIDAD DE PERSONAL*/
