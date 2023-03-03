@@ -141,14 +141,18 @@ class RequestReplacementStaffController extends Controller
         }
 
         if($authorities->isNotEmpty()){
-            $pending_requests_to_sign = RequestReplacementStaff::latest()
+            $pending_requests_to_sign = RequestReplacementStaff::
+                with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
+                ->latest()
                 ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
                     $q->Where('organizational_unit_id', $iam_authorities_in)
                     ->Where('request_status', 'pending');
                 })
                 ->get();
 
-            $requests_to_sign = RequestReplacementStaff::latest()
+            $requests_to_sign = RequestReplacementStaff::
+                with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
+                ->latest()
                 ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
                     $q->Where('organizational_unit_id', $iam_authorities_in)
                     ->Where(function ($j){
@@ -160,14 +164,18 @@ class RequestReplacementStaffController extends Controller
             return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
         }
         else{
-            $pending_requests_to_sign = RequestReplacementStaff::latest()
+            $pending_requests_to_sign = RequestReplacementStaff::
+                with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
+                ->latest()
                 ->whereHas('requestSign', function($q) {
                     $q->Where('organizational_unit_id', 46)
                     ->Where('request_status', 'pending');
                 })
                 ->get();
 
-            $requests_to_sign = RequestReplacementStaff::latest()
+            $requests_to_sign = RequestReplacementStaff::
+                with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
+                ->latest()
                 ->whereHas('requestSign', function($q) {
                     $q->Where('organizational_unit_id', 46)
                     ->Where(function ($j){
