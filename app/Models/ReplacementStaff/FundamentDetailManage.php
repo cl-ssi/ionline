@@ -38,7 +38,6 @@ class FundamentDetailManage extends Model
             case 'mixed announcement':
               return 'Convocatoria mixta';
               break;
-            case '':
             case 'other':
               return 'Otro';
               break;
@@ -48,9 +47,7 @@ class FundamentDetailManage extends Model
             case 'administrative leave':
               return 'Permiso administrativo';
               break;
-            case '':
-              return '';
-              break;
+            default: return $this->name;
         }
     }
 

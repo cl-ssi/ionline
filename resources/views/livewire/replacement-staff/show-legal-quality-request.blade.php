@@ -76,7 +76,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_user_id">Detalle Fundamento</label>
-            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()">
+            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()" @if($selectedLegalQuality != 2 ) disabled @endif>
                 <option value="">Seleccione...</option>
                 @if(!is_null($detailFundaments))
                 @foreach($detailFundaments as $detailFundament)
