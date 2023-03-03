@@ -23,14 +23,11 @@
 
     @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
         Auth::user()->hasPermissionTo('Replacement Staff: technical evaluation') ||
-        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id) ||
+        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', auth()->user()->id)->count() > 0 ||
         Auth::user()->hasRole('Replacement Staff: personal sign'))
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <i class="fas fa-inbox"></i> Solicitudes
-                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                @endif
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.own_index') }}"><i class="fas fa-inbox"></i> Mis Solicitudes</a>
@@ -44,13 +41,13 @@
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a> 
                     <a class="dropdown-item disabled"><i class="fas fa-plus"></i> Formulario de Convocatorias <span class="badge badge-secondary">Próximamente</span></a>
                 @endif
+                @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
+                    Auth::user()->hasRole('Replacement Staff: personal sign'))
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign') }}">
                     <i class="fas fa-check-circle"></i> Gestión de solicitudes
-                    @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                        <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                    @endif
                 </a>
+                @endif
            </div>
        </li>
     @endif

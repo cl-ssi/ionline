@@ -319,7 +319,7 @@
       @endif
 
       <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
-
+      {{--
       @if($requestReplacementStaff->technicalEvaluation &&
               $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
           <h3>&nbsp; Integrantes Comisión</h3>
@@ -345,6 +345,7 @@
           <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
       @endif
+      --}}
 
       @if($requestReplacementStaff->technicalEvaluation &&
         $requestReplacementStaff->technicalEvaluation->reason != NULL)
@@ -370,7 +371,8 @@
           <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
       @endif
-
+      
+      {{--
       @if($requestReplacementStaff->technicalEvaluation &&
               $requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
 
@@ -416,6 +418,8 @@
 
           <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
       @endif
+
+      --}}
 
       <div class="pie_pagina center seis">
           <!--{{ env('APP_SS') }}<br-->

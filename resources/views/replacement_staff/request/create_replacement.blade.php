@@ -24,7 +24,8 @@
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_requester_id">Funcionario Solicitante</label>
             @livewire('search-select-user', [
-                'selected_id' => 'requester_id'
+                'selected_id'   => 'requester_id',
+                'required'      => 'required'
             ])
         </fieldset>
     </div>

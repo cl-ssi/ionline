@@ -397,11 +397,13 @@
 
                         <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
                             <i class="far fa-id-card"></i> Solicitudes de Contratación
+                            {{--
                             @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
                             <span class="badge badge-secondary">
                                 {{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }}
                             </span>
                             @endif
+                            --}}
                         </a>
                         @endif
 
