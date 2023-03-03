@@ -78,7 +78,10 @@ class StaffManageController extends Controller
      */
     public function edit($id)
     {
-        $staffManageByOu = StaffManage::where('organizational_unit_id', $id)
+        $staffManageByOu = StaffManage::
+            with('replacementStaff', 'replacementStaff.profiles', 'replacementStaff.profiles.profile_manage', 
+                'replacementStaff.profiles.profession_manage', 'organizationalUnit')
+            ->where('organizational_unit_id', $id)
             ->get();
 
         return view('replacement_staff.staff_manage.edit', compact('staffManageByOu'));
