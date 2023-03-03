@@ -56,7 +56,11 @@
 
                 <span class="raya_azul">━━━</span><span class="raya_rojo">━━━━━</span><br>
 
-                <span class="small"><strong>{{ $user->shortName }}</strong></span>
+                <span class="small"><strong>{{ $user->shortName }}</strong> 
+                    @if($user->vc_link AND $user->vc_alias)
+                    &nbsp; <a href="{{ route('vc',$user->vc_alias) }}"> <i class="fas fa-video"></i> </a>
+                    @endif
+                </span>
 
                 @if($user->position)
                     <span class="text-muted small">

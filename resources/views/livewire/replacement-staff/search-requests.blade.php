@@ -82,7 +82,7 @@
                     <th>Solicitud</th>
                     <th>Grado</th>
                     <th>Calidad Jurídica</th>
-                    <th colspan="2">Periodo</th>
+                    <th width="7%">Periodo</th>
                     <th>Fundamento</th>
                     <th>Jornada</th>
                     <th>Creador / Solicitante</th>
@@ -121,9 +121,8 @@
                     <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
                     <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                     <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
-                        {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
-                    </td>
-                    <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
+                        {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
+                        {{ $requestReplacementStaff->getNumberOfDays() }}
                         @if($requestReplacementStaff->getNumberOfDays() > 1)
                             días
                         @else
@@ -147,16 +146,18 @@
                     <td class="text-center">
                         @foreach($requestReplacementStaff->RequestSign as $sign)
                             @if($sign->request_status == 'pending' || $sign->request_status == NULL)
-                                <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </span>
                             @endif
                             @if($sign->request_status == 'accepted')
-                                <span style="color: green;">
-                                    <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: green;">
+                                    <i class="fas fa-check-circle fa-2x"></i>
                                 </span>
                             @endif
                             @if($sign->request_status == 'rejected')
-                                <span style="color: Tomato;">
-                                    <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ $sign->organizationalUnit->name }}" style="color: Tomato;">
+                                    <i class="fas fa-times-circle fa-2x"></i>
                                 </span>
                             @endif
                         @endforeach

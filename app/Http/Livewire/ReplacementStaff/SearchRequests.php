@@ -32,8 +32,11 @@ class SearchRequests extends Component
     public function render()
     {   
         if($this->typeIndex == 'assign'){
-            
-            $requests = RequestReplacementStaff::latest()
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
+                ->latest()
                 ->search($this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
@@ -58,7 +61,11 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'own'){
 
-            $requests = RequestReplacementStaff::latest()
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])   
+                ->latest()
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
                 ->search($this->selectedStatus,
@@ -75,7 +82,11 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'ou'){
 
-            $requests = RequestReplacementStaff::latest()
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
+                ->latest()
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
                 ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
@@ -100,7 +111,8 @@ class SearchRequests extends Component
 
     public function updatedselectedFundament($fundament_id)
     {
-        $this->fundamentsDetail = RstDetailFundament::where('fundament_manage_id', $fundament_id)->get();
+        $this->fundamentsDetail = RstDetailFundament::
+            where('fundament_manage_id', $fundament_id)->get();
     }
 
     

@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Rrhh\Authority;
 use App\Models\Warehouse\StoreUser;
 use App\Models\Warehouse\Store;
 use App\Models\Suitability\Result;
@@ -47,6 +48,8 @@ class User extends Authenticatable implements Auditable
         'email',
         'password',
         'birthday',
+        'vc_link',
+        'vc_alias',
         'position',
         'active',
         'gravatar',
@@ -166,6 +169,22 @@ class User extends Authenticatable implements Auditable
     public function switchLogs()
     {
         return $this->hasMany(AccessLog::class,'switch_id');
+    }
+
+    /* Authority relation: Is Manager from ou */
+    public function manager()
+    {
+        return $this->hasMany(Authority::class)
+        ->where('type','manager')
+        ->where('date',today());
+    }
+    
+    /* Authority relation: Is Secretary from ou */
+    public function secretary()
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type','secretary')
+            ->where('date',today());
     }
 
     public function serviceRequests()

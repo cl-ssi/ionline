@@ -121,7 +121,7 @@
                   <table class="table table-sm table-bordered">
                       <tbody>
                           <tr>
-                              <td colspan="4">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                              <td colspan="{{ $requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                           </tr>
                           <tr>
                               @foreach($requestReplacementStaff->RequestSign as $sign)

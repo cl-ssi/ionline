@@ -245,105 +245,90 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
 
             $request_replacement->save();
+
+            $position = 1;
             
-            if($request_replacement->form_type == 'replacement'){
-                //UO Nivel 3 Deptos. bajo SUB Direcciones.
-                if($request_replacement->organizationalUnit->level == 3){
-                    $position = 1;
-                    for ($i = 1; $i <= 4; $i++) {
-                        $request_sing = new RequestSign();
+            for ($i = $request_replacement->organizationalUnit->level; $i >= 2; $i--) {
+                if ($i > 2) {
+                    $request_sing = new RequestSign();
 
-                        $type = 'manager';
-                        $type_adm = 'secretary';
-                        $user_id = Auth::user()->id;
+                    $request_sing->position = $position;
+                    $request_sing->ou_alias = 'leadership';
+                    if($i == $request_replacement->organizationalUnit->level){
+                        $request_sing->organizationalUnit()->associate($request_replacement->organizational_unit_id);
+                        $request_sing->request_status = 'pending';
 
-                        $iam_authority = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
-
-                        if($iam_authority->isNotEmpty()){
-                            if($i == 1){
-                                $request_sing->position = '1';
-                                $request_sing->ou_alias = 'leadership';
-                                $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                                $request_sing->user_id = $user_id;
-                                $request_sing->request_status = 'accepted';
-                                $request_sing->date_sign = Carbon::now();
-                            }
-                            if ($i == 2) {
-                                $request_sing->position = '2';
-                                $request_sing->ou_alias = 'sub';
-                                $request_sing->organizational_unit_id = $request_replacement->organizationalUnit->father->id;
-                                $request_sing->request_status = 'pending';
-                                
-                                // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
-
-                                //manager
-                                $type = 'manager';
-                                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-                                $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
-                                //secretary
-                                $type_adm = 'secretary';
-                                $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type_adm);
-
-                                $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
-
-                            //   Mail::to($emails)
-                            //     ->cc(env('APP_RYS_MAIL'))
-                            //     ->send(new NotificationSign($request_replacement));
-                            }
-
-                            if ($i == 3) {
-                                $request_sing->position = '3';
-                                $request_sing->ou_alias = 'uni_per';
-                                $request_sing->organizational_unit_id = 46;
-                            }
-
-                            if ($i == 4) {
-                                $request_sing->position = '4';
-                                $request_sing->ou_alias = 'sub_rrhh';
-                                $request_sing->organizational_unit_id = 44;
-                            }
+                        //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
+                        $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), 'manager');
+                        if($notification_ou_manager){
+                            $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
                         }
-                        else{
-                            if($i == 1){
-                                $request_sing->position = $position;
-                                $request_sing->ou_alias = 'leadership';
-                                $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                                $request_sing->request_status = 'pending';
-
-                                //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-                                $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), $type);
-                                if($notification_ou_manager){
-                                    $notification_ou_manager->user->notify(new NotificationSign($request_replacement));
-                                } 
-                            }
-                            
-                            if ($i == 2) {
-                                if($request_replacement->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
-                                    $request_sing->position = $position;
-                                    $request_sing->ou_alias = 'sub';
-                                    $request_sing->organizational_unit_id = $request_replacement->organizationalUnit->father->id;
-                                }
-                                else{
-                                    $i++;
-                                }
-                            }
-                            if ($i == 3) {
-                                $request_sing->position = $position;
-                                $request_sing->ou_alias = 'uni_per';
-                                $request_sing->organizational_unit_id = 46;
-                            }
-                            if ($i == 4) {
-                                $request_sing->position = $position;
-                                $request_sing->ou_alias = 'sub_rrhh';
-                                $request_sing->organizational_unit_id = 44;
-                            }
-                        }
-                        $request_sing->request_replacement_staff_id = $request_replacement->id;
-                        $request_sing->save();
-
-                        $position = $position + 1;
                     }
+                    else{
+                        $lastSign = RequestSign::
+                            where('request_replacement_staff_id', $request_replacement->id)
+                            ->latest()
+                            ->first();
+                        
+                            $request_sing->organizationalUnit()->associate( $lastSign->organizationalUnit->father->id);
+                    }
+
+                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    $request_sing->save();
+                    //dd($request_sing);
                 }
+                if ($i == 2){
+                    $lastSign = RequestSign::    
+                        where('request_replacement_staff_id', $request_replacement->id)
+                        ->where('ou_alias', 'leadership')
+                        ->orderBy('position', 'DESC')
+                        ->first();
+                    
+                    if($lastSign->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
+                        $request_sing = new RequestSign();
+                        $request_sing->position = $position;
+                        $request_sing->ou_alias = 'sub';
+                        $request_sing->organizationalUnit()->associate($lastSign->organizationalUnit->father->id);
+                        $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                        $request_sing->save();
+                    }
+                    else{
+                        $position = $position - 1;
+                    }
+                    
+                    /*  APROBACION UNIDAD DE PERSONAL*/
+                    $request_sing = new RequestSign();
+                    $request_sing->position = $position + 1;
+                    $request_sing->ou_alias = 'uni_per';
+                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'PersonalSSI')->first()->value);
+                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    $request_sing->save();
+
+                    /* APROBACIÓN RR.HH. */
+                    $request_sing = new RequestSign();
+                    $request_sing->position = $position + 2;
+                    $request_sing->ou_alias = 'sub_rrhh';
+                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value);
+                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    $request_sing->save();
+
+                    /* APROBACIÓN FINANZAS */
+                    $request_sing = new RequestSign();
+                    $request_sing->position = $position + 3;
+                    $request_sing->ou_alias = 'finance';
+                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value);
+                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    $request_sing->save();
+
+                    /* APROBACIÓN SDA SSI */
+                    $request_sing = new RequestSign();
+                    $request_sing->position = $position + 4;
+                    $request_sing->ou_alias = 'sub_adm';
+                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value);
+                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    $request_sing->save();
+                }
+                $position++;
             }
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO

@@ -160,56 +160,6 @@ class RequestReplacementStaff extends Model implements Auditable
         }
     }
 
-    public static function getPendingRequestToSign(){
-        /* FIX: @mirandaljorge esta funcion se llama dos veces 
-         * en el nav principal, puedes hacer que se llame 
-         * sólo una vez por favor.
-         * Ahora tiene return 0 porque esta dando eshrrror
-         */
-        return 0;
-
-
-        $date = Carbon::now();
-        $type = 'manager';
-        $user_id = Auth::user()->id;
-
-        $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
-
-        foreach ($authorities as $authority){
-            $iam_authorities_in[] = $authority->organizational_unit_id;
-        }
-
-        if($authorities->isNotEmpty()){
-            foreach ($authorities as $authority) {
-                $request_to_sign = RequestReplacementStaff::latest()
-                    ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
-                        $q->Where('organizational_unit_id', $iam_authorities_in)
-                        ->Where('request_status', 'pending');
-                    })
-                    /* FIX: @mirandaljorge Para que lo paginas? si solo los vas a contar */
-                    ->paginate(10)
-                    ->count();
-            }
-            return $request_to_sign;
-        }
-        elseif (Auth::user()->hasRole('Replacement Staff: personal sign')) {
-
-            $request_to_sign = RequestReplacementStaff::latest()
-                ->whereHas('requestSign', function($q){
-                    $q->Where('organizational_unit_id', 46)
-                    ->Where('request_status', 'pending');
-                })
-                /* FIX: @mirandaljorge Para que lo paginas? si solo los vas a contar */
-                ->paginate(10)
-                ->count();
-
-            return $request_to_sign;
-        }
-        else{
-            return $request_to_sign = 0;
-        }
-    }
-
     public function getNumberOfDays() {
         $numberDays = 1 + $this->end_date->diff($this->start_date)->format("%a");
         return $numberDays;
