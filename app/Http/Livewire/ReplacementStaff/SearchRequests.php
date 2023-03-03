@@ -33,7 +33,9 @@ class SearchRequests extends Component
     {   
         if($this->typeIndex == 'assign'){
             $requests = RequestReplacementStaff::
-                with('user', 'organizationalUnit', 'requestSign')
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
                 ->latest()
                 ->search($this->selectedStatus,
                     $this->selectedId,
@@ -82,8 +84,8 @@ class SearchRequests extends Component
 
             $requests = RequestReplacementStaff::
                 with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
-                'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
-                'assignEvaluations'])
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
                 ->latest()
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
