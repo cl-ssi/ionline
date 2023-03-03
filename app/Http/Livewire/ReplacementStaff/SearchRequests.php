@@ -80,7 +80,11 @@ class SearchRequests extends Component
 
         if($this->typeIndex == 'ou'){
 
-            $requests = RequestReplacementStaff::latest()
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                'assignEvaluations'])
+                ->latest()
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
                 ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
