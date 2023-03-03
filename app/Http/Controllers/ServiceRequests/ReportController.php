@@ -305,7 +305,7 @@ class ReportController extends Controller
         return redirect()->back();
       }
 
-      $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.1225);
+      $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.13);
       $txt .=
         $fulfillment->serviceRequest->employee->id . strtoupper($fulfillment->serviceRequest->employee->dv) . "\t" .
         strtoupper(trim($fulfillment->serviceRequest->employee->fullName)) . "\t" .
