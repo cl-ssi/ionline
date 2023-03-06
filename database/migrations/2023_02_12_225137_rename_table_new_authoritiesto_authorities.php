@@ -14,6 +14,7 @@ class RenameTableNewAuthoritiestoAuthorities extends Migration
     public function up()
     {
         //
+        Schema::dropIfExists('rrhh_authorities');
         Schema::rename('rrhh_new_authorities', 'rrhh_authorities');
     }
 
