@@ -12,7 +12,7 @@
             <input class="form-control" type="date" wire:model.debounce.1500ms="end_date" id="end-date">
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="product-id">Producto</label>
             <select wire:model.debounce.1500ms="product_id" id="product-id" class="form-control">
                 <option value="">Todos</option>
@@ -24,7 +24,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-2">
             <label for="program-id">Programa</label>
             <select wire:model.debounce.1500ms="program_id" id="program-id" class="form-control">
                 <option value="">Todos</option>
@@ -38,9 +38,26 @@
         <fieldset class="form-group col-md-2">
             <label for="program-id">Tipo</label>
             <select wire:model.debounce.1500ms="type" id="type" class="form-control">
-                <option value=""></option>
-                <option value="false">Egreso</option>
+                <option value="">Todos</option>
                 <option value="1">Ingreso</option>
+                <option value="false">Egreso</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="type-control">
+                &nbsp;
+                @if($type === "1")
+                    Ingreso
+                @elseif($type === "false")
+                    Egreso
+                @endif
+            </label>
+            <select wire:model.debounce.1500ms="type_control" id="type-control" class="form-control">
+                <option value="">Todos</option>
+                @foreach($typesControl as $typeControl)
+                    <option value="{{ $typeControl->id }}">{{ $typeControl->name }}</option>
+                @endforeach
             </select>
         </fieldset>
     </div>
@@ -75,6 +92,16 @@
                     </td>
                     <td>
                         {{ $controlItem->control->type_format }}
+                        <br>
+                        @if($controlItem->control)
+                            <small>
+                                @if($controlItem->control->isDispatch())
+                                    {{ optional($controlItem->control->typeDispatch)->name }}
+                                @else
+                                    {{ optional($controlItem->control->typeReception)->name }}
+                                @endif
+                            </small>
+                        @endif
                     </td>
                     <td nowrap>
                         {{ $controlItem->control->date_format }}
@@ -98,10 +125,6 @@
                                         {{ optional($controlItem->control->destinationStore)->name }}
                                         @break
                                 @endswitch
-                                <br>
-                                <small>
-                                    {{ optional($controlItem->control->typeDispatch)->name }}
-                                </small>
                             @else
                                 @switch($controlItem->control->type_reception_id)
                                     @case(\App\Models\Warehouse\TypeReception::receiving())
@@ -120,10 +143,6 @@
                                         {{ optional($controlItem->control->typeReception)->name }} - En Positivo
                                         @break
                                 @endswitch
-                                <br>
-                                <small>
-                                    {{ optional($controlItem->control->typeReception)->name }}
-                                </small>
                             @endif
                         @endif
                     </td>

@@ -61,6 +61,7 @@
                     <th class="text-center">Fecha Ingreso</th>
                     <th class="text-center">Acta Ingreso Bodega</th>
                     <th>Facturas</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -91,7 +92,7 @@
                             </div>
                         </td>
                         <td>
-                            <b>Ingreso #{{ $control->id }}</b>
+                            <b>Ingreso #{{ $control->id }} - OC: {{ $control->po_code }}</b>
                             <br>
                             <table class="table table-sm table-borderless">
                                 <tbody>
@@ -110,7 +111,7 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center" nowrap>
                             {{ $control->date->format('Y-m-d') }}
                         </td>
                         <td class="text-center">
@@ -140,9 +141,31 @@
                             @endif
                         </td>
                         <td>
-                            @foreach($control->invoices as $invoice)
-                                <li>{{ $invoice->number }}</li>
-                            @endforeach
+                            @forelse($control->invoices as $invoice)
+                            <a
+                                href="{{ $invoice->link }}"
+                                class="btn btn-sm mb-1 @if($control->completed_invoices) btn-success @else btn-danger @endif"
+                                target="_blank"
+                                title="Ver Factura {{ $invoice->number }}"
+                            >
+                                <i class="fas fa-file-pdf"></i> {{ $invoice->number }}
+                            </a>
+                            <br>
+                            @empty
+                                <small>
+                                    <b>Sin facturas</b>
+                                </small>
+                            @endforelse
+                        </td>
+                        <td class="text-center">
+                            <button
+                                class="btn btn-sm @if($control->completed_invoices === true) btn-success @else btn-outline-success @endif"
+                                wire:click="markCompletedInvoices({{ $control }})"
+                                title="Todas las facturas recepcionadas"
+                                @if($control->completed_invoices) disabled @endif
+                            >
+                                <i class="fas fa-check"></i>
+                            </button>
                         </td>
                     </tr>
                 @empty
@@ -166,7 +189,7 @@
             <input
                 class="form-control @error('number') is-invalid @enderror"
                 id="invoice-number"
-                wire:model.debounce.1500ms="number"
+                wire:model.defer="number"
                 type="text"
             >
             @error('number')
@@ -181,7 +204,7 @@
             <input
                 class="form-control @error('date') is-invalid @enderror"
                 id="invoice-date"
-                wire:model.debounce.1500ms="date"
+                wire:model.defer="date"
                 type="date"
             >
             @error('date')
@@ -196,7 +219,7 @@
             <input
                 class="form-control @error('amount') is-invalid @enderror"
                 id="invoice-amount"
-                wire:model.debounce.1500ms="amount"
+                wire:model.defer="amount"
                 type="text"
             >
             @error('amount')
@@ -211,7 +234,7 @@
             <input
                 class="form-control form-control-file @error('file') is-invalid @enderror"
                 type="file"
-                wire:model.debounce.1500ms="file"
+                wire:model.defer="file"
                 id="invoice-{{ $iteration }}"
             >
             @error('file')

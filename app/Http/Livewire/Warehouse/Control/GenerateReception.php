@@ -77,7 +77,7 @@ class GenerateReception extends Component
     public function mount()
     {
         $this->type_product = 1;
-        $this->programs = Program::orderBy('name')->get(['id', 'name']);
+        $this->programs = $this->getPrograms();
         $this->wre_products = collect([]);
         $this->po_items = [];
         $this->error = false;
@@ -157,6 +157,16 @@ class GenerateReception extends Component
                 $this->error = true;
                 $this->msg = 'Todos los productos de la orden de compra fueron recibidos.';
                 $this->resetInputReception();
+            }
+
+            /**
+             * La OC debe tener un FR relacionado.
+             * No se admite OC sin FR.
+             * Se debe relacionar el FR a la OC en caso de no tener FR.
+             */
+            if(!$this->request_form)
+            {
+                session()->flash('danger', 'La Orden de Compra no tiene un FR relacionado.');
             }
         }
     }
@@ -309,6 +319,17 @@ class GenerateReception extends Component
         return $technical_signer_id;
     }
 
+    public function getPrograms()
+    {
+        $programs = Program::query()
+            ->orderByDesc('period')
+            ->orderBy('name')
+            ->onlyValid()
+            ->get(['id', 'name', 'period']);
+
+        return $programs;
+    }
+
     public function editProduct($index)
     {
         $this->index_selected = $index;
@@ -442,7 +463,8 @@ class GenerateReception extends Component
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
             'reception_visator_id' => $this->store->visator->id,
-            'technical_signer_id' => $this->technical_signer_id
+            'technical_signer_id' => $this->technical_signer_id,
+            'completed_invoices' => false,
         ]);
 
         foreach($this->po_items as $item)

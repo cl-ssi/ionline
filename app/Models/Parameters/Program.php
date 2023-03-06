@@ -58,4 +58,9 @@ class Program extends Model
     {
         return strtolower($this->financial_type) != 'extrapresupuestario' ? 'Presupuestario' : 'Extrapresupuestario';
     }
+
+    public function scopeOnlyValid($query)
+    {
+        return $query->whereIn('period', [now()->year, now()->year - 1]);
+    }
 }

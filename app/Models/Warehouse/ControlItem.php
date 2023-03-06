@@ -60,7 +60,7 @@ class ControlItem extends Model
     {
         $programName = 'Sin Programa';
         if($this->program)
-            $programName = $this->program->name;
+            $programName = $this->program->period . " - " . $this->program->name;
         return $programName;
     }
 
