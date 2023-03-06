@@ -6,6 +6,7 @@ use App\Http\Requests\RequestForm\StoreInvoiceRequest;
 use App\Models\RequestForms\Invoice;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\Store;
+use App\Services\SignatureService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -26,11 +27,17 @@ class InvoiceManagement extends Component
     public $selected_controls;
     public $folder = 'ionline/invoices/';
 
+    protected $listeners = [
+        'refreshComponent' => '$refresh'
+    ];
+
     public function mount(Store $store)
     {
         $this->iteration = 1;
         $this->selected_controls = [];
         $this->controls = collect([]);
+
+        $this->controls = $this->getControls();
     }
 
     public function rules()
@@ -46,18 +53,23 @@ class InvoiceManagement extends Component
     public function searchPurchaseOrder()
     {
         $this->selected_controls = [];
-        $controls = collect([]);
+        $this->controls = $this->getControls();
+    }
 
-        if($this->search)
-        {
-            $controls = Control::query()
-                ->whereStoreId($this->store->id)
-                ->whereType(1)
-                ->wherePoCode($this->search)
-                ->get();
-        }
+    public function getControls()
+    {
+        $controls = Control::query()
+            ->whereStoreId($this->store->id)
+            ->whereType(1)
+            ->whereCompletedInvoices(false)
+            ->when($this->search, function ($query) {
+                $query->where('po_code', 'like', $this->search);
+            })
+            ->has('items')
+            ->orderByDesc('created_at')
+            ->get();
 
-        $this->controls = $controls;
+        return $controls;
     }
 
     public function save()
@@ -90,6 +102,47 @@ class InvoiceManagement extends Component
 
         $this->iteration++;
         $this->selected_controls = [];
-        $this->controls = collect([]);
+        $this->controls = $this->getControls();
+    }
+
+    public function markCompletedInvoices(Control $control)
+    {
+        $control->update([
+            'completed_invoices' => true
+        ]);
+
+        $this->controls = $this->getControls();
+        $this->sendTechnicalRequestSignature($control);
+    }
+
+    public function sendTechnicalRequestSignature(Control $control)
+    {
+        $technicalSigner = $control->technicalSigner ?? null;
+
+        if($technicalSigner)
+        {
+            $technicalSignature = new SignatureService();
+            $technicalSignature->addResponsible($this->store->visator);
+            $technicalSignature->addSignature(
+                10,
+                "Acta de Recepción Técnica #$control->id",
+                "Recepción #$control->id",
+                'Visación en cadena de responsabilidad',
+                true
+            );
+            $technicalSignature->addView('warehouse.pdf.report-reception', [
+                'type' => '',
+                'control' => $control,
+                'store' => $control->store,
+                'act_type' => 'reception',
+            ]);
+            $technicalSignature->addVisators(collect([]));
+            $technicalSignature->addSignatures(collect([$technicalSigner]));
+            $technicalSignature = $technicalSignature->sendRequest();
+            $control->technicalSignature()->associate($technicalSignature);
+            $control->save();
+
+            session()->flash('success', "La solicitud de firma del Ingreso #". $control->id . " fue enviada a $technicalSigner->tinny_name.");
+        }
     }
 }

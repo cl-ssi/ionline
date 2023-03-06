@@ -32,6 +32,7 @@ class Control extends Model
         'document_number',
         'document_date',
         'status',
+        'completed_invoices',
         'store_id',
         'origin_id',
         'destination_id',
@@ -226,7 +227,7 @@ class Control extends Model
     {
         $programName = 'Sin Programa';
         if($this->program)
-            $programName = $this->program->name;
+            $programName = $this->program->period . " - " . $this->program->name;
         return $programName;
     }
 

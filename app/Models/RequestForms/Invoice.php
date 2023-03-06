@@ -6,6 +6,7 @@ use App\Models\Warehouse\Control;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Invoice extends Model
 {
@@ -28,5 +29,10 @@ class Invoice extends Model
     public function control()
     {
         return $this->belongsTo(Control::class);
+    }
+
+    public function getLinkAttribute()
+    {
+        return Storage::disk('gcs')->url($this->url);
     }
 }

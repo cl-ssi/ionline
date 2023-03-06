@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Warehouse\Control;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
 use App\Models\Pharmacies\Program;
+use App\Models\Warehouse\TypeDispatch;
+use App\Models\Warehouse\TypeReception;
 use Livewire\Component;
 
 class ControlReport extends Component
@@ -18,6 +20,8 @@ class ControlReport extends Component
     public $start_date;
     public $end_date;
     public $type;
+    public $type_control;
+    public $typesControl;
 
     protected $listeners = [
         'myProductId'
@@ -38,6 +42,8 @@ class ControlReport extends Component
 
         $this->start_date = now()->startOfMonth()->format('Y-m-d');
         $this->end_date = now()->endOfMonth()->format('Y-m-d');
+
+        $this->typesControl = collect();
     }
 
     public function render()
@@ -71,12 +77,38 @@ class ControlReport extends Component
                 $query->where('product_id', $this->product_id);
             })
             ->when($this->type, function($query) {
-                $query->whereRelation('control','type', $this->type);
+                $query->whereRelation('control', 'type', $this->type);
+            })
+            ->when($this->type_control, function($query) {
+                $query->when($this->type == '1', function ($query) {
+                    $query->whereRelation('control', 'type_reception_id', $this->type_control);
+                }, function($query) {
+                    $query->whereRelation('control', 'type_dispatch_id', $this->type_control);
+                });
             })
             ->whereConfirm(true)
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $controlItems;
+    }
+
+    public function updatedType()
+    {
+        $this->typesControl = collect();
+        if($this->type == "")
+        {
+            $this->type_control = null;
+        }
+
+        if($this->type === "1")
+        {
+            $this->typesControl = TypeReception::all();
+        }
+
+        elseif($this->type === "false")
+        {
+            $this->typesControl = TypeDispatch::all();
+        }
     }
 }
