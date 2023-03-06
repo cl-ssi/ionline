@@ -1,5 +1,5 @@
 <div>
-    código interno: {{ $meeting->id }}
+    Código interno: {{ $meeting->id }}
 
     <div class="titulo">Acta de reunión Ley de Lobby {{ $meeting->subject }}</div>
     <br>
