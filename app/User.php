@@ -187,6 +187,14 @@ class User extends Authenticatable implements Auditable
             ->where('date',today());
     }
 
+    /* Authority relation: Is Delegate from ou */
+    public function delegate()
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type','delegate')
+            ->where('date',today());
+    }
+
     public function serviceRequests()
     {
         return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
