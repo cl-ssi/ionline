@@ -65,7 +65,7 @@ use Illuminate\Support\Facades\DB;
                 @php($subtotal_first_pass = true)
             @endif
             @if($subtotal_first_pass) <tr> @endif
-                <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' nowrap="nowrap" class="text-uppercase">{{!$seccion->tfoot ? Str::before($prestacion->nombre_prestacion, '*') : $prestacion->nombre_prestacion}}</td>
+                <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' {{-- nowrap="nowrap" --}} class="text-uppercase">{{!$seccion->tfoot ? Str::before($prestacion->nombre_prestacion, '*') : $prestacion->nombre_prestacion}}</td>
                 @foreach($seccion->cols as $col)
                 <td align='right' data-t="n" data-v="{{$prestacion->rems->sum($col)}}">{{number_format($prestacion->rems->sum($col),$seccion->precision,",",".")}}</td>
                 @endforeach
