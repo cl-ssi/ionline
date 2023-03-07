@@ -25,7 +25,7 @@ class NewUploadRem extends Component
     public $rem_period_series_id;
     public $rem_period_series;
     public $serie;
-    public $type=null;
+    public $type = null;
     public $hasFile = false;
     public $isOriginal = false;
     public $isCorreccion = false;
@@ -44,7 +44,7 @@ class NewUploadRem extends Component
     public function mount(RemFile $remFiles)
     {
         // Filtrar los registros que deseas obtener
-        $remFiles = RemFile::where('rem_period_series_id', $this->rem_period_series->id)->where('establishment_id', $this->remEstablishment->establishment->id)->where('type',$this->type)->get();
+        $remFiles = RemFile::where('rem_period_series_id', $this->rem_period_series->id)->where('establishment_id', $this->remEstablishment->establishment->id)->where('type', $this->type)->get();
 
         // Asignar el resultado a una propiedad del componente Livewire
         $this->remFiles = $remFiles;
@@ -86,7 +86,7 @@ class NewUploadRem extends Component
 
     public function save()
     {
-        
+
         if ($this->type == 'Original') {
             $this->folder = $this->folderOriginal;
         } else {
@@ -96,7 +96,8 @@ class NewUploadRem extends Component
         $filename = $this->remEstablishment->establishment->new_deis_without_first_character;
         $filename .= strtoupper($this->rem_period_series->serie->name);
         $filename .= '01';
-        $filename .= '.' . $this->file->extension();
+        $extension = pathinfo($this->file->getClientOriginalName(), PATHINFO_EXTENSION);
+        $filename .= '.' . $extension;
         $this->remFileNew = RemFile::updateOrCreate(
             [
                 'period' => $this->period->period,
