@@ -61,10 +61,25 @@ class RequirementController extends Controller
             }
         }
 
+        /** Caso de estudio, sobre el != y el !== 
+         * Descomentar esta líena y la que está debajo del foreach
+         * el valor no es el mismo con != que con !==
+        */
+        // app('debugbar')->log($user !== $auth_user);
+
+        /** Es delegado de una OU (quiere decir que puede ver los SGR del manager) */
+        foreach($auth_user->delegate as $delegate) {
+            $allowed_users->push($delegate->organizationalUnit->currentManager->user);
+        }
+
+        // app('debugbar')->log($user !== $auth_user);
+        // app('debugbar')->log(!$allowed_users->contains($user));
+        // return true;
+
         /** Si no pasó ningún usuario por parametro o
          * si el usuario es distinto al user logeado ($auth_user) y 
          * si el $user no existe en los permitidos entonces mostramos su bandeja personal */
-        if(is_null($user) OR ($user != $auth_user AND !$allowed_users->contains($user) ) )
+        if(is_null($user) OR ($user->id != $auth_user->id AND !$allowed_users->contains($user) ))
         {
             return redirect()->route('requirements.inbox',$auth_user);
         }

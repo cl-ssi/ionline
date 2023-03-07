@@ -76,28 +76,30 @@ class MeetingMgr extends Component
         ];
     }
 
-    public function addCompromise()
-    {
-        $this->compromises[] = [
-            'name' => '',
-            'date' => '',
-            'status' => '',
-        ];
-    }
-
-    public function removeCompromise($index)
-    {
-
-        $compromise_id = $this->compromises[$index]['id'];
-        $this->delete_compromises[] = $compromise_id;
-        array_splice($this->compromises, $index, 1);
-    }
-
     public function removeParticipant($key)
     {
         unset($this->participants[$key]);
         $this->participants = array_values($this->participants);
     }
+
+    public function addCompromise()
+    {
+        $this->compromises[] = Compromise::make([
+            'name' => '', 
+            'date' => '',
+            'status' => ''
+        ]);
+    }
+
+    public function removeCompromise($key)
+    {
+        unset($this->compromises[$key]);
+        $this->compromises = array_values($this->compromises);
+        // $compromise_id = $this->compromises[$index]['id'];
+        // $this->delete_compromises[] = $compromise_id;
+        // array_splice($this->compromises, $index, 1);
+    }
+
 
     public function index()
     {
@@ -108,7 +110,7 @@ class MeetingMgr extends Component
     public function form(Meeting $meeting)
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
-        $this->compromises = Compromise::where('meeting_id', $meeting->id)->get()->toArray();
+        $this->compromises = $this->meeting->compromises->toArray();
         $this->participants = $meeting->participants->map(function($participant) {
             return [
                 'user_id' => $participant->id,
@@ -123,7 +125,6 @@ class MeetingMgr extends Component
 
     public function save()
     {
-        $this->deleteCommitment($this->delete_compromises);
         $this->validate();
         $this->meeting->save();
 
@@ -138,30 +139,17 @@ class MeetingMgr extends Component
         }
 
         /** Guardar los compromisos */
-        foreach ($this->compromises as $compromise) {
-            Compromise::updateOrCreate(
-                ['meeting_id' => $this->meeting->id, 'name' => $compromise['name']],
-                ['date' => $compromise['date'], 'status' => $compromise['status']]
-            );
-        }
+        $this->meeting->compromises()->delete();
+        $this->meeting->compromises()->createMany($this->compromises);
 
         $this->participants= [];
         $this->compromises = [];
         $this->index();
     }
 
-    public function deleteCommitment($ids)
-    {
-        foreach ($ids as $id) {
-            $compromise = Compromise::find($id);
-            if ($compromise) {
-                $compromise->delete();
-            }
-        }
-    }
-
     public function delete(Meeting $meeting)
     {
+        $meeting->compromises->delete();
         $meeting->delete();
     }
 

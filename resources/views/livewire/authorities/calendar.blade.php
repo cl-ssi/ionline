@@ -139,6 +139,14 @@
             </a>
             <br>
             <em class="text-muted">{{ optional($authority['secretary'])->position }}</em>
+
+            <hr class="mt-1 mb-1">
+            {{ optional($authority['delegate'])->tinnyName }}
+            <a href="#" class="link-primary" wire:click="edit('{{ $date }}','delegate')">
+               <i class="fas fa-edit"></i>
+            </a>
+            <br>
+            <em class="text-muted">{{ optional($authority['delegate'])->position }}</em>
             
 
         </div>

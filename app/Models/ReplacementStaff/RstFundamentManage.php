@@ -36,9 +36,10 @@ class RstFundamentManage extends Model
             case 'retirement':
               return 'Retiro o Jubilación';
               break;
-            case '':
-              return '';
+            case 'vacant position':
+              return 'Vacante';
               break;
+            default: return '';
         }
     }
 

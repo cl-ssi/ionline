@@ -18,6 +18,12 @@
     'type' => 'secretary',
 ])
 
+@livewire('profile.subrogations', [
+    'organizationalUnit' => $ou,
+    'hide_own_subrogation' => true,
+    'type' => 'delegate',
+])
+
 <hr>
 
 @livewire('authorities.calendar', ['organizationalUnit' => $ou])

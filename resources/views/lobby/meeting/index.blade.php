@@ -33,7 +33,8 @@
             <th>Responsable</th>
             <th>Solicitante</th>
             <th>Asunto</th>
-            <th></th>
+            <th>Participantes</th>
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody>
@@ -47,6 +48,9 @@
                     @foreach($meeting->participants as $participant)
                         <li>{{ $participant->shortName }} </li>
                     @endforeach
+                </td>
+                <td>
+                    {{ ($meeting->status === 0) ? 'Pendiente' : 'Terminado' }}
                 </td>
                 <td>
                     <a class="btn btn-sm btn-outline-primary" target="_blank" href="{{ route('documents.lobby.show', $meeting) }}">

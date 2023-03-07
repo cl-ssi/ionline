@@ -100,6 +100,8 @@ class ShowLegalQualityRequest extends Component
     }
 
     public function updatedselectedLegalQuality($selected_legal_quality_id){
+        $this->selectedProfile = null;
+        $this->degree = null;
         $this->fundamentLegalQualities = FundamentLegalQuality::where('legal_quality_manage_id', $selected_legal_quality_id)
             ->where($this->formType, 1)
             ->get();

@@ -168,7 +168,7 @@
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
                     <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                    <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                    <td class="text-center">{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                     <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
                         {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
                     </td>
@@ -179,7 +179,10 @@
                             dia
                         @endif
                     </td>
-                    <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                    <td>
+                        {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                    </td>
                     <td>{{ $requestReplacementStaff->user->FullName }}<br>
                         {{ $requestReplacementStaff->organizationalUnit->name }}
                     </td>

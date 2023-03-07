@@ -65,7 +65,7 @@
                         value="{{ $program->id }}"
                         {{ old('mobile_id', optional($control)->program_id) == $program->id ? 'selected' : '' }}
                     >
-                        {{ $program->name }}
+                        {{ $program->period }} - {{ $program->name }}
                     </option>
                 @endforeach
             </select>

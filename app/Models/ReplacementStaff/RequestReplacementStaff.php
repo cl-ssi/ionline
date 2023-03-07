@@ -81,6 +81,10 @@ class RequestReplacementStaff extends Model implements Auditable
         return $this->hasMany('App\Models\ReplacementStaff\AssignEvaluation');
     }
 
+    public function positions(){
+        return $this->hasMany('App\Models\ReplacementStaff\Position');
+    }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':
