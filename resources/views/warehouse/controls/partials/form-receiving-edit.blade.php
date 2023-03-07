@@ -11,7 +11,7 @@
     </fieldset>
 
     <fieldset class="form-group col-md-4">
-        <label for="date">Fecha Ingreso</label>
+        <label for="date">Fecha de Ingreso</label>
         <input
             type="date"
             id="date"
@@ -31,7 +31,7 @@
 <div class="form-row">
     @switch($control->type_reception_id)
         @case(\App\Models\Warehouse\TypeReception::receiving())
-            <fieldset class="form-group col-md-3">
+            <fieldset class="form-group col-md-2">
                 <label for="origin-id">Origen</label>
                 <input
                     type="text"
@@ -42,20 +42,8 @@
                 >
             </fieldset>
             @break
-        @case(\App\Models\Warehouse\TypeReception::return())
-            <fieldset class="form-group col-md-5">
-                <label for="store-origin-id">Bodega Origen</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="store-origin-id"
-                    value="{{ optional($control->originStore)->name }}"
-                    readonly
-                >
-            </fieldset>
-            @break
         @case(\App\Models\Warehouse\TypeReception::receiveFromStore())
-            <fieldset class="form-group col-md-5">
+            <fieldset class="form-group col-md-2">
                 <label for="store-origin-id">Bodega Origen</label>
                 <input
                     type="text"
@@ -66,8 +54,20 @@
                 >
             </fieldset>
             @break
+        @case(\App\Models\Warehouse\TypeReception::return())
+            <fieldset class="form-group col-md-2">
+                <label for="store-origin-id">Bodega Origen</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="store-origin-id"
+                    value="{{ optional($control->originStore)->name }}"
+                    readonly
+                >
+            </fieldset>
+            @break
         @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
-            <fieldset class="form-group col-md-5">
+            <fieldset class="form-group col-md-2">
                 <label for="purchase-order-code">Código OC</label>
                 <input
                     type="text"
@@ -80,36 +80,8 @@
             @break
     @endswitch
 
-    <fieldset class="form-group col-md-3">
-        <label for="program-id">Programa</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            value="{{ $control->program_name }}"
-            readonly
-        >
-    </fieldset>
-
-    <fieldset class="form-group col-md-6">
-        <label for="note">Nota</label>
-        <input
-            type="text"
-            id="note"
-            class="form-control form-control-sm @error('note') is-invalid @enderror"
-            value="{{ optional($control)->name }}"
-            wire:model.debounce.1500ms="note"
-        >
-        @error('note')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-    </fieldset>
-</div>
-
-@if($control->isPurchaseOrder())
-    <div class="form-row">
-        <fieldset class="form-group col-md-4">
+    @if($control->isPurchaseOrder())
+        <fieldset class="form-group col-md-2">
             <label for="po-date">Fecha OC</label>
             <input
                 type="text"
@@ -129,8 +101,116 @@
                 readonly
             >
         </fieldset>
+    @endif
+
+    @if($control->isReceptionNormal())
+        <fieldset class="form-group col-md-3">
+            <label for="program-id">Programa</label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                value="{{ $control->program_name }}"
+                id="program-id"
+                readonly
+            >
+        </fieldset>
+        <fieldset class="form-group col-md-6">
+            <label for="note">Nota</label>
+            <input
+                type="text"
+                id="note"
+                class="form-control form-control-sm @error('note') is-invalid @enderror"
+                value="{{ $control->note }}"
+                wire:model.debounce.1500ms="note"
+            >
+            @error('note')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+    @endif
+</div>
+
+@if($control->isPurchaseOrder())
+    <div class="form-row">
+        <fieldset class="form-group col-md-2">
+            <label for="document-type">Tipo Documento</label>
+            <select
+                wire:model.debounce.1500ms="document_type"
+                id="document-type"
+                class="form-control form-control-sm @error('document_type') is-invalid @enderror"
+            >
+                <option value="">Seleccione un tipo</option>
+                <option value="guide">Guia</option>
+                <option value="invoice">Factura</option>
+            </select>
+            @error('document_type')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="document-date">Fecha Documento</label>
+            <input
+                type="date"
+                id="document-date"
+                class="form-control form-control-sm @error('document_date') is-invalid @enderror"
+                wire:model.debounce.1500ms="document_date"
+            >
+            @error('document_date')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="document-number">Nro. Documento</label>
+            <input
+                type="text"
+                id="document-number"
+                class="form-control form-control-sm @error('document_number') is-invalid @enderror"
+                wire:model.debounce.1500ms="document_number"
+            >
+            @error('document_number')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-md-2">
+            <label for="program-id">Programa</label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                value="{{ $control->program_name }}"
+                id="program-id"
+                readonly
+            >
+        </fieldset>
+
+        <fieldset class="form-group col-md-4">
+            <label for="note">Nota</label>
+            <input
+                type="text"
+                id="note"
+                class="form-control form-control-sm @error('note') is-invalid @enderror"
+                value="{{ $control->note }}"
+                wire:model.debounce.1500ms="note"
+            >
+            @error('note')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
     </div>
 @endif
+
 
 <div class="form-row">
     <fieldset class="form-group col-md-4">

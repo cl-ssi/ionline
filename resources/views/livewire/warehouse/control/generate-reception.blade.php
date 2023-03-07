@@ -180,7 +180,7 @@
                 <option value="guide">Guia</option>
                 <option value="invoice">Factura</option>
             </select>
-            @error('document_number')
+            @error('document_type')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -188,10 +188,10 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-2">
-            <label for="guide-date">Fecha Documento</label>
+            <label for="document-date">Fecha Documento</label>
             <input
                 class="form-control form-control-sm @error('document_date') is-invalid @enderror"
-                id="guide-date"
+                id="document-date"
                 wire:model.debounce.1500ms="document_date"
                 type="date"
             >
@@ -203,10 +203,10 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-2">
-            <label for="guide-number">Número Documento</label>
+            <label for="document-number">Número Documento</label>
             <input
                 class="form-control form-control-sm @error('document_number') is-invalid @enderror"
-                id="guide-number"
+                id="document-number"
                 wire:model.debounce.1500ms="document_number"
                 type="text"
             >
