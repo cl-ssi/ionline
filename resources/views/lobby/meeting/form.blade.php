@@ -1,7 +1,7 @@
 <div class="form-row mb-3">
     <fieldset class="col-12 col-md-5">
         <label for="">Responsable*</label>
-        @livewire('search-select-user', ['selected_id' => 'responsible_id', 'required' => 'required'])
+        @livewire('search-select-user', ['selected_id' => 'responsible_id', 'required' => 'required', 'user' => $meeting->responsible])
         @error('meeting.responsible_id') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
 
@@ -118,6 +118,7 @@
             {{ __('Compromisos') }}
         </label>
     </fieldset>
+
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
@@ -145,7 +146,7 @@
                     </select>
                 </td>
                 <td>
-                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm">Eliminar Compromiso</button>
+                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
                 </td>
             </tr>
             @endforeach
