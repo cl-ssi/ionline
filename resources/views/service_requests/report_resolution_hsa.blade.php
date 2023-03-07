@@ -161,7 +161,11 @@
 
       <div class="right" style="float: right; width: 280px;">
         <div class="left" style="padding-bottom: 6px;">
-          <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+            @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+            @else
+                <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
+            @endif
         </div>
         <div class="left" style="padding-bottom: 2px;">
           <strong>IQUIQUE,</strong>
@@ -439,20 +443,16 @@
         <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
       </p>
 
-      <!-- <p class="justify">
-    <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas
-    @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-      funciones que lo permitan.
-    @else
-      prestaciones que lo permitan.
-    @endif
-</p> -->
+        
+        <p class="justify">
+            <strong>DECIMO TERCERO:</strong> Déjese establecido que el trabajador tendrá derecho a presentar licencias médicas, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.<br><br>
 
-      <p class="justify">
-        <strong>DECIMO TERCERO:</strong> Déjese establecido que el trabajador tendrá derecho a presentar licencias médicas, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.<br><br>
-
-        Las mujeres podrán solicitar permiso post-natal parental, los cuales sólo justificará los días de inasistencia, no procediendo el pago por los días mientras dure el permiso; el beneficio es sólo para la persona definida en el convenio e intransferible
-      </p>
+            <!-- 07/03: Ajuste solicitado por Carol Pérez: eliminar para ssi  -->
+            @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                Las mujeres podrán solicitar permiso post-natal parental, los cuales sólo justificará los días de inasistencia, no procediendo el pago por los días mientras dure el permiso; el beneficio es sólo para la persona definida en el convenio e intransferible
+            @endif
+        </p>
+        
 
       @if($ServiceRequest->additional_benefits != null)
       <p class="justify">
