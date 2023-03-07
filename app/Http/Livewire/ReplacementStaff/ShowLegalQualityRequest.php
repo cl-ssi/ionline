@@ -35,6 +35,7 @@ class ShowLegalQualityRequest extends Component
     public $selectedDegree = null;
 
     public $degree = null;
+    public $degreeStateInput = 'readonly';
 
     /* Para editar y precargar el select PERFIL */
     public $profileSelected = null;
@@ -67,24 +68,26 @@ class ShowLegalQualityRequest extends Component
 
             /* PERFIL GRADO */
             $this->selectedProfile = $this->requestReplacementStaff->profile_manage_id;
-            switch ($this->requestReplacementStaff->profile_manage_id) {
-                case 1:
-                    $this->degree = '22';
-                    break;
-                case 2:
-                    $this->degree = '24';
-                    break;
-                case 3:
-                    $this->degree = '16';
-                    break;
-                case 4:
-                    $this->degree = '22';
-                    break;
+            if($this->formType == 'announcement' && $this->selectedProfile == 1) $this->degreeStateInput = '';
+            if($this->formType == 'replacement')
+                switch ($this->requestReplacementStaff->profile_manage_id) {
+                    case 1:
+                        $this->degree = '22';
+                        break;
+                    case 2:
+                        $this->degree = '24';
+                        break;
+                    case 3:
+                        $this->degree = '16';
+                        break;
+                    case 4:
+                        $this->degree = '22';
+                        break;
 
-                case '':
-                    $this->degree = '';
-                    break;
-            }
+                    case '':
+                        $this->degree = '';
+                        break;
+                }
         }
     }
 
@@ -112,6 +115,11 @@ class ShowLegalQualityRequest extends Component
         else{
             $this->salaryStateInput = 'disabled';
         }
+
+        if($this->formType == 'announcement' && $selected_legal_quality_id == 1) 
+            $this->degreeStateInput = '';
+        else
+        $this->degreeStateInput = 'readonly';
     }
 
     public function updatedselectedFundament($selected_fundament_id){
@@ -125,23 +133,24 @@ class ShowLegalQualityRequest extends Component
     }
 
     public function updatedselectedProfile($profile_id){
-        switch ($profile_id) {
-            case 1:
-                $this->degree = '22';
-                break;
-            case 2:
-                $this->degree = '24';
-                break;
-            case 3:
-                $this->degree = '16';
-                break;
-            case 4:
-                $this->degree = '22';
-                break;
+        if($this->formType == 'replacement')
+            switch ($profile_id) {
+                case 1:
+                    $this->degree = '22';
+                    break;
+                case 2:
+                    $this->degree = '24';
+                    break;
+                case 3:
+                    $this->degree = '16';
+                    break;
+                case 4:
+                    $this->degree = '22';
+                    break;
 
-            case '':
-                $this->degree = '';
-                break;
-        }
+                case '':
+                    $this->degree = '';
+                    break;
+            }
     }
 }

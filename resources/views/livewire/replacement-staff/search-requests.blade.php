@@ -119,19 +119,22 @@
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
                     <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                    <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                    <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
-                        {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
-                        {{ $requestReplacementStaff->getNumberOfDays() }}
-                        @if($requestReplacementStaff->getNumberOfDays() > 1)
-                            días
-                        @else
-                            dia
+                    <td>{{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }}</td>
+                    <td>
+                        @if($requestReplacementStaff->form_type == 'replacement')
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
+                            {{ $requestReplacementStaff->getNumberOfDays() }}
+                            @if($requestReplacementStaff->getNumberOfDays() > 1)
+                                días
+                            @else
+                                dia
+                            @endif
                         @endif
                     </td>
                     <td>
-                        {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
-                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                        {{ $requestReplacementStaff->fundamentManage->NameValue ?? '' }}<br>
+                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue ?? '' }}
                     </td>
                     <td>
                         {{ $requestReplacementStaff->WorkDayValue }}
