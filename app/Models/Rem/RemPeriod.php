@@ -27,18 +27,18 @@ class RemPeriod extends Model
     public function series()
     {
         return $this->hasMany(RemPeriodSerie::class, 'period_id', 'id');
-        
     }
 
-    public static function getPivot($user_id, $date) {
+    public function getMonthStringAttribute()
+    {
+        return str_pad($this->month, 2, '0', STR_PAD_LEFT);
+    }
+
+    public static function getPivot($user_id, $date)
+    {
         $user = User::find($user_id);
-        if($user)
-        {
+        if ($user) {
             return self::getAuthorityFromDate($user->organizational_unit_id, $date, 'manager');
         }
     }
-    
-
-    
-    
 }

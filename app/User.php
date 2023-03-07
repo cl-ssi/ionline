@@ -187,6 +187,14 @@ class User extends Authenticatable implements Auditable
             ->where('date',today());
     }
 
+    /* Authority relation: Is Delegate from ou */
+    public function delegate()
+    {
+        return $this->hasMany(Authority::class)
+            ->where('type','delegate')
+            ->where('date',today());
+    }
+
     public function serviceRequests()
     {
         return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
@@ -585,6 +593,26 @@ class User extends Authenticatable implements Auditable
     /* $user->shortName (PrimerNombre Apellido1 Apellido2), para las Marías contempla sus segundo nombre */
     public function getShortNameAttribute()
     {
+        return implode(' ', array(
+            $this->firstName,
+            mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8'),
+            mb_convert_case($this->mothers_family,MB_CASE_TITLE, 'UTF-8')
+        ));
+    }
+
+    /* $user->tinyName (PrimerNombre Apellido1) */
+    public function getTinnyNameAttribute()
+    {
+        if(!is_null($this->name))
+        {
+            return $this->firstName . ' ' . mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8');
+        }
+        else
+            return "";
+    }
+
+    public function getFirstNameAttribute()
+    {
         $names = explode(' ',trim(mb_convert_case($this->name,MB_CASE_TITLE, 'UTF-8')));
         $cantNames = count($names);
         if($cantNames >=2 AND ($names[0] == 'María' OR $names [0] == 'Maria')) {
@@ -604,28 +632,8 @@ class User extends Authenticatable implements Auditable
             $firstName = $names[0];
         }
 
-        return implode(' ', array(
-            $firstName,
-            mb_convert_case($this->fathers_family,MB_CASE_TITLE, 'UTF-8'),
-            mb_convert_case($this->mothers_family,MB_CASE_TITLE, 'UTF-8')
-        ));
-    }
-
-    /* $user->tinyName (PrimerNombre Apellido1) */
-    public function getTinnyNameAttribute()
-    {
-        if(!is_null($this->name))
-        {
-            $name = explode(" ", $this->name)[0];
-            return $name.' '.$this->fathers_family;
-        }
-        else
-            return "";
-    }
-
-    public function getFirstNameAttribute()
-    {
-        return strtok(mb_convert_case(trim($this->name), MB_CASE_TITLE, 'UTF-8'), " ");
+        return $firstName;
+        // return strtok(mb_convert_case(trim($this->name), MB_CASE_TITLE, 'UTF-8'), " ");
     }
 
     public function getInitialsAttribute()

@@ -18,12 +18,12 @@
         @foreach(auth()->user()->remEstablishments as $remEstablishment)
         <tr>
             <td class="text-center font-weight-bold">
-                {{$remEstablishment->establishment->name}}
-                ({{$remEstablishment->establishment->type}})
-                ({{$remEstablishment->establishment->new_deis_without_first_character}})
+                {{$remEstablishment->establishment->official_name ?? ''}}
+                ({{$remEstablishment->establishment->establishmentType->name ?? ''}})
+                ({{$remEstablishment->establishment->new_deis_without_first_character ?? ''}})
             </td>
             @foreach($periods as $key=>$period)
-            <td>                
+            <td>
                 @if($filesAutorizacion[$key])
                 <span class="text-success">Existe archivo de Autorización por lo que puede Descargar la autorizacion o proceder a subir modificaciones a REM</span>
                 <br>
@@ -42,7 +42,7 @@
                     Serie:{{$serie->serie->name??''}}<strong style="color: red;"> Corrección</strong>
                     <br>
                     @livewire('rem.new-upload-rem',['period'=>$period,'serie'=>$serie, 'remEstablishment'=>$remEstablishment,'rem_period_series'=>$serie, 'type'=>'Correccion'])
-                </ul>                
+                </ul>
                 @endif
                 @endforeach
 
@@ -58,7 +58,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Subir</button>
                 </form>
-                @endif               
+                @endif
             </td>
             @endforeach
 

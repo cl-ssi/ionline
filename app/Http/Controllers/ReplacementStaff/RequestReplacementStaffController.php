@@ -375,15 +375,17 @@ class RequestReplacementStaffController extends Controller
         $newRequestReplacementStaff->form_type = $formType;
         $newRequestReplacementStaff->request_id = $requestReplacementStaff->id;
         $newRequestReplacementStaff->user()->associate(Auth::user());
-        $newRequestReplacementStaff->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $newRequestReplacementStaff->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $newRequestReplacementStaff->requesterUser()->associate($request->requester_id);
 
+        //REVISAR ESTO...
         if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
             $newRequestReplacementStaff->request_status = 'pending';
         }
         else{
             $newRequestReplacementStaff->request_status = 'complete';
         }
+        //-------
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         if($request->hasFile('job_profile_file')){
@@ -398,27 +400,44 @@ class RequestReplacementStaffController extends Controller
 
         $newRequestReplacementStaff->save();
 
+        /* APROBACIÓN JEFATURA DIRECTA */
         $request_sing = new RequestSign();
-
         $request_sing->position = '1';
         $request_sing->ou_alias = 'leadership';
-        $request_sing->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $request_sing->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $request_sing->request_status = 'pending';
-        $request_sing->request_replacement_staff_id = $newRequestReplacementStaff->id;
+        $request_sing->requestReplacementStaff()->associate($newRequestReplacementStaff->id);
         $request_sing->save();
 
-        //SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
+        /* SE NOTIFICA PARA INICIAR EL PROCESO DE FIRMAS */
         $notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, today(), 'manager');
-        $notification_ou_manager->user->notify(new NotificationSign($newRequestReplacementStaff));
+        if($notification_ou_manager){
+            $notification_ou_manager->user->notify(new NotificationSign($newRequestReplacementStaff));
+        }
 
+        /* APROBACIÓN UNIDAD PERSONAL */
         $request_sing_uni_per = new RequestSign();
-
         $request_sing_uni_per->position = '2';
         $request_sing_uni_per->ou_alias = 'uni_per';
-        $request_sing_uni_per->organizational_unit_id = 46;
-        $request_sing_uni_per->request_replacement_staff_id = $newRequestReplacementStaff->id;
+        $request_sing_uni_per->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'PersonalSSI')->first()->value);
+        $request_sing_uni_per->requestReplacementStaff()->associate($newRequestReplacementStaff->id);
         $request_sing_uni_per->save();
+
+        /* APROBACIÓN RR.HH. */
+        $request_sing_rrhh = new RequestSign();
+        $request_sing_rrhh->position = 3;
+        $request_sing_rrhh->ou_alias = 'sub_rrhh';
+        $request_sing_rrhh->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value);
+        $request_sing_rrhh->requestReplacementStaff()->associate($newRequestReplacementStaff->id);
+        $request_sing_rrhh->save();
+
+        /* APROBACIÓN DEPTO. FINANZAS */
+        $request_sing_finance = new RequestSign();
+        $request_sing_finance->position = '4';
+        $request_sing_finance->ou_alias = 'finance';
+        $request_sing_finance->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value);
+        $request_sing_finance->requestReplacementStaff()->associate($newRequestReplacementStaff->id);
+        $request_sing_finance->save();
 
         //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
         $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
