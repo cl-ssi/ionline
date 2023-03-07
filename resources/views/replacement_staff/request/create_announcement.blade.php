@@ -6,11 +6,9 @@
 
 @include('replacement_staff.nav')
 
-<h5><i class="fas fa-file"></i> Nuevo Formulario de Convocatorias</h5>
+<h5><i class="fas fa-file"></i> Nuevo Formulario de Convocatorias</h5><br>
 
-<br>
-
-<form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store', ['formType' => 'announcement']) }}" enctype="multipart/form-data"/>
+<form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store', ['formType' => 'announcement']) }}" enctype="multipart/form-data">
     @csrf
     @method('POST')
     
@@ -18,13 +16,14 @@
     <div class="form-row">
         <fieldset class="form-group col-12 col-sm-6">
             <label for="for_requester_name">Creador de Solicitud</label>
-            <input type="text" class="form-control" name="requester_name" id="for_requester_name" value="{{ Auth::user()->TinnyName }}" disabled>
+            <input type="text" class="form-control" name="requester_name" value="{{Auth::user()->TinnyName}}" disabled>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_id">Funcionario Solicitante</label>
             @livewire('search-select-user', [
-                'selected_id' => 'requester_id'
+                'selected_id'   => 'requester_id',
+                'required'      => 'required'
             ])
         </fieldset>
     </div>
@@ -34,16 +33,62 @@
     <h6 class="small"><b>2. Descripción de Solicitud</b></h6> <br>
     <div class="form-row">
         <fieldset class="form-group col-12 col-sm-6">
-            <label for="for_name">Nombre de Cargo</label>
-            <input type="text" class="form-control" name="name" id="for_name" 
+            <label for="for_name">Nombre de Solicitud</label>
+            <input type="text" class="form-control" name="name"
                 placeholder="EJ: Reemplazo por licencia médica de funcionario de establecimiento..." required>
         </fieldset>
+        <fieldset class="form-group col-md-6">
+            <div class="mb-3">
+                <label for="for_request_verification_file" class="form-label">Correo (Verificación Solicitud)</label>
+                <input class="form-control" type="file" name="request_verification_file" accept="application/pdf" required>
+            </div>
+        </fieldset>
     </div>
-    @livewire('replacement-staff.position', [
-        'formType' => 'announcement'
-    ])
-
     <hr>
+    <h6 class="small"><b>3. Descripción de cargo</b></h6> <br>
+    
+    @livewire('replacement-staff.show-legal-quality-request', ['formType'  => 'announcement'])
+    
+    <div class="form-row">
+        <fieldset class="form-group col-6">
+            <label for="for_calidad_juridica">Jornada</label>
+            <div class="mt-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="work_day" id="for_work_day_diurnal" value="diurnal" required>
+                    <label class="form-check-label" for="for_work_day_diurnal">Diurno</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="work_day" id="for_work_day_third_shift" value="third shift" required>
+                    <label class="form-check-label" for="for_work_day_third_shift">Tercer Turno</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="work_day" id="for_work_day_fourth_shift" value="fourth shift" required>
+                    <label class="form-check-label" for="for_work_day_fourth_shift">Cuarto Turno</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="work_day" id="for_work_day_other" value="other" required>
+                    <label class="form-check-label" for="for_work_day_other">Otro</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-group col-4">
+            <label for="for_name">Otra Jornada</label>
+            <input type="text" class="form-control" name="other_work_day" id="for_other_work_day" placeholder="Otro">
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_charges_number">Nº Cargos</label>
+            <input type="number" class="form-control" name="charges_number" value="1" id="for_charges_number">
+        </fieldset>
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-md-6">
+            <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
+            <input class="form-control" type="file" name="job_profile_file" accept="application/pdf" required>
+        </fieldset>
+    </div>
 
     <h6 class="small"><b>4. Descripción de Unidad Organizacional</b></h6> <br>
 
@@ -53,8 +98,6 @@
 
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 </form>
-
-<br><br>
 
 @endsection
 

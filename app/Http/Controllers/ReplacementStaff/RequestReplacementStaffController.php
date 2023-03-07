@@ -18,7 +18,7 @@ use App\Notifications\ReplacementStaff\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationNewRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Parameters\Parameter;
-
+use App\Models\ReplacementStaff\Position;
 
 class RequestReplacementStaffController extends Controller
 {
@@ -225,27 +225,39 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request, $formType)
     {
+        // dd($request);
         if(Auth::user()->organizationalUnit->level == 3){
             /* SE OBTIENEN LA INFORMACIÓN DEL FORMULARIO */
-            $request_replacement = new RequestReplacementStaff($request->All());
+            if($formType == 'announcement'){
+                $request_replacement = new RequestReplacementStaff();
+                $request_replacement->name = $request->name;
+                $request_replacement->request_status = 'pending';
+                $request_replacement->ou_of_performance_id = $request->ou_of_performance_id;
+                $position = new Position($request->All());
+            }else{
+                $request_replacement = new RequestReplacementStaff($request->All());
+                /* CONDICIÓN DE CONVOCATORIA INTERNA O MIXTA */
+                if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
+                    $request_replacement->request_status = 'pending';
+                }
+                else{
+                    $request_replacement->request_status = 'complete';
+                }
+            }
+
             $request_replacement->form_type = $formType;
             $request_replacement->user()->associate(Auth::user());
             $request_replacement->organizationalUnit()->associate(Auth::user()->organizationalUnit);
             $request_replacement->requesterUser()->associate($request->requester_id);
 
-            /* CONDICIÓN DE CONVOCATORIA INTERNA O MIXTA */
-            if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
-                $request_replacement->request_status = 'pending';
-            }
-            else{
-                $request_replacement->request_status = 'complete';
-            }
-
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             if($request->hasFile('job_profile_file')){
                 $file = $request->file('job_profile_file');
                 $file_name = $now.'_job_profile';
-                $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+                if($formType == 'announcement')
+                    $position->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+                else
+                    $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
             }
 
             $file_verification = $request->file('request_verification_file');
@@ -253,6 +265,7 @@ class RequestReplacementStaffController extends Controller
             $request_replacement->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
 
             $request_replacement->save();
+            if($formType == 'announcement') $request_replacement->positions()->save($position);
 
             $position = 1;
             
