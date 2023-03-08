@@ -6,7 +6,8 @@
 
 <h3 class="mb-3">Solicitudes de firmas y distribución</h3>
 
-<form class="form d-print-none" method="GET" action="">
+@if($tab == 'pendientes') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['pendientes']) }}"> @endif
+@if($tab == 'mis_documentos') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['mis_documentos']) }}"> @endif
     <fieldset class="form-group">
         <div class="input-group">
 
@@ -16,7 +17,7 @@
             </div>
 
             <input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
-                placeholder="Buscar por materia o descripción" name="search" readonly>
+                placeholder="Buscar por materia o descripción" name="search">
 
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
