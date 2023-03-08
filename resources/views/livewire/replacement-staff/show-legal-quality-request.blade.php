@@ -107,7 +107,7 @@
 
         <fieldset class="form-group col-12 col-md-1">
             <label for="profiles">Grado</label>
-            <input type="degree" class="form-control" name="degree" id="for_degree" value="{{ $degree }}" readonly>
+            <input type="degree" class="form-control" name="degree" id="for_degree" value="{{ $degree }}" {{$degreeStateInput}}>
         </fieldset>
             
     </div>
