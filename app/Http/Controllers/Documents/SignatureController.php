@@ -73,15 +73,19 @@ class SignatureController extends Controller
             //Firmas del usuario y del manager actual de ou
             $mySignatures = Signature::with('signaturesFiles')
                 ->whereIn('responsable_id', $users)
-                ->where('subject', 'LIKE', '%'.$request->search.'%')
-                ->where('description','LIKE', '%'.$request->search.'%');
+                ->where(function($query) use ($request) {
+                    $query->where('subject', 'LIKE', '%'.$request->search.'%')
+                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+                });
 
             //Firmas de managers anteriores de la ou
             foreach ($myAuthorities as $myAuthority){
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
                 ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to])
-                ->where('subject', 'LIKE', '%'.$request->search.'%')
-                ->where('description','LIKE', '%'.$request->search.'%');
+                ->where(function($query) use ($request) {
+                    $query->where('subject', 'LIKE', '%'.$request->search.'%')
+                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+                });
 
                 $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
             }
@@ -98,7 +102,7 @@ class SignatureController extends Controller
                 })
                 ->whereHas('signaturesFile.signature', function ($q) use ($request){
                     $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->where('description','LIKE', '%'.$request->search.'%');
+                        ->orWhere('description','LIKE', '%'.$request->search.'%');
                 });
 
             //Firmas de managers anteriores de la ou
@@ -111,7 +115,7 @@ class SignatureController extends Controller
                     ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
                     ->whereHas('signaturesFile.signature', function ($q) use ($request){
                         $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                            ->where('description','LIKE', '%'.$request->search.'%');
+                            ->orWhere('description','LIKE', '%'.$request->search.'%');
                     });
 
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
@@ -129,7 +133,7 @@ class SignatureController extends Controller
                 })
                 ->whereHas('signaturesFile.signature', function ($q) use ($request){
                     $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->where('description','LIKE', '%'.$request->search.'%');
+                        ->orWhere('description','LIKE', '%'.$request->search.'%');
                 });
 
             //Firmas de managers anteriores de la ou
@@ -144,7 +148,7 @@ class SignatureController extends Controller
                 ->whereBetween('signature_date', [$myAuthority->from, $myAuthority->to])
                 ->whereHas('signaturesFile.signature', function ($q) use ($request){
                     $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->where('description','LIKE', '%'.$request->search.'%');
+                        ->orWhere('description','LIKE', '%'.$request->search.'%');
                 });
 
                 $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
@@ -154,7 +158,7 @@ class SignatureController extends Controller
 
         }
 
-        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab', 'request'));
     }
 
     /**

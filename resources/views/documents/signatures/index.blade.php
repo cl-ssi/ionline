@@ -17,7 +17,7 @@
             </div>
 
             <input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
-                placeholder="Buscar por materia o descripción" name="search">
+                placeholder="Buscar por materia o descripción" name="search" value="{{$request->search}}">
 
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
