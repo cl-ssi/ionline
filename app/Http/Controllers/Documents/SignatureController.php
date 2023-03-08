@@ -97,9 +97,11 @@ class SignatureController extends Controller
                 ->whereHas('signaturesFile.signature', function ($q) {
                     $q->whereNull('rejected_at');
                 })
-                ->whereHas('signaturesFile.signature', function ($q) use ($request){
-                    $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->where('description','LIKE', '%'.$request->search.'%');
+                ->when($request->search, function($query) use($search) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                        $query->where('subject', 'like', $search)
+                            ->orWhere('description', 'like', $search);
+                    });
                 });
 
             //Firmas de managers anteriores de la ou
@@ -118,13 +120,6 @@ class SignatureController extends Controller
 
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
-
-            $pendingSignaturesFlows = $pendingSignaturesFlows->when($request->search, function($query) use($search, $request) {
-                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
-                    $query->where('subject', 'like', $search)
-                        ->orWhere('description', 'like', $search);
-                });
-            });
 
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
