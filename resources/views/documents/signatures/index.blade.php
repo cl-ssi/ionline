@@ -25,7 +25,7 @@
                 name="search"
                 value="{{ app('request')->input('search') }}"
             >
-
+            
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fas fa-search" aria-hidden="true"></i></button>
