@@ -6,7 +6,8 @@
 
 <h3 class="mb-3">Solicitudes de firmas y distribución</h3>
 
-<form class="form d-print-none" method="GET" action="">
+@if($tab == 'pendientes') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['pendientes']) }}"> @endif
+@if($tab == 'mis_documentos') <form class="form d-print-none" method="GET" action="{{ route('documents.signatures.index',['mis_documentos']) }}"> @endif
     <fieldset class="form-group">
         <div class="input-group">
 
