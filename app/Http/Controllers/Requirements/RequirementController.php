@@ -61,9 +61,12 @@ class RequirementController extends Controller
             }
         }
 
-        /** Caso de estudio, sobre el != y el !== 
-         * Descomentar esta líena y la que está debajo del foreach
-         * el valor no es el mismo con != que con !==
+        /** 
+         * Caso de estudio, sobre la comparación entre objetos
+         * $user1 == $user2 es falso, si se llama a alguna relacion
+         * de cualquiera de los dos objetos
+         * en el caso de abajo, al llamar a $auth_user->delegate
+         * ya pasan a ser diferentes los resultados.
         */
         // app('debugbar')->log($user !== $auth_user);
 
