@@ -15,9 +15,11 @@ class ProgramController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $programs = Program::with('components')->orderBy('name')->get();
+        $programs = Program::with('components')
+                    ->when($request->program_name, function($q) use ($request){ return $q->where('name', 'LIKE', '%'.$request->program_name.'%'); })
+                    ->orderBy('name')->get();
         return view('agreements.programs.index', compact('programs'));
     }
 

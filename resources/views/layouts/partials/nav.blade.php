@@ -137,7 +137,9 @@
                 @if(auth()->user()->organizationalUnit && auth()->user()->organizationalUnit->establishment_id != 1)
                 <li class="nav-item dropdown {{ active(['request_forms.*','warehouse.*','pharmacies.*','resources.*','inventories.*','allowances.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-money-check"></i> SDA
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Subdirección Administrativa">
+                            <i class="fas fa-money-check"></i> SDA
+                        </span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'nav')->where('parameter', 'accessRF')->first()->value)
@@ -300,7 +302,9 @@
                 <li class="nav-item dropdown
                     {{ active(['rrhh.users.*','rrhh.organizational-units.*','rrhh.authorities.*','suitability.*','replacement_staff.request.*']) }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-users"></i> RRHH
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Subdirección de Gestión y Desarrollo de las Personas">
+                            <i class="fas fa-users"></i> SDGP
+                        </span>
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
