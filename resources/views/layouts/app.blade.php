@@ -110,6 +110,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-es_CL.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+    
+    <script>
+        $('[data-toggle="tooltip"]').tooltip()
+    </script>
 
     @yield('custom_js')
     @livewireScripts
