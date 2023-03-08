@@ -83,7 +83,7 @@
                             <i class="fas fa-edit"></i> {{ $control->id }}
                         </a>
                     </td>
-                    <td>{{ $control->date_format }}</td>
+                    <td nowrap>{{ $control->date_format }}</td>
                     <td>
                         @switch($control->type_reception_id)
                             @case(\App\Models\Warehouse\TypeReception::receiving())

@@ -49,6 +49,18 @@
                     >
                 </fieldset>
                 @break
+            @case(\App\Models\Warehouse\TypeReception::return())
+                <fieldset class="form-group col-md-2">
+                    <label for="store-origin-id">Bodega Origen</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="store-origin-id"
+                        value="{{ optional($control->originStore)->name }}"
+                        readonly
+                    >
+                </fieldset>
+                @break
             @case(\App\Models\Warehouse\TypeReception::purchaseOrder())
                 <fieldset class="form-group col-md-2">
                     <label for="purchase-order-code">Código OC</label>
@@ -87,27 +99,27 @@
         @endif
 
         @if($control->isReceptionNormal())
-        <fieldset class="form-group col-md-3">
-            <label for="program-id">Programa</label>
-            <input
-                type="text"
-                class="form-control form-control-sm"
-                value="{{ $control->program_name }}"
-                id="program-id"
-                readonly
-            >
-        </fieldset>
+            <fieldset class="form-group col-md-3">
+                <label for="program-id">Programa</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ $control->program_name }}"
+                    id="program-id"
+                    readonly
+                >
+            </fieldset>
 
-        <fieldset class="form-group col-md-6">
-            <label for="note">Nota</label>
-            <input
-                type="text"
-                class="form-control form-control-sm"
-                value="{{ $control->note }}"
-                id="note"
-                readonly
-            >
-        </fieldset>
+            <fieldset class="form-group col-md-6">
+                <label for="note">Nota</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="{{ $control->note }}"
+                    id="note"
+                    readonly
+                >
+            </fieldset>
         @endif
     </div>
 

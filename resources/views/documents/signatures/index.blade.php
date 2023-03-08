@@ -16,9 +16,16 @@
                     <i class="fas fa-plus"></i> Nueva solicitud</a>
             </div>
 
-            <input type="text" class="form-control" id="forsearch" onkeyup="filter(3)"
-                placeholder="Buscar por materia o descripción" name="search" value="{{$request->search}}">
-
+            <input
+                type="text"
+                class="form-control"
+                id="forsearch"
+                onkeyup="filter(3)"
+                placeholder="Buscar por materia o descripción"
+                name="search"
+                value="{{ app('request')->input('search') }}"
+            >
+            
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fas fa-search" aria-hidden="true"></i></button>
@@ -88,8 +95,8 @@
                     <td>
                         <b>{{ $pendingSignaturesFlow->signerName }}</b>
                         @if($pendingSignaturesFlow->userSigner->absent == 1)
-                        <br>    
-                        <b>Firma Subrrogada por</b>: 
+                        <br>
+                        <b>Firma Subrrogada por</b>:
                         {{ Auth::user()->tinnyName }}
                         @endif
                         <br>
@@ -129,7 +136,7 @@
                         @foreach($pendingSignaturesFlow->signature->signaturesFlows as $key => $signatureFlow)
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
                                 <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
-                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }}
                                             por {{ $signatureFlow->signerName }}
                                             el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s') }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
@@ -267,10 +274,10 @@
                     <td>{{ $signedSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
                         <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
-                        
+
                         @if($signedSignaturesFlow->userSigner->absent == 1)
                         <br>
-                        <b>Firma Subrrogada por</b>: 
+                        <b>Firma Subrrogada por</b>:
                         {{ Auth::user()->tinnyName }}
                         @endif
                         <br>
@@ -281,7 +288,7 @@
                     <td>
                         @if($signedSignaturesFlow->signature)
                             {{ $signedSignaturesFlow->signature->responsable->tinnyName }}
-                        @endif 
+                        @endif
                     </td>
                     <td class="text-center">
                         @if($signedSignaturesFlow->status === 1)
@@ -303,13 +310,13 @@
                         @foreach($signedSignaturesFlow->signature->signaturesFlows as $key => $signatureFlow)
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
                                 <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
-                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }}
                                             por {{ $signatureFlow->signerName }}
                                             el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s') }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
                                 </span> &nbsp;
                             @endif
-                            
+
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id != null)
                                 <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
                                     title="Firmante Asignado: {{ $signatureFlow->signerName }}
@@ -429,7 +436,7 @@
                         @foreach($signature->SignaturesFlows as $key => $signatureFlow)
                             @if($signatureFlow->status == '1' && $signatureFlow->real_signer_id === null)
                                 <span class="d-inline-bloc img-thumbnail border-dark bg-success text-white rounded-circle" tabindex="0" data-toggle="tooltip"
-                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }} 
+                                    title="{{ $signatureFlow->type == 'firmante' ? 'Firmado ' : 'Visado ' }}
                                             por {{ $signatureFlow->signerName }}
                                             el {{ $signatureFlow->signature_date->format('d-m-Y H:i:s')  }}">
                                     {{ substr($signatureFlow->userSigner->initials, 0, 2) }}
