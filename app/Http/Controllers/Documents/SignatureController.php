@@ -42,8 +42,9 @@ class SignatureController extends Controller
      * @param $tab
      * @return Application|Factory|View|Response
      */
-    public function index(string $tab)
+    public function index(Request $request, string $tab)
     {
+        $search = "%$request->search%";
         $mySignatures = null;
         $signedSignaturesFlows = null;
         $pendingSignaturesFlows = null;
@@ -77,7 +78,7 @@ class SignatureController extends Controller
             //Firmas de managers anteriores de la ou
             foreach ($myAuthorities as $myAuthority){
                 $authoritiesSignatures = Signature::where('responsable_id', $myAuthority->user_id)
-                ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to]);
+                    ->whereBetween('created_at', [$myAuthority->from, $myAuthority->to]);
 
                 $mySignatures = $mySignatures->unionAll($authoritiesSignatures);
             }
@@ -94,7 +95,8 @@ class SignatureController extends Controller
                 });
 
             //Firmas de managers anteriores de la ou
-            foreach ($myAuthorities as $myAuthority){
+            foreach ($myAuthorities as $myAuthority)
+            {
                 $authoritiesPendingSignaturesFlows = SignaturesFlow::where('user_id', $myAuthority->user_id)
                     ->whereNull('status')
                     ->whereHas('signaturesFile.signature', function ($q) {
@@ -104,6 +106,14 @@ class SignatureController extends Controller
 
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
+
+            $pendingSignaturesFlows = $pendingSignaturesFlows->when($request->search, function($query) use($search, $request) {
+                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                    $query->where('subject', 'like', $search)
+                        ->orWhere('description', 'like', $search);
+                });
+            });
+
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
             //Firmas del usuario y del manager actual de ou
@@ -130,7 +140,14 @@ class SignatureController extends Controller
                 $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
             }
 
-            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(20);
+            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function($query) use($search) {
+                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                    $query->where('subject', 'like', $search)
+                        ->orWhere('description', 'like', $search);
+                });
+            });
+
+            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(5);
 
         }
 
