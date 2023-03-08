@@ -167,7 +167,7 @@ class SignatureController extends Controller
                 });
             });
 
-            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(5);
+            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(25);
 
         }
 
