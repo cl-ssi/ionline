@@ -129,6 +129,7 @@ class SignatureController extends Controller
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
             //Firmas del usuario y del manager actual de ou
+            
             $signedSignaturesFlows = SignaturesFlow::with('signaturesFile', 'userSigner')
                 ->whereIn('user_id', $users)
                 ->where(function ($q) {
