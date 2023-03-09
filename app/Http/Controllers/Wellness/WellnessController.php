@@ -156,7 +156,7 @@ class WellnessController extends Controller
 
     public function exportBalance()
     {
-        $ingresos = Balance::select('titulo', 'item', 'asignacion', 'glosa', 'inicial')
+        $ingresos = Balance::select('titulo', 'item', 'asignacion', 'glosa', 'inicial', 'ajustado', 'ejecutado', 'saldo')
             ->where('tipo', 'ingresos')
             ->get()
             ->map(function ($balance) {
@@ -168,6 +168,19 @@ class WellnessController extends Controller
                 }
                 return $balance;
             });
-        return Excel::download(new BalanceExport($ingresos), 'balance.xlsx');
+
+        $gastos = Balance::select('titulo', 'item', 'asignacion', 'glosa', 'inicial', 'ajustado', 'ejecutado', 'saldo')
+            ->where('tipo', 'gastos')
+            ->get()
+            ->map(function ($balance) {
+                if ($balance->item == '000') {
+                    $balance->item = '';
+                }
+                if ($balance->asignacion == '00') {
+                    $balance->asignacion = '';
+                }
+                return $balance;
+            });
+        return Excel::download(new BalanceExport($ingresos, $gastos), 'balance.xlsx');
     }
 }

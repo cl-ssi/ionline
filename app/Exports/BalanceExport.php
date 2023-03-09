@@ -11,16 +11,26 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class BalanceExport implements FromCollection, WithHeadings, WithTitle, WithCustomStartCell, WithStyles
 {
-    protected $resultado;
+    protected $ingresos;
+    protected $gastos;
 
-    public function __construct($resultado)
+    public function __construct($ingresos, $gastos)
     {
-        $this->resultado = $resultado;
+        $this->ingresos = $ingresos;
+        $this->gastos = $gastos;
     }
 
     public function collection()
     {
-        return collect([$this->resultado]);
+        // Combine the "ingresos" and "gastos" collections
+        $balanceCollection = $this->ingresos->concat($this->gastos);
+
+        // Add an empty row between the two tables
+        $balanceCollection->push([]);
+        $balanceCollection->push([]);
+        $balanceCollection->push([]);
+
+        return $balanceCollection;
     }
 
     public function title(): string
@@ -34,14 +44,31 @@ class BalanceExport implements FromCollection, WithHeadings, WithTitle, WithCust
     }
 
     public function headings(): array
-    {
-        return [
-            'TIT.', 'ITEM.', 'ASIG.', 'GLOSA', 'PRESUPUESTO'
-        ];
-    }
+{
+    $ingresosHeadings = [
+        'TIT.', 'ITEM.', 'ASIG.', 'GLOSA', 'PRESUPUESTO ASIGNADO', 'PRESUPUESTO AJUSTADO', 'PRESUPUESTO EJECUTADO', 'SALDO'
+    ];
+
+    $gastosHeadings = [
+        'TIT.', 'ITEM.', 'ASIG.', 'GLOSA', 'MONTO', 'PAGADO'
+    ];
+
+    return array_merge($ingresosHeadings, [''], $gastosHeadings);
+}
 
     public function styles(Worksheet $sheet)
     {
+
+        // Ajusta automáticamente el ancho de las columnas A a H        
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
+        $sheet->getColumnDimension('F')->setAutoSize(true);
+        $sheet->getColumnDimension('G')->setAutoSize(true);
+        $sheet->getColumnDimension('H')->setAutoSize(true);
+        $sheet->getColumnDimension('I')->setAutoSize(true);
+
         // Aplica borde a todas las celdas de la tabla
         $styleArray = [
             'borders' => [
@@ -51,8 +78,8 @@ class BalanceExport implements FromCollection, WithHeadings, WithTitle, WithCust
             ],
         ];
 
-        $sheet->getStyle('B8:F8')->applyFromArray($styleArray); // aplica borde a la fila de encabezados
-        $sheet->getStyle('B9:F' . (8 + $this->resultado->count()))->applyFromArray($styleArray); // aplica borde al contenido de la tabla
+        $sheet->getStyle('B8:I8')->applyFromArray($styleArray); // aplica borde a la fila de encabezados
+        $sheet->getStyle('B9:I' . (8 + $this->ingresos->count()))->applyFromArray($styleArray); // aplica borde al contenido de la tabla
 
         // Oculta las líneas de cuadrícula (gridlines)
         $sheet->setShowGridlines(false);
