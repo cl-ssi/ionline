@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Wellness\Balance;
 use App\Exports\BalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class WellnessController extends Controller
 {
@@ -16,11 +17,25 @@ class WellnessController extends Controller
         return view('wellness.index');
     }
 
-    public function balances()
-    {
-        $balances = Balance::all();
-        return view('wellness.balance', compact('balances'));
-    }
+    
+
+public function balances(Request $request)
+{
+    $mes = $request->input('month');
+    $ano = $request->input('year');
+
+    // Obtener los balances correspondientes al mes y año seleccionado
+    $balances = Balance::where('mes', $mes)
+        ->where('ano', $ano)
+        ->get();
+
+    // Obtener el último día del mes
+    $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
+
+    // Retornar la vista con los balances correspondientes y el último día del mes
+    return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
+}
+
 
     public function ingresos()
     {
