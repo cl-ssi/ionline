@@ -327,6 +327,12 @@
                         </a>
                         @endcan
 
+                        @canany(['Rrhh: birthday'])
+                        <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
+                            <i class="fas fa-birthday-cake"></i> Correo cumpleaños
+                        </a>
+                        @endcan
+
 
                         @can('be god')
                         <div class="dropdown-divider"></div>

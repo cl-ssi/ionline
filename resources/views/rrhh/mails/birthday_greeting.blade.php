@@ -3,7 +3,9 @@
 @section('content')
 
     <div style="text-align: justify;">
-        <p></p>
+        <p> <h2>{{$birthdayEmailConfiguration->tittle}}</h2></p>
+        <p> Estimado {{$user->name}},</p>
+        <p> {!!$birthdayEmailConfiguration->message!!}</p>
     </div>
 
 @endsection
