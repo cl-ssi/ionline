@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Wellness;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Wellness\Balance;
+use App\Exports\BalanceExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WellnessController extends Controller
 {
@@ -148,6 +150,24 @@ class WellnessController extends Controller
             ->where('codigo', 'like', '20.000.00%')
             ->first();
 
-        return view('wellness.report',compact('ingreso', 'gasto'));
+        return view('wellness.report', compact('ingreso', 'gasto'));
+    }
+
+
+    public function exportBalance()
+    {
+        $ingresos = Balance::select('titulo', 'item', 'asignacion', 'glosa', 'inicial')
+            ->where('tipo', 'ingresos')
+            ->get()
+            ->map(function ($balance) {
+                if ($balance->item == '000') {
+                    $balance->item = '';
+                }
+                if ($balance->asignacion == '00') {
+                    $balance->asignacion = '';
+                }
+                return $balance;
+            });
+        return Excel::download(new BalanceExport($ingresos), 'balance.xlsx');
     }
 }
