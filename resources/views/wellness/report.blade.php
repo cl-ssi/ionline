@@ -32,17 +32,17 @@
 
     function drawCharts() {
         // Obtener los datos de ingreso y gasto desde el controlador
-        var ingresoinicial = {{$ingreso->inicial}};
-        var gastoinicial = {{$gasto->inicial}};
+        var ingresoinicial = {{$ingreso->inicial??''}};
+        var gastoinicial = {{$gasto->inicial??''}};
 
-        var ingresotraspaso = {{$ingreso->traspaso}};
-        var gastotraspaso = {{$gasto->traspaso}};
+        var ingresotraspaso = {{$ingreso->traspaso??''}};
+        var gastotraspaso = {{$gasto->traspaso??''}};
 
-        var ingresoajustado = {{$ingreso->ajustado}};
-        var gastoajustado = {{$gasto->ajustado}};
+        var ingresoajustado = {{$ingreso->ajustado??''}};
+        var gastoajustado = {{$gasto->ajustado??''}};
 
-        var ingresoejecutado = {{$ingreso->ejecutado}};
-        var gastoejecutado = {{$gasto->ejecutado}};
+        var ingresoejecutado = {{$ingreso->ejecutado??''}};
+        var gastoejecutado = {{$gasto->ejecutado??''}};
 
         // Crear las tablas de datos
         var datainicial = google.visualization.arrayToDataTable([
