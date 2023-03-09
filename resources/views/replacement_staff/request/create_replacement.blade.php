@@ -117,7 +117,7 @@
     <div class="form-row">
         <fieldset class="form-group col-md-6">
             <div class="mb-3">
-                <label for="for_job_profile_file" class="form-label">Perfil de Cargo (Opcional)</label>
+                <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
                 <input class="form-control" type="file" name="job_profile_file" accept="application/pdf">
             </div>
         </fieldset>
