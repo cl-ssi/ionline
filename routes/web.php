@@ -988,6 +988,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch');
 
+        Route::post('/importBirthdays', [UserController::class, 'importBirthdays'])->name('importBirthdays');
+        Route::view('birthdayGrettings', 'rrhh.birthday_import.index')->name('birthdayGrettings');
+
         Route::get('/', [UserController::class,'index'])->name('index');
         Route::get('/create', [UserController::class,'create'])->name('create');
         Route::post('/', [UserController::class,'store'])->name('store');
