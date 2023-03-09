@@ -2138,6 +2138,7 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
     Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
     Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
     Route::get('/report', [WellnessController::class, 'report'])->name('report');
+    Route::get('/export-balance', [WellnessController::class, 'exportBalance'])->name('exportBalance');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');

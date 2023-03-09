@@ -448,7 +448,7 @@ class GenerateReception extends Component
         $control = Control::create([
             'type' => true,
             'confirm' => true,
-            'status' => false,
+            'status' => true,
             'note' => $dataValidated['note'],
             'date' => $dataValidated['date'],
             'po_date' => Carbon::parse($dataValidated['po_date'])->format('Y-m-d H:i:s'),

@@ -8,8 +8,11 @@
 
 <div class="row mb-3">
     <div class="col-md-12 text-right">
-        <a id="downloadLink" onclick="exportF(this)" class="btn btn-success">
-            <i class="fa fa-file-excel"></i> Descargar Resultado en Excel
+        <a href="{{ route('wellness.exportBalance') }}" class="btn btn-success">
+            <i class="fa fa-file-excel"></i> Descargar Resultado con Formato
+        </a>
+        <a id="downloadLinkExcel" onclick="exportF(this)" class="btn btn-success">
+            <i class="fa fa-file-excel"></i> Descargar Resultado en Pantalla en Excel
         </a>
     </div>
 </div>
