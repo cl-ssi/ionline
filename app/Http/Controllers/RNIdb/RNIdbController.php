@@ -37,7 +37,7 @@ class RNIdbController extends Controller
 
     public function download(File $file)
     {
-        if($file->users()->where('user_id', Auth::id())->count() == 0 || !Auth::user()->hasPermissionTo('RNI Database: admin'))
+        if($file->users()->where('user_id', Auth::id())->count() == 0 && !Auth::user()->hasPermissionTo('RNI Database: admin'))
             return redirect()->route('indicators.index')->with('warning', 'El usuario no tiene los permisos necesarios para descargar base datos RNI.');
         return Storage::disk('gcs')->download($file->file);
     }
