@@ -42,7 +42,7 @@ class SignatureController extends Controller
      * @param $tab
      * @return Application|Factory|View|Response
      */
-    public function index(string $tab, Request $request)
+    public function index(Request $request, string $tab)
     {
         $search = "%$request->search%";
         $mySignatures = null;
@@ -101,9 +101,12 @@ class SignatureController extends Controller
                 ->whereHas('signaturesFile.signature', function ($q) {
                     $q->whereNull('rejected_at');
                 })
-                ->whereHas('signaturesFile.signature', function ($q) use ($request){
-                    $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+
+                ->when($request->search, function($query) use($search) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                        $query->where('subject', 'like', $search)
+                            ->orWhere('description', 'like', $search);
+                    });
                 });
 
             //Firmas de managers anteriores de la ou
@@ -122,13 +125,6 @@ class SignatureController extends Controller
 
                     $pendingSignaturesFlows = $pendingSignaturesFlows->unionAll($authoritiesPendingSignaturesFlows);
             }
-
-            $pendingSignaturesFlows = $pendingSignaturesFlows->when($request->search, function($query) use($search, $request) {
-                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
-                    $query->where('subject', 'like', $search)
-                        ->orWhere('description', 'like', $search);
-                });
-            });
 
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
@@ -167,7 +163,14 @@ class SignatureController extends Controller
                 $signedSignaturesFlows = $signedSignaturesFlows->unionAll($authoritiesSignedSignaturesFlows);
             }
 
-            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(5);
+            $signedSignaturesFlows = $signedSignaturesFlows->when($request->search, function($query) use($search) {
+                $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                    $query->where('subject', 'like', $search)
+                        ->orWhere('description', 'like', $search);
+                });
+            });
+
+            $signedSignaturesFlows = $signedSignaturesFlows->orderByDesc('id')->paginate(25);
 
         }
 

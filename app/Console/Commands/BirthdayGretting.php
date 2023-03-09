@@ -7,6 +7,9 @@ use App\Mail\BirthdayGreeting as BirthdayGreetingMail;
 use App\Models\Commune;
 use Illuminate\Support\Facades\Mail;
 
+use App\User;
+use Carbon\Carbon;
+
 class BirthdayGretting extends Command
 {
     /**
@@ -40,7 +43,33 @@ class BirthdayGretting extends Command
      */
     public function handle()
     {
-        Mail::to("sick_iqq@hotmail.com")->send(new BirthdayGreetingMail());
-        // Commune::create(['name'=>'prueba_correo']);
+        // encuentra usuarios que están de cumpleaños el día de hoy
+        // $users = User::where('active',1)
+        //             ->whereMonth('birthday', Carbon::now()->format('m'))
+        //             ->whereDay('birthday', Carbon::now()->format('d'))
+        //             ->get();
+
+        // foreach($users as $user){
+        //     Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+        // }
+        
+        // $users = SirhActiveUser::whereMonth('birthdate', Carbon::now()->format('m'))
+        //             ->whereDay('birthdate', Carbon::now()->format('d'))
+        //             ->get();
+
+        // foreach($users as $user){
+        //     Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+        // }
+        
+        
+        // de prueba
+        $users = User::where('id',17430005)->get();
+        foreach($users as $user){
+            Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+        }
+
+        
+        
+
     }
 }

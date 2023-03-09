@@ -988,6 +988,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('{user}/password', [UserController::class,'resetPassword'])->name('password.reset');
         Route::get('{user}/switch', [UserController::class,'switch'])->name('switch');
 
+        Route::post('/importBirthdays', [UserController::class, 'importBirthdays'])->name('importBirthdays');
+        Route::view('birthdayGrettings', 'rrhh.birthday_import.index')->name('birthdayGrettings');
+
         Route::get('/', [UserController::class,'index'])->name('index');
         Route::get('/create', [UserController::class,'create'])->name('create');
         Route::post('/', [UserController::class,'store'])->name('store');
@@ -2135,6 +2138,7 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
     Route::get('/gastos', [WellnessController::class, 'gastos'])->name('gastos');
     Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
     Route::get('/report', [WellnessController::class, 'report'])->name('report');
+    Route::get('/export-balance', [WellnessController::class, 'exportBalance'])->name('exportBalance');
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');
