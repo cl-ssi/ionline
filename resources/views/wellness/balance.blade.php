@@ -19,17 +19,13 @@
 
 <table class="table table-bordered" id="tabla_balance">
     <thead>
-        <tr>
-            <th>Año</th>
-            <th>Mes</th>
-            <th>Tipo</th>
-            <th>Código</th>
+        <tr>            
             <th>Título</th>
             <th>Ítem</th>
             <th>Asignación</th>
             <th>Glosa</th>
             <th>Presupuesto Inicial</th>
-            <th>Traspasos Presupuesto</th>
+            <th>Modificaciones Mes XXX</th>
             <th>Presupuesto Ajustado</th>
             <th>Presupuesto Ejecutado</th>
             <th>Saldo Presupuesto</th>
@@ -37,20 +33,17 @@
     </thead>
     <tbody>
         @foreach ($balances as $balance)
-        <tr>
-            <td>{{ $balance->ano }}</td>
-            <td>{{ $balance->mes }}</td>
-            <td>{{ $balance->tipo }}</td>
-            <td>{{ $balance->codigo }}</td>
+
+        <tr @if($balance->item == '000')  class="table-secondary"  @endif>
             <td>{{ $balance->titulo }}</td>
             <td>{{ $balance->item }}</td>
             <td>{{ $balance->asignacion }}</td>
             <td>{{ $balance->glosa }}</td>
-            <td>{{ $balance->inicial }}</td>
-            <td>{{ $balance->traspaso }}</td>
-            <td>{{ $balance->ajustado }}</td>
-            <td>{{ $balance->ejecutado }}</td>
-            <td>{{ $balance->saldo }}</td>
+            <td class="text-right">{{ money($balance->inicial) }}</td>
+            <td class="text-right @if($balance->traspaso <0) text-danger @endif">{{ money($balance->traspaso) }}</td>
+            <td class="text-right">{{ money($balance->ajustado) }}</td>
+            <td class="text-right">{{ money($balance->ejecutado) }}</td>
+            <td class="text-right">{{ money($balance->saldo) }}</td>
         </tr>
         @endforeach
     </tbody>
