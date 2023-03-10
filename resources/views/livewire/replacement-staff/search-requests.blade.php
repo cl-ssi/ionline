@@ -133,7 +133,7 @@
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
                     <td class="text-center">
-                        @if($requestReplacementStaff->form_type == 'replacement')
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->degree }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
@@ -142,7 +142,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->form_type == 'replacement')
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
@@ -151,7 +151,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->form_type == 'replacement')
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
                             {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
                             {{ $requestReplacementStaff->getNumberOfDays() }}
@@ -165,7 +165,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->form_type == 'replacement')   
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)   
                             {{ $requestReplacementStaff->fundamentManage->NameValue ?? '' }}<br>
                             {{ $requestReplacementStaff->fundamentDetailManage->NameValue ?? '' }}
                         @else
@@ -176,7 +176,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->form_type == 'replacement')   
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)   
                             {{ $requestReplacementStaff->WorkDayValue }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
