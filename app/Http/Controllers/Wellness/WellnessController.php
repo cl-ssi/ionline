@@ -17,36 +17,71 @@ class WellnessController extends Controller
         return view('wellness.index');
     }
 
-    
-
-public function balances(Request $request)
-{
-    $mes = $request->input('month');
-    $ano = $request->input('year');
-
-    // Obtener los balances correspondientes al mes y año seleccionado
-    $balances = Balance::where('mes', $mes)
-        ->where('ano', $ano)
-        ->get();
-
-    // Obtener el último día del mes
-    $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
-
-    // Retornar la vista con los balances correspondientes y el último día del mes
-    return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
-}
 
 
-    public function ingresos()
+    public function balances(Request $request)
     {
-        $balances = Balance::where('tipo', 'ingresos')->get();
-        return view('wellness.balance', compact('balances'));
+        $mes = $request->input('month');
+        $ano = $request->input('year');
+        $type = $request->input('type');
+
+        // Obtener los balances correspondientes al mes y año seleccionado
+        $balances = Balance::where('mes', $mes)
+            ->where('ano', $ano);
+
+        if ($type == 'ingresos') {
+            $balances = $balances->where('tipo', 'ingresos');
+        } elseif ($type == 'gastos') {
+            $balances = $balances->where('tipo', 'gastos');
+        }
+
+        $balances = $balances->get();
+
+        // Obtener el último día del mes
+        $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
+
+
+        $request->flash();
+        // Retornar la vista con los balances correspondientes y el último día del mes
+        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
     }
 
-    public function gastos()
+
+
+    public function ingresos(Request $request)
     {
-        $balances = Balance::where('tipo', 'gastos')->get();
-        return view('wellness.balance', compact('balances'));
+        $mes = $request->input('month');
+        $ano = $request->input('year');
+
+        // Obtener los balances correspondientes al mes y año seleccionado
+        $balances = Balance::where('mes', $mes)
+            ->where('ano', $ano)
+            ->where('tipo', 'ingresos')
+            ->get();
+
+        // Obtener el último día del mes
+        $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
+
+        // Retornar la vista con los balances correspondientes y el último día del mes
+        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
+    }
+
+    public function gastos(Request $request)
+    {
+        $mes = $request->input('month');
+        $ano = $request->input('year');
+
+        // Obtener los balances correspondientes al mes y año seleccionado
+        $balances = Balance::where('mes', $mes)
+            ->where('ano', $ano)
+            ->where('tipo', 'gastos')
+            ->get();
+
+        // Obtener el último día del mes
+        $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
+
+        // Retornar la vista con los balances correspondientes y el último día del mes
+        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
     }
 
 

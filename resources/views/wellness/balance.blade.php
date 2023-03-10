@@ -13,29 +13,38 @@
                 <label for="for_month">{{ __('Mes') }}</label>
                 <select name="month" class="form-control selectpicker @error('month') is-invalid @enderror" required>
                     <option value=""></option>
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
+                    <option value="1" {{ old('month') == 1 ? 'selected' : '' }}>Enero</option>
+                    <option value="2" {{ old('month') == 2 ? 'selected' : '' }}>Febrero</option>
+                    <option value="3" {{ old('month') == 3 ? 'selected' : '' }}>Marzo</option>
+                    <option value="4" {{ old('month') == 4 ? 'selected' : '' }}>Abril</option>
+                    <option value="5" {{ old('month') == 5 ? 'selected' : '' }}>Mayo</option>
+                    <option value="6" {{ old('month') == 6 ? 'selected' : '' }}>Junio</option>
+                    <option value="7" {{ old('month') == 7 ? 'selected' : '' }}>Julio</option>
+                    <option value="8" {{ old('month') == 8 ? 'selected' : '' }}>Agosto</option>
+                    <option value="9" {{ old('month') == 9 ? 'selected' : '' }}>Septiembre</option>
+                    <option value="10" {{ old('month') == 10 ? 'selected' : '' }}>Octubre</option>
+                    <option value="11" {{ old('month') == 11 ? 'selected' : '' }}>Noviembre</option>
+                    <option value="12" {{ old('month') == 12 ? 'selected' : '' }}>Diciembre</option>
                 </select>
             </fieldset>
             <fieldset class="form-group col-md-6">
                 <label for="for_year">{{ __('Año') }}</label>
-                <select name="year" class="form-control selectpicker required>
+                <select name="year" class="form-control selectpicker" required>
                     <option value=""></option>
                     @foreach(range((now()->year)-1, now()->year) as $year)
-                        <option value=" {{ $year }}">{{ $year }}</option>
+                    <option value="{{ $year }}" {{ old('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
                     @endforeach
                 </select>
             </fieldset>
+            <fieldset class="form-group col-md-6">
+                <label for="for_type">{{ __('Tipo de Balance') }}</label>
+                <select name="type" class="form-control selectpicker">
+                    <option value="">Todos</option>
+                    <option value="ingresos" {{ old('type') == 'ingresos' ? 'selected' : '' }}>Ingresos</option>
+                    <option value="gastos" {{ old('type') == 'gastos' ? 'selected' : '' }}>Gastos</option>
+                </select>
+            </fieldset>
+
         </div>
         <button type="submit" class="btn btn-primary">{{ __('Consultar') }}</button>
     </form>
