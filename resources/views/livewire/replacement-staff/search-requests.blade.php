@@ -56,7 +56,6 @@
                             </option>
                         @endforeach
                         @endif
-
                     </select>
                 </div>
             </fieldset>
@@ -68,6 +67,19 @@
                 <input class="form-control" type="text" autocomplete="off" placeholder="RUN o NOMBRE"
                     name="name_to_replace_search" wire:model="selectedNameToReplace">
             </fieldset>
+
+            @if($typeIndex == 'assign')
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_sub_search">Subdirección</label>
+                <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
+                    <option value="">Seleccione...</option>
+                
+                    @foreach($subs as $sub)
+                        <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+            @endif
         </div>
     </div>
     <p class="font-weight-lighter">Total de Registros: <b>{{ $requests->total() }}</b></p>
@@ -203,7 +215,7 @@
                         @endif
                     </td>
                     <td>
-                        @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
+                        {{-- @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7) --}}
                             <!-- PERMITE EDITAR SOLICITUD ANTES DE LA PRIMERA APROBACIÓN -->
                             @if(($requestReplacementStaff->user->id == Auth::user()->id || $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
                                     ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
@@ -211,6 +223,9 @@
                                 @if($requestReplacementStaff->form_type == 'replacement')
                                     <a href="{{ route('replacement_staff.request.edit_replacement', $requestReplacementStaff) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                                @else
+                                    <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Resumen"><i class="fas fa-eye"></i></a>
                                 @endif
                             <!-- PERMITE MOSTRAR EL BOTÓN PARA ASIGNAR SOLICITUD -->
                             @elseif($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
@@ -238,7 +253,7 @@
                                         class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
                                 @endif
                             @endif
-                        @endif
+                        {{-- @endif --}}
                     </td>
                 </tr>
                 @endforeach
