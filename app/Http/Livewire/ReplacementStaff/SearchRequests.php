@@ -93,8 +93,8 @@ class SearchRequests extends Component
                     $this->selectedName,
                     $this->selectedFundament,
                     $this->selectedFundamentDetail,
-                    $this->selectedNameToReplace,
-                    $this->ou_dependents_array
+                    $this->selectedNameToReplace
+                    //,$this->ou_dependents_array
                 )
                 ->paginate(50);
         }

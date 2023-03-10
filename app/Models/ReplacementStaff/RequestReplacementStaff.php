@@ -187,7 +187,6 @@ class RequestReplacementStaff extends Model implements Auditable
     {
         if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
             $fundament_search OR $fundament_detail_search OR $name_to_replace_search OR $sub_search) {
-
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('request_status', $status_search);
@@ -224,7 +223,6 @@ class RequestReplacementStaff extends Model implements Auditable
                     ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
                 });
             }
-
             if($sub_search != ''){
                 $query->where(function($q) use($sub_search){
                     $q->whereIn('organizational_unit_id', $sub_search);
