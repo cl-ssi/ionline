@@ -187,13 +187,13 @@
                     <td>
                         @if($event->StatusValue == 'Pendiente')
                             <span>
-            <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
-          </span>
+                                <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
+                            </span>
                         @endif
                         @if($event->StatusValue == 'No aplica')
                             <span>
-            <i class="fas fa-ban"></i> N/A <br>
-          </span>
+                                <i class="fas fa-ban"></i> N/A <br>
+                            </span>
                         @endif
                         @if($event->StatusValue == 'Aprobado')
                             <span style="color: green;">
@@ -201,7 +201,9 @@
           </span>
                             <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
                             <p style="font-size: 11px">
-                                {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
+                                @if($event->event_type != 'pre_finance_event')
+                                    {{ $event->position_signer_user }} {{ $event->signerOrganizationalUnit->name }}<br>
+                                @endif
                             </p>
                             <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}
                             <br>
@@ -838,5 +840,9 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip()
 </script>
 @endsection
