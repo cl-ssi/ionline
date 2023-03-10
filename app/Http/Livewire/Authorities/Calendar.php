@@ -27,6 +27,7 @@ class Calendar extends Component
     public $startDate;
     public $endDate;
     public $position;
+    public $decree;
 
 
     /** Input selector de mes */
@@ -105,7 +106,8 @@ class Calendar extends Component
                 'date' => $date->format('Y-m-d'),
             ], [
                 'user_id' => $this->user_id,
-                'position' => $this->position
+                'position' => $this->position,
+                'decree' => $this->decree
             ]);
         }
 
@@ -170,6 +172,7 @@ class Calendar extends Component
         $this->endDate = null;
         $this->type = null;
         $this->position = null;
+        $this->decree = null;
         $this->user_id = null;
 
     }
