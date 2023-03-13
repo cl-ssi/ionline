@@ -11,17 +11,26 @@
 <form class="form-inline float-right" method="POST" action="{{ route('documents.createFromPrevious') }}">
     @csrf
     <label class="my-1 mr-2" for="forDocumentID">Crear a partir del </label>
-    <input name="document_id" type="text" class="form-control mr-3" id="forDocumentID" placeholder="Código Interno">
+    <input name="document_id" type="text" class="form-control mr-3" id="forDocumentID" placeholder="ID">
     <button type="submit" class="btn btn-outline-secondary my-1"> <i class="fas fa-search"></i> Precargar</button>
 </form>
 
 <br><br>
 <hr>
+<br><br>
 <x-head.tinymce-config />
 
 <form method="post" name="form" action="{{ route('documents.store') }}" onsubmit="return validate_form()">
     @csrf
+
+    <div class="form-row">
+        <div class="form-group col-3">
+            <label for="for_internal_number">Número Interno (Opcional)</label>
+            <input type="number" class="form-control" id="for_internal_number" name="internal_number" {!! $document->internal_number ? 'value="' . $document->internal_number .'"' : '' !!}>
+        </div>
+    </div>
     
+
 
     <div class="form-row">
         <div class="form-group col-2">
@@ -33,7 +42,7 @@
             <select name="type_id" id="formType" class="form-control" required>
                 <option value=""></option>
                 @foreach($types as $id => $type)
-                    <option value="{{ $id }}">{{ $type }}</option>
+                <option value="{{ $id }}">{{ $type }}</option>
                 @endforeach
             </select>
         </div>
@@ -109,12 +118,12 @@
 <div class="alert alert-info" role="alert">
     <strong>TIP para pegar tablas de word o excel</strong>
     <p>
-        <ol>
-            <li>Copiar y pegar la tabla desde el excel o word</li>
-            <li>En el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
-            <li>Buscar donde diga <strong>&lt;table width="XXX"&gt;</strong></li>
-            <li>Reemplazar por <strong>&lt;table style="border-collapse: collapse; width: 100%;" border="1"&gt;</strong></li>
-        </ol>
+    <ol>
+        <li>Copiar y pegar la tabla desde el excel o word</li>
+        <li>En el cuadro del contenido, seleccionar "Vista" y luego "Código fuente"</li>
+        <li>Buscar donde diga <strong>&lt;table width="XXX"&gt;</strong></li>
+        <li>Reemplazar por <strong>&lt;table style="border-collapse: collapse; width: 100%;" border="1"&gt;</strong></li>
+    </ol>
     </p>
 </div>
 

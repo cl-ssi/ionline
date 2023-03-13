@@ -30,6 +30,8 @@ class DocumentController extends Controller
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(30);
         //$documents = Document::Search($request)->latest()->paginate(50);
 
+        $request->flash();
+
         $types = Type::whereNull('partes_exclusive')->pluck('name','id');
 
         if (Auth()->user()->organizational_unit_id) {
@@ -97,7 +99,7 @@ class DocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
         $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
