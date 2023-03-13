@@ -69,6 +69,7 @@ class WordWithdrawalAgreeController extends Controller
         //Director
         $director = mb_strtoupper($agreement->director_signer->user->fullName);
         $directorApelativo = $agreement->director_signer->appellative;
+        if(!Str::contains($directorApelativo,'(S)')) $directorApelativo .= ' Titular';
         $directorRut = mb_strtoupper($agreement->director_signer->user->runFormat());
         $directorDecreto = $agreement->director_signer->decree;
         $directorNationality = Str::contains($agreement->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
