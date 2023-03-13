@@ -342,12 +342,12 @@ class RequestReplacementStaffController extends Controller
                     $request_sing->save();
 
                     /* APROBACIÓN SDA SSI */
-                    $request_sing = new RequestSign();
-                    $request_sing->position = $position + 4;
-                    $request_sing->ou_alias = 'sub_adm';
-                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value);
-                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    $request_sing->save();
+                    // $request_sing = new RequestSign();
+                    // $request_sing->position = $position + 4;
+                    // $request_sing->ou_alias = 'sub_adm';
+                    // $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value);
+                    // $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                    // $request_sing->save();
                 }
                 $position++;
             }
