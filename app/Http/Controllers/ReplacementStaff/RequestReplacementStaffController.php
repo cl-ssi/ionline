@@ -469,7 +469,10 @@ class RequestReplacementStaffController extends Controller
      */
     public function edit(RequestReplacementStaff $requestReplacementStaff)
     {
-        return view('replacement_staff.request.edit', compact('requestReplacementStaff'));
+        if($requestReplacementStaff->form_type == 'announcement')
+            return view('replacement_staff.request.edit_announcement', compact('requestReplacementStaff'));
+        else
+            return view('replacement_staff.request.edit_replacement', compact('requestReplacementStaff'));
     }
 
     public function edit_replacement(RequestReplacementStaff $requestReplacementStaff)
@@ -486,31 +489,45 @@ class RequestReplacementStaffController extends Controller
      */
     public function update(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
-        $requestReplacementStaff->fill($request->all());
+        // return $request;
+        if($requestReplacementStaff->form_type == 'announcement'){
+            $requestReplacementStaff->name = $request->name;
+            $requestReplacementStaff->ou_of_performance_id = $request->ou_of_performance_id;
+            $position = Position::find($request->position_id);
+            if($position){
+                $position->fill($request->all());
+            }else{
+                $position = new Position($request->All());
+                $position->request_replacement_staff_id = $requestReplacementStaff->id;
+            }
+        }else{
+            $requestReplacementStaff->fill($request->all());
+        }
         $requestReplacementStaff->requesterUser()->associate($request->requester_id);
         $now = Carbon::now()->format('Y_m_d_H_i_s');
 
         if($request->hasFile('job_profile_file')){
-            //DELETE LAST
-            Storage::disk('gcs')->delete($requestReplacementStaff->job_profile_file);
-
-            $requestReplacementStaff->fill($request->all());
-
             $file = $request->file('job_profile_file');
             $file_name = $requestReplacementStaff->id.'_'.$now.'_job_profile';
-            $requestReplacementStaff->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+            if($requestReplacementStaff->form_type == 'announcement'){
+                //DELETE LAST
+                Storage::disk('gcs')->delete($position->job_profile_file);
+                $position->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+            }else{
+                Storage::disk('gcs')->delete($requestReplacementStaff->job_profile_file);
+                $requestReplacementStaff->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+            }
         }
 
         if($request->hasFile('request_verification_file')){
-            //DELETE LAST
-            Storage::disk('gcs')->delete($requestReplacementStaff->request_verification_file);
-
             $file_verification = $request->file('request_verification_file');
             $file_name_verification = $requestReplacementStaff->id.'_'.$now.'_request_verification';
+            Storage::disk('gcs')->delete($requestReplacementStaff->request_verification_file);
             $requestReplacementStaff->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
         }
 
         $requestReplacementStaff->save();
+        if($requestReplacementStaff->form_type == 'announcement' && ($request->create_new_position == 'yes' || !$request->has('create_new_position'))) $position->save();
 
         session()->flash('success', 'Su solicitud ha sido sido correctamente actualizada.');
         return redirect()->route('replacement_staff.request.own_index');
@@ -530,6 +547,11 @@ class RequestReplacementStaffController extends Controller
     public function show_file(RequestReplacementStaff $requestReplacementStaff)
     {
         return Storage::disk('gcs')->response($requestReplacementStaff->job_profile_file);
+    }
+
+    public function show_file_position(Position $position)
+    {
+        return Storage::disk('gcs')->response($position->job_profile_file);
     }
 
     public function download(RequestReplacementStaff $requestReplacementStaff)

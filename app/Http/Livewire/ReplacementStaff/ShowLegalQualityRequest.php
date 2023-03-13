@@ -7,6 +7,7 @@ use App\Models\ReplacementStaff\LegalQualityManage;
 use App\Models\ReplacementStaff\FundamentLegalQuality;
 use App\Models\ReplacementStaff\RstDetailFundament;
 use App\Models\ReplacementStaff\ProfileManage;
+use App\Models\ReplacementStaff\RequestReplacementStaff;
 
 class ShowLegalQualityRequest extends Component
 {
@@ -35,25 +36,39 @@ class ShowLegalQualityRequest extends Component
     public $selectedDegree = null;
 
     public $degree = null;
+    public $salary = null;
     public $degreeStateInput = 'readonly';
 
     /* Para editar y precargar el select PERFIL */
     public $profileSelected = null;
 
-    public function mount(){
+    public $isDisabled = '';
+    public $editModePosition = false;
+
+    protected $listeners = ['setPosition', 'setIsDisabled'];
+
+    public function setInputsRequestReplacementStaff()
+    {
         if($this->requestReplacementStaff) {
             $this->selectedLegalQuality = $this->requestReplacementStaff->legal_quality_manage_id;
             $this->selectedFundament = $this->requestReplacementStaff->fundament_manage_id;
-
+            $this->degree = $this->requestReplacementStaff->degree;
+            $this->salary = $this->requestReplacementStaff->salary;
             $this->fundamentLegalQualities = FundamentLegalQuality::where('legal_quality_manage_id', $this->selectedLegalQuality)
-                ->where($this->formType, 1)
-                ->get();
-
-            if($this->selectedFundament == 2){
+            ->where($this->formType, 1)
+            ->get();
+            
+            if($this->selectedLegalQuality == 2){
                 $this->salaryStateInput = '';
             }
             else{
                 $this->salaryStateInput = 'disabled';
+            }
+            
+            if($this->formType == 'announcement' && $this->selectedLegalQuality == 1){
+                $this->degreeStateInput = '';
+            }else{
+                $this->degreeStateInput = 'readonly';
             }
 
             $this->selectedFundamentDetail = $this->requestReplacementStaff->fundament_detail_manage_id;
@@ -68,7 +83,7 @@ class ShowLegalQualityRequest extends Component
 
             /* PERFIL GRADO */
             $this->selectedProfile = $this->requestReplacementStaff->profile_manage_id;
-            if($this->formType == 'announcement' && $this->selectedProfile == 1) $this->degreeStateInput = '';
+            // if($this->formType == 'announcement' && $this->selectedLegalQuality == 1) $this->degreeStateInput = '';
             if($this->formType == 'replacement')
                 switch ($this->requestReplacementStaff->profile_manage_id) {
                     case 1:
@@ -91,6 +106,10 @@ class ShowLegalQualityRequest extends Component
         }
     }
 
+    public function mount(){
+        $this->setInputsRequestReplacementStaff();
+    }
+
     public function render(){
         
         return view('livewire.replacement-staff.show-legal-quality-request',[
@@ -103,26 +122,28 @@ class ShowLegalQualityRequest extends Component
     }
 
     public function updatedselectedLegalQuality($selected_legal_quality_id){
+        if($this->editModePosition) $this->legalQualitySelected = $selected_legal_quality_id;
         $this->selectedProfile = null;
         $this->degree = null;
         $this->fundamentLegalQualities = FundamentLegalQuality::where('legal_quality_manage_id', $selected_legal_quality_id)
-            ->where($this->formType, 1)
-            ->get();
-
+        ->where($this->formType, 1)
+        ->get();
+        
         if($selected_legal_quality_id == 2){
             $this->salaryStateInput = '';
         }
         else{
             $this->salaryStateInput = 'disabled';
         }
-
+        
         if($this->formType == 'announcement' && $selected_legal_quality_id == 1) 
             $this->degreeStateInput = '';
         else
-        $this->degreeStateInput = 'readonly';
+            $this->degreeStateInput = 'readonly';
     }
 
     public function updatedselectedFundament($selected_fundament_id){
+        if($this->editModePosition) $this->fundamentSelected = $selected_fundament_id;
         $this->detailFundaments = RstDetailFundament::where('fundament_manage_id', $selected_fundament_id)
             ->where($this->formType, 1)
             ->get();
@@ -133,6 +154,7 @@ class ShowLegalQualityRequest extends Component
     }
 
     public function updatedselectedProfile($profile_id){
+        if($this->editModePosition) $this->profileSelected = $profile_id;
         if($this->formType == 'replacement')
             switch ($profile_id) {
                 case 1:
@@ -152,5 +174,20 @@ class ShowLegalQualityRequest extends Component
                     $this->degree = '';
                     break;
             }
+    }
+
+    public function setPosition($position)
+    {
+        $this->isDisabled = '';
+        $this->editModePosition = true;
+        $this->requestReplacementStaff = new RequestReplacementStaff();
+        $this->requestReplacementStaff->fill($position);
+        // dd($this->requestReplacementStaff);
+        $this->setInputsRequestReplacementStaff();
+    }
+
+    public function setIsDisabled($value)
+    {
+        $this->isDisabled = $value;
     }
 }

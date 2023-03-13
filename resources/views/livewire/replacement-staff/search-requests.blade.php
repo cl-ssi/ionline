@@ -220,8 +220,8 @@
                             @if(($requestReplacementStaff->user->id == Auth::user()->id || $requestReplacementStaff->organizational_unit_id == Auth::user()->organizationalUnit->id ||
                                     ($requestReplacementStaff->requesterUser && $requestReplacementStaff->requesterUser->id == Auth::user()->id)) &&
                                         $requestReplacementStaff->requestSign->first()->request_status == 'pending')
-                                @if($requestReplacementStaff->form_type == 'replacement')
-                                    <a href="{{ route('replacement_staff.request.edit_replacement', $requestReplacementStaff) }}"
+                                @if($requestReplacementStaff->form_type != null)
+                                    <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                                 @else
                                     <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"

@@ -39,7 +39,7 @@
                     <h6 class="dropdown-header">Crear Solicitudes</h6>
                     {{-- <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a> --}}
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a> 
-                    @if(env('APP_ENV') == 'local')
+                    @can('Replacement Staff: assign request')
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_announcement') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a>
                     @else
                     <a class="dropdown-item disabled"><i class="fas fa-plus"></i> Formulario de Convocatorias <span class="badge badge-secondary">Próximamente</span></a>
