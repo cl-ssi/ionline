@@ -407,6 +407,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
         Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
+        Route::get('/show_file_position/{position}', [RequestReplacementStaffController::class, 'show_file_position'])->name('show_file_position');
         Route::get('/show_verification_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_verification_file'])->name('show_verification_file');
         Route::get('/download_verification/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download_verification'])->name('download_verification');
         Route::prefix('sign')->name('sign.')->group(function(){
