@@ -11,9 +11,9 @@
 <form class="form-inline" method="POST" action="{{ route('documents.find')}}">
     @csrf
     <div class="form-group mr-3 mb-2">
-        <label for="for_id" class="sr-only">Código Interno</label>
+        <label for="for_id" class="sr-only">ID</label>
         <input type="text" class="form-control" name="id" id="for_id"
-            value="{{ isset($document) ? $document->id:'' }}" placeholder="Código interno">
+            value="{{ isset($document) ? $document->id:'' }}" placeholder="ID">
     </div>
     <button type="submit" class="btn btn-primary mb-2 mr-3"><i class="fas fa-search" aria-hidden="true"></i></button>
     <a href="{{ route('documents.add_number') }}" class="btn btn-outline-secondary mb-2 mr-3"> Limpiar </a>
@@ -119,7 +119,7 @@
 
 @else
 <p>
-    No se ha encontrado un documento con el código interno indicado
+    No se ha encontrado un documento con el ID indicado
 </p>
 @endif
 

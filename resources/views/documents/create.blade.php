@@ -11,7 +11,7 @@
 <form class="form-inline float-right" method="POST" action="{{ route('documents.createFromPrevious') }}">
     @csrf
     <label class="my-1 mr-2" for="forDocumentID">Crear a partir del </label>
-    <input name="document_id" type="text" class="form-control mr-3" id="forDocumentID" placeholder="Código Interno">
+    <input name="document_id" type="text" class="form-control mr-3" id="forDocumentID" placeholder="ID">
     <button type="submit" class="btn btn-outline-secondary my-1"> <i class="fas fa-search"></i> Precargar</button>
 </form>
 
