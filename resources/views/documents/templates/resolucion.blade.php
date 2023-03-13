@@ -78,7 +78,7 @@
                 {{ env('APP_SS') }}<br>
                 {{ $document->user->organizationalUnit->name }}
                 </div>
-                <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
+                <div class="left seis" style="padding-bottom: 6px; color: #999">ID: {{ $document->id }}</div>
             </div>
 
             <div class="right" style="float: right; width: 340px; padding-top: 76px;">

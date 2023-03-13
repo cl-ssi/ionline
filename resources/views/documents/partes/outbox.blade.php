@@ -12,8 +12,8 @@
 
     <div class="form-row">
         <fieldset class="form-group col-1">
-            <label for="for_id">Cód Int</label>
-            <input type="text" class="form-control" id="for_id" name="id">
+            <label for="for_id">ID</label>
+            <input type="text" class="form-control" id="for_id" name="id" autocomplete="off">
         </fieldset>
 
         <!-- <fieldset class="form-group col-2">
@@ -45,7 +45,7 @@
 <table class="table table-sm table-bordered table-striped">
     <thead>
         <tr>
-            <th>NI</th>
+            <th>ID</th>
             <th>N°</th>
             <th>Fecha</th>
             <th>Tipo</th>

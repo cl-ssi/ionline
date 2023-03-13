@@ -14,7 +14,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-4 col-md-1">
-            <label for="for_id">Cód Int</label>
+            <label for="for_id">ID</label>
             <input type="text" class="form-control" id="for_id" name="id">
         </fieldset>
 
@@ -23,7 +23,7 @@
             <select name="type_id" id="for_type_id" class="form-control">
                 <option value=""></option>
                 @foreach($types as $id => $type)
-                    <option value="{{ $id }}">{{ $type }}</option>
+                <option value="{{ $id }}" {{ old('type_id') == $id ? 'selected' : '' }}>{{ $type }}</option>
                 @endforeach
             </select>
         </fieldset>
@@ -65,7 +65,7 @@
 <table class="table table-sm">
     <thead>
         <tr>
-            <th>CI</th>
+            <th>ID</th>
             <th>Tipo</th>
             <th>N°</th>
             <th>Fecha</th>
@@ -162,7 +162,7 @@
 <table class="table table-sm">
     <thead>
         <tr>
-            <th>CI</th>
+            <th>ID</th>
             <th>Tipo</th>
             <th>N°</th>
             <th>Fecha</th>

@@ -73,7 +73,7 @@
             <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt=""><br>
             @endif
             <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
-            <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
+            <div class="left seis" style="padding-bottom: 6px; color: #999">ID: {{ $document->id }}</div>
 
             <div class="right" style="float: right; width: 300px;">
                 <div class="left" style="padding-bottom: 6px;"><strong>N°:</strong> {{ $document->number }}</div>

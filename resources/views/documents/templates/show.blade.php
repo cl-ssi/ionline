@@ -75,7 +75,7 @@
                 <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
                 @endif
                 <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
-                <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
+                <div class="left seis" style="padding-bottom: 6px; color: #999">ID: {{ $document->id }}</div>
             </div>
 
             <div class="right" style="float: right; width: 300px; padding-top: 76px;">
