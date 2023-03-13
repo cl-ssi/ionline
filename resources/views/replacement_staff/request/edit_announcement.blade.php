@@ -60,7 +60,7 @@
 
         <fieldset class="form-group col-5">     
             <div>
-                <label for="for_request_verification_file" class="form-label">Correo (Verificación Solicitud)</label>
+                <label for="for_request_verification_file" class="form-label">Antecedentes del proceso</label>
                 <input class="form-control" type="file" name="request_verification_file" accept="application/pdf">
             </div>
         </fieldset>
@@ -77,9 +77,16 @@
     <h6 class="small"><b>4. Descripción de Unidad Organizacional</b></h6> <br>
 
     <div class="form-row">
-        @livewire('replacement-staff.ou-staff-select', [
-            'requestReplacementStaff' => $requestReplacementStaff
-        ])
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_ou_id">
+                Unidad Organizacional
+            </label>
+            @livewire('search-select-organizational-unit', [
+                'selected_id'         => 'ou_of_performance_id',
+                'required'            => 'required',
+                'organizationalUnit' => $requestReplacementStaff->ouPerformance
+            ])
+        </fieldset>
     </div>
     
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
