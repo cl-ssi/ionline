@@ -17,6 +17,12 @@
 <form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">
     @csrf
     @method('PUT')
+    <div class="form-row">
+        <div class="form-group col-3">
+            <label for="for_internal_number">Número Interno (Opcional)</label>
+            <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
+        </div>
+    </div>
 
     <div class="form-row">
         <div class="form-group col-2">

@@ -23,6 +23,7 @@ class Document extends Model implements Auditable
      */
     protected $fillable = [
         'number',
+        'internal_number',
         'date',
         'type_id',
         'reserved',

@@ -99,7 +99,7 @@ class DocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
         $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
