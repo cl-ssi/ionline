@@ -133,7 +133,8 @@
                           <tr>
                               @foreach($requestReplacementStaff->RequestSign as $requestSign)
                                 <td align="center">
-                                    @if($requestSign->request_status == 'pending' && $requestSign->organizational_unit_id == Auth::user()->organizationalUnit->id)
+                                    {{--@if($requestSign->request_status == 'pending' && $requestSign->organizational_unit_id == Auth::user()->organizationalUnit->id) --}}
+                                    @if($requestSign->request_status == 'pending' && in_array($requestSign->organizational_unit_id, $iam_authorities_in))
                                         Estado: {{ $requestSign->StatusValue }} <br><br>
                                         <div class="row">
                                             <div class="col-sm">

@@ -135,6 +135,7 @@ class RequestReplacementStaffController extends Controller
         $user_id = Auth::user()->id;
 
         $authorities = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
+        $iam_authorities_in = array();
 
         foreach ($authorities as $authority){
             $iam_authorities_in[] = $authority->organizational_unit_id;
@@ -161,9 +162,12 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
         }
         else{
+            if(Auth::user()->organizationalUnit->id == 46)
+                $iam_authorities_in[] = 46;
+
             $pending_requests_to_sign = RequestReplacementStaff::
                 with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
                 ->latest()
@@ -184,7 +188,7 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
         }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
