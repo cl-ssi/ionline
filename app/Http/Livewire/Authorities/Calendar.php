@@ -28,6 +28,9 @@ class Calendar extends Component
     public $endDate;
     public $position;
     public $decree;
+    public $representation_id;
+
+    protected $listeners = ['userSelected'];
 
 
     /** Input selector de mes */
@@ -72,7 +75,7 @@ class Calendar extends Component
     public function mount(OrganizationalUnit $organizationalUnit)
     {
         $this->monthSelection = date('Y-m');
-        $this->today = now()->format('Y-m-d');
+        $this->today = now()->format('Y-m-d');        
     }
 
     /**
@@ -107,7 +110,8 @@ class Calendar extends Component
             ], [
                 'user_id' => $this->user_id,
                 'position' => $this->position,
-                'decree' => $this->decree
+                'decree' => $this->decree,
+                'representation_id' => $this->representation_id
             ]);
         }
 
@@ -174,6 +178,12 @@ class Calendar extends Component
         $this->position = null;
         $this->decree = null;
         $this->user_id = null;
+        $this->representation_id = null;
+    }
 
+    public function userSelected($user_id)
+    {
+        $this->representation_id = $user_id;
+        
     }
 }
