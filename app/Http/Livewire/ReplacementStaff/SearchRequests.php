@@ -26,7 +26,7 @@ class SearchRequests extends Component
     public $selectedFundamentDetail = null;
     public $selectedNameToReplace   = null;
     public $selectedSub             = null;
-    public $ou_dependents_array     = array();
+    public $ou_dependents_array     = [];
 
     public $fundamentsDetail;
 
@@ -123,7 +123,7 @@ class SearchRequests extends Component
 
     public function updatedselectedSub($sub_id)
     {
-        $this->ou_dependents_array = NULL;
+        $this->ou_dependents_array = [];
         $ou_dependents = collect(new OrganizationalUnit);
 
         $ou_dependents = OrganizationalUnit::

@@ -223,7 +223,7 @@ class RequestReplacementStaff extends Model implements Auditable
                     ->orwhere('run','LIKE', '%'.$name_to_replace_search.'%');
                 });
             }
-            if($sub_search != ''){
+            if(!empty($sub_search)){
                 $query->where(function($q) use($sub_search){
                     $q->whereIn('organizational_unit_id', $sub_search);
                 });

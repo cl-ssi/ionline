@@ -73,7 +73,6 @@
                 <label for="for_sub_search">Subdirección</label>
                 <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
                     <option value="">Seleccione...</option>
-                
                     @foreach($subs as $sub)
                         <option value="{{ $sub->id }}">{{ $sub->name }}</option>
                     @endforeach
