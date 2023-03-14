@@ -34,16 +34,11 @@
 
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
                 
-                @if(Auth::user()->organizationalUnit->level <= 3) 
+                @can('Replacement Staff: create request')
                     <div class="dropdown-divider"></div>
                     <h6 class="dropdown-header">Crear Solicitudes</h6>
-                    {{-- <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a> --}}
-                    <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a> 
-                    @can('Replacement Staff: assign request')
+                    <a class="dropdown-item" href="{{ route('replacement_staff.request.create_replacement') }}"><i class="fas fa-plus"></i> Formulario de Reemplazos</a>
                     <a class="dropdown-item" href="{{ route('replacement_staff.request.create_announcement') }}"><i class="fas fa-plus"></i> Formulario de Convocatorias</a>
-                    @else
-                    <a class="dropdown-item disabled"><i class="fas fa-plus"></i> Formulario de Convocatorias <span class="badge badge-secondary">Próximamente</span></a>
-                    @endif
                 @endif
                 @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
                     Auth::user()->hasRole('Replacement Staff: personal sign'))

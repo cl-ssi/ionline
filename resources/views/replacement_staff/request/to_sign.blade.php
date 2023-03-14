@@ -27,13 +27,13 @@
             <thead class="text-center small">
                 <tr>
                     <th>#</th>
-                    <th style="width: 8%">Fecha</th>
-                    <th>Cargo</th>
-                    <th>Grado</th>
+                    <th style="width: 7%">Fecha</th>
+                    <th style="width: 15%">Nombre Solicitud</th>
+                    <th>Grado / Renta</th>
                     <th>Calidad Jurídica</th>
                     <th style="width: 7%">Periodo</th>
                     <th>Fundamento</th>
-                    <th>Solicitante</th>
+                    <th>Creador / Solicitante</th>
                     <th>Estado</th>
                     <th style="width: 2%"></th>
                 </tr>
@@ -42,6 +42,7 @@
                 @foreach($pending_requests_to_sign as $requestReplacementStaff)
                 <tr>
                     <td>{{ $requestReplacementStaff->id }}<br>
+                        <span class="badge badge-info">{{ $requestReplacementStaff->FormTypeValue }}</span> <br>
                         @switch($requestReplacementStaff->request_status)
                             @case('pending')
                                 <span class="badge badge-warning">Pendiente</span>
@@ -59,24 +60,59 @@
                         @endswitch
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $requestReplacementStaff->name }}</td>
-                    <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                    <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                    <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
-                        {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
-                        {{ $requestReplacementStaff->getNumberOfDays() }}
-                        @if($requestReplacementStaff->getNumberOfDays() > 1)
-                            días
+                    <td>
+                        {{ $requestReplacementStaff->name }}
+                    </td>
+                    <td class="text-center">
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ $requestReplacementStaff->degree }}
                         @else
-                            dia
+                            @foreach($requestReplacementStaff->positions as $position)
+                                ${{ number_format($position->salary, 0, ",", ".") ?? '' }} <br>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }}
+                        @else
+                            @foreach($requestReplacementStaff->positions as $position)
+                                {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                            @endforeach
                         @endif
                     </td>
                     <td>
-                        {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
-                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
+                            {{ $requestReplacementStaff->getNumberOfDays() }}
+                            @if($requestReplacementStaff->getNumberOfDays() > 1)
+                                días
+                            @else
+                                dia
+                            @endif
+                        @else
+                            
+                        @endif
                     </td>
-                    <td>{{ $requestReplacementStaff->user->FullName }}<br>
-                        {{ $requestReplacementStaff->organizationalUnit->name }}
+                    <td nowrap>
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)   
+                            {{ $requestReplacementStaff->fundamentManage->NameValue ?? '' }} -
+                            {{ $requestReplacementStaff->fundamentDetailManage->NameValue ?? '' }} <br>
+                        @else
+                            @foreach($requestReplacementStaff->positions as $position)
+                                <span class="badge badge-pill badge-dark">{{ $position->charges_number }}</span>
+                                {{ $position->fundamentManage->NameValue ?? '' }} -
+                                {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        <p>
+                            <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                            ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
+                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                        </p>
                     </td>
                     <td class="text-center">
                         @foreach($requestReplacementStaff->RequestSign as $sign)
@@ -120,7 +156,7 @@
 </div>
 
 <div class="col">
-    <h5><i class="fas fa-inbox"></i> Solicitudes Finalizadas</h5>
+    <h5><i class="fas fa-inbox"></i> Solicitudes Aprobadas / Rechazadas</h5>
 </div>
 
 <div class="col">
@@ -129,13 +165,13 @@
             <thead class="text-center small">
                 <tr>
                     <th>#</th>
-                    <th style="width: 8%">Fecha</th>
-                    <th>Cargo</th>
-                    <th>Grado</th>
+                    <th style="width: 7%">Fecha</th>
+                    <th style="width: 15%">Nombre Solicitud</th>
+                    <th>Grado / Renta</th>
                     <th>Calidad Jurídica</th>
-                    <th colspan="2">Periodo</th>
+                    <th style="width: 7%">Periodo</th>
                     <th>Fundamento</th>
-                    <th>Solicitante</th>
+                    <th>Creador / Solicitante</th>
                     <th>Estado</th>
                     <th style="width: 2%"></th>
                 </tr>
@@ -143,7 +179,9 @@
             <tbody class="small">
                 @foreach($requests_to_sign as $requestReplacementStaff)
                 <tr class="{{ ($requestReplacementStaff->sirh_contract == 1) ? 'table-success':'' }}" >
-                    <td>{{ $requestReplacementStaff->id }}<br>
+                    <td>
+                        {{ $requestReplacementStaff->id }}<br>
+                        <span class="badge badge-info">{{ $requestReplacementStaff->FormTypeValue }}</span> <br>
                         @switch($requestReplacementStaff->request_status)
                             @case('pending')
                                 <span class="badge badge-warning">Pendiente</span>
@@ -167,24 +205,52 @@
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $requestReplacementStaff->name }}</td>
-                    <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                    <td class="text-center">{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
-                    <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
-                        {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
-                    </td>
-                    <td class="text-center">{{ $requestReplacementStaff->getNumberOfDays() }}
-                        @if($requestReplacementStaff->getNumberOfDays() > 1)
-                            días
+                    <td class="text-center">
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ $requestReplacementStaff->degree }}
                         @else
-                            dia
+                            @foreach($requestReplacementStaff->positions as $position)
+                                ${{ number_format($position->salary, 0, ",", ".") ?? '' }} <br>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ $requestReplacementStaff->legalQualityManage->NameValue }}
                         @endif
                     </td>
                     <td>
-                        {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
-                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
+                            {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }} <br>
+                            {{ $requestReplacementStaff->getNumberOfDays() }}
+                            @if($requestReplacementStaff->getNumberOfDays() > 1)
+                                días
+                            @else
+                                dia
+                            @endif
+                        @else
+                            
+                        @endif
                     </td>
-                    <td>{{ $requestReplacementStaff->user->FullName }}<br>
-                        {{ $requestReplacementStaff->organizationalUnit->name }}
+                    <td>
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)   
+                            {{ $requestReplacementStaff->fundamentManage->NameValue ?? '' }} -
+                            {{ $requestReplacementStaff->fundamentDetailManage->NameValue ?? '' }} <br>
+                        @else
+                            @foreach($requestReplacementStaff->positions as $position)
+                                <span class="badge badge-pill badge-dark">{{ $position->charges_number }}</span>
+                                {{ $position->fundamentManage->NameValue ?? '' }} -
+                                {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        <p>
+                            <b>Creado por</b>: {{ $requestReplacementStaff->user->TinnyName}} <br>
+                            ({{ $requestReplacementStaff->organizationalUnit->name }}) <br>
+                            <b>Solicitado por</b>: {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                        </p>
                     </td>
                     <td class="text-center">
                         @foreach($requestReplacementStaff->RequestSign as $sign)

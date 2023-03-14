@@ -107,6 +107,8 @@
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 </form>
 
+<br><br>
+
 @endsection
 
 @section('custom_js')

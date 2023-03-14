@@ -90,10 +90,8 @@
                 <tr>
                     <th>#</th>
                     <th style="width: 7%">Fecha</th>
-                    <th>Solicitud</th>
-                    <th>
-                        Grado / Renta 
-                    </th>
+                    <th style="width: 15%">Nombre Solicitud</th>
+                    <th>Grado / Renta</th>
                     <th>Calidad Jurídica</th>
                     <th width="7%">Periodo</th>
                     <th>Fundamento</th>
@@ -130,7 +128,9 @@
                         @endif
                     </td>
                     <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $requestReplacementStaff->name }}</td>
+                    <td>
+                        {{ $requestReplacementStaff->name }}
+                    </td>
                     <td class="text-center">
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                             {{ $requestReplacementStaff->degree }}
@@ -169,8 +169,9 @@
                             {{ $requestReplacementStaff->fundamentDetailManage->NameValue ?? '' }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
-                                {{ $position->fundamentManage->NameValue ?? '' }}<br>
-                                {{ $position->fundamentDetailManage->NameValue ?? '' }}
+                                <span class="badge badge-pill badge-dark">{{ $position->charges_number }}</span>
+                                {{ $position->fundamentManage->NameValue ?? '' }}
+                                {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
                             @endforeach
                         @endif
                     </td>
