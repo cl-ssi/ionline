@@ -12,14 +12,14 @@
 
 
     <div class="form-row">
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-10">
             <label for="formGroupIDInput">ID*</label>
-            <input type="number" class="form-control" id="formGroupIDInput" name="id" required="required" min="6" max="99999999" step="">
+            <input type="number" class="form-control" id="formGroupIDInput" name="id" required="required" min="6" max="99999999" step="" autocomplete="off">
         </fieldset>
 
-        <fieldset class="form-group col-1">
+        <fieldset class="form-group col-2">
             <label for="formGroupDVInput">DV*</label>
-            <input type="text" class="form-control" id="formGroupDVInput" name="dv" required="required" title="Digito verificador">
+            <input type="text" class="form-control" id="formGroupDVInput" name="dv" required="required" title="Digito verificador" autocomplete="off">
         </fieldset>
     </div>
 
