@@ -81,7 +81,8 @@ Total de registros: {{ $users->total() }}
     <tbody>
         @foreach($users as $user)
         <tr>
-            <th>
+            <th nowrap>
+                @livewire('set-single-permission',['user'=>$user, 'permission' => 'Nuevo iOnline'])
                 {!! $user->can('be god') ? '<i class="text-danger fas fa-chess-king" title="be god"></i>':'' !!}
                 {!! $user->can('Drugs') ? '<i class="text-danger fas fa-cannabis" title="Drugs"></i>':'' !!}
                 {!! $user->can('Users: delete') ? '<i class="fas fa-user-slash" title="Users: delete"></i>':'' !!}
