@@ -109,17 +109,18 @@ class PassengerRequest extends Component
         $this->emit('savedPassengers', $this->passengers);
     }
 
-    public function cleanPassenger(){
-      //$this->tittle = "Agregar Ticket";
-      $this->edit  = false;
-      $this->resetErrorBag();
-      $this->run=$this->run=$this->dv=$this->name=$this->fathers_family=
+    public function cleanPassenger()
+    {
+        $this->edit  = false;
+        $this->resetErrorBag();
+        $this->run=$this->run=$this->dv=$this->name=$this->fathers_family=
         $this->mothers_family=$this->birthday=$this->phone_number=$this->email=
         $this->round_trip=$this->origin=$this->destination=$this->departure_date=
-        $this->departure_date=$this->return_date=$this->baggage=$this->unitValue = "";
+        $this->return_date=$this->baggage=$this->unitValue = "";
     }
 
-    public function deletePassenger($key){
+    public function deletePassenger($key)
+    {
         if($this->editRF && array_key_exists('id',$this->passengers[$key])){
             $this->deletedPassengers[]=$this->passengers[$key]['id'];
             $this->emitUp('deletedPassengers', $this->deletedPassengers);
@@ -128,12 +129,10 @@ class PassengerRequest extends Component
         $this->totalValue();
         $this->cleanPassenger();
         $this->emit('savedPassengers', $this->passengers);
-        //$this->cleanTicket();
     }
 
     public function editPassenger($key){
       $this->resetErrorBag();
-      //$this->title                    = "Editar Item Nro ". ($key+1);
       $this->edit                     = true;
 
       $this->run            = $this->passengers[$key]['run'];
@@ -141,14 +140,14 @@ class PassengerRequest extends Component
       $this->name           = $this->passengers[$key]['name'];
       $this->fathers_family = $this->passengers[$key]['fathers_family'];
       $this->mothers_family = $this->passengers[$key]['mothers_family'];
-      $this->birthday       = Carbon::parse($this->passengers[$key]['birthday'])->format('Y-m-d');
+      $this->birthday       = $this->passengers[$key]['birthday'];
       $this->phone_number   = $this->passengers[$key]['phone_number'];
       $this->email          = $this->passengers[$key]['email'];
       $this->round_trip     = $this->passengers[$key]['round_trip'];
       $this->origin         = $this->passengers[$key]['origin'];
       $this->destination    = $this->passengers[$key]['destination'];
-      $this->departure_date = Carbon::parse($this->passengers[$key]['departure_date'])->format('Y-m-d\TH:i');
-      $this->return_date    = $this->passengers[$key]['return_date'] ? Carbon::parse($this->passengers[$key]['return_date'])->format('Y-m-d\TH:i') : null;
+      $this->departure_date = $this->passengers[$key]['departure_date'];
+      $this->return_date    = $this->passengers[$key]['return_date'];
       $this->baggage        = $this->passengers[$key]['baggage'];
       $this->unitValue      = $this->passengers[$key]['unitValue'];
 
@@ -178,16 +177,16 @@ class PassengerRequest extends Component
         $this->emit('savedPassengers', $this->passengers);
     }
 
-    public function totalValue(){
+    public function totalValue()
+    {
         $this->totalValue = 0;
         foreach($this->passengers as $passenger){
             $this->totalValue = $this->totalValue + $passenger['unitValue'];
         }
     }
 
-    public function mount($savedPassengers, $savedTypeOfCurrency){
-      // $this->run = $this->searchedUser->run;
-
+    public function mount($savedPassengers, $savedTypeOfCurrency)
+    {
       $this->passengers             = array();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       $this->editRF                 = false;
@@ -212,14 +211,14 @@ class PassengerRequest extends Component
                 'name'              =>  $passenger->name,
                 'fathers_family'    =>  $passenger->fathers_family,
                 'mothers_family'    =>  $passenger->mothers_family,
-                'birthday'          =>  $passenger->birthday,
+                'birthday'          =>  $passenger->birthday->format('Y-m-d'),
                 'phone_number'      =>  $passenger->phone_number,
                 'email'             =>  $passenger->email,
                 'round_trip'        =>  $passenger->round_trip,
                 'origin'            =>  $passenger->origin,
                 'destination'       =>  $passenger->destination,
-                'departure_date'    =>  $passenger->departure_date,
-                'return_date'       =>  $passenger->return_date,
+                'departure_date'    =>  $passenger->departure_date->format('Y-m-d\TH:i'),
+                'return_date'       =>  $passenger->return_date ? $passenger->return_date->format('Y-m-d\TH:i') : null,
                 'baggage'           =>  $passenger->baggage,
                 'unitValue'         =>  $passenger->unit_value
           ];
@@ -228,7 +227,8 @@ class PassengerRequest extends Component
         }
     }
 
-    public function searchedPassenger(User $user){
+    public function searchedPassenger(User $user)
+    {
         $this->searchedPassenger = $user;
 
         $this->run = $this->searchedPassenger->id;
@@ -236,17 +236,14 @@ class PassengerRequest extends Component
         $this->name = $this->searchedPassenger->name;
         $this->fathers_family = $this->searchedPassenger->fathers_family;
         $this->mothers_family = $this->searchedPassenger->mothers_family;
-        $this->birthday = $this->searchedPassenger->birthday;
+        $this->birthday = $this->searchedPassenger->birthday ? $this->searchedPassenger->birthday->format('Y-m-d') : null;
         $this->phone_number = $this->searchedPassenger->phone_number;
         $this->email = $this->searchedPassenger->email;
     }
 
     public function render()
     {
-        // $this->dv = User::dvCalculate($this->run);
-
         $users = User::orderBy('name', 'ASC')->get();
-
         return view('livewire.request-form.passenger.passenger-request', compact('users'));
     }
 
