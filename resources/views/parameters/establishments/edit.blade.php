@@ -211,6 +211,13 @@
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="form-group col-12 col-md-12">
+            <label for="mail_director">Mail Director (Opcional)</label>
+            <input type="text" class="form-control" id="mail_director" name="mail_director" value="{{$establishment->mail_director}}" placeholder="ingresar mail de director, en caso de ser mas campos separarlo por coma ej: director.ssi@redsalud.gob.cl, director.ssi@redsalud.gov.cl" >
+        </div>
+    </div>
+
 
 
     <div class="form-group">

@@ -47,6 +47,7 @@ class Establishment extends Model implements Auditable
         'longitude',
         'level_of_complexity',
         'provider_type_health_system',
+        'mail_director',
     ];
 
     /**

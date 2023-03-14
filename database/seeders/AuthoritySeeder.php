@@ -34,8 +34,7 @@ class AuthoritySeeder extends Seeder
                 'position' => 'Subdirectora',
                 'type' => 'manager',
                 'decree' => 'resol. pendiente',
-                'organizational_unit_id' => '1',
-                'creator_id' => '12345678',
+                'organizational_unit_id' => '1',                
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -45,8 +44,7 @@ class AuthoritySeeder extends Seeder
                 'date' => $date,
                 'position' => 'Director',
                 'type' => 'manager',
-                'organizational_unit_id' => '1',
-                'creator_id' => '15287582',
+                'organizational_unit_id' => '1',                
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -56,8 +54,7 @@ class AuthoritySeeder extends Seeder
                 'date' => $date,
                 'position' => 'Jefe',
                 'type' => 'manager',
-                'organizational_unit_id' => '2',
-                'creator_id' => '15287582',
+                'organizational_unit_id' => '2',                
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -67,8 +64,7 @@ class AuthoritySeeder extends Seeder
                 'date' => $date,
                 'position' => 'Jefe',
                 'type' => 'manager',
-                'organizational_unit_id' => '24',
-                'creator_id' => '15287582',
+                'organizational_unit_id' => '24',                
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -78,8 +74,7 @@ class AuthoritySeeder extends Seeder
                 'date' => $date,
                 'position' => 'Jefe',
                 'type' => 'manager',
-                'organizational_unit_id' => '40',
-                'creator_id' => '15287582',
+                'organizational_unit_id' => '40',                
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -90,7 +85,6 @@ class AuthoritySeeder extends Seeder
                 'position' => 'Jefe',
                 'type' => 'manager',
                 'organizational_unit_id' => '44',
-                'creator_id' => '15287582',
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -101,7 +95,6 @@ class AuthoritySeeder extends Seeder
                 'position' => 'Jefe',
                 'type' => 'manager',
                 'organizational_unit_id' => '59',
-                'creator_id' => '15287582',
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
@@ -112,7 +105,6 @@ class AuthoritySeeder extends Seeder
                 'position' => 'Subdirector',
                 'type' => 'manager',
                 'organizational_unit_id' => '1',
-                'creator_id' => '15287582',
                 'created_at' => carbon::now(),
                 'updated_at' => carbon::now()
             ]);
