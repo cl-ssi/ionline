@@ -14,4 +14,13 @@ class SirhActiveUser extends Model
     protected $table = 'sirh_active_users';
 
     protected $dates = ['birthdate','timestamp'];
+
+    public function checkEmailFormat(){
+        if (filter_var($this->email_personal, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
 }

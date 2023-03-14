@@ -101,6 +101,8 @@ class BirthdayEmailConfiguration extends Component
         //             ->whereNotNull('email')
         //             ->get();
 
+        // $users = User::where('id',17430005)->get();
+        // dd($users->first()->checkEmailFormat());
         // dd($users,$users2);
 
         return view('livewire.rrhh.birthday-email-configuration');

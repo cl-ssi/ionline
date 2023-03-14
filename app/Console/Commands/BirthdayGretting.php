@@ -44,34 +44,41 @@ class BirthdayGretting extends Command
     public function handle()
     {
         // encuentra usuarios que están de cumpleaños el día de hoy
-        // $users = User::where('active',1)
-        //             ->whereMonth('birthday', Carbon::now()->format('m'))
-        //             ->whereDay('birthday', Carbon::now()->format('d'))
-        //              ->whereNotNull('email_personal')
-        //             ->get();
+        $users = User::where('active',1)
+                    ->whereMonth('birthday', Carbon::now()->format('m'))
+                    ->whereDay('birthday', Carbon::now()->format('d'))
+                     ->whereNotNull('email_personal')
+                    ->get();
 
-        // foreach($users as $user){
-        //     Mail::to($user->email)->send(new BirthdayGreetingMail($user));
-        // }
-        
-        // $users = SirhActiveUser::whereMonth('birthdate', Carbon::now()->format('m'))
-        //             ->whereDay('birthdate', Carbon::now()->format('d'))
-        //             ->whereNotNull('email')
-        //             ->get();
-
-        // foreach($users as $user){
-        //     Mail::to($user->email)->send(new BirthdayGreetingMail($user));
-        // }
-        
-        
-        // de prueba
-        $users = User::where('id',17430005)->get();
         foreach($users as $user){
-            Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+            if($user->checkEmailFormat){
+                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+                Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
+            }else{
+                logger()->info('Error en el formato del correo: ' . $user->id);
+            }
         }
+        
+        $users = SirhActiveUser::whereMonth('birthdate', Carbon::now()->format('m'))
+                    ->whereDay('birthdate', Carbon::now()->format('d'))
+                    ->whereNotNull('email')
+                    ->get();
 
+        foreach($users as $user){
+            if($user->checkEmailFormat){
+                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+                Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
+            }else{
+                logger()->info('Error en el formato del correo: ' . $user->id);
+            }
+        }
         
         
+        // // de prueba
+        // $users = User::where('id',17430005)->get();
+        // foreach($users as $user){
+        //     Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+        // }
 
     }
 }

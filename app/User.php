@@ -752,4 +752,13 @@ class User extends Authenticatable implements Auditable
             }
         }
     }
+
+    public function checkEmailFormat(){
+        if (filter_var($this->email_personal, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
 }
