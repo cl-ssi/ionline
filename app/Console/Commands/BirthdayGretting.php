@@ -47,6 +47,7 @@ class BirthdayGretting extends Command
         // $users = User::where('active',1)
         //             ->whereMonth('birthday', Carbon::now()->format('m'))
         //             ->whereDay('birthday', Carbon::now()->format('d'))
+        //              ->whereNotNull('email_personal')
         //             ->get();
 
         // foreach($users as $user){
@@ -55,6 +56,7 @@ class BirthdayGretting extends Command
         
         // $users = SirhActiveUser::whereMonth('birthdate', Carbon::now()->format('m'))
         //             ->whereDay('birthdate', Carbon::now()->format('d'))
+        //             ->whereNotNull('email')
         //             ->get();
 
         // foreach($users as $user){

@@ -310,7 +310,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                         @canany(['Users: create', 'Users: edit','Users: delete'])
-                        <a class="dropdown-item {{ active(['rrhh.users.*']) }}" href="{{ route('rrhh.users.index') }}">
+                        <a class="dropdown-item {{ active(['rrhh.users.index']) }}" href="{{ route('rrhh.users.index') }}">
                             <i class="fas fa-user fa-fw"></i> Usuarios
                         </a>
                         @endcan

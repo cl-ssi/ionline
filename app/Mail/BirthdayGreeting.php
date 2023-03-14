@@ -35,6 +35,6 @@ class BirthdayGreeting extends Mailable
     public function build()
     {
         $this->birthdayEmailConfiguration = BirthdayEmailConfiguration::all()->last();
-        return $this->view('rrhh.mails.birthday_greeting');
+        return $this->view('rrhh.mails.birthday_greeting')->subject(BirthdayEmailConfiguration::all()->last()->subject);
     }
 }

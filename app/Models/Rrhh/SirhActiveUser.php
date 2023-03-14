@@ -13,5 +13,5 @@ class SirhActiveUser extends Model
 
     protected $table = 'sirh_active_users';
 
-    protected $dates = ['timestamp'];
+    protected $dates = ['birthdate','timestamp'];
 }
