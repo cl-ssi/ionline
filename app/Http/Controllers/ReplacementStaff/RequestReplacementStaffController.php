@@ -226,7 +226,7 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request, $formType)
     {
-        // dd($request);
+        /*
         if(Auth::user()->organizationalUnit->level == 3){
             /* SE OBTIENEN LA INFORMACIÓN DEL FORMULARIO */
             if($formType == 'announcement'){
@@ -292,7 +292,7 @@ class RequestReplacementStaffController extends Controller
                             ->latest()
                             ->first();
                         
-                            $request_sing->organizationalUnit()->associate( $lastSign->organizationalUnit->father->id);
+                        $request_sing->organizationalUnit()->associate( $lastSign->organizationalUnit->father->id);
                     }
 
                     $request_sing->requestReplacementStaff()->associate($request_replacement->id);
@@ -306,7 +306,7 @@ class RequestReplacementStaffController extends Controller
                         ->orderBy('position', 'DESC')
                         ->first();
                     
-                    if($lastSign->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
+                    if($lastSign && $lastSign->organizationalUnit->father->id != Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value){
                         $request_sing = new RequestSign();
                         $request_sing->position = $position;
                         $request_sing->ou_alias = 'sub';
@@ -315,7 +315,18 @@ class RequestReplacementStaffController extends Controller
                         $request_sing->save();
                     }
                     else{
-                        $position = $position - 1;
+                        if($i == $request_replacement->organizationalUnit->level){
+                            $request_sing = new RequestSign();
+                            $request_sing->position = $position;
+                            $request_sing->ou_alias = 'sub';
+                            $request_sing->organizationalUnit()->associate(Auth::user()->organizationalUnit);
+                            $request_sing->request_status = 'pending';
+                            $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                            $request_sing->save();
+                        }
+                        else{
+                            $position = $position - 1;
+                        }
                     }
                     
                     /*  APROBACION UNIDAD DE PERSONAL*/
@@ -362,11 +373,13 @@ class RequestReplacementStaffController extends Controller
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
             return redirect()->route('replacement_staff.request.own_index');
+        /*
         }
         else{
             session()->flash('danger', 'Estimado Usuario, su unidad organizacional no está autorizada para generar solicitudes, favor contactar a la Unidad de Reclutamiento');
             return redirect()->route('replacement_staff.request.own_index');
         }
+        */
     }
 
     public function store_extension(Request $request, RequestReplacementStaff $requestReplacementStaff, $formType)
