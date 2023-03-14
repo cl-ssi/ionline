@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class AuthoritySeeder extends Seeder
 {
@@ -13,15 +14,23 @@ class AuthoritySeeder extends Seeder
      *
      * @return void
      */
-    
+
     public function run()
     {
-        
-        //DB::table('rrhh_authorities')->insert([
+
+        // Define la fecha de inicio y finalización del período de un año.
+        $startDate = Carbon::now();
+        $endDate = $startDate->copy()->addYear();
+
+        // Crea un período que contenga cada día en el intervalo especificado.
+        $period = CarbonPeriod::create($startDate, $endDate);
+
+
+        foreach ($period as $date) {
+
         Authority::create([
             'user_id' => '12345678',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,
             'position' => 'Subdirectora',
             'type' => 'manager',
             'decree' => 'resol. pendiente',
@@ -33,8 +42,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,
             'position' => 'Director',
             'type' => 'manager',
             'organizational_unit_id' => '1',
@@ -45,8 +53,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,
             'position' => 'Jefe',
             'type' => 'manager',
             'organizational_unit_id' => '2',
@@ -57,8 +64,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,            
             'position' => 'Jefe',
             'type' => 'manager',
             'organizational_unit_id' => '24',
@@ -69,8 +75,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,            
             'position' => 'Jefe',
             'type' => 'manager',
             'organizational_unit_id' => '40',
@@ -81,8 +86,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,            
             'position' => 'Jefe',
             'type' => 'manager',
             'organizational_unit_id' => '44',
@@ -93,8 +97,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,            
             'position' => 'Jefe',
             'type' => 'manager',
             'organizational_unit_id' => '59',
@@ -105,8 +108,7 @@ class AuthoritySeeder extends Seeder
 
         Authority::create([
             'user_id' => '15287582',
-            'from' => carbon::now()->toDateString(),
-            'to' => carbon::now()->addYear()->toDateString(),
+            'date' => $date,
             'position' => 'Subdirector',
             'type' => 'manager',
             'organizational_unit_id' => '1',
@@ -114,6 +116,5 @@ class AuthoritySeeder extends Seeder
             'created_at' => carbon::now(),
             'updated_at' => carbon::now()
         ]);
-        
     }
 }
