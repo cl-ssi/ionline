@@ -276,8 +276,16 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
-                            class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                        @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+                            <a href="{{ route('replacement_staff.request.technical_evaluation.show', $requestReplacementStaff) }}"
+                                class="btn btn-outline-secondary btn-sm" title="Evaluación Técnica"><i class="fas fa-eye"></i></a>
+                        @else
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                                data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            @include('replacement_staff.modals.modal_to_sign')
+                        @endif
                     </td>
                 </tr>
                 @endforeach
