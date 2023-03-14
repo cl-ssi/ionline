@@ -131,10 +131,7 @@ class RequestReplacementStaffController extends Controller
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {
-        $type = 'manager';
-        $user_id = Auth::user()->id;
-
-        $authorities = Authority::getAmIAuthorityFromOu(today(), $type, $user_id);
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
         $iam_authorities_in = array();
 
         foreach ($authorities as $authority){
@@ -146,7 +143,7 @@ class RequestReplacementStaffController extends Controller
                 with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
                 ->latest()
                 ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
-                    $q->Where('organizational_unit_id', $iam_authorities_in)
+                    $q->WhereIn('organizational_unit_id', $iam_authorities_in)
                     ->Where('request_status', 'pending');
                 })
                 ->get();
