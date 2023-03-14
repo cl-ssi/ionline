@@ -18,7 +18,7 @@ class DirectDeal extends Model implements Auditable
 
 
     protected $fillable = [
-        'purchase_type_id' ,'description', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'guarantee_ticket_exp_date', 'supplier_id'
+        'purchase_type_id' ,'description', 'is_lower_amount', 'resol_direct_deal', 'resol_contract', 'guarantee_ticket', 'guarantee_ticket_exp_date', 'supplier_id'
     ];
 
     public $dates = [

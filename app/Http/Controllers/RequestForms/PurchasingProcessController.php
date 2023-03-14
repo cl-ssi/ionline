@@ -522,6 +522,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $directdeal = new DirectDeal($request->all());
+        $directdeal->is_lower_amount = $request->has('is_lower_amount');
         $directdeal->save();
 
         $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;

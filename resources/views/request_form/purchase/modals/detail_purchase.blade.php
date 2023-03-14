@@ -329,6 +329,10 @@
                             <!-- Trato directo distinto a MAYOR A 30 Y MENOR A 1.000 UTM -->
                             @if($detail->pivot->directDeal->purchase_type_id != 8)
                             <tr>
+                                <th class="table-active" style="width: 33%">Trato directo menor a 1000 UTM</th>
+                                <td>{{ $detail->pivot->directDeal->is_lower_amount ? 'SÍ' : 'NO' }}</td>
+                            </tr>
+                            <tr>
                                 <th class="table-active" style="width: 33%">Nº Resol. de Contrato</th>
                                 <td>{{ $detail->pivot->directDeal->resol_contract }}</td>
                             </tr>

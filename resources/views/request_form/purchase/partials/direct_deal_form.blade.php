@@ -12,7 +12,7 @@
             </fieldset>
         </div>
         <div class="form-row">
-            <fieldset class="form-group col-sm-12">
+            <fieldset class="form-group col-sm-8">
                 <label for="for_supplier">Proveedor</label>
                 <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm selectpicker" data-live-search="true" title="Seleccione..." required>
                     <option value="">Seleccione...</option>
@@ -21,6 +21,14 @@
                     @endforeach
                 </select>
             </fieldset>
+            @if($requestForm->purchase_type_id != 8)
+            <fieldset class="form-check" style="display:flex;align-items:center;">
+                <input class="form-check-input" type="checkbox" id="for_is_lower_amount" name="is_lower_amount" {{ old('is_lower_amount') ? 'checked' : '' }}>
+                <label class="form-check-label" for="for_is_lower_amount">
+                    Trato directo monto menor a 1000 UTM
+                </label>
+            </fieldset>
+            @endif
         </div>
         <div class="form-row">
             <fieldset class="form-group col-sm-2">
