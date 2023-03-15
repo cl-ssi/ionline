@@ -9,6 +9,7 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\ItemRequestForm;
+// use App\Models\RequestForms\ItemChangedRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
@@ -77,7 +78,7 @@ class RequestForm extends Model implements Auditable
     public function purchasers()
     {
         return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
-            ->withTimestamps();
+            ->withTimestamps()->withTrashed();
     }
 
     public function supervisor()
@@ -102,7 +103,7 @@ class RequestForm extends Model implements Auditable
 
     public function signer()
     {
-        return $this->belongsTo(User::class, 'signer_user_id');
+        return $this->belongsTo(User::class, 'signer_user_id')->withTrashed();
     }
 
     public function userOrganizationalUnit()
@@ -119,6 +120,11 @@ class RequestForm extends Model implements Auditable
     {
         return $this->hasMany(ItemRequestForm::class);
     }
+
+    // public function itemChangedRequestForms()
+    // {
+    //     return $this->hasMany(ItemChangedRequestForm::class);
+    // }
 
     public function passengers()
     {
