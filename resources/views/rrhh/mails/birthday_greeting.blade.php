@@ -4,7 +4,7 @@
 
     <div style="text-align: justify;">
         <p> <h2>{{$birthdayEmailConfiguration->tittle}}</h2></p>
-        <p> Estimado {{$user->name}},</p>
+        <p> Estimado(a) {{$user->name}},</p>
         <p> {!!$birthdayEmailConfiguration->message!!}</p>
     </div>
 
