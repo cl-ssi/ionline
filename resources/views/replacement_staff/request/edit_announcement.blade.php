@@ -60,7 +60,9 @@
 
         <fieldset class="form-group col-5">     
             <div>
-                <label for="for_request_verification_file" class="form-label">Antecedentes del proceso</label>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Resoluciones, Decretos y/o Antecedentes asociados al cargo">
+                <label for="for_request_verification_file" class="form-label">Antecedentes del proceso <i class="fas fa-info-circle"></i></label>
+                </span>
                 <input class="form-control" type="file" name="request_verification_file" accept="application/pdf">
             </div>
         </fieldset>
