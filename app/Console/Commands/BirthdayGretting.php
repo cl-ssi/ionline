@@ -8,6 +8,7 @@ use App\Models\Commune;
 use Illuminate\Support\Facades\Mail;
 
 use App\User;
+use App\Models\Rrhh\SirhActiveUser;
 use Carbon\Carbon;
 
 class BirthdayGretting extends Command
