@@ -162,7 +162,7 @@
     <div class="form-row">
         <div class="form-group col-3 col-md-3">
             <label for="telephone">Teléfono</label>
-            <input type="text" class="form-control" id="telephone" name="telephone" required>
+            <input type="text" class="form-control" id="telephone" name="telephone">
         </div>
 
         <div class="form-group col-4 col-md-4">
@@ -196,8 +196,14 @@
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="form-group col-12 col-md-12">
+            <label for="mail_director">Mail Director (Opcional)</label>
+            <input type="text" class="form-control" id="mail_director" name="mail_director" placeholder="ingresar mail de director, en caso de ser mas campos separarlo por coma ej: director.ssi@redsalud.gob.cl, director.ssi@redsalud.gov.cl" >
+        </div>
+    </div>
+
     <button type="submit" class="btn btn-primary">Crear Establecimiento</button>
     <a href="{{ route('parameters.establishments.index') }}" class="btn btn-secondary ml-4">Cancelar</a>
-
 </form>
 @endsection

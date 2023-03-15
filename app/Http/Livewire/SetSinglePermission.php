@@ -9,6 +9,7 @@ class SetSinglePermission extends Component
 {
     public User $user;
     public $permission;
+    public $icon;
 
     /**
     * Set Permission 
