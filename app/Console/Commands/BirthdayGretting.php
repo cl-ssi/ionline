@@ -52,7 +52,7 @@ class BirthdayGretting extends Command
 
         foreach($users as $user){
             if($user->checkEmailFormat){
-                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+                // Mail::to($user->email)->send(new BirthdayGreetingMail($user));
                 Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
             }else{
                 logger()->info('Error en el formato del correo: ' . $user->id);
@@ -66,7 +66,7 @@ class BirthdayGretting extends Command
 
         foreach($users as $user){
             if($user->checkEmailFormat){
-                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+                // Mail::to($user->email)->send(new BirthdayGreetingMail($user));
                 Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
             }else{
                 logger()->info('Error en el formato del correo: ' . $user->id);
