@@ -51,7 +51,7 @@ class BirthdayGretting extends Command
                     ->get();
 
         foreach($users as $user){
-            if($user->checkEmailFormat){
+            if($user->checkEmailFormat()){
                 // Mail::to($user->email)->send(new BirthdayGreetingMail($user));
                 Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
             }else{
@@ -65,7 +65,7 @@ class BirthdayGretting extends Command
                     ->get();
 
         foreach($users as $user){
-            if($user->checkEmailFormat){
+            if($user->checkEmailFormat()){
                 // Mail::to($user->email)->send(new BirthdayGreetingMail($user));
                 Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
             }else{
