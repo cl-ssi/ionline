@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
 use App\User;
-use App\models\Rrhh\SirhActiveUser;
+use App\Models\Rrhh\SirhActiveUser;
 use Carbon\Carbon;
 use DB;
 
