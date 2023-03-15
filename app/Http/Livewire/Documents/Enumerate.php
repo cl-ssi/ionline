@@ -18,6 +18,7 @@ class Enumerate extends Component
     {
         $this->document->number = Correlative::getCorrelativeFromType($this->document->type_id);
         $this->document->save();
+        return redirect()->route('documents.index');
     }
 
     /**
