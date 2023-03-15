@@ -65,7 +65,7 @@ class BirthdayEmailConfiguration extends Component
         ->select(DB::raw('DATE_FORMAT(birthday, "2000-%m-%d") as date'),
                 DB::raw('DATE_FORMAT(NOW(), "2000-%m-%d") as now'), 
                 'id','name','fathers_family','dv','birthday','email_personal')
-        ->whereRaw('DATE_FORMAT(birthday, "2000-%m-%d") > DATE_FORMAT(NOW(), "2000-%m-%d")')
+        ->whereRaw('DATE_FORMAT(birthday, "2000-%m-%d") >= DATE_FORMAT(NOW(), "2000-%m-%d")')
         ->take(10)
         ->orderBy('date','asc')
         ->get();
@@ -75,7 +75,7 @@ class BirthdayEmailConfiguration extends Component
         $this->sirh_users_array = SirhActiveUser::select(DB::raw('DATE_FORMAT(birthdate, "2000-%m-%d") as date'),
                 DB::raw('DATE_FORMAT(NOW(), "2000-%m-%d") as now'), 
                 'id','name','email','birthdate')
-        ->whereRaw('DATE_FORMAT(birthdate, "2000-%m-%d") > DATE_FORMAT(NOW(), "2000-%m-%d")')
+        ->whereRaw('DATE_FORMAT(birthdate, "2000-%m-%d") >= DATE_FORMAT(NOW(), "2000-%m-%d")')
         ->take(10)
         ->orderBy('date', 'ASC')
         ->get();
