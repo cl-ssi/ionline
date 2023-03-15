@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Mail\BirthdayGreeting as BirthdayGreetingMail;
+use App\Mail\BirthdayGreetingSirhActiveUser;
 use App\Models\Commune;
 use Illuminate\Support\Facades\Mail;
 
@@ -53,7 +54,7 @@ class BirthdayGretting extends Command
 
         foreach($users as $user){
             if($user->checkEmailFormat()){
-                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
+                Mail::to($user->email_personal)->send(new BirthdayGreetingMail($user));
                 Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
             }else{
                 logger()->info('Error en el formato de correo del usuario ID: ' . $user->id);
@@ -67,8 +68,8 @@ class BirthdayGretting extends Command
 
         foreach($users as $user){
             if($user->checkEmailFormat()){
-                Mail::to($user->email)->send(new BirthdayGreetingMail($user));
-                Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingMail($user));
+                Mail::to($user->email)->send(new BirthdayGreetingSirhActiveUser($user));
+                Mail::to('sick_iqq@hotmail.com')->send(new BirthdayGreetingSirhActiveUser($user));
             }else{
                 logger()->info('Error en el formato de correo del usuario ID: ' . $user->id);
             }
