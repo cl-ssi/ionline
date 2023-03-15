@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('change:proStatus')->yearlyOn(12, 16, '00:00');
         }else{
             /* TODO: Esto es para la versión en Cloud Run (Verde) */
-            $schedule->command('command:birthdayGretting')->dailyAt('12:20');
+            $schedule->command('command:birthdayGretting')->dailyAt('08:30');
         }
     }
 
