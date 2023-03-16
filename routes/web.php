@@ -221,12 +221,9 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
-
-
+use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Wellness\LoanController;
 use App\Http\Controllers\Wellness\WellnessController;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -947,7 +944,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         });
     });
 
-    /** 
+    /**
      * Reemplazar después por el nuevo
      */
     //Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
@@ -1616,7 +1613,11 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth','drugs')->gr
 
     Route::get('rosters/analisis_to_admin',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'index'])->name('roster.analisis_to_admin.index');
     Route::get('rosters/analisis_to_admin/{id}',[App\Http\Controllers\Drugs\RosterAnalisisToAdminController::class,'show'])->name('roster.analisis_to_admin.show');
-    Route::get('precursors', App\Http\Livewire\Drugs\Precursors::class)->name('precursors');
+
+    Route::get('precursors', App\Http\Livewire\Drugs\IndexActPrecursor::class)->name('precursors');
+    Route::get('precursors/create', App\Http\Livewire\Drugs\CreateActPrecursor::class)->name('precursors.create');
+    Route::get('precursors/{actPrecursor}/create', App\Http\Livewire\Drugs\EditActPrecursor::class)->name('precursors.edit');
+    Route::get('precursors/{actPrecursor}/pdf', ActPrecursorController::class)->name('precursors.pdf');
 });
 
 Route::get('health_plan/{comuna}', [HealthPlanController::class,'index'])->middleware('auth')->name('health_plan.index');
@@ -2176,10 +2177,10 @@ Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
     $white = imagecolorallocate($im, 255, 255, 255);
     imagefilledrectangle($im, 1, 1, 218, 82, $white);
     $text_color = imagecolorallocate($im, 0, 0, 0);
-    
+
     imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
         $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-    
+
     imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
         $text_color, $font_bold, $user->shortName);
 
@@ -2188,7 +2189,7 @@ Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
 
     imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
         $text_color, $font_regular, env('APP_SS'));
-    
+
     imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
         $text_color, $font_regular, now()->format('d-m-Y H:i:s'));
     ob_start();

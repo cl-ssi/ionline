@@ -129,6 +129,7 @@ class SignatureController extends Controller
             $pendingSignaturesFlows = $pendingSignaturesFlows->get();
 
             //Firmas del usuario y del manager actual de ou
+
             $signedSignaturesFlows = SignaturesFlow::with('signaturesFile', 'userSigner')
                 ->whereIn('user_id', $users)
                 ->where(function ($q) {
@@ -137,9 +138,11 @@ class SignatureController extends Controller
                             $q->whereNotNull('rejected_at');
                         });
                 })
-                ->whereHas('signaturesFile.signature', function ($q) use ($request){
-                    $q->where('subject', 'LIKE', '%'.$request->search.'%')
-                        ->orWhere('description','LIKE', '%'.$request->search.'%');
+                ->when($request->search, function($query) use($search) {
+                    $query->whereHas('signaturesFile.signature', function ($query) use($search) {
+                        $query->where('subject', 'like', $search)
+                            ->orWhere('description', 'like', $search);
+                    });
                 });
 
             //Firmas de managers anteriores de la ou
@@ -171,7 +174,7 @@ class SignatureController extends Controller
 
         }
 
-        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab', 'request'));
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
     }
 
     /**
