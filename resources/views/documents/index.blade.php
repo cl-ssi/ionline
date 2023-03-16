@@ -136,7 +136,7 @@
             </td>
             <td nowrap>
                 @if($doc->file_to_sign_id === null)
-                <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
+                <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary"  @if(!$doc->number) onclick="return confirm('Enviará a firmar un documento sin Numerar' ) @endif">
                     <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
                 @endif
 

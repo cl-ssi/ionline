@@ -37,9 +37,11 @@
             <input type="text" class="form-control" name="name"
                 placeholder="EJ: Reemplazo por licencia médica de funcionario de establecimiento..." required>
         </fieldset>
-        <fieldset class="form-group col-md-6">
+        <fieldset class="form-group col-12 col-md-6">
             <div class="mb-3">
-                <label for="for_request_verification_file" class="form-label">Antecedentes del proceso</label>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Resoluciones, Decretos y/o Antecedentes asociados al cargo">
+                <label for="for_request_verification_file" class="form-label">Antecedentes del proceso de contración <i class="fas fa-info-circle"></i></label>
+                </span>
                 <input class="form-control" type="file" name="request_verification_file" accept="application/pdf" required>
             </div>
         </fieldset>
