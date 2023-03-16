@@ -134,8 +134,12 @@
 
 						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
-							<input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" />
-						</fieldset>
+                            @if($serviceRequest->has_resolution_file)
+							    <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" />
+                            @else
+                                <input type="text" class="form-control" disabled value="Falta resolución." title="Para ingresar este valor, primero se debe cargar resolución firmada.">
+                            @endif
+                        </fieldset>
 
 						<div class="form-check form-check-inline">
 							<input type="hidden" name="illness_leave" value="0">
