@@ -68,7 +68,7 @@ class NotificationNewRequest extends Notification
             'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
             'subject' => 'Se ha creado una nueva solicitud ID: '.$this->requestReplacementStaff->id,
-            'action'  => route($action, false)
+            'action'  => route($action, [], false)
         ];
     }
 }

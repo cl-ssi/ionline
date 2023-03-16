@@ -369,6 +369,7 @@ class RequestReplacementStaffController extends Controller
             if($notification_reclutamiento_manager){
                 $notification_reclutamiento_manager->user->notify(new NotificationNewRequest($request_replacement, 'reclutamiento'));
             }
+            //SE NOTIFICA A FUNCIONARIO SOLICITANTE
             $request_replacement->requesterUser->notify(new NotificationNewRequest($request_replacement, 'requester'));
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
