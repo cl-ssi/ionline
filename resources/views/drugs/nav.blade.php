@@ -65,9 +65,9 @@
 
     @can('Drugs')
     <li class="nav-item">
-        <a class="nav-link {{ active('drugs.precursors') }}"
+        <a class="nav-link {{ active(['drugs.precursors', 'drugs.precursors.*']) }}"
                       href="{{ route('drugs.precursors') }}">
-            <i class="fas fa-flask"></i> Precursores 
+            <i class="fas fa-flask"></i> Precursores
         </a>
     </li>
     @endcan
@@ -76,7 +76,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('drugs.users') }}"
                       href="{{ route('drugs.users') }}">
-            <i class="fas fa-user"></i> 
+            <i class="fas fa-user"></i>
         </a>
     </li>
     @endcan
