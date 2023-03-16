@@ -15,20 +15,20 @@ class ReceptionItem extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 
-        'substance_id', 
-        'nue', 
-        'sample_number', 
+        'description',
+        'substance_id',
+        'nue',
+        'sample_number',
         'document_weight',
-        'gross_weight', 
-        'net_weight', 
-        'estimated_net_weight', 
-        'sample', 
-        'countersample', 
+        'gross_weight',
+        'net_weight',
+        'estimated_net_weight',
+        'sample',
+        'countersample',
         'destruct',
-        'equivalent', 
-        'result_number', 
-        'result_date', 
+        'equivalent',
+        'result_number',
+        'result_date',
         'result_substance_id',
         'dispose_precursor',
     ];
@@ -69,5 +69,108 @@ class ReceptionItem extends Model
     public function protocols()
     {
         return $this->hasMany(Protocol::class);
+    }
+
+    public function getLetterAttribute()
+    {
+        $position = "";
+        $position = $this->reception->items->search(function($receptionItem) {
+            return $receptionItem->id == $this->id;
+        });
+        return$this->position($position + 1);
+    }
+
+    public function position($position)
+    {
+        $letter = "";
+        switch($position) {
+            case 1:
+                $letter = "a";
+                break;
+            case 2:
+                $letter = "b";
+                break;
+            case 3:
+                $letter = "c";
+                break;
+            case 4:
+                $letter = "d";
+                break;
+            case 5:
+                $letter = "e";
+                break;
+            case 6:
+                $letter = "f";
+                break;
+            case 7:
+                $letter = "g";
+                break;
+            case 8:
+                $letter = "h";
+                break;
+            case 9:
+                $letter = "i";
+                break;
+            case 10:
+                $letter = "j";
+                break;
+            case 11:
+                $letter = "k";
+                break;
+            case 12:
+                $letter = "l";
+                break;
+            case 13:
+                $letter = "m";
+                break;
+            case 14:
+                $letter = "n";
+                break;
+            case 15:
+                $letter = "o";
+                break;
+            case 16:
+                $letter = "p";
+                break;
+            case 17:
+                $letter = "q";
+                break;
+            case 18:
+                $letter = "r";
+                break;
+            case 19:
+                $letter = "s";
+                break;
+            case 20:
+                $letter = "t";
+                break;
+            case 21:
+                $letter = "u";
+                break;
+            case 22:
+                $letter = "v";
+                break;
+            case 23:
+                $letter = "w";
+                break;
+            case 24:
+                $letter = "x";
+                break;
+            case 25:
+                $letter = "y";
+                break;
+            case 26:
+                $letter = "z";
+                break;
+        }
+
+        if($position <= 26)
+        {
+            return $letter;
+        }
+        else
+        {
+            return $this->position((int)($position / 26)).$this->position($position % 26);
+        }
     }
 }
