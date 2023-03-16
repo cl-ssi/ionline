@@ -57,7 +57,7 @@ class NewSgr extends Notification
     {
         return [
             'subject' => $this->sgr->subject,
-            'action' => route('requirements.show',$this->sgr->id, false),
+            'action' => route('requirements.show',[$this->sgr->id], false),
         ];
     }
 }
