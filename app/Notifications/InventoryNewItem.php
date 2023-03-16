@@ -58,7 +58,7 @@ class InventoryNewItem extends Notification
         $subject = $this->movement->inventory->unspscProduct->name ?? null;
         return [
             'module'  => 'Inventario', // Opcional
-            'icon'    => '<i class="fas fa-boxes"></i>',
+            'icon'    => '<i class="fas fa-fw fa-boxes"></i>',
             'subject' => 'Recepcionar ingreso de: '.$subject,
             'action'  => route('inventories.check-transfer', [$this->movement->id], false)
         ];

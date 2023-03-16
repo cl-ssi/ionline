@@ -65,7 +65,7 @@ class TestNotification extends Notification
     {
         return [
             'module'  => 'Prueba', // Opcional
-            'icon'    => '<i class="fas fa-bomb"></i>', // Opcional
+            'icon'    => '<i class="fas fa-fw fa-bomb"></i>', // Opcional
             'subject' => 'Nueva notificación de prueba, parametro: '.$this->param,
             'action' => route('resources.computer.edit',[$this->param], false),
         ];

@@ -616,6 +616,12 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('allNotifications') }}">
+                            <i class="fas fa-fw fa-bell" title="Notificaciones"></i> Todas mis notificaciones
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
                         @if(count(auth()->user()->unreadNotifications))
                         @foreach(auth()->user()->unreadNotifications as $notification)
                         <a class="dropdown-item small" href="{{ route('openNotification',$notification) }}">
@@ -629,10 +635,6 @@
                             <i class="fas fa-exclamation"></i> Sin Notificaciones Nuevas
                         </div>
                         @endif
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item small" href="{{ route('allNotifications') }}">
-                            <i class="fas fa-bell" title="Notificaciones"></i> Todas mis notificaciones
-                        </a>
                     </div>
                 </li>
 
