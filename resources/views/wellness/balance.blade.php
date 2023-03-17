@@ -62,7 +62,7 @@
 </div>
 
 @if($balances->isNotEmpty())
-<h4 style="text-align:center; font-weight:bold; text-decoration:underline;">ESTADO PRESUPUESTARIO DE INGRESOS</h4>
+<h4 style="text-align:center; font-weight:bold; text-decoration:underline;">ESTADO PRESUPUESTARIO DE {{strtoupper(old('type'))}} </h4>
 <h4 style="text-align:center; font-weight:bold; text-decoration:underline;">{{$ultimo_dia_del_mes}}</h4>
 
 <table class="table table-bordered" id="tabla_balance">
