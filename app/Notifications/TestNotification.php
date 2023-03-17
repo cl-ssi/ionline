@@ -15,6 +15,9 @@ class TestNotification extends Notification
      *  
      * $user->notify(new App\Notifications\TestNotification($param));
      * 
+     * Ej:
+     * $user->notify(new App\Notifications\TestNotification(69));
+     * 
      */
 
     /**
@@ -60,11 +63,11 @@ class TestNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        // puedo usar aca $this->param
-        $id = 34;
         return [
-            'subject' => 'Staff: Nueva solciitud id:'.$id,
-            'action' => route('resources.computer.edit',15, false),
+            'module'  => 'Prueba', // Opcional
+            'icon'    => '<i class="fas fa-fw fa-bomb"></i>', // Opcional
+            'subject' => 'Nueva notificación de prueba, parametro: '.$this->param,
+            'action' => route('resources.computer.edit',[$this->param], false),
         ];
     }
 }

@@ -16,6 +16,7 @@ use App\Notifications\ReplacementStaff\NotificationEndSigningProcess;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 // use App\Mail\NotificationEndSigningProcess;
 use App\User;
+use App\Models\Parameters\Parameter;
 
 class RequestSignController extends Controller
 {
@@ -118,10 +119,11 @@ class RequestSignController extends Controller
                 return redirect()->route('replacement_staff.request.to_sign');
             }
             else{
-                /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-                $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
-                $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
-
+                // NOTIFICACION PARA RECLUTAMIENTO
+                $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+                if($notification_reclutamiento_manager){
+                    $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
+                }
                 session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
                 return redirect()->route('replacement_staff.request.to_sign');
             }
@@ -138,9 +140,10 @@ class RequestSignController extends Controller
             $requestReplacementStaff->save();
 
             //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-            /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer, parametrizar el "48" */
-            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, Carbon::now(), 'manager');
-            $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'reclutamiento'));
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, today(), 'manager');
+            if($notification_reclutamiento_manager){
+                $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'reclutamiento'));
+            }
             $requestReplacementStaff->requesterUser->notify(new NotificationRejectedRequest($requestReplacementStaff, 'requester'));
 
             session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');

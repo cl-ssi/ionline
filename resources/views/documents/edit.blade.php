@@ -10,8 +10,7 @@
 
 @if( Auth::id() == $document->user_id )
 
-<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-<script src="{{ asset('js/create_doc.js') }}"></script>
+<x-head.tinymce-config />
 
 
 <form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">

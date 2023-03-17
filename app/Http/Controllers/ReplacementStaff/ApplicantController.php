@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EndSelectionNotification;
 use App\Notifications\ReplacementStaff\NotificationEndSelection;
+use App\Models\Parameters\Parameter;
 
 class ApplicantController extends Controller
 {
@@ -184,10 +185,11 @@ class ApplicantController extends Controller
           ->cc(env('APP_RYS_MAIL'))
           ->send(new EndSelectionNotification($technicalEvaluation));
 
-        //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
-        /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer */
-        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(48, $now, 'manager');
-        $notification_reclutamiento_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'reclutamiento'));
+        // NOTIFICACION PARA RECLUTAMIENTO
+        $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+        if($notification_reclutamiento_manager){
+            $notification_reclutamiento_manager->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'reclutamiento'));
+        }
         //SE NOTIFICA A USUARIO QUE CREA  
         $technicalEvaluation->requestReplacementStaff->user->notify(new NotificationEndSelection($technicalEvaluation->requestReplacementStaff, 'user'));
         //SE NOTIFICA A USUARIO QUE SOLICITA
