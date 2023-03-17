@@ -165,12 +165,11 @@ class ServiceRequestController extends Controller
 
   public function user(Request $request)
   {
-    // dd("");
     $fulfillments = array();
     $user = null;
 
     if ($request->input('run')) {
-      $user = User::find($request->input('run'));
+      $user = User::where('id',$request->input('run'))->withTrashed()->get()->first();
 
       if ($user) {
         $fulfillments = Fulfillment::whereHas(
