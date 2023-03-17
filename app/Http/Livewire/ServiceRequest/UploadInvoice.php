@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\ServiceRequests\Fulfillment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class UploadInvoice extends Component
 {
@@ -27,12 +28,14 @@ class UploadInvoice extends Component
             'gcs'
         );
 
-        $this->fulfillment->update(['has_invoice_file' => true]);
+        $this->fulfillment->update(['has_invoice_file' => true, 
+                                    'has_invoice_file_at' => now(), 
+                                    'has_invoice_file_user_id' => auth()->id()]);
     }
 
     public function delete() {
         Storage::disk('gcs')->delete($this->storage_path.$this->fulfillment->id.'.pdf');
-        $this->fulfillment->update(['has_invoice_file' => false]);
+        $this->fulfillment->update(['has_invoice_file' => false, 'has_invoice_file_at' => null]);
     }
 
     public function render()

@@ -89,7 +89,10 @@
 			<li class="list-group-item">
 				@if($fullfillment->serviceRequest->has_resolution_file)
 				<i class="fas fa-circle text-success"></i>
-				<a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fullfillment->serviceRequest->id)}}" target="_blank" title="Resolución"> Resolución. <i class="fas fa-paperclip"></i></a>
+                    @if($fullfillment->serviceRequest->has_resolution_file_at)
+                        ({{$fullfillment->serviceRequest->has_resolution_file_at->format('Y-m-d')}}) - 
+                    @endif
+				    <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fullfillment->serviceRequest->id)}}" target="_blank" title="Resolución"> Resolución. <i class="fas fa-paperclip"></i></a>
 				@else
 				<i class="fas fa-circle text-secondary"></i>
 				No se ha cargado resolución.
@@ -107,6 +110,9 @@
 			<li class="list-group-item">
 				@if($fullfillment->total_to_pay)
 				<i class="fas fa-circle text-success"></i>
+                @if($fullfillment->total_to_pay_at)
+                    ({{$fullfillment->total_to_pay_at->format('Y-m-d')}}) - 
+                @endif
 				Monto de boleta: {{ @money($fullfillment->total_to_pay) }}
 				@else
 				<i class="fas fa-circle text-secondary"></i>
@@ -117,6 +123,11 @@
 				@if($fullfillment->total_to_pay)
                     @if($fullfillment->has_invoice_file)
                         <i class="fas fa-circle text-success"></i>
+
+                        @if($fullfillment->voiceUploader)
+                            ({{$fullfillment->has_invoice_file_at->format('Y-m-d')}} - {{$fullfillment->voiceUploader->shortName}}) - 
+                        @endif
+
                         Boleta cargada
 				    @else
                         <i class="fas fa-circle text-secondary"></i>

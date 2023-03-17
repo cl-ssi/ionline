@@ -423,6 +423,12 @@ class FulfillmentController extends Controller
     public function update(Request $request, Fulfillment $fulfillment)
     {
         $fulfillment->fill($request->all());
+        
+        // 16/03/2023: Cuando se ingresa el total a pagar, se registra la fecha del movimiento.
+        if($request->total_to_pay){
+            $fulfillment->total_to_pay_at = now();
+        }
+
         if($request->hasFile('backup_assistance'))
         {
 

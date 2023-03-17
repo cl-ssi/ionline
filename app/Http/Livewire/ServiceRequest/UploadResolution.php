@@ -38,12 +38,12 @@ class UploadResolution extends Component
         */
         
 
-        $this->serviceRequest->update(['has_resolution_file' => true]);
+        $this->serviceRequest->update(['has_resolution_file' => true, 'has_resolution_file_at' => now()]);
     }
 
     public function delete() {
         Storage::disk('gcs')->delete($this->storage_path.$this->serviceRequest->id.'.pdf');
-        $this->serviceRequest->update(['has_resolution_file' => false]);
+        $this->serviceRequest->update(['has_resolution_file' => false, 'has_resolution_file_at' => null]);
     }
 
     public function render()
