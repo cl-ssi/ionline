@@ -40,7 +40,8 @@ class WellnessController extends Controller
         // Obtener el último día del mes
         $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
 
-        $meses = Balance::groupBy('ano','mes')->get();
+        $meses = Balance::distinct('mes')->orderBy('mes')->get(['mes']);
+
 
         $request->flash();
         // Retornar la vista con los balances correspondientes y el último día del mes
