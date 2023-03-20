@@ -17,9 +17,12 @@
       </div>
     </div>
 </div>
-@endif
 
 <br />
+@endif
+
+@if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+<h5><i class="fas fa-file"></i> Formulario de Reemplazos</h5>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
@@ -129,6 +132,90 @@
         </tbody>
     </table>
 </div>
+@else
+<h5><i class="fas fa-file"></i> Formulario de Convocatorias</h5>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered small">
+        <thead>
+            <tr class="table-active">
+                <th colspan="4">
+                    Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('complete')
+                            <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('rejected')
+                            <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="table-active">Creador / Solicitante</th>
+                    <td style="width: 33%">
+                        {{ $requestReplacementStaff->user->FullName }} <br>
+                        {{ $requestReplacementStaff->organizationalUnit->name }}
+                    </td>
+                    <td style="width: 33%">
+                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                    </td>
+                </tr>
+                <tr>
+                    <th class="table-active">Nombre de Solicitud</th>
+                    <td colspan="2">{{ $requestReplacementStaff->name }}</td>
+                </tr>
+                <tr>
+                    <th class="table-active">Archivos</th>
+                    <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    </br>
+
+    <h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered">
+            <thead class="text-center small table-active">
+                <tr>
+                    <th>N° de cargos</th>
+                    <th>Estamento</th>
+                    <th>Grado / Renta</th>
+                    <th>Calidad Jurídica</th>
+                    <th>Fundamento</th>
+                    <th>Jornada</th>
+                </tr>
+            </thead>
+            <tbody class="text-center small">
+                @foreach($requestReplacementStaff->positions as $position)
+                <tr>
+                    <td>{{ $position->charges_number }}</td>
+                    <td>{{ $position->profile_manage->name ?? '' }}</td>
+                    <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>
+                    <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
+                    <td>
+                        {{ $position->fundamentManage->NameValue ?? '' }}<br>
+                        {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
+                    <td>{{ $position->WorkDayValue ?? '' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
 
 @if($requestReplacementStaff->request_status != "pending")
     <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
