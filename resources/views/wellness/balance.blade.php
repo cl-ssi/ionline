@@ -38,25 +38,30 @@
             </select>
         </fieldset>
 
-        <fieldset class="col-2">
+        <fieldset class="col-1">
             <label for="">&nbsp;</label>
-            <button type="submit" class="btn btn-primary form-control">{{ __('Consultar') }}</button>
+            <button type="submit" class="btn btn-primary form-control">{{ __('Buscar') }}</button>
         </fieldset>
 
+        </form>
+
+        <div class="col-md-1 offset-2">
+            <label for="">Descargar</label>
+            <a href="{{ route('wellness.exportBalance') }}" class="btn btn-outline-secondary form-control">
+                <i class="fas fa-file-csv"></i> &nbsp;
+            </a>
+        </div>
+
+        <div class="col-md-1">
+            <label for="">&nbsp;</label>
+            <a id="downloadLinkExcel" onclick="exportF(this)" class="btn btn-outline-secondary form-control">
+                <i class="fas fa-file-excel"></i> &nbsp;
+            </a>
+        </div>
 
     </div>
-</form>
 
-<div class="row mb-3">
-    <div class="col-md-12 text-right">
-        <a href="{{ route('wellness.exportBalance') }}" class="btn btn-success">
-            <i class="fa fa-file-excel"></i> Con Formato
-        </a>
-        <a id="downloadLinkExcel" onclick="exportF(this)" class="btn btn-success">
-            <i class="fa fa-file-excel"></i> Excel
-        </a>
-    </div>
-</div>
+
 
 @if($balances->isNotEmpty())
 <h4 style="text-align:center; font-weight:bold; text-decoration:underline;">ESTADO PRESUPUESTARIO DE {{strtoupper(old('type'))}} </h4>
