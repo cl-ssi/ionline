@@ -13,18 +13,9 @@
                 <label for="for_month">{{ __('Mes') }}</label>
                 <select name="month" class="form-control selectpicker @error('month') is-invalid @enderror" required>
                     <option value=""></option>
-                    <option value="1" {{ old('month') == 1 ? 'selected' : '' }}>Enero</option>
-                    <option value="2" {{ old('month') == 2 ? 'selected' : '' }}>Febrero</option>
-                    <option value="3" {{ old('month') == 3 ? 'selected' : '' }}>Marzo</option>
-                    <option value="4" {{ old('month') == 4 ? 'selected' : '' }}>Abril</option>
-                    <option value="5" {{ old('month') == 5 ? 'selected' : '' }}>Mayo</option>
-                    <option value="6" {{ old('month') == 6 ? 'selected' : '' }}>Junio</option>
-                    <option value="7" {{ old('month') == 7 ? 'selected' : '' }}>Julio</option>
-                    <option value="8" {{ old('month') == 8 ? 'selected' : '' }}>Agosto</option>
-                    <option value="9" {{ old('month') == 9 ? 'selected' : '' }}>Septiembre</option>
-                    <option value="10" {{ old('month') == 10 ? 'selected' : '' }}>Octubre</option>
-                    <option value="11" {{ old('month') == 11 ? 'selected' : '' }}>Noviembre</option>
-                    <option value="12" {{ old('month') == 12 ? 'selected' : '' }}>Diciembre</option>
+                    @foreach($meses as $mes)
+                    <option value="{{ $mes->mes }}" {{ old('month') == $mes->mes ? 'selected' : '' }}>{{ $mes->mes_nombre }}</option>
+                    @endforeach
                 </select>
             </fieldset>
             <fieldset class="form-group col-md-6">
