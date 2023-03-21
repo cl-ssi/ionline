@@ -36,10 +36,10 @@ class EditActPrecursor extends Component
         $this->old_precursors = $actPrecursor->precursors->pluck('reception_item_id');
         $this->selected_precursors = $actPrecursor->precursors->pluck('reception_item_id');
 
-        $parameterManager = Parameter::where('module', 'drugs')->where('parameter', 'Jefe')->first();
-        if($parameterManager) {
-            $this->manager_id = $parameterManager->value;
-            $this->manager_name = User::find($parameterManager->value)->shortName;
+        $manager = $this->actPrecursor->delivery;
+        if($manager) {
+            $this->manager_id = $manager->id;
+            $this->manager_name = $manager->shortName;
         }
 
         $this->getPrecursors();
@@ -69,7 +69,7 @@ class EditActPrecursor extends Component
 
         $this->actPrecursor->update($dataValidated);
 
-        $this->actPrecursor->delivery_id = $this->manager_id;
+        //$this->actPrecursor->delivery_id = $this->manager_id;
 
         $this->actPrecursor->save();
 
