@@ -9,7 +9,7 @@
         background-image: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%), url("../images/new-year-2023.jpg");
         background-size: cover;
     }
-</style> -->
+</style> --> 
 
 <div class="jumbotron mt-4">
     <div class="row">
