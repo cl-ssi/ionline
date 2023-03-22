@@ -89,7 +89,6 @@
     </div>
 
 
-
     <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
