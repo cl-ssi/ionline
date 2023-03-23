@@ -223,8 +223,8 @@ use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Controllers\Drugs\ActPrecursorController;
-use App\Http\Controllers\Wellness\LoanController;
-use App\Http\Controllers\Wellness\WellnessController;
+use App\Http\Controllers\Welfare\LoanController;
+use App\Http\Controllers\Welfare\WelfareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -2138,11 +2138,11 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 });
 
 /* Rutas de Módulo de Binestar */
-Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function () {
-    Route::get('/', [WellnessController::class, 'index'])->name('index');    
-    Route::get('/balances', [WellnessController::class, 'balances'])->name('balances');
-    Route::get('/report', [WellnessController::class, 'report'])->name('report');
-    Route::get('/export-balance', [WellnessController::class, 'exportBalance'])->name('exportBalance');
+Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () {
+    Route::get('/', [WelfareController::class, 'index'])->name('index');    
+    Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
+    Route::get('/report', [WelfareController::class, 'report'])->name('report');
+    Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
     
 
     Route::prefix('loans')->as('loans.')->group(function () {
@@ -2151,8 +2151,8 @@ Route::prefix('wellness')->as('wellness.')->middleware('auth')->group(function (
     });
 
     Route::prefix('dosfile')->as('dosfile.')->group(function () {
-        Route::get('/', [WellnessController::class, 'dosindex'])->name('index');
-        Route::post('/import', [WellnessController::class, 'dosimport'])->name('import');
+        Route::get('/', [WelfareController::class, 'dosindex'])->name('index');
+        Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
     });
 
 });

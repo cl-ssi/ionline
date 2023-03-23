@@ -4,9 +4,9 @@
 
 @section('content')
 
-@include('wellness.nav')
+@include('welfare.nav')
 
-<form method="GET" action="{{ route('wellness.balances') }}">
+<form method="GET" action="{{ route('welfare.balances') }}">
 
     <div class="form-row">
         <fieldset class="form-group col-3 col-md-2">
@@ -47,7 +47,7 @@
 
         <div class="col-md-1 offset-2">
             <label for="">Descargar</label>
-            <a href="{{ route('wellness.exportBalance') }}" class="btn btn-outline-secondary form-control">
+            <a href="{{ route('welfare.exportBalance') }}" class="btn btn-outline-secondary form-control">
                 <i class="fas fa-file-csv"></i> &nbsp;
             </a>
         </div>

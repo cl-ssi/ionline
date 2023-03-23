@@ -335,7 +335,7 @@
 
                         @canany(['Rrhh: wellfair', 'be god'])
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('wellness.index') }}">
+                        <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
                         </a>
                         @endcan

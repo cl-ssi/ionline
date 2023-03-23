@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Wellness;
+namespace App\Models\Welfare;
 
 
 use Illuminate\Database\Eloquent\Model;

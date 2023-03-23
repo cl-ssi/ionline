@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Wellness;
+namespace App\Http\Controllers\Welfare;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Wellness\Balance;
+use App\Models\Welfare\Balance;
 use App\Exports\BalanceExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
-class WellnessController extends Controller
+class WelfareController extends Controller
 {
     //
     public function index()
     {
-        return view('wellness.index');
+        return view('welfare.index');
     }
 
 
@@ -45,7 +45,7 @@ class WellnessController extends Controller
 
         $request->flash();
         // Retornar la vista con los balances correspondientes y el último día del mes
-        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes, 'meses' => $meses]);
+        return view('welfare.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes, 'meses' => $meses]);
     }
 
 
@@ -65,7 +65,7 @@ class WellnessController extends Controller
         $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
 
         // Retornar la vista con los balances correspondientes y el último día del mes
-        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes, 'meses' => $meses]);
+        return view('welfare.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes, 'meses' => $meses]);
     }
 
     public function gastos(Request $request)
@@ -83,14 +83,14 @@ class WellnessController extends Controller
         $ultimo_dia_del_mes = Carbon::createFromDate($ano, $mes)->endOfMonth()->format('Y-m-d');
 
         // Retornar la vista con los balances correspondientes y el último día del mes
-        return view('wellness.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
+        return view('welfare.balance', ['balances' => $balances, 'ultimo_dia_del_mes' => $ultimo_dia_del_mes]);
     }
 
 
     /*todo lo que parta con dos corresponde al TXT */
     public function dosindex()
     {
-        return view('wellness.dos.index');
+        return view('welfare.dos.index');
     }
 
     public function dosimport(Request $request)
@@ -202,7 +202,7 @@ class WellnessController extends Controller
             ->where('codigo', 'like', '20.000.00%')
             ->first();
 
-        return view('wellness.report', compact('ingreso', 'gasto'));
+        return view('welfare.report', compact('ingreso', 'gasto'));
     }
 
 

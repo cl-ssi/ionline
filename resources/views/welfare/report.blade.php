@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Reportes Módulo de Bienestar')
 @section('content')
-@include('wellness.nav')
+@include('welfare.nav')
 <div class="row">
     <div class="col-md-12">
         <div class="card">

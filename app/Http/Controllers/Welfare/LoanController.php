@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Wellness;
+namespace App\Http\Controllers\Welfare;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Wellness\Loan;
+use App\Models\Welfare\Loan;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LoanController extends Controller
@@ -14,7 +14,7 @@ class LoanController extends Controller
     public function index()
     {
         $loans = Loan::paginate(100);
-        return view('wellness.loans.index', compact('loans'));
+        return view('welfare.loans.index', compact('loans'));
     }
 
     public function import(Request $request)
