@@ -125,6 +125,7 @@ use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\ContactRecordController;
+use App\Http\Controllers\ReplacementStaff\SelectedPositionController;
 
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
@@ -431,6 +432,9 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::delete('{technicalEvaluationFile}/destroy', [TechnicalEvaluationFileController::class, 'destroy'])->name('destroy');
                 Route::get('/show_file/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'show_file'])->name('show_file');
                 Route::get('/download/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'download'])->name('download');
+            });
+            Route::prefix('selected_position')->name('selected_position.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [SelectedPositionController::class, 'store'])->name('store');
             });
             Route::get('/create_document/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'create_document'])->name('create_document');
         });
