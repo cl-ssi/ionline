@@ -85,7 +85,6 @@
                 </td>
             </tr>
             @forelse($receptions as $reception)
-            @if($reception->itemsWithoutPrecursors->count() > 0)
             <tr wire:loading.remove >
                 <td class="text-center">{{ $reception->id }}</td>
                 <td class="text-center" nowrap>{{ $reception->date->format('d-m-Y') }}</td>
@@ -133,7 +132,6 @@
                     </a>
                 </td>
             </tr>
-            @endif
             @empty
             <tr class="text-center" wire:loading.remove>
                 <td colspan="9">
