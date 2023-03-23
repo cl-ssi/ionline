@@ -41,7 +41,7 @@ class ActPrecursor extends Model
 
     public function delivery()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function precursors()

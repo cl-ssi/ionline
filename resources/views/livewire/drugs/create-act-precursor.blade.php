@@ -73,7 +73,7 @@
                 type="text"
                 class="form-control"
                 id="act-delivery"
-                value="{{ auth()->user()->short_name }}"
+                value="{{ $manager_name }}"
                 disabled
                 readonly
             >

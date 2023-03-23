@@ -142,6 +142,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: oficina']);
         Permission::create(['name' => 'Partes: delete']);
 
+        Permission::create(['name' => 'Rrhh: wellfair']);
+
         Permission::create(['name' => 'Replacement Staff: assign request', 'description' => '	Permite asignar solicitudes a funcionarios de la unidad de reclutamiento y selección']);
         Permission::create(['name' => 'Replacement Staff: create request', 'description' => 'Permite crear solicitudes de reemplazo']);
         Permission::create(['name' => 'Replacement Staff: list rrhh', 'description' => 'Permite visualizar el listado de staff de reemplazo']);

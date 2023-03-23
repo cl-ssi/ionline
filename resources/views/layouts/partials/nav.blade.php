@@ -319,7 +319,7 @@
                         <a class="dropdown-item {{ active('rrhh.organizational-units.*') }}" href="{{ route('rrhh.organizational-units.index') }}">
                             <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                         </a>
-                        @endcan                        
+                        @endcan
 
                         @canany(['Authorities: view', 'Authorities: create'])
                         <a class="dropdown-item {{ active('rrhh.new-authorities.*') }}" href="{{ route('rrhh.new-authorities.index') }}">
@@ -333,10 +333,9 @@
                         </a>
                         @endcan
 
-
-                        @can('be god')
+                        @canany(['Rrhh: wellfair', 'be god'])
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('wellness.index') }}">
+                        <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
                         </a>
                         @endcan

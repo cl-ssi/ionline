@@ -4,10 +4,10 @@
 
 @section('content')
 
-@include('wellness.nav')
+@include('welfare.nav')
 
 <h3>Carga de Prestamos SIRH</h3>
-<form method="POST" action="{{ route('wellness.loans.import') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('welfare.loans.import') }}" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="file">Archivo Excel de SIRH:</label>

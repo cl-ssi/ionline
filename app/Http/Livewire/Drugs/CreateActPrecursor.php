@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Drugs;
 
-use App\Http\Requests\Drugs\StoreActPrecursorRequest;
-use App\Models\Drugs\ActPrecursor;
-use App\Models\Drugs\ActPrecursorItem;
-use App\Models\Drugs\ReceptionItem;
 use Livewire\Component;
+use App\User;
+use App\Models\Parameters\Parameter;
+use App\Models\Drugs\ReceptionItem;
+use App\Models\Drugs\ActPrecursorItem;
+use App\Models\Drugs\ActPrecursor;
+use App\Http\Requests\Drugs\StoreActPrecursorRequest;
 
 class CreateActPrecursor extends Component
 {
@@ -14,6 +16,8 @@ class CreateActPrecursor extends Component
     public $full_name_receiving;
     public $run_receiving;
     public $note;
+    public $manager_id;
+    public $manager_name;
 
     public $selected_precursors;
     public $precursors;
@@ -22,6 +26,12 @@ class CreateActPrecursor extends Component
     {
         $this->selected_precursors = [];
         $this->getPrecursors();
+
+        $parameterManager = Parameter::where('module', 'drugs')->where('parameter', 'Jefe')->first();
+        if($parameterManager) {
+            $this->manager_id = $parameterManager->value;
+            $this->manager_name = User::find($parameterManager->value)->shortName;
+        }
     }
 
     public function rules()
@@ -44,7 +54,7 @@ class CreateActPrecursor extends Component
     public function saveActPrecursor()
     {
         $dataValidated = $this->validate();
-        $dataValidated['delivery_id'] = auth()->user()->id;
+        $dataValidated['delivery_id'] = $this->manager_id;
 
         $actPrecursor = ActPrecursor::create($dataValidated);
 
