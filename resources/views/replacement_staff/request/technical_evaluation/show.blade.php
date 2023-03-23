@@ -224,7 +224,7 @@
     </div>
 @endif
 
-@if($requestReplacementStaff->request_status != "pending")
+@if($requestReplacementStaff->request_status != "pending" && $requestReplacementStaff->form_type == 'replacement')
     <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
         class="btn btn-info btn-sm float-right" 
         title="Selección" 
