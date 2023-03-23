@@ -3,7 +3,6 @@
 namespace App\Models\Drugs;
 
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -12,6 +11,13 @@ class Reception extends Model implements Auditable
 {
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'drg_receptions';
 
     /**
      * The attributes that are mass assignable.
@@ -50,16 +56,14 @@ class Reception extends Model implements Auditable
         'reservado_isp_date',
     ];
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'drg_receptions';
-
     public function items()
     {
         return $this->hasMany(ReceptionItem::class);
+    }
+
+    public function itemsWithoutPrecursors()
+    {
+        return $this->hasMany(ReceptionItem::class)->whereNull('dispose_precursor');
     }
 
     public function court()
@@ -115,7 +119,6 @@ class Reception extends Model implements Auditable
     public function haveItemsForDestruction()
     {
         return $this->hasMany(ReceptionItem::class)->where('destruct', '>', 0);
-        // return $this->items()->where('destruct', '>', 0)->count() != 0;
     }
 
     public function haveItems()
@@ -129,9 +132,8 @@ class Reception extends Model implements Auditable
             return $query->where('id', $id)->orWhereHas('sampleToISP', function ($q) use ($id) {
                 $q->where('number', $id);
             });
-            //return $query->where('id', $id)->orWhere('reservado_isp_number',$id);
         } else {
-            return $query->whereDate('created_at', '>', Carbon::today()->subDays(16))->latest();
+            return $query;
         }
     }
 }
