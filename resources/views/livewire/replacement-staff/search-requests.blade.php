@@ -68,7 +68,7 @@
                     name="name_to_replace_search" wire:model="selectedNameToReplace">
             </fieldset>
 
-            @if($typeIndex == 'assign')
+            @if($typeIndex == 'assign' || $typeIndex == 'personal' || $typeIndex == 'assigned_to')
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_sub_search">Subdirección</label>
                 <select name="sub_search" class="form-control" wire:model.debounce.500ms="selectedSub">
@@ -242,7 +242,7 @@
                             <!-- ACCESO A EVALUACIÓN TÉCNICA -->
                             @else
                                 <!-- BOTÓN PARA GESTIONAR EVALUACIÓN TÉCNICA -->
-                                @if($typeIndex == 'assign' && $requestReplacementStaff->technicalEvaluation)
+                                @if(($typeIndex == 'assign' || $typeIndex == 'assigned_to') && $requestReplacementStaff->technicalEvaluation)
                                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
                                         <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff) }}"
                                             class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>

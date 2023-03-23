@@ -55,7 +55,6 @@ class SearchRequests extends Component
         }
 
         if($this->typeIndex == 'own'){
-
             $requests = RequestReplacementStaff::
                 with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
@@ -77,7 +76,6 @@ class SearchRequests extends Component
         }
 
         if($this->typeIndex == 'ou'){
-
             $requests = RequestReplacementStaff::
                 with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
@@ -86,6 +84,48 @@ class SearchRequests extends Component
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
                 ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
+                ->search($this->selectedStatus,
+                    $this->selectedId,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedName,
+                    $this->selectedFundament,
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace,
+                    $this->ou_dependents_array
+                )
+                ->paginate(50);
+        }
+
+        if($this->typeIndex == 'personal'){
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
+                ->latest()
+                ->search($this->selectedStatus,
+                    $this->selectedId,
+                    $this->selectedStartDate,
+                    $this->selectedEndDate,
+                    $this->selectedName,
+                    $this->selectedFundament,
+                    $this->selectedFundamentDetail,
+                    $this->selectedNameToReplace,
+                    $this->ou_dependents_array
+                )
+                ->paginate(50);
+        }
+
+        if($this->typeIndex == 'assigned_to'){
+            $requests = RequestReplacementStaff::
+                with(['user', 'organizationalUnit', 'requestSign', 'requesterUser', 
+                    'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
+                    'assignEvaluations'])
+                ->WhereHas('assignEvaluations', function($j) {
+                    $j->Where('to_user_id', Auth::user()->id)
+                    ->where('status', 'assigned');
+                })
+                ->latest()
                 ->search($this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
