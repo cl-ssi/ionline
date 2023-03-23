@@ -43,6 +43,10 @@ class Position extends Model implements Auditable
         return $this->belongsTo(ResquestReplacementStaff::class);
     }
 
+    public function selectedPositions() {
+      return $this->hasMany('App\Models\ReplacementStaff\SelectedPosition');
+  }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':

@@ -197,6 +197,7 @@
                     <th>Calidad Jurídica</th>
                     <th>Fundamento</th>
                     <th>Jornada</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody class="text-center small">
@@ -210,6 +211,12 @@
                         {{ $position->fundamentManage->NameValue ?? '' }}<br>
                         {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
                     <td>{{ $position->WorkDayValue ?? '' }}</td>
+                    <td>
+                        <a class="btn btn-outline-secondary"
+                            href="{{ route('replacement_staff.request.show_file_position', $position) }}"
+                            target="_blank"> <i class="fas fa-paperclip"></i>
+                        </a>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
@@ -229,7 +236,7 @@
 
 <br />
 
-<h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
+<h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered">

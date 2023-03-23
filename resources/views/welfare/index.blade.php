@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('wellness.nav')
+@include('welfare.nav')
 
 
 <div class="row">

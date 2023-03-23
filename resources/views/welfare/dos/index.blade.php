@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('wellness.nav')
+@include('welfare.nav')
 
 <div class="container">
     <div class="row justify-content-center">
@@ -12,7 +12,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Carga de archivos TXT') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('wellness.dosfile.import') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('welfare.dosfile.import') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group">

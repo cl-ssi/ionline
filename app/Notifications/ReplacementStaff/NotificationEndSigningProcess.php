@@ -21,7 +21,6 @@ class NotificationEndSigningProcess extends Notification
     public function __construct(RequestReplacementStaff $requestReplacementStaff)
     {
         $this->requestReplacementStaff = $requestReplacementStaff;
-        dd($this->requestReplacementStaff);
     }
 
     /**

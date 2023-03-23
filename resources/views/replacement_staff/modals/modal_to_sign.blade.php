@@ -25,6 +25,7 @@
                 @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
                 @if(!$pending_requests_to_sign->Where('id', $requestReplacementStaff->id)->isEmpty())
                 @foreach($pending_requests_to_sign->Where('id', $requestReplacementStaff->id) as $requestReplacementStaff)
+                    <h6><i class="fas fa-file"></i> Formulario de Reemplazos</h6>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered">
                             <thead>
@@ -123,11 +124,30 @@
                 @endif
 
                 @else
+                    <h6><i class="fas fa-file"></i> Formulario de Convocatorias</h6>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered">
                             <thead>
                                 <tr class="table-active">
-                                    <th colspan="4">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
+                                    <th colspan="4">
+                                        Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                                        @switch($requestReplacementStaff->request_status)
+                                            @case('pending')
+                                                <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                                @break
+
+                                            @case('complete')
+                                                <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                                                @break
+
+                                            @case('rejected')
+                                                <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                                                @break
+
+                                            @default
+                                                Default case...
+                                        @endswitch
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,11 +175,11 @@
 
                     </br>
 
-                    <h6>Listado de cargos</h6>
+                    <h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
 
                     <div class="table-responsive">
                         <table class="table table-sm table-hover table-bordered">
-                            <thead class="text-center small">
+                            <thead class="text-center">
                                 <tr>
                                     <th>N° de cargos</th>
                                     <th>Estamento</th>
@@ -167,9 +187,10 @@
                                     <th>Calidad Jurídica</th>
                                     <th>Fundamento</th>
                                     <th>Jornada</th>
+                                    <th>Perfil de Cargo</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center small">
+                            <tbody class="text-center">
                                 @foreach($requestReplacementStaff->positions as $position)
                                 <tr>
                                     <td>{{ $position->charges_number }}</td>
@@ -179,20 +200,24 @@
                                     <td>{{ $position->fundamentManage->NameValue ?? '' }}<br>
                                         {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
                                     <td>{{ $position->WorkDayValue ?? '' }}</td>
+                                    <td>
+                                        <a class="btn btn-outline-secondary"
+                                            href="{{ route('replacement_staff.request.show_file_position', $position) }}"
+                                            target="_blank"> <i class="fas fa-paperclip"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-
+                    <br>
                 @endif
 
+                <h6><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                         <tbody>
-                            <tr>
-                                <td colspan="{{ $requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
-                            </tr>
                             <tr>
                                 @foreach($requestReplacementStaff->RequestSign as $sign)
                                 <td class="table-active text-center">
