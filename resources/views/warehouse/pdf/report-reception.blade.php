@@ -138,6 +138,10 @@
     </tbody>
 </table>
 
+<p>Se deja constancia que los bienes/servicios se recepcionan conforme de acuerdo a especificaciones técnicas, cumple con la calidad técnica, oportunidad y operatividad.</p>
+
+<p>Para constancia firman:</p>
+
 @if($control->receptionVisator)
 <div class="content-signature">
     <div class="aprove">
