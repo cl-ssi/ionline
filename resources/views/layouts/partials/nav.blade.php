@@ -150,6 +150,12 @@
                         @endif
 
 
+                        @can('Payments')
+                        <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">
+                            <i class="fas fa-fw fa-money-bill"></i> Estados de pago
+                        </a>
+                        @endif
+
                         @can('Store')
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header">Bodegas</h6>
