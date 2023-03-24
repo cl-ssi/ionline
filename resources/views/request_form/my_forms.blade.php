@@ -381,20 +381,28 @@
           <td class="text-center">
             @foreach($requestForm->eventRequestForms as $sign)
             @if($sign->status == 'pending' || $sign->status == NULL)
-            <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            </span>
             @endif
             @if($sign->status == 'approved')
-            <span style="color: green;">
-              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-check-circle fa-2x"></i>
             </span>
             @endif
             @if($sign->status == 'rejected')
-            <span style="color: Tomato;">
-              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-times-circle fa-2x"></i>
             </span>
             @endif
             @if($sign->status == 'does_not_apply')
-              <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            </span>
             @endif
             @endforeach
           </td>
