@@ -24,7 +24,7 @@ class Value extends Model
         });
 
         static::updating(function ($model) {
-            // $model->updated_by = Auth::id();
+            $model->updated_by = Auth::id();
         });
 
         static::deleting(function ($model) {
