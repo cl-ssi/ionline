@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -14,7 +15,7 @@ class Indicator extends Model
     protected $fillable = ['number', 'name', 'weighting_by_section', 'evaluated_section_states', 'numerator',  
                            'numerator_source', 'denominator', 'denominator_source', 'numerator_acum_last_year',
                            'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_acum_last_year',
-                           'denominator_cols', 'goal', 'weighting', 'precision', 'establishment_cods'];
+                           'denominator_cols', 'goal', 'weighting', 'precision', 'establishment_cods', 'indicatorable_type'];
 
     public function indicatorable()
     {
@@ -23,27 +24,27 @@ class Indicator extends Model
 
     public function sections()
     {
-        return $this->hasMany('App\Indicators\Section')->orderBy('number');
+        return $this->hasMany(Section::class)->orderBy('number');
     }
 
     public function actions()
     {
-        return $this->hasManyThrough('App\Indicators\Action', 'App\Indicators\Section');
+        return $this->hasManyThrough(Action::class, Section::class);
     }
 
     public function values()
     {
-        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('id')->orderBy('month');
+        return $this->morphMany(Value::class, 'valueable')->orderBy('id')->orderBy('month');
     }
 
     public function attachedFiles()
     {
-        return $this->morphMany('App\Indicators\AttachedFile', 'attachable')->orderBy('section');
+        return $this->morphMany(AttachedFile::class, 'attachable')->orderBy('section');
     }
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'indicators_users')
+        return $this->belongsToMany(User::class, 'indicators_users')
                     ->withPivot('referrer_number')
                     ->withTimestamps()
                     ->orderBy('referrer_number');
@@ -100,16 +101,6 @@ class Indicator extends Model
             return $q->where('establishment', $establishment);
         })->sum('value');
     }
-
-    // public function totalByActivityName($col, $nombre_prestacion)
-    // {
-    //     $total = 0;
-    //     $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($nombre_prestacion){
-    //         return Str::contains($prestacion->descripcion, '- '. $nombre_prestacion);
-    //     });
-    //     foreach($prestaciones as $prestacion) $total += $prestacion->rems->sum($col);
-    //     return $total;
-    // }
 
     public function getValuesAcum2($factor, $commune, $establishment)
     {
@@ -180,14 +171,6 @@ class Indicator extends Model
             $result = $this->values->where('factor', $factor)->where('establishment', $establishment)->last();
             return $result != null ? $result->value : null;
         }
-        // $result = $this->values->where('factor', $factor)
-        //                         ->when($commune, function($q) use ($commune){
-        //                             return $q->where('commune', $commune);
-        //                         })
-        //                         ->when($establishment, function($q) use ($establishment){
-        //                             return $q->where('establishment', $establishment);
-        //                         })->last();
-        // return $result != null ? $result->value : null;
     }
 
     public function getContribution()

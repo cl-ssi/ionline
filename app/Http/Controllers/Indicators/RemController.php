@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
-use App\Indicators\Establecimiento;
-use App\Indicators\Prestacion;
-use App\Indicators\Rem;
-use App\Indicators\Seccion;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\Prestacion;
+use App\Models\Indicators\Rem;
+use App\Models\Indicators\Seccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
@@ -61,7 +61,7 @@ class RemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Indicators\Rem  $rem
+     * @param  \App\Models\Indicators\Rem  $rem
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $year, $serie, $nserie, $unique = null)
@@ -94,7 +94,7 @@ class RemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Indicators\Rem  $rem
+     * @param  \App\Models\Indicators\Rem  $rem
      * @return \Illuminate\Http\Response
      */
     public function edit(Rem $rem)
@@ -106,7 +106,7 @@ class RemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Indicators\Rem  $rem
+     * @param  \App\Models\Indicators\Rem  $rem
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Rem $rem)
@@ -117,7 +117,7 @@ class RemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Indicators\Rem  $rem
+     * @param  \App\Models\Indicators\Rem  $rem
      * @return \Illuminate\Http\Response
      */
     public function destroy(Rem $rem)

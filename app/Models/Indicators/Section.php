@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,11 +11,11 @@ class Section extends Model
 
     public function indicator()
     {
-        return $this->belongsTo('App\Indicators\Indicator');
+        return $this->belongsTo(Indicator::class);
     }
 
     public function actions()
     {
-        return $this->hasMany('App\Indicators\Action')->orderBy('number');
+        return $this->hasMany(Action::class)->orderBy('number');
     }
 }

@@ -63,4 +63,5 @@ class DrgEncrypt extends Command
         
         return 0;
     }
+    
 }

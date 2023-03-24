@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators\_2020;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 $year = 2020;
 $meses = array(1,2,3,4,5,6,7,8,9,10,11,12);

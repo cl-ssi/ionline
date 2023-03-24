@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Indicators\_2020;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 use App\Http\Controllers\Indicators\_2020\aps\Helper;
 
 $year = 2020;

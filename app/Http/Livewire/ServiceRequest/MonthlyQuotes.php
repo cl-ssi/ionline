@@ -10,8 +10,8 @@ use DateInterval;
 
 class MonthlyQuotes extends Component
 {
-    public $parametroMes;
-    public $array_valores_mensualizados;
+    // public $parametroMes;
+    // public $array_valores_mensualizados;
 
     public $serviceRequest;
     public $valores;
@@ -145,8 +145,6 @@ class MonthlyQuotes extends Component
 
     }
 
-
-
     public function items_verification($month)
     {
       // dd($this->serviceRequest->fulfillments->where('month',$month));
@@ -178,9 +176,6 @@ class MonthlyQuotes extends Component
       return true;
     }
 
-
-
-
     public function render()
     {
         $serviceRequest = $this->serviceRequest;
@@ -191,9 +186,7 @@ class MonthlyQuotes extends Component
         $year = $serviceRequest->start_date->year;
 
 
-        $valores_mensualizados = array();
         if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-
             $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
             $valor_mensual = $serviceRequest->net_amount;
             $string = $nroCuotas . " cuotas,";
@@ -203,26 +196,11 @@ class MonthlyQuotes extends Component
             foreach ($periods as $key => $period) {
                 if ($key === array_key_first($periods)) {
                     $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                    }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                    }
                 } else if ($key === array_key_last($periods)) {
                     $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
                     $this->items_verification($period->month);
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                    }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                    }
                 } else {
                     $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                    }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                    }
                 }
             }
         } else
@@ -233,14 +211,7 @@ class MonthlyQuotes extends Component
             if ($diff_in_months < 1) {
                 $string = "1 cuota de $";
                 $string .= number_format($serviceRequest->gross_amount);
-                if ($this->items_verification($serviceRequest->start_date->month)) {
-                  $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->net_amount));
-                }else{
-                  $valores_mensualizados[$serviceRequest->start_date->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                }
-
             } else {
-
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
                     $valor_mensual = $serviceRequest->net_amount;
@@ -249,36 +220,19 @@ class MonthlyQuotes extends Component
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date->addMonth());
                     $periods = iterator_to_array($periods);
                     $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    //$valor_diferente1 = round($dias_trabajados1 * round(($valor_mensual / 30)));
                     // se modifica el cálculo según correo
                     $valor_diferente1 = round($dias_trabajados1 * ($valor_mensual / 30));
                     $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;
-                    //dd($dias_trabajados2);
                     $valor_diferente2 = round($dias_trabajados2 * ($valor_mensual / 30));
 
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
                             $string .= " una de $" . number_format($valor_diferente1) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente1));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else if ($key === array_key_last($periods)) {
                             $string .= " y una de $" . number_format($valor_diferente2) . " el mes de " . $period->monthName . ";";
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente2));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else {
                             $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         }
                     }
                 } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
@@ -292,31 +246,15 @@ class MonthlyQuotes extends Component
                     $periods = iterator_to_array($periods);
                     //erg: comenté la linea siguiente porque desconozco el +1 que se hace al final, estaba afectando cálculo de nataly 16/02/2022
                     $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
                     $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
                             $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else if ($key === array_key_last($periods)) {
                             $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else {
                             $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         }
                     }
                 }
@@ -328,48 +266,20 @@ class MonthlyQuotes extends Component
                     $interval = DateInterval::createFromDateString('1 month');
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
                     $periods = iterator_to_array($periods);
-                    // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    //$dias_trabajados = $serviceRequest->end_date->lastOfMonth()->diff($serviceRequest->end_date)->days + 1;
                     $dias_trabajados = (int)$serviceRequest->end_date->format('d');
-                    //dd($dias_trabajados);
-                    //$valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
                     $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
-                    //dd($valor_diferente);
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
                             $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else if ($key === array_key_last($periods)) {
                             $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName . ";";
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         } else {
                             $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
-                            }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
-                            }
                         }
                     }
                 }
             }
-        }
-
-        // se devuelve array para mostrar monto de un mes determinado por parámetro
-        if($this->parametroMes != null){
-          // devuelve valor solo si existe en array
-          if (array_key_exists($this->parametroMes, $valores_mensualizados)) {
-            $this->array_valores_mensualizados = $valores_mensualizados;
-          }
         }
 
         // $string .= $aguinaldo;
@@ -378,11 +288,6 @@ class MonthlyQuotes extends Component
         }
 
         $this->valores = $string;
-    // }
-
-
-
-        //dd($string);
         return view('livewire.service-request.monthly-quotes');
     }
 

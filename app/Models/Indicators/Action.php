@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,17 +13,17 @@ class Action extends Model
 
     public function section()
     {
-        return $this->belongsTo('App\Indicators\Section');
+        return $this->belongsTo(Section::class);
     }
 
     public function values()
     {
-        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
+        return $this->morphMany(Value::class, 'valueable')->orderBy('month');
     }
 
     public function compliances()
     {
-        return $this->hasMany('App\Indicators\ComplianceCalc');
+        return $this->hasMany(ComplianceCalc::class);
     }
 
     public function getValuesAcum($factor)

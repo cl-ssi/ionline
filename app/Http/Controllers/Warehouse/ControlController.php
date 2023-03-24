@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Warehouse;
 
-use App\Http\Controllers\Controller;
-use App\Models\Warehouse\Control;
-use App\Models\Warehouse\Store;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Warehouse\Store;
+use App\Models\Warehouse\Control;
+use App\Models\RequestForms\Invoice;
+use App\Http\Controllers\Controller;
 
 class ControlController extends Controller
 {
@@ -124,5 +126,18 @@ class ControlController extends Controller
     {
         $nav = $request->nav;
         return view('warehouse.stores.manage-invoice', compact('store', 'nav'));
+    }
+
+
+    /**
+    * Download Invoice
+    */
+    public function downloadInvoice(Invoice $invoice)
+    {
+        if(Storage::disk('gcs')->exists($invoice->url)) {
+            return Storage::disk('gcs')->response($invoice->url);
+        }else{
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }
     }
 }

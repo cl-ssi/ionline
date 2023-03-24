@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ class ComplianceCalc extends Model
 
     public function action()
     {
-        return $this->belongsTo('App\Indicators\Action');
+        return $this->belongsTo(Action::class);
     }
 
     public function getLeftResultOperatorInverseAttribute()

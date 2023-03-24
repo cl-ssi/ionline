@@ -1659,7 +1659,7 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])
         ->middleware(['can:Store: warehouse manager']);
-
+    Route::get('download-invoice/{invoice}', [ControlController::class,'downloadInvoice'])->name('download-invoice');
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
 

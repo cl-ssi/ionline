@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
-use App\Indicators\Establecimiento;
-use App\Indicators\HealthGoal;
-use App\Indicators\Indicator;
-use App\Indicators\Percapita;
-use App\Indicators\ProgramAps;
-use App\Indicators\Rem;
-use App\Indicators\Value;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\HealthGoal;
+use App\Models\Indicators\Indicator;
+use App\Models\Indicators\Percapita;
+use App\Models\Indicators\ProgramAps;
+use App\Models\Indicators\Rem;
+use App\Models\Indicators\Value;
 use App\Models\Commune;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

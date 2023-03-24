@@ -34,98 +34,55 @@ class RequestReplacementStaffController extends Controller
 
     public function assign_index()
     {
-        $pending_requests = RequestReplacementStaff::latest()
-            ->WhereHas('technicalEvaluation', function($q) {
-              $q->Where('technical_evaluation_status', 'pending');
-            })
-            ->WhereHas('assignEvaluations', function($j) {
-              $j->Where('to_user_id', Auth::user()->id)
-               ->where('status', 'assigned');
-            })
-            ->get();
+        // $pending_requests = RequestReplacementStaff::latest()
+        //     ->WhereHas('technicalEvaluation', function($q) {
+        //       $q->Where('technical_evaluation_status', 'pending');
+        //     })
+        //     ->WhereHas('assignEvaluations', function($j) {
+        //       $j->Where('to_user_id', Auth::user()->id)
+        //        ->where('status', 'assigned');
+        //     })
+        //     ->get();
 
-        $requests = RequestReplacementStaff::latest()
-            ->WhereHas('technicalEvaluation', function($q) {
-              $q->Where('technical_evaluation_status', 'complete')
-              ->OrWhere('technical_evaluation_status', 'rejected');
-            })
-            ->WhereHas('assignEvaluations', function($j) {
-              $j->Where('to_user_id', Auth::user()->id)
-               ->where('status', 'assigned');
-            })
-            ->paginate(10);
+        // $requests = RequestReplacementStaff::latest()
+        //     ->WhereHas('technicalEvaluation', function($q) {
+        //       $q->Where('technical_evaluation_status', 'complete')
+        //       ->OrWhere('technical_evaluation_status', 'rejected');
+        //     })
+        //     ->WhereHas('assignEvaluations', function($j) {
+        //       $j->Where('to_user_id', Auth::user()->id)
+        //        ->where('status', 'assigned');
+        //     })
+        //     ->paginate(10);
 
-        return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
+        // return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
+
+        return view('replacement_staff.request.assign_index');
     }
 
     public function own_index()
     {
-        $my_pending_requests = RequestReplacementStaff::latest()
-            ->where('user_id', Auth::user()->id)
-            ->where('request_status', 'pending')
-            ->get();
-
-        $my_request = RequestReplacementStaff::latest()
-            ->where('user_id', Auth::user()->id)
-            ->where(function ($q){
-              $q->where('request_status', 'complete')
-                ->orWhere('request_status', 'rejected');
-            })
-            ->paginate(10);
-
-        return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
+        return view('replacement_staff.request.own_index');
     }
 
     public function personal_index()
     {
-        // $my_pending_requests = RequestReplacementStaff::latest()
-        //     ->where('user_id', Auth::user()->id)
-        //     ->where('request_status', 'pending')
-        //     ->get();
-
-        $requests = RequestReplacementStaff::latest()
-            //->where('user_id', Auth::user()->id)
-            ->where(function ($q){
-              $q->where('request_status', 'complete')
-                ->orWhere('request_status', 'rejected');
-            })
-            ->paginate(15);
-
-        //dd($requests);
-
-        return view('replacement_staff.request.personal_index', compact('requests'));
+        return view('replacement_staff.request.personal_index');
     }
 
     public function pending_personal_index()
     {
+        /*
         $requests = RequestReplacementStaff::latest()
             ->where('request_status', 'pending')
             ->paginate(15);
 
         return view('replacement_staff.request.pending_personal_index', compact('requests'));
+        */
     }
 
     public function ou_index()
     {
-        // $ou_pending_requests = RequestReplacementStaff::latest()
-        //     ->where(function ($q){
-        //       $q->where('user_id', Auth::user()->id)
-        //         ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
-        //     })
-        //     ->where('request_status', 'pending')
-        //     ->get();
-
-        // $ou_requests = RequestReplacementStaff::latest()
-        //     ->where(function ($q){
-        //       $q->where('user_id', Auth::user()->id)
-        //         ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
-        //     })
-        //     ->where(function ($q){
-        //       $q->where('request_status', 'complete')
-        //         ->orWhere('request_status', 'rejected');
-        //     })
-        //     ->paginate(10);
-
         return view('replacement_staff.request.ou_index');
     }
 

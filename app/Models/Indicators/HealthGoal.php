@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +16,7 @@ class HealthGoal extends Model
 
     public function indicators()
     {
-        return $this->morphMany('App\Indicators\Indicator', 'indicatorable');
+        return $this->morphMany(Indicator::class, 'indicatorable');
     }
 
     public function getCompliance()
