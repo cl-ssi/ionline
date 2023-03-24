@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators\_2020;
 
 
 use App\Http\Controllers\Controller;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 
 class ComgesController extends Controller

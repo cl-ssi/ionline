@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;

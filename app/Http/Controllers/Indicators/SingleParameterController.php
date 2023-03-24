@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Indicators;
 
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 use App\Models\Establishment;
 use App\Exports\PercapitaExport;
 use App\Exports\PercapitaOficialExport;
@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\Redirect;
-use App\Indicators\Percapita;
-use App\Indicators\PercapitaOficial;
-use App\Indicators\Establecimiento;
+use App\Models\Indicators\Percapita;
+use App\Models\Indicators\PercapitaOficial;
+use App\Models\Indicators\Establecimiento;
 use App\Models\Commune;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -72,7 +72,7 @@ class SingleParameterController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\indicators\SingleParameter  $singleParameter
+     * @param  \App\Models\indicators\SingleParameter  $singleParameter
      * @return \Illuminate\Http\Response
      */
     public function show(SingleParameter $singleParameter)
@@ -83,7 +83,7 @@ class SingleParameterController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\indicators\SingleParameter  $singleParameter
+     * @param  \App\Models\indicators\SingleParameter  $singleParameter
      * @return \Illuminate\Http\Response
      */
     public function edit(SingleParameter $singleParameter)
@@ -99,7 +99,7 @@ class SingleParameterController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\indicators\SingleParameter  $singleParameter
+     * @param  \App\Models\indicators\SingleParameter  $singleParameter
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, SingleParameter $singleParameter)
@@ -118,7 +118,7 @@ class SingleParameterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\indicators\SingleParameter  $singleParameter
+     * @param  \App\Models\indicators\SingleParameter  $singleParameter
      * @return \Illuminate\Http\Response
      */
     public function destroy(SingleParameter $singleParameter)

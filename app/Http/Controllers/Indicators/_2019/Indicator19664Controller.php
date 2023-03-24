@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Indicators\_2019;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 class Indicator19664Controller extends Controller
 {

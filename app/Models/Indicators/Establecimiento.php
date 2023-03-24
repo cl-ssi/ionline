@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,9 +40,6 @@ class Establecimiento extends Model
         $instance = new Rem();
         $instance->setYear($this->year);
 
-        // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
-        // $localKey = $this->getKeyName();
-
         return new HasMany($instance->newQuery(), $this, 'IdEstablecimiento', 'Codigo');
     }
 
@@ -50,9 +47,6 @@ class Establecimiento extends Model
     {
         $instance = new Percapita();
         $instance->setYear($this->year);
-
-        // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
-        // $localKey = $this->getKeyName();
 
         return new HasMany($instance->newQuery(), $this, 'COD_CENTRO', 'Codigo');
     }

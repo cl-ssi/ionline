@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,18 +18,8 @@ class ProgramApsGlosa extends Model
     ];
 
     public function values() {
-        return $this->hasMany('App\Indicators\ProgramApsValue');
+        return $this->hasMany(ProgramApsValue::class);
     }
-/*
-    ProgramAps::Create([
-        'periodo' => 2018,
-        'nivel' => 'Prevención',
-        'prestaciones' => 'CONTROL DE SALUD EN POBLACIÓN INFANTIL MENOR DE 1 AÑO',
-        'glosaPoblacion' => 'Población 2, 4, 6 meses',
-        'verificacion' => 'REM A01, Sección B celdas H32+J32+L32',
-        'profesional' => 'Enfermera'
-    ]);
-    */
 
     use SoftDeletes;
 

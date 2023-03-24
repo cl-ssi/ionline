@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Percapita extends Model
+class PercapitaOficial extends Model
 {
     protected $connection = 'mysql_rem';
 
@@ -15,7 +15,7 @@ class Percapita extends Model
     {
         $this->year = $year;
         if($year != null){
-            $this->table = $year.'percapita';
+            $this->table = $year.'percapitaoficial';
         }
     }
 
@@ -37,19 +37,7 @@ class Percapita extends Model
     {
         $instance = new Establecimiento();
         $instance->setYear($this->year);
-
-        // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
-        // $localKey = $this->getKeyName();
     
-        return new BelongsTo($instance->newQuery(), $this, 'COD_CENTRO', 'Codigo', 'establecimiento');
+        return new BelongsTo($instance->newQuery(), $this, 'Id_Centro_APS', 'Codigo', 'establecimiento');
     }
-
-    // public function __construct($attributes = [], $year = null) 
-    // {
-    //     parent::__construct($attributes);
-
-    //     $year = $year ?: date('Y');
-
-    //     $this->setTable($year.'rems');
-    // }
 }

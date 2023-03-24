@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,7 @@ class SingleParameter extends Model
     ];
 
     public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+        return $this->belongsTo(Establishment::class);
     }
 
     public function scopeSearch($query, Request $request) {

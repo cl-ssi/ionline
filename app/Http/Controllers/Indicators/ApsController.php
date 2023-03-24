@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
-use App\Indicators\Aps;
-use App\Indicators\Establecimiento;
-use App\Indicators\Rem;
-use App\Indicators\Value;
+use App\Models\Indicators\Aps;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\Rem;
+use App\Models\Indicators\Value;
 use Illuminate\Support\Str;
 
 class ApsController extends Controller

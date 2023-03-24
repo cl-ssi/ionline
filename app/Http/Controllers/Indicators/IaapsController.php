@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
-use App\Indicators\Establecimiento;
-use App\Indicators\HealthGoal;
-use App\Indicators\Iaaps;
-use App\Indicators\Indicator;
-use App\Indicators\Percapita;
-use App\Indicators\ProgramAps;
-use App\Indicators\Rem;
-use App\Indicators\Value;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\HealthGoal;
+use App\Models\Indicators\Iaaps;
+use App\Models\Indicators\Indicator;
+use App\Models\Indicators\Percapita;
+use App\Models\Indicators\ProgramAps;
+use App\Models\Indicators\Rem;
+use App\Models\Indicators\Value;
 use App\Models\Commune;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -84,32 +84,6 @@ class IaapsController extends Controller
                         $cols = array_map('trim', explode(',', $cols_array[$i]));
                         $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
-                        // if(Str::contains($source, 'FONASA')){
-                            // $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
-                            //                         ->with('establecimiento')
-                            //                         ->whereIn('COD_CENTRO', $iiaaps->establishment_cods)
-                            //                         ->whereRaw(implode(' AND ', $cods))
-                            //                         ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
-
-                            // foreach($result as $item){
-                            //     $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $item->valor]);
-                            //     $value->commune = $item->establecimiento->comuna;
-                            //     $value->establishment = $item->establecimiento->alias_estab;
-                            //     $indicator->values->add($value);
-                            // }
-                            // Consultamos si existen en el denominador valores manuales por comuna
-                            // if($factor == 'denominador' && $indicator->denominator_values_by_commune != null){
-                            //     $values = array_map('trim', explode(',', $indicator->denominator_values_by_commune));
-                            //     $value = $values[array_search($iiaaps->commune, $iiaaps->communes)];
-
-                            //     if(!empty($value)){ //valores distinto a 0 los procesamos
-                            //         // Seteamos valores nuevos segun comuna y factor denominador
-                            //         $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $value]);
-                            //         $value->commune = $iiaaps->commune;
-                            //         $indicator->values->add($value);
-                            //     }
-                            // }
-                        // } else { // fuente REM
                         if(Str::contains($source, 'REM')){
                             //Es rem P la consulta?
                             $isRemP = Rem::year($year-1)->select('Mes')

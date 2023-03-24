@@ -22,7 +22,7 @@ class IAAPSController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Indicators\IAAPS\IAAPS  $iAAPS
+     * @param  \App\Models\Indicators\IAAPS\IAAPS  $iAAPS
      * @return \Illuminate\Http\Response
      * public function show(IAAPS $iAAPS)
      */

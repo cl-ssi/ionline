@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Indicators;
+namespace App\Models\Indicators;
 
+use App\Models\Commune;
+use App\Models\Establishment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,15 +21,15 @@ class ProgramApsValue extends Model
     ];
 
     public function commune() {
-        return $this->belongsTo('App\Models\Commune');
+        return $this->belongsTo(Commune::class);
     }
 
     public function establishment() {
-        return $this->belongsTo('App\Models\Establishment');
+        return $this->belongsTo(Establishment::class);
     }
 
     public function glosa() {
-        return $this->belongsTo('App\Indicators\ProgramApsGlosa', 'program_aps_glosa_id');
+        return $this->belongsTo(ProgramApsGlosa::class, 'program_aps_glosa_id');
     }
 
     use SoftDeletes;
