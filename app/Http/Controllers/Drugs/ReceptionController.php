@@ -257,9 +257,9 @@ class ReceptionController extends Controller
                 'reception.sampleToIsp',
                 'reception.recordToCourt',
             ])
-            ->whereNull('dispose_precursor')
             ->orderBy('reception_id', 'desc')
             ->paginate(1000);
+
 
         return view('drugs.receptions.report', compact('items', 'items_sin_destruir'));
     }
