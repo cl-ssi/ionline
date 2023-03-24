@@ -51,6 +51,8 @@
                     <th class="text-center">Estado</th>
                     <th class="text-center">Acta Ingreso Bodega</th>
                     <th>Facturas</th>
+                    <th>Enviado Firma</th>
+                    <th>Firmado</th>
                 </tr>
             </thead>
             <tbody>
@@ -152,6 +154,12 @@
                                 </span>
                             </a>
                         @endforeach
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        
                     </td>
                 </tr>
                 @empty
