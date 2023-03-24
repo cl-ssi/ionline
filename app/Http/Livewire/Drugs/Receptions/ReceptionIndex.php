@@ -23,12 +23,6 @@ class ReceptionIndex extends Component
         ]);
     }
 
-    /**
-     * Para que aparezca los días pendientes de destrucción
-     * Formula: Que no tenga una destrucción creada
-     * que tenga items con saldo mayor a cero ((peso neto - primera + segunda) saldo a destruir mayor > 0)
-     * y que tenga al menos un item, distinto a un precursor reservado
-     */
     public function getReceptions()
     {
         $receptions = Reception::query()
@@ -37,13 +31,21 @@ class ReceptionIndex extends Component
                 'partePoliceUnit',
                 'documentPoliceUnit',
                 'destruction',
-                'haveItemsForDestruction'
+                'haveItemsForDestruction',
             ])
             ->withCount(['items'])
             ->when($this->filter == 'pending', function($query) {
-                $query->has('haveItemsForDestruction')->where(function($query) {
-                    $query->doesntHave('destruction');
-                });
+                /**
+                 * Actas de recepción que tengan la cantidad a destruir mayor a cero y que no tenga acta de destrución
+                 */
+                $query->has('haveItemsForDestruction')
+                    ->where(function($query) {
+                        $query->doesntHave('destruction');
+                    })
+                    /**
+                     * Actas que tenga items al menos un items a destruir, o item no reservado
+                     */
+                    ->has('itemsWithoutPrecursors');
             })
             ->when($this->filter == '', function($query) {
                 $query->whereDate('created_at', '>', Carbon::today()->subDays(16));
