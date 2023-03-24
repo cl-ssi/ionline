@@ -226,6 +226,9 @@ class ReceptionController extends Controller
 
     public function report()
     {
+        /**
+         * Obtiene todos los items sin reservar y por destruir.
+         */
         $items = ReceptionItem::query()
             ->with('substance')
             ->whereNull('dispose_precursor')
@@ -233,18 +236,30 @@ class ReceptionController extends Controller
             ->selectRaw('*, net_weight - sample - countersample as total_sample')
             ->get();
 
+        /**
+         * Filtro los que tienen cantidad mayor a cero a destruir
+         */
         $items = $items->filter(function($item) {
             return $item->total_sample > 0;
         });
 
+        /**
+         * Suma el total a destruir agrupados por sustancias
+         */
         $items_sin_destruir = $items->groupBy('substance.name')->map(function ($row) {
             return $row->sum('destruct');
         });
 
+        /**
+         * Filtro para mostrar solo las sustancias donde la suma a destruir sea mayor a cero
+         */
         $items_sin_destruir = $items_sin_destruir->filter(function($item) {
             return $item > 0;
         });
 
+        /**
+         * Obtiene todos los items
+         */
         $items = ReceptionItem::query()
             ->with([
                 'reception',
