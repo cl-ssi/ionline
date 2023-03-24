@@ -1,40 +1,24 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Warehouse;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
 
-class TestNotification extends Notification
+class TechnicalReception extends Notification
 {
     use Queueable;
-
-    /**
-     * Pasos:
-     * Crear una nueva $ php artisan make:notification Modulo/Notificación
-     * 
-     * 1. (Opcional) En el constructor se pueden pasar parámetros
-     * 2. Cambiar a 'database' en el método via
-     * 3. En método toArray va la notificación
-     * 
-     * Para utilizarlo:
-     * $user->notify(new App\Notifications\TestNotification($param));
-     * 
-     * Ej:
-     * $user->notify(new App\Notifications\TestNotification(69));
-     * 
-     */
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($param)
+    public function __construct($subject)
     {
-        $this->param = $param;
+        $this->subject = $subject;
     }
 
     /**
@@ -71,10 +55,9 @@ class TestNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'module'  => 'Prueba', // Opcional
-            'icon'    => '<i class="fas fa-fw fa-bomb"></i>', // Opcional
-            'subject' => 'Nueva notificación de prueba, parametro: '.$this->param,
-            'action' => route('resources.computer.edit',[$this->param], false),
+            'icon'    => '<i class="fas fa-fw fa-box-open"></i>',
+            'subject' => 'Firma pendiente de '. $this->subject,
+            'action' => route('documents.signatures.index',['pendientes'], false),
         ];
     }
 }
