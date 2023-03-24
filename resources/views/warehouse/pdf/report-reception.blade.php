@@ -8,9 +8,6 @@
     <div class="siete">
         {{ env('APP_SS') }}
     </div>
-    <!-- <div class="siete" style="padding-top: 3px;">
-        <i>correo@redsalud.gob.cl</i>
-    </div> -->
 </div>
 
 

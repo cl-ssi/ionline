@@ -33,6 +33,6 @@ class Invoice extends Model
 
     public function getLinkAttribute()
     {
-        return Storage::disk('gcs')->url($this->url);
+        return route('warehouse.download-invoice',$this->id);
     }
 }
