@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Warehouse\Invoices;
 
-use App\Http\Requests\RequestForm\StoreInvoiceRequest;
-use App\Models\RequestForms\Invoice;
-use App\Models\Warehouse\Control;
-use App\Models\Warehouse\Store;
-use App\Services\SignatureService;
-use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
+use App\Services\SignatureService;
+use App\Notifications\Warehouse\TechnicalReception;
+use App\Models\Warehouse\Store;
+use App\Models\Warehouse\Control;
+use App\Models\RequestForms\Invoice;
+use App\Http\Requests\RequestForm\StoreInvoiceRequest;
 
 class InvoiceManagement extends Component
 {
@@ -123,9 +124,12 @@ class InvoiceManagement extends Component
         {
             $technicalSignature = new SignatureService();
             $technicalSignature->addResponsible($this->store->visator);
+
+            $subject = "Acta de Recepción Técnica #$control->id";
+            
             $technicalSignature->addSignature(
                 10,
-                "Acta de Recepción Técnica #$control->id",
+                $subject,
                 "Recepción #$control->id",
                 'Visación en cadena de responsabilidad',
                 true
@@ -141,6 +145,8 @@ class InvoiceManagement extends Component
             $technicalSignature = $technicalSignature->sendRequest();
             $control->technicalSignature()->associate($technicalSignature);
             $control->save();
+
+            $technicalSigner->notify(new TechnicalReception($subject));
 
             session()->flash('success', "La solicitud de firma del Ingreso #". $control->id . " fue enviada a $technicalSigner->tinny_name.");
         }
