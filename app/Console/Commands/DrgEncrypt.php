@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+
+use App\Models\Drugs\Reception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Console\Command;
-use App\Models\Commune;
+
+
 
 class DrgEncrypt extends Command
 {
@@ -39,29 +42,15 @@ class DrgEncrypt extends Command
      */
     public function handle()
     {
-        /** Crear un comando */
-        // php artisan make:command DrgEncrypt
 
-
-
-        /** Atributo del modelo para encryptar */
-
-        // protected $casts = [
-        //     'name' => 'encrypted'
-        // ];
-
-
-        /** Listar comunas */
-        /** No olvidar importar la clase Commune arriba */
-        $communes = Commune::all();
-
-        foreach($communes as $commune) {
-            echo $commune->name . "\n";
-            $commune->name = Crypt::encryptString($commune->name);
-            $commune->save();
+        $imputed = Reception::all();
+        foreach($imputed as $imputed) {
+            echo $imputed->imputed . "\n";
+            $imputed->imputed = Crypt::encryptString($imputed->imputed);
+            $imputed->imputed_run = Crypt::encryptString($imputed->imputed_run);
+            $imputed->save();
         }
         
         return 0;
     }
-    
 }
