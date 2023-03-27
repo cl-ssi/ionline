@@ -55,7 +55,11 @@ class Reception extends Model implements Auditable
         'document_date',
         'reservado_isp_date',
     ];
-
+    protected $casts = [
+        'imputed'=> 'encrypted',
+        'imputed_run' => 'encrypted',
+    ];
+    
     public function items()
     {
         return $this->hasMany(ReceptionItem::class);
