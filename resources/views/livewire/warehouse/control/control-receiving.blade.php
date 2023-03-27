@@ -48,9 +48,11 @@
                     <th>Origen</th>
                     <th>Programa</th>
                     <th class="text-center"># Productos</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Acta Ingreso Bodega</th>
+                    <!-- <th class="text-center">Estado</th> -->
+                    <th class="text-center">Ingreso Bodega</th>
                     <th>Facturas</th>
+                    <th>Enviado Firma</th>
+                    <th>Firmado</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,23 +111,13 @@
                     </td>
                     <td>{{ $control->program_name }}</td>
                     <td class="text-center">{{ $control->items->count() }}</td>
-                    <td class="text-center">
+                    <!-- <td class="text-center">
                         <span class="badge badge-{{ $control->color_confirm }}">
                             {{ $control->confirm_format }}
                         </span>
-                    </td>
+                    </td> -->
                     <td class="text-center">
-                        @if($control->technicalSignature && $control->technicalSignature->signaturesFlows->first()->isSigned())
-                            <a
-                                href="{{ route('documents.signatures.showPdf', [
-                                    $control->technicalSignature->signaturesFlows->first()->signaturesFile->id, time()
-                                ]) }}"
-                                class="btn btn-sm btn-outline-success" target="_blank"
-                                title="Ver documento"
-                            >
-                                <i class="fas fa-file-pdf"></i>
-                            </a>
-                        @elseif($control->isConfirmed())
+                        @if($control->isConfirmed())
                             <a
                                 href="{{ route('warehouse.control.pdf', [
                                     'store' => $store,
@@ -144,7 +136,7 @@
                         @foreach($control->invoices as $invoice)
                             <a
                                 href="{{ $invoice->link }}"
-                                class="btn btn-sm @if($control->completed_invoices) btn-success @else btn-danger @endif"
+                                class="btn btn-sm btn-success"
                                 target="_blank"
                                 title="Ver Factura {{ $invoice->number }}"
                             >
@@ -152,6 +144,22 @@
                                 </span>
                             </a>
                         @endforeach
+                    </td>
+                    <td class="text-center font-weight-bold text-success">
+                        {{ $control->completed_invoices ? '✓' : ''}}
+                    </td>
+                    <td class="text-center">
+                        @if($control->technicalSignature && $control->technicalSignature->signaturesFlows->first()->isSigned())
+                            <a
+                                href="{{ route('documents.signatures.showPdf', [
+                                    $control->technicalSignature->signaturesFlows->first()->signaturesFile->id, time()
+                                ]) }}"
+                                class="btn btn-sm btn-danger" target="_blank"
+                                title="Ver documento"
+                            >
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
                 @empty

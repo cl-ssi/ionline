@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Indicators\_2020;
 
-use App\Indicators\ProgramApsValue;
-use App\Indicators\ProgramApsGlosa;
+use App\Models\Indicators\ProgramApsValue;
+use App\Models\Indicators\ProgramApsGlosa;
 use App\Models\Commune;
 use App\Models\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-// use App\Indicators\Rem;
+// use App\Models\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
 
 class ProgramApsValueController extends Controller
@@ -2419,7 +2419,7 @@ class ProgramApsValueController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Indicators\ProgramApsValue  $programApsValue
+     * @param  \App\Models\Indicators\ProgramApsValue  $programApsValue
      * @return \Illuminate\Http\Response
      */
     public function show(ProgramApsValue $programApsValue)
@@ -2430,7 +2430,7 @@ class ProgramApsValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Indicators\ProgramApsValue  $programApsValue
+     * @param  \App\Models\Indicators\ProgramApsValue  $programApsValue
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, ProgramApsGlosa $glosa, Commune $commune)
@@ -2460,7 +2460,7 @@ class ProgramApsValueController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Indicators\ProgramApsValue  $programApsValue
+     * @param  \App\Models\Indicators\ProgramApsValue  $programApsValue
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ProgramApsValue $programApsValue)
@@ -2474,7 +2474,7 @@ class ProgramApsValueController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Indicators\ProgramApsValue  $programApsValue
+     * @param  \App\Models\Indicators\ProgramApsValue  $programApsValue
      * @return \Illuminate\Http\Response
      */
     public function destroy(ProgramApsValue $programApsValue)

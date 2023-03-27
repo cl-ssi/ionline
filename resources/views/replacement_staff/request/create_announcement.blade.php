@@ -95,7 +95,7 @@
     <h6 class="small"><b>4. Descripción de Unidad Organizacional</b></h6> <br>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-12 col-md-6">
             <label for="for_ou_id">
                 Unidad Organizacional
             </label>

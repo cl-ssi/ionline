@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 /* INDICADOR 1 */
 /* 2019 */

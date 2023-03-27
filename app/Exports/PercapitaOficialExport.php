@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Indicators\PercapitaOficial;
+use App\Models\Indicators\PercapitaOficial;
 use Maatwebsite\Excel\Concerns\{FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStrictNullComparison};
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Http\Request;

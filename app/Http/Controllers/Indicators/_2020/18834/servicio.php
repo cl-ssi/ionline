@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Indicators\_2020;
 
-use App\Indicators\Rem;
+use App\Models\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 $last_year= 2019;
 $year= 2020;

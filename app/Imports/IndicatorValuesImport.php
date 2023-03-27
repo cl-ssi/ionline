@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Indicators\Value;
+use App\Models\Indicators\Value;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +54,7 @@ class IndicatorValuesImport implements ToCollection
                 if($count){
                     $result = Value::where('activity_name', 'like', $row[0])->where('factor', 'denominador')
                                 ->where('commune', $this->commune)->where('establishment', $this->establishment)
-                                ->where('valueable_id', $this->valueable_id)->where('valueable_type', 'App\Indicators\Indicator')->first();
+                                ->where('valueable_id', $this->valueable_id)->where('valueable_type', 'App\Models\Indicators\Indicator')->first();
                     if($result){
                         $result->increment('value', $count);
                     }else{
@@ -66,7 +66,7 @@ class IndicatorValuesImport implements ToCollection
                             'establishment' => $this->establishment,
                             'value' => $count,
                             'valueable_id' => $this->valueable_id,
-                            'valueable_type' => 'App\Indicators\Indicator',
+                            'valueable_type' => 'App\Models\Indicators\Indicator',
                         ]);
                     }
                 }

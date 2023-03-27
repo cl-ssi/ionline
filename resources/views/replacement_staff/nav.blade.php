@@ -77,11 +77,11 @@
         </a>
 
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ route('replacement_staff.request.pending_personal_index') }}">
+            <!-- <a class="dropdown-item" href="{{ route('replacement_staff.request.pending_personal_index') }}">
               <i class="fas fa-inbox"></i> Solicitudes Pendientes
-            </a>
+            </a> -->
             <a class="dropdown-item" href="{{ route('replacement_staff.request.personal_index') }}">
-              <i class="fas fa-inbox"></i> Solicitudes Finalizadas
+                <i class="fas fa-inbox"></i> Todas las solicitudes
             </a>
         </div>
     </li>

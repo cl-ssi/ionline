@@ -16,6 +16,7 @@ use App\Models\Drugs\Protocol;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReceptionController extends Controller
 {
@@ -26,19 +27,7 @@ class ReceptionController extends Controller
      */
     public function index(Request $request)
     {
-        $receptions = Reception::with([
-            'items',
-            'partePoliceUnit',
-            'documentPoliceUnit',
-            'destruction',
-            'haveItemsForDestruction'
-        ])
-        ->withCount(['items'])
-        ->Search($request->get('id'))->get();
-        //dd($receptions);
-        //$receptions = Reception::whereDate('created_at', '>', Carbon::today()->subDays(16))->latest()->get();
-        //Reception::Reception::whereDate('created_at', '>', Carbon\Carbon::today()->subDays(16))->latest()->paginate(100);
-        return view('drugs.receptions.index')->withReceptions($receptions);
+        return view('drugs.receptions.index');
     }
 
     /**
@@ -50,7 +39,6 @@ class ReceptionController extends Controller
     {
         $courts = Court::All()->SortBy('name');
         $policeUnits = PoliceUnit::All()->SortBy('name');
-        //$substances = Substance::All()->SortBy('name');
         return view('drugs.receptions.create')
             ->withCourts($courts)
             ->withPolice_units($policeUnits);
@@ -90,8 +78,6 @@ class ReceptionController extends Controller
         $observer = optional(User::Find(Parameter::get('drugs','MinistroDeFe')))->FullName;
         $lawyer_observer = optional(User::Find(Parameter::get('drugs','MinistroDeFeJuridico')))->FullName;
 
-        //dd($trashedDestructions);
-        //$observer = User::Find(Parameter::get('drugs','Mandatado'))->FullName;
         return view('drugs.receptions.show', compact('reception', 'substances', 'trashedDestructions','manager','observer','lawyer_observer'));
     }
 
@@ -106,7 +92,6 @@ class ReceptionController extends Controller
         $courts = Court::All()->SortBy('name');
         $policeUnits = PoliceUnit::All()->SortBy('name');
 
-        //$substances = Substance::All()->SortBy('name');
         return view('drugs.receptions.edit', compact('reception', 'courts', 'policeUnits'));
     }
 
@@ -241,47 +226,56 @@ class ReceptionController extends Controller
 
     public function report()
     {
-        $items = ReceptionItem::with('substance')->doesnthave('reception.destruction')->get();
+        /**
+         * Obtiene todos los items sin reservar y por destruir.
+         */
+        $items = ReceptionItem::query()
+            ->with('substance')
+            ->whereNull('dispose_precursor')
+            ->doesnthave('reception.destruction')
+            ->selectRaw('*, net_weight - sample - countersample as total_sample')
+            ->get();
+
+        /**
+         * Filtro los que tienen cantidad mayor a cero a destruir
+         */
+        $items = $items->filter(function($item) {
+            return $item->total_sample > 0;
+        });
+
+        /**
+         * Suma el total a destruir agrupados por sustancias
+         */
         $items_sin_destruir = $items->groupBy('substance.name')->map(function ($row) {
             return $row->sum('destruct');
         });
 
-        $items = ReceptionItem::with([
-            'reception',
-            'reception.user',
-            'reception.court',
-            'substance',
-            'protocols',
-            'reception.destruction.user',
-            'resultSubstance',
-            'reception.sampleToIsp',
-            'reception.recordToCourt'
-            ])->orderBy('reception_id', 'desc')->paginate(1000);
-
-        //$destruct = $items->sum('destruct');
-
-        //dd($deals);
-        /*
-        $deals = $regions->sum(function ($region) {
-            return $region->submits->sum('deals');
+        /**
+         * Filtro para mostrar solo las sustancias donde la suma a destruir sea mayor a cero
+         */
+        $items_sin_destruir = $items_sin_destruir->filter(function($item) {
+            return $item > 0;
         });
 
-        $num = $mystuff->groupBy('dateDay')->map(function ($row) {
-            return $row->sum('n');
-        });
-        */
+        /**
+         * Obtiene todos los items
+         */
+        $items = ReceptionItem::query()
+            ->with([
+                'reception',
+                'reception.user',
+                'reception.court',
+                'substance',
+                'protocols',
+                'reception.destruction.user',
+                'resultSubstance',
+                'reception.sampleToIsp',
+                'reception.recordToCourt',
+            ])
+            ->orderBy('reception_id', 'desc')
+            ->paginate(1000);
+
 
         return view('drugs.receptions.report', compact('items', 'items_sin_destruir'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Drugs\Reception  $reception
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reception $reception)
-    {
-        //
     }
 }

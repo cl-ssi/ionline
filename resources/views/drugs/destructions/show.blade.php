@@ -22,11 +22,11 @@
 </p>
 
 <!-- Usar vieñas con letras sólo si hay más de un item -->
-{!! $destruction->reception->items->count()== 1 ? "<ul>" : '<ol class="li_letras">' !!}
+{!! $destruction->reception->itemsWithoutPrecursors->count() == 1 ? '<ul>' : '<ul>' !!}
 
-    @foreach($destruction->reception->items as $item)
+    @foreach($destruction->reception->itemsWithoutPrecursors as $item)
         <li style="margin-bottom: 14px; padding-bottom: 6px">
-            {{ $item->description }}
+            {{ $item->letter }}. {{ $item->description }}
 
         <table class="ocho">
             <thead>
@@ -127,14 +127,14 @@
 <div id="firmas" style="">
 
     <div class="center" style="width: 33%">
-        {{ $destruction->manager->FullName }}<br>
+        {{ $destruction->manager->fullName }}<br>
         {{ $destruction->manager->position }} {{ $destruction->manager->organizationalUnit->name }}<br>
         {{ env('APP_SS') }}<br>
     </div>
 
     <div class="center" style="width: 33%">
-        @if($destruction->observer)
-        {{ $destruction->observer->FullName }}<br>
+        @if($destruction->observer AND $destruction->observer != $destruction->lawyer_observer)
+        {{ $destruction->observer->fullName }}<br>
         Ministro de Fe<br>
         {{ env('APP_SS') }}
         @endif
@@ -142,7 +142,7 @@
 
     <div class="center" style="width: 32%;">
         @if($destruction->lawyer_observer)
-        {{ $destruction->lawyer_observer->FullName }}<br>
+        {{ $destruction->lawyer_observer->fullName }}<br>
         Departamento de Asesoría Jurídica<br>
         {{ env('APP_SS') }}<br>
         @endif

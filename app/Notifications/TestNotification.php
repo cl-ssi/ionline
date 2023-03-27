@@ -12,7 +12,14 @@ class TestNotification extends Notification
     use Queueable;
 
     /**
-     *  
+     * Pasos:
+     * Crear una nueva $ php artisan make:notification Modulo/Notificación
+     * 
+     * 1. (Opcional) En el constructor se pueden pasar parámetros
+     * 2. Cambiar a 'database' en el método via
+     * 3. En método toArray va la notificación
+     * 
+     * Para utilizarlo:
      * $user->notify(new App\Notifications\TestNotification($param));
      * 
      * Ej:

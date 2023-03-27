@@ -31,10 +31,11 @@
 </p>
 
 <!-- Usar vieñas con letras sólo si hay más de un item -->
-{!! $reception->items->count()== 1 ? "<ul>" : "<ol class='li_letras'>" !!}
+{!! $reception->items->count()== 1 ? '<ul>' : '<ul>' !!}
 
     @foreach($reception->items as $item)
-        <li style="margin-bottom: 16px;"> {{ $item->description }}
+        <li style="margin-bottom: 16px;">
+            {{ $item->letter }}. {{ $item->description }}
         <table class="ocho">
             <thead>
                 <tr>

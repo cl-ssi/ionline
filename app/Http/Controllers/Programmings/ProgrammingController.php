@@ -19,7 +19,7 @@ class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
-        $year = $request->year ?? Carbon::now()->year + 1;
+        $year = $request->year ?? Carbon::now()->year;
         $accessByCommune = null;
         $accessByEstablishments = null;
         if(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False){

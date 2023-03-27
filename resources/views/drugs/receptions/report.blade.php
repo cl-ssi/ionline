@@ -23,7 +23,7 @@
                 @foreach($items_sin_destruir as $nombre => $cantidad)
                 <tr>
                     <td>{{ $nombre }}</td>
-                    <td class="text-center">{{ $cantidad }}</td>
+                    <td class="text-center">{{ $cantidad }} g</td>
                 </tr>
                 @endforeach
             </tbody>

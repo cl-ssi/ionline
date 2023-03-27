@@ -3,10 +3,10 @@ namespace App\Http\Controllers\Indicators\_2020;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Indicators\Establecimiento;
-use App\Indicators\Rem;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
-use App\Indicators\SingleParameter;
+use App\Models\Indicators\SingleParameter;
 
 $year = 2020;
 

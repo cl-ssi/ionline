@@ -72,12 +72,12 @@
                             @endforeach
                         @endif
                     </td>
-                    <td class="text-center">
+                    <td nowrap>
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
-                            {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }}
+                            {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }} ({{ $requestReplacementStaff->profile_manage->name ?? '' }})
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
-                                {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                                {{ $position->legalQualityManage->NameValue ?? '' }} ({{ $position->profile_manage->name ?? '' }})<br>
                             @endforeach
                         @endif
                     </td>
@@ -214,9 +214,13 @@
                             @endforeach
                         @endif
                     </td>
-                    <td class="text-center">
+                    <td nowrap>
                         @if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
-                            {{ $requestReplacementStaff->legalQualityManage->NameValue }}
+                            {{ $requestReplacementStaff->legalQualityManage->NameValue ?? '' }} ({{ $requestReplacementStaff->profile_manage->name ?? '' }})
+                        @else
+                            @foreach($requestReplacementStaff->positions as $position)
+                                {{ $position->legalQualityManage->NameValue ?? '' }} ({{ $position->profile_manage->name ?? '' }})<br>
+                            @endforeach
                         @endif
                     </td>
                     <td>

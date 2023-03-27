@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Drugs;
 
-use App\Http\Requests\Drugs\StoreActPrecursorRequest;
-use App\Models\Drugs\ActPrecursor;
-use App\Models\Drugs\ActPrecursorItem;
-use App\Models\Drugs\ReceptionItem;
 use Livewire\Component;
+use App\User;
+use App\Models\Parameters\Parameter;
+use App\Models\Drugs\ReceptionItem;
+use App\Models\Drugs\ActPrecursorItem;
+use App\Models\Drugs\ActPrecursor;
+use App\Http\Requests\Drugs\StoreActPrecursorRequest;
 
 class EditActPrecursor extends Component
 {
@@ -21,6 +23,9 @@ class EditActPrecursor extends Component
     public $old_precursors;
     public $precursors;
 
+    public $manager_id;
+    public $manager_name;
+
     public function mount(ActPrecursor $actPrecursor)
     {
         $this->date = $actPrecursor->date->format('Y-m-d');
@@ -30,6 +35,12 @@ class EditActPrecursor extends Component
 
         $this->old_precursors = $actPrecursor->precursors->pluck('reception_item_id');
         $this->selected_precursors = $actPrecursor->precursors->pluck('reception_item_id');
+
+        $manager = $this->actPrecursor->delivery;
+        if($manager) {
+            $this->manager_id = $manager->id;
+            $this->manager_name = $manager->shortName;
+        }
 
         $this->getPrecursors();
     }
@@ -57,6 +68,10 @@ class EditActPrecursor extends Component
         $dataValidated = $this->validate();
 
         $this->actPrecursor->update($dataValidated);
+
+        //$this->actPrecursor->delivery_id = $this->manager_id;
+
+        $this->actPrecursor->save();
 
         foreach($this->actPrecursor->precursors as $precursor)
         {

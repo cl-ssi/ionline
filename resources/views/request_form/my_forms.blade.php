@@ -106,20 +106,28 @@
             @if($requestForm->eventRequestForms->count() > 0)
                 @foreach($requestForm->eventRequestForms as $sign)
                     @if($sign->status == 'pending')
-                    <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </span>
                     @endif
                     @if($sign->status == 'approved')
-                    <span style="color: green;">
-                      <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                        <i class="fas fa-check-circle fa-2x"></i>
                     </span>
                     @endif
                     @if($sign->status == 'rejected')
-                    <span style="color: Tomato;">
-                      <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                        <i class="fas fa-times-circle fa-2x"></i>
                     </span>
                     @endif
                     @if($sign->status == 'does_not_apply')
-                      <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                        @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                        <i class="fas fa-ban fa-2x"></i>
+                    </span>
                     @endif
                 @endforeach
             @else
@@ -235,20 +243,28 @@
           <td class="text-center">
             @foreach($requestForm->eventRequestForms as $sign)
             @if($sign->status == 'pending' || $sign->status == NULL)
-            <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                  @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                    <i class="fas fa-clock fa-2x"></i>
+                </span>
             @endif
             @if($sign->status == 'approved')
-            <span style="color: green;">
-              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-check-circle fa-2x"></i>
             </span>
             @endif
             @if($sign->status == 'rejected')
-            <span style="color: Tomato;">
-              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
             </span>
             @endif
             @if($sign->status == 'does_not_apply')
-              <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+              @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            </span>
             @endif
             @endforeach
           </td>
@@ -363,24 +379,36 @@
           <td align="center">{{ $requestForm->quantityOfItems() }}</td>
           <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
           <td class="text-center">
-            @foreach($requestForm->eventRequestForms as $sign)
-            @if($sign->status == 'pending' || $sign->status == NULL)
-            <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+            @if($requestForm->eventRequestForms->count() > 0)
+                @foreach($requestForm->eventRequestForms as $sign)
+                @if($sign->status == 'pending' || $sign->status == NULL)
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                  @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                    <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                </span>
+                @endif
+                @if($sign->status == 'approved')
+                <span style="color: green;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                  @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                    <i class="fas fa-check-circle fa-2x"></i>
+                </span>
+                @endif
+                @if($sign->status == 'rejected')
+                <span style="color: Tomato;" class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                  @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                    <i class="fas fa-times-circle fa-2x"></i>
+                </span>
+                @endif
+                @if($sign->status == 'does_not_apply')
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                  @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                    <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                </span>
+                @endif
+                @endforeach
+            @else
+                <i class="fas fa-save fa-2x"></i>
             @endif
-            @if($sign->status == 'approved')
-            <span style="color: green;">
-              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-            </span>
-            @endif
-            @if($sign->status == 'rejected')
-            <span style="color: Tomato;">
-              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-            </span>
-            @endif
-            @if($sign->status == 'does_not_apply')
-              <i class="fas fa-ban fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
-            @endif
-            @endforeach
           </td>
           <td>
             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>

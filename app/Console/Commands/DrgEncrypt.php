@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+
 use App\Models\Drugs\Reception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Console\Command;
+
 
 
 class DrgEncrypt extends Command
@@ -40,8 +42,8 @@ class DrgEncrypt extends Command
      */
     public function handle()
     {
-        $imputed = Reception::all();
 
+        $imputed = Reception::all();
         foreach($imputed as $imputed) {
             echo $imputed->imputed . "\n";
             $imputed->imputed = Crypt::encryptString($imputed->imputed);

@@ -9,10 +9,7 @@ use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Models\Parameters\Holiday;
 use App\Models\Profile\Subrogation;
-use Illuminate\Support\Facades\Validator;
-use DateTime;
-use DatePeriod;
-use DateInterval;
+
 
 
 class Calendar extends Component
@@ -75,7 +72,7 @@ class Calendar extends Component
     public function mount(OrganizationalUnit $organizationalUnit)
     {
         $this->monthSelection = date('Y-m');
-        $this->today = now()->format('Y-m-d');        
+        $this->today = now()->format('Y-m-d');
     }
 
     /**
@@ -148,6 +145,7 @@ class Calendar extends Component
                 'manager' => false,
                 'delegate' => false,
                 'secretary' => false,
+                'authority_id' => false,
 
             );
         }
@@ -157,11 +155,18 @@ class Calendar extends Component
         }
 
         foreach ($newAuthorities as $authority) {
+
             $this->data[$authority->date->format('Y-m-d')][$authority->type] = $authority->user;
             $this->data[$authority->date->format('Y-m-d')][$authority->type]['position'] = $authority->position;
+            $this->data[$authority->date->format('Y-m-d')]['authority_id'] = $authority->id;
         }
 
         return view('livewire.authorities.calendar');
+    }
+
+    public function delete($id)
+    {
+        Authority::find($id)->delete();
     }
 
     public function cancel()
@@ -184,6 +189,5 @@ class Calendar extends Component
     public function userSelected($user_id)
     {
         $this->representation_id = $user_id;
-        
     }
 }

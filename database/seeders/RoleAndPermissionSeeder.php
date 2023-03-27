@@ -142,6 +142,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: oficina']);
         Permission::create(['name' => 'Partes: delete']);
 
+        Permission::create(['name' => 'Rrhh: wellfair']);
+
         Permission::create(['name' => 'Replacement Staff: assign request', 'description' => '	Permite asignar solicitudes a funcionarios de la unidad de reclutamiento y selección']);
         Permission::create(['name' => 'Replacement Staff: create request', 'description' => 'Permite crear solicitudes de reemplazo']);
         Permission::create(['name' => 'Replacement Staff: list rrhh', 'description' => 'Permite visualizar el listado de staff de reemplazo']);
@@ -159,110 +161,111 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Job Position Profile: create', 'description' => 'Permite crear la creación de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: all', 'description' => 'Permite acceder a todo el listado de perfiles de cargo']);
         Permission::create(['name' => 'Job Position Profile: audit', 'description' => 'Permite acceder al registro de auditoría del módulo']);
+        
+        Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
 
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'
         // )
 
-
         $role = Role::create(['name' => 'Drugs: admin']);
         $role->givePermissionTo([
-			'Drugs',
-			'Drugs: view receptions',
-			'Drugs: create receptions',
-			'Drugs: edit receptions',
-			'Drugs: destroy drugs',
-			'Drugs: view reports',
-			'Drugs: manage parameters',
-			'Drugs: manage substances',
-			'Drugs: manage courts',
-			'Drugs: manage police units',
-			'Drugs: delete destructions',
-			'Drugs: add results from ISP',
-			'Drugs: add protocols']);
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: create receptions',
+            'Drugs: edit receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: manage parameters',
+            'Drugs: manage substances',
+            'Drugs: manage courts',
+            'Drugs: manage police units',
+            'Drugs: delete destructions',
+            'Drugs: add results from ISP',
+            'Drugs: add protocols']);
 
         $role = Role::create(['name' => 'Drugs: receptionist']);
         $role->givePermissionTo([
-			'Drugs',
-			'Drugs: view receptions',
-			'Drugs: create receptions',
-			'Drugs: edit receptions',
-			'Drugs: destroy drugs',
-			'Drugs: view reports',
-			'Drugs: manage substances',
-			'Drugs: manage courts',
-			'Drugs: manage police units',
-			'Drugs: add protocols']);
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: create receptions',
+            'Drugs: edit receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: manage substances',
+            'Drugs: manage courts',
+            'Drugs: manage police units',
+            'Drugs: add protocols']);
 
         $role = Role::create(['name' => 'Drugs: basic']);
         $role->givePermissionTo([
-			'Drugs',
-			'Drugs: view receptions',
-			'Drugs: destroy drugs',
-			'Drugs: view reports',
-			'Drugs: add results from ISP']);
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: add results from ISP']);
 
-		$role = Role::create(['name' => 'RRHH: admin']);
-		$role->givePermissionTo(['Users: create', 'Users: edit', 'Users: delete', 'Users: assign permission']);
+        $role = Role::create(['name' => 'RRHH: admin']);
+        $role->givePermissionTo(['Users: create', 'Users: edit', 'Users: delete', 'Users: assign permission']);
 
-		$role = Role::create(['name' => 'Resources: admin']);
-		$role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
+        $role = Role::create(['name' => 'Resources: admin']);
+        $role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
 
-		$role = Role::create(['name' => 'Tickets: admin']);
-		$role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
+        $role = Role::create(['name' => 'Tickets: admin']);
+        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
 
-		$role = Role::create(['name' => 'Replacement Staff: admin']);
-		$role->givePermissionTo([
-			'Replacement Staff: assign request',
-			'Replacement Staff: create request',
-			'Replacement Staff: list rrhh',
-			'Replacement Staff: manage',
-			'Replacement Staff: staff manage',
-			'Replacement Staff: technical evaluation'
-		]);
+        $role = Role::create(['name' => 'Replacement Staff: admin']);
+        $role->givePermissionTo([
+            'Replacement Staff: assign request',
+            'Replacement Staff: create request',
+            'Replacement Staff: list rrhh',
+            'Replacement Staff: manage',
+            'Replacement Staff: staff manage',
+            'Replacement Staff: technical evaluation'
+        ]);
 
-		$role = Role::create(['name' => 'Replacement Staff: user']);
-		$role->givePermissionTo([
-			'Replacement Staff: create request'
-		]);
+        $role = Role::create(['name' => 'Replacement Staff: user']);
+        $role->givePermissionTo([
+            'Replacement Staff: create request'
+        ]);
 
-		$role = Role::create(['name' => 'Replacement Staff: user rys']);
-		$role->givePermissionTo([
-			'Replacement Staff: create request',
-			'Replacement Staff: list rrhh',
-			'Replacement Staff: technical evaluation',
-			'Replacement Staff: view requests'
-		]);
+        $role = Role::create(['name' => 'Replacement Staff: user rys']);
+        $role->givePermissionTo([
+            'Replacement Staff: create request',
+            'Replacement Staff: list rrhh',
+            'Replacement Staff: technical evaluation',
+            'Replacement Staff: view requests'
+        ]);
 
-		$role = Role::create(['name' => 'Replacement Staff: personal']);
-		$role->givePermissionTo([
-			'Replacement Staff: view requests'
-		]);
+        $role = Role::create(['name' => 'Replacement Staff: personal']);
+        $role->givePermissionTo([
+            'Replacement Staff: view requests'
+        ]);
 
-		$role = Role::create(['name' => 'Replacement Staff: personal sign']);
-		$role->givePermissionTo([
-			'Replacement Staff: view requests',
-			'Replacement Staff: personal sign'
-		]);
+        $role = Role::create(['name' => 'Replacement Staff: personal sign']);
+        $role->givePermissionTo([
+            'Replacement Staff: view requests',
+            'Replacement Staff: personal sign'
+        ]);
 
-		$roleStoreAdmin = Role::create(['name' => 'Store: admin']);
-		$roleStoreUser = Role::create(['name' => 'Store: user']);
-		$roleStoreSuperAdmin = Role::create(['name' => 'Store: Super admin']);
+        $roleStoreAdmin = Role::create(['name' => 'Store: admin']);
+        $roleStoreUser = Role::create(['name' => 'Store: user']);
+        $roleStoreSuperAdmin = Role::create(['name' => 'Store: Super admin']);
 
-		// TODO: Definir mas permisos por rol
-		$permission = Permission::create(['name' => 'Store: index']);
+        // TODO: Definir mas permisos por rol
+        $permission = Permission::create(['name' => 'Store: index']);
 
-		// $user = User::find(15287582);
-		// $user->assignRole($roleStoreSuperAdmin);
-		// $user->givePermissionTo('Store: index');
+        // $user = User::find(15287582);
+        // $user->assignRole($roleStoreSuperAdmin);
+        // $user->givePermissionTo('Store: index');
 
-		$roleStoreSuperAdmin->givePermissionTo($permission);
+        $roleStoreSuperAdmin->givePermissionTo($permission);
 
-		// create roles and assign created permissions
-		// GOD LIKE
-		$role = Role::create(['name' => 'god']);
-		$role->givePermissionTo(Permission::all());
-		$role = Role::create(['name' => 'dev']);
+        // create roles and assign created permissions
+        // GOD LIKE
+        $role = Role::create(['name' => 'god']);
+        $role->givePermissionTo(Permission::all());
+        $role = Role::create(['name' => 'dev']);
     }
 }

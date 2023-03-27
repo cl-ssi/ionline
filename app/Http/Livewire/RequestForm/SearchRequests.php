@@ -54,30 +54,29 @@ class SearchRequests extends Component
 
     public function querySearch($isPaginated = true)
     {
+        $query = RequestForm::query();
+
         if($this->inbox == 'all'){
-            $query = RequestForm::query();
+            // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
+            if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
+                $ouSearch = Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value;
+                $query->whereHas('userOrganizationalUnit', function ($q) use ($ouSearch) {
+                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                    ->orWhere('request_user_ou_id', $ouSearch);
+                })
+                ->orWhereHas('contractOrganizationalUnit', function ($q) use ($ouSearch) {
+                    return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
+                    ->orWhere('contract_manager_ou_id', $ouSearch);
+                });
+            }
         }
 
-        if($this->inbox == 'purchase'){
-            $query = RequestForm::query();
-            
+        if($this->inbox == 'purchase'){            
             $query->where('status', 'approved')->whereNotNull('signatures_file_id')
                 ->whereHas('purchasers', function ($q) {
                     return $q->where('users.id', Auth()->user()->id);
                 })
                 ->latest('approved_at');
-        }
-
-        // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
-        if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
-            $query->whereHas('userOrganizationalUnit', function ($q) {
-                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
-                ->orWhere('request_user_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
-            })
-            ->orWhereHas('contractOrganizationalUnit', function ($q) {
-                return $q->where('establishment_id', Auth()->user()->organizationalUnit->establishment_id)
-                ->orWhere('contract_manager_ou_id', Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value);
-            });
         }
 
         $query->search($this->selectedStatus,

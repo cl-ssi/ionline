@@ -58,5 +58,8 @@ class DatabaseSeeder extends Seeder
         $this->call(BudgetItemSeeder::class);
         $this->call(PurchaseUnitSeeder::class);
 
+        /* SEED PARA MANTENEDORES DE DROGAS */
+        $this->call(ParameterSeeder::class);
+
     }
 }

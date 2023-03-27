@@ -19,6 +19,8 @@
 </div>
 @endif
 
+@if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
+<h5><i class="fas fa-file"></i> Formulario de Reemplazos</h5>
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
         <thead class="small">
@@ -127,23 +129,115 @@
         </tbody>
     </table>
 </div>
+@else
+<h5><i class="fas fa-file"></i> Formulario de Convocatorias</h5>
 
-@if($requestReplacementStaff->request_status != "pending")
+<div class="table-responsive">
+    <table class="table table-sm table-bordered small">
+        <thead>
+            <tr class="table-active">
+                <th colspan="4">
+                    Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('complete')
+                            <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @case('rejected')
+                            <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="table-active">Creador / Solicitante</th>
+                <td style="width: 33%">
+                    {{ $requestReplacementStaff->user->FullName }} <br>
+                    {{ $requestReplacementStaff->organizationalUnit->name }}
+                </td>
+                <td style="width: 33%">
+                    {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                </td>
+            </tr>
+            <tr>
+                <th class="table-active">Nombre de Solicitud</th>
+                <td colspan="2">{{ $requestReplacementStaff->name }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Archivos</th>
+                <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</br>
+
+<h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
+
+<div class="table-responsive">
+    <table class="table table-sm table-hover table-bordered">
+        <thead class="text-center small table-active">
+            <tr>
+                <th>N° de cargos</th>
+                <th>Estamento</th>
+                <th>Grado / Renta</th>
+                <th>Calidad Jurídica</th>
+                <th>Fundamento</th>
+                <th>Jornada</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="text-center small">
+            @foreach($requestReplacementStaff->positions as $position)
+            <tr>
+                <td>{{ $position->charges_number }}</td>
+                <td>{{ $position->profile_manage->name ?? '' }}</td>
+                <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>
+                <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
+                <td>
+                    {{ $position->fundamentManage->NameValue ?? '' }}<br>
+                    {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
+                <td>{{ $position->WorkDayValue ?? '' }}</td>
+                <td>
+                    <a class="btn btn-outline-secondary"
+                      href="{{ route('replacement_staff.request.show_file_position', $position) }}"
+                      target="_blank"> <i class="fas fa-paperclip"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+<br>
+@endif
+
+<!-- RESUMEN EN PDF (SOLO DISPONIBLE PARA REEMPLAZOS) -->
+@if($requestReplacementStaff->request_status != "pending" && ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL))
     <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
         class="btn btn-info btn-sm float-right" 
         title="Selección" 
         target="_blank">
         Exportar Resumen <i class="fas fa-file"></i>
     </a>
-<br /> <br /> 
+<br />
 @endif
 
+<h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
         <tbody class="small">
-            <tr>
-                <td colspan="{{ $requestReplacementStaff->RequestSign->count() }}">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
-            </tr>
             <tr>
                 @foreach($requestReplacementStaff->RequestSign as $sign)
                   <td class="table-active text-center">
@@ -200,10 +294,9 @@
     </table>
 </div>
 
-<br>
-
-@if($requestReplacementStaff->technical_evaluation_status == 'complete' ||
-    $requestReplacementStaff->technical_evaluation_status == 'rejected')
+<!-- CUADRO DE ESTADO DE SOLICITUD -->
+@if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+    <br>
     <div class="table-responsive">
         <table class="table table-sm table-bordered small">
             <tr>
@@ -212,7 +305,7 @@
             </tr>
             <tr>
                 <th class="table-active">Fecha de Cierre</th>
-                <td colspan="2">{{ $date_end->format('d-m-Y H:i:s') }}</td>
+                <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
             </tr>
         </table>
     </div>
@@ -220,6 +313,7 @@
 
 <br>
 
+<!-- FUNCIONARIOS ASIGNADOS -->
 <div class="card" id="commission">
     <div class="card-header">
         <h6>Funcionario(s) asignados a esta solicitud</h6>
@@ -266,6 +360,7 @@
 
 <br>
 
+<!-- FINALIZAR PROCESO DE SELECCIÓN -->
 <div class="row">
     <div class="col">
         @if($requestReplacementStaff->technicalEvaluation->reason == NULL)
@@ -368,8 +463,8 @@
     <br>
 </div>
 
+@if($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)
 <br>
-
 <div class="card" id="applicant">
     <div class="card-header">
         <h6>Selección de RR.HH.</h6>
@@ -570,6 +665,160 @@
 
     </div>
 </div>
+@else
+<br>
+    @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' || $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+    <div class="card" id="applicant">
+        <div class="card-header">
+            <h6>Selección de RR.HH.</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                    <thead class="text-center small">
+                        <tr>
+                            <th width="3%">#</th>
+                            <th width="10%">Estamento</th>
+                            <th width="10%">Grado / Renta</th>
+                            <th width="15%">Calidad Jurídica / Fundamento</th>
+                            <th width="10%">Jornada</th>
+                            <th colspan="2">Datos del Seleccionado</th>
+                            <th></th>
+                        <tr>
+                    </thead>
+                    <tbody class="small">
+                        @php
+                            $contador = 0;
+                        @endphp
+                        @foreach($requestReplacementStaff->positions as $position)
+                            @foreach($position->selectedPositions as $key => $selectedPosition)
+                            <tr>
+                                <th class="text-center">
+                                    {{ $contador + 1 }}
+                                </th>
+                                <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
+                                <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                <td class="text-center">
+                                    {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                                    {{ $position->fundamentManage->NameValue ?? '' }} <br>
+                                    {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                                </td>
+                                <td class="text-center">{{ $position->WorkDayValue ?? '' }}</td>
+                                @if($selectedPosition->run != null)
+                                <td width="20%" class="text-center">
+                                    {{ $selectedPosition->run }}-{{ $selectedPosition->dv }}
+                                </td>
+                                <td class="text-center">
+                                    {{ $selectedPosition->name }}
+                                </td>
+                                @else
+                                <td colspan="2" class="text-center">
+                                    <span class="badge badge-warning">No seleccionado</span>
+                                </td>
+                                @endif
+                                <td>
+                                </td>
+                            </tr>
+                            @php
+                                $contador++;
+                            @endphp
+                            @endforeach
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+            </form>
+        </div>
+    </div>
+    @else
+    <div class="card" id="applicant">
+        <div class="card-header">
+            <h6>Selección de RR.HH.</h6>
+        </div>
+        <div class="card-body">
+            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.selected_position.store', $requestReplacementStaff->technicalEvaluation) }}" enctype="multipart/form-data">
+            @csrf
+            @method('POST')
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                    <thead class="text-center small">
+                        <tr>
+                            <th width="3%">#</th>
+                            <th width="10%">Estamento</th>
+                            <th width="10%">Grado / Renta</th>
+                            <th width="15%">Calidad Jurídica / Fundamento</th>
+                            <th width="10%">Jornada</th>
+                            <th colspan="2">Datos del Seleccionado</th>
+                            <th></th>
+                        <tr>
+                    </thead>
+                    <tbody class="small">
+                        @php
+                            $contador = 0;
+                        @endphp
+                        @foreach($requestReplacementStaff->positions as $position)
+                            @for ($i = 1; $i <= $position->charges_number; $i++)
+                                <tr>
+                                    <th class="text-center">
+                                        <fieldset class="form-group col-12 col-md-12">
+                                            <input type="text" class="form-control" name="position_id[]" id="for_position_id" value="{{ $position->id }}" readonly hidden>
+                                        </fieldset>
+                                        {{ $contador }}
+                                    </th>
+                                    <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
+                                    <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                    <td class="text-center">
+                                        {{ $position->legalQualityManage->NameValue ?? '' }} <br>
+                                        {{ $position->fundamentManage->NameValue ?? '' }} <br>
+                                        {{ $position->fundamentDetailManage->NameValue ?? '' }} <br>
+                                    </td>
+                                    <td class="text-center">{{ $position->WorkDayValue ?? '' }}</td>
+                                    <td width="20%">
+                                        <div class="input-group">
+                                        <input type="text" class="form-control" name="run[]" autocomplete="off" placeholder="run" id="for_run" required>
+                                          <div class="input-group-append col-12 col-md-5">
+                                              <input type="text" class="form-control" name="dv[]" autocomplete="off" placeholder="dv" id="for_dv" required>
+                                          </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <fieldset class="form-group col-12 col-md-12">
+                                            <input type="text" class="form-control" name="name[]" autocomplete="off" placeholder="Nombre Completo" id="for_name" required>
+                                        </fieldset>
+                                    </td>
+                                    <td>
+                                        <fieldset class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" 
+                                                  type="checkbox" 
+                                                  name="selected_position[]"
+                                                  id="for_selected_position"
+                                                  value="{{ $position->id }}">
+                                            </div>
+                                        </fieldset>
+                                    </td>
+                                </tr>
+                                @php
+                                    $contador++;
+                                @endphp
+                            @endfor
+                        @endforeach
+                    </tbody>
+                </table>
+                
+                <button type="submit" 
+                  onclick="return confirm('¿Está seguro que desea Cerrar la solicitud?')"
+                  class="btn btn-primary float-right"
+                  id="save_btn">
+                      <i class="fas fa-save"></i> Guardar y Cerrar Solicitud
+                </button>
+            </div>
+            </form>
+        </div>
+    </div>
+    @endif
+@endif
 
 <br>
 
@@ -772,6 +1021,14 @@
           document.getElementById("for_end_date").readOnly = false;
         }
     }
+    
+    $('input[name="selected_position[]"]').change(function() {
+        var tr = $(this).closest('tr')
+        tr.find('input[name="run[]"]').prop('readonly', this.checked);
+        tr.find('input[name="dv[]"]').prop('readonly', this.checked);
+        tr.find('input[name="name[]"]').prop('readonly', this.checked);
+    });
+
 </script>
 
 @endsection

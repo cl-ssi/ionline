@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Indicators\Dashboard;
 
 use Livewire\Component;
 
-use App\Indicators\Establecimiento;
+use App\Models\Indicators\Establecimiento;
 
 class PopulationSearchForm extends Component
 {

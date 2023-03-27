@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
 use App\Imports\IndicatorValuesImport;
-use App\Indicators\AttachedFile;
-use App\Indicators\Establecimiento;
-use App\Indicators\HealthGoal;
-use App\Indicators\Indicator;
-use App\Indicators\Percapita;
-use App\Indicators\PercapitaOficial;
-use App\Indicators\Rem;
-use App\Indicators\Value;
+use App\Models\Indicators\AttachedFile;
+use App\Models\Indicators\Establecimiento;
+use App\Models\Indicators\HealthGoal;
+use App\Models\Indicators\Indicator;
+use App\Models\Indicators\Percapita;
+use App\Models\Indicators\PercapitaOficial;
+use App\Models\Indicators\Rem;
+use App\Models\Indicators\Value;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -367,7 +367,7 @@ class HealthGoalController extends Controller
             $fileModel->establishment = $request->establishment;
             $fileModel->section = $request->section;
             $fileModel->attachable_id = $indicator->id;
-            $fileModel->attachable_type = 'App\Indicators\Indicator';
+            $fileModel->attachable_type = 'App\Models\Indicators\Indicator';
             $fileModel->save();
         }
 
@@ -396,7 +396,7 @@ class HealthGoalController extends Controller
                 $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
                 $fileModel->document_name = $filename;
                 $fileModel->attachable_id = $newValue->id;
-                $fileModel->attachable_type = 'App\Indicators\Value';
+                $fileModel->attachable_type = 'App\Models\Indicators\Value';
                 $fileModel->save();
             }
         }
@@ -419,7 +419,7 @@ class HealthGoalController extends Controller
                 $fileModel->file = $file->store('ionline/indicators/health_goals/19813/'.$year,['disk' => 'gcs']);
                 $fileModel->document_name = $filename;
                 $fileModel->attachable_id = $value->id;
-                $fileModel->attachable_type = 'App\Indicators\Value';
+                $fileModel->attachable_type = 'App\Models\Indicators\Value';
                 $fileModel->save();
             }
         }
