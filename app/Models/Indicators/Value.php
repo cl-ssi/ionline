@@ -2,7 +2,7 @@
 
 namespace App\Models\Indicators;
 
-// use App\Programmings\Task;
+use App\Programmings\Task;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -50,7 +50,7 @@ class Value extends Model
         return $this->morphMany(AttachedFile::class, 'attachable');
     }
 
-    // public function tasks(){
-    //     return $this->hasMany(Task::class, 'activity_id');
-    // }
+    public function tasks(){
+        return $this->hasMany(Task::class, 'activity_id');
+    }
 }
