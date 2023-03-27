@@ -19,6 +19,8 @@ use App\Models\Documents\Parte;
 use App\Models\Documents\ParteFile;
 use Carbon\Carbon;
 
+use App\Models\Establishment;
+
 /* No sé si son necesarias, las puse para el try catch */
 use Exception;
 use GuzzleHttp\Exception\RequestException;
@@ -51,12 +53,14 @@ class DigitalSignatureController extends Controller
         } else {
             $route = $request->route;
 
-            $req = Request::create($route,
+            $req = Request::create(
+                $route,
                 'GET',
                 [],
                 [],
                 [],
-                $_SERVER);
+                $_SERVER
+            );
 
             $res = app()->handle($req);
             $responseBody = $res->getContent();
@@ -78,8 +82,10 @@ class DigitalSignatureController extends Controller
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType, $docId, $verificationCode);
 
         if (!$responseArray['statusOk']) {
-            return redirect()->route($callbackRoute, ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
-                'modelId' => $modelId]);
+            return redirect()->route($callbackRoute, [
+                'message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
+                'modelId' => $modelId
+            ]);
         }
 
         $signaturesFile = SignaturesFile::create();
@@ -93,9 +99,11 @@ class DigitalSignatureController extends Controller
         $signaturesFile->update(['signed_file' => $filePath]);
         Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
 
-        return redirect()->route($callbackRoute, ['message' => "El documento $modelId se ha firmado correctamente.",
+        return redirect()->route($callbackRoute, [
+            'message' => "El documento $modelId se ha firmado correctamente.",
             'modelId' => $modelId,
-            'signaturesFile' => $signaturesFile->id]);
+            'signaturesFile' => $signaturesFile->id
+        ]);
     }
 
     /**
@@ -109,10 +117,10 @@ class DigitalSignatureController extends Controller
     {
         $message = '';
 
-        if(isset($request->pendingSignaturesFlowsIds)){
+        if (isset($request->pendingSignaturesFlowsIds)) {
             $pendingSignaturesFlowsIdsArray = json_decode($request->pendingSignaturesFlowsIds);
             $pendingSignaturesFlows = SignaturesFlow::findMany($pendingSignaturesFlowsIdsArray);
-        }else{
+        } else {
             $pendingSignaturesFlows = SignaturesFlow::where('id', $signaturesFlowId)->get();
         }
 
@@ -141,9 +149,22 @@ class DigitalSignatureController extends Controller
                 $ct_posicion_firmas = $signaturesFlow->sign_position;
             }
 
-            $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-                $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis,
-                $visatorType, $positionVisatorType);
+            $responseArray = $this->signPdfApi(
+                $pdfbase64,
+                $checksum_pdf,
+                $modo,
+                $otp,
+                $type,
+                $docId,
+                $verificationCode,
+                $ct_firmas_visator,
+                $ct_posicion_firmas,
+                $visatorAsSignature,
+                $custom_x_axis,
+                $custom_y_axis,
+                $visatorType,
+                $positionVisatorType
+            );
 
             if (!$responseArray['statusOk']) {
                 session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -153,7 +174,7 @@ class DigitalSignatureController extends Controller
             $signaturesFlow->status = 1;
             $signaturesFlow->signature_date = now();
 
-            if($signaturesFlow->user_id != Auth::id())
+            if ($signaturesFlow->user_id != Auth::id())
                 $signaturesFlow->real_signer_id = Auth::id();
 
             $signaturesFlow->save();
@@ -168,7 +189,7 @@ class DigitalSignatureController extends Controller
                 $signaturesFlow->signaturesFile->save();
                 Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
                 Storage::disk('gcs')->delete($oldFilePath);
-            }else {
+            } else {
                 $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
                 $signaturesFlow->signaturesFile->signed_file = $filePath;
                 $signaturesFlow->signaturesFile->save();
@@ -195,79 +216,88 @@ class DigitalSignatureController extends Controller
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
-                $dest_vec=array();
+                $dest_vec = array();
 
 
 
                 if (strpos($destinatarios, ',') !== false) {
                     $dest_vec = array_map('trim', explode(',', $destinatarios));
-                }
-                else{
+                } else {
                     $dest_vec[0] = $destinatarios;
                 }
 
-                $has_director_mail=false;
+                //TODO dejar que sea con el 38, consultar que ocurre cuando entre en 2 sistemas de parte
+                $establishment = Establishment::find(38);
+                $mail_director = $establishment->mail_director;
+                if (strpos($mail_director, ',') !== false) {
+                    $mail_director_vec = array_map('trim', explode(',', $mail_director));
+                } else {
+                    $mail_director_vec[0] = $mail_director;
+                }
+
+
+
+
+                $has_director_mail = false;
                 foreach ($dest_vec as $dest) {
-                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl')
-                    {
-                        $has_director_mail=true;
+                    if (in_array($dest, $mail_director_vec)) {
+                        $has_director_mail = true;
+                        break;
                     }
                 }
 
                 // Entra en caso que tengo algun correo de dirección
-                if ($has_director_mail===true)
-                    {
-                        $generador = $signaturesFlow->signature->responsable->fullname;
-                        $unidad = $signaturesFlow->signature->organizationalUnit->name;
+                if ($has_director_mail === true) {
+                    $generador = $signaturesFlow->signature->responsable->fullname;
+                    $unidad = $signaturesFlow->signature->organizationalUnit->name;
 
-                        // switch ($signaturesFlow->signature->document_type) {
-                        //     case 'Memorando':
-                        //         $this->tipo = 'Memo';
-                        //         break;
-                        //     case 'Resoluciones':
-                        //         $this->tipo = 'Resolución';
-                        //         break;
-                        //     default:
-                        //         $this->tipo = $signaturesFlow->signature->document_type;
-                        //         break;
-                        // }
+                    // switch ($signaturesFlow->signature->document_type) {
+                    //     case 'Memorando':
+                    //         $this->tipo = 'Memo';
+                    //         break;
+                    //     case 'Resoluciones':
+                    //         $this->tipo = 'Resolución';
+                    //         break;
+                    //     default:
+                    //         $this->tipo = $signaturesFlow->signature->document_type;
+                    //         break;
+                    // }
 
-                        $parte = Parte::create([
-                            'entered_at' => Carbon::now(),
-                            'type_id' => $signaturesFlow->signature->type_id,
-                            'date' => $signaturesFlow->signature->request_date,
-                            'subject' => $signaturesFlow->signature->subject,
-                            //TODO: Coordinar VC con Torres y ver como se trata HAH
-                            //'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
-                            'establishment_id' => 38,
-                            'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
-                        ]);
+                    $parte = Parte::create([
+                        'entered_at' => Carbon::now(),
+                        'type_id' => $signaturesFlow->signature->type_id,
+                        'date' => $signaturesFlow->signature->request_date,
+                        'subject' => $signaturesFlow->signature->subject,
+                        //TODO: Coordinar VC con Torres y ver como se trata HAH
+                        //'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
+                        'establishment_id' => 38,
+                        'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
+                    ]);
 
-                        $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
-                                            ->where('file_type', 'documento')
-                                            ->get();
+                    $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                        ->where('file_type', 'documento')
+                        ->get();
 
+                    ParteFile::create([
+                        'parte_id' => $parte->id,
+                        'file' => $distribucion->first()->file,
+                        'name' => $distribucion->first()->id . '.pdf',
+                        'signature_file_id' => $distribucion->first()->id,
+                    ]);
+
+                    $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                        ->where('file_type', 'anexo')
+                        ->get();
+
+                    foreach ($signaturesFiles as $key => $sf) {
                         ParteFile::create([
                             'parte_id' => $parte->id,
-                            'file' => $distribucion->first()->file,
-                            'name' => $distribucion->first()->id . '.pdf',
-                            'signature_file_id' => $distribucion->first()->id,
+                            'file' => $sf->file,
+                            'name' => $sf->id . '.pdf',
+                            //'signature_file_id' => $sf->id,
                         ]);
-
-                        $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
-                                                ->where('file_type', 'anexo')
-                                                ->get();
-
-                        foreach ($signaturesFiles as $key => $sf) {
-                            ParteFile::create([
-                                'parte_id' => $parte->id,
-                                'file' => $sf->file,
-                                'name' => $sf->id . '.pdf',
-                                //'signature_file_id' => $sf->id,
-                            ]);
-                        }
                     }
-
+                }
             }
 
             // Si es visación en cadena, se envía notificación por correo al siguiente firmante
@@ -281,7 +311,7 @@ class DigitalSignatureController extends Controller
                     if ($nextSignaturesFlowVisation) {
                         Mail::to($nextSignaturesFlowVisation->userSigner->email)
                             ->send(new NewSignatureRequest($signaturesFlow));
-                    }elseif($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null){
+                    } elseif ($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null) {
                         Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
                             ->send(new NewSignatureRequest($signaturesFlow));
                     }
@@ -289,7 +319,6 @@ class DigitalSignatureController extends Controller
             }
 
             $message .= "El documento {$signaturesFlow->signature->id} se ha firmado correctamente. <br>";
-
         }
 
         session()->flash('info', $message);
@@ -314,11 +343,22 @@ class DigitalSignatureController extends Controller
      * @param int|null $positionVisatorType
      * @return array
      */
-    public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
-                               int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                               bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null,
-                               string $visatorType = null, int $positionVisatorType = null): array
-    {
+    public function signPdfApi(
+        string $pdfbase64,
+        string $checksum_pdf,
+        $modo,
+        string $otp,
+        string $signatureType,
+        int $docId,
+        string $verificationCode,
+        int $ct_firmas_visator = null,
+        int $posicion_firma = null,
+        bool $visatorAsSignature = null,
+        int $custom_x_axis = null,
+        int $custom_y_axis = null,
+        string $visatorType = null,
+        int $positionVisatorType = null
+    ): array {
         /* Confección del cuadro imagen de la firma */
         $font_light = public_path('fonts/verdana-italic.ttf');
         $font_bold = public_path('fonts/verdana-bold-2.ttf');
@@ -339,27 +379,83 @@ class DigitalSignatureController extends Controller
             imagefilledrectangle($im, 1, 1, 398, 82, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
 
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-                $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
-                $text_color, $font_bold, $fullName);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 0.3,
-                $text_color, $font_regular, env('APP_SS'));
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
-                $text_color, $font_regular, 'Verificar autenticidad https://i.saludiquique.cl/validador');
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
-                $text_color, $font_regular,  ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : ''));
-            imagettftext($im, $fontSize, 0, 235, $yPading * 5 + $marginTop + 0.5,
-                $text_color, $font_regular,  ($signatureType === 'firmante' ? $actualDate : ''));
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 1 + $marginTop,
+                $text_color,
+                $font_light,
+                "Firmado digitalmente de acuerdo con la ley Nº 19.799"
+            );
+            imagettftext(
+                $im,
+                $fontSize + 1,
+                0,
+                $xAxis,
+                $yPading * 2 + $marginTop + 0.2,
+                $text_color,
+                $font_bold,
+                $fullName
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 3 + $marginTop + 0.3,
+                $text_color,
+                $font_regular,
+                env('APP_SS')
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 4 + $marginTop + 0.4,
+                $text_color,
+                $font_regular,
+                'Verificar autenticidad https://i.saludiquique.cl/validador'
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 5 + $marginTop + 0.5,
+                $text_color,
+                $font_regular,
+                ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : '')
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                235,
+                $yPading * 5 + $marginTop + 0.5,
+                $text_color,
+                $font_regular,
+                ($signatureType === 'firmante' ? $actualDate : '')
+            );
         } else {
 
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
-//            $background_color = imagecolorallocate($im, 204, 204, 204);
+            //            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 0, 0, 400, 40, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-                $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 1 + $marginTop,
+                $text_color,
+                $font_light,
+                Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials)
+            );
         }
 
 
@@ -380,7 +476,6 @@ class DigitalSignatureController extends Controller
             $run = 22222222;  // $run = 22222222;
             $purpose = 'Desatendido'; // $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
-
         } elseif ($modo == self::MODO_ATENDIDO_TEST) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
@@ -406,7 +501,7 @@ class DigitalSignatureController extends Controller
             $run = Auth::id();
             $purpose = 'Desatendido';
             $entity = 'Servicio de Salud Iquique';
-        }else {
+        } else {
             session()->flash('warning', 'Modo de firma no seleccionado');
             return redirect()->route('documents.signatures.index', ['pendientes']);
         }
@@ -433,17 +528,17 @@ class DigitalSignatureController extends Controller
                 $alto = 26;
             }
 
-            if($visatorType === 'elaborador'){
+            if ($visatorType === 'elaborador') {
                 $page = '1';
                 $coordenada_x = 65;
                 $posicion_firma = $positionVisatorType;
                 $coordenada_y = -10 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
-            }elseif($visatorType === 'revisador'){
+            } elseif ($visatorType === 'revisador') {
                 $page = '1';
                 $coordenada_x = 330;
                 $posicion_firma = $positionVisatorType;
                 $coordenada_y = -10 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
-            }else{
+            } else {
                 $coordenada_x = 65;
                 $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             }
@@ -455,7 +550,7 @@ class DigitalSignatureController extends Controller
             $ancho = 170 * 1.4;
             $alto = 55;
 
-            if($visatorType === 'aprobador'){
+            if ($visatorType === 'aprobador') {
                 $page = '1';
                 $coordenada_x = 330;
                 $coordenada_y = 83;
@@ -492,7 +587,7 @@ class DigitalSignatureController extends Controller
             ]
         ];
 
-//        dd(json_encode($data, JSON_PRETTY_PRINT));
+        //        dd(json_encode($data, JSON_PRETTY_PRINT));
 
         // <llx> Coordenada x de la esquina inferior izquierda de la imagen.
         // <lly> Coordenada y de la esquina inferior izquierda de la imagen.
@@ -511,10 +606,11 @@ class DigitalSignatureController extends Controller
         }
         $json = $response->json();
 
-//        dd($json);
+        //        dd($json);
 
         if (array_key_exists('error', $json)) {
-            return ['statusOk' => false,
+            return [
+                'statusOk' => false,
                 'content' => '',
                 'errorMsg' => $json['error'],
             ];
@@ -522,35 +618,38 @@ class DigitalSignatureController extends Controller
 
         if (!array_key_exists('content', $json['files'][0])) {
             if (array_key_exists('error', $json)) {
-                return ['statusOk' => false,
+                return [
+                    'statusOk' => false,
                     'content' => '',
                     'errorMsg' => $json['error'],
                 ];
             } else {
-                return ['statusOk' => false,
+                return [
+                    'statusOk' => false,
                     'content' => '',
                     'errorMsg' => $json['files'][0]['status'],
                 ];
             }
-
         }
 
         //TEST
-//        header('Content-Type: application/pdf');
-//        echo base64_decode($json['files'][0]['content']);
-//        die();
+        //        header('Content-Type: application/pdf');
+        //        echo base64_decode($json['files'][0]['content']);
+        //        die();
 
-        return ['statusOk' => true,
+        return [
+            'statusOk' => true,
             'content' => $json['files'][0]['content'],
             'errorMsg' => '',
         ];
     }
 
-    public function test($otp) {
+    public function test($otp)
+    {
         $pdf            = 'samples/protocolo_small.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
-//        $signatureType  = 'firmante';
+        //        $signatureType  = 'firmante';
         $signatureType  = 'visador';
         $docId          = 55555;
         $verificationCode = 'asaasf';
@@ -582,26 +681,82 @@ class DigitalSignatureController extends Controller
             imagefilledrectangle($im, 1, 1, 398, 82, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
 
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-                $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-            imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 0.2,
-                $text_color, $font_bold, $fullName);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 0.3,
-                $text_color, $font_regular, env('APP_SS'));
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 0.4,
-                $text_color, $font_regular, 'Verificar autenticidad https://i.saludiquique.cl/validador');
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 0.5,
-                $text_color, $font_regular,  ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : ''));
-            imagettftext($im, $fontSize, 0, 235, $yPading * 5 + $marginTop + 0.5,
-                $text_color, $font_regular,  ($signatureType === 'firmante' ? $actualDate : ''));
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 1 + $marginTop,
+                $text_color,
+                $font_light,
+                "Firmado digitalmente de acuerdo con la ley Nº 19.799"
+            );
+            imagettftext(
+                $im,
+                $fontSize + 1,
+                0,
+                $xAxis,
+                $yPading * 2 + $marginTop + 0.2,
+                $text_color,
+                $font_bold,
+                $fullName
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 3 + $marginTop + 0.3,
+                $text_color,
+                $font_regular,
+                env('APP_SS')
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 4 + $marginTop + 0.4,
+                $text_color,
+                $font_regular,
+                'Verificar autenticidad https://i.saludiquique.cl/validador'
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 5 + $marginTop + 0.5,
+                $text_color,
+                $font_regular,
+                ($signatureType === 'firmante' ? "ID: $docId - Código: $verificationCode" : '')
+            );
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                235,
+                $yPading * 5 + $marginTop + 0.5,
+                $text_color,
+                $font_regular,
+                ($signatureType === 'firmante' ? $actualDate : '')
+            );
         } else {
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
-//            $background_color = imagecolorallocate($im, 204, 204, 204);
+            //            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 0, 0, 400, 40, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
-            imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-                $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
+            imagettftext(
+                $im,
+                $fontSize,
+                0,
+                $xAxis,
+                $yPading * 1 + $marginTop,
+                $text_color,
+                $font_light,
+                Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials)
+            );
         }
 
         // $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
@@ -647,17 +802,17 @@ class DigitalSignatureController extends Controller
                 $alto = 26;
             }
 
-            if($visatorType === 'elaborador'){
+            if ($visatorType === 'elaborador') {
                 $page = '1';
                 $coordenada_x = 65;
                 $alto = 280;
                 $posicion_firma = $positionVisatorType;
-            }elseif($visatorType === 'revisador'){
+            } elseif ($visatorType === 'revisador') {
                 $page = '1';
                 $coordenada_x = 330;
                 $alto = 280;
                 $posicion_firma = $positionVisatorType;
-            }else{
+            } else {
                 $coordenada_x = 65;
             }
 
@@ -669,7 +824,7 @@ class DigitalSignatureController extends Controller
             $ancho = 170 * 1.4;
             $alto = 55;
 
-            if($visatorType === 'aprobador'){
+            if ($visatorType === 'aprobador') {
                 $page = '1';
                 $coordenada_x = 330;
                 $coordenada_y = 83;
@@ -718,11 +873,12 @@ class DigitalSignatureController extends Controller
         // $response = Http::post($url, $data);
         $json = $response->json();
         //dd($json);
-//        $json['files'][0]['content'];
+        //        $json['files'][0]['content'];
 
 
         if (array_key_exists('error', $json)) {
-            return ['statusOk' => false,
+            return [
+                'statusOk' => false,
                 'content' => '',
                 'errorMsg' => $json['error'],
             ];
@@ -730,24 +886,23 @@ class DigitalSignatureController extends Controller
 
         if (!array_key_exists('content', $json['files'][0])) {
             if (array_key_exists('error', $json)) {
-                return ['statusOk' => false,
+                return [
+                    'statusOk' => false,
                     'content' => '',
                     'errorMsg' => $json['error'],
                 ];
             } else {
-                return ['statusOk' => false,
+                return [
+                    'statusOk' => false,
                     'content' => '',
                     'errorMsg' => $json['files'][0]['status'],
                 ];
             }
-
         }
 
         header('Content-Type: application/pdf');
         echo base64_decode($json['files'][0]['content']);
 
         die();
-
     }
-
 }
