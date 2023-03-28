@@ -37,12 +37,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        Task::create($request->all());
         $activity = Value::with('tasks')->findOrFail($request->activity_id);
         if($activity->tasks && $activity->tasks->count() >= $activity->value){
-            session()->flash('danger', 'No ha sido posible registrar tarea para la actividad programada.');
-            return redirect()->back();
+            $activity->update(['value' => $activity->tasks->count()]);
         }
-        Task::create($request->all());
         session()->flash('success', 'Se ha creado una nueva tarea para la actividad programada.');
         return redirect()->back();
     }
@@ -92,8 +91,12 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        /* TODO: verificar que la tarea no tenga fechas reprogramadas antes de eliminarlo */
-        Task::destroy($id);
+        $task = Task::findOrFail($id);
+        $task->delete();
+        $activity = Value::with('tasks')->findOrFail($task->activity_id);
+        if($activity->tasks && $activity->tasks->count()+1 >= $activity->value){
+            $activity->update(['value' => $activity->tasks->count()]);
+        }
         session()->flash('success', 'Se ha eliminado correctamente la tarea para la actividad programada.');
         return redirect()->back();
     }

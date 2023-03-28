@@ -72,7 +72,9 @@ class TaskReschedulingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        TaskRescheduling::findOrFail($id)->update($request->all());
+        session()->flash('success', 'Se ha editado correctamente la reprogramación de la tarea.');
+        return redirect()->back();
     }
 
     /**
