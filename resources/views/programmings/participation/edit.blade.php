@@ -30,43 +30,41 @@
 
 </form>
 <hr>
-<h3 class="mb-3">Tareas asociadas a la actividad @if($value->tasks->count() < $value->value) <button type="button" class="btn btn-info mb-4 float-right btn-sm" data-toggle="modal" data-target="#exampleModal">Agregar tarea</a>@endif</h3>
-@if($value->tasks->count() < $value->value)
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Crear tarea</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" class="form-horizontal" action="{{ route('participation.tasks.store') }}">
-                    <div class="modal-body">
-                        @csrf
-                        <input type="hidden" name="activity_id" value="{{$value->id}}">
-                        <div class="form-row">
-                            <fieldset class="form-group col-sm-9">
-                                <label for="for_name">Nombre de la tarea</label>
-                                <input type="text" class="form-control" id="for_name" name="name" required>
-                            </fieldset>
-
-                            <fieldset class="form-group col-sm">
-                                <label for="for_date">Fecha ejecución</label>
-                                <input type="date" class="form-control" id="for_date" name="date" required>
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
+<h3 class="mb-3">Tareas asociadas a la actividad <button type="button" class="btn btn-info mb-4 float-right btn-sm" data-toggle="modal" data-target="#exampleModal">Agregar tarea</a></h3>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Crear tarea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <form method="POST" class="form-horizontal" action="{{ route('participation.tasks.store') }}">
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="activity_id" value="{{$value->id}}">
+                    <div class="form-row">
+                        <fieldset class="form-group col-sm-9">
+                            <label for="for_name">Nombre de la tarea</label>
+                            <input type="text" class="form-control" id="for_name" name="name" required>
+                        </fieldset>
+
+                        <fieldset class="form-group col-sm">
+                            <label for="for_date">Fecha ejecución</label>
+                            <input type="date" class="form-control" id="for_date" name="date" required>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
-@endif
+</div>
 
 <table id="tasks-table" class="table table-sm table-hover">
     <thead>

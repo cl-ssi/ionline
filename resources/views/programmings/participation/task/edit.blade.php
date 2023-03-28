@@ -84,7 +84,9 @@
             <td class="text-center">{{$rescheduling->date->format('d-m-Y')}}</td>
             {{--@if($programming->status == 'active')--}}
             <td class="text-right">
-                <a href="{{ route('participation.tasks.rescheduling.edit', $rescheduling) }}" class="btn btb-flat btn-xs  btn-light bt-sm">
+                <a class="btn btb-flat btn-xs btn-light btn-sm" data-toggle="modal" data-target="#updateModal"
+                data-formaction="{{ route('participation.tasks.rescheduling.update', $rescheduling)}}"
+                data-reason="{{ $rescheduling->reason }}" data-date="{{ $rescheduling->date->format('Y-m-d') }}">
                     <i class="fas fa-edit"></i></a>
                 <form method="POST" action="{{ route('participation.tasks.rescheduling.destroy', $rescheduling) }}" class="d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
@@ -101,4 +103,51 @@
     </tbody>
 </table>
 
-    @endsection
+<!-- modal edit -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar reprogramación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form method="post" id="form-edit" enctype="multipart/form-data" >
+                <div class="modal-body">
+                    {{ method_field('PUT') }} {{ csrf_field() }}
+
+                    <div class="form-row">
+                        <fieldset class="form-group col-sm-9">
+                            <label for="for_reason">Motivo</label>
+                            <input type="text" class="form-control" id="for_reason" name="reason" required>
+                        </fieldset>
+
+                        <fieldset class="form-group col-sm">
+                            <label for="for_date">Fecha reprogramación</label>
+                            <input type="date" class="form-control" id="for_date" name="date" required>
+                        </fieldset>
+                    </div>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('custom_js')
+<script type="text/javascript">
+    $('#updateModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+        modal.find('input[name="reason"]').val(button.data('reason'))
+        modal.find('input[name="date"]').val(button.data('date'))
+        var formaction  = button.data('formaction')
+        modal.find("#form-edit").attr('action', formaction)
+    })
+</script>
+@endsection
