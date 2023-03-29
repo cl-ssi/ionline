@@ -61,7 +61,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col">
-            <label for="forSubject">Materia*</label>
+            <label for="forSubject">Materia</label>
             <input type="text" class="form-control" id="forSubject"
                 value="{{ $document->subject }}" name="subject" maxlength="255"
                 placeholder="Descripción del contenido del documento" required>
@@ -157,12 +157,26 @@
 @section('custom_js')
 
 <script type="text/javascript">
-var typeVal = $('#formType').val();
-    if(typeVal == "Resolución") {
-        $("#forFrom").removeAttr( "required" );
-        $("#forFor").removeAttr( "required" );
-        $("#collapse").hide(); 
+    var typeVal = $('#for_type_id').val();
+
+    if(typeVal == "5") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
     }
+
+    if (typeVal == "7") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+
+    if (typeVal == "8") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+
 $('#formType').change(
     function() {
         if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){

@@ -57,6 +57,10 @@
             font-size: 0.9rem;
         }
 
+        .catorce {
+            font-size: 1.4rem;
+        }
+
         .center {
             text-align: center;
         }
@@ -71,6 +75,10 @@
 
         .justify {
             text-align: justify;
+        }
+
+        .negrita {
+            font-weight: bold;
         }
 
         br {
@@ -94,7 +102,7 @@
             <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
             @endif
             <div class="siete" style="padding-bottom: 4px;">
-                {{ env('APP_SS') }}<br>
+                {{ $document->user->organizationalUnit->establishment->name }}<br>
                 {{ $document->user->organizationalUnit->name }}
             </div>
             <div class="left seis" style="padding-bottom: 6px; color: #999">ID: {{ $document->id }}
@@ -104,10 +112,11 @@
             </div>
         </div>
 
-        <div class="right" style="float: right; width: 340px; padding-top: 76px;">
-            <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;">
-                <strong style="text-transform: uppercase;">{{ optional($document->type)->name }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
-                <div style="padding-top:26px">Iquique.</div>
+        <div class="right" style="float: right; width: 340px; padding-top: 90px;">
+            <div class="left" style="padding-bottom: 26px; font-size: 15px; padding-left: 60px;">
+                <strong style="text-transform: uppercase; padding-right: 30px;">{{ optional($document->type)->name }} N°:</strong>
+                <span class="catorce negrita">{{ $document->number }}</span><br>
+                <div style="padding-top:6px">Iquique, {{ $document->date->day }} de {{ $document->date->monthName }} del {{ $document->date->year }}</div>
             </div>
         </div>
 
@@ -115,17 +124,6 @@
         <div>
             {!! $document->contentHtml !!}
         </div>
-
-        <div style="padding-top: 20px">
-            {{--
-            <div class="firma center" style="padding-top: 68px; text-transform: uppercase; padding-bottom: 8px;">
-                <div style="padding-bottom: 4px;">___________________________________</div>
-                <div style="padding-bottom: 4px;">{!! $document->fromHtmlSign !!}</div>
-                <div>{{ env('APP_SS') }}
-        </div>
-    </div>
-    --}}
-    </div>
 
 
     @if($document->distributionHtml != null)
@@ -145,9 +143,6 @@
             @foreach($document->responsiblesArray as $responsable)
             <tr>
                 <td class="seis">{{ $responsable }}</td>
-                {{--
-                        <td class="center"> _ _ _ </td><td>_______</td>
-                        --}}
             </tr>
             @endforeach
         </table>
@@ -156,8 +151,9 @@
 
 
     <div class="pie_pagina center seis">
-        <!--{{ env('APP_SS') }}<br-->
-        {{ env('APP_SS_ADDRESS') }} - Fono: {{ env('APP_SS_TELEPHONE') }} - {{ env('APP_SS_WEBSITE') }}
+        {{ $document->user->organizationalUnit->establishment->address }} - 
+        Fono: {{ $document->user->organizationalUnit->establishment->telephone }} - 
+        {{ env('APP_SS_WEBSITE') }}
     </div>
     </div>
 
