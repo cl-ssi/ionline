@@ -160,6 +160,13 @@
                 $("#forNumber").prop('disabled', true);
                 $("#forNumber").val(null);
             }
+            if ("5" === this.value) { // Resolucion
+                $("#forFrom").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#forFor").removeAttr("required");
+                $("#forSubject").removeAttr("required");
+                $("#collapse").hide();
+            }
             if ("6" === this.value) {
                 $("#forNumber").prop('disabled', true);
                 $("#forNumber").val(null);
@@ -185,7 +192,6 @@
                 $("#forFor").removeAttr("required");
                 $("#forNumber").prop('disabled', true);
                 $("#collapse").hide();
-                $("#forSubject").val('Exenta');
             }
         }
     );
