@@ -1199,6 +1199,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
+    Route::get('pdf',[DocumentController::class,'pdf']);
 
     Route::get('lobby',MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}',MeetingShow::class)->name('lobby.show');

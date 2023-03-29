@@ -304,4 +304,15 @@ class DocumentController extends Controller
         //            echo base64_decode($document->fileToSign->signed_file);
         //        }
     }
+
+    public function pdf() 
+    {
+        $pdf = \PDF::loadView('documents.templates.pdf', [
+            'title' => 'CodeAndDeploy.com Laravel Pdf with Image Example',
+            'description' => 'This is an example Laravel pdf with Image tutorial.',
+            'footer' => 'by <a href="https://codeanddeploy.com">codeanddeploy.com</a>'
+        ]);
+
+        return $pdf->download('sample-with-image.pdf');
+    }
 }
