@@ -11,7 +11,7 @@
 
         <fieldset class="form-group col">
             <label for="for_product">Producto</label>
-            <select id="for_product" class="form-control" name="product_id" onchange="jsCambiaSelect(this)">
+            <select id="for_product" class="form-control selectpicker" data-live-search="true" name="product_id" onchange="jsCambiaSelect(this)">
                 <option></option>
               @foreach ($products as $key => $product)
                 <option value="{{$product->id}}">{{$product->name}}</option>
