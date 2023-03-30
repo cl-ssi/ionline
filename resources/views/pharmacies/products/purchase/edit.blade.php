@@ -60,7 +60,6 @@
     </fieldset>
     <fieldset class="form-group col-4">
         <label for="for_text">Fecha vencimiento factura</label>
-        {{$purchase->invoice_date}}
         @if ($purchase->invoice_date <> NULL)
           <input type="date" class="form-control" id="for_date" name="invoice_date" value="{{$purchase->invoice_date->format('Y-m-d')}}">
         @else
