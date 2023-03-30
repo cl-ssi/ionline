@@ -160,6 +160,8 @@ use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
+use App\Http\Controllers\Programmings\TaskController;
+use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
 
@@ -696,6 +698,10 @@ Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
 
 Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
+    Route::resource('tasks', TaskController::class)->except(['index']);
+    Route::prefix('tasks')->name('tasks.')->group(function () {
+        Route::resource('rescheduling', TaskReschedulingController::class);
+    });
     Route::get('/{programming}', [ParticipationController::class,'show'])->name('show');
     Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class,'create'])->name('create');
     Route::post('/{programming}', [ParticipationController::class,'store'])->name('store');
