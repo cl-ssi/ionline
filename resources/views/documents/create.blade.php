@@ -84,7 +84,7 @@
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="18" name="content">{!! $document->content !!}</textarea>
+        <textarea class="form-control" id="contenido" rows="30" name="content">{!! $document->content !!}</textarea>
     </div>
 
     <div class="form-row">
