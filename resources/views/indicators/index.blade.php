@@ -15,6 +15,9 @@
 <!-- <div class="alert alert-warning" role="alert">
     Indicadores "<strong>En Revisión</strong>", pendientes de verificación por parte de referentes.
 </div> -->
+<div class="alert alert-warning" role="alert">
+    Se publica datos REM serie A de meses de Enero y Febrero 2023, ésta contiene datos preliminares con información enviada por los establecimientos, previo al nuevo cambio de serie con la cual deberán tributar a partir del mes de Abril.
+</div>
 
 <div class="row">
 
