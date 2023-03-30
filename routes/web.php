@@ -1891,6 +1891,10 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         });
     });
 
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
+        Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
+    });
+
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
     Route::get('/create_view_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
@@ -1929,33 +1933,6 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
 
     Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
-
-    //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
-    //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
-    Route::get('/saludo/{name}/{nickname?}', function ($name, $nickname = null) {
-      if ($nickname) {
-          return "Bienvenido {$name}, tu apodo es {$nickname}";
-        } else {
-            return "Bienvenido {$name}, no tienes apodo";
-          }
-    });
-
-    Route::get('/tesseract', function() {
-        return File::get(public_path() . '\tesseract.html');
-    });
-
-    //return File::get(public_path() . '/to new folder name/index.html');
-
-    //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
-    //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
-
-
-    // Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
-    //     Route::get('/', [PassengerController::class, 'index'])->name('index');
-    //     Route::get('/create', [PassengerController::class, 'create'])->name('create');
-    //     //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
-    //     //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-    // });
 });
 
 Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {

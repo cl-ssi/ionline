@@ -358,6 +358,59 @@
         </div>
         {{ $request_forms->appends(request()->query())->links() }}
     @endif
+    <!--  REPORTE: FORM-ITEMS -->
+    @if($request_forms->count() > 0 && $inbox == 'report: form-items')
+        <div class="row">
+            <div class="col">
+                <p class="font-weight-lighter">Total de Registros: <b>{{ $request_forms->total() }}</b></p>
+            </div>
+            <div class="col">
+                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped table-hover small">
+                <thead>
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th>Estado Fomulario</th>
+                        <th>Folio</th>
+                        <th>Depende de Folio</th>
+                        <th>Fecha Creación</th>
+                        <th>Tipo / Mecanismo de Compra</th>
+                        <th>Descripción</th>
+                        <th>Programa</th>
+                        <th>Comprador</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($request_forms as $requestForm)
+                    <tr>
+                        <td nowrap>{{ $requestForm->id }}</td>
+                        <td nowrap>{{ $requestForm->getStatus() }}</td>
+                        <td nowrap>{{ $requestForm->folio }}</td>
+                        <td nowrap>
+                            @if($requestForm->father)
+                                {{ $requestForm->father->folio }}
+                            @endif
+                        </td>
+                        <td nowrap>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                        <td nowrap>
+                            {{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }} / {{ $requestForm->SubtypeValue }}
+                        </td>
+                        <td nowrap>{{ $requestForm->name }}</td>
+                        <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
+                        <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                        <td></td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+        {{ $request_forms->appends(request()->query())->links() }}
+    @endif
 
     @if($request_forms->count() == 0)
         <div class="row">
