@@ -22,9 +22,11 @@
                 <span class="catorce negrita">{{ $document->number }}</span>
             </div>
 
+            @if($document->date)
             <div style="padding-top:5px; padding-left: 2px;">
                 Iquique, {{ $document->date->day }} de {{ $document->date->monthName }} del {{ $document->date->year }}
             </div>
+            @endif
 
         </div>
 
