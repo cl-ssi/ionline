@@ -41,6 +41,7 @@ class Establishment extends Model implements Auditable
         'street_type',
         'street_number',
         'address',
+        'url',
         'telephone',
         'emergency_service',
         'latitude',

@@ -1,0 +1,81 @@
+/* * Define the margins of your page * */
+/* @page {
+    margin: 100px 25px;
+} */
+
+body,
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    /*font-family: "Lucida Console", Monaco, monospace;*/
+    font-size: 0.8rem;
+}
+
+.content-block,
+p {
+    page-break-inside: avoid;
+}
+
+footer  {
+    position: fixed; 
+    bottom: -60px; 
+    left: 0px; 
+    right: 0px;
+    height: 50px; 
+
+    font-size: 0.6rem;
+    text-align: center;
+    clear: both;
+}
+
+.seis {
+    font-size: 0.6rem;
+}
+
+.siete {
+    font-size: 0.7rem;
+}
+
+.ocho {
+    font-size: 0.8rem;
+}
+
+.nueve {
+    font-size: 0.9rem;
+}
+
+.catorce {
+    font-size: 1.4rem;
+}
+
+.quince {
+    font-size: 15px;
+}
+
+.center {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.negrita {
+    font-weight: bold;
+}
+
+br {
+    display: block;
+    /* makes it have a width */
+    content: "";
+    /* clears default height */
+    margin-top: 4;
+    /* change this to whatever height you want it */
+}

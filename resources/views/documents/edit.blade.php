@@ -16,12 +16,6 @@
 <form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">
     @csrf
     @method('PUT')
-    <div class="form-row">
-        <div class="form-group col-3">
-            <label for="for_internal_number">Número Interno (Opcional)</label>
-            <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
-        </div>
-    </div>
 
     <div class="form-row">
         <div class="form-group col-2">
@@ -35,7 +29,7 @@
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type_id" id="for_type_id" class="form-control" required>
+            <select name="type_id" id="for_type_id" class="form-control" {{ isset($document->number) ? 'disabled':'' }}>
                 <option value=""></option>
                 @foreach($types as $id => $type)
                     <option value="{{ $id }}" {{ $document->type_id == $id ? 'selected' : '' }}>{{ $type }}</option>
@@ -117,6 +111,13 @@
             <label for="forResponsible">Responsables (separado por salto de línea)</label>
             <textarea class="form-control" id="forResponsible" rows="5"  placeholder="Cargo"
                 name="responsible">{{ $document->responsible }}</textarea>
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group col-3">
+            <label for="for_internal_number">Número Interno (Opcional)</label>
+            <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
         </div>
     </div>
 
