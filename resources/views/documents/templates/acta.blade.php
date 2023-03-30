@@ -30,7 +30,7 @@
 
         </div>
 
-        <div style="clear: both; padding-bottom: 36px"></div>
+        <div style="clear: both; padding-bottom: 46px"></div>
 
         <div>
             {!! $document->contentHtml !!}

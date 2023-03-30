@@ -160,19 +160,43 @@
 <script type="text/javascript">
     var typeVal = $('#for_type_id').val();
 
+    /* Circular */
+    if(typeVal == "4") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Resolución */
     if(typeVal == "5") {
         $("#forFrom").removeAttr("required");
         $("#forFor").removeAttr("required");
+        $("#forSubject").removeAttr("required");
         $("#collapse").hide();
     }
-
-    if (typeVal == "7") {
+    /* Convenio */
+    if(typeVal == "6") {
         $("#forFrom").removeAttr("required");
         $("#forFor").removeAttr("required");
         $("#collapse").hide();
     }
+    /* Ordinario */
+    if (typeVal == "7") {
 
+    }
+    /* Informe */
     if (typeVal == "8") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Protocolo */
+    if (typeVal == "9") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Acta */
+    if (typeVal == "10") {
         $("#forFrom").removeAttr("required");
         $("#forFor").removeAttr("required");
         $("#collapse").hide();
