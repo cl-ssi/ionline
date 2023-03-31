@@ -99,6 +99,9 @@ class SearchRequests extends Component
         ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
 
+        if($this->inbox == 'report: form-items'){
+            $query->with('itemRequestForms', 'eventRequestForms', 'associateProgram');
+        }
         return ($isPaginated) ? $query->paginate(50) : $query->get();
     }
 
@@ -106,6 +109,7 @@ class SearchRequests extends Component
     {   
         $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
         // dd($ouSearch);
+
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
             'users' => User::permission('Request Forms: purchaser')->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),
