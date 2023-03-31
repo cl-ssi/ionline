@@ -84,7 +84,7 @@
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="18" name="content">{!! $document->content !!}</textarea>
+        <textarea class="form-control" id="contenido" rows="30" name="content">{!! $document->content !!}</textarea>
     </div>
 
     <div class="form-row">
@@ -195,6 +195,8 @@
                 $("#forFrom").removeAttr("required");
                 $("#forFor").removeAttr("required");
                 $("#collapse").hide();
+                var contenido = '<h2 style="text-align: center; text-decoration: underline;">ACTA DE REUNI&Oacute;N</h2><p><strong>Datos de la reuni&oacute;n:</strong></p><table style="border-collapse: collapse; width: 100%;" border="1" cellpadding="5"><tbody><tr style="height: 25px;"><td><strong>Fecha:</strong></td><td style="width: 15%; text-align: center;">&nbsp;</td><td style="width: 15%; text-align: center;"><strong>Hora inicio:&nbsp;</strong></td><td style="width: 15%; text-align: center;">&nbsp;</td><td style="width: 15%; text-align: center;"><strong>Hora t&eacute;rmino:</strong></td><td style="width: 15%; text-align: center;">&nbsp;</td></tr><tr style="height: 25px;"><td><strong>Tipo</strong>:</td><td colspan="5">&nbsp;[<strong>&nbsp; &nbsp;</strong>] Ordinaria - [<strong>&nbsp; &nbsp;</strong>] Lobby con instituci&oacute;n :&nbsp;&nbsp;</td></tr><tr style="height: 25px;"><td><strong>Mecanismo:</strong></td><td colspan="5">&nbsp;[<strong>&nbsp; &nbsp;</strong>] Presencial&nbsp; - [<strong>&nbsp; &nbsp;</strong>] Video Conferencia&nbsp; - [<strong>&nbsp; &nbsp;</strong>] Otro:</td></tr></tbody></table><p><strong>Temas tratados:</strong></p><table style="width: 100%; border-collapse: collapse;" border="1"><tbody><tr><td><ol><li>&nbsp;</li></ol></td></tr></tbody></table><p><strong>Asistentes y expositores</strong></p><table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="5"><tbody><tr style="height: 25px;"><td><strong>Nombre completo</strong></td><td><strong>Cargo</strong></td><td><strong>Instituci&oacute;n</strong></td><td><strong>Expositor</strong></td></tr><tr style="height: 25px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="width: 8.5%; text-align: center;">[<strong>&nbsp; &nbsp;</strong>]</td></tr><tr style="height: 25px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="width: 8.5%; text-align: center;">[<strong>&nbsp; &nbsp;</strong>]</td></tr><tr style="height: 25px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="width: 8.5%; text-align: center;">[<strong>&nbsp; &nbsp;</strong>]</td></tr><tr style="height: 25px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td style="width: 8.5%; text-align: center;">[<strong>&nbsp; &nbsp;</strong>]</td></tr></tbody></table><p><strong>Acuerdos:</strong></p><table style="width: 100%; border-collapse: collapse;" border="1"><tbody><tr><td><ol><li>&nbsp;</li></ol></td></tr></tbody></table><p>&nbsp;</p>';
+                tinyMCE.activeEditor.setContent(contenido);
             }
             /* Acta de recepción */
             if ("11" === this.value) {

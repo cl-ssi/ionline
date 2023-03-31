@@ -11,21 +11,21 @@
       <i class="fas fa-file-alt"></i> Formularios
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-      <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.my_forms') }}"><i class="fas fa-fw fa-inbox"></i> Mis Formularios</a>
       @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value)
       @if(Auth::user()->hasPermissionTo('Request Forms: all') || Auth()->user()->organizational_unit_id == $ouSearch)
-      <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-inbox"></i> Todos los formularios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.all_forms') }}"><i class="fas fa-fw fa-inbox"></i> Todos los formularios</a>
       @endif
-      <a class="dropdown-item" href="{{ route('request_forms.pending_forms') }}"><i class="fas fa-inbox"></i>
+      <a class="dropdown-item" href="{{ route('request_forms.pending_forms') }}"><i class="fas fa-fw fa-inbox"></i>
         {{-- @if(App\Models\RequestForms\RequestForm::getPendingRequestToSign() > 0)
             <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
         @endif --}}
         Pendientes por firmar
       </a>
-      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_forms') }}"><i class="fas fa-inbox"></i> Admin. de contratos</a>
+      <a class="dropdown-item" href="{{ route('request_forms.contract_manager_forms') }}"><i class="fas fa-fw fa-inbox"></i> Admin. de contratos</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{{ route('request_forms.items.create') }}"><i class="fas fa-file-alt"></i> Bienes y/o Servicios</a>
-      <a class="dropdown-item" href="{{ route('request_forms.passengers.create') }}"><i class="fas fa-ticket-alt"></i> Pasajes Aéreos</a>
+      <a class="dropdown-item" href="{{ route('request_forms.items.create') }}"><i class="fas fa-fw fa-file-alt"></i> Bienes y/o Servicios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.passengers.create') }}"><i class="fas fa-fw fa-ticket-alt"></i> Pasajes Aéreos</a>
     </div>
   </li>
 
@@ -40,6 +40,17 @@
       </div>
     </li>
   @endif
+  
+  @can('Request Forms: reports')
+  <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-fw fa-chart-line"></i> Reportes
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{{ route('request_forms.reports.show_form_items') }}"><i class="fas fa-fw fa-list-ol"></i> Formularios - Items</a>
+      </div>
+  </li>
+  @endcan
 
   @php($ouSearch = App\Models\Parameters\Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH', 'AdquisicionesHAH', 'FinanzasSSI'])->pluck('value')->toArray())
 	@if(in_array(Auth()->user()->organizational_unit_id, $ouSearch) || Auth::user()->hasPermissionTo('Request Forms: config'))
