@@ -13,17 +13,17 @@
     <fieldset class="form-group col-2">
           <input type="radio" name="tipo" value="1" @if ($request->get('tipo') == 1 || $request->get('tipo') == NULL)
             checked="checked"
-          @endif onclick="show1()"> Compras
+          @endif > Compras
     </fieldset>
     <fieldset class="form-group col-2">
       <input type="radio" name="tipo" value="2" @if ($request->get('tipo') == 2)
             checked="checked"
-          @endif onclick="show2()"> Ingresos
+          @endif > Ingresos
     </fieldset>
     <fieldset class="form-group col-2">
       <input type="radio" name="tipo" value="3" @if ($request->get('tipo') == 3)
             checked="checked"
-          @endif  onclick="show2()"> Egresos
+          @endif > Egresos
     </fieldset>
   </div>
 
@@ -77,22 +77,69 @@
           </select>
     </div>
 
+    <!-- <div style="display: flex; justify-content: flex-end">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    </div><br> -->
     <div class="input-group mb-3">
-      <div class="input-group-prepend">
-          <span class="input-group-text">Notas</span>
-      </div>
-
-          <input type="text" class="form-control" id="for_notas" name="notes" {{ ($request->get('notes'))?'value='.$request->get('notes'):'' }}>
-          <div class="input-group-append">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-          </div>
+        <div class="input-group-prepend">
+            <span class="input-group-text">Producto</span>
+        </div>
+        <input type="text" class="form-control" id="for_product" name="product" {{ ($request->get('product'))?'value='.$request->get('product'):'' }}>
+        
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+        </div>
     </div>
 </form>
 
 <!-- compras -->
 @if ($request->get('tipo') == 1)
 
-  <div class="table-responsive">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+        onclick="tableToExcel('tabla_movimientos', 'Movimientos')">
+        <i class="fas fa-download"></i>
+    </button>
+    
+    <div class="table-responsive" id="table1">
+        <table class="table table-striped table-sm" id="tabla_movimientos">
+            <thead>
+                <tr>
+                    <th scope="col">FECHA</th>
+                    <th scope="col">PROVEEDOR</th>
+                    <th scope="col">FACTURA</th>
+                    <th scope="col">GUIA</th>
+                    <th scope="col">F.DOC</th>
+                    <th scope="col">DESTINO</th>
+                    <th scope="col">FONDOS</th>
+                    <th scope="col">PRECIO</th>
+                    <th scope="col">ACTA</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($dataCollection as $key => $data)
+                    <tr>
+                        <td>{{$data->date->format('d/m/Y')}}</td>
+                        <td>{{$data->supplier->name}}</td>
+                        <td>{{$data->invoice}}</td>
+                        <td>{{$data->despatch_guide}}</td>
+                        <td>{{$data->invoice_date}}</td>
+                        <td>{{$data->destination}}</td>
+                        <td>{{$data->from}}</td>
+                        <!--<td>{{$data->acceptance_certificate}}</td>-->
+                        <td>{{round($data->purchase_order_amount,2)}}</td>
+                        <td>
+                            <a href="{{ route('pharmacies.products.purchase.edit', $data) }}"
+                                class="btn btn-outline-secondary btn-sm">
+                                <span class="fas fa-edit" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive" id="table2" style="display: none">
   	<table class="table table-striped table-sm" id="tabla_movimientos">
   		<thead>
   			<tr>
@@ -104,31 +151,26 @@
                 <th scope="col">DESTINO</th>
                 <th scope="col">FONDOS</th>
                 <th scope="col">ACTA</th>
-                <th>
-                    <button type="button" class="btn btn-sm btn-outline-primary"
-                        onclick="tableToExcel('tabla_movimientos', 'Movimientos')">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </th>
   			</tr>
   		</thead>
   		<tbody>
   			@foreach($dataCollection as $key => $data)
-  					<tr>
-  		        <td>{{$data->date->format('d/m/Y')}}</td>
-  						<td>{{$data->supplier->name}}</td>
-              <td>{{$data->invoice}}</td>
-              <td>{{$data->despatch_guide}}</td>
-              <td>{{$data->invoice_date}}</td>
-              <td>{{$data->destination}}</td>
-              <td>{{$data->from}}</td>
-              <!--<td>{{$data->acceptance_certificate}}</td>-->
-              <td>
-                  <a href="{{ route('pharmacies.products.purchase.edit', $data) }}"
-                      class="btn btn-outline-secondary btn-sm">
-                  <span class="fas fa-edit" aria-hidden="true"></span></a>
-              </td>
-  					</tr>
+  				<tr>
+                    <td>{{$data->date->format('d/m/Y')}}</td>
+                    <td>{{$data->supplier->name}}</td>
+                    <td>{{$data->invoice}}</td>
+                    <td>{{$data->despatch_guide}}</td>
+                    <td>{{$data->invoice_date}}</td>
+                    <td>{{$data->destination}}</td>
+                    <td>{{$data->from}}</td>
+                    <!--<td>{{$data->acceptance_certificate}}</td>-->
+                    <td>
+                        <a href="{{ route('pharmacies.products.purchase.edit', $data) }}"
+                            class="btn btn-outline-secondary btn-sm">
+                            <span class="fas fa-edit" aria-hidden="true"></span>
+                        </a>
+                    </td>
+  				</tr>
   			@endforeach
   		</tbody>
   	</table>
@@ -191,37 +233,38 @@
 @endsection
 
 @section('custom_js')
-  <script>
-    window.onload = function() {
-      if (document.getElementsByName('tipo')[0].checked) {
-        show1();
-      }
-      else{
-        show2();
-      }
-    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    function show1(){
-      document.getElementById('establishment_id').disabled =true;
-      document.getElementById('program').disabled =true;
-      document.getElementById('supplier_id').disabled =false;
-    }
-    function show2(){
-      document.getElementById('establishment_id').disabled = false;
-      document.getElementById('program').disabled = false;
-      document.getElementById('supplier_id').disabled = true;
-    }
+<script>
 
-    var tableToExcel = (function() {
-        var uri = 'data:application/vnd.ms-excel;base64,'
-        , template = '<html </head><body><table>{table}</table></body></html>'
-        , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-        , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-        return function(table, name) {
-        if (!table.nodeType) table = document.getElementById(table)
-        var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-        window.location.href = uri + base64(format(template, ctx))
+$(document).ready(function() {
+    
+
+    $("input[name='tipo']").change(function(){
+        if($("input[name='tipo']:checked").val() == 1){
+            $('#table1').show();
+            $('#table2').hide();
+        }else{
+            $('#table1').hide();
+            $('#table2').show();
         }
-    })()
-  </script>
+    });
+
+
+    
+});
+
+
+var tableToExcel = (function() {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html </head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+    return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+    }
+})()
+</script>
 @endsection

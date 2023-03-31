@@ -103,7 +103,7 @@
 	</table>
 </div>
 
-
+{{ $purchases->appends(request()->query())->links() }}
 
 @endsection
 
