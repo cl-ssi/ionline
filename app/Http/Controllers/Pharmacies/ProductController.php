@@ -209,6 +209,7 @@ class ProductController extends Controller
                                                                     });
                                                     });
                                     })
+                                    ->with('supplier')
                                     ->get();
       }
       //ingresos
@@ -240,7 +241,7 @@ class ProductController extends Controller
                                                                 });
                                                 });
                                 })
-                                // ->paginate(15);
+                                ->with('establishment')
                                 ->get();
       }
       //egresos
@@ -273,6 +274,7 @@ class ProductController extends Controller
                                                                 });
                                                 });
                                 })
+                                ->with('establishment')
                                 ->get();
       }
 
@@ -290,7 +292,8 @@ class ProductController extends Controller
                                         })->when($product_id, function ($q, $product_id) {
                                            return $q->where('product_id', $product_id);
                                         })->select(DB::raw('max(id) as id'))
-                                          ->groupBy('product_id');
+                                          ->groupBy('product_id')->get();
+                                        //   dd($purchaseItems_aux);
       $purchaseItems= PurchaseItem::whereHas('purchase', function ($query) {
                                      return $query->where('pharmacy_id',session('pharmacy_id'));
                                   })->whereIn('id', $purchaseItems_aux)->paginate(15);
@@ -301,13 +304,18 @@ class ProductController extends Controller
     }
 
     public function repConsumeHistory(Request $request){
-      //dd($request->get('year'));
-      $matrix = Product::SearchConsumosHistoricos($request->get('year'),
-                                                  $request->get('category_id'),
-                                                  $request->get('establishment_id'));
+        //dd($request->get('year'));
+        
+        // // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
+        // set_time_limit(3600);
+        // ini_set('memory_limit', '1024M');
 
-      $categories = Category::orderBy('name','ASC')->get();
-      $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+        $matrix = Product::SearchConsumosHistoricos($request->get('year'),
+                                                    $request->get('category_id'),
+                                                    $request->get('establishment_id'));
+
+        $categories = Category::orderBy('name','ASC')->get();
+        $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
       return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix'));
     }

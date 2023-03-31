@@ -93,7 +93,7 @@
 </form>
 
 <!-- compras -->
-@if ($request->get('tipo') == 1)
+
 
     <button type="button" class="btn btn-sm btn-outline-primary"
         onclick="tableToExcel('tabla_movimientos', 'Movimientos')">
@@ -110,12 +110,13 @@
                     <th scope="col">GUIA</th>
                     <th scope="col">F.DOC</th>
                     <th scope="col">DESTINO</th>
-                    <th scope="col">FONDOS</th>
+                    <!-- <th scope="col">FONDOS</th> -->
                     <th scope="col">PRECIO</th>
                     <th scope="col">ACTA</th>
                 </tr>
             </thead>
             <tbody>
+                @if ($request->get('tipo') == 1)
                 @foreach($dataCollection as $key => $data)
                     <tr>
                         <td>{{$data->date->format('d/m/Y')}}</td>
@@ -124,7 +125,7 @@
                         <td>{{$data->despatch_guide}}</td>
                         <td>{{$data->invoice_date}}</td>
                         <td>{{$data->destination}}</td>
-                        <td>{{$data->from}}</td>
+                        <!-- <td>{{$data->from}}</td> -->
                         <!--<td>{{$data->acceptance_certificate}}</td>-->
                         <td>{{round($data->purchase_order_amount,2)}}</td>
                         <td>
@@ -135,100 +136,66 @@
                         </td>
                     </tr>
                 @endforeach
+                @endif
             </tbody>
         </table>
     </div>
 
-    <div class="table-responsive" id="table2" style="display: none">
-  	<table class="table table-striped table-sm" id="tabla_movimientos">
-  		<thead>
-  			<tr>
-  				<th scope="col">FECHA</th>
-  				<th scope="col">PROVEEDOR</th>
-  				<th scope="col">FACTURA</th>
-                <th scope="col">GUIA</th>
-                <th scope="col">F.DOC</th>
-                <th scope="col">DESTINO</th>
-                <th scope="col">FONDOS</th>
-                <th scope="col">ACTA</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			@foreach($dataCollection as $key => $data)
-  				<tr>
-                    <td>{{$data->date->format('d/m/Y')}}</td>
-                    <td>{{$data->supplier->name}}</td>
-                    <td>{{$data->invoice}}</td>
-                    <td>{{$data->despatch_guide}}</td>
-                    <td>{{$data->invoice_date}}</td>
-                    <td>{{$data->destination}}</td>
-                    <td>{{$data->from}}</td>
-                    <!--<td>{{$data->acceptance_certificate}}</td>-->
-                    <td>
-                        <a href="{{ route('pharmacies.products.purchase.edit', $data) }}"
-                            class="btn btn-outline-secondary btn-sm">
-                            <span class="fas fa-edit" aria-hidden="true"></span>
-                        </a>
-                    </td>
-  				</tr>
-  			@endforeach
-  		</tbody>
-  	</table>
-  </div>
 
-@endif
 
 <!-- ingresos -->
-@if ($request->get('tipo') == 2)
-  <div class="table-responsive">
-  	<table class="table table-striped table-sm" id="TableFilter">
-  		<thead>
-  			<tr>
-  				<th scope="col">FECHA</th>
-  				<th scope="col">ORIGEN</th>
-  				<th scope="col">NOTAS</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			@foreach($dataCollection as $key => $data)
-  					<tr>
-  		        <td>{{$data->date->format('d/m/Y')}}</td>
-  						<td>{{$data->establishment->name}}</td>
-              <td>{{$data->notes}}</td>
-  					</tr>
-  			@endforeach
-  		</tbody>
-  	</table>
-  </div>
 
-@endif
+    <div class="table-responsive" id="table2">
+        <table class="table table-striped table-sm" id="TableFilter">
+            <thead>
+                <tr>
+                    <th scope="col">FECHA</th>
+                    <th scope="col">ORIGEN</th>
+                    <th scope="col">NOTAS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ($request->get('tipo') == 2)
+                @foreach($dataCollection as $key => $data)
+                        <tr>
+                    <td>{{$data->date->format('d/m/Y')}}</td>
+                            <td>{{$data->establishment->name}}</td>
+                <td>{{$data->notes}}</td>
+                        </tr>
+                @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+
+
 
 <!-- egresos -->
-@if ($request->get('tipo') == 3)
+    <div class="table-responsive" id="table3">
+    <table class="table table-striped table-sm" id="TableFilter">
+        <thead>
+            <tr>
+                <th scope="col">FECHA</th>
+                <th scope="col">DESTINO</th>
+                <th scope="col">NOTAS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if ($request->get('tipo') == 3)
+            @foreach($dataCollection as $key => $data)
+                    <tr>
+                <td>{{$data->date->format('d/m/Y')}}</td>
+                        <td>{{$data->establishment->name}}</td>
+                <td>{{$data->notes}}</td>
+                {{-- <td>{{$data->dispatchItems->first()->product->program}}</td> --}}
+                    </tr>
+            @endforeach
+            @endif
+        </tbody>
+    </table>
+    </div>
 
-  <div class="table-responsive">
-  	<table class="table table-striped table-sm" id="TableFilter">
-  		<thead>
-  			<tr>
-  				<th scope="col">FECHA</th>
-  				<th scope="col">DESTINO</th>
-  				<th scope="col">NOTAS</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			@foreach($dataCollection as $key => $data)
-  					<tr>
-  		        <td>{{$data->date->format('d/m/Y')}}</td>
-  						<td>{{$data->establishment->name}}</td>
-              <td>{{$data->notes}}</td>
-              {{-- <td>{{$data->dispatchItems->first()->product->program}}</td> --}}
-  					</tr>
-  			@endforeach
-  		</tbody>
-  	</table>
-  </div>
 
-@endif
 
 @endsection
 
@@ -238,33 +205,42 @@
 <script>
 
 $(document).ready(function() {
-    
 
+    $('#table1').show();
+    $('#table2').hide();
+    $('#table3').hide();
+    
     $("input[name='tipo']").change(function(){
         if($("input[name='tipo']:checked").val() == 1){
             $('#table1').show();
             $('#table2').hide();
-        }else{
+            $('#table3').hide();
+        }else if($("input[name='tipo']:checked").val() == 2){
             $('#table1').hide();
             $('#table2').show();
+            $('#table3').hide();
+        }else{
+            $('#table1').hide();
+            $('#table2').hide();
+            $('#table3').show();
         }
     });
-
-
     
 });
 
 
-var tableToExcel = (function() {
-    var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html </head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-    return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-    window.location.href = uri + base64(format(template, ctx))
-    }
-})()
+	var tableToExcel = (function() {
+	    var uri = 'data:application/vnd.ms-excel;base64,'
+	    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
+	    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+	    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+	    return function(table, name) {
+	    if (!table.nodeType) table = document.getElementById(table)
+	    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+	    window.location.href = uri + base64(format(template, ctx))
+	    }
+	})()
+
+
 </script>
 @endsection
