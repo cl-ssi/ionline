@@ -18,6 +18,7 @@ use App\Notifications\ReplacementStaff\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationNewRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Parameters\Parameter;
+use App\Models\Parameters\BudgetItem;
 use App\Models\ReplacementStaff\Position;
 
 class RequestReplacementStaffController extends Controller
@@ -34,29 +35,6 @@ class RequestReplacementStaffController extends Controller
 
     public function assign_index()
     {
-        // $pending_requests = RequestReplacementStaff::latest()
-        //     ->WhereHas('technicalEvaluation', function($q) {
-        //       $q->Where('technical_evaluation_status', 'pending');
-        //     })
-        //     ->WhereHas('assignEvaluations', function($j) {
-        //       $j->Where('to_user_id', Auth::user()->id)
-        //        ->where('status', 'assigned');
-        //     })
-        //     ->get();
-
-        // $requests = RequestReplacementStaff::latest()
-        //     ->WhereHas('technicalEvaluation', function($q) {
-        //       $q->Where('technical_evaluation_status', 'complete')
-        //       ->OrWhere('technical_evaluation_status', 'rejected');
-        //     })
-        //     ->WhereHas('assignEvaluations', function($j) {
-        //       $j->Where('to_user_id', Auth::user()->id)
-        //        ->where('status', 'assigned');
-        //     })
-        //     ->paginate(10);
-
-        // return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
-
         return view('replacement_staff.request.assign_index');
     }
 
@@ -95,6 +73,13 @@ class RequestReplacementStaffController extends Controller
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
 
+        /* Listado de items presupuestarios */
+        $budgetItemsReplacement = BudgetItem::whereIn('code', ['210300500102', '210300500101'])->get();
+
+        $budgetItemsAnnoucement = BudgetItem::whereIn('code', ['210100100102','210100100103', '210200100102', 
+            '210200100103'])->get();
+        
+
         if($authorities->isNotEmpty()){
             $pending_requests_to_sign = RequestReplacementStaff::
                 with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
@@ -116,7 +101,8 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
         }
         else{
             if(Auth::user()->organizationalUnit->id == 46)
@@ -142,8 +128,11 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
         }
+
+
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
         return redirect()->route('replacement_staff.request.own_index');

@@ -88,6 +88,11 @@ class RequestSignController extends Controller
             $requestSign->date_sign = Carbon::now();
             $requestSign->save();
 
+            if($request->has('budget_item_id')){
+                $requestReplacementStaff->budget_item_id = $request->budget_item_id;
+                $requestReplacementStaff->save();
+            }
+
             $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1);
             
             if(!$nextRequestSign->isEmpty()){

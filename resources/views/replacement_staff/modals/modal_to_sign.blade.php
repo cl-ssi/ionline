@@ -114,6 +114,15 @@
                                         @endif
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th class="table-active">Ítem Presupuestario</th>
+                                    <td colspan="2">
+                                    @if($requestReplacementStaff->budgetItem)
+                                        {{ $requestReplacementStaff->budgetItem->code }} <br>
+                                        {{ $requestReplacementStaff->budgetItem->name }}
+                                    @endif
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -232,19 +241,60 @@
                                             @if($requestSign->request_status == 'pending' && in_array($requestSign->organizational_unit_id, $iam_authorities_in))
                                                 Estado: {{ $requestSign->StatusValue }} <br><br>
                                                 <div class="row">
-                                                    <div class="col-sm">
+                                                    <div class="col-md-12">
                                                         <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
                                                             @csrf
                                                             @method('PUT')
-                                                            <button type="submit" class="btn btn-success btn-sm"
+                                                            
+                                                            @if($requestSign->ou_alias == 'uni_per' && Auth::user()->hasRole('Replacement Staff: personal sign'))
+                                                                <fieldset class="form-group">
+                                                                    <label for="for_gender" >Subtítulo</label>
+                                                                    <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
+                                                                        <option value="">Seleccione...</option>
+                                                                        @if($requestReplacementStaff->form_type == 'replacement')
+                                                                            @foreach($budgetItemsReplacement as $budgetItem)
+                                                                                <option value="{{ $budgetItem->id }}">
+                                                                                    {{ $budgetItem->code }} -
+                                                                                    @if($budgetItem->code == '210300500102')
+                                                                                        Reemplazos del personal no médico
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210300500101')
+                                                                                        Reemplazos del personal médico
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endforeach
+                                                                        @else
+                                                                            @foreach($budgetItemsAnnoucement as $budgetItem)
+                                                                                <option value="{{ $budgetItem->id }}">
+                                                                                    {{ $budgetItem->code }} -
+                                                                                    @if($budgetItem->code == '210100100102')
+                                                                                        Personal de Planta Ley 18.834
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210100100103')
+                                                                                        Personal de Planta Ley 19.664
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210200100102')
+                                                                                        Personal a Contrata Ley 18.834
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210200100103')
+                                                                                        Personal a Contrata Ley 19.664
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </select>
+                                                                </fieldset>
+                                                            @endif
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                    <p>
+                                                        <button type="submit" class="btn btn-success btn-sm"
                                                                 onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                                                 title="Aceptar">
                                                                 <i class="fas fa-check-circle"></i></a>
                                                             </button>
                                                         </form>
-                                                    </div>
-                                                    <div class="col-sm">
-                                                    <p>
+
                                                         <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                                                             <i class="fas fa-times-circle"></i>
                                                         </a>
