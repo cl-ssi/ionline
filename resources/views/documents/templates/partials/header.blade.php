@@ -6,21 +6,21 @@
         <img src="{{ public_path('/images/logo_rgb_'.$document->organizationalUnit->establishment->alias.'.png') }}" width="120" alt="Logo de la institución">
     @endif
 
+    @if(isset($linea1))
     <div class="siete" style="padding-top: 2px;">
-        {{ $document->organizationalUnit->establishment->name }}
-    </div>
-    
-    @if(isset($organizationalUnit))
-    <div class="siete" style="padding-top: 1px;">
-        {{ $organizationalUnit->name }}
+        {{ $linea1 }}
     </div>
     @endif
     
-    <div class="seis" style="padding-top: 2px; color: #999">
-        ID: {{ $document->id }}
-        
-        @if ($document->internal_number)
-            - Nº Interno: {{ $document->internal_number }}
-        @endif
+    @if(isset($linea2))
+    <div class="siete" style="padding-top: 1px;">
+        {{ $linea2 }}
     </div>
+    @endif
+    
+    @if(isset($linea3))
+    <div class="seis" style="padding-top: 2px; color: #999">
+        {{ $linea3 }}
+    </div>
+    @endif
 </header>

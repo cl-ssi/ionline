@@ -17,14 +17,18 @@ p {
 
 footer  {
     position: fixed; 
-    bottom: -60px; 
+    bottom: -40px; 
     left: 0px; 
     right: 0px;
     height: 50px; 
-
-    font-size: 0.6rem;
     text-align: center;
     clear: both;
+}
+
+main {
+    /* Debería ser 150 para respetar el ancho de la plantilla del gobierno */
+    /* margin-left: 150px; */
+    margin-left: 50px;
 }
 
 .seis {
@@ -78,4 +82,16 @@ br {
     /* clears default height */
     margin-top: 4;
     /* change this to whatever height you want it */
+}
+
+.raya_rojo {
+    color: #EE3A43;
+    display: inline-block;
+    font-size: 24.0pt;
+}
+
+.raya_azul {
+    color: #0168B3;
+    display: inline-block;
+    font-size: 24.0pt;
 }
