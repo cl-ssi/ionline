@@ -362,7 +362,7 @@
     @if($request_forms->count() > 0 && $inbox == 'report: form-items')
         <div class="row">
             <div class="col">
-                <p class="font-weight-lighter">Total de Registros: <b>{{ $request_forms->total() }}</b></p>
+                <p class="font-weight-lighter">Total de Formularios: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
@@ -389,6 +389,7 @@
                         <th>Presupuesto</th>
                         <th>Estado Proceso Compra</th>
                         <th>Fecha de Aprobación Depto. Abastecimiento</th>
+                        <!-- ITEMS -->
                         <th>N° Item</th>
                         <th>ID</th>
                         <th>Item Presupuestario</th>
@@ -399,10 +400,29 @@
                         <th>Valor U.</th>
                         <th>Impuestos</th>
                         <th>Total Item</th>	
+                        <!-- PROCESO DE COMPRAS -->
+                        <th>Estado compra</th>
+                        <th>Tipo compra</th>
+                        <th>ID Licitación</th>
+                        <th>Fechas</th>
+                        <th>Orden de compra</th>
+                        <th>Proveedor RUT - nombre</th>
+                        <th>Cotización</th>
+                        <th>N° res.</th>
+                        <th>Especificaciones Técnicas (COMPRADOR/PROVEEDOR)</th>
+                        <th>Cantidad</th>
+                        <th>Unidad de medida</th>
+                        <th>Moneda</th>
+                        <th>Precio neto</th>
+                        <th>Total cargos</th>
+                        <th>Total descuentos</th>
+                        <th>Total impuesto</th>
+                        <th>Monto Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($request_forms as $requestForm) 
+                @foreach($request_forms as $requestForm)
+                @if($requestForm->type_form == 'bienes y/o servicios')
                     @foreach($requestForm->itemRequestForms as $key =>$item)
                     <tr>
                         <td class="text-right" nowrap>{{ $requestForm->id }}</td>
@@ -437,7 +457,11 @@
                         </td>
                         <td>
                             @if($loop->first)
-                                
+                                @if($requestForm->purchasingProcess)
+                                    {{ $requestForm->purchasingProcess->getStatus() }}
+                                @else
+                                    En proceso
+                                @endif
                             @endif
                         </td>
                         <td nowrap>
@@ -465,8 +489,26 @@
                         <td class="text-right">{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
                         <td class="text-center">{{ $item->tax }}</td>
                         <td class="text-right">{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td class="text-right" nowrap>
+                            @foreach($item->purchasingProcess as $purchasingProcess)
+                                @foreach($purchasingProcess->details as $detail)
+                                    @if($loop->first)
+                                        {{ $detail->pivot->getStatus() }}
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </td>
+                    </tr>
+                    
+                    {{-- dd($item->purchasingProcess) --}}
+                    @endforeach
+                @else
+                    @foreach($requestForm->passengers as $key =>$item)
+                    <tr>
+                        <td class="text-right" nowrap>{{ $requestForm->id }}</td>
                     </tr>
                     @endforeach
+                @endif
                 @endforeach
                 </tbody>
             </table>

@@ -100,7 +100,7 @@ class SearchRequests extends Component
         ->latest();
 
         if($this->inbox == 'report: form-items'){
-            $query->with('itemRequestForms', 'eventRequestForms', 'associateProgram');
+            $query->with('itemRequestForms', 'eventRequestForms', 'associateProgram', 'itemRequestForms.purchasingProcess.details');
         }
         return ($isPaginated) ? $query->paginate(50) : $query->get();
     }
