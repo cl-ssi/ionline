@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Programmings;
 
-use App\Programmings\Programming;
+use App\Models\Programmings\Programming;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Programmings\Review;

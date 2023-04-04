@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Programmings\Professional;
+use App\Models\Programmings\Professional;
 
 class ProfessionalSeeder extends Seeder
 {

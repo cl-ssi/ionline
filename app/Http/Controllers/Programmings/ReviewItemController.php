@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Programmings\Programming;
-use App\Programmings\ProgrammingItem;
+use App\Models\Programmings\Programming;
+use App\Models\Programmings\ProgrammingItem;
 use App\Models\Programmings\ReviewItem;
 use App\Models\Programmings\Review;
-use App\Programmings\Professional;
-use App\Programmings\ProfessionalHour;
-use App\Programmings\ProgrammingDay;
+use App\Models\Programmings\Professional;
+use App\Models\Programmings\ProfessionalHour;
+use App\Models\Programmings\ProgrammingDay;
 
 class ReviewItemController extends Controller
 {

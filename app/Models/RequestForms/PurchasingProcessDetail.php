@@ -96,4 +96,15 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         elseif($this->immediatePurchase) return 'immediate_purchase_id';
         else return null;
     }
+
+    public function getStatus(){
+        switch ($this->status) {
+            case "total":
+                return 'Comprado';
+                break;
+            case "desert":
+                return 'Desierto';
+                break;
+        }
+    }
 }

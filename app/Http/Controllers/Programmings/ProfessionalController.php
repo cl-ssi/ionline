@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Programmings\Professional;
+use App\Models\Programmings\Professional;
 
 class ProfessionalController extends Controller
 {

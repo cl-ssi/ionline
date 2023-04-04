@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
+use App\Models\Indicators\Value;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
-class TaskRescheduling extends Model
+class Task extends Model
 {
     use SoftDeletes;
-    protected $table = 'pro_task_rescheduling';
+    protected $table = 'pro_tasks';
 
     protected $fillable = [
-        'reason', 'date', 'task_id', 'created_by', 'updated_by'
+        'name', 'date', 'activity_id', 'created_by', 'updated_by'
     ];
 
     public $dates = [
@@ -37,8 +39,12 @@ class TaskRescheduling extends Model
         });
     }
 
-    public function task() {
-        return $this->belongsTo(Task::class);
+    public function activity() {
+        return $this->belongsTo(Value::class, 'activity_id');
+    }
+
+    public function reschedulings() {
+        return $this->hasMany(TaskRescheduling::class);
     }
 
     public function createdBy() {
@@ -47,5 +53,9 @@ class TaskRescheduling extends Model
 
     public function updatedBy() {
         return $this->belongsTo(User::class, 'updated_by')->select(array('id', 'dv', 'name', 'fathers_family', 'mothers_family'))->withTrashed();
+    }
+
+    public function getRowspanCountAttribute(){
+        return $this->reschedulings->count() > 0 ? $this->reschedulings->count() : 1;
     }
 }

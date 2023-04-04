@@ -129,6 +129,15 @@
                   @endif
                 </td>
             </tr>
+            <tr>
+                <th class="table-active">Ítem Presupuestario</th>
+                <td colspan="2">
+                  @if($requestReplacementStaff->budgetItem)
+                      {{ $requestReplacementStaff->budgetItem->code }} <br>
+                      {{ $requestReplacementStaff->budgetItem->name }}
+                  @endif
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
-use App\Programmings\TaskRescheduling;
+use App\Models\Programmings\TaskRescheduling;
 use Illuminate\Http\Request;
 
 class TaskReschedulingController extends Controller

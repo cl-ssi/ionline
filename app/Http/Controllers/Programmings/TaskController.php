@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
 use App\Models\Indicators\Value;
-use App\Programmings\Task;
+use App\Models\Programmings\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller

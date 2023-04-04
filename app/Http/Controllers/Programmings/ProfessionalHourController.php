@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Programmings\ProfessionalHour;
-use App\Programmings\Professional;
+use App\Models\Programmings\ProfessionalHour;
+use App\Models\Programmings\Professional;
 
 class ProfessionalHourController extends Controller
 {

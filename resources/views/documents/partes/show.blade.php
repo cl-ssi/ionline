@@ -6,7 +6,7 @@
 
 @include('documents.partes.partials.nav')
 
-<h3>Documento N° {{ $parte->id }} <small>( N° origen: {{ $parte->number }} - Tipo:  {{ optional($parte->type)->name }} ) </small></h3>
+<h3>Documento N° {{ $parte->correlative }} <small>( N° origen: {{ $parte->number }} - Tipo:  {{ optional($parte->type)->name }} ) </small></h3>
 Materia: {{ $parte->subject }}
 @if($parte->important)
      <span class="text-danger">Importante <i class="fas fa-exclamation"></i></span>
