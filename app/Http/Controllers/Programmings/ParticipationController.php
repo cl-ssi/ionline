@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Indicators\HealthGoal;
 use App\Models\Indicators\Indicator;
 use App\Models\Indicators\Value;
-use App\Programmings\Programming;
+use App\Models\Programmings\Programming;
 use Illuminate\Http\Request;
 
 class ParticipationController extends Controller

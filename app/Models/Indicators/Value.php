@@ -2,7 +2,7 @@
 
 namespace App\Models\Indicators;
 
-use App\Programmings\Task;
+use App\Models\Programmings\Task;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Programmings\Programming;
+use App\Models\Programmings\Programming;
 use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\CommuneFile;
-use App\Programmings\ActivityItem;
-use App\Programmings\ProfessionalHour;
-use App\Programmings\ProgrammingItem;
+use App\Models\Programmings\ActivityItem;
+use App\Models\Programmings\ProfessionalHour;
+use App\Models\Programmings\ProgrammingItem;
 use App\User;
 use Illuminate\Support\Str;
 

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Programmings\Programming;
-use App\Programmings\ProgrammingItem;
+use App\Models\Programmings\Programming;
+use App\Models\Programmings\ProgrammingItem;
 use App\Models\Establishment;
 use App\Models\Commune;
 use App\User;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Programmings\ReviewItem;
-use App\Programmings\ProgrammingActivityItem;
+use App\Models\Programmings\ProgrammingActivityItem;
 
 class ProgrammingReportController extends Controller
 {

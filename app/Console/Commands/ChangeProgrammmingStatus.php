@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Programmings\Programming;
+use App\Models\Programmings\Programming;
 use Illuminate\Console\Command;
 
 class ChangeProgrammmingStatus extends Command

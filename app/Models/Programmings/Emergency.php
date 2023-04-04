@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +29,7 @@ class Emergency extends Model
     }
 
     public function programming() {
-        return $this->belongsTo('App\Programmings\Programming');
+        return $this->belongsTo('App\Models\Programmings\Programming');
     }
 
     public function getFactorAttribute()
