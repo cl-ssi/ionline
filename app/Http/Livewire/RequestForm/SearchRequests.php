@@ -56,7 +56,7 @@ class SearchRequests extends Component
     {
         $query = RequestForm::query();
 
-        if($this->inbox == 'all' && $this->inbox == 'report: form-items'){
+        if($this->inbox == 'all' || $this->inbox == 'report: form-items'){
             // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
             if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
                 $ouSearch = Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value;
