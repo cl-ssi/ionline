@@ -74,9 +74,15 @@ class Parte extends Model
 
 
     public function setCorrelative() {
-        abort_if(auth()->user()->organizational_unit_id == null, 501,'El usuario no tiene unidad organizacional asociada');
         
-        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        /** Si el parte tiene un establishment_id seteado, usamos ese, de lo contrario el de usuario logeado */
+        if(isset($this->establishment_id)) {
+            $establishment_id = $this->establishment_id;
+        }
+        else {
+            abort_if(auth()->user()->organizational_unit_id == null, 501,'El usuario no tiene unidad organizacional asociada');
+            $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+        }
 
         /* Obtener el objeto correlativo según el tipo */
         $correlative = Correlative::whereNull('type_id')
