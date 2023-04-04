@@ -291,13 +291,17 @@
                                                         <button type="submit" class="btn btn-success btn-sm"
                                                                 onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                                                 title="Aceptar">
-                                                                <i class="fas fa-check-circle"></i></a>
-                                                            </button>
+                                                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
+                                                                    <i class="fas fa-check-circle"></i></a>
+                                                                </span>
+                                                        </button>
                                                         </form>
 
-                                                        <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </a>
+                                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
+                                                            <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                <i class="fas fa-times-circle"></i>
+                                                            </a>
+                                                        </span>
                                                     </p>
                                                     </div>
                                                 </div>
