@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\Establishment;
 use App\Models\Documents\Type;
+use App\Models\Documents\Correlative;
 
 class Parte extends Model
 {
@@ -19,19 +20,20 @@ class Parte extends Model
      * @var array
      */
     protected $fillable = [
-        'date',
+        'correlative',
+        'entered_at',
         'type_id',
         'reserved',
+        'date',
         'number',
         'origin',
         'subject',
         'important',
-        'entered_at',
-        'viewed_at',
         'physical_format',
         'received_by_id',
         'establishment_id',
         'reception_date',
+        'viewed_at',
     ];
 
     /**
@@ -68,6 +70,36 @@ class Parte extends Model
     public function type()
     {
         return $this->belongsTo(Type::class)->withTrashed();
+    }
+
+
+    public function setCorrelative() {
+        abort_if(auth()->user()->organizational_unit_id == null, 501,'El usuario no tiene unidad organizacional asociada');
+        
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
+        /* Obtener el objeto correlativo según el tipo */
+        $correlative = Correlative::whereNull('type_id')
+            ->where('establishment_id',$establishment_id)
+            ->first();
+
+        if(!$correlative) {
+            $correlative = Correlative::create([
+                'type_id' => null,
+                'correlative' => 1,
+                'establishment_id' => $establishment_id
+            ]);
+        }
+
+        /* Almacenar el número del correlativo  */
+        $number = $correlative->correlative;
+
+        /* Aumentar el correlativo y guardarlo */
+        $correlative->correlative += 1;
+        $correlative->save();
+
+        /* Almacenar el correlativo en el parte */
+        $this->correlative = $number;
     }
 
 
