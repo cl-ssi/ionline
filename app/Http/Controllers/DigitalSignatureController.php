@@ -268,11 +268,13 @@ class DigitalSignatureController extends Controller
                         'type_id' => $signaturesFlow->signature->type_id,
                         'date' => $signaturesFlow->signature->request_date,
                         'subject' => $signaturesFlow->signature->subject,
-                        //TODO: Coordinar VC con Torres y ver como se trata HAH
+                        /* Fixear: que se genere un parte dependiendo del correo de director que se haya puesto */
                         'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
                         // 'establishment_id' => 38,
                         'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
                     ]);
+                    $parte->setCorrelative();
+                    $parte->save();
 
                     $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
                         ->where('file_type', 'documento')
