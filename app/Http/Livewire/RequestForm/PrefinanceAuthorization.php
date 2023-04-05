@@ -46,6 +46,15 @@ class PrefinanceAuthorization extends Component
       $this->program_id         = $requestForm->program_id;
       $this->sigfe              = $requestForm->associateProgram ? $requestForm->associateProgram->folio : $requestForm->sigfe;
       $this->financial_type     = $requestForm->associateProgram->financing ?? '';
+      $this->requestForm->load('itemRequestForms', 'passengers');
+      if($this->requestForm->passengers->count() > 0){
+        foreach($this->requestForm->passengers as $passenger)
+          $this->arrayItemRequest[$passenger->id]['budgetId'] = $passenger->budget_item_id;
+      }
+      else{
+        foreach($this->requestForm->itemRequestForms as $item)
+          $this->arrayItemRequest[$item->id]['budgetId'] = $item->budget_item_id;
+      }
     }
 
 
