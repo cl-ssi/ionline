@@ -64,6 +64,21 @@ class Signature extends Model
         return $this->hasMany(SignatureFlow::class);
     }
 
+    public function leftSignatures()
+    {
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'left');
+    }
+
+    public function centerSignatures()
+    {
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'center');
+    }
+
+    public function rightSignatures()
+    {
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'right');
+    }
+
     public function annexes()
     {
         return $this->hasMany(SignatureAnnex::class);
