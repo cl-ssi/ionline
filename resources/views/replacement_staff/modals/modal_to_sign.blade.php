@@ -354,24 +354,22 @@
                 @endif
             </div>
             <div class="modal-footer">
-                @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted')
+                @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
+                    $requestReplacementStaff->budget_item_id)
+                    @php 
+                        $idModelModal = $requestReplacementStaff->id;
+                        $routePdfSignModal = "/replacement_staff/request/create_budget_availability_certificate_document/$idModelModal/";
+                        $routeCallbackSignModal = 'replacement_staff.request.callbackSign';
+                    @endphp
 
-                        @php 
-                            $idModelModal = $requestReplacementStaff->id;
-                            $routePdfSignModal = "/replacement_staff/request/create_budget_availability_certificate_document/$idModelModal/";
-                            $routeCallbackSignModal = 'replacement_staff.request.callbackSign';
-                        @endphp
+                    @include('documents.signatures.partials.sign_file')
 
-                        @include('documents.signatures.partials.sign_file')
-
-                        <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
-                            title="Firma Digital"
-                            data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
-                            Firmar <i class="fas fa-signature"></i>
-                        </button> 
-                    @endif
-                
-
+                    <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
+                        title="Firma Digital"
+                        data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+                        Firmar <i class="fas fa-signature"></i>
+                    </button> 
+                @endif
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
