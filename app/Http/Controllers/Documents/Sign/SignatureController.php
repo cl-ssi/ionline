@@ -17,7 +17,7 @@ class SignatureController extends Controller
         /**
          * Obtengo en ancho y largo del pdf
          */
-        $document = 'samples/document-letter-size.pdf';
+        $document = 'samples/samp_bkp.pdf';
         $pdf = new Fpdi('P', 'mm');
         $pdf->setSourceFile($document);
         $pageId = $pdf->importPage(1);
