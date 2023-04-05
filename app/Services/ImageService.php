@@ -151,7 +151,7 @@ class ImageService
         /**
          * Save the image
          */
-        imagepng($imagen, "signature-document-number.jpg", 9);
+        // imagepng($imagen, "signature-document-number.jpg", 9);
 
         return $imagen;
 
