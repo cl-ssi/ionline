@@ -12,6 +12,16 @@ class SignatureFlow extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * Punto de Partida
+     */
+    const Y = 100;
+
+    /**
+     * Espaciado entre una linea y otra
+     */
+    const PADDING = 37;
+
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -59,5 +69,29 @@ class SignatureFlow extends Model
     public function signature()
     {
         return $this->belongsTo(Signature::class);
+    }
+
+    public function getYAttribute()
+    {
+        $start = ($this->is_visator == true) ? 110 : SignatureFlow::Y;
+        $padding = ($this->is_visator == true) ? 15 : SignatureFlow::PADDING;
+
+        return $start + (($this->row_position + 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+    }
+
+    public function getXAttribute()
+    {
+        switch ($this->column_position) {
+            case 'left':
+                $x = 33;
+                break;
+            case 'center':
+                $x = 215;
+                break;
+            case 'right':
+                $x = 397;
+                break;
+        }
+        return $x;
     }
 }
