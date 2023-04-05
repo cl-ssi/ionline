@@ -242,6 +242,8 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
+use App\Http\Livewire\Sign\RequestSignature;
 
 /*
 |--------------------------------------------------------------------------
@@ -2179,6 +2181,16 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
 });
 
+/**
+ * Rutas de Modulo Sign
+ */
+Route::middleware('auth')->group(function () {
+    Route::get('/position-document-number', [SignSignatureController::class, 'positionDocumentNumber']);
+});
+
+Route::prefix('v2/documents/signatures')->as('documents.v2.')->middleware('auth')->group(function () {
+    Route::get('/create', RequestSignature::class)->name('create');
+});
 
 Route::view('/some', 'some');
 
