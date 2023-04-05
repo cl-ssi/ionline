@@ -94,8 +94,6 @@ class ImageService
         imagepng($imagen, "signature-visacion.jpg", 9);
 
         return $imagen;
-
-        return "creado";
     }
 
     /**
@@ -156,7 +154,6 @@ class ImageService
         imagepng($imagen, "signature-document-number.jpg", 9);
 
         return $imagen;
-        return "imagen creada";
 
         /**
          * Revisar
@@ -241,6 +238,11 @@ class ImageService
          */
         imagettftext($imagen, $fontSize - 1, 0, $xAxis, $yPading * 4.3 + $marginTop + 0.5, $textColor, $this->fontRegular, now());
 
+        /**
+         * Save the image
+         */
+        imagejpeg($imagen, 'signature-digital.jpg', 100);
+
         return $imagen;
 
         /**
@@ -250,12 +252,5 @@ class ImageService
         imagepng($imagen);
         $firma = base64_encode(ob_get_clean());
         imagedestroy($imagen);
-
-        /**
-         * Save the image
-         */
-        imagejpeg($imagen, 'signature-digital.jpg', 100);
-
-        // return "firma digital creada";
     }
 }
