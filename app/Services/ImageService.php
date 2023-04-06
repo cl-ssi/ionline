@@ -109,9 +109,9 @@ class ImageService
         /**
          * Define los parameters
          */
-        $widthNumber = 150;
+        $widthNumber = 100;
         $widthImage = 900;
-        $heightImage = 150;
+        $heightImage = 200;
         $fontSize = 17;
         $xPading = 15;
         $yPading = 33;
@@ -136,17 +136,17 @@ class ImageService
          * Add text to image
          */
         $text = "Firmado electrónicamente de acuerdo a la ley Nº 19.799";
-        imagettftext($imagen, $fontSize + 2, 0, $xPading, $yPading, $textColor, $this->fontLight, $text);
+        imagettftext($imagen, $fontSize + 2, 0, $xPading * 7, $yPading, $textColor, $this->fontLight, $text);
 
         /**
          * Add verification link to image
          */
-        imagettftext($imagen, $fontSize, 0, $xPading, $yPading * 2.3, $textColor, $this->fontConsolas, "$verificationLink ID $validationCode");
+        imagettftext($imagen, $fontSize, 0, $xPading * 7, $yPading * 2.3, $textColor, $this->fontConsolas, "$verificationLink ID $validationCode");
 
         /**
          * Add the document number to image
          */
-        imagettftext($imagen, $fontSize + 10, 0, $xPading + $widthImage - $widthNumber, $yPading * 4, $textColor, $this->fontConsolasBold, $documentNumber);
+        imagettftext($imagen, $fontSize + 35, 0, $xPading + $widthImage - $widthNumber - 400, $yPading * 6, $textColor, $this->fontConsolasBold, $documentNumber);
 
         /**
          * Save the image
