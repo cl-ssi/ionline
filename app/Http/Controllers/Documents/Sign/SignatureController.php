@@ -20,39 +20,37 @@ class SignatureController extends Controller
         $document = 'samples/samp_bkp.pdf';
         $pdf = new Fpdi('P', 'mm');
         $pdf->setSourceFile($document);
-        $pageId = $pdf->importPage(1);
-        $size = $pdf->getTemplateSize($pageId);
+        $firstPage = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($firstPage);
 
         /**
          * Obtengo el base64 del pdf y el checksum
          */
-        $pdf            = $document;
-        $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
-        $checksum_pdf   = md5_file(public_path($pdf));
+        $base64Pdf = base64_encode(file_get_contents(public_path($document)));
+        $checkSumPdf = md5_file(public_path($document));
 
         /**
-         * Obtengo la imagen del documentNumber
+         * Obtengo la imagen con el numero de Documento
          */
-        $imagen_firma = app(ImageService::class)->createDocumentNumber("https://i.saludiquique.gob.cl/validador", "2342-Xdf4", "13.089");
-        $name = Str::random();
-        $new = imagepng($imagen_firma, "$name.png");
-        $firma = base64_encode(ob_get_clean());
-        $firma = base64_encode(file_get_contents("$name.png"));
-        imagedestroy($imagen_firma);
+        $imageWithDocumentNumber = app(ImageService::class)->createDocumentNumber("https://i.saludiquique.gob.cl/validador", "2342-Xdf4", "13.089");
+        ob_start();
+        imagepng($imageWithDocumentNumber);
+        $signature = base64_encode(ob_get_clean());
+        imagedestroy($imageWithDocumentNumber);
 
         /**
          * Setea las credenciales de la api desde el env
          */
-        $url        = env('FIRMA_URL');
-        $api_token  = env('FIRMA_API_TOKEN');
-        $secret     = env('FIRMA_SECRET');
+        $url = env('FIRMA_URL');
+        $apiToken = env('FIRMA_API_TOKEN');
+        $secret = env('FIRMA_SECRET');
 
         /**
          * Setea la info para firmar un documento
          */
-        $purpose    = 'Desatendido';
-        $entity     = 'Servicio de Salud Iquique';
-        $run        = "15287582";
+        $purpose = 'Desatendido';
+        $entity = 'Servicio de Salud Iquique';
+        $run = "15287582";
         $page = 'LAST';
 
         /**
@@ -77,22 +75,21 @@ class SignatureController extends Controller
         $heightFile = $size['height'] / 10;
 
         /**
-         * De centimetros a pulgadas
+         * De centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
          */
-        $coordenada_x = ($widthFile * 0.393701) * 72;
-        $coordenada_y = ($heightFile * 0.3937) * 72;
-
+        $xCoordinate = ($widthFile * 0.393701) * 72;
+        $yCoordinate = ($heightFile * 0.393701) * 72;
 
         /**
          * Descifrar porque hay que restar 230 y 150 a las coordenadas
          */
-        $coordenada_x = $coordenada_x - 230;
-        $coordenada_y = $coordenada_y - 150;
+        $xCoordinate = $xCoordinate - 215;
+        $yCoordinate = $yCoordinate - 150;
 
         /**
          * Largo y ancho de la imagen
          */
-        $largoFirma = 200;
+        $heightFirma = 200;
         $widthFirma = 100;
 
         /**
@@ -101,27 +98,27 @@ class SignatureController extends Controller
         $margin = 110;
 
         $data = [
-            'api_token_key' => $api_token,
+            'api_token_key' => $apiToken,
             'token' => $jwt,
             'files' => [
                 [
                     'content-type' => 'application/pdf',
-                    'content' => $pdfbase64,
+                    'content' => $base64Pdf,
                     'description' => 'str',
-                    'checksum' => $checksum_pdf,
+                    'checksum' => $checkSumPdf,
                     'layout' => "
                         <AgileSignerConfig>
                             <Application id=\"THIS-CONFIG\">
                                 <pdfPassword/>
                                 <Signature>
                                     <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                        <llx>" . ($coordenada_x). "</llx>
-                                        <lly>" . ($coordenada_y). "</lly>
-                                        <urx>" . ($coordenada_x + $largoFirma) . "</urx>
-                                        <ury>" . ($coordenada_y + $widthFirma + $margin) . "</ury>
+                                        <llx>" . ($xCoordinate). "</llx>
+                                        <lly>" . ($yCoordinate). "</lly>
+                                        <urx>" . ($xCoordinate + $heightFirma) . "</urx>
+                                        <ury>" . ($yCoordinate + $widthFirma + $margin) . "</ury>
                                         <page>" . $page . "</page>
                                         <image>BASE64</image>
-                                        <BASE64VALUE>$firma</BASE64VALUE>
+                                        <BASE64VALUE>$signature</BASE64VALUE>
                                     </Visible>
                                 </Signature>
                             </Application>
