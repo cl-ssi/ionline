@@ -88,12 +88,12 @@ class ImageService
          */
         imagettftext($imagen, 80, 0, $xPading, $yPading, $textColor, $this->fontLight, $user->initials);
 
+        return $imagen;
+
         /**
          * Save the image
          */
-        imagepng($imagen, "signature-visacion.jpg", 9);
-
-        return $imagen;
+        // imagepng($imagen, "signature-visacion.jpg", 9);
     }
 
     /**
@@ -148,12 +148,12 @@ class ImageService
          */
         imagettftext($imagen, $fontSize + 35, 0, $xPading + $widthImage - $widthNumber - 400, $yPading * 6, $textColor, $this->fontConsolasBold, $documentNumber);
 
+        return $imagen;
+
         /**
          * Save the image
          */
         // imagepng($imagen, "signature-document-number.jpg", 9);
-
-        return $imagen;
 
         /**
          * Revisar
@@ -214,11 +214,6 @@ class ImageService
         imagecopymerge($imagen, $digitalSignatureLogo, $width - $firmaDigitalWidth, 2, 0, 3, imagesx($digitalSignatureLogo) - 5, imagesy($digitalSignatureLogo) - 5, 100);
 
         /**
-         * Add text
-         */
-        // imagettftext($imagen, $fontSize, 0, $xAxis, $yPading * 0.9 + $marginTop, $textColor, $this->fontLight, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
-
-        /**
          * Add the signer's name to the image
          */
         imagettftext($imagen, $fontSize + 15, 0, $xAxis, $yPading * 1.5 + $marginTop, $textColor, $this->fontBold, $user->shortName);
@@ -238,12 +233,12 @@ class ImageService
          */
         imagettftext($imagen, $fontSize - 1, 0, $xAxis, $yPading * 4.3 + $marginTop + 0.5, $textColor, $this->fontRegular, now());
 
+        return $imagen;
+
         /**
          * Save the image
          */
         imagejpeg($imagen, 'signature-digital.jpg', 100);
-
-        return $imagen;
 
         /**
          * Revisar
