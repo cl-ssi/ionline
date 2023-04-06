@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\Documents\Type;
@@ -121,8 +122,12 @@ class DocumentController extends Controller
         if($document->id == 13667) {
             return view('documents.templates.show_13667')->withDocument($document);
         }
-        return view('documents.templates.'.$document->viewName)->withDocument($document);
 
+        return Pdf::loadView('documents.templates.'.$document->viewName, [
+            'document' => $document
+        ])->stream('download.pdf');
+
+        // return view('documents.templates.'.$document->viewName)->withDocument($document);
     }
 
     /**
@@ -304,4 +309,5 @@ class DocumentController extends Controller
         //            echo base64_decode($document->fileToSign->signed_file);
         //        }
     }
+
 }

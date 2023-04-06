@@ -76,12 +76,11 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_user_id">Detalle Fundamento</label>
-            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()" @if($selectedLegalQuality == 1 && $formType == 'announcement') disabled @endif {{ $isDisabled }}>
+            <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail" onchange="remoteWorking()" @if($selectedLegalQuality == 1 && $formType == 'announcement') disabled @endif {{ $isDisabled }} required>
                 <option value="">Seleccione...</option>
                 @if(!is_null($detailFundaments))
                 @foreach($detailFundaments as $detailFundament)
-                    <option value="{{ $detailFundament->fundamentDetailManage->id }}"
-                        @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament_detail_manage_id == $fundamentDetailSelected) ? 'selected' : '' }} @endif>
+                    <option value="{{ $detailFundament->fundamentDetailManage->id }}">
                         {{ $detailFundament->fundamentDetailManage->NameValue }}
                     </option>
                 @endforeach

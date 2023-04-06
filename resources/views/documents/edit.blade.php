@@ -16,12 +16,6 @@
 <form method="POST" class="form-horizontal" action="{{ route('documents.update', $document) }}">
     @csrf
     @method('PUT')
-    <div class="form-row">
-        <div class="form-group col-3">
-            <label for="for_internal_number">Número Interno (Opcional)</label>
-            <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
-        </div>
-    </div>
 
     <div class="form-row">
         <div class="form-group col-2">
@@ -35,7 +29,7 @@
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type_id" id="for_type_id" class="form-control" required>
+            <select name="type_id" id="for_type_id" class="form-control" {{ isset($document->number) ? 'disabled':'' }}>
                 <option value=""></option>
                 @foreach($types as $id => $type)
                     <option value="{{ $id }}" {{ $document->type_id == $id ? 'selected' : '' }}>{{ $type }}</option>
@@ -61,7 +55,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col">
-            <label for="forSubject">Materia*</label>
+            <label for="forSubject">Materia</label>
             <input type="text" class="form-control" id="forSubject"
                 value="{{ $document->subject }}" name="subject" maxlength="255"
                 placeholder="Descripción del contenido del documento" required>
@@ -103,7 +97,7 @@
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="18"
+        <textarea class="form-control" id="contenido" rows="30"
             name="content">{{ $document->content }}</textarea>
     </div>
 
@@ -117,6 +111,13 @@
             <label for="forResponsible">Responsables (separado por salto de línea)</label>
             <textarea class="form-control" id="forResponsible" rows="5"  placeholder="Cargo"
                 name="responsible">{{ $document->responsible }}</textarea>
+        </div>
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group col-3">
+            <label for="for_internal_number">Número Interno (Opcional)</label>
+            <input type="number" class="form-control" id="for_internal_number" name="internal_number" value="{{ $document->internal_number }}">
         </div>
     </div>
 
@@ -157,12 +158,50 @@
 @section('custom_js')
 
 <script type="text/javascript">
-var typeVal = $('#formType').val();
-    if(typeVal == "Resolución") {
-        $("#forFrom").removeAttr( "required" );
-        $("#forFor").removeAttr( "required" );
-        $("#collapse").hide(); 
+    var typeVal = $('#for_type_id').val();
+
+    /* Circular */
+    if(typeVal == "4") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
     }
+    /* Resolución */
+    if(typeVal == "5") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#forSubject").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Convenio */
+    if(typeVal == "6") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Ordinario */
+    if (typeVal == "7") {
+
+    }
+    /* Informe */
+    if (typeVal == "8") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Protocolo */
+    if (typeVal == "9") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+    /* Acta */
+    if (typeVal == "10") {
+        $("#forFrom").removeAttr("required");
+        $("#forFor").removeAttr("required");
+        $("#collapse").hide();
+    }
+
 $('#formType').change(
     function() {
         if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){

@@ -66,7 +66,7 @@
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
             <td>{{ $item->nue }}</td>
-            <td>{{ $item->reception->imputed }}</td>
+            <td></td>
             <td>{{ $item->substance->name }}</td>
             <td>
                 @foreach($item->protocols as $protocol )

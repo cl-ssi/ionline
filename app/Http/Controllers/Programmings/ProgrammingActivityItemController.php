@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
-// use App\Programmings\Programming;
-use App\Programmings\ProgrammingActivityItem;
+// use App\Models\Programmings\Programming;
+use App\Models\Programmings\ProgrammingActivityItem;
 use Illuminate\Http\Request;
 
 class ProgrammingActivityItemController extends Controller

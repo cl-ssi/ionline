@@ -672,4 +672,8 @@ class RequestFormController extends Controller {
         $counter = RequestForm::withTrashed()->whereNull('request_form_id')->where('created_at', '>=' , $startOfYear)->where('created_at', '<=', $endOfYear)->count() + 1;
         return Carbon::now()->year.'-'.$counter;
     }
+
+    public function show_form_items(){
+        return view('request_form.reports.show_form_items');
+    }
 }

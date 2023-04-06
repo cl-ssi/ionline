@@ -56,7 +56,7 @@ class SearchRequests extends Component
     {
         $query = RequestForm::query();
 
-        if($this->inbox == 'all'){
+        if($this->inbox == 'all' || $this->inbox == 'report: form-items'){
             // Filtro por Hospital Alto Hospicio + Unidad Puesta en marcha HAH
             if(Auth()->user()->organizationalUnit->establishment->id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
                 $ouSearch = Parameter::where('parameter', 'PuestaEnMarchaHAH')->first()->value;
@@ -99,6 +99,9 @@ class SearchRequests extends Component
         ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
 
+        if($this->inbox == 'report: form-items'){
+            $query->with('itemRequestForms', 'eventRequestForms', 'associateProgram', 'itemRequestForms.purchasingProcess.details');
+        }
         return ($isPaginated) ? $query->paginate(50) : $query->get();
     }
 
@@ -106,6 +109,7 @@ class SearchRequests extends Component
     {   
         $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AdquisicionesHAH'])->pluck('value')->toArray();
         // dd($ouSearch);
+
         return view('livewire.request-form.search-requests', [
             'request_forms' => $this->querySearch(),
             'users' => User::permission('Request Forms: purchaser')->OrWhereIn('organizational_unit_id', $ouSearch)->orderBy('name','asc')->get(),

@@ -66,7 +66,7 @@
         <tbody>
             @forelse($partes as $parte)
             <tr>
-                <td>{{ $parte->id }}</td>
+                <td>{{ $parte->correlative }}</td>
                 <td>
                     <small title="{{ $parte->created_at }}">
                         {{ $parte->entered_at }}

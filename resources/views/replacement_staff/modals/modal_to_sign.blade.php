@@ -114,12 +114,19 @@
                                         @endif
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th class="table-active">Ítem Presupuestario</th>
+                                    <td colspan="2">
+                                    @if($requestReplacementStaff->budgetItem)
+                                        {{ $requestReplacementStaff->budgetItem->code }} <br>
+                                        {{ $requestReplacementStaff->budgetItem->name }}
+                                    @endif
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-
                     <br />
-                    
                 @endforeach
                 @endif
 
@@ -224,34 +231,82 @@
                                     <strong>{{ $sign->organizationalUnit->name }}</strong><br>
                                 </td>
                                 @endforeach
-                                </tr>
-                                <tr>
-                                    @foreach($requestReplacementStaff->RequestSign as $requestSign)
-                                        <td align="center">
-                                            {{--@if($requestSign->request_status == 'pending' && $requestSign->organizational_unit_id == Auth::user()->organizationalUnit->id) --}}
-                                            @if($requestSign->request_status == 'pending' && in_array($requestSign->organizational_unit_id, $iam_authorities_in))
-                                                Estado: {{ $requestSign->StatusValue }} <br><br>
-                                                <div class="row">
-                                                    <div class="col-sm">
-                                                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <button type="submit" class="btn btn-success btn-sm"
-                                                                onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                                                title="Aceptar">
-                                                                <i class="fas fa-check-circle"></i></a>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                    <div class="col-sm">
-                                                    <p>
-                                                        <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                            <i class="fas fa-times-circle"></i>
-                                                        </a>
-                                                    </p>
-                                                    </div>
+                            </tr>
+                            <tr>
+                                @foreach($requestReplacementStaff->RequestSign as $requestSign)
+                                    <td align="center">
+                                        @if($requestSign->request_status == 'pending' && in_array($requestSign->organizational_unit_id, $iam_authorities_in))
+                                            Estado: {{ $requestSign->StatusValue }} <br><br>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                            
+                                                        @if($requestSign->ou_alias == 'uni_per' && Auth::user()->hasRole('Replacement Staff: personal sign'))
+                                                            <fieldset class="form-group">
+                                                                <label for="for_gender" >Subtítulo</label>
+                                                                <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
+                                                                        <option value="">Seleccione...</option>
+                                                                        @if($requestReplacementStaff->form_type == 'replacement')
+                                                                            @foreach($budgetItemsReplacement as $budgetItem)
+                                                                                <option value="{{ $budgetItem->id }}">
+                                                                                    {{ $budgetItem->code }} -
+                                                                                    @if($budgetItem->code == '210300500102')
+                                                                                        Reemplazos del personal no médico
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210300500101')
+                                                                                        Reemplazos del personal médico
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endforeach
+                                                                        @else
+                                                                            @foreach($budgetItemsAnnoucement as $budgetItem)
+                                                                                <option value="{{ $budgetItem->id }}">
+                                                                                    {{ $budgetItem->code }} -
+                                                                                    @if($budgetItem->code == '210100100102')
+                                                                                        Personal de Planta Ley 18.834
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210100100103')
+                                                                                        Personal de Planta Ley 19.664
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210200100102')
+                                                                                        Personal a Contrata Ley 18.834
+                                                                                    @endif
+                                                                                    @if($budgetItem->code == '210200100103')
+                                                                                        Personal a Contrata Ley 19.664
+                                                                                    @endif
+                                                                                </option>
+                                                                            @endforeach
+                                                                        @endif
+                                                                </select>
+                                                            </fieldset>
+                                                        @endif
+                                                    
                                                 </div>
-                                                <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>
+                                                        @if($requestSign->ou_alias != 'finance')
+                                                            <button type="submit" class="btn btn-success btn-sm"
+                                                                    onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                                                    title="Aceptar">
+                                                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
+                                                                        <i class="fas fa-check-circle"></i></a>
+                                                                    </span>
+                                                            </button>
+                                                            </form>
+                                                        @else
+                                                           
+                                                        @endif
+                                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
+                                                            <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                                <i class="fas fa-times-circle"></i>
+                                                            </a>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
                                                     <div class="col-sm">
                                                         <div class="collapse" id="collapseExample">
                                                             <div class="card card-body">
@@ -271,7 +326,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                            </div>
                                             @elseif($requestSign->request_status == 'accepted')
                                                 <span style="color: green;">
                                                 <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }}
@@ -285,14 +340,36 @@
                                                     <i class="fas fa-clock"></i> {{ $requestSign->StatusValue }}<br>
                                                 @endif
                                             @endif
-                                        </td>
-                                    @endforeach
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                @if($requestReplacementStaff->budget_item_id)
+                <object type="application/pdf" data="{{ route('replacement_staff.request.create_budget_availability_certificate_view', [ $requestReplacementStaff ]) }}" width="100%" height="400" style="height: 85vh;"><a href="{{-- route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) --}}" target="_blank">
+                    <i class="fas fa-file"></i> Ver documento</a>
+                </object>
+                @endif
             </div>
             <div class="modal-footer">
+                @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
+                    $requestReplacementStaff->budget_item_id)
+                    @php 
+                        $idModelModal = $requestReplacementStaff->id;
+                        $routePdfSignModal = "/replacement_staff/request/create_budget_availability_certificate_document/$idModelModal/";
+                        $routeCallbackSignModal = 'replacement_staff.request.callbackSign';
+                    @endphp
+
+                    @include('documents.signatures.partials.sign_file')
+
+                    <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
+                        title="Firma Digital"
+                        data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+                        Firmar <i class="fas fa-signature"></i>
+                    </button> 
+                @endif
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

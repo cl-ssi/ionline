@@ -85,6 +85,7 @@ class ParteController extends Controller
         $parte->establishment()->associate(auth()->user()->organizationalUnit->establishment);
         $parte->important = $request->input('important') == 'on' ? 1 : null;
         $parte->reserved = $request->input('reserved') == 'on' ? 1 : null;
+        $parte->setCorrelative();
         $parte->save();
 
         //dd($parte);

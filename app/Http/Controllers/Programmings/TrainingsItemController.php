@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use App\Models\Programmings\CommuneFile;
 use Illuminate\Http\Request;
-use App\Programmings\Programming;
-use App\Programmings\TrainingItem;
+use App\Models\Programmings\Programming;
+use App\Models\Programmings\TrainingItem;
 
 class TrainingsItemController extends Controller
 {

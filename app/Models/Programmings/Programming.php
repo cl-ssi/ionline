@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -19,19 +19,19 @@ class Programming extends Model implements Auditable
     }
 
     public function items(){
-        return $this->hasMany('App\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
+        return $this->hasMany('App\Models\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
     }
 
     public function days(){
-        return $this->hasMany('App\Programmings\ProgrammingDay');
+        return $this->hasMany('App\Models\Programmings\ProgrammingDay');
     }
 
     public function emergencies(){
-        return $this->hasMany('App\Programmings\Emergency');
+        return $this->hasMany('App\Models\Programmings\Emergency');
     }
 
     public function professionalHours(){
-        return $this->hasMany('App\Programmings\ProfessionalHour');
+        return $this->hasMany('App\Models\Programmings\ProfessionalHour');
     }
 
     public function establishment() {

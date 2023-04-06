@@ -15,7 +15,7 @@
 
 		<div class="form-row">
 			<fieldset class="form-group col-3">
-				<label for="for_date">Fecha</label>
+				<label for="for_date">Fecha de recepción</label>
 				<input type="date" class="form-control" id="for_date" name="date" required="required">
 			</fieldset>
 
@@ -39,7 +39,7 @@
 					<input type="text" class="form-control" id="for_text" placeholder="" name="purchase_order_dato">
 			</fieldset>
 			<fieldset class="form-group col-4">
-          <label for="for_date">Fecha OC</label>
+          <label for="for_date">Fecha de emisión factura</label>
           <input type="date" class="form-control" id="for_date" name="purchase_order_date" required="required">
       </fieldset>
 			<fieldset class="form-group col-4">
@@ -58,7 +58,7 @@
 					<input type="number" class="form-control" id="for_text" name="invoice">
 			</fieldset>
 			<fieldset class="form-group col-4">
-          <label for="for_text">Fecha Doc.</label>
+          <label for="for_text">Fecha vencimiento factura</label>
           <input type="date" class="form-control" id="for_text" name="invoice_date">
       </fieldset>
 		</div>

@@ -68,7 +68,11 @@
                             {{ $requestReplacementStaff->degree }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
-                                ${{ number_format($position->salary, 0, ",", ".") ?? '' }} <br>
+                                @if($position->salary)
+                                    ${{ number_format($position->salary, 0, ",", ".") ?? '' }}
+                                @else
+                                    {{ $position->degree }}
+                                @endif
                             @endforeach
                         @endif
                     </td>
@@ -210,7 +214,11 @@
                             {{ $requestReplacementStaff->degree }}
                         @else
                             @foreach($requestReplacementStaff->positions as $position)
-                                ${{ number_format($position->salary, 0, ",", ".") ?? '' }} <br>
+                                @if($position->salary)
+                                    ${{ number_format($position->salary, 0, ",", ".") ?? '' }}
+                                @else
+                                    {{ $position->degree }}
+                                @endif
                             @endforeach
                         @endif
                     </td>

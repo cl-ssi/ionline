@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,11 +35,11 @@ class ProgrammingItem extends Model implements Auditable
     }
 
     public function activityItem(){
-        return $this->belongsTo('App\Programmings\ActivityItem', 'activity_id');
+        return $this->belongsTo('App\Models\Programmings\ActivityItem', 'activity_id');
     }
 
     public function programming(){
-        return $this->belongsTo('App\Programmings\Programming');
+        return $this->belongsTo('App\Models\Programmings\Programming');
     }
 
     public function user(){
@@ -47,11 +47,11 @@ class ProgrammingItem extends Model implements Auditable
     }
 
     public function professionalHour(){
-        return $this->belongsTo('App\Programmings\ProfessionalHour', 'professional');
+        return $this->belongsTo('App\Models\Programmings\ProfessionalHour', 'professional');
     }
 
     public function professionalHours(){
-        return $this->belongsToMany('App\Programmings\ProfessionalHour', 'pro_programming_item_pro_hour')->withPivot('id', 'activity_performance', 'designated_hours_weeks', 'hours_required_year', 'hours_required_day', 'direct_work_year', 'direct_work_hour')->withTimestamps()->using(ProItemProHour::class);
+        return $this->belongsToMany('App\Models\Programmings\ProfessionalHour', 'pro_programming_item_pro_hour')->withPivot('id', 'activity_performance', 'designated_hours_weeks', 'hours_required_year', 'hours_required_day', 'direct_work_year', 'direct_work_hour')->withTimestamps()->using(ProItemProHour::class);
     }
 
     public function rowspan(){

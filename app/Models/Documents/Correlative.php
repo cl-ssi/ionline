@@ -14,6 +14,7 @@ class Correlative extends Model
     protected $fillable = [
         'type_id',
         'correlative',
+        'establishment_id'
     ];
 
     /**
@@ -25,13 +26,20 @@ class Correlative extends Model
 
     public static function getCorrelativeFromType($type_id)
     {
+        abort_if(auth()->user()->organizational_unit_id == null, 501,'El usuario no tiene unidad organizacional asociada');
+        
+        $establishment_id = auth()->user()->organizationalUnit->establishment_id;
+
         /* Obtener el objeto correlativo según el tipo */
-        $correlative = Correlative::where('type_id', $type_id)->first();
+        $correlative = Correlative::where('type_id', $type_id)
+            ->where('establishment_id',$establishment_id)
+            ->first();
+
         if(!$correlative) {
             $correlative = Correlative::create([
                 'type_id' => $type_id,
                 'correlative' => 1,
-                'year' => date('Y')
+                'establishment_id' => $establishment_id
             ]);
         }
         /* Almacenar el número del correlativo  */
@@ -41,7 +49,7 @@ class Correlative extends Model
         $correlative->correlative += 1;
         $correlative->save();
 
-        /* Retornar el número actial */
+        /* Retornar el número actual */
         return $number;
     }
 }

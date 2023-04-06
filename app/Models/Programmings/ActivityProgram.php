@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +12,6 @@ class ActivityProgram extends Model
     ];
 
     public function items(){
-        return $this->hasMany('App\Programmings\ActivityItem', 'activity_id');
+        return $this->hasMany('App\Models\Programmings\ActivityItem', 'activity_id');
     }
 }
