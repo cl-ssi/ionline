@@ -422,6 +422,14 @@ class FulfillmentController extends Controller
      */
     public function update(Request $request, Fulfillment $fulfillment)
     {
+
+        // se agrega esta validación ya que existía un problema con la "coma" al reconocer un valor de miles o con separación de coma.
+        $total_to_pay = str_replace(",", "", $request->total_to_pay);
+        $total_to_pay = str_replace(".", ",", $total_to_pay);
+        $request->merge([
+            'total_to_pay' => $total_to_pay,
+        ]);
+
         $fulfillment->fill($request->all());
         
         // 16/03/2023: Cuando se ingresa el total a pagar, se registra la fecha del movimiento.
