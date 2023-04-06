@@ -216,40 +216,42 @@ class DigitalSignatureController extends Controller
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
-                $dest_vec = array();
+                // $dest_vec = array();
 
 
 
-                if (strpos($destinatarios, ',') !== false) {
-                    $dest_vec = array_map('trim', explode(',', $destinatarios));
-                } else {
-                    $dest_vec[0] = $destinatarios;
-                }
+                // if (strpos($destinatarios, ',') !== false) {
+                //     $dest_vec = array_map('trim', explode(',', $destinatarios));
+                // } else {
+                //     $dest_vec[0] = $destinatarios;
+                // }
+
+                $parte = Parte::createPartesForDirectors($destinatarios, $signaturesFlow);
 
                 //TODO dejar que sea con el 38, consultar que ocurre cuando entre en 2 sistemas de parte
-                $establishment = Establishment::find(38);
-                $mail_director = $establishment->mail_director;
-                if (strpos($mail_director, ',') !== false) {
-                    $mail_director_vec = array_map('trim', explode(',', $mail_director));
-                } else {
-                    $mail_director_vec[0] = $mail_director;
-                }
+                // $establishment = Establishment::find(38);
+                // $mail_director = $establishment->mail_director;
+                // if (strpos($mail_director, ',') !== false) {
+                //     $mail_director_vec = array_map('trim', explode(',', $mail_director));
+                // } else {
+                //     $mail_director_vec[0] = $mail_director;
+                // }
 
 
 
 
-                $has_director_mail = false;
-                foreach ($dest_vec as $dest) {
-                    if (in_array($dest, $mail_director_vec)) {
-                        $has_director_mail = true;
-                        break;
-                    }
-                }
+                // $has_director_mail = false;
+                // foreach ($dest_vec as $dest) {
+                //     if (in_array($dest, $mail_director_vec)) {
+                //         $has_director_mail = true;
+                //         break;
+                //     }
+                // }
 
                 // Entra en caso que tengo algun correo de dirección
-                if ($has_director_mail === true) {
-                    $generador = $signaturesFlow->signature->responsable->fullname;
-                    $unidad = $signaturesFlow->signature->organizationalUnit->name;
+                // if ($has_director_mail === true) {
+                    // $generador = $signaturesFlow->signature->responsable->fullname;
+                    // $unidad = $signaturesFlow->signature->organizationalUnit->name;
 
                     // switch ($signaturesFlow->signature->document_type) {
                     //     case 'Memorando':
@@ -263,29 +265,29 @@ class DigitalSignatureController extends Controller
                     //         break;
                     // }
 
-                    $parte = Parte::create([
-                        'entered_at' => Carbon::now(),
-                        'type_id' => $signaturesFlow->signature->type_id,
-                        'date' => $signaturesFlow->signature->request_date,
-                        'subject' => $signaturesFlow->signature->subject,
-                        /* Fixear: que se genere un parte dependiendo del correo de director que se haya puesto */
-                        'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
-                        // 'establishment_id' => 38,
-                        'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
-                    ]);
-                    $parte->setCorrelative();
-                    $parte->save();
+                    // $parte = Parte::create([
+                    //     'entered_at' => Carbon::now(),
+                    //     'type_id' => $signaturesFlow->signature->type_id,
+                    //     'date' => $signaturesFlow->signature->request_date,
+                    //     'subject' => $signaturesFlow->signature->subject,
+                    //     /* Fixear: que se genere un parte dependiendo del correo de director que se haya puesto */
+                    //     'establishment_id' => Auth::user()->organizationalUnit->establishment->id,
+                    //     // 'establishment_id' => 38,
+                    //     'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
+                    // ]);
+                    // $parte->setCorrelative();
+                    // $parte->save();
 
-                    $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
-                        ->where('file_type', 'documento')
-                        ->get();
+                    // $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                    //     ->where('file_type', 'documento')
+                    //     ->get();
 
-                    ParteFile::create([
-                        'parte_id' => $parte->id,
-                        'file' => $distribucion->first()->file,
-                        'name' => $distribucion->first()->id . '.pdf',
-                        'signature_file_id' => $distribucion->first()->id,
-                    ]);
+                    // ParteFile::create([
+                    //     'parte_id' => $parte->id,
+                    //     'file' => $distribucion->first()->file,
+                    //     'name' => $distribucion->first()->id . '.pdf',
+                    //     'signature_file_id' => $distribucion->first()->id,
+                    // ]);
 
                     $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
                         ->where('file_type', 'anexo')
@@ -299,7 +301,7 @@ class DigitalSignatureController extends Controller
                             //'signature_file_id' => $sf->id,
                         ]);
                     }
-                }
+                // }
             }
 
             // Si es visación en cadena, se envía notificación por correo al siguiente firmante

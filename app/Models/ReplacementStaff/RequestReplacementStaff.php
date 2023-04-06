@@ -89,6 +89,10 @@ class RequestReplacementStaff extends Model implements Auditable
         return $this->belongsTo('App\Models\Parameters\BudgetItem');
     }
 
+    public function budgetAvailabilityCertificateSignature(){
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+    }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':

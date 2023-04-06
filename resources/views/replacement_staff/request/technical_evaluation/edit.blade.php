@@ -243,6 +243,18 @@
 <br />
 @endif
 
+@if($requestReplacementStaff->signatures_file_id)
+    <a class="btn btn-info btn-sm float-right" 
+        title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
+        target="_blank" 
+        title="Certificado">
+        <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
+    </a>
+    <br />
+@endif
+
+<br />
+
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">

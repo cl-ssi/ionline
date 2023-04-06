@@ -430,6 +430,11 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
+        Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
+        Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
+        Route::get('/budget_availability_certificate_callbackSign/{message}/{modelId}/{signaturesFile?}', [RequestReplacementStaffController::class, 'callbackSign'])->name('callbackSign');
+        Route::get('/show_budget_availability_certificate_signed/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_budget_availability_certificate_signed'])->name('show_budget_availability_certificate_signed');
+
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{requestReplacementStaff}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
