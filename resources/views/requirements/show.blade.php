@@ -106,7 +106,7 @@
 
 @if($requirement->parte <> null)
     @if($requirement->parte->files != null)
-        <h6 class="mb-3">Requerimiento creado en base al parte número: {{ $requirement->parte->id }}
+        <h6 class="mb-3">Requerimiento creado en base al parte número: {{ $requirement->parte->correlative }}
         @foreach($requirement->parte->files as $file)
             <a href="{{ route('documents.partes.download', $file->id) }}"
                 target="_blank" data-toggle="tooltip" data-placement="top"

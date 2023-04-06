@@ -177,6 +177,7 @@ class ProductController extends Controller
       $establishment_id = $request->get('establishment_id');
       $notes = $request->get('notes');
       $program = $request->get('program');
+      $product = $request->get('product');
 
       //compras
       $dataCollection = collect();
@@ -189,13 +190,27 @@ class ProductController extends Controller
                                                          ->where('notes','LIKE',"%$notes%");
                                                  })->paginate(15);*/
        $dataCollection = Purchase::where('pharmacy_id',session('pharmacy_id'))
-                                 ->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                 ->when($supplier_id, function ($q, $supplier_id) {
-                                       return $q->where('supplier_id', $supplier_id);
-                                  })
-                                 ->where('notes','LIKE',"%$notes%")
-                                 // ->paginate(15);
-                                 ->get();
+                                    ->whereBetween('date', [$fecha_inicio,$fecha_termino])
+                                    ->when($supplier_id, function ($q, $supplier_id) {
+                                        return $q->where('supplier_id', $supplier_id);
+                                    })
+                                    ->where('notes','LIKE',"%$notes%")
+                                    ->when($product, function ($q, $product) {
+                                        return $q->whereHas('purchaseItems', function ($query) use ($product) {
+                                                        return $query->whereHas('product', function ($query) use ($product) {
+                                                                        return $query->where('name','LIKE',"%$product%");
+                                                                    });
+                                                    });
+                                    })
+                                    ->whereHas('purchaseItems', function ($query) use ($program) {
+                                        return $query->whereHas('product', function ($query) use ($program) {
+                                                      return $query->whereHas('program', function ($query) use ($program) {
+                                                                      return $query->where('name','LIKE',"%$program%");
+                                                                    });
+                                                    });
+                                    })
+                                    ->with('supplier')
+                                    ->get();
       }
       //ingresos
       if ($tipo == 2) {
@@ -207,20 +222,27 @@ class ProductController extends Controller
                                                            ->where('notes','LIKE',"%$notes%");
                                                    })->paginate(15);*/
        $dataCollection = Receiving::where('pharmacy_id',session('pharmacy_id'))
-                                  ->whereBetween('date', [$fecha_inicio,$fecha_termino])
-                                  ->when($establishment_id, function ($q, $establishment_id) {
-                                       return $q->where('establishment_id', $establishment_id);
-                                    })
-                                  ->where('notes','LIKE',"%$notes%")
-                                  ->whereHas('receivingItems', function ($query) use ($program) {
-                                      return $query->whereHas('product', function ($query) use ($program) {
-                                                    return $query->whereHas('program', function ($query) use ($program) {
-                                                                    return $query->where('name','LIKE',"%$program%");
-                                                                  });
-                                                  });
-                                  })
-                                  // ->paginate(15);
-                                  ->get();
+                                ->whereBetween('date', [$fecha_inicio,$fecha_termino])
+                                ->when($establishment_id, function ($q, $establishment_id) {
+                                    return $q->where('establishment_id', $establishment_id);
+                                })
+                                ->where('notes','LIKE',"%$notes%")
+                                ->when($product, function ($q, $product) {
+                                return $q->whereHas('purchaseItems', function ($query) use ($product) {
+                                                return $query->whereHas('product', function ($query) use ($product) {
+                                                                return $query->where('name','LIKE',"%$product%");
+                                                            });
+                                            });
+                                })
+                                ->whereHas('receivingItems', function ($query) use ($program) {
+                                    return $query->whereHas('product', function ($query) use ($program) {
+                                                return $query->whereHas('program', function ($query) use ($program) {
+                                                                return $query->where('name','LIKE',"%$program%");
+                                                                });
+                                                });
+                                })
+                                ->with('establishment')
+                                ->get();
       }
       //egresos
       if ($tipo == 3) {
@@ -238,6 +260,13 @@ class ProductController extends Controller
                                      return $q->where('establishment_id', $establishment_id);
                                    })
                                 ->where('notes','LIKE',"%$notes%")
+                                ->when($product, function ($q, $product) {
+                                    return $q->whereHas('purchaseItems', function ($query) use ($product) {
+                                                    return $query->whereHas('product', function ($query) use ($product) {
+                                                                    return $query->where('name','LIKE',"%$product%");
+                                                                });
+                                                });
+                                })
                                 ->whereHas('dispatchItems', function ($query) use ($program) {
                                     return $query->whereHas('product', function ($query) use ($program) {
                                                   return $query->whereHas('program', function ($query) use ($program) {
@@ -245,9 +274,8 @@ class ProductController extends Controller
                                                                 });
                                                 });
                                 })
+                                ->with('establishment')
                                 ->get();
-                                // ->paginate(15);
-                                // dd($dataCollection);
       }
 
       $suppliers = Supplier::where('pharmacy_id',session('pharmacy_id'))
@@ -264,7 +292,8 @@ class ProductController extends Controller
                                         })->when($product_id, function ($q, $product_id) {
                                            return $q->where('product_id', $product_id);
                                         })->select(DB::raw('max(id) as id'))
-                                          ->groupBy('product_id');
+                                          ->groupBy('product_id')->get();
+                                        //   dd($purchaseItems_aux);
       $purchaseItems= PurchaseItem::whereHas('purchase', function ($query) {
                                      return $query->where('pharmacy_id',session('pharmacy_id'));
                                   })->whereIn('id', $purchaseItems_aux)->paginate(15);
@@ -275,13 +304,18 @@ class ProductController extends Controller
     }
 
     public function repConsumeHistory(Request $request){
-      //dd($request->get('year'));
-      $matrix = Product::SearchConsumosHistoricos($request->get('year'),
-                                                  $request->get('category_id'),
-                                                  $request->get('establishment_id'));
+        //dd($request->get('year'));
+        
+        // // FIX TIEMPO LIMITE DE EJECUCUCION Y MEMORIA LIMITE EN PHP.INI
+        // set_time_limit(3600);
+        // ini_set('memory_limit', '1024M');
 
-      $categories = Category::orderBy('name','ASC')->get();
-      $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
+        $matrix = Product::SearchConsumosHistoricos($request->get('year'),
+                                                    $request->get('category_id'),
+                                                    $request->get('establishment_id'));
+
+        $categories = Category::orderBy('name','ASC')->get();
+        $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                      ->orderBy('name','ASC')->get();
       return view('pharmacies.reports.consume_history', compact('request','establishments','categories','matrix'));
     }

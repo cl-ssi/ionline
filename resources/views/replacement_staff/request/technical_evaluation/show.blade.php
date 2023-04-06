@@ -129,6 +129,15 @@
                   @endif
                 </td>
             </tr>
+            <tr>
+                <th class="table-active">Ítem Presupuestario</th>
+                <td colspan="2">
+                  @if($requestReplacementStaff->budgetItem)
+                      {{ $requestReplacementStaff->budgetItem->code }} <br>
+                      {{ $requestReplacementStaff->budgetItem->name }}
+                  @endif
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -231,7 +240,17 @@
         target="_blank">
         Exportar Resumen <i class="fas fa-file"></i>
     </a>
-<br />
+    <br />
+@endif
+
+@if($requestReplacementStaff->signatures_file_id)
+    <a class="btn btn-info btn-sm float-right" 
+        title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
+        target="_blank" 
+        title="Certificado">
+        <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
+    </a>
+    <br />
 @endif
 
 <br />

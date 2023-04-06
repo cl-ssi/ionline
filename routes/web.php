@@ -160,6 +160,8 @@ use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
+use App\Http\Controllers\Programmings\TaskController;
+use App\Http\Controllers\Programmings\TaskReschedulingController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
 
@@ -428,6 +430,11 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
+        Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
+        Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
+        Route::get('/budget_availability_certificate_callbackSign/{message}/{modelId}/{signaturesFile?}', [RequestReplacementStaffController::class, 'callbackSign'])->name('callbackSign');
+        Route::get('/show_budget_availability_certificate_signed/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_budget_availability_certificate_signed'])->name('show_budget_availability_certificate_signed');
+
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{requestReplacementStaff}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::get('/{requestReplacementStaff}/show', [TechnicalEvaluationController::class, 'show'])->name('show');
@@ -696,6 +703,10 @@ Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
 
 Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
+    Route::resource('tasks', TaskController::class)->except(['index']);
+    Route::prefix('tasks')->name('tasks.')->group(function () {
+        Route::resource('rescheduling', TaskReschedulingController::class);
+    });
     Route::get('/{programming}', [ParticipationController::class,'show'])->name('show');
     Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class,'create'])->name('create');
     Route::post('/{programming}', [ParticipationController::class,'store'])->name('store');
@@ -1885,6 +1896,10 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         });
     });
 
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
+        Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
+    });
+
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
     Route::get('/create_view_document/{requestForm}/{has_increased_expense}', [RequestFormController::class, 'create_view_document'])->name('create_view_document');
@@ -1923,33 +1938,6 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
 
     Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
-
-    //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
-    //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
-    Route::get('/saludo/{name}/{nickname?}', function ($name, $nickname = null) {
-      if ($nickname) {
-          return "Bienvenido {$name}, tu apodo es {$nickname}";
-        } else {
-            return "Bienvenido {$name}, no tienes apodo";
-          }
-    });
-
-    Route::get('/tesseract', function() {
-        return File::get(public_path() . '\tesseract.html');
-    });
-
-    //return File::get(public_path() . '/to new folder name/index.html');
-
-    //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
-    //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
-
-
-    // Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
-    //     Route::get('/', [PassengerController::class, 'index'])->name('index');
-    //     Route::get('/create', [PassengerController::class, 'create'])->name('create');
-    //     //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
-    //     //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-    // });
 });
 
 Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {

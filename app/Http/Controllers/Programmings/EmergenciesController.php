@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
-use App\Programmings\Emergency;
-use App\Programmings\Programming;
+use App\Models\Programmings\Emergency;
+use App\Models\Programmings\Programming;
 use Illuminate\Http\Request;
 
 class EmergenciesController extends Controller

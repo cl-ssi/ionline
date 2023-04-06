@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Programmings\ActionType;
+use App\Models\Programmings\ActionType;
 
 class ActionTypeTableSeeder extends Seeder
 {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Programmings\ActivityProgram;
+use App\Models\Programmings\ActivityProgram;
 use App\Models\Establishment;
 use App\Models\Commune;
 

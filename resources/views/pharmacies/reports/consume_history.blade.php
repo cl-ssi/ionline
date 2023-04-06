@@ -105,7 +105,7 @@
 @endsection
 
 @section('custom_js')
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	var tableToExcel = (function() {
 	    var uri = 'data:application/vnd.ms-excel;base64,'
 	    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
@@ -117,5 +117,5 @@
 	    window.location.href = uri + base64(format(template, ctx))
 	    }
 	})()
-</script>
+</script> -->
 @endsection

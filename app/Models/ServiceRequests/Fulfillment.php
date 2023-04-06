@@ -492,9 +492,14 @@ class Fulfillment extends Model implements Auditable
 
         $first_month = $serviceRequest->start_date->month;
         $last_month  = $serviceRequest->end_date->month;
+
+        // validación para que no considere periodos que se encuentren fuera del rango del contrato
+        if($this->month > $serviceRequest->end_date->month){
+            return null;
+        }
+
         /* TODO: Que pasa si un contrato pasa al siguiente año? */
         $year = $serviceRequest->start_date->year;
-
 
         $valores_mensualizados = array();
         if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {

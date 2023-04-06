@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Nuevo requerimiento
     @if($parte->id <> 0)
-        en base al parte <strong>{{ $parte->id }}</strong>
+        en base al parte <strong>{{ $parte->correlative }}</strong>
         @if($parte->files != null)
             @foreach($parte->files as $file)
                 <a href="{{ route('documents.partes.download', $file->id) }}"

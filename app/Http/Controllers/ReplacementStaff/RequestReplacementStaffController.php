@@ -16,9 +16,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\ReplacementStaff\NotificationSign;
 use App\Notifications\ReplacementStaff\NotificationNewRequest;
+use App\Notifications\ReplacementStaff\NotificationEndSigningProcess;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Parameters\Parameter;
+use App\Models\Parameters\BudgetItem;
 use App\Models\ReplacementStaff\Position;
+use Illuminate\Http\Response;
+use App\Models\Documents\SignaturesFile;
 
 class RequestReplacementStaffController extends Controller
 {
@@ -34,29 +38,6 @@ class RequestReplacementStaffController extends Controller
 
     public function assign_index()
     {
-        // $pending_requests = RequestReplacementStaff::latest()
-        //     ->WhereHas('technicalEvaluation', function($q) {
-        //       $q->Where('technical_evaluation_status', 'pending');
-        //     })
-        //     ->WhereHas('assignEvaluations', function($j) {
-        //       $j->Where('to_user_id', Auth::user()->id)
-        //        ->where('status', 'assigned');
-        //     })
-        //     ->get();
-
-        // $requests = RequestReplacementStaff::latest()
-        //     ->WhereHas('technicalEvaluation', function($q) {
-        //       $q->Where('technical_evaluation_status', 'complete')
-        //       ->OrWhere('technical_evaluation_status', 'rejected');
-        //     })
-        //     ->WhereHas('assignEvaluations', function($j) {
-        //       $j->Where('to_user_id', Auth::user()->id)
-        //        ->where('status', 'assigned');
-        //     })
-        //     ->paginate(10);
-
-        // return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
-
         return view('replacement_staff.request.assign_index');
     }
 
@@ -95,6 +76,13 @@ class RequestReplacementStaffController extends Controller
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
 
+        /* Listado de items presupuestarios */
+        $budgetItemsReplacement = BudgetItem::whereIn('code', ['210300500102', '210300500101'])->get();
+
+        $budgetItemsAnnoucement = BudgetItem::whereIn('code', ['210100100102','210100100103', '210200100102', 
+            '210200100103'])->get();
+        
+
         if($authorities->isNotEmpty()){
             $pending_requests_to_sign = RequestReplacementStaff::
                 with('legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'user', 'organizationalUnit')
@@ -116,7 +104,8 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
         }
         else{
             if(Auth::user()->organizationalUnit->id == 46)
@@ -142,8 +131,11 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 'requests_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
         }
+
+
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
         return redirect()->route('replacement_staff.request.own_index');
@@ -588,5 +580,61 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.reports.request_by_dates', compact('totalRequestByDates', 
             'request', 'pending', 'complete', 'rejected', 'firstRequest', 'continuity'));
     }
-    
+
+    public function create_budget_availability_certificate_view(RequestReplacementStaff $requestReplacementStaff){
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('replacement_staff.request.documents.budget_availability_certificate', compact('requestReplacementStaff'));
+
+        $output = $pdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'inline; filename="certificado_disponibilidad_presupuestaria.pdf"']
+        );
+    }
+
+    public function create_budget_availability_certificate_document(RequestReplacementStaff $requestReplacementStaff){
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('replacement_staff.request.documents.budget_availability_certificate', compact('requestReplacementStaff'));
+
+        return $pdf->stream('certificado-disponibilidad-presupuestaria.pdf');
+    }
+
+    public function callbackSign($message, $modelId, SignaturesFile $signaturesFile = null)
+    {
+        if (!$signaturesFile) { 
+            session()->flash('danger', $message);
+            return redirect()->route('request_forms.pending_forms');   
+        }
+        else{
+            // dd(Auth::user()->id);
+            $requestReplacementStaff = RequestReplacementStaff::find($modelId);
+
+            //SE ACTUALIZA SIGN DE FINANZAS
+            $event = $requestReplacementStaff->requestSign->where('ou_alias', 'finance')->first();
+
+            $event->user_id         = Auth::user()->id;
+            $event->request_status  = 'accepted';
+            $event->date_sign       = now();
+            $event->save();
+
+            /* MODIFICAR REQUEST CON SIGNATURE ID */  
+            $requestReplacementStaff->signatures_file_id = $signaturesFile->id;
+            $requestReplacementStaff->save();
+
+            $notification_reclutamiento_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'ReclutamientoSSI')->first()->value, today(), 'manager');
+            if($notification_reclutamiento_manager){
+                $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
+            }
+            session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
+            return redirect()->route('replacement_staff.request.to_sign');
+        }
+
+    }
+
+    public function show_budget_availability_certificate_signed(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return Storage::disk('gcs')->response($requestReplacementStaff->budgetAvailabilityCertificateSignature->signed_file);
+    }
 }

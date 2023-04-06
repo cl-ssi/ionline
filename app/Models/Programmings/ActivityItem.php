@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Programmings;
+namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,11 +14,11 @@ class ActivityItem extends Model
     ];
 
     public function program(){
-        return $this->belongsTo('App\Programmings\ActivityProgram', 'activity_id');
+        return $this->belongsTo('App\Models\Programmings\ActivityProgram', 'activity_id');
     }
 
     public function programItems(){
-        return $this->hasMany('App\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
+        return $this->hasMany('App\Models\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
     }
 
     public function programming(){

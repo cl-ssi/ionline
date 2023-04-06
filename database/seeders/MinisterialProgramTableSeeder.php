@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Programmings\MinisterialProgram;
+use App\Models\Programmings\MinisterialProgram;
 
 class MinisterialProgramTableSeeder extends Seeder
 {

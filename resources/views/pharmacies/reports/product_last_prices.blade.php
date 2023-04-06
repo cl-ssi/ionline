@@ -60,6 +60,8 @@
 	</table>
 </div>
 
+{{ $purchaseItems->appends(request()->query())->links() }}
+
 @endsection
 
 @section('custom_js')
