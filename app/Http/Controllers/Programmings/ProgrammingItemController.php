@@ -37,10 +37,10 @@ class ProgrammingItemController extends Controller
             //     })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
             // })
             // busqueda de actividades sin filtro ni tipo de actividad
-            ->when(!$listTracer && !$activityFilter && !$cycleFilter && !$activityType, function ($q){
+            ->when(!$listTracer && !$activityFilter && !$cycleFilter, function ($q){
                 return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user');
             })
-            ->when($listTracer || $activityFilter || $cycleFilter, function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
+            ->when($activityType == 'Directa' && ($listTracer || $activityFilter || $cycleFilter), function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
                 return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter, $cycleFilter) {
                     return $q2->when(!empty($listTracer), function($q3) use ($listTracer){
                                 return $q3->Wherein('int_code', $listTracer);
