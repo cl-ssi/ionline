@@ -9,7 +9,7 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+    <a href="{{ Session::has('items_url') ? Session::get('items_url') : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>

@@ -14,6 +14,7 @@ use App\Models\Programmings\ActivityProgram;
 use App\Models\Programmings\Professional;
 use App\Models\Programmings\ProgrammingActivityItem;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 class ProgrammingItemController extends Controller
 {
@@ -95,6 +96,8 @@ class ProgrammingItemController extends Controller
         ->distinct()->pluck('int_code');
 
         $professionals = Professional::all();
+
+        Session::put('items_url', request()->fullUrl());
 
         return view('programmings.programmingItems.index', compact('programming', 'tracerNumbers', 'pendingActivities', 'professionals'));
     }

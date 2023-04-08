@@ -9,7 +9,7 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ Session::has('success') ? route('programmingitems.index', ['programming_id' => $programmingItem->programming_id, 'activity_type' => $programmingItem->professionalHours->count() == 0 ? '' : ($programmingItem->activity_subtype != null ? 'Indirecta' : 'Directa')]) : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
+    <a href="{{ Session::has('items_url') ? Session::get('items_url') : url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>

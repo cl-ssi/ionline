@@ -17,7 +17,7 @@ class CommuneFileController extends Controller
 {
     public function index(Request $request)
     {
-        $year = $request->year ?? Carbon::now()->year + 1;
+        $year = $request->year ?? Carbon::now()->year;
         $accessByCommune = null;
         if(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False){
             $last_year = Programming::latest()->first()->year;
