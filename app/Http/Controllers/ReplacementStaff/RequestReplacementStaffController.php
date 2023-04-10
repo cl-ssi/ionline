@@ -77,11 +77,8 @@ class RequestReplacementStaffController extends Controller
         }
 
         /* Listado de items presupuestarios */
-        $budgetItemsReplacement = BudgetItem::whereIn('code', ['210300500102', '210300500101'])->get();
-
-        $budgetItemsAnnoucement = BudgetItem::whereIn('code', ['210100100102','210100100103', '210200100102', 
-            '210200100103'])->get();
-        
+        $budgetItems= BudgetItem::whereIn('code', ['210300500102', '210300500101','210100100102',
+            '210100100103', '210200100102', '210200100103'])->get();
 
         if($authorities->isNotEmpty()){
             $pending_requests_to_sign = RequestReplacementStaff::
@@ -105,7 +102,7 @@ class RequestReplacementStaffController extends Controller
                 })
                 ->paginate(10);
             return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
-                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
+                'requests_to_sign', 'budgetItems'));
         }
         else{
             if(Auth::user()->organizationalUnit->id == 46)
@@ -132,7 +129,7 @@ class RequestReplacementStaffController extends Controller
                 })
                 ->paginate(10);
             return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
-                'requests_to_sign', 'budgetItemsReplacement', 'budgetItemsAnnoucement'));
+                'requests_to_sign', 'budgetItems'));
         }
 
 

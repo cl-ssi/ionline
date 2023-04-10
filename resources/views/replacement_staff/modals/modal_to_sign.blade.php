@@ -243,46 +243,40 @@
                                                         @csrf
                                                         @method('PUT')
                                                             
-                                                        @if($requestSign->ou_alias == 'uni_per' && Auth::user()->hasRole('Replacement Staff: personal sign'))
+                                                        @if($requestSign->ou_alias == 'uni_per' 
+                                                            && Auth::user()->hasRole('Replacement Staff: personal sign') 
+                                                            && (($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata')
+                                                                || ($requestReplacementStaff->positions->count() > 0 && $requestReplacementStaff->positions->first()->legalQualityManage->NameValue == 'Contrata')))
                                                             <fieldset class="form-group">
                                                                 <label for="for_gender" >Subtítulo</label>
                                                                 <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
-                                                                        <option value="">Seleccione...</option>
-                                                                        @if($requestReplacementStaff->form_type == 'replacement')
-                                                                            @foreach($budgetItemsReplacement as $budgetItem)
-                                                                                <option value="{{ $budgetItem->id }}">
-                                                                                    {{ $budgetItem->code }} -
-                                                                                    @if($budgetItem->code == '210300500102')
-                                                                                        Reemplazos del personal no médico
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210300500101')
-                                                                                        Reemplazos del personal médico
-                                                                                    @endif
-                                                                                </option>
-                                                                            @endforeach
-                                                                        @else
-                                                                            @foreach($budgetItemsAnnoucement as $budgetItem)
-                                                                                <option value="{{ $budgetItem->id }}">
-                                                                                    {{ $budgetItem->code }} -
-                                                                                    @if($budgetItem->code == '210100100102')
-                                                                                        Personal de Planta Ley 18.834
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210100100103')
-                                                                                        Personal de Planta Ley 19.664
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210200100102')
-                                                                                        Personal a Contrata Ley 18.834
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210200100103')
-                                                                                        Personal a Contrata Ley 19.664
-                                                                                    @endif
-                                                                                </option>
-                                                                            @endforeach
-                                                                        @endif
+                                                                    <option value="">Seleccione...</option>
+                                                                    @foreach($budgetItems as $budgetItem)
+                                                                        <option value="{{ $budgetItem->id }}">
+                                                                            {{ $budgetItem->code }} -
+                                                                            @if($budgetItem->code == '210300500102')
+                                                                                Reemplazos del personal no médico
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210300500101')
+                                                                                Reemplazos del personal médico
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210100100102')
+                                                                                Personal de Planta Ley 18.834
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210100100103')
+                                                                                Personal de Planta Ley 19.664
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210200100102')
+                                                                                Personal a Contrata Ley 18.834
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210200100103')
+                                                                                Personal a Contrata Ley 19.664
+                                                                            @endif
+                                                                        </option>
+                                                                    @endforeach
                                                                 </select>
                                                             </fieldset>
                                                         @endif
-                                                    
                                                 </div>
                                                 <div class="col-md-12">
                                                     <p>
