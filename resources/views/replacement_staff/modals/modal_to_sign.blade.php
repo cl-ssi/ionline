@@ -245,8 +245,7 @@
                                                             
                                                         @if($requestSign->ou_alias == 'uni_per' 
                                                             && Auth::user()->hasRole('Replacement Staff: personal sign') 
-                                                            && (($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata')
-                                                                || ($requestReplacementStaff->positions->count() > 0 && $requestReplacementStaff->positions->first()->legalQualityManage->NameValue == 'Contrata')))
+                                                            && ($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata'))
                                                             <fieldset class="form-group">
                                                                 <label for="for_gender" >Subtítulo</label>
                                                                 <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
@@ -280,7 +279,9 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <p>
-                                                        @if($requestSign->ou_alias != 'finance')
+                                                        @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
+                                                            $requestReplacementStaff->budget_item_id)
+                                                        @else
                                                             <button type="submit" class="btn btn-success btn-sm"
                                                                     onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                                                     title="Aceptar">
@@ -289,8 +290,6 @@
                                                                     </span>
                                                             </button>
                                                             </form>
-                                                        @else
-                                                           
                                                         @endif
                                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
                                                             <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -358,7 +357,7 @@
 
                     @include('documents.signatures.partials.sign_file')
 
-                    <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
+                    <button type="button" data-toggle="modal" class="btn btn-primary float-right"
                         title="Firma Digital"
                         data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
                         Firmar <i class="fas fa-signature"></i>
