@@ -276,16 +276,23 @@ class RequestReplacementStaffController extends Controller
                     }
                     
                     /*  APROBACION UNIDAD DE PERSONAL*/
-                    $request_sing = new RequestSign();
-                    $request_sing->position = $position + 1;
-                    $request_sing->ou_alias = 'uni_per';
-                    $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'PersonalSSI')->first()->value);
-                    $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    $request_sing->save();
+                    if($request_replacement->form_type == 'replacement'){
+                        $request_sing = new RequestSign();
+                        $request_sing->position = $position + 1;
+                        $request_sing->ou_alias = 'uni_per';
+                        $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'PersonalSSI')->first()->value);
+                        $request_sing->requestReplacementStaff()->associate($request_replacement->id);
+                        $request_sing->save();
+                    }
 
                     /* APROBACIÓN RR.HH. */
                     $request_sing = new RequestSign();
-                    $request_sing->position = $position + 2;
+                    if($request_replacement->form_type == 'replacement'){
+                        $request_sing->position = $position + 2;
+                    }
+                    else{
+                        $request_sing->position = $position + 1;
+                    }
                     $request_sing->ou_alias = 'sub_rrhh';
                     $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SubRRHH')->first()->value);
                     $request_sing->requestReplacementStaff()->associate($request_replacement->id);
@@ -293,19 +300,16 @@ class RequestReplacementStaffController extends Controller
 
                     /* APROBACIÓN FINANZAS */
                     $request_sing = new RequestSign();
-                    $request_sing->position = $position + 3;
+                    if($request_replacement->form_type == 'replacement'){
+                        $request_sing->position = $position + 3;
+                    }
+                    else{
+                        $request_sing->position = $position + 2;
+                    }
                     $request_sing->ou_alias = 'finance';
                     $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value);
                     $request_sing->requestReplacementStaff()->associate($request_replacement->id);
                     $request_sing->save();
-
-                    /* APROBACIÓN SDA SSI */
-                    // $request_sing = new RequestSign();
-                    // $request_sing->position = $position + 4;
-                    // $request_sing->ou_alias = 'sub_adm';
-                    // $request_sing->organizationalUnit()->associate(Parameter::where('module', 'ou')->where('parameter', 'SDASSI')->first()->value);
-                    // $request_sing->requestReplacementStaff()->associate($request_replacement->id);
-                    // $request_sing->save();
                 }
                 $position++;
             }
