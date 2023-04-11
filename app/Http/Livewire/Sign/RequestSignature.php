@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Sign;
 
 use Illuminate\Support\Str;
 use App\Http\Requests\Sign\StoreSignatureRequest;
+use App\Models\Documents\Sign\Signature;
+use App\Models\Documents\Type;
 use App\Services\SignService;
 use App\User;
 use Livewire\Component;
@@ -23,8 +25,8 @@ class RequestSignature extends Component
     public $page;
 
     public $document_to_sign;
-    public $annex; //array
-    public $url; //array
+    public $annex;
+    public $url;
 
     public $left_signatures;
     public $center_signatures;
@@ -42,18 +44,20 @@ class RequestSignature extends Component
     public $column_center_visator;
     public $column_right_visator;
 
+    public $documentTypes;
+
     protected $listeners = [
         'setEmailRecipients',
         'setEmailDistributions',
         'addLeftSignature',
         'addCenterSignature',
         'addRightSignature',
-        'documentTypeChanged' => 'setDocumentType'
     ];
 
     public function mount()
     {
         $this->resetInput();
+        $this->documentTypes = Type::whereNull('partes_exclusive')->pluck('name', 'id');
     }
 
     public function rules()
@@ -66,25 +70,38 @@ class RequestSignature extends Component
         return view('livewire.sign.request-signature');
     }
 
-    public function setDocumentType($documentType)
-    {
-        $this->type_id = $documentType;
-    }
-
     public function save()
     {
         $this->validate();
 
         /**
-         * Guarda el archivo a firmar
+         * Map the recipients
          */
-        $folder = 'ionline/sign/original'; // enum o en el modelo Signature
-        $filename = 'document-sign-' . now()->timestamp();
+        $recipients = collect($this->recipients);
+        $recipients = $recipients->map(function($item) {
+            return $item['destination'];
+        });
+        $this->recipients = $recipients->toArray();
+
+        /**
+         * Map the distributions
+         */
+        $distribution = collect($this->distribution);
+        $distribution = $distribution->map(function($item) {
+            return $item['destination'];
+        });
+        $this->distribution = $distribution->toArray();
+
+        /**
+         * Save the file to sign
+         */
+        $folder = Signature::getFolder();
+        $filename = 'document-sign-' . now()->timestamp;
         $url = $filename.'.pdf';
         $this->document_to_sign->storeAs($folder, $url, 'gcs');
 
         /**
-         * Crea la solicitud de firma
+         * Create the signature request
          */
         $signatureService = new SignService;
         $signatureService->setDocumentNumber($this->document_number);
@@ -121,8 +138,8 @@ class RequestSignature extends Component
         $this->column_center_visator = false;
         $this->column_right_visator = false;
 
-        $this->recipients = [];
-        $this->distribution = [];
+        $this->recipients = collect([]);
+        $this->distribution = collect([]);
 
         $this->namesSignaturesLeft = collect([]);
         $this->namesSignaturesCenter = collect([]);
