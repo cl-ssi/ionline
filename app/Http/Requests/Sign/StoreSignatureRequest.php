@@ -33,11 +33,11 @@ class StoreSignatureRequest extends FormRequest
             'distribution'          => 'required',
             'recipients'            => 'required',
             'column_left_endorse'   => 'required',
-            'column_center_endorse' => 'required',
-            'column_right_endorse'  => 'required',
+            'column_center_endorse' => 'nullable',
+            'column_right_endorse'  => 'nullable',
             'left_signatures'       => 'required|array|min:1|max:5',
-            'center_signatures'     => 'required|array|min:1|max:5',
-            'right_signatures'      => 'required|array|min:1|max:5',
+            'center_signatures'     => 'nullable|array|max:5',
+            'right_signatures'      => 'nullable|array|max:5',
         ];
     }
 }
