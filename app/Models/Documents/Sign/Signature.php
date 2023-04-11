@@ -99,6 +99,11 @@ class Signature extends Model
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
     }
 
+    public static function getFolder()
+    {
+        return 'ionline/sign/original';
+    }
+
     public function makePayload($purpose, $run)
     {
         $entity = 'Subsecretaría General de La Presidencia';
@@ -117,7 +122,7 @@ class Signature extends Model
     {
         switch ($modo)
         {
-            case 0: 
+            case 0:
                 $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
                 break;
             case 1:
