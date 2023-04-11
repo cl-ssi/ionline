@@ -5,172 +5,323 @@ namespace App\Services;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class SignService
 {
+    /**
+     *
+     * @var string
+     */
     public $document_number;
 
+    /**
+     * @var string
+     */
     public $type_id;
 
+    /**
+     * @var bool
+     */
     public $reserved;
 
+    /**
+     * @var string
+     */
     public $subject;
 
+    /**
+     * @var string
+     */
     public $description;
 
+    /**
+     * @var array
+     */
     public $distribution;
 
+    /**
+     * @var array
+     */
     public $recipients;
 
+    /**
+     * @var string
+     */
     public $page;
 
+    /**
+     * @var bool
+     */
     public $column_left_visator;
 
+    /**
+     * @var string
+     */
     public $column_left_endorse;
 
+    /**
+     * @var bool
+     */
     public $column_center_visator;
 
+    /**
+     * @var string
+     */
     public $column_center_endorse;
 
+    /**
+     * @var bool
+     */
     public $column_right_visator;
 
+    /**
+     * @var string
+     */
     public $column_right_endorse;
 
+    /**
+     * @var \Illuminate\Support\Collection
+     */
     public $signers_left;
 
+    /**
+     * @var \Illuminate\Support\Collection
+     */
     public $signers_center;
 
+    /**
+     * @var \Illuminate\Support\Collection
+     */
     public $signers_right;
 
+    /**
+     * @var string
+     */
     public $file;
 
+    /**
+     * @var mixed
+     */
     public $annexes;
 
+    /**
+     * @var string
+     */
     public $user_id;
 
+    /**
+     * @var string
+     */
     public $ou_id;
 
+    /**
+     * Initialize the service
+     */
     public function __construct()
     {
         $this->page = 'last';
         $this->reserved = false;
     }
 
-    // tipo de visacion
-    // opcional (uno o mas usuario)
-    // obligatorio sin cadena (uno o mas)
-    // obligatorio en cadena responsabilidad (dos o mas usuario)
-
-    // si no hay usuario no aparezca el tipo de visacion
+    /**
+     * @param  string $documentNumber
+     * @return void
+     */
     public function setDocumentNumber(string $documentNumber)
     {
         $this->document_number = Carbon::parse($documentNumber);
     }
 
-    public function setType($typeId)
+    /**
+     * @param  string $typeId
+     * @return void
+     */
+    public function setType(string $typeId)
     {
         $this->type_id = $typeId;
     }
 
+    /**
+     * @param  boolean $reserved
+     * @return void
+     */
     public function setReserved(bool $reserved = false)
     {
         $this->reserved = $reserved;
     }
 
-    public function setSubject($subject)
+    /**
+     * @param  string $subject
+     * @return void
+     */
+    public function setSubject(string $subject)
     {
         $this->subject = $subject;
     }
 
-    public function setDescription($description)
+    /**
+     * @param  string $description
+     * @return void
+     */
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
 
-    public function setDistribution($distribution)
+    /**
+     * @param  array $distribution
+     * @return void
+     */
+    public function setDistribution(array $distribution)
     {
         $this->distribution = $distribution;
     }
 
-    public function setRecipients($recipients)
+    /**
+     * @param  array $recipients
+     * @return void
+     */
+    public function setRecipients(array $recipients)
     {
         $this->recipients = $recipients;
     }
 
+    /**
+     * @param  string $page
+     * @return void
+     */
     public function setPage(string $page = 'last')
     {
         $this->page = $page;
     }
 
-    public function setColumnLeftVisator($columnLeftVisator)
+    /**
+     * @param  bool $columnLeftVisator
+     * @return void
+     */
+    public function setColumnLeftVisator(bool $columnLeftVisator)
     {
         $this->column_left_visator = $columnLeftVisator;
     }
 
-    public function setColumnLeftEndorse($columnLeftEndorse)
+    /**
+     * @param  string $columnLeftEndorse
+     * @return void
+     */
+    public function setColumnLeftEndorse(string $columnLeftEndorse)
     {
         $this->column_left_endorse = $columnLeftEndorse;
     }
 
-    public function setColumnCenterVisator($columnCenterVisator)
+    /**
+     * @param  boolean $columnCenterVisator
+     * @return void
+     */
+    public function setColumnCenterVisator(bool $columnCenterVisator)
     {
         $this->column_center_visator = $columnCenterVisator;
     }
 
-    public function setColumnCenterEndorse($columnCenterEndorse)
+    /**
+     * @param  string $columnCenterEndorse
+     * @return void
+     */
+    public function setColumnCenterEndorse(string $columnCenterEndorse)
     {
         $this->column_center_endorse = $columnCenterEndorse;
     }
 
-    public function setColumnRightVisator($columnRightVisator)
+    /**
+     * @param  boolean $columnRightVisator
+     * @return void
+     */
+    public function setColumnRightVisator(bool $columnRightVisator)
     {
         $this->column_right_visator = $columnRightVisator;
     }
 
-    public function setColumnRightEndorse($columnRightEndorse)
+    /**
+     * @param  string $columnRightEndorse
+     * @return void
+     */
+    public function setColumnRightEndorse(string $columnRightEndorse)
     {
         $this->column_right_endorse = $columnRightEndorse;
     }
 
-    public function setUserId($userId)
+    /**
+     * @param  string $userId
+     * @return void
+     */
+    public function setUserId(string $userId)
     {
         $this->user_id = $userId;
     }
 
-    public function setOuId($ouId)
+    /**
+     * @param  string $ouId
+     * @return void
+     */
+    public function setOuId(string $ouId)
     {
         $this->ou_id = $ouId;
     }
 
-    public function setFile($file)
+    /**
+     * @param  string $file
+     * @return void
+     */
+    public function setFile(string $file)
     {
         $this->file = $file;
     }
 
-    public function setAnnexes($annexes)
+    /**
+     * @param  mixed $annexes
+     * @return void
+     */
+    public function setAnnexes(mixed $annexes)
     {
         $this->annexes = $annexes;
     }
 
-    public function setSignersLeft($signersLeft)
+    /**
+     * @param  Collection $signersLeft
+     * @return void
+     */
+    public function setSignersLeft(Collection $signersLeft)
     {
         $this->signers_left = $signersLeft;
     }
 
-    public function setSignersCenter($signersCenter)
+    /**
+     * @param  Collection $signersCenter
+     * @return void
+     */
+    public function setSignersCenter(Collection $signersCenter)
     {
         $this->signers_center = $signersCenter;
     }
 
-    public function setSignersRight($signersRight)
+    /**
+     * @param  Collection $signersRight
+     * @return void
+     */
+    public function setSignersRight(Collection $signersRight)
     {
         $this->signers_right = $signersRight;
     }
 
+    /**
+     * Save the Signature and the file to sign
+     *
+     * @return Signature
+     */
     public function save()
     {
         /**
-         * Crea la solicitud de Firma
+         * Create the Signature request
          */
         $signature = Signature::create([
             'document_number' => $this->document_number,
@@ -194,7 +345,7 @@ class SignService
         ]);
 
         /**
-         * Agrega los firmantes de la columna izquierda
+         * Add the signers from the left column
          */
         foreach($this->signers_left as $indexLeft => $itemSignerLeft)
         {
@@ -212,7 +363,7 @@ class SignService
         }
 
         /**
-         * Agrega los firmantes de la columna derecha
+         * Add the signers from the center column
          */
         foreach($this->signers_center as $indexCenter => $itemSignerCenter)
         {
@@ -231,7 +382,7 @@ class SignService
         }
 
         /**
-         * Agrega los firmantes de la columna derecha
+         * Add the signers from the right column
          */
         foreach($this->signers_right as $indexRight => $itemSignerRight)
         {
@@ -248,5 +399,7 @@ class SignService
 
             $signature->flows()->save($signerRight);
         }
+
+        return $signature;
     }
 }
