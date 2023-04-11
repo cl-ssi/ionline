@@ -6,14 +6,15 @@ use Livewire\Component;
 
 class AddEmails extends Component
 {
-    public $emails;
-    public $email;
+    public $typeDestination;
+    public $destinations;
+    public $destination;
     public $eventName;
-    public $emailRecipients;
 
     public function mount()
     {
-        $this->emails = collect();
+        $this->destinations = collect();
+        $this->typeDestination = "email";
     }
 
     public function render()
@@ -23,15 +24,29 @@ class AddEmails extends Component
 
     public function addEmail()
     {
-        $this->validate([
-            'email' => 'required|email',
-        ]);
+        $rules = [
+            'destination' => 'required|string|min:5|max:255',
+        ];
 
-        $this->emails->push($this->email);
+        if($this->typeDestination == "email")
+        {
+            $rules = [
+                'destination' => 'required|email',
+            ];
+        }
 
-        $this->email = null;
+        $this->validate($rules);
 
-        $this->emitUp($this->eventName, $this->emails);
+        $destination['type'] = $this->typeDestination;
+        $destination['destination'] = $this->destination;
+
+        $this->destinations->push($destination);
+
+        $this->destination = null;
+
+        $this->emitUp($this->eventName, $this->destinations);
+
+        $this->typeDestination = "email";
 
     }
 }
