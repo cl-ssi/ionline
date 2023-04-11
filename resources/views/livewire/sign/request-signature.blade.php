@@ -24,8 +24,18 @@
         </fieldset>
 
         <fieldset class="form-group col-3">
-            @livewire('signatures.document-types', ['type_id' => $signature->type_id ?? null])
-            <input type="hidden" name="type_id" class="@error('type_id') is-invalid @enderror">
+            <label for="document-type">Tipo de Documento*</label>
+            <select
+                class="form-control"
+                id="document-type"
+                required
+                wire:model='type_id'
+            >
+                <option value="">Seleccion un tipo</option>
+                @foreach($documentTypes as $id => $type)
+                    <option value="{{ $id }}">{{ $type }}</option>
+                @endforeach
+            </select>
             @error('type_id')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -51,7 +61,22 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-5">
+        <fieldset class="form-group col-4">
+            <label for="document-signed">Documento a Firmar</label>
+            <input
+                type="file"
+                class="form-control @error('document_to_sign') is-invalid @enderror"
+                id="document-signed"
+                wire:model="document_to_sign"
+            >
+            @error('document_to_sign')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
+
+        <fieldset class="form-group col-8">
             <label for="description">Descripción del documento</label>
             <input
                 type="text"
@@ -67,39 +92,6 @@
             @enderror
         </fieldset>
 
-        <fieldset class="form-group col-2">
-            <label for="page">Página</label>
-            <select
-                class="form-control"
-                name="page"
-                required
-                wire:model='page'
-                required
-            >
-                <option value="last">Última</option>
-                <option value="first">Primera</option>
-            </select>
-            @error('page')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
-
-        <fieldset class="form-group col-5">
-            <label for="document-signed">Documento a Firmar</label>
-            <input
-                type="file"
-                class="form-control @error('document_to_sign') is-invalid @enderror"
-                id="document-signed"
-                wire:model="document_to_sign"
-            >
-            @error('document_to_sign')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
-        </fieldset>
     </div>
 
     <div class="form-row">
@@ -154,13 +146,17 @@
                 </span>
             @enderror
 
-            <p class="mt-1">
-                <small>
-                    @foreach($distribution as $i => $emailDistribution)
-                        <a href="mailto:{{ $emailDistribution }}">{{ $emailDistribution }}</a>@if($i < count($distribution) - 1),@else.@endif
-                    @endforeach
-                </small>
-            </p>
+            <ul class="list-group mt-2">
+                @foreach($distribution as $i => $itemDistribution)
+                    <li class="list-group-item">
+                        @if($itemDistribution['type'] == 'email')
+                            <a href="mailto:{{ $itemDistribution['destination'] }}">{{ $itemDistribution['destination'] }}</a>
+                        @else
+                            {{ $itemDistribution['destination'] }}
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
         </fieldset>
 
         <fieldset class="form-group col-6">
@@ -177,19 +173,27 @@
                 </span>
             @enderror
 
-            <p class="mt-1">
-                <small>
-                    @foreach($recipients as $j => $emailRecipient)
-                        <a href="mailto:{{ $emailRecipient }}">{{ $emailRecipient }}</a>@if($j < count($recipients) - 1),@else.@endif
-                    @endforeach
-                </small>
-            </p>
+            <ul class="list-group mt-2">
+                @foreach($recipients as $j => $itemRecipient)
+                    <li class="list-group-item">
+                        @if($itemRecipient['type'] == 'email')
+                            <a href="mailto:{{ $itemRecipient['destination'] }}">{{ $itemRecipient['destination'] }}</a>
+                        @else
+                            {{ $itemRecipient['destination'] }}
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
         </fieldset>
     </div>
 
-    <h5>
-        Firmantes
-    </h5>
+    <div class="row">
+        <div class="col">
+            <h5>
+                Firmantes
+            </h5>
+        </div>
+    </div>
 
     <div class="form-row mt-4">
         <fieldset class="form-group col-4">
@@ -207,30 +211,42 @@
                 </span>
             @enderror
 
-            <hr>
-
-            <div class="input-group input-group-sm mt-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="left-endorse">
-                        Firma
-                    </label>
+            @if($namesSignaturesLeft->count() > 0)
+                <div class="input-group input-group-sm my-2">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="left-endorse">
+                            Firma
+                        </label>
+                    </div>
+                    <select
+                        class="custom-select custom-select-sm @error('column_left_endorse') is-invalid @enderror"
+                        id="left-endorse"
+                        wire:model.debounce.1500ms="column_left_endorse"
+                    >
+                        <option selected>Selecione Tipo Visación</option>
+                        @if($namesSignaturesLeft->count() >= 1)
+                            <option value="Opcional">Opcional</option>
+                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        @endif
+                        @if($namesSignaturesLeft->count() >= 2)
+                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
+                        @endif
+                    </select>
                 </div>
-                <select
-                    class="custom-select custom-select-sm @error('column_left_endorse') is-invalid @enderror"
-                    id="left-endorse"
-                    wire:model.debounce.1500ms="column_left_endorse"
-                >
-                    <option selected>Selecione Tipo Visación</option>
-                    <option value="Opcional">Opcional</option>
-                    <option value="Obligatorio">Obligatorio</option>
-                    <option value="En Cadena de Responsabilidad">En Cadena de Responsabilidad</option>
-                </select>
                 @error('column_left_endorse')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-            </div>
+            @endif
+
+            <ul class="list-group mt-1">
+                @forelse($namesSignaturesLeft as $indexLeft => $itemLeftSignature)
+                    <li class="list-group-item">1.{{ $indexLeft + 1 }} {{ $itemLeftSignature }} </li>
+                @empty
+                    <li class="list-group-item">No hay usuarios</li>
+                @endforelse
+            </ul>
 
             <div class="form-check form-check-inline my-1">
                 <input
@@ -243,16 +259,6 @@
                     Visadores
                 </label>
             </div>
-
-            <br>
-
-            <ul class="list-group">
-                @forelse($namesSignaturesLeft as $indexLeft => $itemLeftSignature)
-                    <li class="list-group-item">1.{{ $indexLeft + 1 }} {{ $itemLeftSignature }} </li>
-                @empty
-                    <li class="list-group-item">No hay usuarios</li>
-                @endforelse
-            </ul>
         </fieldset>
 
         <fieldset class="form-group col-4">
@@ -270,45 +276,34 @@
                 </span>
             @enderror
 
-            <hr>
-
-            <div class="input-group input-group-sm mt-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="center-endorse">
-                        Visación Central
-                    </label>
+            @if($namesSignaturesCenter->count() > 0)
+                <div class="input-group input-group-sm my-2">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="center-endorse">
+                            Firma
+                        </label>
+                    </div>
+                    <select
+                        class="custom-select custom-select-sm @error('column_center_endorse') is-invalid @enderror"
+                        id="center-endorse"
+                        wire:model.debounce.1500ms="column_center_endorse"
+                    >
+                        <option selected>Selecione Tipo Visación</option>
+                        @if($namesSignaturesCenter->count() >= 1)
+                            <option value="Opcional">Opcional</option>
+                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        @endif
+                        @if($namesSignaturesCenter->count() >= 2)
+                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
+                        @endif
+                    </select>
+                    @error('column_center_endorse')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
-                <select
-                    class="custom-select custom-select-sm @error('column_center_endorse') is-invalid @enderror"
-                    id="center-endorse"
-                    wire:model.debounce.1500ms="column_center_endorse"
-                >
-                    <option selected>Selecione Tipo Visación</option>
-                    <option value="Opcional">Opcional</option>
-                    <option value="Obligatorio">Obligatorio</option>
-                    <option value="En Cadena de Responsabilidad">En Cadena de Responsabilidad</option>
-                </select>
-                @error('column_center_endorse')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-check form-check-inline my-1">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    wire:model="column_center_visator"
-                    id="left-visator"
-                    disabled
-                >
-                <label class="form-check-label" for="left-visator">
-                    Visadores
-                </label>
-            </div>
-
-            <br>
+            @endif
 
             <ul class="list-group">
                 @forelse($namesSignaturesCenter as $indexCenter => $itemCenterSignature)
@@ -317,6 +312,19 @@
                     <li class="list-group-item">No hay usuarios</li>
                 @endforelse
             </ul>
+
+            <div class="form-check form-check-inline my-1">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    wire:model="column_center_visator"
+                    id="center-visator"
+                    disabled
+                >
+                <label class="form-check-label" for="center-visator">
+                    Visadores
+                </label>
+            </div>
         </fieldset>
 
         <fieldset class="form-group col-4">
@@ -334,44 +342,34 @@
                 </span>
             @enderror
 
-            <hr>
-
-            <div class="input-group input-group-sm mt-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="right-endorse">
-                        Visación Derecha
-                    </label>
+            @if($namesSignaturesCenter->count() > 0)
+                <div class="input-group input-group-sm my-2">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="right-endorse">
+                            Firma
+                        </label>
+                    </div>
+                    <select
+                        class="custom-select custom-select-sm @error('column_right_endorse') is-invalid @enderror"
+                        id="right-endorse"
+                        wire:model.debounce.1500ms="column_right_endorse"
+                    >
+                        <option selected>Selecione Tipo Visación</option>
+                        @if($namesSignaturesRight->count() >= 1)
+                            <option value="Opcional">Opcional</option>
+                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        @endif
+                        @if($namesSignaturesRight->count() >= 2)
+                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
+                        @endif
+                    </select>
+                    @error('column_right_endorse')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
-                <select
-                    class="custom-select custom-select-sm @error('column_right_endorse') is-invalid @enderror"
-                    id="right-endorse"
-                    wire:model.debounce.1500ms="column_right_endorse"
-                >
-                    <option selected>Selecione Tipo Visación</option>
-                    <option value="Opcional">Opcional</option>
-                    <option value="Obligatorio">Obligatorio</option>
-                    <option value="En Cadena de Responsabilidad">En Cadena de Responsabilidad</option>
-                </select>
-                @error('column_right_endorse')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-
-            <div class="form-check form-check-inline my-1">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    wire:model="column_right_visator"
-                    id="left-visator"
-                    disabled
-                >
-                <label class="form-check-label" for="left-visator">
-                    Visadores
-                </label>
-            </div>
-            <br>
+            @endif
 
             <ul class="list-group">
                 @forelse($namesSignaturesRight as $indexRight => $itemRightSignature)
@@ -380,16 +378,56 @@
                     <li class="list-group-item">No hay usuarios</li>
                 @endforelse
             </ul>
+
+            <div class="form-check form-check-inline my-1">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    wire:model="column_right_visator"
+                    id="right-visator"
+                    disabled
+                >
+                <label class="form-check-label" for="right-visator">
+                    Visadores
+                </label>
+            </div>
         </fieldset>
     </div>
 
-    <button
-        type="submit"
-        id="submitBtn"
-        class="btn btn-primary mt-2"
-        wire:click="save"
-    >
-        <i class="fa fa-file"></i> Crear Solicitud
-    </button>
+    <div class="row">
+        <div class="col">
+            <button
+                type="submit"
+                id="submitBtn"
+                class="btn btn-primary"
+                wire:click="save"
+            >
+                <i class="fa fa-file"></i> Crear Solicitud
+            </button>
+        </div>
+
+        <div class="col-4">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Ubicación de Firmas</span>
+                </div>
+                <select
+                    class="form-control"
+                    name="page"
+                    required
+                    wire:model='page'
+                    required
+                >
+                    <option value="last">Última Pagina</option>
+                    <option value="first">Primera Pagina</option>
+                </select>
+                @error('page')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+    </div>
 
 </div>
