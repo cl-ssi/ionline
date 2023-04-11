@@ -47,6 +47,9 @@ class FundamentDetailManage extends Model
             case 'administrative leave':
               return 'Permiso administrativo';
               break;
+            case 'compensatory rest':
+              return 'Descanso reparatorio';
+              break;
             default: return $this->name;
         }
     }

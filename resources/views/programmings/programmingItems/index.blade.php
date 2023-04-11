@@ -44,7 +44,7 @@
             <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
         </a>
         @if($programming->pendingItems != null || $programming->pendingIndirectItems != null)
-        <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal" @unlessrole('Programming: Review|Programming: Admin') disabled @endunlessrole>
         <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{$programming->pendingItems->count() + $programming->pendingIndirectItems->count()}}</span>
         </button> 
         @endif
@@ -61,7 +61,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @can('ProgrammingItem: evaluate')
                     <form method="post" action="{{ route('pendingitems.store') }}">
                     @csrf
                     <input type="hidden" name="programming_id" value="{{$programming->id}}">
@@ -86,7 +85,6 @@
                         </div>
                     </div>
                     </form>
-                    @endcan
                     <div class="table-responsive">
                     <table class="table center table-striped table-sm table-bordered table-condensed fixed_headers table-hover">
                         <thead class="small" style="font-size:60%;">
@@ -99,7 +97,7 @@
                             <th class="text-center align-middle">PROF. QUE OTORGA LA PRESTACIÓN</th>
                             <th class="text-center align-middle">OBSERVACIONES</th>
                             <th class="text-center align-middle">SOLICITADO POR</th>
-                            @can('ProgrammingItem: evaluate')<th class="text-center align-middle">ACCIONES</th>@endcan
+                            <th class="text-center align-middle">ACCIONES</th>
                         </thead>
                         <tbody style="font-size:70%;">
                             @forelse($programming->pendingIndirectItems as $item)
@@ -113,14 +111,11 @@
                                 <td class="text-center align-middle">-</td>
                                 <td class="text-center align-middle w-25">
                                     <div class="editable-txt">{!! $item->observation !!} 
-                                    @can('ProgrammingItem: evaluate')
                                     <button id="btn_{{$item->id}}" title="Editar observaciones" class="float-right edit-btn" style="border: none; background-color:transparent;">
                                         <i class="fas fa-edit fa-lg text-warning"></i>
                                     </button>
-                                    @endcan
                                     </div>
 
-                                    @can('ProgrammingItem: evaluate')
                                     <form id="form_{{$item->id}}" class="editable-form" action="{{ route('pendingitems.update', $item->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
@@ -132,10 +127,8 @@
                                             <i class="fas fa-check fa-lg text-success"></i>
                                         </button>
                                     </form>
-                                    @endcan
                                 </td>
                                 <td class="text-center align-middle">{{ $item->requestedBy->fullName ?? '' }}</td>
-                                @can('ProgrammingItem: evaluate')
                                 <td class="text-center align-middle">
                                 <form action="{{ route('pendingitems.destroy', $item->id) }}" method="POST">
                                     @csrf
@@ -145,7 +138,6 @@
                                     </button>
                                 </form>
                                 </td>
-                                @endcan
                             </tr>
                             @empty
                             <td class="text-center align-middle" colspan="10"><br><br>No hay actividades indirectas pendientes<br><br><br></td>
@@ -162,14 +154,11 @@
                                 <td class="text-center align-middle">{{ $item->professional }}</td>
                                 <td class="text-center align-middle w-25">
                                     <div class="editable-txt">{!! $item->pivot->observation !!} 
-                                    @can('ProgrammingItem: evaluate')
                                     <button id="btn_{{$item->pivot->id}}" title="Editar observaciones" class="float-right edit-btn" style="border: none; background-color:transparent;">
                                         <i class="fas fa-edit fa-lg text-warning"></i>
                                     </button>
-                                    @endcan
                                     </div>
 
-                                    @can('ProgrammingItem: evaluate')
                                     <form id="form_{{$item->pivot->id}}" class="editable-form" action="{{ route('pendingitems.update', $item->pivot->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
@@ -181,10 +170,8 @@
                                             <i class="fas fa-check fa-lg text-success"></i>
                                         </button>
                                     </form>
-                                    @endcan
                                 </td>
                                 <td class="text-center align-middle">{{ $item->pivot->requestedBy->fullName ?? '' }}</td>
-                                @can('ProgrammingItem: evaluate')
                                 <td class="text-center align-middle">
                                 <form action="{{ route('pendingitems.destroy', $item->pivot->id) }}" method="POST">
                                     @csrf
@@ -194,7 +181,6 @@
                                     </button>
                                 </form>
                                 </td>
-                                @endcan
                             </tr>
                             @empty
                             <td class="text-center align-middle" colspan="10"><br><br>No hay actividades pendientes<br><br><br></td>
@@ -300,12 +286,17 @@
     <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
     <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasDirectas')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
+<!-- PERMISOS -->
+@php($canEvaluate = Auth::user()->can('ProgrammingItem: evaluate'))
+@php($canEdit = Auth::user()->can('ProgrammingItem: edit'))
+@php($canDuplicate = Auth::user()->can('ProgrammingItem: duplicate'))
+@php($canDelete = Auth::user()->can('ProgrammingItem: delete'))
 <!-- ACTIVIDADES DIRECTAS -->
 <table id="HorasDirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-center align-middle" > Evaluación</th>@endcan
-            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
+            @if($canEvaluate)<th class="text-center align-middle" > Evaluación</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -335,8 +326,8 @@
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -344,7 +335,7 @@
         @php($directProgrammingItems = $programming->itemsBy('Direct', Request::has('activity') || Request::has('tracer_number')))
         @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
-        @can('ProgrammingItem: evaluate')
+        @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->reviewItems->count() != 0)
@@ -367,8 +358,8 @@
                     @endif
                 </a>
             </td>
-        @endcan
-        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+        @endif
+        @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
@@ -403,7 +394,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->user->tinny_name }}</td>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
@@ -413,7 +404,7 @@
                 </form>
             </td>
             @endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            @if($canDelete && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitem->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
@@ -457,8 +448,8 @@
 <table id="HorasIndirectas{{$activity_subtype}}" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
+            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
             <th class="text-center align-middle">CATEGORÍA</th>
             <th class="text-center align-middle">NOMBRE DE ACTIVIDAD</th>
             <th class="text-center align-middle">N° VECES AL MES</th>
@@ -481,8 +472,8 @@
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -490,7 +481,7 @@
     @php($indirectProgrammingItems = $programming->itemsIndirectBy($activity_subtype))
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
-        @can('ProgrammingItem: evaluate')
+        @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitemsIndirect->reviewItems->count() != 0)
@@ -513,8 +504,8 @@
                     @endif
                 </a>
             </td>
-        @endcan
-        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+        @endif
+        @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_category }}</td>
@@ -536,7 +527,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
@@ -546,7 +537,7 @@
                 </form>
             </td>
             @endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            @if($canDelete && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
@@ -590,8 +581,8 @@
 <table id="HorasIndirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
+            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -620,8 +611,8 @@
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -629,7 +620,7 @@
     @php($indirectProgrammingItems = $programming->itemsBy('Indirect', Request::has('activity') || Request::has('tracer_number')))
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
-        @can('ProgrammingItem: evaluate')
+        @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
@@ -659,8 +650,8 @@
                     @endif
                 </a>
             </td>
-        @endcan
-        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+        @endif
+        @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
@@ -695,7 +686,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->user->tinny_name }}</td>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
@@ -705,7 +696,7 @@
                 </form>
             </td>
             @endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            @if($canDelete && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
@@ -749,8 +740,8 @@
     <thead>
         <tr class="small " style="font-size:55%;">
 
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
+            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+            @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">TIPO</th>
@@ -782,8 +773,8 @@
                 data-content="Usa las teclas <span class='badge badge-secondary'>CTRL</span> + <span class='badge badge-secondary'>F</span> para activar el buscador de tu navegador.">
                 <i class="fas fa-info-circle fa-lg"></i></a>
             </th>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
+            @if($canDuplicate && $programming->status == 'active')<th class="text-center align-middle">DUPLICAR</th>@endif
+            @if($canDelete && $programming->status == 'active')<th class="text-left align-middle" >ELIMINAR</th>@endif
 
         </tr>
     </thead>
@@ -791,7 +782,7 @@
     @php($workshopProgrammingItems = $programming->itemsBy('Workshop', Request::has('activity') || Request::has('tracer_number')))
         @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
-        @can('ProgrammingItem: evaluate')
+        @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
@@ -821,8 +812,8 @@
                     @endif
                 </a>
             </td>
-        @endcan
-        @if(Auth::user()->can('ProgrammingItem: edit') && $programming->status == 'active')
+        @endif
+        @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
@@ -858,7 +849,7 @@
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->user->tinny_name }}</td>
-            @if(Auth::user()->can('ProgrammingItem: duplicate') && $programming->status == 'active')
+            @if($canDuplicate && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.clone', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('POST') }} {{ csrf_field() }}
@@ -868,7 +859,7 @@
                 </form>
             </td>
             @endif
-            @if(Auth::user()->can('ProgrammingItem: delete') && $programming->status == 'active')
+            @if($canDelete && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}

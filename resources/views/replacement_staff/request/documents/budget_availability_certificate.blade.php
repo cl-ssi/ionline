@@ -37,4 +37,19 @@
     Suscribe y Certifica,
 </div>
 
+<div style="clear: both; padding-bottom: 670px">&nbsp;</div>
+
+<div style="text-align: left;">
+
+    @foreach($requestReplacementStaff->requestSign as $sign)
+        @if($sign->user)
+            @if($sign->ou_alias != 'sub_rrhh')
+                {{ $sign->user->getInitialsAttribute() }} -
+            @else
+                {{ $sign->user->getInitialsAttribute() }}
+            @endif
+        @endif
+    @endforeach
+</div>
+
 @endsection
