@@ -19,14 +19,14 @@ class ProgrammingReviewController extends Controller
         $communeFile = CommuneFile::where('id',$request->commune_file_id)->first();
 
 
-        return view('programmings/reviews/index')->withProgramming($programming)->withReview($reviews)->with('communeFile', $communeFile);
+        return view('programmings.reviews.index')->withProgramming($programming)->withReview($reviews)->with('communeFile', $communeFile);
     }
 
     public function show($communeFile_id)
     {
         $communeFile = CommuneFile::with('programming_reviews.updatedBy:id,name,fathers_family,mothers_family')->findOrFail($communeFile_id);
         
-        return view('programmings/reviews/show', compact('communeFile'));
+        return view('programmings.reviews.show', compact('communeFile'));
     }
 
     public function update(Request $request,$id)

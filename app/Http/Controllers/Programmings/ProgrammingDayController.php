@@ -11,13 +11,13 @@ class ProgrammingDayController extends Controller
     public function index(Request $request)
     {
         $programmingDays = ProgrammingDay::where('programming_id',$request->programming_id)->first();
-        return view('programmings/programmingDays/index')->withProgrammingDays($programmingDays);
+        return view('programmings.programmingDays.index')->withProgrammingDays($programmingDays);
     }
 
     public function show(Request $request, $id)
     {
         $programmingDays = ProgrammingDay::where('programming_id',$id)->first();
-        return view('programmings/programmingDays/index')->withProgrammingDays($programmingDays);
+        return view('programmings.programmingDays.index')->withProgrammingDays($programmingDays);
     }
 
     public function store(Request $request)

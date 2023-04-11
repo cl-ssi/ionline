@@ -536,7 +536,14 @@ class Fulfillment extends Model implements Auditable
         {
             // la persona trabaja menos de 1 mes
             $diff_in_months = $serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
+
             if ($diff_in_months < 1) {
+
+                // se agrega validación para cuando sea inferior a un mes pero sea de meses diferentes.
+                if($serviceRequest->start_date->month != $serviceRequest->end_date->month){
+                    goto here;
+                }
+
                 if ($this->items_verification($serviceRequest->start_date->month)) {
                   $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->net_amount));
                 }else{
@@ -544,6 +551,8 @@ class Fulfillment extends Model implements Auditable
                 }
 
             } else {
+
+                here:
 
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;

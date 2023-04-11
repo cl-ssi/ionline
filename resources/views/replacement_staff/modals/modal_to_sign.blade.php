@@ -243,50 +243,45 @@
                                                         @csrf
                                                         @method('PUT')
                                                             
-                                                        @if($requestSign->ou_alias == 'uni_per' && Auth::user()->hasRole('Replacement Staff: personal sign'))
+                                                        @if($requestSign->ou_alias == 'uni_per' 
+                                                            && Auth::user()->hasRole('Replacement Staff: personal sign') 
+                                                            && ($requestReplacementStaff->legalQualityManage && $requestReplacementStaff->legalQualityManage->NameValue == 'Contrata'))
                                                             <fieldset class="form-group">
                                                                 <label for="for_gender" >Subtítulo</label>
                                                                 <select name="budget_item_id" id="for_budget_item_id" class="form-control" required small>
-                                                                        <option value="">Seleccione...</option>
-                                                                        @if($requestReplacementStaff->form_type == 'replacement')
-                                                                            @foreach($budgetItemsReplacement as $budgetItem)
-                                                                                <option value="{{ $budgetItem->id }}">
-                                                                                    {{ $budgetItem->code }} -
-                                                                                    @if($budgetItem->code == '210300500102')
-                                                                                        Reemplazos del personal no médico
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210300500101')
-                                                                                        Reemplazos del personal médico
-                                                                                    @endif
-                                                                                </option>
-                                                                            @endforeach
-                                                                        @else
-                                                                            @foreach($budgetItemsAnnoucement as $budgetItem)
-                                                                                <option value="{{ $budgetItem->id }}">
-                                                                                    {{ $budgetItem->code }} -
-                                                                                    @if($budgetItem->code == '210100100102')
-                                                                                        Personal de Planta Ley 18.834
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210100100103')
-                                                                                        Personal de Planta Ley 19.664
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210200100102')
-                                                                                        Personal a Contrata Ley 18.834
-                                                                                    @endif
-                                                                                    @if($budgetItem->code == '210200100103')
-                                                                                        Personal a Contrata Ley 19.664
-                                                                                    @endif
-                                                                                </option>
-                                                                            @endforeach
-                                                                        @endif
+                                                                    <option value="">Seleccione...</option>
+                                                                    @foreach($budgetItems as $budgetItem)
+                                                                        <option value="{{ $budgetItem->id }}">
+                                                                            {{ $budgetItem->code }} -
+                                                                            @if($budgetItem->code == '210300500102')
+                                                                                Reemplazos del personal no médico
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210300500101')
+                                                                                Reemplazos del personal médico
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210100100102')
+                                                                                Personal de Planta Ley 18.834
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210100100103')
+                                                                                Personal de Planta Ley 19.664
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210200100102')
+                                                                                Personal a Contrata Ley 18.834
+                                                                            @endif
+                                                                            @if($budgetItem->code == '210200100103')
+                                                                                Personal a Contrata Ley 19.664
+                                                                            @endif
+                                                                        </option>
+                                                                    @endforeach
                                                                 </select>
                                                             </fieldset>
                                                         @endif
-                                                    
                                                 </div>
                                                 <div class="col-md-12">
                                                     <p>
-                                                        @if($requestSign->ou_alias != 'finance')
+                                                        @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
+                                                            $requestReplacementStaff->budget_item_id)
+                                                        @else
                                                             <button type="submit" class="btn btn-success btn-sm"
                                                                     onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                                                     title="Aceptar">
@@ -295,8 +290,6 @@
                                                                     </span>
                                                             </button>
                                                             </form>
-                                                        @else
-                                                           
                                                         @endif
                                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
                                                             <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -347,7 +340,7 @@
                     </table>
                 </div>
 
-                @if($requestReplacementStaff->budget_item_id)
+                @if($requestReplacementStaff->budget_item_id != NULL)
                 <object type="application/pdf" data="{{ route('replacement_staff.request.create_budget_availability_certificate_view', [ $requestReplacementStaff ]) }}" width="100%" height="400" style="height: 85vh;"><a href="{{-- route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) --}}" target="_blank">
                     <i class="fas fa-file"></i> Ver documento</a>
                 </object>
@@ -364,7 +357,7 @@
 
                     @include('documents.signatures.partials.sign_file')
 
-                    <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
+                    <button type="button" data-toggle="modal" class="btn btn-primary float-right"
                         title="Firma Digital"
                         data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
                         Firmar <i class="fas fa-signature"></i>

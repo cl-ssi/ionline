@@ -17,7 +17,6 @@ use App\Models\Rrhh\UserRequestOfDay;
 use App\Models\Rrhh\ShiftDateOfClosing;
 use App\Models\Rrhh\ShiftClose;
 use App\Rrhh\OrganizationalUnit;
-use App\Programmings\Professional;
 /* TODO: que hace role? */
 use Spatie\Permission\Models\Role;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
