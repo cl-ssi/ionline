@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Services\ImageService;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use setasign\Fpdi\Fpdi;
 
 
