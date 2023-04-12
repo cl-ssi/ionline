@@ -2165,6 +2165,12 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
     });
 
+    Route::prefix('amipass')->as('amipass.')->group(function () {
+        // Route::get('/', [WelfareController::class, 'index'])->name('index');
+        // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
+        Route::view('/', 'welfare.amipass.index')->name('index');
+    });
+
 });
 
 
