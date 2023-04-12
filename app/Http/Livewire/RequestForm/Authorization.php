@@ -72,7 +72,7 @@ class Authorization extends Component
         $this->title = 'Autorización Abastecimiento';
       }elseif($eventType=='finance_event'){
         $this->title = 'Autorización Finanzas';
-        $this->lstProgram = Program::with('Subtitle')->where('period', $requestForm ? $requestForm->created_at->format('Y') : Carbon::now()->year)->orderBy('alias_finance')->get();
+        $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
         $this->sigfe = $requestForm->associateProgram ? $requestForm->associateProgram->folio : $requestForm->sigfe;
         $this->financial_type = $requestForm->associateProgram->financing ?? '';
       }elseif($eventType=='leader_ship_event'){
