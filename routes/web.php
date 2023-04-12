@@ -2232,3 +2232,15 @@ Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
     echo "<img src=\"data:image/png;base64,$firma\" />&nbsp;&nbsp;&nbsp;";
     echo "<img src=\"data:image/png;base64,$firma\" />";
 });
+// Maqueta para nueva vista honorarios y contratos
+Route::get('/maquetas/honorarios', function () {
+    return view('maquetas.honorarios');
+})->name('maquetas.honorarios');
+
+Route::get('/maquetas/menu', function () {
+    return view('maquetas.menu');
+})->name('maquetas.menu');
+
+Route::get('/maquetas/vista', function () {
+    return view('maquetas.vista');
+})->name('maquetas.vista');

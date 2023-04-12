@@ -8,7 +8,7 @@
     {{--
     @if(!$organizationalUnit)
     <fieldset class="col-12 col-md-8">
-        <label for="for-name">Unidar Organizacional</label>
+        <label for="for-name">Unidad Organizacional</label>
         @livewire('select-organizational-unit', [
             'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
             'select_id' => 'organizational_unit_id',
