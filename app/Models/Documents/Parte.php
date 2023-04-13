@@ -179,6 +179,7 @@ class Parte extends Model
                     $query->where($column, 'LIKE', '%' . $value . '%');
                     break;
                 case 'id':
+                case 'correlative':
                 case 'number':
                 case 'type_id':
                     $query->where($column, $value);

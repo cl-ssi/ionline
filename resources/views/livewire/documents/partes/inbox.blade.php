@@ -6,9 +6,14 @@
     <h3 class="mb-3">Bandeja de entrada</h3>
 
     <div class="form-row">
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-6 col-md-1">
             <label for="for_id">ID</label>
             <input type="number" class="form-control" id="for_id" wire:model.defer="parte_id" autocomplete="off">
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="for_correlative">Correlativo</label>
+            <input type="number" class="form-control" id="for_correlative" wire:model.defer="parte_correlative" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">
