@@ -177,8 +177,7 @@ class Parte extends Model
                 case 'origin':
                 case 'subject':
                     $query->where($column, 'LIKE', '%' . $value . '%');
-                    break;
-                case 'id':
+                    break;                
                 case 'correlative':
                 case 'number':
                 case 'type_id':

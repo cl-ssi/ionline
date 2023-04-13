@@ -5,13 +5,9 @@
 
     <h3 class="mb-3">Bandeja de entrada</h3>
 
-    <div class="form-row">
-        <fieldset class="form-group col-6 col-md-1">
-            <label for="for_id">ID</label>
-            <input type="number" class="form-control" id="for_id" wire:model.defer="parte_id" autocomplete="off">
-        </fieldset>
+    <div class="form-row">        
 
-        <fieldset class="form-group col-6 col-md-1">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_correlative">Correlativo</label>
             <input type="number" class="form-control" id="for_correlative" wire:model.defer="parte_correlative" autocomplete="off">
         </fieldset>
@@ -91,7 +87,6 @@
     <table class="table table-sm table-bordered table-striped" wire:loading.class="d-none">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Correlativo</th>
                 <th>Ingreso</th>
                 <th>Tipo</th>
@@ -104,7 +99,6 @@
         <tbody>
             @forelse($partes as $parte)
             <tr>
-                <td rowspan="2" class="text-center">{{ $parte->id }}</td>
                 <td rowspan="2" class="text-center">{{ $parte->correlative??'' }}</td>
                 <td data-toggle="tooltip" data-placement="top"
                     data-original-title="{{ $parte->created_at }}">
