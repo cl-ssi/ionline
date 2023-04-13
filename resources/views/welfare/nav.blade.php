@@ -29,7 +29,7 @@
         </a>
     </li>
 
-    @canany(['amiPASS'])
+    @can(['amiPASS'])
     <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle"
             href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -44,5 +44,5 @@
             </a>
         </div>
     </li>
-    @endcanany
+    @endcan
 </ul>
