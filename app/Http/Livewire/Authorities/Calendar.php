@@ -166,7 +166,12 @@ class Calendar extends Component
 
     public function delete($id)
     {
-        Authority::find($id)->delete();
+        $authority = Authority::find($id);
+        $from = $authority->date;
+        $lastDayOfYear = Carbon::now()->endOfYear();
+
+        //Elimina todos los registros de autoridades de la misma categoría y unidad organizativa a partir de la fecha de la autoridad seleccionada hasta el final del año actual"
+        Authority::whereBetween('date', [$from, $lastDayOfYear])->where('type',$authority->type)->where('organizational_unit_id',$authority->organizational_unit_id)->delete();
     }
 
     public function cancel()
