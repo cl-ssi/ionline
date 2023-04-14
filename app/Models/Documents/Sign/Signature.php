@@ -42,6 +42,7 @@ class Signature extends Model
         'verification_code',
         'signed_file',
         'page',
+        'is blocked',
         'column_left_visator',
         'column_left_endorse',
         'column_center_visator',
