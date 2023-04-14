@@ -2178,6 +2178,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('v2/documents/signatures')->as('documents.v2.')->middleware('auth')->group(function () {
     Route::get('/create', RequestSignature::class)->name('create');
+    Route::get('/index', SignatureIndex::class)->name('index');
 });
 
 Route::view('/some', 'some');
