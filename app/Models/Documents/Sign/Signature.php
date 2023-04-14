@@ -5,9 +5,11 @@ namespace App\Models\Documents\Sign;
 use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Rrhh\OrganizationalUnit;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Signature extends Model
 {
@@ -27,6 +29,7 @@ class Signature extends Model
      */
     protected $fillable = [
         'document_number',
+        'number',
         'type_id',
         'reserved',
         'subject',
@@ -99,23 +102,86 @@ class Signature extends Model
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
     }
 
+    public function getFirmsAttribute()
+    {
+        $leftSignatures = $this->leftSignatures->sortBy('row_position');
+        $centerSignatures = $this->centerSignatures->sortBy('row_position');
+        $rightSignatures = $this->rightSignatures->sortBy('row_position');
+
+        return $leftSignatures->merge($centerSignatures)->merge($rightSignatures);
+    }
+
+    public function getNextFlowAttribute()
+    {
+        $next = $this->firms->search(function ($firm) {
+            return $firm->status == 'pending';
+        });
+
+        return $this->firms[$next];
+    }
+
+    public function getNextSignerAttribute()
+    {
+        $next = $this->firms->search(function ($firm) {
+            return $firm->status == 'pending';
+        });
+
+        if($this->nextFlow->status == 'pending')
+            return $this->firms[$next]->signer;
+        else
+            return null;
+    }
+
+    public function getCanSignAttribute()
+    {
+        if($this->nextFlow->column_position == 'left')
+        {
+            $type = $this->column_left_endorse;
+        }
+        elseif($this->nextFlow->column_position == 'center')
+        {
+            $type = $this->column_center_endorse;
+        }
+        elseif($this->nextFlow->column_position == 'right')
+        {
+            $type = $this->column_right_endorse;
+        }
+
+        if($type == 'Opcional')
+        {
+            $canSign = true;
+        }
+        elseif($type == 'Obligatorio sin Cadena de Responsabilidad')
+        {
+            $canSign = true;
+        }
+        elseif($type == 'Obligatorio en Cadena de Responsabilidad')
+        {
+            $canSign = $this->nextSigner ? $this->nextSigner->id == auth()->id() : false;
+        }
+
+        return $canSign;
+    }
+
+    public function getCounterAttribute()
+    {
+        return $this->firms->count();
+    }
+
+    public function getLinkAttribute()
+    {
+        $link = null;
+        if(Storage::disk('gcs')->exists($this->file))
+        {
+            $link = Storage::disk('gcs')->url($this->file);
+        }
+
+        return $link;
+    }
+
     public static function getFolder()
     {
         return 'ionline/sign/original';
-    }
-
-    public function makePayload($purpose, $run)
-    {
-        $entity = 'Subsecretaría General de La Presidencia';
-
-        $payload = [
-            "purpose" => $purpose,
-            "entity" => $entity,
-            "expiration" => now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
-            "run" => $run
-        ];
-
-        return $payload;
     }
 
     public static function getUrl($modo)
@@ -185,5 +251,19 @@ class Signature extends Model
                 break;
         }
         return $purpose;
+    }
+
+    public function makePayload($purpose, $run)
+    {
+        $entity = 'Subsecretaría General de La Presidencia';
+
+        $payload = [
+            "purpose" => $purpose,
+            "entity" => $entity,
+            "expiration" => now()->add(30, 'minutes')->format('Y-m-d\TH:i:s'),
+            "run" => $run
+        ];
+
+        return $payload;
     }
 }
