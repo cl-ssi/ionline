@@ -27,6 +27,8 @@ class CreateSignSignatures extends Migration
             $table->text('distribution')->nullable();
             $table->text('recipients')->nullable();
 
+            $table->boolean('is_blocked')->default(false);
+
             $table->string('status')->nullable(); // pending, signed, rejected
             $table->datetime('status_at')->nullable();
 
