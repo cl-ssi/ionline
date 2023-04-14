@@ -100,6 +100,8 @@ class RequestSignature extends Component
         $url = $filename.'.pdf';
         $this->document_to_sign->storeAs($folder, $url, 'gcs');
 
+        $file = $folder . "/" . $url;
+
         /**
          * Create the signature request
          */
@@ -117,7 +119,7 @@ class RequestSignature extends Component
         $signatureService->setColumnCenterEndorse($this->column_center_endorse);
         $signatureService->setColumnRightVisator($this->column_right_visator);
         $signatureService->setColumnRightEndorse($this->column_right_endorse);
-        $signatureService->setFile($url);
+        $signatureService->setFile($file);
         $signatureService->setAnnexes(null);
         $signatureService->setSignersLeft($this->left_signatures);
         $signatureService->setSignersCenter($this->center_signatures);
