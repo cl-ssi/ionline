@@ -246,6 +246,7 @@ use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
 use App\Http\Livewire\Sign\RequestSignature;
+use App\Http\Livewire\Sign\SignatureIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -2151,11 +2152,11 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 
 /* Rutas de Módulo de Binestar */
 Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () {
-    Route::get('/', [WelfareController::class, 'index'])->name('index');    
+    Route::get('/', [WelfareController::class, 'index'])->name('index');
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
     Route::get('/export-balance', [WelfareController::class, 'exportBalance'])->name('exportBalance');
-    
+
 
     Route::prefix('loans')->as('loans.')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('index');
