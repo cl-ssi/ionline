@@ -227,7 +227,7 @@ class SignService
      * @param  string $columnCenterEndorse
      * @return void
      */
-    public function setColumnCenterEndorse(string $columnCenterEndorse)
+    public function setColumnCenterEndorse(string $columnCenterEndorse = null)
     {
         $this->column_center_endorse = $columnCenterEndorse;
     }
@@ -245,7 +245,7 @@ class SignService
      * @param  string $columnRightEndorse
      * @return void
      */
-    public function setColumnRightEndorse(string $columnRightEndorse)
+    public function setColumnRightEndorse(string $columnRightEndorse = null)
     {
         $this->column_right_endorse = $columnRightEndorse;
     }
@@ -334,6 +334,7 @@ class SignService
             'status' => 'pending', // enum
             'status_at' => now(),
             'page' => $this->page,
+            'file' => $this->file,
             'column_left_visator' => $this->column_left_visator,
             'column_left_endorse' => $this->column_left_endorse,
             'column_center_visator' => $this->column_center_visator,
