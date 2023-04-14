@@ -841,7 +841,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
 
         /** descomposición del resource */
-        Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        // Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/index/{type}', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
         Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
         Route::get('/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])->name('edit');
