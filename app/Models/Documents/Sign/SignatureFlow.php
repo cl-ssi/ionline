@@ -71,6 +71,48 @@ class SignatureFlow extends Model
         return $this->belongsTo(Signature::class);
     }
 
+    public function getStatusColorAttribute()
+    {
+        switch ($this->status) {
+            case 'pending':
+                $statusColor = 'default';
+                break;
+
+            case 'rejected':
+                $statusColor = 'danger';
+                break;
+
+            case 'signed':
+                $statusColor = 'success';
+                break;
+            default:
+                $statusColor = 'dark';
+                break;
+        }
+        return $statusColor;
+    }
+
+    public function getStatusColorTextAttribute()
+    {
+        switch ($this->status) {
+            case 'pending':
+                $statusColor = 'dark';
+                break;
+
+            case 'rejected':
+                $statusColor = 'white';
+                break;
+
+            case 'signed':
+                $statusColor = 'white';
+                break;
+            default:
+                $statusColor = 'white';
+                break;
+        }
+        return $statusColor;
+    }
+
     public function getYAttribute()
     {
         $start = ($this->is_visator == true) ? 110 : SignatureFlow::Y;
