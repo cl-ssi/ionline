@@ -844,7 +844,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
 
         /** descomposición del resource */
-        Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        // Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/index/{type}', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
         Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
         Route::get('/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])->name('edit');
@@ -2166,6 +2167,12 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
     Route::prefix('dosfile')->as('dosfile.')->group(function () {
         Route::get('/', [WelfareController::class, 'dosindex'])->name('index');
         Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
+    });
+
+    Route::prefix('amipass')->as('amipass.')->group(function () {
+        // Route::get('/', [WelfareController::class, 'index'])->name('index');
+        // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
+        Route::view('/', 'welfare.amipass.index')->name('index');
     });
 
 });

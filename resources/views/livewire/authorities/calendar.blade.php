@@ -128,9 +128,11 @@
     <a href="#" class="link-primary" wire:click="edit('{{ $date }}','manager')">
         <i class="fas fa-edit"></i>
     </a>
-    <a href="#" class="link-danger ml-2" wire:click="delete({{ $authority['authority_id'] }} )">
+    @if($authority['manager'])
+    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['manager']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})" >
         <i class="fas fa-trash-alt text-danger"></i>
     </a>
+    @endif
     <br>
     <em class="text-muted">{{ optional($authority['manager'])->position }}</em>
 
@@ -140,7 +142,7 @@
         <i class="fas fa-edit"></i>
     </a>
     @if($authority['secretary'])
-    <a href="#" class="link-danger ml-2" wire:click="delete('{{ $authority['authority_id'] }}')">
+    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro  de {{$authority['secretary']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}}y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
         <i class="fas fa-trash-alt text-danger"></i>
     </a>
     @endif
@@ -153,7 +155,7 @@
         <i class="fas fa-edit"></i>
     </a>
     @if($authority['delegate'])
-    <a href="#" class="link-danger ml-2" wire:click="delete('{{ $authority['authority_id'] }}')">
+    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['delegate']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
         <i class="fas fa-trash-alt text-danger"></i>
     </a>
     @endif
@@ -163,6 +165,7 @@
 
 </div>
 @endforeach
+
 
 
 <!-- CSS Custom para el calendario -->
