@@ -368,11 +368,12 @@
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
             </div>
         </div>
-
+        
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
+                        <!-- FORMULARIO -->
                         <th>ID</th>
                         <th>Estado Fomulario</th>
                         <th>Folio</th>
@@ -422,8 +423,8 @@
                 </thead>
                 <tbody>
                 @foreach($request_forms as $requestForm)
-                @if($requestForm->type_form == 'bienes y/o servicios')
-                    @foreach($requestForm->itemRequestForms as $key =>$item)
+                    @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
+                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
                     <tr>
                         <td class="text-right" nowrap>{{ $requestForm->id }}</td>
                         <td class="text-center" nowrap>{{ $requestForm->getStatus() }}</td>
@@ -474,41 +475,60 @@
                         <td class="text-center">
                             {{ $loop->iteration }}
                         </td>
-                        <td class="text-right">{{ $item->id }}</td>
-                        <td class="text-right" nowrap>{{ $item->budgetItem ? $item->budgetItem->fullName() : '' }}</td>
+                        <td class="text-right">{{ $detail->id ?? '' }}</td>
+                        <td class="text-right" nowrap>{{ $detail->budgetItem ? $detail->budgetItem->fullName() : '' }}</td>
                         <td nowrap>
-                            @if($item->product_id)
-                                {{ optional($item->product)->code }} {{ optional($item->product)->name }}
+                            @if($detail->product_id)
+                                {{ optional($detail->product)->code }} {{ optional($detail->product)->name }}
                             @else
-                                {{ $item->article }}
+                                {{ $detail->article }}
                             @endif
                         </td>
-                        <td class="text-center">{{ $item->unit_of_measurement }}</td>
-                        <td nowrap>{{ $item->specification }}</td>
-                        <td class="text-center">{{ $item->quantity }}</td>
-                        <td class="text-right">{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
-                        <td class="text-center">{{ $item->tax }}</td>
-                        <td class="text-right">{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
-                        <td class="text-right" nowrap>
-                            @foreach($item->purchasingProcess as $purchasingProcess)
-                                @foreach($purchasingProcess->details as $detail)
-                                    @if($loop->first)
-                                        {{ $detail->pivot->getStatus() }}
-                                    @endif
-                                @endforeach
-                            @endforeach
+                        <td class="text-center">{{ $detail->unit_of_measurement }}</td>
+                        <td nowrap>{{ $detail->specification }}</td>
+                        <td class="text-center">{{ $detail->quantity }}</td>
+                        <td class="text-right">{{ str_replace(',00', '', number_format($detail->unit_value, 2,",",".")) }}</td>
+                        <td class="text-center">{{ $detail->tax }}</td>
+                        <td class="text-right">{{ number_format($detail->expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td class="text-center" nowrap>
+                            {{ $detail->pivot->getStatus() }}
                         </td>
+                        <td class="text-center" nowrap>{{ $detail->pivot->getPurchasingTypeName() }}</td>
+                        <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
+                        <td align="center">
+                            @if($detail->pivot->tender)
+                            <button type="button" class="badge badge-pill badge-dark popover-item" id="detail-{{$detail->id}}" rel="popover"><i class="fas fa-info"></i></button>
+                            <div class="popover-list-content" style="display:none;">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha creación <span class="badge badge-light">{{ $detail->pivot->tender->creation_date ? $detail->pivot->tender->creation_date->format('d-m-Y H:i') : '-' }}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha cierre <span class="badge badge-light">{{$detail->pivot->tender->closing_date ? $detail->pivot->tender->closing_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha inicio <span class="badge badge-light">{{$detail->pivot->tender->initial_date ? $detail->pivot->tender->initial_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha final <span class="badge badge-light">{{$detail->pivot->tender->final_date ? $detail->pivot->tender->final_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación respuestas <span class="badge badge-light">{{$detail->pivot->tender->pub_answers_date ? $detail->pivot->tender->pub_answers_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha acto apertura <span class="badge badge-light">{{$detail->pivot->tender->opening_act_date ? $detail->pivot->tender->opening_act_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha publicación <span class="badge badge-light">{{$detail->pivot->tender->pub_date ? $detail->pivot->tender->pub_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha adjudicación <span class="badge badge-light">{{$detail->pivot->tender->grant_date ? $detail->pivot->tender->grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha estimada adjudicación <span class="badge badge-light">{{$detail->pivot->tender->estimated_grant_date ? $detail->pivot->tender->estimated_grant_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">Fecha visita terreno <span class="badge badge-light">{{$detail->pivot->tender->field_visit_date ? $detail->pivot->tender->field_visit_date->format('d-m-Y H:i') : '-'}}</span></li>
+                                </ul>
+                            </div>
+                            @endif</td>
+                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->oc ? $detail->pivot->tender->oc->po_id : ($detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->po_id : '-') }}</td>
+                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
+                        <td>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
+                        <td>{{ $detail->pivot->directDeal ? $detail->pivot->directDeal->resol_direct_deal : '-'}}</td>
+                        <td>Comprador: {{ $detail->specification }} // proveedor: {{ $detail->pivot->supplier_specifications }}</td>
+                        <td align="right">{{ $detail->pivot->quantity }}</td>
+                        <td>{{ $detail->unit_of_measurement }}</td>
+                        <td>{{ $detail->pivot->tender ? $detail->pivot->tender->currency : '' }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->unit_value,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->charges,$requestForm->precision_currency,",",".") }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->discounts,$requestForm->precision_currency,",",".") }}</td>
+                        <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
+                        <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
                     </tr>
-                    
-                    {{-- dd($item->purchasingProcess) --}}
                     @endforeach
-                @else
-                    @foreach($requestForm->passengers as $key =>$item)
-                    <tr>
-                        <td class="text-right" nowrap>{{ $requestForm->id }}</td>
-                    </tr>
-                    @endforeach
-                @endif
+                    @endif
                 @endforeach
                 </tbody>
             </table>

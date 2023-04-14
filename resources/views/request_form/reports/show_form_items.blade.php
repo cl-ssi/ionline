@@ -25,4 +25,16 @@
 
 @section('custom_js')
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.popover-item').popover({
+            html: true,
+            trigger: 'hover',
+            content: function() {
+                return $(this).next('.popover-list-content').html();
+            }
+        });
+    });
+</script>
+
 @endsection
