@@ -16,12 +16,13 @@ class CreateSignSignatures extends Migration
         Schema::create('sign_signatures', function (Blueprint $table) {
             $table->id();
 
-            $table->datetime('document_number')->nullable(); // editable
-            $table->foreignId('type_id')->nullable()->constrained('doc_types'); // Tipo de Documento
+            $table->integer('number')->nullable();
+            $table->datetime('document_number')->nullable();
+            $table->foreignId('type_id')->nullable()->constrained('doc_types');
             $table->boolean('reserved')->nullable();
             $table->string('subject')->nullable();
             $table->text('description')->nullable();
-            $table->string('file')->nullable(); //
+            $table->string('file')->nullable();
 
             $table->text('distribution')->nullable();
             $table->text('recipients')->nullable();
@@ -33,17 +34,17 @@ class CreateSignSignatures extends Migration
             $table->string('signed_file')->nullable();
             $table->string('page')->nullable(); // first o last
 
-            $table->boolean('column_left_visator')->nullable(); // isVisator
-            $table->string('column_left_endorse')->nullable(); // tipo de Visacion
+            $table->boolean('column_left_visator')->nullable();
+            $table->string('column_left_endorse')->nullable();
 
-            $table->boolean('column_center_visator')->nullable(); // isVisator
-            $table->string('column_center_endorse')->nullable(); // tipo de Visacion
+            $table->boolean('column_center_visator')->nullable();
+            $table->string('column_center_endorse')->nullable();
 
-            $table->boolean('column_right_visator')->nullable(); // isVisator
-            $table->string('column_right_endorse')->nullable(); // tipo de Visacion
+            $table->boolean('column_right_visator')->nullable();
+            $table->string('column_right_endorse')->nullable();
 
-            $table->foreignId('user_id')->nullable()->constrained('users'); // Creado por
-            $table->foreignId('ou_id')->nullable()->constrained('organizational_units'); // Unidad Organizational del UserId
+            $table->foreignId('user_id')->nullable()->constrained('users'); // creado por
+            $table->foreignId('ou_id')->nullable()->constrained('organizational_units');
 
             $table->softDeletes();
             $table->timestamps();
