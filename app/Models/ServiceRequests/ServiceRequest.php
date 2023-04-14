@@ -133,38 +133,45 @@ class ServiceRequest extends Model implements Auditable
 
     public static function getPendingRequests()
     {
-      $user_id = Auth::user()->id;
-      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                           $subQuery->where('responsable_id',$user_id);
-                                           //$subQuery->where('status', '<>', 2);
-                                           $subQuery->orwhere('user_id',$user_id);
-                                           //$subQuery->whereNull('derive_date');
+        $count = 0;
+        $user_id = Auth::user()->id;
+        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                        $subQuery->where('responsable_id',$user_id)
+                                                ->whereNull('status');
+                                    })
+                                    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+                                        $subQuery->where('status',0);
+                                    })
+                                    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+                                        $subQuery->whereNull('status')
+                                                ->where('sign_position',2);
+                                    })
+                                    ->with('SignatureFlows')
+                                    ->get();
 
-                                         })->with("SignatureFlows")
-
-                                         ->orderBy('id','asc')
-                                         ->get();
-      $cont = 0;
-      foreach ($serviceRequests as $key => $serviceRequest) {
-        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
-          foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
-            if ($user_id == $signatureFlow->responsable_id) {
-              if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
-                  if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
-                  }else{
-                    //var_dump($serviceRequest->id);
-                    $cont += 1;
-                  }
+        foreach ($serviceRequests as $key => $serviceRequest) {
+            //not rejected
+            if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
+                foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+                    //with responsable_id
+                    if ($user_id == $signatureFlow->responsable_id) {
+                        if ($signatureFlow->status == NULL) {
+                            if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                                
+                                } 
+                                else 
+                                {
+                                    $count += 1;
+                                }
+                            }
+                        } 
+                    }
                 }
-              }else{
-              }
             }
-          }
         }
-      }
 
-      return $cont;
+      return $count;
     }
 
     public function status(){

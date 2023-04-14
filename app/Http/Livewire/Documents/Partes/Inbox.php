@@ -14,7 +14,8 @@ class Inbox extends Component
 
     public $types;
 
-    public $parte_id;
+    
+    public $parte_correlative;
     public $parte_type_id;
     public $parte_number;
     public $parte_origin;
@@ -29,7 +30,8 @@ class Inbox extends Component
     {
         $this->types = Type::pluck('name','id');
 
-        $this->parte_id = session('parte_id');
+        
+        $this->parte_correlative = session('parte_correlative');
         $this->parte_type_id = session('parte_type_id');
         $this->parte_number = session('parte_number');
         $this->parte_origin = session('parte_origin');
@@ -39,8 +41,8 @@ class Inbox extends Component
     }
 
     public function search() 
-    {
-        session(['parte_id' => $this->parte_id]);
+    {        
+        session(['parte_correlative' => $this->parte_correlative]);
         session(['parte_type_id' => $this->parte_type_id]);
         session(['parte_number' => $this->parte_number]);
         session(['parte_origin' => $this->parte_origin]);
@@ -60,7 +62,7 @@ class Inbox extends Component
     {
         $partes = Parte::query()
             ->whereEstablishmentId(auth()->user()->organizationalUnit->establishment->id)
-            ->filter('id', $this->parte_id)
+            ->filter('correlative', $this->parte_correlative)
             ->filter('type_id', $this->parte_type_id)
             ->filter('number', $this->parte_number)
             ->filter('origin', $this->parte_origin)

@@ -63,8 +63,8 @@ class ServiceRequestController extends Controller
 
   }
 
-
-  public function index()
+  //función queda de respaldo, no se utiliza desde 14/04/2023
+  public function index_respaldo()
   {
     // $start_date = '2022-01-01';
     // $end_date = '2022-01-02';
@@ -161,6 +161,116 @@ class ServiceRequestController extends Controller
     }
 
     return view('service_requests.requests.index', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
+  }
+
+  public function index($type)
+  {
+    $user_id = Auth::user()->id;
+    $users = User::orderBy('name', 'ASC')->get();
+
+    $data = [];
+
+    $notAvailableCount = 0;
+    $pendingCount = 0;
+    $signedCount = 0;
+    $rejecedCount = 0;
+
+    $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+        $subQuery->where('responsable_id',$user_id)
+                ->whereNull('status');
+    })
+    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+        $subQuery->where('status',0);
+    })
+    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+        $subQuery->whereNull('status')
+                ->where('sign_position',2);
+    })
+    ->with('SignatureFlows')
+    ->get();
+
+    foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
+            foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+                //with responsable_id
+                if ($user_id == $signatureFlow->responsable_id) {
+                    if ($signatureFlow->status == NULL) {
+                        if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                            if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+
+                            } 
+                            else 
+                            {
+                                if($type == "pending"){
+                                    $data[$serviceRequest->id] = $serviceRequest;
+                                }
+                                $pendingCount += 1;
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+    }
+
+    $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+        $subQuery->where('responsable_id',$user_id)
+                ->whereNull('status');
+    })
+    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+        $subQuery->where('status',0);
+    })
+    ->with('SignatureFlows')
+    ->get();
+
+    foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
+            foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+                //with responsable_id
+                if ($user_id == $signatureFlow->responsable_id) {
+                    if ($signatureFlow->status == NULL) {
+                        if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                            if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                                $notAvailableCount += 1;
+                                if($type == "notAvaliable"){
+                                    $data[$serviceRequest->id] = $serviceRequest;
+                                }
+                            } 
+                        }
+                    } 
+                }
+            }
+        }
+    }
+
+    $rejecedCount = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                                $subQuery->where('responsable_id', $user_id);
+                                            })
+                                            ->whereHas("SignatureFlows", function ($subQuery) {
+                                                $subQuery->where('status',0);
+                                            })->count();
+    if($type == "rejected"){
+        $data = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                    $subQuery->where('responsable_id', $user_id);
+                                })
+                                ->whereHas("SignatureFlows", function ($subQuery) {
+                                    $subQuery->where('status',0);
+                                })->paginate(100);
+    }
+
+    $signedCount = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                                $subQuery->where('responsable_id', $user_id)
+                                                        ->where('status',1);
+                                            })->count();
+
+    if($type == "signed"){
+        $data = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
+                                        $subQuery->where('responsable_id', $user_id)
+                                                ->where('status',1);
+                                })->paginate(100);
+    }
+
+    return view('service_requests.requests.index', compact('data','type','users','notAvailableCount','pendingCount','rejecedCount','signedCount'));
   }
 
   public function user(Request $request)
@@ -589,7 +699,7 @@ class ServiceRequestController extends Controller
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido creada.');
     // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service-request.certificate-pdf', $SignatureFlow) . '" target="_blank">Aquí.</a>');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   /**
@@ -619,7 +729,7 @@ class ServiceRequestController extends Controller
         $serviceRequest->signatureFlows->where('user_id', $user_id)->count() == 0
       ) {
         session()->flash('danger', 'No tiene acceso a esta solicitud');
-        return redirect()->route('rrhh.service-request.index');
+        return redirect()->route('rrhh.service-request.index','pending');
       }
     }
 
@@ -699,7 +809,7 @@ class ServiceRequestController extends Controller
     }
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido modificada.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   public function update_aditional_data(Request $request, ServiceRequest $serviceRequest)
@@ -733,7 +843,7 @@ class ServiceRequestController extends Controller
   {
     $serviceRequest->delete();
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido eliminada.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   public function destroy_with_parameters(Request $request)
@@ -753,7 +863,7 @@ class ServiceRequestController extends Controller
 
     $serviceRequest->delete();
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido eliminada.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   public function consolidated_data(Request $request)
@@ -1333,7 +1443,7 @@ class ServiceRequestController extends Controller
     }
 
     session()->flash('info', $cont . ' solicitudes fueron derivadas.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   public function accept_all_requests()
@@ -1386,7 +1496,7 @@ class ServiceRequestController extends Controller
     }
 
     session()->flash('info', $count . ' solicitudes fueron aceptadas.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
 

@@ -5,10 +5,11 @@
 
     <h3 class="mb-3">Bandeja de entrada</h3>
 
-    <div class="form-row">
+    <div class="form-row">        
+
         <fieldset class="form-group col-6 col-md-2">
-            <label for="for_id">ID</label>
-            <input type="number" class="form-control" id="for_id" wire:model.defer="parte_id" autocomplete="off">
+            <label for="for_correlative">Correlativo</label>
+            <input type="number" class="form-control" id="for_correlative" wire:model.defer="parte_correlative" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">
@@ -60,7 +61,7 @@
     </div>
 
     <h5 class="mt-3">
-        @foreach(array('parte_id','parte_type','parte_number','parte_origin','parte_subject') as $filter)
+        @foreach(array('parte_correlative','parte_type','parte_number','parte_origin','parte_subject') as $filter)
             @if( session($filter) )
             <a href="#" class="badge badge-secondary" wire:click="removeFilter('{{$filter}}')">
                 {{ session($filter) }} <i class="fas fa-trash text-light small"></i>
@@ -86,7 +87,7 @@
     <table class="table table-sm table-bordered table-striped" wire:loading.class="d-none">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Correlativo</th>
                 <th>Ingreso</th>
                 <th>Tipo</th>
                 <th nowrap>Fecha Doc.</th>
@@ -98,7 +99,7 @@
         <tbody>
             @forelse($partes as $parte)
             <tr>
-                <td rowspan="2" class="text-center">{{ $parte->correlative }}</td>
+                <td rowspan="2" class="text-center">{{ $parte->correlative??'' }}</td>
                 <td data-toggle="tooltip" data-placement="top"
                     data-original-title="{{ $parte->created_at }}">
                     <small>{{ $parte->entered_at }}</small>

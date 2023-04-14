@@ -2,7 +2,7 @@
     @if($has_invoice_file)
     
         @if($fulfillment->voiceUploader)
-            ({{$fulfillment->has_invoice_file_at->format('Y-m-d')}} - {{$fulfillment->voiceUploader->shortName}}) - 
+            ({{$fulfillment->has_invoice_file_at}} - {{$fulfillment->voiceUploader->shortName}}) - 
         @endif
         <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()]) }}"
            target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>

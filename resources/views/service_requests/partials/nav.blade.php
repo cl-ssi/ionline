@@ -15,8 +15,8 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{ active('rrhh.service-request.index') }}"
-            href="{{ route('rrhh.service-request.index') }}">
+        <a class="nav-link {{ active('rrhh.service-request.index','pending') }}"
+            href="{{ route('rrhh.service-request.index','pending') }}">
             <i class="fas fa-pencil-alt"></i> Solicitudes
             <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
         </a>

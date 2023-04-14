@@ -125,7 +125,7 @@
                         <i class="fas fa-circle text-success"></i>
 
                         @if($fullfillment->voiceUploader)
-                            ({{$fullfillment->has_invoice_file_at->format('Y-m-d')}} - {{$fullfillment->voiceUploader->shortName}}) - 
+                            ({{$fullfillment->has_invoice_file_at}} - {{$fullfillment->voiceUploader->shortName}}) - 
                         @endif
 
                         Boleta cargada
@@ -140,7 +140,7 @@
 			<li class="list-group-item">
 				@if($fullfillment->payment_date)
                     <i class="fas fa-circle text-success"></i>
-                    Pagado realizado el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
+                    Se pagara el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
 				@else
                     <i class="fas fa-circle text-secondary"></i>
                     Pago pendiente.

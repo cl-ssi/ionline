@@ -75,6 +75,7 @@
         <tr>
             <th>N°</th>
             <th>Ingreso</th>
+            <th>Correlativo</th>
             <th>Tipo</th>
             <th nowrap>Fecha Doc.</th>
             <th>Número</th>
@@ -85,7 +86,8 @@
     <tbody>
         @forelse($partes as $parte)
         <tr>
-            <td rowspan="2" class="text-center">{{ $parte->correlative }}</td>
+            <td rowspan="2" class="text-center">{{ $parte->id }}</td>
+            <td rowspan="2" class="text-center">{{ $parte->correlative??'' }}</td>
             <td data-toggle="tooltip" data-placement="top"
                 data-original-title="{{ $parte->created_at }}">
                 <small>{{ $parte->entered_at }}</small>

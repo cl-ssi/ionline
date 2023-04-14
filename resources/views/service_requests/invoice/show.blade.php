@@ -129,7 +129,7 @@
 					<li class="list-group-item">
 						@if($fullfillment->payment_date)
 						<i class="fas fa-circle text-success"></i>
-						Pagado realizado el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
+						Se pagara el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
 						@else
 						<i class="fas fa-circle text-secondary"></i>
 						Pago pendiente.
