@@ -61,7 +61,7 @@
     </div>
 
     <h5 class="mt-3">
-        @foreach(array('parte_id','parte_type','parte_number','parte_origin','parte_subject') as $filter)
+        @foreach(array('parte_correlative','parte_type','parte_number','parte_origin','parte_subject') as $filter)
             @if( session($filter) )
             <a href="#" class="badge badge-secondary" wire:click="removeFilter('{{$filter}}')">
                 {{ session($filter) }} <i class="fas fa-trash text-light small"></i>
