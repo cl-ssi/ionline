@@ -64,7 +64,7 @@ class ServiceRequestController extends Controller
   }
 
   //función queda de respaldo, no se utiliza desde 14/04/2023
-  public function index_respaldo()
+  public function index_bak()
   {
     // $start_date = '2022-01-01';
     // $end_date = '2022-01-02';
@@ -160,7 +160,7 @@ class ServiceRequestController extends Controller
       }
     }
 
-    return view('service_requests.requests.index', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
+    return view('service_requests.requests.index_bak', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
   }
 
   public function index($type)
@@ -176,18 +176,21 @@ class ServiceRequestController extends Controller
     $rejecedCount = 0;
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-        $subQuery->where('responsable_id',$user_id)
-                ->whereNull('status');
+        $subQuery->whereNull('status');
+        $subQuery->where('responsable_id', $user_id);
+      $subQuery->orwhere('user_id', $user_id);
     })
     ->wheredoesnthave("SignatureFlows", function($subQuery) {
         $subQuery->where('status',0);
     })
-    ->wheredoesnthave("SignatureFlows", function($subQuery) {
-        $subQuery->whereNull('status')
-                ->where('sign_position',2);
-    })
+    // ->wheredoesnthave("SignatureFlows", function($subQuery) {
+    //     $subQuery->whereNull('status')
+    //             ->where('sign_position',2);
+    // })
     ->with('SignatureFlows')
     ->get();
+
+    // dd($serviceRequests);
 
     foreach ($serviceRequests as $key => $serviceRequest) {
         if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
