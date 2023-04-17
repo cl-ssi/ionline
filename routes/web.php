@@ -842,6 +842,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         /** descomposición del resource */
         // Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/index_bak}', [ServiceRequestController::class, 'index_bak'])->name('index_bak');
         Route::get('/index/{type}', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
         Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
