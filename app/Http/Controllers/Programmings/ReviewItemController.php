@@ -97,4 +97,25 @@ class ReviewItemController extends Controller
       session()->flash('success', 'El registro ha sido eliminado de este listado');
        return redirect()->back();
     }
+
+    public function acceptItems(Request $request)
+    {
+        // return $request;
+        if($request->has('check_accept_item')){
+            foreach($request->check_accept_item as $item){
+                ReviewItem::create([
+                    'review_id' => 1,
+                    'review' => 'No hay observaciones. Actividad aceptada',
+                    'answer' => 'SI',
+                    'active' => 'SI',
+                    'rectified' => 'SI',
+                    'user_id' => auth()->user()->id,
+                    'programming_item_id' => $item
+                ]);
+            }
+        }
+
+        session()->flash('success', 'Se ha creado una nueva observación de aceptación para las actividades seleccionadas');
+        return redirect()->back();
+    }
 }
