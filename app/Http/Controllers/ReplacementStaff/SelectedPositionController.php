@@ -53,6 +53,8 @@ class SelectedPositionController extends Controller
 
         $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
         $technicalEvaluation->requestReplacementStaff->save();
+
+        return redirect()->route('replacement_staff.request.technical_evaluation.edit',['requestReplacementStaff' => $technicalEvaluation->requestReplacementStaff]);
     }
 
     /**

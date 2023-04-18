@@ -726,7 +726,13 @@
                                     {{ $contador + 1 }}
                                 </th>
                                 <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                <td class="text-center">
+                                    @if($position->degree)
+                                        {{ $position->degree }}
+                                    @else
+                                        ${{ number_format($position->salary, 0, ",", ".") }}
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     {{ $position->legalQualityManage->NameValue ?? '' }} <br>
                                     {{ $position->fundamentManage->NameValue ?? '' }} <br>
@@ -773,6 +779,7 @@
                 <table class="table table-sm table-striped table-bordered">
                     <thead class="text-center small">
                         <tr>
+                            <th width="3%" hidden>#</th>
                             <th width="3%">#</th>
                             <th width="10%">Estamento</th>
                             <th width="10%">Grado / Renta</th>
@@ -783,20 +790,25 @@
                         <tr>
                     </thead>
                     <tbody class="small">
-                        @php
-                            $contador = 0;
-                        @endphp
                         @foreach($requestReplacementStaff->positions as $position)
                             @for ($i = 1; $i <= $position->charges_number; $i++)
                                 <tr>
-                                    <th class="text-center">
+                                    <th class="text-center" hidden>
                                         <fieldset class="form-group col-12 col-md-12">
-                                            <input type="text" class="form-control" name="position_id[]" id="for_position_id" value="{{ $position->id }}" readonly hidden>
+                                            <input type="text" class="form-control" name="position_id[]" id="for_position_id" value="{{ $position->id }}" readonly>
                                         </fieldset>
-                                        {{ $contador }}
+                                    </th>
+                                    <th class="text-center">
+                                        {{ $loop->iteration }}
                                     </th>
                                     <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                    <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                    <td class="text-center">
+                                        @if($position->degree)
+                                            {{ $position->degree }}
+                                        @else
+                                            ${{ number_format($position->salary, 0, ",", ".") }}
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         {{ $position->legalQualityManage->NameValue ?? '' }} <br>
                                         {{ $position->fundamentManage->NameValue ?? '' }} <br>
@@ -828,9 +840,6 @@
                                         </fieldset>
                                     </td>
                                 </tr>
-                                @php
-                                    $contador++;
-                                @endphp
                             @endfor
                         @endforeach
                     </tbody>
