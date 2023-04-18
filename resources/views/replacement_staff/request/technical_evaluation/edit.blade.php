@@ -233,27 +233,35 @@
 @endif
 
 <!-- RESUMEN EN PDF (SOLO DISPONIBLE PARA REEMPLAZOS) -->
-@if($requestReplacementStaff->request_status != "pending" && ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL))
-    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
-        class="btn btn-info btn-sm float-right" 
-        title="Selección" 
-        target="_blank">
-        Exportar Resumen <i class="fas fa-file"></i>
-    </a>
-<br />
+@if($requestReplacementStaff->request_status != "pending" && ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)) 
+<div class="row">
+    <div class="col-12">
+        <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+            class="btn btn-info btn-sm float-right" 
+            title="Selección" 
+            target="_blank">
+            <i class="fas fa-file"></i> Exportar Resumen 
+        </a>
+    </div>
+</div>
+
+</br>
 @endif
 
 @if($requestReplacementStaff->signatures_file_id)
-    <a class="btn btn-info btn-sm float-right" 
-        title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
-        target="_blank" 
-        title="Certificado">
-        <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
-    </a>
-    <br />
-@endif
+<div class="row">
+    <div class="col-12">
+        <a class="btn btn-info btn-sm float-right" 
+            title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
+            target="_blank" 
+            title="Certificado">
+            <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
+        </a>
+    </div>
+</div>
 
 <br />
+@endif
 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 <div class="table-responsive">
