@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\ExpenseReport;
+use App\Models\Agreements\ExpenseReport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -42,7 +42,7 @@ class ExpenseReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\ExpenseReport  $expenseReport
+     * @param  \App\Models\Agreements\ExpenseReport  $expenseReport
      * @return \Illuminate\Http\Response
      */
     public function show(ExpenseReport $expenseReport)
@@ -53,7 +53,7 @@ class ExpenseReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\ExpenseReport  $expenseReport
+     * @param  \App\Models\Agreements\ExpenseReport  $expenseReport
      * @return \Illuminate\Http\Response
      */
     public function edit(ExpenseReport $expenseReport)
@@ -65,7 +65,7 @@ class ExpenseReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\ExpenseReport  $expenseReport
+     * @param  \App\Models\Agreements\ExpenseReport  $expenseReport
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ExpenseReport $expenseReport)
@@ -76,7 +76,7 @@ class ExpenseReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\ExpenseReport  $expenseReport
+     * @param  \App\Models\Agreements\ExpenseReport  $expenseReport
      * @return \Illuminate\Http\Response
      */
     public function destroy(ExpenseReport $expenseReport)

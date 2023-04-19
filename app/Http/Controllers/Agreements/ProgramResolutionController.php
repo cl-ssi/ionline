@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Program;
+use App\Models\Agreements\Program;
 use App\Http\Controllers\Controller;
-use App\Agreements\ProgramResolution;
-use App\Agreements\ProgramResolutionAmount;
-use App\Agreements\Signer;
+use App\Models\Agreements\ProgramResolution;
+use App\Models\Agreements\ProgramResolutionAmount;
+use App\Models\Agreements\Signer;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -54,7 +54,7 @@ class ProgramResolutionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\ProgramResolution  $programResolution
+     * @param  \App\Models\Agreements\ProgramResolution  $programResolution
      * @return \Illuminate\Http\Response
      */
     public function show($programResolutionId)
@@ -70,7 +70,7 @@ class ProgramResolutionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\ProgramResolution  $programResolution
+     * @param  \App\Models\Agreements\ProgramResolution  $programResolution
      * @return \Illuminate\Http\Response
      */
     public function edit(ProgramResolution $programResolution)
@@ -82,7 +82,7 @@ class ProgramResolutionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\ProgramResolution  $programResolution
+     * @param  \App\Models\Agreements\ProgramResolution  $programResolution
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $programResolutionId)
@@ -102,7 +102,7 @@ class ProgramResolutionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\ProgramResolution  $programResolution
+     * @param  \App\Models\Agreements\ProgramResolution  $programResolution
      * @return \Illuminate\Http\Response
      */
     public function destroy($programResolutionId)

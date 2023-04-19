@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Documents;
 
-use App\Agreements\Addendum;
-use App\Agreements\Agreement;
+use App\Models\Agreements\Addendum;
+use App\Models\Agreements\Agreement;
 use App\Models\Documents\Document;
 use App\Http\Controllers\Controller;
 use App\Mail\NewSignatureRequest;

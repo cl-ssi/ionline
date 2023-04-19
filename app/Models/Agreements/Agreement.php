@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,11 +26,11 @@ class Agreement extends Model
      */
     // public function amounts()
     // {
-    //     return $this->hasMany('App\Agreements\ComponentAmount', 'App\Agreements\AgreementComponent');
+    //     return $this->hasMany('App\Models\Agreements\ComponentAmount', 'App\Models\Agreements\AgreementComponent');
     // }
 
     public function program() {
-        return $this->belongsTo('App\Agreements\Program');
+        return $this->belongsTo('App\Models\Agreements\Program');
     }
 
     public function commune() {
@@ -46,23 +46,23 @@ class Agreement extends Model
     }
 
     public function agreement_amounts() {
-        return $this->hasMany('App\Agreements\AgreementAmount');
+        return $this->hasMany('App\Models\Agreements\AgreementAmount');
     }
 
     public function agreement_quotas() {
-        return $this->hasMany('App\Agreements\AgreementQuota');
+        return $this->hasMany('App\Models\Agreements\AgreementQuota');
     }
 
     public function addendums() {
-        return $this->hasMany('App\Agreements\Addendum')->orderBy('created_at','desc');
+        return $this->hasMany('App\Models\Agreements\Addendum')->orderBy('created_at','desc');
     }
 
     public function stages() {
-        return $this->hasMany('App\Agreements\Stage');
+        return $this->hasMany('App\Models\Agreements\Stage');
     }
 
     public function director_signer(){
-        return $this->belongsTo('App\Agreements\Signer');
+        return $this->belongsTo('App\Models\Agreements\Signer');
     }
 
     public function fileToEndorse() {

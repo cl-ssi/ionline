@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +10,7 @@ class Addendum extends Model
     use SoftDeletes;
 
     public function agreement() {
-        return $this->belongsTo('App\Agreements\Agreement');
+        return $this->belongsTo('App\Models\Agreements\Agreement');
     }
 
     public function fileToEndorse() {
@@ -26,7 +26,7 @@ class Addendum extends Model
     }
 
     public function director_signer() {
-        return $this->belongsTo('App\Agreements\Signer', 'director_signer_id');
+        return $this->belongsTo('App\Models\Agreements\Signer', 'director_signer_id');
     }
 
     public function getEndorseStateBySignPos($i){
