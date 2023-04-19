@@ -52,6 +52,22 @@ class Addendum extends Model
         return false;
     }
 
+    public function getSignObservation(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function getSignState(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -114,6 +114,22 @@ class Agreement extends Model
     public function isTypeMandate(){
         return $this->program_id == 44 && $this->agreement_amounts->count() == 1 && $this->agreement_amounts->first()->program_component_id == 48; //Programa CAPACITACION con el unico COMPONENTE DESARROLLO RRHH
     }
+
+    public function getSignObservation(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function getSignState(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
+    }
     
 
     use SoftDeletes;
