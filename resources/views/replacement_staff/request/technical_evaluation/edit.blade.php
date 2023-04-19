@@ -233,27 +233,35 @@
 @endif
 
 <!-- RESUMEN EN PDF (SOLO DISPONIBLE PARA REEMPLAZOS) -->
-@if($requestReplacementStaff->request_status != "pending" && ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL))
-    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
-        class="btn btn-info btn-sm float-right" 
-        title="Selección" 
-        target="_blank">
-        Exportar Resumen <i class="fas fa-file"></i>
-    </a>
-<br />
+@if($requestReplacementStaff->request_status != "pending" && ($requestReplacementStaff->form_type == 'replacement' || $requestReplacementStaff->form_type == NULL)) 
+<div class="row">
+    <div class="col-12">
+        <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+            class="btn btn-info btn-sm float-right" 
+            title="Selección" 
+            target="_blank">
+            <i class="fas fa-file"></i> Exportar Resumen 
+        </a>
+    </div>
+</div>
+
+</br>
 @endif
 
 @if($requestReplacementStaff->signatures_file_id)
-    <a class="btn btn-info btn-sm float-right" 
-        title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
-        target="_blank" 
-        title="Certificado">
-        <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
-    </a>
-    <br />
-@endif
+<div class="row">
+    <div class="col-12">
+        <a class="btn btn-info btn-sm float-right" 
+            title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
+            target="_blank" 
+            title="Certificado">
+            <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
+        </a>
+    </div>
+</div>
 
 <br />
+@endif
 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 <div class="table-responsive">
@@ -718,7 +726,13 @@
                                     {{ $contador + 1 }}
                                 </th>
                                 <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                <td class="text-center">
+                                    @if($position->degree)
+                                        {{ $position->degree }}
+                                    @else
+                                        ${{ number_format($position->salary, 0, ",", ".") }}
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     {{ $position->legalQualityManage->NameValue ?? '' }} <br>
                                     {{ $position->fundamentManage->NameValue ?? '' }} <br>
@@ -765,6 +779,7 @@
                 <table class="table table-sm table-striped table-bordered">
                     <thead class="text-center small">
                         <tr>
+                            <th width="3%" hidden>#</th>
                             <th width="3%">#</th>
                             <th width="10%">Estamento</th>
                             <th width="10%">Grado / Renta</th>
@@ -775,20 +790,25 @@
                         <tr>
                     </thead>
                     <tbody class="small">
-                        @php
-                            $contador = 0;
-                        @endphp
                         @foreach($requestReplacementStaff->positions as $position)
                             @for ($i = 1; $i <= $position->charges_number; $i++)
                                 <tr>
-                                    <th class="text-center">
+                                    <th class="text-center" hidden>
                                         <fieldset class="form-group col-12 col-md-12">
-                                            <input type="text" class="form-control" name="position_id[]" id="for_position_id" value="{{ $position->id }}" readonly hidden>
+                                            <input type="text" class="form-control" name="position_id[]" id="for_position_id" value="{{ $position->id }}" readonly>
                                         </fieldset>
-                                        {{ $contador }}
+                                    </th>
+                                    <th class="text-center">
+                                        {{ $loop->iteration }}
                                     </th>
                                     <td class="text-center">{{ $position->profile_manage->name ?? '' }}</td>
-                                    <td class="text-right">${{ $position->degree ?? number_format($position->salary, 0, ",", ".") }} <br></td>
+                                    <td class="text-center">
+                                        @if($position->degree)
+                                            {{ $position->degree }}
+                                        @else
+                                            ${{ number_format($position->salary, 0, ",", ".") }}
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         {{ $position->legalQualityManage->NameValue ?? '' }} <br>
                                         {{ $position->fundamentManage->NameValue ?? '' }} <br>
@@ -820,9 +840,6 @@
                                         </fieldset>
                                     </td>
                                 </tr>
-                                @php
-                                    $contador++;
-                                @endphp
                             @endfor
                         @endforeach
                     </tbody>

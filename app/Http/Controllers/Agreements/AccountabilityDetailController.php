@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\AccountabilityDetail;
+use App\Models\Agreements\AccountabilityDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Agreements\Agreement;
-use App\Agreements\Accountability;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\Accountability;
 
 class AccountabilityDetailController extends Controller
 {
@@ -48,7 +48,7 @@ class AccountabilityDetailController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\AccountabilityDetail  $accountabilityDetail
+     * @param  \App\Models\Agreements\AccountabilityDetail  $accountabilityDetail
      * @return \Illuminate\Http\Response
      */
     public function show(AccountabilityDetail $accountabilityDetail)
@@ -59,7 +59,7 @@ class AccountabilityDetailController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\AccountabilityDetail  $accountabilityDetail
+     * @param  \App\Models\Agreements\AccountabilityDetail  $accountabilityDetail
      * @return \Illuminate\Http\Response
      */
     public function edit(AccountabilityDetail $accountabilityDetail)
@@ -71,7 +71,7 @@ class AccountabilityDetailController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\AccountabilityDetail  $accountabilityDetail
+     * @param  \App\Models\Agreements\AccountabilityDetail  $accountabilityDetail
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, AccountabilityDetail $accountabilityDetail)
@@ -82,7 +82,7 @@ class AccountabilityDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\AccountabilityDetail  $accountabilityDetail
+     * @param  \App\Models\Agreements\AccountabilityDetail  $accountabilityDetail
      * @return \Illuminate\Http\Response
      */
     public function destroy(AccountabilityDetail $accountabilityDetail)

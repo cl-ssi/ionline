@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Agreement;
-use App\Agreements\Program;
-use App\Agreements\Stage;
-use App\Agreements\AgreementAmount;
-use App\Agreements\AgreementQuota;
-use App\Agreements\Addendum;
-use App\Agreements\Signer;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\Program;
+use App\Models\Agreements\Stage;
+use App\Models\Agreements\AgreementAmount;
+use App\Models\Agreements\AgreementQuota;
+use App\Models\Agreements\Addendum;
+use App\Models\Agreements\Signer;
 use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Parameters\Municipality;
@@ -58,7 +58,7 @@ class AgreementController extends Controller
     public function indexTracking(Request $request)
     {
         $programs = Program::orderBy('name')->get();
-        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums.fileToEndorse.signaturesFlows','commune', 'fileToEndorse.signaturesFlows')
+        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows','addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows')
                                ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
                                ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
                                ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
@@ -141,7 +141,7 @@ class AgreementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function show(Agreement $agreement)
@@ -157,7 +157,7 @@ class AgreementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function edit(Agreement $agreement)
@@ -171,7 +171,7 @@ class AgreementController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Agreement $agreement)
@@ -219,7 +219,7 @@ class AgreementController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function updateAmount(Request $request, AgreementAmount $AgreementAmount)
@@ -270,7 +270,7 @@ class AgreementController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function updateQuota(Request $request, AgreementQuota $AgreementQuota)
@@ -301,7 +301,7 @@ class AgreementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\Agreement  $agreement
+     * @param  \App\Models\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
     public function destroy(Agreement $agreement)

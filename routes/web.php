@@ -699,6 +699,7 @@ Route::get('/downloadFileC/{file}', [CommuneFileController::class,'downloadFileC
 Route::resource('reviews', ProgrammingReviewController::class)->middleware('auth');
 Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
 Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
+Route::post('/reviewItems/acceptItems', [ReviewItemController::class,'acceptItems'])->name('reviewItems.acceptItems');
 
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
 
@@ -1850,6 +1851,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/callback-sign-new-budget/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSignNewBudget'])->name('callbackSignNewBudget');
     Route::get('/signed-request-form-pdf/{requestForm}/{original}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
+    Route::get('/signed-old-request-form-pdf/{oldSignatureFile}', [RequestFormController::class, 'signedOldRequestFormPDF'])->name('signedOldRequestFormPDF');
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
     Route::get('/export', [RequestFormController::class, 'export'])->name('export');
     Route::get('/{requestForm}/copy', [RequestFormController::class, 'copy'])->name('copy');

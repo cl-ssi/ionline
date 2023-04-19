@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,11 +16,11 @@ class ProgramComponent extends Model
      */
     public function program()
     {
-        return $this->belongsTo('App\Agreements\Program');
+        return $this->belongsTo('App\Models\Agreements\Program');
     }
 
     // public function amount() {
-    //     return $this->hasOne('App\Agreements\ResolutionAmount');
+    //     return $this->hasOne('App\Models\Agreements\ResolutionAmount');
     // }
 
     /**

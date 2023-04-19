@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Accountability;
-use App\Agreements\Agreement;
+use App\Models\Agreements\Accountability;
+use App\Models\Agreements\Agreement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -50,7 +50,7 @@ class AccountabilityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\Accountability  $accountability
+     * @param  \App\Models\Agreements\Accountability  $accountability
      * @return \Illuminate\Http\Response
      */
     public function show(Accountability $accountability)
@@ -61,7 +61,7 @@ class AccountabilityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\Accountability  $accountability
+     * @param  \App\Models\Agreements\Accountability  $accountability
      * @return \Illuminate\Http\Response
      */
     public function edit(Accountability $accountability)
@@ -73,7 +73,7 @@ class AccountabilityController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\Accountability  $accountability
+     * @param  \App\Models\Agreements\Accountability  $accountability
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Accountability $accountability)
@@ -84,7 +84,7 @@ class AccountabilityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\Accountability  $accountability
+     * @param  \App\Models\Agreements\Accountability  $accountability
      * @return \Illuminate\Http\Response
      */
     public function destroy(Accountability $accountability)

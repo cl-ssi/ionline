@@ -148,16 +148,28 @@ class Parte extends Model
             $parte->setCorrelative();
             $parte->save();
 
-            $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+            $document = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
                 ->where('file_type', 'documento')
-                ->get();
+                ->first();
 
             ParteFile::create([
                 'parte_id' => $parte->id,
-                'file' => $distribucion->first()->file,
-                'name' => $distribucion->first()->id . '.pdf',
-                'signature_file_id' => $distribucion->first()->id,
+                'file' => $document->file,
+                'name' => $document->fileName,
+                'signature_file_id' => $document->id,
             ]);
+
+            $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+            ->where('file_type', 'anexo')
+            ->get();
+
+            foreach ($signaturesFiles as $key => $sf) {
+                ParteFile::create([
+                    'parte_id' => $parte->id,
+                    'file' => $sf->file,
+                    'name' => $sf->fileName,
+                ]);
+            }
         }
     }
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 
 class ProgramResolutionAmount extends Model
 {
     public function program_resolution() {
-        return $this->belongsTo('App\Agreements\ProgramResolution');
+        return $this->belongsTo('App\Models\Agreements\ProgramResolution');
     }
 
     public function program_component() {
-        return $this->belongsTo('App\Agreements\ProgramComponent')->withTrashed();
+        return $this->belongsTo('App\Models\Agreements\ProgramComponent')->withTrashed();
     }
 
     /**

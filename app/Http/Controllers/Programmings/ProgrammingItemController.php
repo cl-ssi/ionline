@@ -165,9 +165,10 @@ class ProgrammingItemController extends Controller
         ->orderBy('T1.alias','ASC')
         ->get();
 
+        $reviewItem = ReviewItem::find($request->review_id);
 
 
-        return view('programmings.programmingItems.show', compact('programmingitem', 'programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems'))->withProgrammingItem($programmingitem);
+        return view('programmings.programmingItems.show', compact('programmingitem', 'programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems', 'reviewItem'))->withProgrammingItem($programmingitem);
 
      }
 
@@ -241,6 +242,17 @@ class ProgrammingItemController extends Controller
                      'direct_work_year' => $professional['direct_work_year'], 
                      'direct_work_hour' => $professional['direct_work_hour']]);
             }
+        }
+
+        if($request->has('review_id')){
+            $reviewItem = ReviewItem::findOrFail($request->review_id);
+            $reviewItem->rectified = "SI";
+            $reviewItem->rect_comments = $request->rect_comments;
+            $reviewItem->updated_by = Auth()->user()->id;
+            $reviewItem->save();
+
+            session()->flash('success', 'Se ha rectificado correctamente la observación. <script>window.close()</script>');
+            return redirect()->back();
         }
 
         session()->flash('success', 'El registro se ha editado correctamente');

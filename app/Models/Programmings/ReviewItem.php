@@ -14,7 +14,7 @@ class ReviewItem extends Model implements Auditable
     protected $table = 'pro_review_items';
 
     protected $fillable = [
-        'id','review_id', 'review', 'answer', 'observation', 'active', 'user_id', 'rectified', 'updated_by', 'programming_item_id'
+        'id','review_id', 'review', 'answer', 'observation', 'active', 'user_id', 'rectified', 'rect_comments', 'updated_by', 'programming_item_id'
     ];
 
     public function programItem()
