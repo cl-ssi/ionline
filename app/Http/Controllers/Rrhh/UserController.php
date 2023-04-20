@@ -33,10 +33,16 @@ class UserController extends Controller
                 'organizationalUnit',
                 'permissions',
                 'roles',
-            ])->orderBy('name', 'Asc')->paginate(150);
+            ])->orderBy('name', 'Asc')->paginate(100);
+
         $permissions = Permission::orderBy('name')->pluck('name');
-        
-        return view('rrhh.index', compact('users','permissions'));
+
+        $can = [
+            'be god' => auth()->user()->can('be god'),
+            'Users: edit' => auth()->user()->can('Users: edit'),
+        ];
+
+        return view('rrhh.index', compact('users','permissions','can'));
     }
 
     /**

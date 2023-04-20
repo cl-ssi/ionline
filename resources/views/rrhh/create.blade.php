@@ -10,31 +10,30 @@
 <form method="POST" action="{{ route('rrhh.users.store') }}" enctype="multipart/form-data">
     @csrf
 
-
     <div class="form-row">
-        <fieldset class="form-group col-10">
+        <fieldset class="form-group col-2">
             <label for="formGroupIDInput">ID*</label>
             <input type="number" class="form-control" id="formGroupIDInput" name="id" required="required" min="6" max="99999999" step="" autocomplete="off">
         </fieldset>
 
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-1">
             <label for="formGroupDVInput">DV*</label>
             <input type="text" class="form-control" id="formGroupDVInput" name="dv" required="required" title="Digito verificador" autocomplete="off">
         </fieldset>
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-md-4">
             <label for="formGroupNameInput">Nombre*</label>
             <input type="text" class="form-control" id="formGroupNameInput" placeholder="Nombre" name="name" required="required">
         </fieldset>
 
-        <div class="form-group col">
+        <div class="form-group col-md-3">
             <label for="name">Apellido Paterno*</label>
             <input type="text" class="form-control" name="fathers_family" required="required">
         </div>
 
-        <div class="form-group col">
+        <div class="form-group col-md-3">
             <label for="name">Apellido Materno*</label>
             <input type="text" class="form-control" name="mothers_family" required="required">
         </div>

@@ -16,15 +16,18 @@
             <label for="run">RUN</label>
             <input type="text" readonly class="form-control-plaintext" id="staticRUN" value="{{$user->runFormat()}}">
         </div>
+    </div>
+
+    <div class="form-row">
         <div class="form-group col-md-4">
             <label for="name">Nombres</label>
             <input type="text" class="form-control" name="name" value="{{$user->name}}">
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label for="name">Apellido Paterno</label>
             <input type="text" class="form-control" name="fathers_family" value="{{ $user->fathers_family }}">
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label for="name">Apellido Materno</label>
             <input type="text" class="form-control" name="mothers_family" value="{{ $user->mothers_family }}">
         </div>
@@ -86,10 +89,12 @@
 
         </form>
 
+        @can('Users: reset password option')
         <form method="POST" action="{{ route('rrhh.users.password.reset', $user->id) }}" class="d-inline">
             {{ method_field('PUT') }} {{ csrf_field() }}
             <button class="btn btn-sm btn-outline-secondary"><span class="fas fa-redo" aria-hidden="true"></span> Restaurar clave</button>
         </form>
+        @endcan
 
         @can('Users: delete')
         <form method="POST" action="{{ route('rrhh.users.destroy', $user->id) }}" class="d-inline">
@@ -98,39 +103,39 @@
         </form>
         @endcan
 
-        @role('god')
+        @can('be god')
         <!--TODO: Revisar un código decente para utilizar este método, quizá sólo un link en vez de un formulario, chequear en el controller que tenga el rol god() -->
         <form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
             {{ csrf_field() }}
             <button class="btn btn-sm btn-outline-warning"><span class="fas fa-redo" aria-hidden="true"></span> Switch</button>
         </form>
-        @endrole
+        @endcan
 
-        @if(!$user->hasVerifiedEmail())
-            @if($user->email_personal)
-                <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
-                    @csrf
-                    <button class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-envelope" title="Verificar correo electrónico personal"></i>
+        @can('Users: send mail verification')
+            @if(!$user->hasVerifiedEmail())
+                @if($user->email_personal)
+                    <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
+                        @csrf
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-envelope" title="Verificar correo electrónico personal"></i>
+                        </button>
+                    </form>
+                @else
+                    <button class="btn btn-sm btn-secondary" disabled>
+                        <i class="fas fa-envelope" title="No tiene agregado correo electrónico personal"></i>
                     </button>
-                </form>
+                @endif
             @else
-                <button class="btn btn-sm btn-secondary" disabled>
-                    <i class="fas fa-envelope" title="No tiene agregado correo electrónico personal"></i>
+                <button class="btn btn-sm btn-outline-success" disabled>
+                    <i class="fas fa-envelope" title="Correo electrónico personal verificada"></i>
                 </button>
             @endif
-        @else
-            <button class="btn btn-sm btn-outline-success" disabled>
-                <i class="fas fa-envelope" title="Correo electrónico personal verificada"></i>
-            </button>
-        @endif
+        @endcan
 
     </div>
 
-    <br /><hr />
-    <div style="height: 300px; overflow-y: scroll;">
-            @include('partials.audit', ['audits' => $user->audits()] )
-    </div>
+    <hr />
+    @include('partials.audit', ['audits' => $user->audits()] )
 
 @endcan
 
