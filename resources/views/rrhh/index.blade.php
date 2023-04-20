@@ -42,6 +42,7 @@
                 'required' => false,
             ])
         </fieldset>
+        @if($can['be god'])
         <fieldset class="col-2">
             <select class="form-control" name="permission">
                 <option value="">Permisos</option>
@@ -50,6 +51,7 @@
                 @endforeach
             </select>
         </fieldset>
+        @endif
         <fieldset class="col-3">
             <div class="input-group mb-3">
                 <input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus autocomplete="off">
