@@ -1456,15 +1456,15 @@ class ServiceRequestController extends Controller
     $serviceRequestsMyPendings = array();
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                         $subQuery->where('responsable_id',$user_id);
-                                         //$subQuery->where('status', '<>', 2);
-                                         $subQuery->orwhere('user_id',$user_id);
-                                         //$subQuery->whereNull('derive_date');
-
-                                       })->with("SignatureFlows")
-
-                                       ->orderBy('id','asc')
-                                       ->get();
+                                        $subQuery->whereNull('status');
+                                        $subQuery->where('responsable_id', $user_id);
+                                    $subQuery->orwhere('user_id', $user_id);
+                                    })
+                                    ->wheredoesnthave("SignatureFlows", function($subQuery) {
+                                        $subQuery->where('status',0);
+                                    })
+                                    ->with('SignatureFlows')
+                                    ->get();
 
     $cont = 0;
     foreach ($serviceRequests as $key => $serviceRequest) {
