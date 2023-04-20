@@ -70,7 +70,9 @@ Total de registros: {{ $users->total() }}
 <table class="table table-responsive-xl table-striped table-sm">
     <thead class="thead-dark">
         <tr>
+            @if($can['be god'])
             <th scope="col"></th>
+            @endif
             <th scope="col">RUN</th>
             <th scope="col">Nombre</th>
             <th scope="col">Unidad Organizacional</th>
@@ -81,6 +83,7 @@ Total de registros: {{ $users->total() }}
     <tbody>
         @foreach($users as $user)
         <tr>
+            @if($can['be god'])
             <th nowrap>
                 @livewire('set-single-permission', [ 'user' => $user, 'permission' => 'Nuevo iOnline', 'icon' => 'globe'])
                 {!! $user->can('be god') ? '<i class="text-danger fas fa-chess-king" title="be god"></i>':'' !!}
@@ -89,21 +92,22 @@ Total de registros: {{ $users->total() }}
                 {!! $user->can('Partes: director') ? '<i class="fas fa-file-import" title="Partes: director"></i>':'' !!}
                 {!! $user->can('Requirements: delete') ? '<i class="text-danger fas fa-rocket" title="Requirements: delete"></i>':'' !!}
             </th>
+            @endif
             <th scope="row" nowrap>{{ $user->runFormat() }}</td>
             <td nowrap>{{ $user->shortName }} {{ trashed($user) }}</td>
             <td class="small">{{ @$user->organizationalUnit->name ?: ''}}</td>
             <td class="small">{{ $user->position }}</td>
             <td nowrap>
                 @unless($user->trashed())
-                    @can('Users: edit')
+                    @if($can['Users: edit'])
                         <a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-edit" aria-hidden="true"></span></a>
                     @endcan
 
-                    @role('god')
+                    @if($can['be god'])
                     <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning">
                     <span class="fas fa-redo" aria-hidden="true"></span></a>
-                    @endrole
+                    @endif
                 @endunless
             </td>
         </tr>
