@@ -5,6 +5,7 @@
 <body>
     <!-- Define header and footer blocks before your content -->
     @include('documents.templates.partials.header', [
+        'establishment' => $document->organizationalUnit->establishment,
         'linea3' => "ID: " . $document->id . (isset($document->internal_number) ? '- Nº Interno: '. $document->internal_number : ''),
     ])
 
