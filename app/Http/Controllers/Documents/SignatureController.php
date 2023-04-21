@@ -59,15 +59,18 @@ class SignatureController extends Controller
         $myAuthorities = collect();
         $ous_secretary = Authority::getAmIAuthorityFromOu(today(), 'secretary', Auth::user()->id);
         foreach ($ous_secretary as $secretary) {
-            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
-            $allTimeAuthorities = Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager');
+            if($secretary->OrganizationalUnit) {
+                $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
+                $allTimeAuthorities = Authority::getAuthorityFromAllTime($secretary->OrganizationalUnit->id, 'manager');
+            }
+            //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, today(), 'manager')->user_id;
 
             /* TODO: @tebiccr Despues de que esté estable el modulo nueva autoridad quitar este foreach ya que no debería ser necesario */
-            foreach($allTimeAuthorities as $allTimeAuthority){
-                if(!in_array($allTimeAuthority->user_id, $users)){
-                    $myAuthorities->push($allTimeAuthority);
-                }
-            }
+            // foreach($allTimeAuthorities as $allTimeAuthority){
+            //     if(!in_array($allTimeAuthority->user_id, $users)){
+            //         $myAuthorities->push($allTimeAuthority);
+            //     }
+            // }
         }
 
         if ($tab == 'mis_documentos') {
