@@ -9,9 +9,9 @@
                 </div>
             </td>
             <td class="center" style="font-size: 8px;">
-                {{ $document->organizationalUnit->establishment->address }} - 
-                {{ $document->organizationalUnit->establishment->telephone }} - 
-                {{ $document->organizationalUnit->establishment->url }}
+                {{ $document->establishment->address }} - 
+                {{ $document->establishment->telephone }} - 
+                {{ $document->establishment->url }}
             </td>
             <td width="20%" class="right" >
             <img src="{{ public_path('/images/footer-gob.png') }}" width="100" alt="Logo de la institución">

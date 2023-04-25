@@ -82,6 +82,11 @@ class Establishment extends Model implements Auditable
         return $this->hasMany(Store::class);
     }
 
+    public function mother()
+    {
+        return $this->belongsTo(Establishment::class,'new_mother_code','new_deis');
+    }
+
     public function usersInventories()
     {
         return $this->belongsToMany(User::class, 'inv_establishment_user')
