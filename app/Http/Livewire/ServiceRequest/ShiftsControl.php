@@ -5,6 +5,7 @@ namespace App\Http\Livewire\ServiceRequest;
 use Livewire\Component;
 use App\Models\ServiceRequests\ShiftControl;
 use App\Models\ServiceRequests\Fulfillment;
+use Illuminate\Support\Facades\Auth;
 
 class ShiftsControl extends Component
 {
@@ -41,12 +42,12 @@ class ShiftsControl extends Component
           $this->fulfillment = Fulfillment::find($this->fulfillment->id);
         }else{
           $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
-          logger("No se encontró shiftcontrol para eliminar.");
+          logger("No se encontró shiftcontrol para eliminar. Usuario: " . Auth::user()->id);
         }
         
       }else{
         $this->msg = "No se encontró horario a eliminar. Intente nuevamente.";
-        logger("Se intentó eliminar un shiftcontrol que venía vacío.");
+        logger("Se intentó eliminar un shiftcontrol que venía vacío. Usuario: " . Auth::user()->id);
       }
     }
 
