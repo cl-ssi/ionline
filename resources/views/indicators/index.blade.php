@@ -10,9 +10,9 @@
     </ol>
 </nav>
 
-<div class="alert alert-warning" role="alert">
+<!-- <div class="alert alert-warning" role="alert">
     Se publica datos REM serie A de meses de Enero y Febrero 2023, ésta contiene datos preliminares con información enviada por los establecimientos, previo al nuevo cambio de serie con la cual deberán tributar a partir del mes de Abril.
-</div>
+</div> -->
 
 <h3 class="mb-3">Metas Sanitarias</h3>
 
