@@ -90,6 +90,7 @@ class CreateWellAmiEmployeeInformation extends Migration
             $table->date('fecha_termino_ausentismo')->nullable();
             $table->date('fecha_primer_contrato')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

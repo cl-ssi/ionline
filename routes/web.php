@@ -45,6 +45,7 @@ use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
+use App\Http\Controllers\Welfare\AmipassController;
 
 use App\Http\Controllers\WebserviceController;
 
@@ -2170,9 +2171,9 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
     });
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
-        // Route::get('/', [WelfareController::class, 'index'])->name('index');
+        Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
-        Route::view('/', 'welfare.amipass.index')->name('index');
+        Route::view('/upload', 'welfare.amipass.index')->name('upload');
     });
 
 });
