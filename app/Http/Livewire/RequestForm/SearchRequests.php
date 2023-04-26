@@ -13,6 +13,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\RequestForms\ItemRequestForm;
+use App\Exports\RequestForms\FormItemsExport;
+
 class SearchRequests extends Component
 {
     use WithPagination;
@@ -120,6 +123,20 @@ class SearchRequests extends Component
     public function export()
     {
         return Excel::download(new RequestFormsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
+    }
+
+    public function exportFormItems()
+    {
+        $this->detailsToExport = collect(new ItemRequestForm);
+        foreach($this->querySearch(false) as $search){
+            if($search->purchasingProcess && $search->purchasingProcess->details->count() > 0){
+                foreach($search->purchasingProcess->details as $key => $detail){
+                    $this->detailsToExport->push($detail);
+                }
+            }
+        }
+
+        return Excel::download(new FormItemsExport($this->detailsToExport), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
 
     public function searchedRequesterOu(OrganizationalUnit $organizationalUnit){
