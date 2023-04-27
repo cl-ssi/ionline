@@ -219,12 +219,14 @@
                     @foreach($reviewItems as $review)
                     <tr >
                         <td 
-                            @if($review->answer == 'NO')
+                            @if($review->answer == 'NO' && $review->rectified == 'NO')
                                 class="text-center align-middle table-danger"
                             @elseif($review->answer == 'REGULAR')
                                 class="text-center align-middle table-warning"
                             @elseif($review->answer == 'SI')
                                 class="text-center align-middle table-primary"
+                            @else
+                                class="text-center align-middle table-success"
                             @endif>
                             {{ $review->id }}
                         </td>
