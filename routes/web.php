@@ -2188,6 +2188,7 @@ Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
 // Route::get('/log',[TestController::class,'log']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
 // Route::get('/info',[TestController::class,'info']);
+Route::get('/job',[TestController::class,'job'])->middleware('auth');
 
 Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
     $font_light = public_path('fonts/verdana-italic.ttf');
