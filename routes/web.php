@@ -1266,6 +1266,7 @@ Route::resource('documents', DocumentController::class)->middleware('auth');
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
     /** Custom routes */
     Route::get('download/{file}',  [EventController::class,'download'])->name('download');
+    Route::get('deleteFile/{file}',  [EventController::class,'deleteFile'])->name('deleteFile');
     Route::get('outbox', [RequirementController::class,'outbox'])->name('outbox');
     Route::get('secretary_outbox', [RequirementController::class,'secretary_outbox'])->name('secretary_outbox');
     Route::get('archive_requirement/{requirement}', [RequirementController::class,'archive_requirement'])->name('archive_requirement');

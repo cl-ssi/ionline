@@ -286,4 +286,11 @@ class EventController extends Controller
         // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
         
     }
+
+    public function deleteFile(File $file){
+        Storage::disk('gcs')->delete($file);
+
+        $file->delete();
+        return redirect()->back()->with('success', 'Se eliminó el archivo adjunto.');
+    }
 }
