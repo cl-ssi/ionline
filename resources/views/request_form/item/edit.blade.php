@@ -47,7 +47,7 @@
                             Técnicas:</label>
                         <textarea name="technical_specifications" id="for_technical_specifications"
                                   class="form-control form-control-sm"
-                                  rows="2">{{$itemRequestForm->specification}}</textarea>
+                                  rows="2">{!! $itemRequestForm->specification !!}</textarea>
                     </fieldset>
                     <fieldset class="form-group col-sm-3">
                         <label for="for_taxes">Tipo de Impuestos:</label><br>

@@ -21,10 +21,12 @@
                     <tbody class="small">
                         <tr>
                             <th class="table-active" scope="row">Folio</th>
-                            <td>{{ $requestForm->folio }}</td>
+                            <td>{{ $requestForm->folio }}
                             @if($requestForm->father)
-                            <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}" target="_blank">{{ $requestForm->father->folio }}</a>)
+                                <br>(<a href="{{ route('request_forms.show', $requestForm->father->id) }}"
+                                        target="_blank">{{ $requestForm->father->folio }}</a>)
                             @endif
+                        </td>
                         </tr>
                         <tr>
                             <th class="table-active" scope="row">Fecha de Creación</th>
@@ -118,7 +120,7 @@
                 @include('request_form.purchase.modals.select_purchase_mechanism')
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending  || $requestForm->has_increased_expense) disabled @endif >
+                <button type="button" class="btn btn-primary btn-sm float-right mr-2" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
                     Cambiar presupuesto
                 </button>
 
@@ -305,7 +307,7 @@
                             @endif
                             </td>
                             <td>{{ $item->unit_of_measurement }}</td>
-                            <td>{{ $item->specification }}</td>
+                            <td>{!! $item->specification !!}</td>
                             <td align="center">
                             @if($item->article_file)
                             <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
@@ -393,7 +395,12 @@
                         <thead class="text-center">
                             <tr>
                                 <th>Item</th>
-                                <th>Pasajero</th>
+                                <th width="70">RUT</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Fecha Nac.</th>
+                                <th>Teléfono</th>
+                                <th>E-mail</th>
                                 <th>Item Pres.</th> 
                                 <th>Tipo viaje</th>
                                 <th>Origen</th>
@@ -430,11 +437,13 @@
                             {{--<tr data-id="{{$item->product->code ?? ''}}">--}}
                             <tr>
                                 <td>{{ $key+1 }}</td>
-                                <td>
-                                    <b>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</b> <br>
-                                    {{ $passenger->FullName }}
-                                </td>
-                                <td>{{ $passenger->budgetItem()->first()->fullName() }}</td>
+                                <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                                <td>{{ $passenger->name }}</td>
+                                <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                                <td>{{ $passenger->birthday ? $passenger->birthday->format('d-m-Y') : '' }}</td>
+                                <td>{{ $passenger->phone_number }}</td>
+                                <td>{{ $passenger->email }}</td>
+                                <td>{{ $passenger->budgetItem ? $passenger->budgetItem->fullName() : '' }}</td>
                                 <td>{{ $passenger->roundTripName }}</td>
                                 <td>{{ $passenger->origin }}</td>
                                 <td>{{ $passenger->destination }}</td>
@@ -505,14 +514,14 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="11"></td>
+                                <td colspan="16"></td>
                                 <td class="text-right">Valor Total</td>
                                 <td align="right">
                                     <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" readonly>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="11"></td>
+                                <td colspan="16"></td>
                                 <td class="text-right">Total seleccionado</td>
                                 <td align="right">
                                 <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount_selected" readonly>
@@ -1488,7 +1497,7 @@
 
     });
 
-    //NEW BUDGET EVENTS
+    //NEW BUDGET EVENTS FOR ITEMS
     $('#for_new_quantity,#for_new_unit_value,#for_new_tax').on('change keyup', function() {
         var tr = $(this).closest('tr')
         var qty = tr.find('input[name="new_quantity[]"]')
@@ -1499,6 +1508,12 @@
         total.val((totalValueWithTaxes(qty.val() * price.val(), tax.val())).toFixed(2));
         calculateNewAmount()
     });
+
+    //NEW BUDGET EVENTS FOR PASSENGERS
+    $('#for_new_item_total').on('change keyup', function() {
+        calculateNewAmount()
+    });
+
 </script>
 
 @endsection

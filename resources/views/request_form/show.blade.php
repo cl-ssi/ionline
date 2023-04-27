@@ -277,7 +277,7 @@
                             @endif
                         </td>
                         <td>{{ $itemRequestForm->unit_of_measurement }}</td>
-                        <td style="white-space: pre-wrap;">{{ $itemRequestForm->specification }}</td>
+                        <td style="white-space: pre-wrap;">{!! $itemRequestForm->specification !!}</td>
                         <td align="center">
                             @if($itemRequestForm->article_file)
                                 <a href="{{ route('request_forms.show_item_file', $itemRequestForm) }}" target="_blank">
@@ -429,7 +429,7 @@
                             <td>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
                             <td>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
                             <td>{{ $detail->pivot->directDeal ? $detail->pivot->directDeal->resol_direct_deal : '-'}}</td>
-                            <td>Comprador: {{ $detail->specification }} // proveedor: {{ $detail->pivot->supplier_specifications }}</td>
+                            <td>Comprador: {!! $detail->specification !!} // proveedor: {!! $detail->pivot->supplier_specifications !!}</td>
                             <td align="right">{{ $detail->pivot->quantity }}</td>
                             <td>{{ $detail->unit_of_measurement }}</td>
                             <td>{{ $detail->pivot->tender ? $detail->pivot->tender->currency : '' }}</td>

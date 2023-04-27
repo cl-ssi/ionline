@@ -9,7 +9,7 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\ItemRequestForm;
-// use App\Models\RequestForms\ItemChangedRequestForm;
+use App\Models\RequestForms\ItemChangedRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
@@ -121,10 +121,10 @@ class RequestForm extends Model implements Auditable
         return $this->hasMany(ItemRequestForm::class);
     }
 
-    // public function itemChangedRequestForms()
-    // {
-    //     return $this->hasMany(ItemChangedRequestForm::class);
-    // }
+    public function itemChangedRequestForms()
+    {
+        return $this->hasMany(ItemChangedRequestForm::class);
+    }
 
     public function passengers()
     {
@@ -154,6 +154,11 @@ class RequestForm extends Model implements Auditable
     public function signedOldRequestForm()
     {
         return $this->belongsTo(SignaturesFile::class, 'old_signatures_file_id');
+    }
+
+    public function signedOldRequestForms()
+    {
+        return $this->hasMany(OldSignatureFile::class)->latest();
     }
 
     public function associateProgram()
