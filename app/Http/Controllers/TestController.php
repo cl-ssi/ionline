@@ -87,8 +87,13 @@ class TestController extends Controller
     {
         TestJob::dispatch(auth()->user())
             // ->onConnection('cloudtasks')
-            ->delay(5);
-        return "Test Job Dispatch";
+            ->delay(15);
+
+        return view('mails.test', [
+            'user' => auth()->user()
+        ]);
+        
+        // return "Test Job Dispatch";
     }
 
 }

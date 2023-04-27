@@ -2,17 +2,17 @@
 
 @section('content')
 
-<strong>COMPROBANTE DE INGRESO DE NUEVO REGISTRO</strong><br><br>
-<strong>MÓDULO DE INTEGRIDAD Y ÉTICA</strong><br><br>
+<strong>CORREO DE PRUEBA ENVIADO DESDE IONLINE</strong><br><br>
+
 <hr>
+
 <div class="justify">
     <div class="card">
         <div class="card-body">
 
             <h3 class="mb-3">
-                Correo de prueba enviado a {{ $user->shortName }}
+                Usuario: {{ $user->shortName }}
             </h3>
-
 
 
             <div class="card">
@@ -29,10 +29,10 @@
 
 @endsection
 
-@section('firmante', 'SSI Intranet')
+@section('firmante', 'Intranet Servicio de Salud Iquique')
 
-@section('linea1', 'Módulo de integridad y ética')
+@section('linea1', 'Módulo de .....')
 
-@section('linea2', 'Unidad de Informática y Tecnología')
+@section('linea2', 'Departamento de Tecnologías de la Información y Telecomunicaciones')
 
 @section('linea3', 'sistemas.ssi@redsalud.gob.cl')
