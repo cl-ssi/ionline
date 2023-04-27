@@ -86,8 +86,8 @@ class TestController extends Controller
     public function job()
     {
         TestJob::dispatch(auth()->user())
-            ->onConnection('cloudtasks')
-            ->delay(15);
+            // ->onConnection('cloudtasks')
+            ->delay(5);
         return "Test Job Dispatch";
     }
 
