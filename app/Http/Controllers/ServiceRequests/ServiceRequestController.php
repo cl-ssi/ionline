@@ -497,10 +497,15 @@ class ServiceRequestController extends Controller
       }
     }
 
+    // si el usuario se encuentra eliminado, se vuelve a dejar activo
+    if(User::withTrashed()->find($request->user_id)->trashed()){
+        User::withTrashed()->find($request->user_id)->restore();
+    }
+
     //devuelve user o lo crea
     $user = User::updateOrCreate(
-      ['id' => $request->user_id],
-      [
+    ['id' => $request->user_id],
+    [
         'dv' =>  $request->dv,
         'name' =>  $request->name,
         'fathers_family' =>  $request->fathers_family,
@@ -510,13 +515,8 @@ class ServiceRequestController extends Controller
         'phone_number' =>  $request->phone_number,
         'email' =>  $request->email,
         'organizational_unit_id' =>  $request->responsability_center_ou_id
-      ]
-
-
-      //$request->All()
-
+    ]
     );
-
 
     // $user = User::find($request->user_id);
 
