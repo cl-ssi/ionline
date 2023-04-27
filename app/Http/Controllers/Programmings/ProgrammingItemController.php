@@ -39,7 +39,7 @@ class ProgrammingItemController extends Controller
             // })
             // busqueda de actividades sin filtro ni tipo de actividad
             ->when(!$listTracer && !$activityFilter && !$cycleFilter, function ($q){
-                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user');
+                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user', 'items.programming');
             })
             ->when($activityType == 'Directa' && ($listTracer || $activityFilter || $cycleFilter), function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
                 return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter, $cycleFilter) {
@@ -50,7 +50,7 @@ class ProgrammingItemController extends Controller
                             })->when($cycleFilter != null, function($q3) use ($cycleFilter){
                                 return $q3->where('vital_cycle', $cycleFilter);
                             });
-                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
+                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user', 'items.programming'])->get();
              })
             ->when($activityType == 'Indirecta' && ($categoryFilter || $workAreaFilter || $proFilter), function($q) use ($categoryFilter, $workAreaFilter, $proFilter) {
                 return $q->whereHas('items', $filter = function($q2) use ($categoryFilter, $workAreaFilter, $proFilter) {
@@ -63,7 +63,7 @@ class ProgrammingItemController extends Controller
                             // ->when($cycleFilter != null, function($q3) use ($cycleFilter){
                             //     return $q3->where('vital_cycle', $cycleFilter);
                             // });
-                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user'])->get();
+                })->with(['items' => $filter, 'items.reviewItems', 'items.professionalHours.professional', 'establishment', 'pendingItems', 'items.user', 'items.programming'])->get();
             })
             ->first();
 
@@ -225,7 +225,7 @@ class ProgrammingItemController extends Controller
     public function update(Request $request, ProgrammingItem $programmingitem)
     {
         // return $request;
-        $programmingitem->load('professionalHours');
+        $programmingitem->load('professionalHours', 'programming');
         $programmingitem->fill($request->all());
         $programmingitem->prevalence_rate = $request->has('prevalence_rate') ? $request->prevalence_rate : null;
         $programmingitem->save();
@@ -249,6 +249,7 @@ class ProgrammingItemController extends Controller
             $reviewItem->rectified = "SI";
             $reviewItem->rect_comments = $request->rect_comments;
             $reviewItem->updated_by = Auth()->user()->id;
+            if($programmingitem->programming->year >= 2024) $reviewItem->answer = null;
             $reviewItem->save();
 
             session()->flash('success', 'Se ha rectificado correctamente la observación. <script>window.close()</script>');

@@ -75,6 +75,14 @@
                             <i class="fas fa-file-contract"></i>
                         </a>
                         @endif
+
+                        @if($requestForm->signedOldRequestForms->isNotEmpty())
+                        <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anteriores firmados" href="{{ $requestForm->old_signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" data-toggle="modal" data-target="#history-fr-{{$requestForm->id}}">
+                        <i class="fas fa-file-contract"></i>
+                        </a>
+                        @include('request_form.partials.modals.old_signed_request_forms')
+                        @endif
+
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                             <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>
                         </span>
@@ -155,6 +163,13 @@
                         <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anterior firmado" href="{{ $requestForm->old_signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" title="Certificado">
                             <i class="fas fa-file-contract"></i>
                         </a>
+                        @endif
+                        
+                        @if($requestForm->signedOldRequestForms->isNotEmpty())
+                        <a class="btn btn-secondary btn-sm" title="Ver Formulario de Requerimiento Anteriores firmados" href="{{ $requestForm->old_signatures_file_id == 11 ? route('request_forms.show_file', $requestForm->requestFormFiles->first() ?? 0) : route('request_forms.signedRequestFormPDF', [$requestForm, 0]) }}" target="_blank" data-toggle="modal" data-target="#history-fr-{{$requestForm->id}}">
+                        <i class="fas fa-file-contract"></i>
+                        </a>
+                        @include('request_form.partials.modals.old_signed_request_forms')
                         @endif
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="">
                             <a href="{{ route('request_forms.supply.purchase', $requestForm) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-shopping-cart"></i></a>

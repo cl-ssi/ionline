@@ -227,8 +227,11 @@ class Authorization extends Component
             $this->requestForm->status = 'rejected';
             $this->requestForm->save();
           } else {
+            $this->requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms');
+            foreach($this->requestForm->itemRequestForms as $item)
+              if($item->latestPendingItemChangedRequestForms)
+                $item->latestPendingItemChangedRequestForms->update(['status' => 'rejected']);
             $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
-            // dd($nextEvent);
             if(!$nextEvent->isEmpty()) $nextEvent->last()->update(['status' => 'does_not_apply']);
           }
            $event->signature_date = Carbon::now();

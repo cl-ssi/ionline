@@ -87,6 +87,14 @@ class Passenger extends Model
         return $this->belongsTo('App\RequestForms\RequestFormItemCode');
     }
 
+    public function passengerChanged() {
+        return $this->hasMany(PassengerChanged::class, 'passenger_id');
+    }
+
+    public function latestPendingPassengerChanged() {
+        return $this->hasOne(PassengerChanged::class, 'passenger_id')->where('status', 'pending')->latestOfMany();
+    }
+
     public $table = "arq_passengers";
 
     public $dates = ['departure_date', 'return_date', 'birthday'];

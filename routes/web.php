@@ -2183,12 +2183,16 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 Route::view('/some', 'some');
 
 /** Test Routes */
-Route::get('/ous',[TestController::class,'ous']);
-Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
-// Route::get('/dev/get-ip',[TestController::class,'getIp']);
-// Route::get('/log',[TestController::class,'log']);
-Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
-// Route::get('/info',[TestController::class,'info']);
+Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/ous',[TestController::class,'ous']);
+    Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
+    // Route::get('/dev/get-ip',[TestController::class,'getIp']);
+    // Route::get('/log',[TestController::class,'log']);
+    Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
+    // Route::get('/info',[TestController::class,'info']);
+    Route::get('/job',[TestController::class,'job'])->middleware('auth');
+});
+
 
 Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
     $font_light = public_path('fonts/verdana-italic.ttf');
