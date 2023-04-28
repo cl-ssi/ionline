@@ -8,88 +8,52 @@
 <h3 class="mb-3">Perfil del Funcionario</h3>
 
 <div class="personal-data-table" style="border-radius: 10px; margin: 20px;">
-<div class="p-3 mb-3" style="border-radius: 10px; border: 2px solid black; background-color: white;">
-      <h4>Datos Personales</h4>
+  <div class="p-3 mb-3" style="border-radius: 10px; border: 2px solid black; background-color: white;padding: 20px; box-sizing: border-box;">
+        <h4>Datos Personales</h4>
+  </div>
+    <div class="row" style="padding: 20px; box-sizing: border-box;" >
+      <div class="col-md-2">
+        <label for="nombre">Nombre:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="nombre" name="nombre" value="Alvaro">
+      </div>
+      <div class="col-md-2">
+        <label for="apellidos">Apellidos:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="apellidos" name="apellidos" value="Scarameli">
+      </div>
     </div>
-  <div class="row" >
-    <div class="col-md-2">
-      <label for="nombre">Nombre:</label>
+    <div class="row" style="padding: 20px; box-sizing: border-box;">
+      <div class="col-md-2">
+        <label for="rut">Rut:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="rut" name="rut" value="1243124">
+      </div>
+      <div class="col-md-2">
+        <label for="direccion">Dirección:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="direccion" name="direccion" value="Calle Siempre viva 123">
+      </div>
     </div>
-    <div class="col-md-4">
-      <input type="text" id="nombre" name="nombre" value="Alvaro">
-    </div>
-    <div class="col-md-2">
-      <label for="apellidos">Apellidos:</label>
-    </div>
-    <div class="col-md-4">
-      <input type="text" id="apellidos" name="apellidos" value="Scarameli">
+    <div class="row" style="padding: 20px; box-sizing: border-box;">
+      <div class="col-md-2">
+        <label for="nro-telefonico">Nro. Telefonico:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="nro-telefonico" name="nro-telefonico" value="+56969696969">
+      </div>
+      <div class="col-md-2">
+        <label for="correo-electronico">Correo Electronico:</label>
+      </div>
+      <div class="col-md-4">
+        <input type="email" id="correo-electronico" name="correo-electronico" value="emailu@gmail.com">
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-2">
-      <label for="rut">Rut:</label>
-    </div>
-    <div class="col-md-4">
-      <input type="text" id="rut" name="rut" value="1243124">
-    </div>
-    <div class="col-md-2">
-      <label for="direccion">Dirección:</label>
-    </div>
-    <div class="col-md-4">
-      <input type="text" id="direccion" name="direccion" value="Calle Siempre viva 123">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-2">
-      <label for="nro-telefonico">Nro. Telefonico:</label>
-    </div>
-    <div class="col-md-4">
-      <input type="text" id="nro-telefonico" name="nro-telefonico" value="+56969696969">
-    </div>
-    <div class="col-md-2">
-      <label for="correo-electronico">Correo Electronico:</label>
-    </div>
-    <div class="col-md-4">
-      <input type="email" id="correo-electronico" name="correo-electronico" value="emailu@gmail.com">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-2">
-      <label for="profesion">Profesión:</label>
-    </div>
-    <div class="col-md-4">
-      <select class="form-control selectpicker" data-live-search="true" name="profession_id" data-size="5" id="profesion">
-        <option value="">Todos</option>
-        <option value="1">Desarrollador de software</option>
-        <option value="2">Diseñador gráfico</option>
-        <option value="3">Ingeniero mecánico</option>
-        <option value="4">Abogado</option>
-        <option value="5">Contador</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <label for="establecimiento">Establecimiento:</label>
-    </div>
-    <div class="col-md-4">
-      <select class="form-control" data-live-search="true" name="establishment_id" data-size="5" id="establecimiento">
-            <option value="">Todos</option>
-            <option value="1">Hospital A</option>
-            <option value="2">Hospital B</option>
-            <option value="3">Clínica C</option>
-            <option value="4">Consultorio D</option>
-            <option value="5">Centro médico E</option>
-          </select>
-        </td>
-        <td><label for="unidad">Unidad:</label></td>
-        <td>
-          <select class="form-control" data-live-search="true" name="responsability_center_ou_id" data-size="5" id="unidad">
-            <option value="">Todos</option>
-            <option value="1">Unidad 1</option>
-            <option value="2">Unidad 2</option>
-          </select>
-    </div>
-	</div>
-</div>
 
 <div class="table-container mb-3" style="border-radius: 10px; border: 2px solid black;">
   <div class="bg-primary text-white p-3 mb-3 rounded-top">
@@ -136,18 +100,6 @@
               </select>
             </div>
             <div class="form-group col-md-3">
-              <label for="period">Periodo:</label>
-              <select class="form-control" id="period">
-                <option>Seleccione</option>
-                <option>Enero - Febrero</option>
-                <option>Marzo - Abril</option>
-                <option>Mayo - Junio</option>
-                <option>Julio - Agosto</option>
-                <option>Septiembre - Octubre</option>
-                <option>Noviembre - Diciembre</option>
-              </select>
-            </div>
-            <div class="form-group col-md-3">
               <label for="start-date">Fecha Inicio:</label>
               <input type="date" class="form-control" id="start-date">
             </div>
@@ -162,7 +114,9 @@
                 <option>No Aprobado</option>
               </select>
             </div>
-        </div>
+            </div>  
+          </div>
+      </div>
     </div>
 </div>
 
@@ -170,56 +124,80 @@
     <div class="bg-warning text-white p-3 mb-3" style="border-radius: 10px;">
         <h4>Firmas de resolución</h4>
     </div>
-    <table class="table table-bordered table-sm w-100" style="border-radius: 10px;">
-      <thead>
-          <tr>
-          <th>Fecha</th>
-          <th>U.Organizacional</th>
-          <th>Cargo</th>
-          <th>Usuario</th>
-          <th>Tipo</th>
-          <th>Estado</th>
-          <th>Observación</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-          <td>2022-02-05</td>
-          <td>S.A.M.U.</td>
-          <td>Funcionario</td>
-          <td>Norma Constanza Dueñas Peña</td>
-          <td>Creador</td>
-          <td>Creado</td>
-          <td></td>
-          </tr>
-          <tr>
-          <td>2022-04-11</td>
-          <td>S.A.M.U.</td>
-          <td>Funcionario</td>
-          <td>Norma Constanza Dueñas Peña</td>
-          <td>Responsable</td>
-          <td>Aceptado</td>
-          <td>por Claudio Fuentes</td>
-          </tr>
-          <tr>
-          <td>2022-04-06</td>
-          <td>S.A.M.U.</td>
-          <td>Médico Jefe</td>
-          <td>Maria Veronica Astudillo Sanchez</td>
-          <td>Supervisor</td>
-          <td>Aceptado</td>
-          <td></td>
-          </tr>
-          <tr>
-          <td>2022-03-02</td>
-          <td>Planificación y Gestion RRHH</td>
-          <td>Profesional</td>
-          <td>Eduardo Javier</td>
-          <td>Visador</td>
-          <td>Aceptada</td>
-          <td></td>
-        </tr>
-      </tbody>
+    <table class="table table-bordered table-sm w-100" style="padding: 20px; box-sizing: border-box;">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>U.Organizacional</th>
+                <th>Cargo</th>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2022-02-05</td>
+                <td>S.A.M.U.</td>
+                <td>Funcionario</td>
+                <td>Norma Constanza Dueñas Peña</td>
+                <td>Creador</td>
+                <td>
+                    <select name="estado1">
+                        <option value="--">--</option>
+                        <option value="Aceptado">Aceptado</option>
+                        <option value="Rechazado">Rechazado</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2022-04-11</td>
+                <td>S.A.M.U.</td>
+                <td>Funcionario</td>
+                <td>Norma Constanza Dueñas Peña</td>
+                <td>Responsable</td>
+                <td>
+                    <select name="estado2">
+                        <option value="--">--</option>
+                        <option value="Aceptado">Aceptado</option>
+                        <option value="Rechazado">Rechazado</option>
+                    </select>
+                </td>
+                <td>por Claudio Fuentes</td>
+            </tr>
+            <tr>
+                <td>2022-04-06</td>
+                <td>S.A.M.U.</td>
+                <td>Médico Jefe</td>
+                <td>Maria Veronica Astudillo Sanchez</td>
+                <td>Supervisor</td>
+                <td>
+                    <select name="estado3">
+                        <option value="--">--</option>
+                        <option value="Aceptado">Aceptado</option>
+                        <option value="Rechazado">Rechazado</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2022-03-02</td>
+                <td>Planificación y Gestion RRHH</td>
+                <td>Profesional</td>
+                <td>Eduardo Javier</td>
+                <td>Visador</td>
+                <td>
+                    <select name="estado4">
+                        <option value="--">--</option>
+                        <option value="Aceptado">Aceptado</option>
+                        <option value="Rechazado">Rechazado</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
     </table>
 </div>
 
@@ -227,7 +205,7 @@
   <div class="bg-danger text-white p-3 mb-3" style="border-radius: 10px;">
     <h4>Datos Adicionales - Recursos Humanos</h4>
   </div>
-  <div class="form-container">
+  <div class="form-container" style="padding: 20px; box-sizing: border-box;">
     <div class="form-field">
       <label for="numero_contrato">Numero de contrato</label>
       <input type="text" id="numero_contrato" name="numero_contrato">
@@ -286,107 +264,106 @@
 
 <div class="table-container mb-3" style="border-radius: 10px; border: 2px solid black;">
     <div class="bg-success text-white p-3 mb-3" style="border-radius: 10px;">
-        <h4 class="d-flex w-100">Cumplimientos Solicitudes de Contratación</h4>
+        <h4 class="d-flex w-100">Responsable Cumplimientos Solicitudes de Contratación</h4>
     </div>
-    <table class="table table-bordered table-sm w-100" style="border-radius: 10px;">
+    <div class="bg-white p-3" style="border-radius: 10px;">
+        <div class="bg-white text-black p-3 mb-3" style="border-radius: 10px;">
+            <h4 class="d-flex w-100">Control de Turnos</h4>
+            <hr style="border-top: 2px solid green; margin: 20px 0;">
+            <div style="display: flex;">
+            <div class="form-field">
+                <label for="fecha_resolucion">Entrada</label>
+                <input type="date" id="fecha_entrada" name="fecha_entrada">
+            </div>
+            <div class="form-field" style="margin-left: 10px;">
+                <label for="hora_entrada">Hora</label>
+                <input type="time" id="hora_entrada" name="hora_entrada">
+            </div>
+            <div class="form-field" style="margin-left: 10px;">
+                <label for="fecha_resolucion">Salida</label>
+                <input type="date" id="fecha_salida" name="fecha_salida">
+            </div>
+            <div class="form-field" style="margin-left: 10px;">
+                <label for="hora_salida">Hora</label>
+                <input type="time" id="hora_salida" name="hora_salida">
+            </div>
+            <div class="form-field" style="margin-left: 10px;">
+                <label for="observaciones">Observaciones</label>
+                <textarea id="observaciones" name="observaciones"></textarea>
+            </div>
+            <div class="form-field" style="margin-left: 10px;">
+                <button type="button" class="btn btn-primary">Ingresar</button>
+            </div>
+        </div>
+        <hr style="border-top: 2px solid green; margin: 20px 0;">
+    <table class="table table-striped" style="border: none;">
         <thead>
-        <tr>
-            <th colspan="10"></th>
-                <th></th>
-            <th colspan="3" class="text-center">Visados</th>
-        </tr>
-            <tr> 
-                <th>Id</th>
-                <th>Nro.Res</th>
-                <th>Tipo</th>
-                <th>T.Contrato</th>
-                <th>C.Responsabilidad</th>
-                <th>F.Solicitud</th>
-                <th>Rut</th>
-                <th>Funcionario</th>
-                <th>F. Inicio</th>
-                <th>F. Término</th>
-                <!-- <th scope="col">Estado Solicitud</th> -->
-                <th>Acción</th>
-                <th>Resp.</th>
-                <th>RRHH</th>
-                <th>Finanzas</th>
+            <tr>
+                <th>Entradas</th>
+                <th>Salidas</th>
+                <th>Horas</th>
+                <th>Observación</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>476</td>
-                <td>Tipo</td>
-                <td>Horas Extra</td>
-                <td>Aprobado</td>
-                <td>Cwkjd</td>
-                <td>01-01-2023</td>
-                <td>12345678-9</td>
-                <td>01-01-2023</td>
-                <td>01-01-2023</td>
-                <td>Action</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>476</td>
-                <td>Tipo</td>
-                <td>Horas Extra</td>
-                <td>Aprobado</td>
-                <td>Cwkjd</td>
-                <td>01-01-2023</td>
-                <td>12345678-9</td>
-                <td>01-01-2023</td>
-                <td>01-01-2023</td>
-                <td>Action</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>476</td>
-                <td>Tipo</td>
-                <td>Horas Extra</td>
-                <td>Aprobado</td>
-                <td>Cwkjd</td>
-                <td>01-01-2023</td>
-                <td>12345678-9</td>
-                <td>01-01-2023</td>
-                <td>01-01-2023</td>
-                <td>Action</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>476</td>
-                <td>Tipo</td>
-                <td>Horas Extra</td>
-                <td>Aprobado</td>
-                <td>Cwkjd</td>
-                <td>01-01-2023</td>
-                <td>12345678-9</td>
-                <td>01-01-2023</td>
-                <td>01-01-2023</td>
-                <td>Action</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+        <tr style="border-top: none;">
+                    <td>2023-04-27 08:00</td>
+                    <td>2023-04-27 17:00</td>
+                    <td>9</td>
+                    <td>Trabajó en el proyecto XYZ</td>
+                </tr>
         </tbody>
     </table>
+      <hr style="border-top: 2px solid green; margin: 20px 0;">
+      <table class="table table-striped" style="border: none;">
+        <thead>
+            <tr>
+                <th>Horas Diurno</th>
+                <th>Horas Nocturno</th>
+                <th>Horas Total</th>
+                <th>Horas a Pagar</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr style="border-top: none;">
+                    <td>12</td>
+                    <td>0</td>
+                    <td>12</td>
+                    <td>12</td>
+                    <td>$300.000 (se debe comprobar)</td>
+                </tr>
+        </tbody>
+    </table>
+        <div class="form-field" style="margin-left: 10px;">
+        <div class="form-field" style="display: flex;">
+        <button type="button" class="btn btn-primary">Ver Certificado</button>
+        <button type="button" class="btn btn-primary" style="margin-left: 10px;">Certificado Firmado</button>
+        <button type="button" class="btn btn-danger" style="margin-left: 10px;">Eliminar</button>
+        </div>
+        <hr style="border-top: 2px solid green; margin: 20px 0;">
+        <div class="form-field" style="margin-top: 20px;">
+          <div style="display: flex;">
+            <div style="flex: 1;">
+              <label for="adjuntar-archivos">Adjuntar archivos al cumplimiento (opcional)</label>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <button type="button" class="btn btn-secondary" style="margin-right: 10px;">Agregar +</button>
+              <button type="button" class="btn btn-primary">Subir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <div class="table-container mb-3" style="border-radius: 10px; border: 2px solid black;">
   <div class="bg-danger text-white p-3 mb-3" style="border-radius: 10px;">
     <h4>Datos Adicionales - Recursos Humanos</h4>
   </div>
-  <div class="form-container">
+  <div class="form-container" style="padding: 20px; box-sizing: border-box;">
     <div class="form-field">
       <label for="numero_resolucion">Numero de resolución</label>
       <input type="text" id="numero_resolucion" name="numero_resolucion">
@@ -435,7 +412,7 @@
     <div class="bg-warning text-white p-3 mb-3" style="border-radius: 10px;">
         <h4>Boleta</h4>
     </div>
-    <div class="form-container">
+    <div class="form-container" style="padding: 20px; box-sizing: border-box;">
     <div class="form-field">
       <label for="numero_resolucion">N° Boleta</label>
       <input type="text" id="id_boleta" name="n_boleta">
@@ -457,21 +434,21 @@
   <div class="p-3 mb-3" style="border-radius: 10px; background-color: cyan">
     <h4>Datos Adicionales - Finanzas</h4>
   </div>
-  <div class="form-container">
+  <div class="form-container" style="padding: 20px; box-sizing: border-box;">
     <div class="form-field">
       <label for="numero_resolucion">Numero de resolución</label>
-      <input type="text" id="numero_resolucion" name="numero_resolucion">
+      <input type="text" id="numero_resolucion" name="numero_resolucion" readonly>
     </div>
     <div class="form-field">
       <label for="fecha_resolucion">Fecha resolución</label>
-      <input type="date" id="fecha_resolucion" name="fecha_resolucion">
+      <input type="date" id="fecha_resolucion" name="fecha_resolucion" readonly>
     </div>
     <div class="form-field">
       <label for="monto_mensualizado">Total Horas a pagar per.</label>
-      <input type="text" id="monto_horas_per" name="monto_horas_per">
+      <input type="text" id="monto_horas_per" name="monto_horas_per"readonly> 
     </div>
     <div class="form-field">
-      <label for="monto_bruto_valor_hora">Total a pagar</label>
+      <label for="monto_bruto_valor_hora">Total a pagar</label readonly>
       <input type="text" id="total_pagado" name="Total_pagar">
     </div>
     <div class="form-field">
