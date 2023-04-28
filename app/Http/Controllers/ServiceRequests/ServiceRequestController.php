@@ -497,10 +497,10 @@ class ServiceRequestController extends Controller
       }
     }
 
-    // si el usuario se encuentra eliminado, se vuelve a dejar activo
-    if(User::withTrashed()->find($request->user_id)->trashed()){
-        User::withTrashed()->find($request->user_id)->restore();
-    }
+    // // si el usuario se encuentra eliminado, se vuelve a dejar activo
+    // if(User::withTrashed()->find($request->user_id)->trashed()){
+    //     User::withTrashed()->find($request->user_id)->restore();
+    // }
 
     //devuelve user o lo crea
     $user = User::updateOrCreate(
