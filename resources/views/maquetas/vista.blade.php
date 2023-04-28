@@ -4,7 +4,6 @@
 
 @section('content')
 
-
 <h3 class="mb-3">Perfil del Funcionario</h3>
 
 <div class="personal-data-table" style="border-radius: 10px; margin: 20px;">
