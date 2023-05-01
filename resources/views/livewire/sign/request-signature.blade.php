@@ -26,7 +26,7 @@
         <fieldset class="form-group col-3">
             <label for="document-type">Tipo de Documento*</label>
             <select
-                class="form-control"
+                class="form-control @error('type_id') is-invalid @enderror"
                 id="document-type"
                 required
                 wire:model='type_id'
@@ -192,16 +192,22 @@
             <h5>
                 Firmantes
             </h5>
+            <input type="hidden" name="signers" class="@error('signers') is-invalid @enderror">
+            @error('signers')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </div>
+
     </div>
 
     <div class="form-row mt-4">
         <fieldset class="form-group col-4">
             <label for="left-signatures">1. Firmantes Columna Izquierda</label>
-            @livewire('users.search-user', [
-                'placeholder' => 'Ingrese un nombre',
+
+            @livewire('sign.add-signer', [
                 'eventName' => 'addLeftSignature',
-                'tagId' => 'left-signatures',
             ])
 
             <input type="hidden" name="left_signatures" class="@error('left_signatures') is-invalid @enderror">
@@ -212,7 +218,7 @@
             @enderror
 
             @if($namesSignaturesLeft->count() > 0)
-                <div class="input-group input-group-sm my-2">
+                <div class="input-group input-group-sm my-1">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="left-endorse">
                             Firma
@@ -232,17 +238,27 @@
                             <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
                         @endif
                     </select>
+                    @error('column_left_endorse')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
-                @error('column_left_endorse')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
             @endif
+
+            <label>Firmantes Agregados</label>
 
             <ul class="list-group mt-1">
                 @forelse($namesSignaturesLeft as $indexLeft => $itemLeftSignature)
-                    <li class="list-group-item">1.{{ $indexLeft + 1 }} {{ $itemLeftSignature }} </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        1.{{ $indexLeft + 1 }} {{ $itemLeftSignature }}
+                        <button
+                            class="btn btn-sm btn-danger"
+                            wire:click="deleteSigner({{ $indexLeft }}, 'left')"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </li>
                 @empty
                     <li class="list-group-item">No hay usuarios</li>
                 @endforelse
@@ -263,10 +279,9 @@
 
         <fieldset class="form-group col-4">
             <label for="center-signatures">2. Firmantes Columna Central</label>
-            @livewire('users.search-user', [
-                'placeholder' => 'Ingrese un nombre',
+
+            @livewire('sign.add-signer', [
                 'eventName' => 'addCenterSignature',
-                'tagId' => 'center-signatures',
             ])
 
             <input type="hidden" name="center_signatures" class="@error('center_signatures') is-invalid @enderror">
@@ -277,7 +292,7 @@
             @enderror
 
             @if($namesSignaturesCenter->count() > 0)
-                <div class="input-group input-group-sm my-2">
+                <div class="input-group input-group-sm my-1">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="center-endorse">
                             Firma
@@ -305,9 +320,19 @@
                 </div>
             @endif
 
-            <ul class="list-group">
+            <label>Firmantes Agregados</label>
+
+            <ul class="list-group mt-1">
                 @forelse($namesSignaturesCenter as $indexCenter => $itemCenterSignature)
-                    <li class="list-group-item">2.{{ $indexCenter + 1 }} {{ $itemCenterSignature }} </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        2.{{ $indexCenter + 1 }} {{ $itemCenterSignature }}
+                        <button
+                            class="btn btn-sm btn-danger"
+                            wire:click="deleteSigner({{ $indexCenter }}, 'left')"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </li>
                 @empty
                     <li class="list-group-item">No hay usuarios</li>
                 @endforelse
@@ -329,10 +354,9 @@
 
         <fieldset class="form-group col-4">
             <label for="center-signatures">3. Firmantes Columna Derecha</label>
-            @livewire('users.search-user', [
-                'placeholder' => 'Ingrese un nombre',
+
+            @livewire('sign.add-signer', [
                 'eventName' => 'addRightSignature',
-                'tagId' => 'center-signatures',
             ])
 
             <input type="hidden" name="right_signatures" class="@error('right_signatures') is-invalid @enderror">
@@ -343,7 +367,7 @@
             @enderror
 
             @if($namesSignaturesCenter->count() > 0)
-                <div class="input-group input-group-sm my-2">
+                <div class="input-group input-group-sm my-1">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="right-endorse">
                             Firma
@@ -371,9 +395,19 @@
                 </div>
             @endif
 
-            <ul class="list-group">
+            <label>Firmantes Agregados</label>
+
+            <ul class="list-group mt-1">
                 @forelse($namesSignaturesRight as $indexRight => $itemRightSignature)
-                    <li class="list-group-item">3.{{ $indexRight + 1 }} {{ $itemRightSignature }} </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        3.{{ $indexRight + 1 }} {{ $itemRightSignature }}
+                        <button
+                            class="btn btn-sm btn-danger"
+                            wire:click="deleteSigner({{ $indexRight }}, 'left')"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </li>
                 @empty
                     <li class="list-group-item">No hay usuarios</li>
                 @endforelse
@@ -394,7 +428,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col">
             <button
                 type="submit"
