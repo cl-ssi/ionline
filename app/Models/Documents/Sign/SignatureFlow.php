@@ -12,9 +12,9 @@ class SignatureFlow extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * Punto de Partida
+     * Punto de Partida en Y
      */
-    const Y = 100;
+    const START_Y = 2;
 
     /**
      * Espaciado entre una linea y otra
@@ -89,6 +89,7 @@ class SignatureFlow extends Model
                 $statusColor = 'dark';
                 break;
         }
+        
         return $statusColor;
     }
 
@@ -110,20 +111,21 @@ class SignatureFlow extends Model
                 $statusColor = 'white';
                 break;
         }
+
         return $statusColor;
     }
 
     public function getYAttribute()
     {
-        $start = ($this->is_visator == true) ? 110 : SignatureFlow::Y;
         $padding = ($this->is_visator == true) ? 15 : SignatureFlow::PADDING;
 
-        return $start + (($this->row_position + 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+        return SignatureFlow::START_Y + (($this->row_position) * $padding) ; // punto de inicio + (ancho de linea * posicion)
     }
 
     public function getXAttribute()
     {
-        switch ($this->column_position) {
+        switch ($this->column_position)
+        {
             case 'left':
                 $x = 33;
                 break;
@@ -134,6 +136,7 @@ class SignatureFlow extends Model
                 $x = 397;
                 break;
         }
+
         return $x;
     }
 }
