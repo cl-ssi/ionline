@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Addendum;
-use App\Agreements\Signer;
+use App\Models\Agreements\Addendum;
+use App\Models\Agreements\Signer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\Signature;
@@ -113,7 +113,7 @@ class AddendumController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\Addendum  $addendum
+     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function show(Addendum $addendum)
@@ -124,7 +124,7 @@ class AddendumController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\Addendum  $addendum
+     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function edit(Addendum $addendum)
@@ -136,14 +136,14 @@ class AddendumController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\Addendum  $addendum
+     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\Addendum  $addendum
+     * @param  \App\Models\Agreements\Addendum  $addendum
      * @return \Illuminate\Http\Response
      */
     public function destroy(Addendum $addendum)

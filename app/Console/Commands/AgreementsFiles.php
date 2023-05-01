@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Agreements\Addendum;
-use App\Agreements\Agreement;
-use App\Agreements\ProgramResolution;
+use App\Models\Agreements\Addendum;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\ProgramResolution;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 

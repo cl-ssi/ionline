@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Signer;
+use App\Models\Agreements\Signer;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;

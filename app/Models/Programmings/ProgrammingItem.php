@@ -29,8 +29,11 @@ class ProgrammingItem extends Model implements Auditable
     public function getCountReviewsBy($status)
     {
         return $this->reviewItems
-            ->where('rectified', $status == 'Not rectified' ? 'NO' : 'SI')
-            ->where('answer', $status == 'Rectified' ? 'NO' : ($status == 'Regularly rectified' ? 'REGULAR' : ($status == 'Accepted rectified' ? 'SI' : 'NO')))
+            // ->where('rectified', $status == 'Not rectified' ? 'NO' : 'SI')
+            ->when($this->programming->year <= 2023, function($q) use ($status){
+                return $q->where('rectified', $status == 'Not rectified' ? 'NO' : 'SI');
+            })
+            ->where('answer', $status == 'Rectified' ? ($this->programming->year <= 2023 ? 'NO' : null) : ($status == 'Regularly rectified' ? 'REGULAR' : ($status == 'Accepted rectified' ? 'SI' : 'NO')))
             ->count();
     }
 

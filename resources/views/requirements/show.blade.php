@@ -207,6 +207,12 @@
                 <a href="{{ route('requirements.download', $file->id) }}" target="_blank">
                     <i class="fas fa-paperclip"></i> {{ $file->name }}
                 </a>
+
+                @if($file->event->from_user_id == auth()->id())
+                <a href="{{ route('requirements.deleteFile', $file->id) }}">
+                    <i class="fas fa-trash" style="color:red"></i>
+                </a>
+                @endif
             @endforeach
             </span>
 

@@ -45,6 +45,7 @@ use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
+use App\Http\Controllers\Welfare\AmipassController;
 
 use App\Http\Controllers\WebserviceController;
 
@@ -702,6 +703,7 @@ Route::get('/downloadFileC/{file}', [CommuneFileController::class,'downloadFileC
 Route::resource('reviews', ProgrammingReviewController::class)->middleware('auth');
 Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
 Route::put('reviewItemsRect/{id}', [ReviewItemController::class,'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
+Route::post('/reviewItems/acceptItems', [ReviewItemController::class,'acceptItems'])->name('reviewItems.acceptItems');
 
 Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
 
@@ -845,6 +847,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         /** descomposición del resource */
         // Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/index_bak}', [ServiceRequestController::class, 'index_bak'])->name('index_bak');
         Route::get('/index/{type}', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
         Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
@@ -1266,6 +1269,7 @@ Route::resource('documents', DocumentController::class)->middleware('auth');
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
     /** Custom routes */
     Route::get('download/{file}',  [EventController::class,'download'])->name('download');
+    Route::get('deleteFile/{file}',  [EventController::class,'deleteFile'])->name('deleteFile');
     Route::get('outbox', [RequirementController::class,'outbox'])->name('outbox');
     Route::get('secretary_outbox', [RequirementController::class,'secretary_outbox'])->name('secretary_outbox');
     Route::get('archive_requirement/{requirement}', [RequirementController::class,'archive_requirement'])->name('archive_requirement');
@@ -1852,6 +1856,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/callback-sign-new-budget/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSignNewBudget'])->name('callbackSignNewBudget');
     Route::get('/signed-request-form-pdf/{requestForm}/{original}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
+    Route::get('/signed-old-request-form-pdf/{oldSignatureFile}', [RequestFormController::class, 'signedOldRequestFormPDF'])->name('signedOldRequestFormPDF');
     Route::get('/request_form_comments', [RequestFormController::class, 'request_form_comments'])->name('request_form_comments');
     Route::get('/export', [RequestFormController::class, 'export'])->name('export');
     Route::get('/{requestForm}/copy', [RequestFormController::class, 'copy'])->name('copy');
@@ -2170,9 +2175,9 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
     });
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
-        // Route::get('/', [WelfareController::class, 'index'])->name('index');
+        Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
-        Route::view('/', 'welfare.amipass.index')->name('index');
+        Route::view('/upload', 'welfare.amipass.index')->name('upload');
     });
 
 });
@@ -2194,12 +2199,16 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
 Route::view('/some', 'some');
 
 /** Test Routes */
-Route::get('/ous',[TestController::class,'ous']);
-Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
-// Route::get('/dev/get-ip',[TestController::class,'getIp']);
-// Route::get('/log',[TestController::class,'log']);
-Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
-// Route::get('/info',[TestController::class,'info']);
+Route::prefix('test')->as('test.')->group(function () {
+    Route::get('/ous',[TestController::class,'ous']);
+    Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
+    // Route::get('/dev/get-ip',[TestController::class,'getIp']);
+    // Route::get('/log',[TestController::class,'log']);
+    Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
+    // Route::get('/info',[TestController::class,'info']);
+    Route::get('/job',[TestController::class,'job'])->middleware('auth');
+});
+
 
 Route::get('/image/{user}/{size?}', function (User $user, $size = null) {
     $font_light = public_path('fonts/verdana-italic.ttf');

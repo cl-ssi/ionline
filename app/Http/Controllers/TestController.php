@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 
 use App\Rrhh\OrganizationalUnit;
-use App\Models\Establishment;
 use App\Models\WebService\MercadoPublico;
+use App\Models\Establishment;
+use App\Jobs\TestJob;
 
 class TestController extends Controller
 {
@@ -76,6 +77,23 @@ class TestController extends Controller
             // fin de livewire
         }
 
+    }
+
+
+    /**
+    * Test Job
+    */
+    public function job()
+    {
+        TestJob::dispatch(auth()->user())
+            // ->onConnection('cloudtasks')
+            ->delay(15);
+
+        return view('mails.test', [
+            'user' => auth()->user()
+        ]);
+        
+        // return "Test Job Dispatch";
     }
 
 }

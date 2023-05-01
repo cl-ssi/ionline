@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +10,7 @@ class ProgramResolution extends Model
     use SoftDeletes;
 
     public function program() {
-        return $this->belongsTo('App\Agreements\Program');
+        return $this->belongsTo('App\Models\Agreements\Program');
     }
 
     public function referrer() {
@@ -18,11 +18,11 @@ class ProgramResolution extends Model
     }
 
     public function director_signer(){
-        return $this->belongsTo('App\Agreements\Signer');
+        return $this->belongsTo('App\Models\Agreements\Signer');
     }
 
     public function resolution_amounts() {
-        return $this->hasMany('App\Agreements\ProgramResolutionAmount');
+        return $this->hasMany('App\Models\Agreements\ProgramResolutionAmount');
     }
     /**
      * The attributes that are mass assignable.

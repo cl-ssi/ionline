@@ -142,10 +142,10 @@ class ServiceRequest extends Model implements Auditable
                                     ->wheredoesnthave("SignatureFlows", function($subQuery) {
                                         $subQuery->where('status',0);
                                     })
-                                    ->wheredoesnthave("SignatureFlows", function($subQuery) {
-                                        $subQuery->whereNull('status')
-                                                ->where('sign_position',2);
-                                    })
+                                    // ->wheredoesnthave("SignatureFlows", function($subQuery) {
+                                    //     $subQuery->whereNull('status')
+                                    //             ->where('sign_position',2);
+                                    // })
                                     ->with('SignatureFlows')
                                     ->get();
 

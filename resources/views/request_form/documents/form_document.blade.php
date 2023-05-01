@@ -275,17 +275,17 @@
                   <td>{{ $key+1 }}</td>
                   <td>{{ $item->budgetItem->code }}</td>
                   <td>{{ $item->product ? $item->product->code.' '.$item->product->name : $item->article }}</td>
-                  <td>{{ $item->specification }}</td>
-                  <td align="right">{{ $item->quantity }}</td>
-                  <td align="right">{{$requestForm->symbol_currency}}{{ str_replace(',00', '', number_format($item->unit_value, 2,",",".")) }}</td>
-                  <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->expense,$requestForm->precision_currency,",",".") }}</td>
+                  <td>{!! $item->latestPendingItemChangedRequestForms->specification ?? $item->specification !!}</td>
+                  <td align="right">{{ $item->latestPendingItemChangedRequestForms->quantity ?? $item->quantity }}</td>
+                  <td align="right">{{$requestForm->symbol_currency}}{{ str_replace(',00', '', number_format($item->latestPendingItemChangedRequestForms->unit_value ?? $item->unit_value, 2,",",".")) }}</td>
+                  <td align="right">{{$requestForm->symbol_currency}}{{ number_format($item->latestPendingItemChangedRequestForms->expense ?? $item->expense,$requestForm->precision_currency,",",".") }}</td>
               </tr>
               @endforeach
           </tbody>
           <tfoot>
               <tr align="right">
                   <th colspan="6">Total</th>
-                  <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</th>
+                  <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense ?? $requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</th>
               </tr>
           </tfoot>
       </table>
@@ -325,7 +325,7 @@
                   <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
                   <td>{{ $passenger->return_date ? $passenger->return_date->format('d-m-Y H:i') : '' }}</td>
                   <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
-                  <td align="right">{{ number_format($passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
+                  <td align="right">{{ number_format($passenger->latestPendingPassengerChanged->unit_value ?? $passenger->unit_value, $requestForm->precision_currency, ",", ".") }}</td>
               </tr>
           @endforeach
           </tbody>
@@ -334,7 +334,7 @@
               <th colspan="11">
                   Valor Total
               </th>
-              <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</th>
+              <th>{{$requestForm->symbol_currency}}{{ number_format($requestForm->new_estimated_expense ?? $requestForm->estimated_expense, $requestForm->precision_currency,",",".") }}</th>
           </tr>
           </tfoot>
       </table>

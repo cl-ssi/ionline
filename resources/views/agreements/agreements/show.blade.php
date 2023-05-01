@@ -61,7 +61,7 @@
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordWithdrawal', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->program_id == 50) <!-- convenio de colaboración -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordCollaboration', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
-        @elseif($agreement->isTypeMandate()) <!-- convenio mandato para program id 44 con componente de desarrollo rrhh -->
+        @elseif($agreement->isTypeMandate() && $agreement->period != 2023) <!-- convenio mandato para program id 44 con componente de desarrollo rrhh, para periodo 2023 corre convenio general -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandate', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
         @elseif($agreement->program_id == 51) <!-- convenio mandato PFC para program id 51 -->
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordMandatePFC', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>

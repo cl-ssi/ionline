@@ -5,7 +5,8 @@ namespace App\Http\Livewire\welfare;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\Imports\UserBirthdayImport;
+use App\models\Welfare\Abscence;
+use App\Imports\AbscencesImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\User;
@@ -22,85 +23,84 @@ class AmipassAbscencesImport extends Component
     public function save()
     {
         $this->message2 = "";
-        
         $this->validate([
             'file' => 'required|file|mimes:xls,xlsx|max:10240', // 10MB Max
         ]);
 
+        
+
         $file = $this->file;
-        $collection = Excel::toCollection(new UserBirthdayImport, $file);
-
-        set_time_limit(7200);
-        ini_set('memory_limit', '2048M');
-
-        // se modifican todos los usuarios a inactivos
-        User::where('id','>',0)->update(['active' => 0]);
+        $collection = Excel::toCollection(new AbscencesImport, $file);
 
         $total_count = $collection->first()->count()+1;
-        $count_ionline = 0;
-        $count_sirh = 0;
+        $count_inserts = 0;
+
         foreach($collection as $row){
+
             foreach($row as $key => $column){ 
                 
                 if(array_key_exists('rut', $column->toArray()))
                 {
                     if($column['rut']!=null)
                     {
-                        // $date = Carbon::parse($column['fecha_nacimiento']);
-                        $UNIX_DATE = ($column['fecha_nacimiento'] - 25569) * 86400;
-                        $date_fecha_nacimiento = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
+                        $fresolucion = null;
+                        $val = trim($column['fresolucion']);
+                        if($val){
+                            $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
+                            $fresolucion = new Carbon($val);
+                        }  
 
-                        if($column['fecha_inicio_contrato']!="00/00/0000"){
-                            $UNIX_DATE = ($column['fecha_inicio_contrato'] - 25569) * 86400;
-                            $date_fecha_inicio_contrato = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
-                        }else{$date_fecha_inicio_contrato = null;}
+                        $val = trim($column['finicio']);
+                        $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
+                        $finicio = new Carbon($val);
 
-                        if($column['fecha_termino_contrato']!="00/00/0000"){
-                            $UNIX_DATE = ($column['fecha_termino_contrato'] - 25569) * 86400;
-                            $fecha_termino_contrato = Carbon::parse(gmdate("d-m-Y H:i:s", $UNIX_DATE));
-                        }else{$fecha_termino_contrato = null;}
+                        $val = trim($column['ftermino']);
+                        $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
+                        $ftermino = new Carbon($val);
+
+                        Abscence::updateOrCreate([
+                            'rut' => $column['rut'],
+                            'fecha_inicio' => $finicio,
+                            'fecha_termino' => $ftermino
+                        ],[
+                            'rut' => $column['rut'],
+                            'dv' => $column['dv'],
+                            'nombre' => $column['nombre'],
+                            'ley' => $column['ley'],
+                            'edad_años' => $column['edadanos'],
+                            'edad_meses' => $column['edadmeses'],
+                            'afp' => $column['afp'],
+                            'salud' => $column['salud'],
+                            'codigo_unidad' => $column['codigo_unidad'],
+                            'nombre_unidad' => $column['nombre_unidad'],
+                            'genero' => $column['genero'],
+                            'cargo' => $column['cargo'],
+                            'calidad_juridica' => $column['calidad_juridica'],
+                            'planta' => $column['planta'],
+                            'nro_resolucion' => $column['n_resolucion'],
+                            'fecha_resolucion' => $fresolucion,
+                            'fecha_inicio' => $finicio,
+                            'fecha_termino' => $ftermino,
+                            'total_dias_auscentismo' => $column['total_dias_ausentismo'],
+                            'auscentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
+                            'costo_de_licencia' => $column['costo_de_licencia'],
+                            'tipo_de_auscentismo' => $column['tipo_de_ausentismo'],
+                            'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
+                            'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
+                            'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
+                            'tipo_de_contrato' => $column['tipo_de_contrato']
+                        ]);
+
+                        $count_inserts += 1;
                         
-                        if($date_fecha_nacimiento->isValid()){
-                            // si encuentra al usuario en tabla users, lo deja como activo. Solo guarda correo, si este es un correo válido.
-                            if(User::find($column['rut'])){
-                                $user = User::find($column['rut']);
-                                $user->birthday = $date_fecha_nacimiento;
-                                if(filter_var($column['correos'], FILTER_VALIDATE_EMAIL)) {
-                                    $user->email_personal = $column['correos'];
-                                }
-                                $user->active = 1;
-                                $user->save();
-
-                                $count_ionline += 1;
-                            }
-                            // cuando no existe usuario en users, se crea en tabla sirh_active_users
-                            else{
-                                SirhActiveUser::updateOrCreate([
-                                    'id' => $column['rut']
-                                ],[
-                                    'id' => $column['rut'],
-                                    'dv' => $column['dv'],
-                                    'email' => $column['correos'],
-                                    'name' => $column['nombre_funcionario'],
-                                    'birthdate' => $date_fecha_nacimiento,
-                                    'start_contract_date' => $date_fecha_inicio_contrato,
-                                    'end_contract_date' => $fecha_termino_contrato,
-                                    'legal_quality' => $column['descripcion_calidad_juridica'],
-                                    'ou_description' => $column['descripcion_unidad']
-                                ]);
-
-                                $count_sirh += 1;
-                            }
-                        }
-
                     }
                 }
             }
             
         }
 
-        $this->message2 = 'Se ha cargado correctamente el archivo (De un total de ' . $total_count . ' registros, se actualizaron ' . 
-        $count_ionline . ' usuarios de ionline, y se crearon/actualizando ' . $count_sirh .' usuarios de forma externa a ionline).';
+        $this->message2 = 'Se ha cargado correctamente el archivo (De un total de ' . $total_count . ' registros, se registraron ' . 
+        $count_inserts . ' registros con auscentismos).';
     }
 
     public function render()

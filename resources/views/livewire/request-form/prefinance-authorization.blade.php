@@ -42,7 +42,7 @@
                     @endif
                   </td>
                   <td>{{$item->unit_of_measurement}}</td>
-                  <td>{{$item->specification}}</td>
+                  <td>{!! $item->specification !!}</td>
                   <td align="center">
                     @if($item->article_file)
                       <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">

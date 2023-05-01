@@ -105,7 +105,7 @@ class EventRequestForm extends Model implements Auditable
         $contractManagerBelongsHAH  = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value;
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $contractManagerBelongsHAH 
-                                        ? ($requestForm->contractOrganizationalUnit->level > 2 ? $requestForm->contractOrganizationalUnit->getOrganizationalUnitByLevel(2)->id : $requestForm->contractOrganizationalUnit->father->id ) 
+                                        ? ($requestForm->contractOrganizationalUnit->level > 2 ? $requestForm->contractOrganizationalUnit->getOrganizationalUnitByLevel(2)->id : ($requestForm->contractOrganizationalUnit->father->id ?? $requestForm->contract_manager_ou_id) ) 
                                         : $requestForm->contract_manager_ou_id;
         $event->cardinal_number     =   1;
         $event->status              =   'pending';

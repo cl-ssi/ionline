@@ -111,7 +111,7 @@ class SignatureFlowController extends Controller
           }
 
           session()->flash('success', 'Se ha reiniciado el flujo de firmas.');
-          return redirect()->route('rrhh.service-request.index');
+          return redirect()->route('rrhh.service-request.index','pending');
         }
         //Aceptar o rechazar
         else {
@@ -179,7 +179,7 @@ class SignatureFlowController extends Controller
     }
 
     session()->flash('success', 'Se ha registrado la visación.');
-    return redirect()->route('rrhh.service-request.index');
+    return redirect()->route('rrhh.service-request.index','pending');
   }
 
   /**

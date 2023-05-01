@@ -12,9 +12,9 @@
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
-@if(Auth::user()->can('ProgrammingItem: edit') && $programmingItem->programming->status == 'active')
+{{--@if(Auth::user()->can('ProgrammingItem: edit') && $programmingItem->programming->status == 'active')
 <a target="_blank" href="{{ route('programmingitems.show', $programmingItem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
-@endif
+@endif--}}
 
 @if(Auth::user()->can('ProgrammingItem: delete') && $programmingItem->programming->status == 'active')
     <form method="POST" action="{{ route('programmingitems.destroy', $programmingItem->id) }}" class="small d-inline">
@@ -219,12 +219,14 @@
                     @foreach($reviewItems as $review)
                     <tr >
                         <td 
-                            @if($review->answer == 'NO')
+                            @if($review->answer == 'NO' && $review->rectified == 'NO')
                                 class="text-center align-middle table-danger"
                             @elseif($review->answer == 'REGULAR')
                                 class="text-center align-middle table-warning"
                             @elseif($review->answer == 'SI')
                                 class="text-center align-middle table-primary"
+                            @else
+                                class="text-center align-middle table-success"
                             @endif>
                             {{ $review->id }}
                         </td>
@@ -273,14 +275,15 @@
                         @if(Auth::user()->can('Reviews: rectify') && $programmingItem->programming->status == 'active')
                        
                         <td class="text-center align-middle" >
-                        <button class="btn btb-flat  btn-light" data-toggle="modal"
+                        <!-- <button class="btn btb-flat  btn-light" data-toggle="modal"
                             data-target="#updateModalRect"
                             data-review_id="{{ $review->id }}"
                             data-rectified="{{ $review->rectified }}"
                             data-rect_comments="{{ $review->rect_comments }}"
                             data-formaction="{{ route('reviewItemsRect.update', $review->id)}}">
                         <i class="far fa-check-square text-success "></i>
-                        </button>
+                        </button> -->
+                        <a target="_blank" rel=opener href="{{ route('programmingitems.show', [$programmingItem->id, 'review_id' => $review->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="far fa-check-square text-success"></i></a>
                         </td>
                         @endif
                         @can('Reviews: delete')
@@ -359,7 +362,7 @@
     @include('programmings/reviewItems/modal_edit_confirm')
     @include('programmings/reviewItems/modal_edit_eval_rect')
 
-    @can('Programming: audit')
+    @hasanyrole('Programming: Review|Programming: Admin')
     <hr/>
 
         <h6><i class="fas fa-info-circle"></i> Auditoría Interna</h6>
@@ -415,7 +418,7 @@
                 </div>
             </div>
         </div>
-    @endcan
+    @endhasanyrole
 
 @endsection
 

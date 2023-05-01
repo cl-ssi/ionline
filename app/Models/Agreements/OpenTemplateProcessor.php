@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 class OpenTemplateProcessor extends \PhpOffice\PhpWord\TemplateProcessor {
     public function __construct($instance) {

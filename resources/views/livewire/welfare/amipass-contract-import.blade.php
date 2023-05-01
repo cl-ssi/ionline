@@ -19,5 +19,9 @@
             {{ $message2 }}
         </div>
     @endif
+
+    <div wire:loading>
+        <img src="https://paladins-draft.com/img/circle_loading.gif" width="64" height="64" class="m-auto mt-1/4">
+    </div>
     
 </div>

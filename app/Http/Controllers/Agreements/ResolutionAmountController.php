@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\ResolutionAmount;
+use App\Models\Agreements\ResolutionAmount;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -42,7 +42,7 @@ class ResolutionAmountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\ResolutionAmount  $resolutionAmount
+     * @param  \App\Models\Agreements\ResolutionAmount  $resolutionAmount
      * @return \Illuminate\Http\Response
      */
     public function show(ResolutionAmount $resolutionAmount)
@@ -53,7 +53,7 @@ class ResolutionAmountController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\ResolutionAmount  $resolutionAmount
+     * @param  \App\Models\Agreements\ResolutionAmount  $resolutionAmount
      * @return \Illuminate\Http\Response
      */
     public function edit(ResolutionAmount $resolutionAmount)
@@ -65,7 +65,7 @@ class ResolutionAmountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\ResolutionAmount  $resolutionAmount
+     * @param  \App\Models\Agreements\ResolutionAmount  $resolutionAmount
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ResolutionAmount $resolutionAmount)
@@ -76,7 +76,7 @@ class ResolutionAmountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\ResolutionAmount  $resolutionAmount
+     * @param  \App\Models\Agreements\ResolutionAmount  $resolutionAmount
      * @return \Illuminate\Http\Response
      */
     public function destroy(ResolutionAmount $resolutionAmount)

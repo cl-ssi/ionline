@@ -289,18 +289,18 @@ class DigitalSignatureController extends Controller
                     //     'signature_file_id' => $distribucion->first()->id,
                     // ]);
 
-                    $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
-                        ->where('file_type', 'anexo')
-                        ->get();
+                    // $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)
+                    //     ->where('file_type', 'anexo')
+                    //     ->get();
 
-                    foreach ($signaturesFiles as $key => $sf) {
-                        ParteFile::create([
-                            'parte_id' => $parte->id,
-                            'file' => $sf->file,
-                            'name' => $sf->id . '.pdf',
-                            //'signature_file_id' => $sf->id,
-                        ]);
-                    }
+                    // foreach ($signaturesFiles as $key => $sf) {
+                    //     ParteFile::create([
+                    //         'parte_id' => $parte->id,
+                    //         'file' => $sf->file,
+                    //         'name' => $sf->id . '.pdf',
+                    //         //'signature_file_id' => $sf->id,
+                    //     ]);
+                    // }
                 // }
             }
 
