@@ -31,7 +31,7 @@ class SignatureController extends Controller
         /**
          * Obtengo la imagen con el numero de Documento
          */
-        $imageWithDocumentNumber = app(ImageService::class)->createDocumentNumber("https://i.saludiquique.gob.cl/validador", "2342-Xdf4", "13.089");
+        $imageWithDocumentNumber = app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089");
         ob_start();
         imagepng($imageWithDocumentNumber);
         $signature = base64_encode(ob_get_clean());
