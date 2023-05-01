@@ -10,7 +10,7 @@ class ImageService
      * How to use the ImageService service:
      *
      * return app(ImageService::class)->createVisator(auth()->user());
-     * return app(ImageService::class)->createDocumentNumber("https://i.saludiquique.gob.cl/validador", "2342-Xdf4", "13.089");
+     * return app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089");
      * return app(ImageService::class)->createSignature(auth()->user());
      */
 
@@ -99,15 +99,15 @@ class ImageService
     /**
      * Create the image with the document number
      *
-     * @param  string $verificationLink
      * @param  string $validationCode
      * @param  string $documentNumber
+     * @param  string $verificationLink
      * @return void
      */
-    public function createDocumentNumber($verificationLink, $validationCode, $documentNumber)
+    public function createDocumentNumber($validationCode, $documentNumber, $verificationLink = "https://i.saludiquique.gob.cl/validador")
     {
         /**
-         * Define los parameters
+         * Define the parameters
          */
         $widthNumber = 100;
         $widthImage = 900;
