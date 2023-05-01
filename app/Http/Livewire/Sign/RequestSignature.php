@@ -45,6 +45,7 @@ class RequestSignature extends Component
     public $column_right_visator;
 
     public $documentTypes;
+    public $signers;
 
     protected $listeners = [
         'setEmailRecipients',
@@ -214,6 +215,24 @@ class RequestSignature extends Component
         else
         {
             $this->emit('clearSearchUser', false);
+        }
+    }
+
+    public function deleteSigner($index, $column)
+    {
+        switch ($column) {
+            case 'left':
+                $this->left_signatures = $this->left_signatures->forget($index)->values();
+                $this->namesSignaturesLeft = $this->namesSignaturesLeft->forget($index)->values();
+                break;
+            case 'center':
+                $this->center_signatures = $this->center_signatures->forget($index)->values();
+                $this->namesSignaturesCenter = $this->namesSignaturesCenter->forget($index)->values();
+                break;
+            case 'right':
+                $this->right_signatures = $this->right_signatures->forget($index)->values();
+                $this->namesSignaturesRight = $this->namesSignaturesRight->forget($index)->values();
+                break;
         }
     }
 }
