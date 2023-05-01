@@ -29,14 +29,20 @@ use App\User;
 use App\Mail\PurchaserNotification;
 use App\Mail\RfEndNewBudgetSignNotification;
 use App\Models\Parameters\Parameter;
+use App\Models\RequestForms\ItemChangedRequestForm;
+use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\OldSignatureFile;
+use App\Models\RequestForms\Passenger;
+use App\Models\RequestForms\PassengerChanged;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RequestFormController extends Controller {
 
     public function my_forms() 
     {
-        $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+        $my_pending_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
             ->where('request_user_id', Auth::user()->id)
             ->where(function ($q){
                 $q->where('status', 'pending')
@@ -45,13 +51,13 @@ class RequestFormController extends Controller {
             ->latest('id')
             ->get();
 
-        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+        $my_requests = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
             ->where('request_user_id', Auth::user()->id)
             ->whereIn('status', ['approved', 'rejected'])
             ->latest('id')
             ->get();
 
-        $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense')
+        $my_ou = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'signedOldRequestForms')
             ->where('request_user_ou_id', Auth::user()->OrganizationalUnit->id)
             ->latest('id')
             ->get();
@@ -252,6 +258,7 @@ class RequestFormController extends Controller {
             $eventTypeBudget = $eventType == 'pre_budget_event' ? 'supply_event' : 'finance_event';
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+            $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
         }
 
         $eventTitles = [
@@ -296,7 +303,51 @@ class RequestFormController extends Controller {
 
     public function create_new_budget(Request $request, RequestForm $requestForm)
     {
-        $requestForm->newBudget = $request->newBudget;
+        if(!$request->has('item_request_form_id') && !$request->has('passenger_request_form_id')){
+            session()->flash('danger', 'Estimado Usuario/a: no hay items de bienes y/o servicios o pasajeros asociados al formulario de requerimiento para solicitar cambio de presupuesto');
+            return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+        }
+        $requestForm->newBudget = $request->new_amount;
+        $itemsChangedCount = 0;
+        // return $request;
+        if($request->has('item_request_form_id')){
+            foreach ($request->item_request_form_id as $key => $item) {
+                $valuesChangedCount = 0; $itemChanged = null;
+                $itemToChange = ItemRequestForm::findorFail($item);
+                $itemChanged = new ItemChangedRequestForm();
+                if(trim($itemToChange->specification) !== $request->new_specification[$key]) { $itemChanged->specification = $request->new_specification[$key]; $valuesChangedCount++; }
+                if($itemToChange->quantity != $request->new_quantity[$key]){ $itemChanged->quantity = $request->new_quantity[$key]; $valuesChangedCount++; }
+                if($itemToChange->unit_value != $request->new_unit_value[$key]){ $itemChanged->unit_value = $request->new_unit_value[$key]; $valuesChangedCount++; }
+                if($itemToChange->tax != $request->new_tax[$key]){ $itemChanged->tax = $request->new_tax[$key]; $valuesChangedCount++; }
+                if($itemToChange->expense != $request->new_item_total[$key]){ $itemChanged->expense = $request->new_item_total[$key]; $valuesChangedCount++; }
+                if($valuesChangedCount > 0){
+                    $itemChanged->item_request_form_id = $item;
+                    $itemChanged->status = 'pending';
+                    $itemChanged->save();
+                    $itemsChangedCount++;
+                }
+            }
+        }
+
+        if($request->has('passenger_request_form_id')){
+            foreach ($request->passenger_request_form_id as $key => $passenger) {
+                $valuesChangedCount = 0; $passengerChanged = null;
+                $passengerToChange = Passenger::findorFail($passenger);
+                $passengerChanged = new PassengerChanged();
+                if($passengerToChange->unit_value != $request->new_item_total[$key]){ $passengerChanged->unit_value = $request->new_item_total[$key]; $valuesChangedCount++; }
+                if($valuesChangedCount > 0){
+                    $passengerChanged->passenger_id = $passenger;
+                    $passengerChanged->status = 'pending';
+                    $passengerChanged->save();
+                    $itemsChangedCount++;
+                }
+            }
+        }
+
+        if (!$itemsChangedCount) {
+            session()->flash('danger', 'Estimado Usuario/a: para solicitar un nuevo presupuesto se requiere realizar cambios en al menos un item o pasajero.');
+            return redirect()->back()->withInput();
+        }
         EventRequestForm::createNewBudgetEvent($requestForm);
         session()->flash('info', 'Se ha solicitado un nuevo presupuesto pendiente de su aprobación, mientras no tenga respuesta de esta solicitud no podrá registrar nuevas compras.');
         return redirect()->route('request_forms.supply.index');
@@ -308,6 +359,7 @@ class RequestFormController extends Controller {
         if($has_increased_expense){
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+            $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
         }
 
         $pdf = app('dompdf.wrapper');
@@ -324,6 +376,7 @@ class RequestFormController extends Controller {
         if($has_increased_expense){
             $requestForm->has_increased_expense = true;
             $requestForm->new_estimated_expense = $requestForm->estimated_expense + $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
+            $requestForm->load('itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged');
         }
 
         $pdf = app('dompdf.wrapper');
@@ -389,7 +442,7 @@ class RequestFormController extends Controller {
             return redirect()->route('request_forms.pending_forms');
         }
         else{
-            $requestForm = RequestForm::find($modelId);
+            $requestForm = RequestForm::with('eventRequestForms')->find($modelId);
 
             //ACTUALIZAO EVENTO DE FINANZAS
             $event = $requestForm->eventRequestForms->where('event_type', 'finance_event')->first();
@@ -437,7 +490,27 @@ class RequestFormController extends Controller {
             return redirect()->route('request_forms.pending_forms');
         }
         else{
-            $requestForm = RequestForm::find($modelId);
+            $requestForm = RequestForm::with('eventRequestForms', 'itemRequestForms.latestPendingItemChangedRequestForms', 'passengers.latestPendingPassengerChanged')->find($modelId);
+
+            // Modificar items
+            if($requestForm->itemRequestForms)
+                foreach($requestForm->itemRequestForms as $item){
+                    if($item->latestPendingItemChangedRequestForms){
+                        $fieldsToChange = array_filter($item->latestPendingItemChangedRequestForms->only(['quantity', 'unit_value', 'specification', 'tax', 'expense']));
+                        $item->update($fieldsToChange);
+                        $item->latestPendingItemChangedRequestForms->update(['status' => 'approved']);
+                    }
+                }
+
+            //Modificar pasajeros
+            if($requestForm->passengers)
+                foreach($requestForm->passengers as $passenger){
+                    if($passenger->latestPendingPassengerChanged){
+                        $fieldsToChange = array_filter($passenger->latestPendingPassengerChanged->only(['unit_value']));
+                        $passenger->update($fieldsToChange);
+                        $passenger->latestPendingPassengerChanged->update(['status' => 'approved']);
+                    }
+                }
 
             //ACTUALIZAO EVENTO DE FINANZAS
             $event = $requestForm->eventRequestForms->where('event_type', 'budget_event')->where('status', 'pending')->first();
@@ -448,9 +521,14 @@ class RequestFormController extends Controller {
               'signer_user_id'       => auth()->id()
             ]);
 
+            $oldSignatureFile = new OldSignatureFile();
+            $oldSignatureFile->request_form_id = $requestForm->id;
+            $oldSignatureFile->old_signature_file_id = $requestForm->signatures_file_id;
+            $oldSignatureFile->save();
+
             $requestForm->has_increased_expense = true;
             $requestForm->estimated_expense = $requestForm->estimated_expense + $event->purchaser_amount;
-            $requestForm->old_signatures_file_id = $requestForm->signatures_file_id;
+            // $requestForm->old_signatures_file_id = $requestForm->signatures_file_id;
             $requestForm->signatures_file_id = $signaturesFile->id;
             $requestForm->save();
 
@@ -472,6 +550,11 @@ class RequestFormController extends Controller {
     public function signedRequestFormPDF(RequestForm $requestForm, $original)
     {
       return Storage::disk('gcs')->response($original ? $requestForm->signedRequestForm->signed_file : $requestForm->signedOldRequestForm->signed_file);
+    }
+
+    public function signedOldRequestFormPDF(OldSignatureFile $oldSignatureFile)
+    {
+        return Storage::disk('gcs')->response($oldSignatureFile->signedFile->signed_file);
     }
 
     public function create_provision(RequestForm $requestForm, Request $request)

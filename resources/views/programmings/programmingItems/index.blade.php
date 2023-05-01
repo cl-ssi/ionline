@@ -27,12 +27,24 @@
 
 .modal-dialog.modal-dialog-scrollable .modal-content { max-height: 100%; }
 
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+
 </style>
 @endsection
 
 @section('content')
 
 @include('programmings/nav')
+
+<!-- Back to top button -->
+<button type="button" class="btn btn-secondary rounded-circle btn-lg" id="btn-back-to-top">
+  <i class="fas fa-arrow-up"></i>
+</button>
 
 @if($programming->status == 'active')
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id'), 'activity_type' => Request::get('activity_type')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
@@ -286,6 +298,7 @@
     <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
     <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('HorasDirectas')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
+
 <!-- PERMISOS -->
 @php($canEvaluate = Auth::user()->can('ProgrammingItem: evaluate'))
 @php($canEdit = Auth::user()->can('ProgrammingItem: edit'))
@@ -295,7 +308,17 @@
 <table id="HorasDirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @if($canEvaluate)<th class="text-center align-middle" > Evaluación</th>@endif
+            @if($canEvaluate)
+            <form id="check-multi-items-form" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            {{ method_field('POST') }} {{ csrf_field() }}
+            
+            <th class="text-center align-middle" >
+            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form">
+            <i class="fas fa-clipboard-check text-primary"></i>
+            </button></th>
+            </form>
+            <th class="text-center align-middle" > Evaluación</th>
+            @endif
             @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
@@ -336,6 +359,13 @@
         @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
         @if($canEvaluate)
+            <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
+            @if($programmingitem->reviewItems->count() == 0)
+            <div class="form-check">
+                <input class="form-check-input position-static" type="checkbox" id="check_accept_item" name="check_accept_item[]" value="{{$programmingitem->id}}" aria-label="Aceptar actividad" form="check-multi-items-form">
+            </div>
+            @endif
+            </td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->reviewItems->count() != 0)
@@ -435,7 +465,7 @@
 </div>
 
 @if($programming->year >= 2023)
-@foreach(array('Esporádicas', 'Designación') as $activity_subtype)
+@foreach(array('Esporádicas', 'Designación') as $key => $activity_subtype)
 <div class="tab-pane fade {{Request::get('activity_type') == 'Indirecta' && $loop->first ? 'show active' : ''}}" id="nav-indirect-{{$activity_subtype}}" role="tabpanel" aria-labelledby="nav-indirect-{{$activity_subtype}}-tab">
 <ul class="list-inline">
     <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
@@ -448,7 +478,17 @@
 <table id="HorasIndirectas{{$activity_subtype}}" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+        @if($canEvaluate)
+            <form id="check-multi-items-form-{{$key}}" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            {{ method_field('POST') }} {{ csrf_field() }}
+            
+            <th class="text-center align-middle" >
+            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-{{$key}}">
+            <i class="fas fa-clipboard-check text-primary"></i>
+            </button></th>
+            </form>
+            <th class="text-center align-middle" > Evaluación</th>
+            @endif
             @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
             <th class="text-center align-middle">CATEGORÍA</th>
             <th class="text-center align-middle">NOMBRE DE ACTIVIDAD</th>
@@ -482,6 +522,13 @@
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
         @if($canEvaluate)
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            @if($programmingitemsIndirect->reviewItems->count() == 0)
+            <div class="form-check">
+                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-{{$key}}">
+            </div>
+            @endif
+            </td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitemsIndirect->reviewItems->count() != 0)
@@ -581,7 +628,17 @@
 <table id="HorasIndirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+            @if($canEvaluate)
+            <form id="check-multi-items-form-indirect" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            {{ method_field('POST') }} {{ csrf_field() }}
+            
+            <th class="text-center align-middle" >
+            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-indirect">
+            <i class="fas fa-clipboard-check text-primary"></i>
+            </button></th>
+            </form>
+            <th class="text-left align-middle" > Evaluación</th>
+            @endif
             @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
@@ -621,6 +678,13 @@
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
         @if($canEvaluate)
+            <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
+            @if($programmingitemsIndirect->reviewItems->count() == 0)
+            <div class="form-check">
+                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-indirect">
+            </div>
+            @endif
+            </td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
@@ -740,7 +804,17 @@
     <thead>
         <tr class="small " style="font-size:55%;">
 
-            @if($canEvaluate)<th class="text-left align-middle" > Evaluación</th>@endif
+            @if($canEvaluate)
+            <form id="check-multi-items-form-talleres" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
+            {{ method_field('POST') }} {{ csrf_field() }}
+            
+            <th class="text-center align-middle" >
+            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-talleres">
+            <i class="fas fa-clipboard-check text-primary"></i>
+            </button></th>
+            </form>
+            <th class="text-left align-middle" > Evaluación</th>
+            @endif
             @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
@@ -783,6 +857,13 @@
         @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
         @if($canEvaluate)
+            <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
+            @if($programmingItemworkshop->reviewItems->count() == 0)
+            <div class="form-check">
+                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingItemworkshop->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-talleres">
+            </div>
+            @endif
+            </td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
@@ -935,5 +1016,35 @@
         $('#work_area_div').hide(); //por defecto se deja filtro por actividades indirectas esporadicas
     @endif
 
+    //Get the button back to the top page
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+    scrollFunction();
+    };
+
+    function scrollFunction() {
+    if (
+        document.body.scrollTop > 20 ||
+        document.documentElement.scrollTop > 20
+    ) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    }
+
+    // $('#check_accept_item').click(function(){
+    //     console.log($(this)) 
+    //     $(this).find('input [name=multi-items-button]').prop("disabled", $('input[type="checkbox"]:checked').length == 0);
+    // });
 </script>
 @endsection

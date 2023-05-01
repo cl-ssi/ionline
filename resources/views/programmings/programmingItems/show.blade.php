@@ -463,8 +463,6 @@ Editar Item Programación Operativa </h4>
         </div>
     </div>
 
-
-
     <div class="form-row small">
         
         <div class="form-group col-md-12">
@@ -473,6 +471,16 @@ Editar Item Programación Operativa </h4>
         </div>
         
     </div>
+
+    @if(request()->has('review_id'))
+    <input type="hidden" name="review_id" value="{{request()->review_id}}" form="edit-form">
+    <div class="form-row small">
+        <div class="form-group col-md-12">
+            <label for="exampleFormControlTextarea1">Comentarios/Acuerdo a la observación #{{request()->review_id}}:</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="rect_comments" rows="5" form="edit-form">{{$reviewItem->rect_comments}}</textarea>
+        </div>
+    </div>
+    @endif
 
     
     <button type="submit" class="btn btn-info mb-4" form="edit-form">Actualizar</button>
@@ -798,6 +806,11 @@ Editar Item Programación Operativa </h4>
         newElement.find('form').remove();
         newElement.appendTo('.dynamic-stuff').show();
     });
+
+    // if close child window after submit this form refresh parent window
+    window.onunload = function(){
+        window.opener.location.reload();
+    };
     
 </script>
 

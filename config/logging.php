@@ -1,8 +1,11 @@
 <?php
 
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NullHandler;
+use App\Logging\DatabaseVia;
+use App\Logging\DatabaseHandler;
+use Actived\MicrosoftTeamsNotifier\LogMonolog;
 
 return [
 
@@ -41,11 +44,11 @@ return [
             'ignore_exceptions' => false,
         ],
 
-        // Log to MySQL
+        /* Log to MySQL */
         'database' => [
             'driver' => 'custom',
-            'handler' => App\Logging\DatabaseHandler::class,
-            'via' => App\Logging\DatabaseVia::class,
+            'handler' => DatabaseHandler::class,
+            'via' => DatabaseVia::class,
             'level' => 'debug',
         ],
 
@@ -68,6 +71,18 @@ return [
             'username' => 'iOnline',
             'emoji' => ':boom:',
             'level' => 'debug',
+        ],
+
+        'teams' => [
+            'driver' => 'custom',//#1
+            'via'    => LogMonolog::class,//#2
+            'webhookDsn' => env('LOG_TEAMS_WEBHOOK_URL'),//#3
+            'level'  => 'debug',//#6
+            'title'  => 'Log iOnline',//#4
+            'subject' => 'Message Subject',//#5 
+            'emoji'  => '&#x1F3C1',//#7
+            'color'  => '#fd0404',//#8
+            'format' => '[%datetime%] %channel%.%level_name%: %message%'//#9
         ],
 
         'papertrail' => [

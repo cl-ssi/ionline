@@ -20,7 +20,6 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
 
     public function __construct(Collection $resultSearch)
     {
-        // dd($resultSearch);
         $this->resultSearch = $resultSearch;
     }
 
@@ -32,21 +31,21 @@ class RequestFormsExport implements FromCollection, WithMapping, ShouldAutoSize,
     public function headings(): array
     {
         return [
-          'ID',
-          'Estado',
-          'Folio',
-          'Depende de folio',
-          'Fecha Creación',
-          'Tipo / Mecanismo de Compra',
-          'Descripción',
-          'Programa',
-          'Usuario Gestor',
-          'Comprador',
-          'Items',
-          '',
-          'Presupuesto',
-          'Estado Proceso compra',
-          'Fecha de Aprobación Depto Abastecimiento'
+            'ID',
+            'Estado',
+            'Folio',
+            'Depende de folio',
+            'Fecha Creación',
+            'Tipo / Mecanismo de Compra',
+            'Descripción',
+            'Programa',
+            'Usuario Gestor',
+            'Comprador',
+            'Items',
+            '',
+            'Presupuesto',
+            'Estado Proceso compra',
+            'Fecha de Aprobación Depto Abastecimiento'
         ];
     }
 

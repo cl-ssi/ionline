@@ -5,7 +5,7 @@ namespace App\Rrhh;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
-use App\Agreements\Agreement;
+use App\Models\Agreements\Agreement;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

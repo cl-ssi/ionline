@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Stage extends Model
+class Accountability extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,11 +13,15 @@ class Stage extends Model
      * @var array
      */
     protected $fillable = [
-        'id','type','group','date','dateEnd','date_addendum','dateEnd_addendum','observation','agreement_id'
+        'month', 'document', 'date'
     ];
 
     public function agreement() {
-        return $this->belongsTo('App\Agreements\Agreement');
+        return $this->belongsTo('App\Models\Agreements\Agreement');
+    }
+
+    public function details() {
+        return $this->hasMany('App\Models\Agreements\AccountabilityDetail');
     }
 
     use SoftDeletes;
@@ -27,12 +31,7 @@ class Stage extends Model
      *
      * @var array
      */
-    protected $dates = ['date','dateEnd'];
+    protected $dates = ['deleted_at', 'date'];
 
-    /**
-    * The table associated with the model.
-    *
-    * @var string
-    */
-    protected $table = 'agr_stages';
+    protected $table = 'agr_accountabilities';
 }

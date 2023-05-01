@@ -19,7 +19,7 @@
                         <th>Aspectos Generales</th>
                         <th class="text-right">Puntaje</th>
                         <th class="text-center w-25">Observación y Solicitud</th>
-                         @can('Reviews: edit')<th class="text-left align-middle" ></th>@endcan
+                        @if(Auth::user()->can('Reviews: edit') && $communeFile->programming_status == 'active')<th class="text-left align-middle" ></th>@endif
                     </tr>
                 </thead>
                 <tbody style="font-size:75%;">
@@ -44,7 +44,7 @@
                         <td class="text-left align-middle">{!! $review->general_features !!}</td>
                         <td class="text-center align-middle">{{ $review->score }}</td>
                         <td class="text-center align-middle" >{{ $review->observation }}</td>
-                        @can('Reviews: edit')
+                        @if(Auth::user()->can('Reviews: edit') && $communeFile->programming_status == 'active')
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                             data-target="#updateModal"
@@ -56,7 +56,7 @@
                         <i class="fas fa-edit small"></i> Evaluar
                         </button>
                         </td>
-                        @endcan
+                        @endif
                         @if($communeFile->isLastReviewBy('REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES', $review))
                         @php($totalB += $review->score)
                         @php($passTotalA = true)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,11 +26,11 @@ class Agreement extends Model
      */
     // public function amounts()
     // {
-    //     return $this->hasMany('App\Agreements\ComponentAmount', 'App\Agreements\AgreementComponent');
+    //     return $this->hasMany('App\Models\Agreements\ComponentAmount', 'App\Models\Agreements\AgreementComponent');
     // }
 
     public function program() {
-        return $this->belongsTo('App\Agreements\Program');
+        return $this->belongsTo('App\Models\Agreements\Program');
     }
 
     public function commune() {
@@ -46,23 +46,23 @@ class Agreement extends Model
     }
 
     public function agreement_amounts() {
-        return $this->hasMany('App\Agreements\AgreementAmount');
+        return $this->hasMany('App\Models\Agreements\AgreementAmount');
     }
 
     public function agreement_quotas() {
-        return $this->hasMany('App\Agreements\AgreementQuota');
+        return $this->hasMany('App\Models\Agreements\AgreementQuota');
     }
 
     public function addendums() {
-        return $this->hasMany('App\Agreements\Addendum')->orderBy('created_at','desc');
+        return $this->hasMany('App\Models\Agreements\Addendum')->orderBy('created_at','desc');
     }
 
     public function stages() {
-        return $this->hasMany('App\Agreements\Stage');
+        return $this->hasMany('App\Models\Agreements\Stage');
     }
 
     public function director_signer(){
-        return $this->belongsTo('App\Agreements\Signer');
+        return $this->belongsTo('App\Models\Agreements\Signer');
     }
 
     public function fileToEndorse() {
@@ -113,6 +113,22 @@ class Agreement extends Model
 
     public function isTypeMandate(){
         return $this->program_id == 44 && $this->agreement_amounts->count() == 1 && $this->agreement_amounts->first()->program_component_id == 48; //Programa CAPACITACION con el unico COMPONENTE DESARROLLO RRHH
+    }
+
+    public function getSignObservation(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function getSignState(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
     }
     
 

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Addendum;
+use App\Models\Agreements\Addendum;
 use Illuminate\Http\Request;
-use App\Agreements\Agreement;
-use App\Agreements\Program;
-use App\Agreements\ProgramComponent;
-use App\Agreements\Stage;
-use App\Agreements\AgreementAmount;
-use App\Agreements\AgreementQuota;
-use App\Agreements\OpenTemplateProcessor;
-use App\Agreements\MyClass;
-use App\Agreements\ProgramResolution;
-use App\Agreements\Signer;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\Program;
+use App\Models\Agreements\ProgramComponent;
+use App\Models\Agreements\Stage;
+use App\Models\Agreements\AgreementAmount;
+use App\Models\Agreements\AgreementQuota;
+use App\Models\Agreements\OpenTemplateProcessor;
+use App\Models\Agreements\MyClass;
+use App\Models\Agreements\ProgramResolution;
+use App\Models\Agreements\Signer;
 use App\Models\Commune;
 use App\Models\Parameters\Municipality;
 use App\Models\Establishment;

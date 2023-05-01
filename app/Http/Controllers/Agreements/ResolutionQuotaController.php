@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\ResolutionQuota;
+use App\Models\Agreements\ResolutionQuota;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -42,7 +42,7 @@ class ResolutionQuotaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Agreements\ResolutionQuota  $resolutionQuota
+     * @param  \App\Models\Agreements\ResolutionQuota  $resolutionQuota
      * @return \Illuminate\Http\Response
      */
     public function show(ResolutionQuota $resolutionQuota)
@@ -53,7 +53,7 @@ class ResolutionQuotaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Agreements\ResolutionQuota  $resolutionQuota
+     * @param  \App\Models\Agreements\ResolutionQuota  $resolutionQuota
      * @return \Illuminate\Http\Response
      */
     public function edit(ResolutionQuota $resolutionQuota)
@@ -65,7 +65,7 @@ class ResolutionQuotaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Agreements\ResolutionQuota  $resolutionQuota
+     * @param  \App\Models\Agreements\ResolutionQuota  $resolutionQuota
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ResolutionQuota $resolutionQuota)
@@ -76,7 +76,7 @@ class ResolutionQuotaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Agreements\ResolutionQuota  $resolutionQuota
+     * @param  \App\Models\Agreements\ResolutionQuota  $resolutionQuota
      * @return \Illuminate\Http\Response
      */
     public function destroy(ResolutionQuota $resolutionQuota)

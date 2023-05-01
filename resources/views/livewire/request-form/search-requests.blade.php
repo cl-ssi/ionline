@@ -365,7 +365,7 @@
                 <p class="font-weight-lighter">Total de Formularios: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+                <a class="btn btn-success btn-sm mb-1 float-right" wire:click="exportFormItems"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
             </div>
         </div>
         
@@ -456,7 +456,7 @@
                                 {{ $requestForm->symbol_currency }}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}
                             @endif
                         </td>
-                        <td>
+                        <td nowrap>
                             @if($loop->first)
                                 @if($requestForm->purchasingProcess)
                                     {{ $requestForm->purchasingProcess->getStatus() }}
@@ -472,6 +472,7 @@
                                 @endforeach
                             @endif
                         </td>
+                        
                         <td class="text-center">
                             {{ $loop->iteration }}
                         </td>
@@ -485,7 +486,7 @@
                             @endif
                         </td>
                         <td class="text-center">{{ $detail->unit_of_measurement }}</td>
-                        <td nowrap>{{ $detail->specification }}</td>
+                        <td nowrap>{{ substr($detail->specification, 0, 100) }}</td>
                         <td class="text-center">{{ $detail->quantity }}</td>
                         <td class="text-right">{{ str_replace(',00', '', number_format($detail->unit_value, 2,",",".")) }}</td>
                         <td class="text-center">{{ $detail->tax }}</td>
@@ -494,8 +495,8 @@
                             {{ $detail->pivot->getStatus() }}
                         </td>
                         <td class="text-center" nowrap>{{ $detail->pivot->getPurchasingTypeName() }}</td>
-                        <td>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
-                        <td align="center">
+                        <td nowrap>{{ $detail->pivot->tender ? $detail->pivot->tender->tender_number : '-' }}</td>
+                        <td align="center" nowrap>
                             @if($detail->pivot->tender)
                             <button type="button" class="badge badge-pill badge-dark popover-item" id="detail-{{$detail->id}}" rel="popover"><i class="fas fa-info"></i></button>
                             <div class="popover-list-content" style="display:none;">
@@ -513,11 +514,11 @@
                                 </ul>
                             </div>
                             @endif</td>
-                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->oc ? $detail->pivot->tender->oc->po_id : ($detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->po_id : '-') }}</td>
-                        <td>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
-                        <td>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
+                        <td nowrap>{{ $detail->pivot->tender && $detail->pivot->tender->oc ? $detail->pivot->tender->oc->po_id : ($detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->po_id : '-') }}</td>
+                        <td nowrap>{{ $detail->pivot->tender && $detail->pivot->tender->supplier ? $detail->pivot->tender->supplier->run. ' - '.$detail->pivot->tender->supplier->name : $detail->pivot->supplier_run.' - '.$detail->pivot->supplier_name }}</td>
+                        <td nowrap>{{ $detail->pivot->immediatePurchase ? $detail->pivot->immediatePurchase->cot_id : '-'}}</td>
                         <td>{{ $detail->pivot->directDeal ? $detail->pivot->directDeal->resol_direct_deal : '-'}}</td>
-                        <td>Comprador: {{ $detail->specification }} // proveedor: {{ $detail->pivot->supplier_specifications }}</td>
+                        <td nowrap>Comprador: {{ substr($detail->specification, 0, 100) }} // proveedor: {{ substr($detail->pivot->supplier_specifications, 0, 100) }}</td>
                         <td align="right">{{ $detail->pivot->quantity }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
                         <td>{{ $detail->pivot->tender ? $detail->pivot->tender->currency : '' }}</td>

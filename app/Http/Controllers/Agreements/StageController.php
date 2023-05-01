@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Stage;
+use App\Models\Agreements\Stage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;

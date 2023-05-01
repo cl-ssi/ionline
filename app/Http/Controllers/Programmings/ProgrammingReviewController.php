@@ -25,7 +25,10 @@ class ProgrammingReviewController extends Controller
     public function show($communeFile_id)
     {
         $communeFile = CommuneFile::with('programming_reviews.updatedBy:id,name,fathers_family,mothers_family')->findOrFail($communeFile_id);
-        
+        $communeFile->programming_status = Programming::where('year', $communeFile->year)->whereHas('establishment.commune', function($q) use ($communeFile){
+            return $q->where('id', $communeFile->commune_id);
+        })->first()->status;
+        // return $communeFile;
         return view('programmings.reviews.show', compact('communeFile'));
     }
 

@@ -142,8 +142,12 @@ class EventController extends Controller
                 foreach ($users_enCopia as $key => $user_) {
                     //Si algún usuario destino es autoridad, se marca el requerimiento
                     $userModel = User::find($user_);
-                    $managerUserId = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager')->user_id;
-                    $isManager = ($user_ == $managerUserId);
+
+                    /** Hice esta modificación para que no se caiga si no tienen manager la OU */
+                    $manager = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager');
+                    if($manager) {
+                        $isManager = ($user_ == $manager->user_id);
+                    }
                     if ($isManager) $isAnyManager = true;
 
                     //guarda evento.
@@ -281,5 +285,12 @@ class EventController extends Controller
 
         // return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
         
+    }
+
+    public function deleteFile(File $file){
+        Storage::disk('gcs')->delete($file);
+
+        $file->delete();
+        return redirect()->back()->with('success', 'Se eliminó el archivo adjunto.');
     }
 }

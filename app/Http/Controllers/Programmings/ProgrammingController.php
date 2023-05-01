@@ -36,7 +36,7 @@ class ProgrammingController extends Controller
             }
         }
 
-        $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune', 'pendingItems')
+        $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune', 'pendingItems', 'items.programming')
             ->where('year', $year)
             ->when($accessByEstablishments != null, function($q) use($accessByEstablishments){
                  $q->whereIn('establishment_id', $accessByEstablishments);

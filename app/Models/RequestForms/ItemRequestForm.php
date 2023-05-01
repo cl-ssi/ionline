@@ -39,6 +39,14 @@ class ItemRequestForm extends Model implements Auditable
         return $this->belongsTo(BudgetItem::class);
     }
 
+    public function itemChangedRequestForms() {
+        return $this->hasMany(ItemChangedRequestForm::class, 'item_request_form_id');
+    }
+
+    public function latestPendingItemChangedRequestForms() {
+        return $this->hasOne(ItemChangedRequestForm::class, 'item_request_form_id')->where('status', 'pending')->latestOfMany();
+    }
+
     public function purchasingProcesses() {
         return $this->hasMany(PurchasingProcess::class, 'item_request_form_id');
     }

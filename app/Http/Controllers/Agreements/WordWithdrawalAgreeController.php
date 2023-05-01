@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Agreements;
 
-use App\Agreements\Addendum;
+use App\Models\Agreements\Addendum;
 use Illuminate\Http\Request;
-use App\Agreements\Agreement;
-use App\Agreements\OpenTemplateProcessor;
-use App\Agreements\Signer;
-use App\Agreements\Stage;
+use App\Models\Agreements\Agreement;
+use App\Models\Agreements\OpenTemplateProcessor;
+use App\Models\Agreements\Signer;
+use App\Models\Agreements\Stage;
 use App\Models\Parameters\Municipality;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;

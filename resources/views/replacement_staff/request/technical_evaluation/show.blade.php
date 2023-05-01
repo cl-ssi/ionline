@@ -168,92 +168,99 @@
                     @endswitch
                 </th>
             </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th class="table-active">Creador / Solicitante</th>
-                    <td style="width: 33%">
-                        {{ $requestReplacementStaff->user->FullName }} <br>
-                        {{ $requestReplacementStaff->organizationalUnit->name }}
-                    </td>
-                    <td style="width: 33%">
-                        {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
-                    </td>
-                </tr>
-                <tr>
-                    <th class="table-active">Nombre de Solicitud</th>
-                    <td colspan="2">{{ $requestReplacementStaff->name }}</td>
-                </tr>
-                <tr>
-                    <th class="table-active">Archivos</th>
-                    <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="table-active">Creador / Solicitante</th>
+                <td style="width: 33%">
+                    {{ $requestReplacementStaff->user->FullName }} <br>
+                    {{ $requestReplacementStaff->organizationalUnit->name }}
+                </td>
+                <td style="width: 33%">
+                    {{($requestReplacementStaff->requesterUser) ?  $requestReplacementStaff->requesterUser->TinnyName : '' }}
+                </td>
+            </tr>
+            <tr>
+                <th class="table-active">Nombre de Solicitud</th>
+                <td colspan="2">{{ $requestReplacementStaff->name }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Archivos</th>
+                <td colspan="2">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-    </br>
+</br>
 
-    <h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
+<h6><i class="fas fa-list-ol"></i> Listado de cargos</h6>
 
-    <div class="table-responsive">
-        <table class="table table-sm table-hover table-bordered">
-            <thead class="text-center small table-active">
-                <tr>
-                    <th>N° de cargos</th>
-                    <th>Estamento</th>
-                    <th>Grado / Renta</th>
-                    <th>Calidad Jurídica</th>
-                    <th>Fundamento</th>
-                    <th>Jornada</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody class="text-center small">
-                @foreach($requestReplacementStaff->positions as $position)
-                <tr>
-                    <td>{{ $position->charges_number }}</td>
-                    <td>{{ $position->profile_manage->name ?? '' }}</td>
-                    <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>
-                    <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
-                    <td>
-                        {{ $position->fundamentManage->NameValue ?? '' }}<br>
-                        {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
-                    <td>{{ $position->WorkDayValue ?? '' }}</td>
-                    <td>
-                        <a class="btn btn-outline-secondary"
-                            href="{{ route('replacement_staff.request.show_file_position', $position) }}"
-                            target="_blank"> <i class="fas fa-paperclip"></i>
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+<div class="table-responsive">
+    <table class="table table-sm table-hover table-bordered">
+        <thead class="text-center small table-active">
+            <tr>
+                <th>N° de cargos</th>
+                <th>Estamento</th>
+                <th>Grado / Renta</th>
+                <th>Calidad Jurídica</th>
+                <th>Fundamento</th>
+                <th>Jornada</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="text-center small">
+            @foreach($requestReplacementStaff->positions as $position)
+            <tr>
+                <td>{{ $position->charges_number }}</td>
+                <td>{{ $position->profile_manage->name ?? '' }}</td>
+                <td>{{ $position->degree ?? number_format($position->salary, 0, ",", ".") }}</td>
+                <td>{{ $position->legalQualityManage->NameValue ?? '' }}</td>
+                <td>
+                    {{ $position->fundamentManage->NameValue ?? '' }}<br>
+                    {{ $position->fundamentDetailManage->NameValue ?? '' }}</td>
+                <td>{{ $position->WorkDayValue ?? '' }}</td>
+                <td>
+                    <a class="btn btn-outline-secondary"
+                        href="{{ route('replacement_staff.request.show_file_position', $position) }}"
+                        target="_blank"> <i class="fas fa-paperclip"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<br>
 @endif
 
 @if($requestReplacementStaff->request_status != "pending" && $requestReplacementStaff->form_type == 'replacement')
-    <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
-        class="btn btn-info btn-sm float-right" 
-        title="Selección" 
-        target="_blank">
-        Exportar Resumen <i class="fas fa-file"></i>
-    </a>
-    <br />
+<div class="row">
+    <div class="col-12">
+        <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+            class="btn btn-info btn-sm float-right" 
+            title="Selección" 
+            target="_blank">
+            <i class="fas fa-file"></i> Exportar Resumen 
+        </a>        
+    </div>
+</div>
+<br>
 @endif
 
 @if($requestReplacementStaff->signatures_file_id)
-    <a class="btn btn-info btn-sm float-right" 
-        title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
-        target="_blank" 
-        title="Certificado">
-        <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
-    </a>
-    <br />
-@endif
-
+<div class="row">
+    <div class="col-12">
+        <a class="btn btn-info btn-sm float-right" 
+            title="" href="{{ route('replacement_staff.request.show_budget_availability_certificate_signed', $requestReplacementStaff) }}" 
+            target="_blank" 
+            title="Certificado">
+            <i class="fas fa-file-contract"></i> Certificado de Disponibilidad Presupuestaria
+        </a>
+    </div>
+</div>
 <br />
+@endif
 
 <h6 class="small"><i class="fas fa-signature"></i> El proceso debe contener las aprobaciones de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</h6>
 

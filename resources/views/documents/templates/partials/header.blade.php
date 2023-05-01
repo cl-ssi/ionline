@@ -1,10 +1,47 @@
 
 <header class="left" style="float: left;">
-    @if(isset($logo_pluma))
-        <img src="{{ public_path('/images/logo_pluma_'.$document->organizationalUnit->establishment->alias.'.jpg') }}" width="120" alt="Logo de la institución">
-    @else
-        <img src="{{ public_path('/images/logo_rgb_'.$document->organizationalUnit->establishment->alias.'.png') }}" width="120" alt="Logo de la institución">
-    @endif
+
+    @php 
+        /**
+         * Parámetros del include:
+         * @include('documents.templates.partials.header', [
+         *   'establishment' => $document->organizationalUnit->establishment, // Obligatorio
+         *   'logo_pluma' => true or false, // Opcional
+         *   'linea1' => 'Ej: Establecimiento', // Opcional
+         *   'linea2' => 'Ej: Unidad organizacional', // Opcional
+         *   'linea3' => 'Ej: Nº Interno: '. $document->internal_number : '') // opcional,
+         *   ]);
+        */
+
+
+
+        /** Confeccionar URL pública del logo */
+        /** El código está acá poder reutilizar este include en otro documento
+        * EJ:  
+        * '/images/logo_rgb_SSI.png'
+        * '/images/logo_pluma_SSI_HAH.png'
+        * 
+        */
+        $logo = '/images/logo_';
+
+        if(isset($logo_pluma)) {
+            $logo .= 'pluma_';
+        }
+        else {
+            $logo .= 'rgb_';
+        }
+
+        if($establishment->mother) {
+            $logo .= $establishment->mother->alias . '_';
+        }
+
+        $logo .= $establishment->alias . '.png';
+    @endphp 
+
+
+    <img src="{{ public_path($logo) }}" 
+        height="109" 
+        alt="Logo de la institución">
 
     @if(isset($linea1))
     <div class="siete" style="padding-top: 2px;">

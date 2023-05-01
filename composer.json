@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.4|^8.1",
         "ext-gd": "*",
+        "actived/microsoft-teams-notifier": "*",
         "aquaro/laravel-maintenance-mode": "^0.1.1",
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^2.10",
@@ -31,6 +32,7 @@
         "setasign/fpdi": "^2.3",
         "spatie/laravel-permission": "^3.13",
         "stackkit/laravel-google-cloud-scheduler": "^2.0",
+        "stackkit/laravel-google-cloud-tasks-queue": "^3.5",
         "superbalist/laravel-google-cloud-storage": "^2.2"
     },
     "require-dev": {

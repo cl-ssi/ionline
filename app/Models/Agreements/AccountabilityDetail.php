@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +18,7 @@ class AccountabilityDetail extends Model
     ];
 
     public function accountability() {
-        return $this->belongsTo('App\Agreements\Accountability');
+        return $this->belongsTo('App\Models\Agreements\Accountability');
     }
 
     use SoftDeletes;

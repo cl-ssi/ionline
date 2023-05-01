@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 
 class AgreementAmount extends Model
 {
     public function agreement() {
-        return $this->belongsTo('App\Agreements\Agreement');
+        return $this->belongsTo('App\Models\Agreements\Agreement');
     }
 
     public function program_component() {
-        return $this->belongsTo('App\Agreements\ProgramComponent')->withTrashed();
+        return $this->belongsTo('App\Models\Agreements\ProgramComponent')->withTrashed();
     }
 
     /**

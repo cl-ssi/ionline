@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,11 +10,11 @@ class Program extends Model
     use SoftDeletes;
 
     public function agreements() {
-        return $this->hasMany('App\Programs\Agreement');
+        return $this->hasMany('App\Models\Agreements\Agreement');
     }
 
     public function resolutions() {
-        return $this->hasMany('App\Agreements\ProgramResolution')->orderBy('created_at','desc');
+        return $this->hasMany('App\Models\Agreements\ProgramResolution')->orderBy('created_at','desc');
     }
 
     /**
@@ -24,7 +24,7 @@ class Program extends Model
      */
     public function components()
     {
-        return $this->hasMany('App\Agreements\ProgramComponent');
+        return $this->hasMany('App\Models\Agreements\ProgramComponent');
     }
     /**
      * The attributes that are mass assignable.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Agreements;
+namespace App\Models\Agreements;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +10,7 @@ class Addendum extends Model
     use SoftDeletes;
 
     public function agreement() {
-        return $this->belongsTo('App\Agreements\Agreement');
+        return $this->belongsTo('App\Models\Agreements\Agreement');
     }
 
     public function fileToEndorse() {
@@ -26,7 +26,7 @@ class Addendum extends Model
     }
 
     public function director_signer() {
-        return $this->belongsTo('App\Agreements\Signer', 'director_signer_id');
+        return $this->belongsTo('App\Models\Agreements\Signer', 'director_signer_id');
     }
 
     public function getEndorseStateBySignPos($i){
@@ -50,6 +50,22 @@ class Addendum extends Model
             foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
                 if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
         return false;
+    }
+
+    public function getSignObservation(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function getSignState(){
+        if($this->fileToSign)
+            foreach($this->fileToSign->signaturesFlows as $signatureFlow)
+                if($signatureFlow->sign_position == 0)
+                    return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
     }
 
     /**

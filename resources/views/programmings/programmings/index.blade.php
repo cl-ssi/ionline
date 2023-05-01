@@ -14,13 +14,19 @@
                     @endforeach
     </select>
 </form>
-</h3> 
- <!-- Permiso para crear nueva programación númerica -->
- @can('Programming: create')
-    <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
- @endcan
+</h3>
+<!-- PERMISOS -->
+@php($canStatus = Auth::user()->can('Programming: status'))
+@php($canEdit = Auth::user()->can('Programming: edit'))
+@php($canViewPH = Auth::user()->can('ProfessionalHour: view'))
+@php($canViewPD = Auth::user()->can('ProgrammingDay: view'))
+@php($canViewItem = Auth::user()->can('ProgrammingItem: view'))
+<!-- Permiso para crear nueva programación númerica -->
+@can('Programming: create')
+<a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
+@endcan
 
- @if($request->year == 2022 || $year == 2022)
+@if($request->year == 2022 || $year == 2022)
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
@@ -35,8 +41,8 @@
     <table class="table table-sm table-hover">
         <thead>
             <tr class="small ">
-                @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
-                @can('Programming: edit')<th class="text-left align-middle table-dark" >Editar</th>@endcan
+                @if($canStatus)<th class="text-left align-middle table-dark" >Estado</th>@endif
+                @if($canEdit)<th class="text-left align-middle table-dark" >Editar</th>@endif
                 <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Obs.</th>
                 <th class="text-left align-middle table-dark" >Act.<br>pte.</th>
@@ -54,7 +60,7 @@
             @foreach($programmings as $programming)
             <tr class="small">
             <!-- Permiso para Activar o Desactivar programación númerica -->
-            @can('Programming: status')
+            @if($canStatus)
                 <td >
                     <button class="btn btb-flat  btn-light" data-toggle="modal"
                         data-target="#updateModalRect"
@@ -69,13 +75,13 @@
                     
                     </button>
                 </td>
-            @endcan
+            @endif
             <!-- Permiso para editar programación númerica -->
-            @can('Programming: edit')
+            @if($canEdit)
                 <td ><a href="{{ route('programmings.show', $programming->id) }}" class="btn btb-flat btn-sm btn-light" >
                     <i class="fas fa-edit"></i></a>
                 </td>
-            @endcan
+            @endif
                 <td > <span class="badge badge-info">{{ $total_tracers != 0 ? number_format(($programming->getCountActivities()/$total_tracers) *100, 0, ',', ' ') : 0}}%</span> </td>
                 <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count() + $programming->pendingIndirectItems->count(), 0, ',', ' ')}}</span> </td>
                 <td > <span class="badge badge-warning">{{ number_format($programming->pendingItems->count() + $programming->pendingIndirectItems->count(), 0, ',', ' ')}}</span> </td>
@@ -94,23 +100,23 @@
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
-                @can('ProfessionalHour: view')
+                @if($canViewPH)
                     <a href="{{ route('professionalhours.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-secondary">
                         <i class="fas fa-user-tag small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Profesionales</span> 
                     </a>
-                @endcan
+                @endif
                 <!-- Permiso para paremtrizar los días habiles anuales en la programación númerica en proceso -->
-                @can('ProgrammingDay: view')
+                @if($canViewPD)
                     <a href="{{ route('programmingdays.index',['programming_id' => $programming->id]) }}"  class="btn btb-flat btn-sm btn-secondary" >
                         <i class="fas fa-calendar-alt small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Días a Programar</span> 
                     </a>
-                @endcan
+                @endif
 
                 <!-- Planificación a partir del 2023 -->
                 @if($request->year >= 2023 || $year >= 2023)
-                    @can('ProgrammingItem: view')
+                    @if($canViewItem)
                     <a href="{{ route('participation.show', $programming) }}" class="btn btb-flat btn-sm btn-primary" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Participación</span> 
@@ -120,32 +126,32 @@
                         <i class="fas fa-exclamation-triangle small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Emergencias-Desastres y Epidemiología</span> 
                     </a>
-                    @endcan
+                    @endif
                 @endif
 
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso -->
                 @if($request->year >= 2023 || $year >= 2023)
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso a partir del 2023 -->
-                @can('ProgrammingItem: view')
+                @if($canViewItem)
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Directa']) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Act. directas</span> 
                     </a>
-                @endcan
+                @endif
 
-                @can('ProgrammingItem: view')
+                @if($canViewItem)
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id, 'activity_type' => 'Indirecta']) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Act. indirectas</span> 
                     </a>
-                @endcan
+                @endif
                 @else
-                @can('ProgrammingItem: view')
+                @if($canViewItem)
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Actividades</span> 
                     </a>
-                @endcan
+                @endif
                 @endif
                 </td> 
             </tr>
