@@ -1,15 +1,13 @@
 <div>
     <div class="input-group">
-        <div class="input-group-prepend">
-            <select
-                class="custom-select"
-                id="select-option"
-                wire:model="typeDestination"
-            >
-                <option value="email">Correo</option>
-                <option value="department">Otro</option>
-            </select>
-        </div>
+        <select
+            class="custom-select"
+            id="select-option"
+            wire:model="typeDestination"
+        >
+            <option value="email">Correo</option>
+            <option value="department">Otro</option>
+        </select>
         <input
             type="text"
             wire:model.debounce.1500ms="destination"
