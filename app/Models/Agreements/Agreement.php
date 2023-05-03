@@ -130,6 +130,10 @@ class Agreement extends Model
                     return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
         return 'fa-ellipsis-h';
     }
+
+    public function rowspan(){
+        return $this->addendums->count() > 0 ? $this->addendums->count() : 1;
+    }
     
 
     use SoftDeletes;

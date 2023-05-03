@@ -35,27 +35,6 @@
             @csrf
             @method('PUT')
             <div class="form-row">
-                <fieldset class="form-group col-3">
-                    <label for="fordate">Fecha Resolución</label>
-                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $program_resolution->date ? $program_resolution->date->format('Y-m-d') : '' }}" >
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="fornumber">Número Resolución</label>
-                    <input type="integer" name="number" class="form-control" id="fornumber" value="{{ $program_resolution->number }}" >
-                    <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="for">Archivo Resolución PDF ya firmada</label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="forfile" name="file">
-                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión ya firmada por el/la director/a</small>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="foragreement">Programa</label>
                     <select name="agreement" id="formagreement" class="form-control" disabled>
@@ -112,6 +91,27 @@
                 <fieldset class="form-group col-3">
                     <label for="fordate">Fecha Resolución Distribuye Recursos</label>
                     <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $program_resolution->res_resource_date ? $program_resolution->res_resource_date->format('Y-m-d') : '' }}" >
+                </fieldset>
+            </div>
+            <div class="form-row">
+                <fieldset class="form-group col-3">
+                    <label for="fordate">Fecha Resolución</label>
+                    <input type="date" name="date" class="form-control" id="fordate" value="{{ $program_resolution->date ? $program_resolution->date->format('Y-m-d') : '' }}" >
+                </fieldset>
+
+                <fieldset class="form-group col-3">
+                    <label for="fornumber">Número Resolución</label>
+                    <input type="integer" name="number" class="form-control" id="fornumber" value="{{ $program_resolution->number }}" >
+                    <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
+                </fieldset>
+
+                <fieldset class="form-group col-3">
+                    <label for="for">Archivo Resolución PDF ya firmada</label>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="forfile" name="file">
+                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
+                     <small class="form-text text-muted">* Adjuntar versión ya firmada por el/la director/a</small>
+                    </div>
                 </fieldset>
             </div>
             

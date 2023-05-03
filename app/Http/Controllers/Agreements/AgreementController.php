@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Agreements;
 
+use App\Exports\Agreements\TrackingAgreementsExport;
 use App\Models\Agreements\Agreement;
 use App\Models\Agreements\Program;
 use App\Models\Agreements\Stage;
 use App\Models\Agreements\AgreementAmount;
 use App\Models\Agreements\AgreementQuota;
-use App\Models\Agreements\Addendum;
 use App\Models\Agreements\Signer;
-use App\Models\Establishment;
 use App\Models\Commune;
 use App\Models\Parameters\Municipality;
 use Carbon\Carbon;
@@ -24,6 +23,7 @@ use App\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AgreementController extends Controller
 {
@@ -57,13 +57,21 @@ class AgreementController extends Controller
 
     public function indexTracking(Request $request)
     {
-        $programs = Program::orderBy('name')->get();
-        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows','addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows')
-                               ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
-                               ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
-                               ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
+        // return $request;
+        $query = Agreement::with('program','stages','agreement_amounts.program_component','commune','fileToEndorse.signaturesFlows','addendums.fileToEndorse.signaturesFlows','fileToSign.signaturesFlows','addendums.fileToSign.signaturesFlows')
+        ->when($request->program, function($q) use ($request){ return $q->where('program_id', $request->program); })
+        ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
+        ->where('period', $request->period ? $request->period : date('Y'))->latest();
+
+        if($request->has('export')){
+            return Excel::download(new TrackingAgreementsExport($query->get()), 'TrackingAgreementsExport_'.Carbon::now().'.xlsx');
+        }
+
+        $agreements = $query->paginate(50);
         // return $agreements;
+        $programs = Program::orderBy('name')->get();
         $communes = Commune::orderBy('name')->get();
+
         return view('agreements.agreements.trackingIndicator', compact('programs', 'agreements', 'communes'));
     }
 
