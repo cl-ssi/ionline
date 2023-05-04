@@ -28,7 +28,7 @@
         </div>
         <div class="custom-file">
             <input type="file" class="custom-file-input" id="dte_file" wire:model="dtes">
-            <label class="custom-file-label" for="dte_file" data-browse="Examinar">Archivo xls máximo 20 mb</label>
+            <label class="custom-file-label" for="dte_file" data-browse="Examinar">Archivo xls máximo 2mb</label>
         </div>
     </div>
 
