@@ -106,6 +106,22 @@ class Dte extends Model
         return $this->hasMany(ImmediatePurchase::class,'po_id', 'folio_oc');
     }
 
+    /** Compra Inmediata en singular, es para poder utilizar la relación de request form de abajo */
+    public function immediatePurchase()
+    {
+        return $this->hasOne(ImmediatePurchase::class,'po_id', 'folio_oc');
+    }
+
+    /** Formulario de Requerimientos  */
+    public function requestForm()
+    {
+        if($this->immediatePurchase) {
+            return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
+        }
+        else {
+            return $this->immediatePurchase();
+        }
+    }
 
 
     public function scopeSearch($query, $filter)

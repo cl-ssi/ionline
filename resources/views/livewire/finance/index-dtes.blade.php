@@ -31,6 +31,8 @@
                 <th>Folio</th>
                 <th>Emisor</th>
                 <th>Folio OC</th>
+                <th>FR</th>
+                <th>Admin C.</th>
                 <th>Detalle</th>
             </tr>
         </thead>
@@ -49,6 +51,22 @@
                 </td>
                 <td>{{ $dte->emisor }}</td>
                 <td>{{ $dte->folio_oc }}</td>
+                <td>
+                    @if($dte->requestForm)
+                    <a
+                        class="btn btn-primary btn-block"
+                        href="{{ route('request_forms.show', $dte->requestForm->id) }}"
+                        target="_blank"
+                    >
+                        <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+                    </a>
+                    @endif
+                </td>
+                <td>
+                    @if($dte->requestForm)
+                        {{ $dte->requestForm->contractManager->shortName }}
+                    @endif
+                </td>
                 <td>
                     <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapse{{$dte->id}}" aria-expanded="false" aria-controls="collapse{{$dte->id}}">
                         Ver detalle
