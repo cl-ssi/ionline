@@ -91,7 +91,7 @@ class Dte extends Model
     * @var string
     */
     protected $table = 'fin_dtes';
-    
+
 
     public function scopeSearch($query, $filter)
     {
@@ -102,6 +102,9 @@ class Dte extends Model
                     switch($column) 
                     {
                         case 'folio': 
+                            $query->where($column,$value);
+                            break;
+                        case 'folio_oc': 
                             $query->where($column,$value);
                             break;
                     }
