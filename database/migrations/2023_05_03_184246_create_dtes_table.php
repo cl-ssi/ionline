@@ -13,7 +13,7 @@ class CreateDtesTable extends Migration
      */
     public function up()
     {
-        Schema::create('dtes', function (Blueprint $table) {
+        Schema::create('fin_dtes', function (Blueprint $table) {
             $table->id();
             $table->integer('tipo');
             $table->string('tipo_documento');
@@ -73,6 +73,6 @@ class CreateDtesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dtes');
+        Schema::dropIfExists('fin_dtes');
     }
 }

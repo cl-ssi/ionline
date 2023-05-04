@@ -85,6 +85,14 @@ class Dte extends Model
     ];
 
 
+    /**
+    * The primary key associated with the table.
+    *
+    * @var string
+    */
+    protected $table = 'fin_dtes';
+    
+
     public function scopeSearch($query, $filter)
     {
         if(!empty($filter)) {

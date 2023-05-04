@@ -6,10 +6,18 @@
             </div>
         @endif
     </div>
+
     <label for="users">Cargar archivo de Acepta con reporte de DTEs</label>
-    <input type="file" class="form-control" style="padding: 3px;" wire:model="dtes">
- 
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">Cargar Archivo</button>
+        </div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="dte_file" wire:model="dtes">
+            <label class="custom-file-label" for="dte_file" data-browse="Examinar">Archivo xls máximo 20 mb</label>
+        </div>
+    </div>
+
     @error('dtes') <span class="error">{{ $message }}</span> @enderror
- 
-    <button class="btn btn-primary" type="submit" wire:loading.attr="disabled">Cargar Archivo</button>
+
 </form>

@@ -1811,8 +1811,8 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () {
     Route::get('payments', [PaymentController::class,'index'])->name('payments.index');
-    Route::get('dtes',IndexDtes::class);
-    Route::get('dtes/upload',UploadDtes::class);
+    Route::get('dtes',IndexDtes::class)->name('dtes.index');
+    Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
 });
 
 /*formulario de requerimiento compra o servicio */
