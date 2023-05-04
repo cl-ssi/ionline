@@ -83,4 +83,22 @@ class Dte extends Model
         'fecha_aceptacion',
         'fecha',
     ];
+
+
+    public function scopeSearch($query, $filter)
+    {
+        if(!empty($filter)) {
+            foreach($filter as $column => $value) {
+                if(!empty($value))
+                {
+                    switch($column) 
+                    {
+                        case 'folio': 
+                            $query->where($column,$value);
+                            break;
+                    }
+                }
+            }
+        }
+    }
 }
