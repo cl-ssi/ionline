@@ -245,6 +245,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Livewire\Finance\UploadDtes;
 
 /*
 |--------------------------------------------------------------------------
@@ -1809,6 +1810,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () {
     Route::get('payments', [PaymentController::class,'index'])->name('payments.index');
+    Route::get('dtes/upload',UploadDtes::class);
 });
 
 /*formulario de requerimiento compra o servicio */
