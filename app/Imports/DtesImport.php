@@ -26,11 +26,14 @@ class DtesImport implements ToModel, WithStartRow, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Dte([
-            'tipo' => $row['tipo'],
-            'tipo_documento' => $row['tipo_documento'],
-            'folio' => $row['folio'],
-            'emisor' => $row['emisor'],
+        return Dte::updateOrCreate(
+            [
+                'tipo' => $row['tipo'],
+                'tipo_documento' => $row['tipo_documento'],
+                'folio' => $row['folio'],
+                'emisor' => $row['emisor'],
+            ],
+            [
             'razon_social_emisor' => $row['razon_social_emisor'],
             'receptor' => $row['receptor'],
             'publicacion' => Carbon::instance(Date::excelToDateTimeObject($row['publicacion'])),
