@@ -2,8 +2,10 @@
 
 namespace App\Models\Finance;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Warehouse\Control;
+use App\Models\RequestForms\ImmediatePurchase;
 
 class Dte extends Model
 {
@@ -91,6 +93,19 @@ class Dte extends Model
     * @var string
     */
     protected $table = 'fin_dtes';
+
+    /** Control(ingresos) de Warehouse */
+    public function controls()
+    {
+        return $this->hasMany(Control::class,'po_code', 'folio_oc');
+    }
+
+    /** Compras Inmediatas */
+    public function immediatePurchases()
+    {
+        return $this->hasMany(ImmediatePurchase::class,'po_id', 'folio_oc');
+    }
+
 
 
     public function scopeSearch($query, $filter)

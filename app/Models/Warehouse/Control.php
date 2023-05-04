@@ -125,6 +125,7 @@ class Control extends Model
         return $this->belongsTo(OrganizationalUnit::class);
     }
 
+    /** Documentos Tributarios */
     public function dtes()
     {
         return $this->hasMany(Dte::class,'folio_oc','po_code');
