@@ -12,17 +12,15 @@
     
     <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-3">
-            <div class="input-group mb-3">
             <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i class="fas fa-search"></i> Buscar</button>
-            </div>
         </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-           
+            <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i class="fas fa-search"></i> Buscar</button>
         </div>
     </div>
 
@@ -32,7 +30,9 @@
                 <th>Tipo documento</th>
                 <th>Folio</th>
                 <th>Emisor</th>
+                <th>Folio OC</th>
                 <th>Detalle</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +41,7 @@
                 <td>{{ $dte->tipo_documento }}</td>
                 <td>{{ $dte->folio }}</td>
                 <td>{{ $dte->emisor }}</td>
+                <td>{{ $dte->folio_oc }}</td>
                 <td>
                     <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapse{{$dte->id}}" aria-expanded="false" aria-controls="collapse{{$dte->id}}">
                         Ver detalle
@@ -50,6 +51,9 @@
                             {{ print_r($dte->toArray()) }}
                         </pre>
                     </div>
+                </td>
+                <td>
+                    <a href="{{ $dte->uri }}" target="_blank" class="link"> <i class="fas fa-paperclip"></i></a>
                 </td>
             </tr>
             @endforeach

@@ -2,18 +2,19 @@
 
 namespace App\Models\Warehouse;
 
-use App\Models\Documents\Signature;
-use App\Models\Parameters\Program;
-use App\Models\Parameters\Supplier;
-use App\Models\RequestForms\Invoice;
-use App\Models\RequestForms\PurchaseOrder;
-use App\Models\RequestForms\RequestForm;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\PurchaseOrder;
+use App\Models\RequestForms\Invoice;
+use App\Models\Parameters\Supplier;
+use App\Models\Parameters\Program;
+use App\Models\Finance\Dte;
+use App\Models\Documents\Signature;
 
 class Control extends Model
 {
@@ -122,6 +123,11 @@ class Control extends Model
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class);
+    }
+
+    public function dtes()
+    {
+        return $this->hasMany(Dte::class,'folio_oc','po_code');
     }
 
     /**

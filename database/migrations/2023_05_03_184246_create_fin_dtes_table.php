@@ -63,6 +63,10 @@ class CreateFinDtesTable extends Migration
             $table->datetime('fecha_aceptacion')->nullable();
             $table->datetime('fecha')->nullable();
             $table->timestamps();
+
+            // $table->index(['folio']);
+            // $table->index(['emisor']);
+            // $table->index(['folio_oc']);
         });
     }
 
