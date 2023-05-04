@@ -161,7 +161,7 @@
                             @forelse($control->dtes as $dte)
                             <li>
                                 <a 
-                                    href="{{ $dte->uri }}" 
+                                    href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
                                     target="_blank" 
                                     class="btn btn-sm mb-1 btn-info"
                                 > 

@@ -32,14 +32,21 @@
                 <th>Emisor</th>
                 <th>Folio OC</th>
                 <th>Detalle</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($dtes as $dte)
             <tr>
                 <td>{{ $dte->tipo_documento }}</td>
-                <td>{{ $dte->folio }}</td>
+                <td>
+                    <a 
+                        href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
+                        target="_blank" 
+                        class="btn btn-sm mb-1 btn-outline-secondary"
+                    > 
+                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+                    </a>
+                </td>
                 <td>{{ $dte->emisor }}</td>
                 <td>{{ $dte->folio_oc }}</td>
                 <td>
@@ -51,9 +58,6 @@
                             {{ print_r($dte->toArray()) }}
                         </pre>
                     </div>
-                </td>
-                <td>
-                    <a href="{{ $dte->uri }}" target="_blank" class="link"> <i class="fas fa-paperclip"></i></a>
                 </td>
             </tr>
             @endforeach

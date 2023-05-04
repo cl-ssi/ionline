@@ -20,8 +20,6 @@
         @endif
     </div>
 
-
-
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
