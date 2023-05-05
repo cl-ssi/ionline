@@ -28,7 +28,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
     }
 
     public function itemRequestForm() {
-        return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
+        return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id')->with('budgetItem');
     }
 
     public function passenger() {
@@ -72,7 +72,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         elseif($this->fundToBeSettled) return 'Fondo a rendir';
         elseif($this->tender) return $this->tender->purchaseType->name ?? '';
         elseif($this->directDeal) return $this->directDeal->purchaseType->name ?? '';
-        elseif($this->immediatePurchase) return $this->itemRequestForm && $this->itemRequestForm->requestForm->father ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
+        elseif($this->immediatePurchase) return $this->itemRequestForm && $this->itemRequestForm->requestForm->request_form_id ? 'Orden de compra' : $this->immediatePurchase->purchaseType->name;
         else return '';
         // return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
     }
