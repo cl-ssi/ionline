@@ -1910,6 +1910,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
+        Route::get('/show_form_items_export',[RequestFormController::class,'show_form_items_export'])->name('show_form_items_export');
     });
 
     /* DOCUMENTS */
