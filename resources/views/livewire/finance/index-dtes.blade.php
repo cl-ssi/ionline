@@ -52,7 +52,7 @@
                 <td>{{ $dte->emisor }}</td>
                 <td>{{ $dte->folio_oc }}</td>
                 <td>
-                    @if($dte->requestForm)
+                    @if($dte->requestForm AND $dte->immediatePurchase->purchasingProcessDetail)
                     <a
                         class="btn btn-primary btn-block"
                         href="{{ route('request_forms.show', $dte->requestForm->id) }}"
@@ -63,8 +63,10 @@
                     @endif
                 </td>
                 <td>
-                    @if($dte->requestForm)
+                    @if($dte->requestForm AND $dte->immediatePurchase->purchasingProcessDetail)
                         {{ $dte->requestForm->contractManager->shortName }}
+                        @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id])
+
                     @endif
                 </td>
                 <td>
@@ -78,6 +80,7 @@
                     </div>
                 </td>
             </tr>
+
             @endforeach
         </tbody>
     </table>
