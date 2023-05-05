@@ -14,7 +14,9 @@ use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\RequestForms\ItemRequestForm;
+use App\Jobs\ProcessReportFormItems;
 use App\Exports\RequestForms\FormItemsExport;
+
 
 class SearchRequests extends Component
 {
@@ -99,14 +101,16 @@ class SearchRequests extends Component
         $this->selectedTender,
         $this->selectedSupplier
         )
-        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
+        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerUser',
+        'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
         ->latest();
 
         if($this->inbox == 'report: form-items'){
-            $query->with('eventRequestForms', 'associateProgram', 'purchasingProcess.details');
+            $query->with('eventRequestForms', 'associateProgram', 'purchasingProcess.details', 
+                'itemRequestForms');
         }
 
-        return ($isPaginated) ? $query->paginate(50) : $query->get();
+        return ($isPaginated) ? $query->paginate(50) : $query->limit(100)->get();
     }
 
     public function render()
@@ -127,16 +131,20 @@ class SearchRequests extends Component
 
     public function exportFormItems()
     {
-        $this->detailsToExport = collect(new ItemRequestForm);
-        foreach($this->querySearch(false) as $search){
-            if($search->purchasingProcess && $search->purchasingProcess->details->count() > 0){
-                foreach($search->purchasingProcess->details as $key => $detail){
-                    $this->detailsToExport->push($detail);
-                }
-            }
-        }
+        // $this->detailsToExport = collect(new ItemRequestForm);
+        // foreach($this->querySearch(false) as $search){
+        //     if($search->purchasingProcess && $search->purchasingProcess->details->count() > 0){
+        //         foreach($search->purchasingProcess->details as $key => $detail){
+        //             $this->detailsToExport->push($detail);
+        //         }
+        //     }
+        // }
 
-        return Excel::download(new FormItemsExport($this->detailsToExport), 'requestFormsExport_'.Carbon::now().'.xlsx');
+        //ProcessReportFormItems::dispatch($this->detailsToExport);
+            // ->onConnection('cloudtasks')
+            //->delay(15);
+
+        return Excel::download(new FormItemsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
 
     public function searchedRequesterOu(OrganizationalUnit $organizationalUnit){
