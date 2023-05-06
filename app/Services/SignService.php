@@ -209,7 +209,7 @@ class SignService
      * @param  string $columnLeftEndorse
      * @return void
      */
-    public function setColumnLeftEndorse(string $columnLeftEndorse)
+    public function setColumnLeftEndorse(string $columnLeftEndorse = null)
     {
         $this->column_left_endorse = $columnLeftEndorse;
     }
