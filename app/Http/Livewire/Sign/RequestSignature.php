@@ -8,6 +8,7 @@ use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Type;
 use App\Services\SignService;
 use App\User;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -74,6 +75,21 @@ class RequestSignature extends Component
     public function save()
     {
         $this->validate();
+
+        $validator = Validator::make([
+            'total_signatures' =>
+                $this->left_signatures->count()
+                + $this->center_signatures->count()
+                + $this->right_signatures->count()
+        ], [
+            'total_signatures' => 'required|numeric|min:1'
+        ]);
+
+        if($validator->fails())
+        {
+            session()->flash('danger', 'La solicitud debe tener al menos un firmante');
+            return;
+        }
 
         /**
          * Map the recipients
