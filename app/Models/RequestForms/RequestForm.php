@@ -526,6 +526,8 @@ class RequestForm extends Model implements Auditable
             if($program_search != ''){
                 $query->where(function($q) use($program_search){
                     $q->where('program', 'LIKE', '%'.$program_search.'%');
+                })->orWhereHas('associateProgram', function($query) use ($program_search){
+                    $query->where('alias_finance', 'LIKE', '%'.$program_search.'%');
                 });
             }
             if($purchase_order_search != ''){

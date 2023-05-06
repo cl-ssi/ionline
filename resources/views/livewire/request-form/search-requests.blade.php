@@ -365,7 +365,9 @@
                 <p class="font-weight-lighter">Total de Formularios: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
+                {{--
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="exportFormItems"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+                --}}
             </div>
         </div>
         
@@ -426,6 +428,7 @@
                     @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
                     @foreach($requestForm->purchasingProcess->details as $key => $detail)
                     <tr>
+                        {{-- dd($detail)  --}}
                         <td class="text-right" nowrap>{{ $requestForm->id }}</td>
                         <td class="text-center" nowrap>{{ $requestForm->getStatus() }}</td>
                         <td class="text-right" nowrap>{{ $requestForm->folio }}</td>

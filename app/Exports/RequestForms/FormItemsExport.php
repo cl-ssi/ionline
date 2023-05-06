@@ -2,28 +2,31 @@
 
 namespace App\Exports\RequestForms;
 
-//use App\Models\RequestForms\RequestForm;
-use App\Models\RequestForms\ItemRequestForm;
+// use App\Models\RequestForms\RequestForm;
+// use App\Models\RequestForms\ItemRequestForm;
 
-use Illuminate\Database\Eloquent\Collection;
+// use Illuminate\Database\Eloquent\Collection;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\Exportable;
+// use Maatwebsite\Excel\Concerns\FromCollection;
+// use Maatwebsite\Excel\Concerns\Exportable;
 
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
+// use Maatwebsite\Excel\Concerns\WithHeadings;
+// use Maatwebsite\Excel\Concerns\WithMapping;
+// use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+// use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+// use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+// use PhpOffice\PhpSpreadsheet\Shared\Date;
+
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
 use Illuminate\Http\Request;
 use Livewire\Component;
 
-class FormItemsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithColumnFormatting
+class FormItemsExport implements FromView /*FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithColumnFormatting*/
 {
-    use Exportable;
-    
+    //use Exportable;
+
     public function __construct($resultSearch)
     {
         $this->resultSearch = $resultSearch;
@@ -32,6 +35,15 @@ class FormItemsExport implements FromCollection, WithHeadings, WithMapping, Shou
     /**
     * @return \Illuminate\Support\Collection
     */
+
+    public function view(): View
+    {
+        return view('request_form.reports.items', [
+            'request_forms' => $this->resultSearch
+        ]);
+    }
+
+    /*
     public function collection()
     {
         return $this->resultSearch;
@@ -148,4 +160,5 @@ class FormItemsExport implements FromCollection, WithHeadings, WithMapping, Shou
             'Z' => NumberFormat::FORMAT_NUMBER
         ];
     }
+    */
 }

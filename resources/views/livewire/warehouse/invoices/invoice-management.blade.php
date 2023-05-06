@@ -144,19 +144,31 @@
                         </td>
                         <td>
                             @forelse($control->invoices as $invoice)
-                            <a
-                                href="{{ $invoice->link }}"
-                                class="btn btn-sm mb-1 @if($control->completed_invoices) btn-success @else btn-danger @endif"
-                                target="_blank"
-                                title="Ver Factura {{ $invoice->number }}"
-                            >
-                                <i class="fas fa-file-pdf"></i> {{ $invoice->number }}
-                            </a>
-                            <br>
+                            <li>
+                                <a
+                                    href="{{ $invoice->link }}"
+                                    class="btn btn-sm mb-1 @if($control->completed_invoices) btn-success @else btn-danger @endif"
+                                    target="_blank"
+                                    title="Ver Factura {{ $invoice->number }}"
+                                >
+                                    <i class="fas fa-file-pdf"></i> {{ $invoice->number }}
+                                </a>
+                            </li>
                             @empty
-                                <small>
-                                    <b>Sin facturas</b>
-                                </small>
+                            @endforelse
+                            
+                            
+                            @forelse($control->dtes as $dte)
+                            <li>
+                                <a 
+                                    href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
+                                    target="_blank" 
+                                    class="btn btn-sm mb-1 btn-info"
+                                > 
+                                    <i class="fas fa-file-pdf"></i> {{ $dte->folio }}
+                                </a>
+                            </li>
+                            @empty
                             @endforelse
                         </td>
                         <td class="text-center">

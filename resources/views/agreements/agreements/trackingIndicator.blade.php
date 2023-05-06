@@ -36,6 +36,12 @@
 	</div>
 </form>
 </h3>
+<form method="GET" action="{{ route('agreements.tracking.index') }}">
+<input type="hidden" name="program" value="{{request()->program}}">
+<input type="hidden" name="commune" value="{{request()->commune}}">
+<input type="hidden" name="period" value="{{request()->period}}">
+<button type="submit" name="export" class="btn btn-success mb-1 btn-sm">Exportar Excel</button>
+</form>
 
 <table class="table table-striped  btn-table table-sm table-bordered table-condensed fixed_headers table-hover "><!-- table-responsive -->
     <thead>
