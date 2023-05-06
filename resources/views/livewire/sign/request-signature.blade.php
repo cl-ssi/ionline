@@ -7,6 +7,8 @@
         Solicitud
     </h5>
 
+    @include('layouts.partials.flash_message')
+
     <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="document-number">Fecha Documento*</label>
