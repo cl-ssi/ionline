@@ -89,7 +89,7 @@ class SignatureFlow extends Model
                 $statusColor = 'dark';
                 break;
         }
-        
+
         return $statusColor;
     }
 
