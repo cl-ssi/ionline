@@ -106,26 +106,6 @@ class Signature extends Model
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
     }
 
-    public function isEnumerate()
-    {
-        return $this->number != null;
-    }
-
-    public function isPending()
-    {
-        return $this->status == 'pending';
-    }
-
-    public function isCompleted()
-    {
-        return $this->status == 'completed';
-    }
-
-    public function isRejected()
-    {
-        return $this->status == 'rejected';
-    }
-
     public function getStatusTranslateAttribute()
     {
         switch ($this->status) {
@@ -197,62 +177,62 @@ class Signature extends Model
         return $leftSignatures->merge($centerSignatures)->merge($rightSignatures);
     }
 
-    public function getNextFlowAttribute()
-    {
-        $next = $this->signatures->search(function ($firm) {
-            return $firm->status == 'pending';
-        });
-
-        return $this->signatures[$next];
-    }
-
-    public function getNextSignerAttribute()
-    {
-        $next = $this->signatures->search(function ($firm) {
-            return $firm->status == 'pending';
-        });
-
-        if($this->nextFlow->status == 'pending')
-            return $this->signatures[$next]->signer;
-        else
-            return null;
-    }
-
     public function getCanSignAttribute()
     {
-        if($this->nextFlow->column_position == 'left')
+        /**
+         * TODO: ¿Que pasa con el subrrogante?
+         */
+
+        $columnPosition = $this->flows->firstWhere('signer_id', auth()->id())->column_position;
+
+        if($columnPosition == 'left')
         {
             $type = $this->column_left_endorse;
+            $signers = $this->leftSignatures;
         }
-        elseif($this->nextFlow->column_position == 'center')
+        elseif($columnPosition == 'center')
         {
             $type = $this->column_center_endorse;
+            $signers = $this->centerSignatures();
+
         }
-        elseif($this->nextFlow->column_position == 'right')
+        elseif($columnPosition == 'right')
         {
             $type = $this->column_right_endorse;
+            $signers = $this->rightSignatures;
         }
 
-        if($type == 'Opcional')
+        $statusByColum = $this->getStatusColumn($columnPosition);
+
+        if($type == 'Opcional' OR $type == 'Obligatorio sin Cadena de Responsabilidad')
         {
-            $canSign = true;
-        }
-        elseif($type == 'Obligatorio sin Cadena de Responsabilidad')
-        {
-            $canSign = true;
+            $canSign = $statusByColum;
         }
         elseif($type == 'Obligatorio en Cadena de Responsabilidad')
         {
-            /**
-             * TODO: ¿Que pasa con el subrrogante?
-             */
-            $canSign = $this->nextSigner ? $this->nextSigner->id == auth()->id() : false;
+            $signer = $signers->firstWhere('signer_id', auth()->id());
+
+            if(!isset($signer))
+                $canSign = false;
+
+            if($signer->row_position == 0 && $signer->status == 'pending')
+                $canSign = true;
+            else {
+                $signerPrevious = $signers->firstWhere('row_position', $signer->row_position - 1);
+
+                if(isset($signerPrevious) && $signerPrevious->status == 'signed' && $signer->status == 'pending') {
+                    $canSign = true;
+                } else {
+                    $canSign = false;
+                }
+            }
+
         }
 
         return $canSign;
     }
 
-    public function getisSignedForMeAttribute()
+    public function getIsSignedForMeAttribute()
     {
         $signedForMe = $this->flows->firstWhere('signer_id', auth()->id());
 
@@ -282,24 +262,142 @@ class Signature extends Model
         return $link;
     }
 
-    public static function getFolder()
+    public function getTypesAttribute()
     {
-        return 'ionline/sign/original';
+        $types = collect();
+        $types->push($this->column_left_endorse);
+        $types->push($this->column_center_endorse);
+        $types->push($this->column_right_endorse);
+
+        return $types;
     }
 
-    public static function getFolderSigned()
+    public function getCountColumnAvailableAttribute()
     {
-        return 'ionline/sign/signed';
+        return $this->leftSignatures->count() + $this->centerSignatures->count() + $this->rightSignatures->count();
     }
 
-    public static function getFolderEnumerate()
+    public function getColumnAvailableAttribute()
     {
-        return 'ionline/sign/enumerate';
+        $available = collect();
+
+        if($this->leftSignatures->count() > 0)
+        {
+            $available->push('left');
+        }
+
+        if($this->centerSignatures->count() > 0)
+        {
+            $available->push('center');
+        }
+
+        if($this->rightSignatures->count() > 0)
+        {
+            $available->push('right');
+        }
+
+        return $available;
     }
 
-    public static function getVerificationCode(Signature $signature)
+    public function getColumnLeftSignatureStatusAttribute()
     {
-        return $signature->id . "-" . Str::random(6);
+        return $this->getStatusColumn('left');
+    }
+
+    public function getColumnCenterSignatureStatusAttribute()
+    {
+        return $this->getStatusColumn('center');
+    }
+
+    public function getColumnRightSignatureStatusAttribute()
+    {
+        return $this->getStatusColumn('right');
+    }
+
+    public function getStatusColumn($columParameter)
+    {
+        $position = $this->columnAvailable->search(function ($column) use ($columParameter) {
+            return $column == $columParameter;
+        });
+
+        if($position == 0)
+        {
+            $available = true;
+        }
+        else
+        {
+            $columnAvailable = $this->columnAvailable->toArray();
+
+            switch ($columnAvailable[$position - 1]) {
+                case 'left':
+                    $available = $this->leftAllSigned;
+                    break;
+
+                case 'center':
+                    $available = $this->centerAllSigned;
+                    break;
+
+                case 'right':
+                    $available = $this->rightAllSigned;
+                    break;
+
+                default:
+                    $available = false;
+                    break;
+            }
+        }
+
+        return $available;
+    }
+
+    public function getLeftAllSignedAttribute()
+    {
+        if($this->column_left_endorse == 'Opcional')
+        {
+            return true;
+        }
+
+        return $this->leftSignatures->every('status', '==', 'signed');
+    }
+
+    public function getCenterAllSignedAttribute()
+    {
+        if($this->column_center_endorse == 'Opcional')
+        {
+            return true;
+        }
+
+        return $this->centerSignatures->every('status', '==', 'signed');
+    }
+
+    public function getRightAllSignedAttribute()
+    {
+        if($this->column_right_endorse == 'Opcional')
+        {
+            return true;
+        }
+
+        return $this->rightSignatures->every('status', '==', 'signed');
+    }
+
+    public function isEnumerate()
+    {
+        return $this->number != null;
+    }
+
+    public function isPending()
+    {
+        return $this->status == 'pending';
+    }
+
+    public function isCompleted()
+    {
+        return $this->status == 'completed';
+    }
+
+    public function isRejected()
+    {
+        return $this->status == 'rejected';
     }
 
     public static function modoDesatendidoTest()
@@ -320,6 +418,26 @@ class Signature extends Model
     public static function modoDesatenidodProduccion()
     {
         return 3;
+    }
+
+    public static function getFolder()
+    {
+        return 'ionline/sign/original';
+    }
+
+    public static function getFolderSigned()
+    {
+        return 'ionline/sign/signed';
+    }
+
+    public static function getFolderEnumerate()
+    {
+        return 'ionline/sign/enumerate';
+    }
+
+    public static function getVerificationCode(Signature $signature)
+    {
+        return $signature->id . "-" . Str::random(6);
     }
 
     public function getUrl($modo)
