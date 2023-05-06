@@ -20,6 +20,11 @@ class Stage extends Model
         return $this->belongsTo('App\Models\Agreements\Agreement');
     }
 
+    public function getDateEndTextAttribute()
+    {
+        return $this->dateEnd ? 'Aceptado el '.$this->dateEnd->format('d-m-Y') : ($this->date ? 'Enviado el '.$this->date->format('d-m-Y') : 'En espera');
+    }
+
     use SoftDeletes;
 
     /**
