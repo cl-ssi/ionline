@@ -3,10 +3,68 @@
     <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Firmar Solicitud #{{ $signature->id }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="row">
+                    <div class="col-8">
+                        <h5
+                            class="modal-title"
+                            id="exampleModalCenterTitle"
+                        >
+                            Firmar Solicitud #{{ $signature->id }}
+                        </h5>
+                    </div>
+
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-9">
+                            <div class="text-right">
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        placeholder="Ingrese el OTP"
+                                        aria-label="Recipient's username"
+                                        aria-describedby="button-addon2"
+                                        wire:model.defer="otp"
+                                    >
+                                    <div class="input-group-append">
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            wire:click="signDocument({{ $signature }})"
+                                            wire:loading.attr="disabled"
+                                            wire:target='signDocument'
+                                        >
+                                            <span
+                                                wire:loading.remove
+                                                wire:target="signDocument"
+                                            >
+                                            <i class="fas fa-signature"></i>
+                                            </span>
+
+                                            <span
+                                                class="spinner-border spinner-border-sm"
+                                                role="status"
+                                                wire:loading
+                                                wire:target="signDocument"
+                                                aria-hidden="true"
+                                            >
+                                            </span>
+
+                                            Firmar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3 text-right">
+                            <button
+                                type="button"
+                                class="close text-right" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-body text-center">
                 <object
@@ -14,52 +72,6 @@
                     data="{{ $signature->link }}"
                     width="100%" height="400" style="height: 70vh;">
                 </object>
-            </div>
-
-            <div class="modal-footer">
-                <div class="form-row">
-                    <div class="col-8">
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Ingrese el OTP"
-                            aria-label="Recipient's username"
-                            aria-describedby="button-addon2"
-                            wire:model.defer="otp"
-                        >
-                    </div>
-                    <div class="col-4">
-
-                        <button
-                            class="btn btn-primary"
-                            type="button"
-                            id="button-addon2"
-                            wire:click="signDocument({{ $signature }})"
-                            wire:loading.attr="disabled"
-                            wire:target='signDocument'
-                        >
-                            <span
-                                wire:loading.remove
-                                wire:target="signDocument"
-                            >
-                            <i class="fas fa-signature"></i>
-                            </span>
-
-                            <span
-                                class="spinner-border spinner-border-sm"
-                                role="status"
-                                wire:loading
-                                wire:target="signDocument"
-                                aria-hidden="true"
-                            >
-                            </span>
-
-                            Firmar
-                        </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
