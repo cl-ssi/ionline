@@ -32,10 +32,10 @@ class StoreSignatureRequest extends FormRequest
             'document_to_sign'      => 'required|mimes:pdf|max:10240',
             'distribution'          => 'required',
             'recipients'            => 'required',
-            'column_left_endorse'   => 'required',
+            'column_left_endorse'   => 'nullable',
             'column_center_endorse' => 'nullable',
             'column_right_endorse'  => 'nullable',
-            'left_signatures'       => 'required|array|min:1|max:5',
+            'left_signatures'       => 'nullable|array|max:5',
             'center_signatures'     => 'nullable|array|max:5',
             'right_signatures'      => 'nullable|array|max:5',
         ];
