@@ -1,14 +1,22 @@
-<form wire:submit.prevent="save">
+<div>
     <h3>Estimado/a 
-
+        {{-- 
+        @if($dte->requestForm)
+            {{ $dte->requestForm->contractManager->shortName }}
+        @endif 
+        --}}
     </h3>
 
     <p>
         El siguiente DTE (documento tributario electrónico) fué recepcionado en portal DIPRES Acepta.<br>
-
+        {{-- 
+        @if($dte->requestForm)
+            Está asociado al formulario de requerimiento Fólio Nº: <strong>{{ $dte->requestForm->folio }}</strong> de 
+            <strong>{{ $dte->requestForm->contractOrganizationalUnit->name }}</strong>. <br>
+        @endif 
+        --}}
         Solicito favor señalar aceptación o reclamo del documento:
     </p>
-
 
     <table class="table table-sm table-bordered">
         <thead>
@@ -88,4 +96,4 @@
     <b>
         Atentamente Tu Papá Abastecimiento.
     </b>
-</form>
+</div>
