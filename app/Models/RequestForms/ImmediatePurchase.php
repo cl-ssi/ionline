@@ -2,12 +2,13 @@
 
 namespace App\Models\RequestForms;
 
-use App\Models\Parameters\PurchaseType;
-use App\Models\Parameters\Supplier;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Parameters\Supplier;
+use App\Models\Parameters\PurchaseType;
+use App\Models\Finance\Dte;
 
 class ImmediatePurchase extends Model implements Auditable
 {
@@ -48,5 +49,25 @@ class ImmediatePurchase extends Model implements Auditable
     public function attachedFiles()
     {
         return $this->hasMany(AttachedFile::class);
+    }
+
+    public function purchasingProcessDetail()
+    {
+        return $this->hasOne(PurchasingProcessDetail::class);
+    }
+
+    /** Relación con el formulario de requerimiento
+     * Sin embargo no puedo hacer busquedas de FRs utilizando esta relación
+     * ejemplo: ImmediatePurchase::whereRelation('requestForm','id',2208)->get()
+     */
+    public function requestForm()
+    {
+        return $this->purchasingProcessDetail->itemRequestForm->requestForm();
+    }
+
+    /** Documentos Tributarios */
+    public function dtes()
+    {
+        return $this->hasMany(Dte::class,'folio_oc','po_id');
     }
 }
