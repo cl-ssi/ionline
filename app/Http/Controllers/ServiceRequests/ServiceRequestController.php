@@ -176,9 +176,11 @@ class ServiceRequestController extends Controller
     $rejecedCount = 0;
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-        $subQuery->whereNull('status');
-        $subQuery->where('responsable_id', $user_id);
-        $subQuery->orwhere('user_id', $user_id);
+        $subQuery->whereNull('status')
+                ->where( function($query) use($user_id){
+                    $query->where('responsable_id', $user_id)
+                            ->orwhere('user_id', $user_id);
+                });
     })
     ->wheredoesnthave("SignatureFlows", function($subQuery) {
         $subQuery->where('status',0);
@@ -189,8 +191,6 @@ class ServiceRequestController extends Controller
     // })
     ->with('SignatureFlows')
     ->get();
-
-    // dd($serviceRequests);
 
     foreach ($serviceRequests as $key => $serviceRequest) {
         if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0) {
@@ -217,8 +217,11 @@ class ServiceRequestController extends Controller
     }
 
     $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-        $subQuery->where('responsable_id',$user_id)
-                ->whereNull('status');
+        $subQuery->whereNull('status')
+                ->where( function($query) use($user_id){
+                    $query->where('responsable_id', $user_id)
+                            ->orwhere('user_id', $user_id);
+                });
     })
     ->wheredoesnthave("SignatureFlows", function($subQuery) {
         $subQuery->where('status',0);
@@ -247,14 +250,20 @@ class ServiceRequestController extends Controller
     }
 
     $rejecedCount = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                                                $subQuery->where('responsable_id', $user_id);
+                                                $subQuery->where( function($query) use($user_id){
+                                                            $query->where('responsable_id', $user_id)
+                                                                    ->orwhere('user_id', $user_id);
+                                                        });
                                             })
                                             ->whereHas("SignatureFlows", function ($subQuery) {
                                                 $subQuery->where('status',0);
                                             })->count();
     if($type == "rejected"){
         $data = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                                    $subQuery->where('responsable_id', $user_id);
+                                    $subQuery->where( function($query) use($user_id){
+                                                $query->where('responsable_id', $user_id)
+                                                        ->orwhere('user_id', $user_id);
+                                            });
                                 })
                                 ->whereHas("SignatureFlows", function ($subQuery) {
                                     $subQuery->where('status',0);
@@ -262,14 +271,20 @@ class ServiceRequestController extends Controller
     }
 
     $signedCount = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                                                $subQuery->where('responsable_id', $user_id)
-                                                        ->where('status',1);
+                                                $subQuery->where('status',1)
+                                                    ->where( function($query) use($user_id){
+                                                        $query->where('responsable_id', $user_id)
+                                                                ->orwhere('user_id', $user_id);
+                                                    });
                                             })->count();
 
     if($type == "signed"){
         $data = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) use ($user_id) {
-                                        $subQuery->where('responsable_id', $user_id)
-                                                ->where('status',1);
+                                        $subQuery->where('status',1)
+                                                ->where( function($query) use($user_id){
+                                                    $query->where('responsable_id', $user_id)
+                                                            ->orwhere('user_id', $user_id);
+                                                });
                                 })->paginate(100);
     }
 
