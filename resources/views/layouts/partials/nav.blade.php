@@ -679,6 +679,10 @@
                             <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                         </a>
 
+                        <a class="dropdown-item" href="{{ route('rrhh.attendance.no-record') }}">
+                            <i class="fas fa-fw fa-clock"></i> {{ __('Registrar inasistencia') }}
+                        </a>
+
                         @role('god')
                         <div class="dropdown-divider"></div>
 
