@@ -14,6 +14,7 @@ use App\Models\Warehouse\StoreUser;
 use App\Models\Warehouse\Store;
 use App\Models\Suitability\Result;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Profile\Subrogation;
 use App\Models\Parameters\AccessLog;
@@ -305,6 +306,12 @@ class User extends Authenticatable implements Auditable
     public function lobbyMeetings()
     {
         return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
+    }
+
+
+    public function noAttendanceRecords()
+    {
+        return $this->hasMany(NoAttendanceRecord::class);
     }
     
 
