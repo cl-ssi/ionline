@@ -44,7 +44,9 @@ use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
+
 use App\Http\Livewire\Finance\DteConfirmation;
+
 
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
@@ -187,12 +189,14 @@ use App\Http\Controllers\Parameters\LogController;
 use App\Http\Controllers\Parameters\LocationController;
 use App\Http\Controllers\Parameters\InventoryLabelController;
 use App\Http\Controllers\Parameters\EstablishmentTypeController;
-
 use App\Http\Controllers\Parameters\EstablishmentController;
 use App\Http\Controllers\Parameters\CommuneController;
 use App\Http\Controllers\Parameters\BudgetItemController;
+
 use App\Http\Controllers\MunicipalityController;
+
 use App\Http\Controllers\Mammography\MammographyController;
+
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
@@ -200,7 +204,6 @@ use App\Http\Controllers\Indicators\SingleParameterController;
 
 use App\Http\Controllers\Indicators\ProgramApsController;
 use App\Http\Controllers\Indicators\IaapsController;
-
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;

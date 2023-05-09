@@ -9,7 +9,7 @@
         </li>
     </ul>
 
-    
+
     <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
 
     <div class="row mb-3">
@@ -20,8 +20,21 @@
             <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i class="fas fa-search"></i> Buscar</button>
+            <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i
+                    class="fas fa-search"></i> Buscar</button>
         </div>
+        <div class="col-md-4">
+            <button class="btn btn-outline-primary" type="button" wire:click="loadManualDTE">Cargar Manualmente
+                DTE</button>
+        </div>
+
+        @if ($showManualDTE)
+            <div>
+                @livewire('finance.manual-dtes')
+                
+            </div>
+        @endif
+
     </div>
 
     <table class="table table-sm table-bordered">
@@ -38,6 +51,7 @@
         </thead>
         <tbody>
             @foreach ($dtes as $dte)
+
             <tr>
                 <td>{{ $dte->tipo_documento }}</td>
                 <td>
@@ -84,7 +98,7 @@
             @endforeach
         </tbody>
     </table>
-    
- 
+
+
     {{ $dtes->links() }}
 </div>

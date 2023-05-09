@@ -14,9 +14,17 @@ class IndexDtes extends Component
 
     public $filter;
 
+    
+    public $showManualDTE = false;
+
+
+
+
+
+
     /**
-    * query
-    */
+     * query
+     */
     public function query()
     {
         return Dte::search($this->filter)
@@ -37,4 +45,16 @@ class IndexDtes extends Component
             'dtes' => $this->query()
         ]);
     }
+
+    public function loadManualDTE()
+    {
+        $this->showManualDTE = true;
+    }
+
+    public function dteAdded()
+    {
+        // Ocultar el formulario
+        $this->showManualDTE = false;
+    }
+    
 }
