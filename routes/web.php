@@ -44,6 +44,7 @@ use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
+use App\Http\Livewire\Finance\DteConfirmation;
 
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;

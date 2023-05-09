@@ -52,7 +52,7 @@
                 <td>{{ $dte->emisor }}</td>
                 <td>{{ $dte->folio_oc }}</td>
                 <td>
-                    @if($dte->requestForm AND $dte->immediatePurchase->purchasingProcessDetail)
+                @if($dte->requestForm AND $dte->immediatePurchase->purchasingProcessDetail)
                     <a
                         class="btn btn-primary btn-block"
                         href="{{ route('request_forms.show', $dte->requestForm->id) }}"
