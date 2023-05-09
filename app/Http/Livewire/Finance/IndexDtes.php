@@ -27,7 +27,16 @@ class IndexDtes extends Component
      */
     public function query()
     {
-        return Dte::search($this->filter)->paginate(100);
+        return Dte::search($this->filter)
+            ->with([
+                'immediatePurchase',
+                'immediatePurchase.purchasingProcessDetail',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+            ])
+            ->orderBy('emision')
+            ->paginate(50);
     }
 
     public function render()

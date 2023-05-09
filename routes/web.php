@@ -45,6 +45,9 @@ use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 
+use App\Http\Livewire\Finance\DteConfirmation;
+
+
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
@@ -53,6 +56,7 @@ use App\Http\Controllers\WebserviceController;
 use App\Http\Controllers\Warehouse\StoreController;
 use App\Http\Controllers\Warehouse\ProductController as WarehouseProductController;
 use App\Http\Controllers\Warehouse\OriginController;
+
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
@@ -60,6 +64,7 @@ use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryContro
 use App\Http\Controllers\VaccinationController;
 
 use App\Http\Controllers\Unspsc\SegmentController;
+
 use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ClassController;
@@ -189,7 +194,9 @@ use App\Http\Controllers\Parameters\CommuneController;
 use App\Http\Controllers\Parameters\BudgetItemController;
 
 use App\Http\Controllers\MunicipalityController;
+
 use App\Http\Controllers\Mammography\MammographyController;
+
 use App\Http\Controllers\JobPositionProfiles\MessageController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileSignController;
 use App\Http\Controllers\JobPositionProfiles\JobPositionProfileController;
@@ -202,7 +209,6 @@ use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
 
 use App\Http\Controllers\HomeController;
-
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 
 use App\Http\Controllers\Finance\PaymentController;
@@ -216,13 +222,13 @@ use App\Http\Controllers\Drugs\ActPrecursorController;
 use App\Http\Controllers\Documents\SignatureController;
 use App\Http\Controllers\Documents\ParteFileController;
 use App\Http\Controllers\Documents\ParteController;
-use App\Http\Controllers\Documents\DocumentController;
 
+use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\DigitalSignatureController;
+
 use App\Http\Controllers\ClaveUnicaController;
 
 use App\Http\Controllers\Auth\VerificationController;
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
@@ -1810,6 +1816,7 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('payments', [PaymentController::class,'index'])->name('payments.index');
     Route::get('dtes',IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
+    Route::get('dtes/{dte}/confirmation',DteConfirmation::class)->name('dtes.confirmation');
 });
 
 /*formulario de requerimiento compra o servicio */

@@ -2,12 +2,13 @@
 
 namespace App\Models\RequestForms;
 
-use App\Models\Parameters\PurchaseType;
-use App\Models\Parameters\Supplier;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RequestForms\PurchasingProcessDetail;
+use App\Models\Parameters\Supplier;
+use App\Models\Parameters\PurchaseType;
 
 class Tender extends Model implements Auditable
 {
@@ -30,6 +31,11 @@ class Tender extends Model implements Auditable
     public function purchaseType()
     {
         return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
+    }
+
+    public function purchasingProcessDetail()
+    {
+        return $this->hasOne(PurchasingProcessDetail::class);
     }
 
     public function attachedFiles()

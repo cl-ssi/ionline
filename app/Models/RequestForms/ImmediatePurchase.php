@@ -6,6 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RequestForms\DirectDeal;
 use App\Models\Parameters\Supplier;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Finance\Dte;
@@ -41,6 +42,11 @@ class ImmediatePurchase extends Model implements Auditable
         return $this->belongsTo(Tender::class);
     }
 
+    public function directDeal()
+    {
+        return $this->belongsTo(DirectDeal::class);
+    }
+
     public function purchaseType()
     {
         return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
@@ -56,13 +62,25 @@ class ImmediatePurchase extends Model implements Auditable
         return $this->hasOne(PurchasingProcessDetail::class);
     }
 
+
     /** Relación con el formulario de requerimiento
      * Sin embargo no puedo hacer busquedas de FRs utilizando esta relación
      * ejemplo: ImmediatePurchase::whereRelation('requestForm','id',2208)->get()
      */
     public function requestForm()
-    {
-        return $this->purchasingProcessDetail->itemRequestForm->requestForm();
+    {        
+        if($this->tender_id) {
+            return $this->tender->purchasingProcessDetail->purchasingProcess->requestForm();
+        }
+        elseif($this->direct_deal_id) {
+            return $this->directDeal->purchasingProcessDetail->purchasingProcess->requestForm();
+        }
+        else {
+            return $this->purchasingProcessDetail->purchasingProcess->requestForm();
+        }
+        //    tender->purchasingProcessDetail->purchasingProcess->requestForm()
+        //directDeal->purchasingProcessDetail->purchasingProcess->requestForm()
+        //return $this->purchasingProcessDetail->itemRequestForm->requestForm();
     }
 
     /** Documentos Tributarios */
