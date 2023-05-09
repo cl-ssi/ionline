@@ -68,7 +68,8 @@ class ImmediatePurchase extends Model implements Auditable
      * ejemplo: ImmediatePurchase::whereRelation('requestForm','id',2208)->get()
      */
     public function requestForm()
-    {        
+    {
+        
         if($this->tender_id) {
             return $this->tender->purchasingProcessDetail->purchasingProcess->requestForm();
         }
@@ -81,6 +82,11 @@ class ImmediatePurchase extends Model implements Auditable
         //    tender->purchasingProcessDetail->purchasingProcess->requestForm()
         //directDeal->purchasingProcessDetail->purchasingProcess->requestForm()
         //return $this->purchasingProcessDetail->itemRequestForm->requestForm();
+
+        // 1. Migracion y agregar request_form_id;
+        // 2. Comando que recorra todos los immediatepurchases y le setee el request_form_id
+        // 3. Dejar la relacion con bleongTo 
+        // 4. Boot created o updated, y guardar automaticamente el request_form_id cuando se cree un modelo ImmediatePurchase
     }
 
     /** Documentos Tributarios */
