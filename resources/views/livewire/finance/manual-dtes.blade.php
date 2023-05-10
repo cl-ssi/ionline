@@ -4,9 +4,10 @@
         <button type="button" class="close" wire:click="hideForm">&times;</button>
     </div>
 @endif
-
-
 <div>
+
+
+<h3 class="mb-3">Cargar DTE Manualmente</h3>
     <form wire:submit.prevent="saveDte">
         <div class="form-group">
             <label for="tipoDocumento">Tipo de documento</label>
@@ -52,6 +53,15 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+
+        <div class="form-group">
+            <label for="barCode">7 Últimos dígitos código de barra</label>
+            <input type="text" class="form-control" id="barCode" wire:model.defer="barCode" placeholder="6A86963" required maxlength="7">
+            @error('barCode')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
+    <hr>
 </div>

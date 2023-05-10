@@ -14,6 +14,7 @@ class ManualDtes extends Component
     public $razonSocial;
     public $montoTotal;
     public $folioOC;
+    public $barCode;
     public $showSuccessMessage = false;
 
     public function saveDte()
@@ -26,7 +27,14 @@ class ManualDtes extends Component
             'razonSocial' => 'required',
             'montoTotal' => 'required',
             'folioOC' => 'required',
+            'barCode' => 'required|size:7',
         ]);
+
+        // Generar el último campo de la URI
+        $user_id = $this->emisor; // Ejemplo: Reemplaza esto con la lógica para obtener el ID de usuario
+        $boleta_numero = str_pad($this->folio, 5, '0', STR_PAD_LEFT);
+        $codigo_barra = $this->barCode;
+        $uri_last_field = $user_id . $boleta_numero . $codigo_barra;
 
         // Guardar los campos en el modelo Dte
         Dte::create([
@@ -36,15 +44,14 @@ class ManualDtes extends Component
             'razon_social' => $this->razonSocial,
             'monto_total' => $this->montoTotal,
             'folio_oc' => $this->folioOC,
+            'uri' => 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field,
         ]);
 
         // Reiniciar los campos del formulario después de guardar
         $this->resetFields();
 
-         // Mostrar el mensaje de éxito
-         $this->showSuccessMessage = true;
-
-        
+        // Mostrar el mensaje de éxito
+        $this->showSuccessMessage = true;
     }
 
     public function hideForm()
@@ -61,6 +68,7 @@ class ManualDtes extends Component
         $this->razonSocial = '';
         $this->montoTotal = '';
         $this->folioOC = '';
+        $this->barCode = '';
     }
 
 
