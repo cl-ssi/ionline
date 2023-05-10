@@ -130,7 +130,7 @@
                         <td>
                             @if(is_null($authorityRecord->status))
                             <a class="btn btn-sm btn-outline-primary" 
-                                href="{{ route('rrhh.attendance.no-record.confirmation',$authorityRecord) }}"> 
+                                href="{{ route('rrhh.attendance.no-records.confirmation',$authorityRecord) }}"> 
                                 <i class="fas fa-eye"></i>
                             </a>
                             @endif
