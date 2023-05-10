@@ -122,6 +122,7 @@ class LogStatistics extends Component
         $group = DB::table('logs')
             ->select('module', DB::raw('count(*) as total'))
             ->groupBy('module')
+            ->orderByDesc('total')
             ->get();
 
         return view('livewire.parameters.log-statistics', [
