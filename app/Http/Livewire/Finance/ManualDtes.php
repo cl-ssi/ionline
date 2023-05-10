@@ -73,6 +73,31 @@ class ManualDtes extends Component
         $this->barCode = '';
     }
 
+    public function verBoleta()
+    {
+        // Validar el campo de código de barra antes de redirigir a la URL
+        $this->validate([
+            'tipoDocumento' => 'required',
+            'folio' => 'required|numeric',
+            'emisor' => 'required',
+            'razonSocial' => 'required',
+            'montoTotal' => 'required|numeric',
+            'folioOC' => 'required',
+            'barCode' => 'required|size:7',
+        ]);
+
+        // Generar la URL de la boleta utilizando el código de barra
+        $runFilter = preg_replace('/[^0-9K]/', '', $this->emisor);
+        $user_id = substr($runFilter, 0, -1);
+        $boleta_numero = str_pad($this->folio, 5, '0', STR_PAD_LEFT);
+        $codigo_barra = $this->barCode;
+        $uri_last_field = $user_id . $boleta_numero . $codigo_barra;
+        $boleta_url = 'https://loa.sii.cl/cgi_IMT/TMBCOT_ConsultaBoletaPdf.cgi?origen=TERCEROS&txt_codigobarras=' . $uri_last_field;
+
+        // Redirigir a la URL de la boleta
+        return redirect()->to($boleta_url);
+    }
+
 
 
     public function render()
