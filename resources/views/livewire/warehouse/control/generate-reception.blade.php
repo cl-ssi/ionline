@@ -1,12 +1,6 @@
 <div>
     @include('layouts.partials.flash_message')
 
-    @if(! $store->visator)
-        <div class="alert alert-danger" role="alert">
-            La bodega no posee visador. Recuerde añadir uno.
-        </div>
-    @endif
-
     <div class="mt-2">
         <h5>Nuevo Ingreso: {{ $store->name }}</h5>
     </div>
@@ -262,7 +256,7 @@
                     id="visator-id"
                     type="text"
                     class="form-control form-control-sm"
-                    value="{{ $store->visator->full_name ?? 'La bodega no posee visador'  }}"
+                    value="{{ auth()->user()->full_name ?? 'La bodega no posee visador' }}"
                     readonly
                 >
         </fieldset>
@@ -546,7 +540,7 @@
                 wire:click="finish"
                 wire:loading.attr="disabled"
                 wire:target="finish"
-                @if($po_code == null || !$store->visator || !$request_form)
+                @if($po_code == null || !$request_form)
                     disabled
                 @endif
             >
