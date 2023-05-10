@@ -211,6 +211,12 @@ class UserController extends Controller
     {
         /* Primero Limpiamos todos los roles */
         $user->roles()->detach();
+        /* Segundo limpiamos permisos y contraseña */
+        $user->syncPermissions([]);
+        $user->givePermissionTo('Users: must change password');
+        $user->givePermissionTo('Nuevo iOnline');
+        $user->password = null;
+        $user->save();
 
         $user->delete();
 
