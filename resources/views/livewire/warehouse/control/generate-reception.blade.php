@@ -1,12 +1,6 @@
 <div>
     @include('layouts.partials.flash_message')
 
-    @if(! $store->visator)
-        <div class="alert alert-danger" role="alert">
-            La bodega no posee visador. Recuerde añadir uno.
-        </div>
-    @endif
-
     <div class="mt-2">
         <h5>Nuevo Ingreso: {{ $store->name }}</h5>
     </div>

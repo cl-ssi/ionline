@@ -5,12 +5,6 @@
         </div>
     </div>
 
-    @if($store->visator == null)
-    <div class="alert alert-warning" role="alert">
-        Recuerde añadir un visador a la bodega
-    </div>
-    @endif
-
     <div class="row">
         <div class="col">
             <div class="card">
