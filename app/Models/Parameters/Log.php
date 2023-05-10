@@ -18,6 +18,7 @@ class Log extends Model
     protected $fillable = [
         'user_id',
         'message',
+        'module',
         'uri',
         'formatted',
         'context',
@@ -29,6 +30,7 @@ class Log extends Model
         'user_agent',
         'record_datetime',
         'created_at',
+        'updated_at'
     ];
 
     public function user()

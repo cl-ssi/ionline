@@ -13,9 +13,19 @@ class LogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($module = null)
     {
-        $logs = Log::orderByDesc('id')->paginate(100);
+        if($module) {
+            if($module == 'unknown') {
+                $logs = Log::whereNull('module')->orderByDesc('id')->paginate(100);
+            }
+            else {
+                $logs = Log::whereModule($module)->orderByDesc('id')->paginate(100);
+            }
+        }
+        else {
+            $logs = Log::orderByDesc('id')->paginate(100);
+        }
 
         return view('parameters.logs.index', compact('logs'));
     }
