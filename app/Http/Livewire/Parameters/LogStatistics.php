@@ -69,16 +69,24 @@ class LogStatistics extends Component
                 $log->module = 'Viáticos';
                 $log->save();
             }
+            elseif (preg_match('~^/\d+/firma$~', $log->uri)) {
+                $log->module = 'Firmas';
+                $log->save();
+            }
+            elseif (preg_match('/\/documents\/showPdf/', $log->uri)) {
+                $log->module = 'Firmas';
+                $log->save();
+            }
+            elseif (preg_match('/\/documents\/signed-document-pdf/', $log->uri)) {
+                $log->module = 'Firmas';
+                $log->save();
+            }
             elseif (preg_match('/\/documents\/\d*$/', $log->uri)) {
                 $log->module = 'Documentos';
                 $log->save();
             }
             elseif (preg_match('~^/documents~', $log->uri)) {
                 $log->module = 'Documentos';
-                $log->save();
-            }
-            elseif (preg_match('~^/\d+/firma$~', $log->uri)) {
-                $log->module = 'Firmas';
                 $log->save();
             }
             elseif (preg_match('~^/firma~', $log->uri)) {
