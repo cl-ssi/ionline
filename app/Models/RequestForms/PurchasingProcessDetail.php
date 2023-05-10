@@ -66,6 +66,16 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        //while creating/inserting item into db  
+        static::creating(function ($purchasingProcessDetail) {
+            $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+            $purchasingProcessDetail->immediatePurchase->save();
+        });
+    }
+
     public function getPurchasingTypeName(){
         if($this->internalPurchaseOrder) return 'OC interna';
         elseif($this->pettyCash) return 'Fondo menor';

@@ -11,6 +11,7 @@ use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\ItemChangedRequestForm;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
@@ -164,6 +165,11 @@ class RequestForm extends Model implements Auditable
     public function associateProgram()
     {
         return $this->belongsTo(Program::class, 'program_id');
+    }
+
+    public function immediatePurchases()
+    {
+        return $this->hasMany(ImmediatePurchase::class);
     }
 
     public function getTotalEstimatedExpense()

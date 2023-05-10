@@ -10,6 +10,7 @@ use App\Models\RequestForms\DirectDeal;
 use App\Models\Parameters\Supplier;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Finance\Dte;
+use App\Models\RequestForms\RequestForm;
 
 class ImmediatePurchase extends Model implements Auditable
 {
@@ -70,18 +71,17 @@ class ImmediatePurchase extends Model implements Auditable
     public function requestForm()
     {
         
-        if($this->tender_id) {
-            return $this->tender->purchasingProcessDetail->purchasingProcess->requestForm();
-        }
-        elseif($this->direct_deal_id) {
-            return $this->directDeal->purchasingProcessDetail->purchasingProcess->requestForm();
-        }
-        else {
-            return $this->purchasingProcessDetail->purchasingProcess->requestForm();
-        }
-        //    tender->purchasingProcessDetail->purchasingProcess->requestForm()
-        //directDeal->purchasingProcessDetail->purchasingProcess->requestForm()
-        //return $this->purchasingProcessDetail->itemRequestForm->requestForm();
+        // if($this->tender_id) {
+        //     return $this->tender->purchasingProcessDetail->purchasingProcess->requestForm();
+        // }
+        // elseif($this->direct_deal_id) {
+        //     return $this->directDeal->purchasingProcessDetail->purchasingProcess->requestForm();
+        // }
+        // else {
+        //     return $this->purchasingProcessDetail->purchasingProcess->requestForm();
+        // }
+
+        return $this->belongsTo(RequestForm::class, 'request_form_id');
 
         // 1. Migracion y agregar request_form_id;
         // 2. Comando que recorra todos los immediatepurchases y le setee el request_form_id
@@ -94,4 +94,22 @@ class ImmediatePurchase extends Model implements Auditable
     {
         return $this->hasMany(Dte::class,'folio_oc','po_id');
     }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     //while creating/inserting item into db  
+    //     static::creating(function ($immediatePurchase) {
+    //         if($immediatePurchase->tender_id) {
+    //             $immediatePurchase->request_form_id = $immediatePurchase->tender->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //         }
+    //         elseif($immediatePurchase->direct_deal_id) {
+    //             $immediatePurchase->request_form_id = $immediatePurchase->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //         }
+    //         else {
+    //             $immediatePurchase->request_form_id = $immediatePurchase->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //         }
+    //         $immediatePurchase->save();
+    //     });
+    // }
 }
