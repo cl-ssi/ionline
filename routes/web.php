@@ -835,9 +835,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/',[AttendanceController::class,'index'])->name('index');
         Route::get('/import',[AttendanceController::class,'import'])->name('import');
         Route::post('/store',[AttendanceController::class,'store'])->name('store');
-        Route::get('no-record',NoAttendanceRecordMgr::class)->name('no-record');
-        Route::get('no-record/{noAttendanceRecord}/confirmation',NoAttendanceRecordConfirmation::class)->name('no-record.confirmation');
-        Route::get('no-record/manager',NoAttendanceRecordIndex::class)->name('no-record.index');
+        Route::get('no-records',NoAttendanceRecordIndex::class)->name('no-records.index');
+        Route::get('no-records-mgr',NoAttendanceRecordMgr::class)->name('no-records.mgr');
+        Route::get('no-records/{noAttendanceRecord}/confirmation',NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
     });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {

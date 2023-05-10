@@ -21,6 +21,8 @@ class NoAttendanceRecord extends Model
         'observation',
         'authority_observation',
         'authority_id',
+        'rrhh_user_id',
+        'rrhh_at',
     ];
 
     /**
@@ -35,9 +37,9 @@ class NoAttendanceRecord extends Model
     *
     * @var array
     */
-    // protected $dates = [
-    //     'date',
-    // ];
+    protected $dates = [
+        'rrhh_at',
+    ];
 
     protected $casts = [
         'date' => 'date:Y-m-d\TH:i:s'
@@ -52,5 +54,11 @@ class NoAttendanceRecord extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function rrhhUser()
+    {
+        return $this->belongsTo(User::class,'rrhh_user_id');
+    }
+    
 
 }
