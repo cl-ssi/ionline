@@ -31,7 +31,9 @@ class ManualDtes extends Component
         ]);
 
         // Generar el último campo de la URI
-        $user_id = $this->emisor; // Ejemplo: Reemplaza esto con la lógica para obtener el ID de usuario
+        $runFilter  = preg_replace('/[^0-9K]/', '', $this->emisor);
+        $user_id  = substr($runFilter, 0, -1);
+
         $boleta_numero = str_pad($this->folio, 5, '0', STR_PAD_LEFT);
         $codigo_barra = $this->barCode;
         $uri_last_field = $user_id . $boleta_numero . $codigo_barra;

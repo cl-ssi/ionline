@@ -23,19 +23,18 @@
             <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i
                     class="fas fa-search"></i> Buscar</button>
         </div>
-        <div class="col-md-4">
-            <button class="btn btn-outline-primary" type="button" wire:click="loadManualDTE">Cargar Manualmente
-                DTE</button>
-        </div>        
+        <div class="col-md-4 text-right">
+            <button class="btn btn-success" type="button" wire:click="loadManualDTE">
+                <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
+        </div>
 
     </div>
 
     @if ($showManualDTE)
-            <div>
-                @livewire('finance.manual-dtes')
-                
-            </div>
-        @endif
+        <div>
+            @livewire('finance.manual-dtes')
+        </div>
+    @endif
 
     <table class="table table-sm table-bordered">
         <thead>
