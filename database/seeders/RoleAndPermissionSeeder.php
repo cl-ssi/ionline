@@ -30,6 +30,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Users: assign permission', 'description' => 'Asignar permisos a usuarios']);
         Permission::create(['name' => 'Users: reset password option', 'description' => 'Muestra el boton para resetear password']);
         Permission::create(['name' => 'Users: send mail verification', 'description' => 'Muestra el boton para verificar email']);
+        Permission::create(['name' => 'Users: no attendance record manager', 'description' => 'Para quien registra la justificación cuando no se marca en el reloj control']);
 
         Permission::create(['name' => 'OrganizationalUnits: create', 'description' => 'Crear unidades organizacionales']);
         Permission::create(['name' => 'OrganizationalUnits: edit', 'description' => 'Editar unidades organizacionales']);

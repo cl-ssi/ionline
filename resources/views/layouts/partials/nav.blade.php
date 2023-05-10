@@ -333,9 +333,16 @@
                         </a>
                         @endcan
 
+                        @can('Users: no attendance record manager')
+                        <a class="dropdown-item {{ active('rrhh.attendance.no-records.index') }}" 
+                            href="{{ route('rrhh.attendance.no-records.index') }}">
+                            <i class="fas fa-clock fa-fw"></i> Justificaciones de asistencia
+                        </a>
+                        @endcan
+
                         @canany(['Rrhh: birthday'])
                         <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
-                            <i class="fas fa-birthday-cake"></i> Correo cumpleaños
+                            <i class="fas fa-fw fa-birthday-cake"></i> Correo cumpleaños
                         </a>
                         @endcan
 
@@ -679,8 +686,8 @@
                             <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                         </a>
 
-                        <a class="dropdown-item" href="{{ route('rrhh.attendance.no-record') }}">
-                            <i class="fas fa-fw fa-clock"></i> {{ __('Constancia registro asistencia') }}
+                        <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
+                            <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
                         @role('god')

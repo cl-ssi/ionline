@@ -108,7 +108,7 @@
             type="text"
             id="reception-visator"
             class="form-control form-control-sm"
-            value="{{ $store->visator->full_name ?? 'No posee Visador Ingreso Bodega' }}"
+            value="{{ auth()->user()->full_name ?? 'No posee Visador Ingreso Bodega' }}"
             readonly
         >
     </fieldset>

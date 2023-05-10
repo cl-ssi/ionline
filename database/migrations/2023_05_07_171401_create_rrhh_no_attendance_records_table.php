@@ -22,9 +22,10 @@ class CreateRrhhNoAttendanceRecordsTable extends Migration
             $table->string('authority_observation')->nullable();
             $table->datetime('authority_at')->nullable();
             $table->boolean('status')->nullable()->default(null);
-            $table->foreignId('rrhh_user')->nullable();
+            $table->foreignId('rrhh_user_id')->nullable()->constrained('users');
             $table->timestamp('rrhh_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

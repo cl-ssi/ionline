@@ -39,14 +39,16 @@
         <div class="form-row">
             <div class="form-group col-2">
                 <label for="folio">Número</label>
-                <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off" min="1">
+                <input type="number" class="form-control" id="folio" wire:model.defer="folio" autocomplete="off"
+                    min="1">
                 @error('folio')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group col-2">
                 <label for="montoTotal">Monto Total</label>
-                <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal" autocomplete="off" min="1000">
+                <input type="number" class="form-control" id="montoTotal" wire:model.defer="montoTotal"
+                    autocomplete="off" min="1000">
                 @error('montoTotal')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -62,12 +64,12 @@
             <div class="form-group col-4">
                 <label for="barCode">7 Últimos dígitos código de barra</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="barCode" wire:model.defer="barCode" placeholder="ej: 6A86963"
-                        required maxlength="7" autocomplete="off">
+                    <input type="text" class="form-control" id="barCode" wire:model.defer="barCode"
+                        placeholder="ej: 6A86963" required maxlength="7" autocomplete="off">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">
+                        <a class="btn btn-outline-secondary" href="#" wire:click.prevent="verBoleta" target="_blank">
                             <i class="fas fa-file-pdf" aria-hidden="true"></i> Ver boleta
-                        </button>
+                        </a>
                     </div>
                 </div>
                 @error('barCode')
@@ -84,4 +86,15 @@
         </div>
     </form>
     <hr>
+
+    <script>
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('mostrarUrlBoleta', function(boletaUrl) {
+                // Mostrar la URL de la boleta en un cuadro de diálogo
+                alert('URL de la boleta: ' + boletaUrl);
+            });
+        });
+    </script>
+
+
 </div>
