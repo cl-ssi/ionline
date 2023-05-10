@@ -14,12 +14,29 @@ class IndexDtes extends Component
 
     public $filter;
 
+    
+    public $showManualDTE = false;
+
+
+
+
+
+
     /**
-    * query
-    */
+     * query
+     */
     public function query()
     {
-        return Dte::search($this->filter)->paginate(100);
+        return Dte::search($this->filter)
+            ->with([
+                'immediatePurchase',
+                'immediatePurchase.purchasingProcessDetail',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+            ])
+            ->orderBy('emision')
+            ->paginate(50);
     }
 
     public function render()
@@ -28,4 +45,16 @@ class IndexDtes extends Component
             'dtes' => $this->query()
         ]);
     }
+
+    public function loadManualDTE()
+    {
+        $this->showManualDTE = true;
+    }
+
+    public function dteAdded()
+    {
+        // Ocultar el formulario
+        $this->showManualDTE = false;
+    }
+    
 }
