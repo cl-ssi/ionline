@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Warehouse\Stores;
 
 use App\Models\Warehouse\StoreUser;
 use App\User;
-use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
@@ -19,7 +18,6 @@ class ManageStoreUsers extends Component
     public $roles;
     public $user_id;
     public $role_id;
-    public $is_visator;
     public $search;
     public $search_user;
     public $selectedName;
@@ -28,7 +26,6 @@ class ManageStoreUsers extends Component
     public $rules = [
         'user_id' => 'required|exists:users,id',
         'role_id' => 'required|exists:roles,id',
-        'is_visator' => 'nullable|boolean'
     ];
 
     public function mount()
@@ -36,7 +33,6 @@ class ManageStoreUsers extends Component
         $this->totalStoreUser = $this->store->users->count();
         $this->users = collect([]);
         $this->roles = Role::whereIn('id', [18, 19])->get();
-        $this->is_visator = false;
     }
 
     public function render()
@@ -92,12 +88,10 @@ class ManageStoreUsers extends Component
     public function addUser()
     {
         $this->validate();
-        if($this->existVisator())
-            throw ValidationException::withMessages(['is_visator' => 'El visador ya existe para esta bodega.']);
+
 
         $this->store->users()->attach($this->user_id, [
             'role_id' => $this->role_id,
-            'is_visator' => $this->is_visator,
             'status' => false,
         ]);
 
@@ -113,22 +107,12 @@ class ManageStoreUsers extends Component
         $this->store->refresh();
     }
 
-    public function existVisator()
-    {
-        $visator = StoreUser::query()
-            ->whereStoreId($this->store->id)
-            ->whereIsVisator(true);
-
-        return ($visator->exists() && ($this->is_visator == true)) ? true : false;
-    }
-
     public function resetInput()
     {
         $this->selectedName = null;
         $this->search = null;
         $this->role_id = null;
         $this->user_id = null;
-        $this->is_visator = false;
     }
 
     public function clearSearch()
