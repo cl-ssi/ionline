@@ -22,10 +22,10 @@ class ManualDtes extends Component
         // Validar los campos antes de guardarlos
         $this->validate([
             'tipoDocumento' => 'required',
-            'folio' => 'required',
+            'folio' => 'required|numeric',
             'emisor' => 'required',
             'razonSocial' => 'required',
-            'montoTotal' => 'required',
+            'montoTotal' => 'required|numeric',
             'folioOC' => 'required',
             'barCode' => 'required|size:7',
         ]);
