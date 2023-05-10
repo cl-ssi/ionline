@@ -287,22 +287,16 @@ class GenerateReception extends Component
 
     public function getRequestFormId()
     {
-        $request_form_id = null;
-        $immediatePurchase = ImmediatePurchase::wherePoId($this->po_search)->first();
-        if($immediatePurchase)
+        $this->request_form = null;
+
+        if(isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm))
         {
-            $purchasingDetail = PurchasingProcessDetail::whereImmediatePurchaseId($immediatePurchase->id)->first();
-            if($purchasingDetail)
-            {
-                $purchasingProcess = PurchasingProcess::find($purchasingDetail->purchasing_process_id);
-                if($purchasingProcess)
-                {
-                    $request_form_id = $purchasingProcess->request_form_id;
-                    $this->request_form = $purchasingProcess->requestForm;
-                }
-            }
+            $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
+            $this->request_form = $requestForm;
+
         }
-        return $request_form_id;
+
+        return $requestForm->id ?? null;
     }
 
     public function getTechnicalSignatureId()
