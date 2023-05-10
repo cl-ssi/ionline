@@ -456,7 +456,7 @@ class GenerateReception extends Component
             'supplier_id' => $supplier->id,
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
-            'reception_visator_id' => $this->store->visator->id,
+            'reception_visator_id' => auth()->id(),
             'technical_signer_id' => $this->technical_signer_id,
             'completed_invoices' => false,
         ]);
