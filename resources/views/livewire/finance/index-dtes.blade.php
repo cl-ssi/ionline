@@ -23,19 +23,18 @@
             <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i
                     class="fas fa-search"></i> Buscar</button>
         </div>
-        <div class="col-md-4">
-            <button class="btn btn-outline-primary" type="button" wire:click="loadManualDTE">Cargar Manualmente
-                DTE</button>
+        <div class="col-md-4 text-right">
+            <button class="btn btn-success" type="button" wire:click="loadManualDTE">
+                <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
         </div>
 
-        @if ($showManualDTE)
-            <div>
-                @livewire('finance.manual-dtes')
-                
-            </div>
-        @endif
-
     </div>
+
+    @if ($showManualDTE)
+        <div>
+            @livewire('finance.manual-dtes')
+        </div>
+    @endif
 
     <table class="table table-sm table-bordered">
         <thead>
@@ -55,6 +54,7 @@
             <tr>
                 <td>{{ $dte->tipo_documento }}</td>
                 <td>
+                @if ($dte->tipo_documento !='boleta_honorarios')
                     <a 
                         href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
                         target="_blank" 
@@ -62,6 +62,15 @@
                     > 
                         <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                     </a>
+                    @else
+                    <a 
+                        href="{{ $dte->uri }}" 
+                        target="_blank" 
+                        class="btn btn-sm mb-1 btn-outline-secondary"
+                    > 
+                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+                    </a>
+                @endif
                 </td>
                 <td>{{ $dte->emisor }}</td>
                 <td>{{ $dte->folio_oc }}</td>

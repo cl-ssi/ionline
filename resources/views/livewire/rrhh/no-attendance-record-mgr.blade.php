@@ -10,12 +10,12 @@
         <form class="form-row mt-3">
             <div class="form-group col-md-3">
                 <label for="date">Fecha y hora</label>
-                <input type="datetime-local" class="form-control" wire:model="noAttendanceRecord.date">
+                <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date">
                 @error('noAttendanceRecord.date') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="form-group col-md-9">
                 <label for="formGroupExampleInput2">Fundamento del no registro</label>
-                <input type="text" class="form-control" wire:model="noAttendanceRecord.observation">
+                <input type="text" class="form-control" wire:model.defer="noAttendanceRecord.observation">
                 @error('noAttendanceRecord.observation') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
         </form>
@@ -31,7 +31,7 @@
     @else
         <div class="form-row">
                 <div class="col">
-                    <h3 class="mb-3">Listado de constancias de no registro de asistencia</h3>
+                    <h3 class="mb-3">Constancias de ausencia de registro de asistencia</h3>
                 </div>
                 <div class="col-3 text-end">
                     @if($checkAuthority)
@@ -59,7 +59,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($records as $record)
+                    @foreach($myRecords as $record)
                         <tr>
                             <td>
                             @if(is_null($record->status))
@@ -94,6 +94,52 @@
                 </tbody>
             </table>
 
-        {{ $records->links() }}
+        {{ $myRecords->links() }}
+
+
+        <h4>Mis aprobaciones como jefatura</h4>
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>Funcionario</th>
+                    <th>Fecha registro</th>
+                    <th>Fundamento</th>
+                    <th>Estado</th>
+                    <th>Observación</th>
+                    <th>Fecha revisión</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($authorityRecrods as $authorityRecord)
+                    <tr>
+                        <td>{{ $authorityRecord->user->shortName }}</td>
+                        <td>{{ $authorityRecord->date }}</td>
+                        <td>{{ $authorityRecord->observation }}</td>
+                        <td>
+                            @if(is_null($authorityRecord->status))
+                            <i class="fas fa-clock"></i>
+                            @elseif($authorityRecord->status === 1)
+                            <i class="fas fa-thumbs-up text-success"></i>
+                            @else
+                            <i class="fas fa-thumbs-down text-danger"></i>
+                            @endif
+                        </td>
+                        <td>{{ $authorityRecord->authority_observation }}</td>
+                        <td>{{ $authorityRecord->authority_at }}</td>
+                        <td>
+                            @if(is_null($authorityRecord->status))
+                            <a class="btn btn-sm btn-outline-primary" 
+                                href="{{ route('rrhh.attendance.no-record.confirmation',$authorityRecord) }}"> 
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        {{ $authorityRecrods->links() }}
     @endif
 </div>

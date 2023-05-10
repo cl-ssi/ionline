@@ -16,6 +16,7 @@ class NoAttendanceRecord extends Model
     * @var array
     */
     protected $fillable = [
+        'date',
         'user_id',
         'observation',
         'authority_observation',
@@ -34,12 +35,12 @@ class NoAttendanceRecord extends Model
     *
     * @var array
     */
-    protected $dates = [
-        'date',
-    ];
+    // protected $dates = [
+    //     'date',
+    // ];
 
     protected $casts = [
-        'date' => 'date:Y-m-d H:i:s'
+        'date' => 'date:Y-m-d\TH:i:s'
     ];
 
     public function user()

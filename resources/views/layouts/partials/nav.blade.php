@@ -680,7 +680,7 @@
                         </a>
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-record') }}">
-                            <i class="fas fa-fw fa-clock"></i> {{ __('Registrar inasistencia') }}
+                            <i class="fas fa-fw fa-clock"></i> {{ __('Constancia registro asistencia') }}
                         </a>
 
                         @role('god')

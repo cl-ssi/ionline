@@ -515,7 +515,7 @@ class UserController extends Controller
     public function openNotification($notification)
     {
         $notification = auth()->user()->notifications->find($notification);
-        $route = config('app.url').$notification->data['action'];
+        $route = $notification->data['action'];
         $notification->markAsRead();
         return redirect($route);
     }

@@ -25,7 +25,7 @@ class NoAttendanceRecordMgr extends Component
     protected function rules()
     {
         return [
-            'noAttendanceRecord.date' => 'required|date_format:Y-m-d H:i:s',
+            'noAttendanceRecord.date' => 'required|date',
             'noAttendanceRecord.observation' => 'required',
         ];
     }
@@ -71,9 +71,12 @@ class NoAttendanceRecordMgr extends Component
 
     public function render()
     {
-        $records = NoAttendanceRecord::latest()->paginate(25);
+        $myRecords = NoAttendanceRecord::whereUserId(auth()->id())->latest()->paginate(25);
+        $authorityRecrods = NoAttendanceRecord::whereAuthorityId(auth()->id())->latest()->paginate(25);
+
         return view('livewire.rrhh.no-attendance-record-mgr',[
-            'records' => $records
+            'myRecords' => $myRecords,
+            'authorityRecrods' => $authorityRecrods
         ]);
     }
 }
