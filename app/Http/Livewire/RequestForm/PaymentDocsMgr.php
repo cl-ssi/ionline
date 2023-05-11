@@ -9,22 +9,56 @@ use App\Models\RequestForms\PaymentDoc;
 class PaymentDocsMgr extends Component
 {
     public RequestForm $requestForm;
-    public PaymentDoc $paymentDoc; // *
-
+    public $name;
+    public $description;
     public $form = false;
+    protected $listeners = ['refreshComponent' => '$refresh'];
+
+    
 
     /**
     * Save
     */
     public function save()
     {
-        $this->paymentDoc->save(); // *
+        $this->validate([
+            'name' => ['required', 'string'],
+        ]);
+
+        $paymentDoc = new PaymentDoc(); // Crear una nueva instancia de PaymentDoc
+        $paymentDoc->name = $this->name; // Asignar el valor del campo "name"
+        $paymentDoc->description = $this->description; // Asignar el valor del campo "description"
+        $paymentDoc->requestForm()->associate($this->requestForm); // Asociar el PaymentDoc con el RequestForm actual
+        $paymentDoc->save(); // Guardar el PaymentDoc en la base de datos
+        $this->form = false;
+        $this->emit('refreshComponent');
+
+        $this->name = '';
+        $this->description = '';
+
+        
+    }
+
+    public function delete($paymentDocId)
+    {
+        $paymentDoc = PaymentDoc::findOrFail($paymentDocId); // Buscar el PaymentDoc por su ID
+        $paymentDoc->delete(); // Eliminar el PaymentDoc
+
+        $this->emit('refreshComponent');
+    }
+
+
+
+    /**
+    * Muestra el formulario al apretar en el botón "+"
+    */
+    public function showForm()
+    {
+        $this->form = true;
     }
 
     public function render()
     {
-        /* Para debug lo tengo en true, pero se debe habilitar con el botón "+" */
-        $this->form = true;
         return view('livewire.request-form.payment-docs-mgr');
     }
 }
