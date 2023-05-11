@@ -18,7 +18,9 @@
         wire:model="organizational_unit_id"
         style="font-family:monospace;"
         data-live-search="true" id="ou" name="to_ou_id" data-size="10"
+        {{-- 
         {{ $required ? 'required' : '' }}>
+        --}}
         
         <option></option>
         @foreach($ous as $ou)
