@@ -50,8 +50,6 @@ class JobPositionProfileSignController extends Controller
             $position = 1;
             for ($i = $jobPositionProfile->organizationalUnit->level; $i >= 2; $i--) {
                 if ($i > 2) {
-                    $jpp_sing = new JobPositionProfileSign();
-
                     $jpp_sing                           = new JobPositionProfileSign();
                     $jpp_sing->position                 = $position;
                     $jpp_sing->event_type               = 'leadership';
@@ -92,33 +90,31 @@ class JobPositionProfileSignController extends Controller
                     $jpp_esign->job_position_profile_id = $jobPositionProfile->id;
                     $jpp_esign->save();
                 }
-
                 $position++;
             }
-            
-            $jobPositionProfile->save();
-
+            /*
             session()->flash('success', 'Estimado Usuario, se ha enviado Exitosamente El Perfil de Cargo');
             return redirect()->route('job_position_profile.index');
+            */
         }
 
 
-        $jpp_review = new JobPositionProfileSign();
-        $jpp_review->position = 1;
-        $jpp_review->event_type = 'review';
-        $jpp_review->status = 'pending';
-        $jpp_review->job_position_profile_id = $jobPositionProfile->id;
-        $jpp_review->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'GestionDesarrolloDelTalento')->first()->value;
-        $jpp_review->save();
+        // $jpp_review = new JobPositionProfileSign();
+        // $jpp_review->position = 1;
+        // $jpp_review->event_type = 'review';
+        // $jpp_review->status = 'pending';
+        // $jpp_review->job_position_profile_id = $jobPositionProfile->id;
+        // $jpp_review->organizational_unit_id = Parameter::where('module', 'ou')->where('parameter', 'GestionDesarrolloDelTalento')->first()->value;
+        // $jpp_review->save();
 
-        $jpp_esing = new JobPositionProfileSign();
-        $jpp_esing->position = 2;
-        $jpp_esing->event_type = 'esign';
-        $jpp_esing->job_position_profile_id = $jobPositionProfile->id;
-        $jpp_esing->organizational_unit_id = $jobPositionProfile->organizationalUnit->id;
-        $jpp_esing->save();
+        // $jpp_esing = new JobPositionProfileSign();
+        // $jpp_esing->position = 2;
+        // $jpp_esing->event_type = 'esign';
+        // $jpp_esing->job_position_profile_id = $jobPositionProfile->id;
+        // $jpp_esing->organizational_unit_id = $jobPositionProfile->organizationalUnit->id;
+        // $jpp_esing->save();
         
-        $jobPositionProfile->status = 'review';
+        $jobPositionProfile->status = 'sent';
         $jobPositionProfile->save();
 
         session()->flash('success', 'Estimado Usuario, se ha enviado Exitosamente El Perfil de Cargo');

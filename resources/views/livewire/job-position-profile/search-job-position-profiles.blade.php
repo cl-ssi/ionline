@@ -52,6 +52,7 @@
                         <th>Nombre de Perfil de Cargo</th>
                         <th>Detalle / Calidad Jurídica</th>
                         <th>Marco Legal</th>
+                        <th>Aprobaciones</th>
                         <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -61,19 +62,19 @@
                         <th>
                             {{ $jobPositionProfile->id }} <br>
                             @switch($jobPositionProfile->status)
-                            @case('pending')
-                                <span class="badge badge-warning">Pendiente</span>
+                            @case('saved')
+                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
                                 @break
 
-                            @case('complete')
-                                <span class="badge badge-success">Finalizado</span>
+                            @case('sent')
+                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
                                 @break
 
                             @case('rejected')
-                                <span class="badge badge-danger">Rechazado</span>
+                                <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
                                 @break
                             @case('review')
-                                <span class="badge badge-info">En revisión</span>
+                                <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
                                 @break
                         @endswitch    
                         </th>
@@ -94,9 +95,37 @@
                             @if($jobPositionProfile->dfl29) DFL N°29 <br> @endif
                             {{ $jobPositionProfile->working_day }} Horas
                         </td>
+                        <td class="text-center">
+                            @if($jobPositionProfile->status == 'saved')
+                                <i class="fas fa-save fa-2x"></i>
+                            @else
+                                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                                    @if($sign->status == 'pending' || $sign->status == NULL)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </span>
+                                    @endif
+                                    @if($sign->status == 'approved')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                            style="color: green;"
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </span>
+                                    @endif
+                                    @if($sign->status == 'rejected')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                            style="color: Tomato;"
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-times-circle fa-2x"></i>
+                                        </span>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </td>
                         <td class="text-center">    
                             @if($index == 'own')
-                                @if($jobPositionProfile->status == 'pending')
+                                @if($jobPositionProfile->status == 'saved')
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>

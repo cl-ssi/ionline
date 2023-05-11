@@ -107,12 +107,11 @@
 </div>
 
 <hr />
-
-
+<br>
 
 <div class="row">
     <div class="col-md-3">
-        <h6><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h6>
+        <h5><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h5>
     </div>
     <div class="col-md-9">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">

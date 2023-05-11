@@ -59,6 +59,23 @@ class JobPositionProfile extends Model implements Auditable
         return $this->hasMany('App\Models\JobPositionProfiles\JobPositionProfileSign');
     }
 
+    public function getStatusValueAttribute() {
+        switch($this->status) {
+            case 'saved':
+                return 'Guardado';
+                break;
+            case 'sent':
+                return 'Enviado';
+                break;
+            case 'complete':
+                return 'Finalizado';
+                break;
+            case 'rejected':
+                return 'Rechazado';
+                break;
+        }
+    }
+
     public function getSubordinatesValueAttribute() {
         switch($this->subordinates) {
           case '0':

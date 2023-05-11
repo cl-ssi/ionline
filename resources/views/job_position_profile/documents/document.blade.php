@@ -166,16 +166,19 @@
             <th align="left" style="background-color: #b4c6e7">Organigrama</th>
         </tr>
         <tr>
-            <td><div id="chart_div"></div></td>
+            <td><img id="chartImg" /></td>
         </tr>
     </tbody>
 </table>
+
+{{-- <div id="chart_div"></div> --}}
 
 @endsection
 
 @section('custom_js')
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--
     <script type="text/javascript">
         
         google.charts.load('current', {packages:["orgchart"]});
@@ -189,13 +192,50 @@
             data.addColumn('string', 'ToolTip');
 
             // For each orgchart box, provide the name, manager, and tooltip to show.
-            data.addRows({!! $jobPositionProfile->organizationalUnit->treeWithChilds->toJson() !!});
+            data.addRows({!! $tree !!});
 
             // Create the chart.
             var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
             // Draw the chart, setting the allowHtml option to true for the tooltips.
             chart.draw(data, {'allowHtml':true});
+
+            google.visualization.events.addListener(chart, 'ready', function () {
+                var imgUri = chart.getImageURI();
+                // do something with the image URI, like:
+                document.getElementById('chartImg').src = imgUri;
+            });
         }
+    </script>
+    -->
+    <script type="text/javascript">
+        function drawVisualizationDaily() {
+            // Create and populate the data table.
+            var data = google.visualization.arrayToDataTable([
+                ['Daily', 'Sales'],
+                ['Mon', 4],
+                ['Tue', 6],
+                ['Wed', 6],
+                ['Thu', 5],
+                ['Fri', 3],
+                ['Sat', 7],
+                ['Sun', 7]
+            ]);
+            
+            // Create and draw the visualization.
+            var chart = new google.visualization.ColumnChart(document.getElementById('visualization'));
+            google.visualization.events.addListener(chart, 'ready', function () {
+                var imgUri = chart.getImageURI();
+                // do something with the image URI, like:
+                document.getElementById('chartImg').src = imgUri;
+            });
+            chart.draw(data, {
+                title:"Daily Sales",
+                width:500,
+                height:400,
+                hAxis: {title: "Daily"}
+            });
+        }  
+        google.load('visualization', '1', {packages:['corechart'], callback: drawVisualizationDaily});
     </script>
 
 @endsection
