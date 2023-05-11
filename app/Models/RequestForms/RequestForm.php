@@ -2,25 +2,26 @@
 
 namespace App\Models\RequestForms;
 
-use App\Models\Documents\SignaturesFile;
+use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\PurchasingProcess;
+use App\Models\RequestForms\PaymentDoc;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\ItemChangedRequestForm;
-use App\Models\RequestForms\EventRequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
-use App\Models\Parameters\PurchaseType;
+use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseUnit;
+use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
 use App\Models\Parameters\Program;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
-use OwenIt\Auditing\Contracts\Auditable;
-use Illuminate\Http\Request;
+use App\Models\Documents\SignaturesFile;
 
 class RequestForm extends Model implements Auditable
 {
@@ -170,6 +171,11 @@ class RequestForm extends Model implements Auditable
     public function immediatePurchases()
     {
         return $this->hasMany(ImmediatePurchase::class);
+    }
+
+    public function paymentDocs()
+    {
+        return $this->hasMany(PaymentDoc::class);
     }
 
     public function getTotalEstimatedExpense()
