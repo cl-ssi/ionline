@@ -361,6 +361,9 @@
 
     @endif
 
+    <!--Documentos necesarios para procesar el pago -->
+    @livewire('request-form.payment-docs-mgr',['requestForm' => $requestForm])
+
     <!--Observaciones al proceso de compra -->
     @if($requestForm->purchasingProcess)
         <h6><i class="fas fa-eye"></i> Observaciones al proceso de compra</h6>

@@ -278,9 +278,11 @@ class JobPositionProfileController extends Controller
     }
 
     public function create_document(JobPositionProfile $jobPositionProfile){
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('job_position_profile.documents.document', compact('jobPositionProfile'));
+        $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
 
-        return $pdf->stream('mi-archivo.pdf');
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('job_position_profile.documents.document', compact('jobPositionProfile', 'tree'));
+
+        return $pdf->stream('mi-perfil-de-cargo.pdf');
     }
 }
