@@ -7,7 +7,7 @@
         required
        {{ $readonlyEstablishment ? 'disabled' : '' }}>
         <option value="0"></option>
-        @foreach($establishments->sortBy('name') as $establishment)
+        @foreach($establishments->sortBy('official_name') as $establishment)
             <option value="{{ $establishment->id }}"> {{ $establishment->official_name }}</option>
         @endforeach
     </select>
