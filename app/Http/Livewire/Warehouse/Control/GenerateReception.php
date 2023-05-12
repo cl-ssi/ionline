@@ -110,6 +110,14 @@ class GenerateReception extends Component
         $this->error = MercadoPublico::getPurchaseOrderError($purchaseOrder);
         $this->msg = MercadoPublico::getPurchaseOrderErrorMessage($purchaseOrder);
 
+        if($purchaseOrder->charges != 0)
+        {
+            $this->error = true;
+            $this->msg = 'La OC posee cargos asociados.';
+            $this->resetInputReception();
+        }
+
+
         if(!$this->error)
         {
             foreach($purchaseOrder->items as $item)

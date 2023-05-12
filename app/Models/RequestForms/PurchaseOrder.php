@@ -44,7 +44,7 @@ class PurchaseOrder extends Model
     protected $dates = [
         'date'
     ];
-    
+
     public function getDataObjectAttribute()
     {
         $object = json_decode($this->data);
@@ -66,6 +66,11 @@ class PurchaseOrder extends Model
         return $this->data_object->Listado[0]->PorcentajeIva;
     }
 
+    public function getChargesAttribute()
+    {
+        return $this->data_object->Listado[0]->Cargos;
+    }
+
     public function getItemsAttribute()
     {
         return $this->data_object->Listado[0]->Items->Listado;
@@ -76,6 +81,7 @@ class PurchaseOrder extends Model
         $rut = strval($this->data_object->Listado[0]->Proveedor->RutSucursal);
         return $rut;
     }
+
     public function getSupplierRutAttribute()
     {
         $rut = Str::replace('.', '', $this->supplier_rut_full);
