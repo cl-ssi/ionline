@@ -67,7 +67,7 @@ class ImportBirthdaysFile extends Component
                                 $user = User::find($column['rut']);
                                 $user->birthday = $date_fecha_nacimiento;
                                 if(filter_var($column['correos'], FILTER_VALIDATE_EMAIL)) {
-                                    if($user->email_personal!=null){
+                                    if($user->email_personal==null){
                                         $user->email_personal = $column['correos'];
                                     }
                                 }
