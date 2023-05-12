@@ -9,12 +9,9 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th class="text-right">
-                    @if (!$requestForm->father)
-                        {{-- El RequestForm es padre  Asi que puede agregar --}}
-                        <button type="button" class="btn btn-sm btn-success" wire:click="showForm"> <i
+                        <button type="button" class="btn btn-sm btn-success" wire:click="showForm" {{$requestForm->father?'disabled':''}} title="Solamente pueden agregar documentos los formularios padre"> <i
                                 class="fas fa-plus"></i>
                         </button>
-                    @endif
                 </th>
             </tr>
         </thead>
@@ -30,7 +27,11 @@
                     <tr>
                         <td>{{ $doc->name }}</td>
                         <td>{{ $doc->description }}</td>
-                        <td class="small">En caso de querer eliminar ir al formulario padre</td>
+                        <td class="text-right">
+                        <button type="button" class="btn btn-sm btn-danger" disabled title="En caso de querer eliminar un documento ir al formulario padre">
+                        <i class="fas fa-trash"></i>
+                        </button>
+                        </td>
                     </tr>
                 @endforeach
             @else
@@ -41,7 +42,7 @@
                         <td>{{ $doc->description }}</td>
                         <td class="text-right">
                             <button type="button" class="btn btn-sm btn-danger"
-                                wire:click="delete({{ $doc->id }})">
+                                wire:click="delete({{ $doc->id }})" {{$requestForm->father?'disabled':''}}>
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
