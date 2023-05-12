@@ -9,23 +9,51 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th class="text-right">
-                    <button type="button" class="btn btn-sm btn-success" wire:click="showForm"> <i class="fas fa-plus"></i>
-                    </button>
+                        <button type="button" class="btn btn-sm btn-success" wire:click="showForm" {{$requestForm->father?'disabled':''}} title="Solamente pueden agregar documentos los formularios padre"> <i
+                                class="fas fa-plus"></i>
+                        </button>
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($requestForm->paymentDocs as $doc)
-                <tr>
-                    <td>{{ $doc->name }}</td>
-                    <td>{{ $doc->description }}</td>
-                    <td class="text-right">
-                        <button type="button" class="btn btn-sm btn-danger" wire:click="delete({{ $doc->id }})">
-                            <i class="fas fa-trash"></i>
+            <tr>
+                <td>Boleta o Factura</td>
+                <td></td>
+                <td></td>
+            </tr>
+            @if ($requestForm->father)
+                {{-- El RequestForm es hijo  Asi que solo debe ver y recorrer en el foreach del padre --}}
+                @foreach ($requestForm->father->paymentDocs as $doc)
+                    <tr>
+                        <td>{{ $doc->name }}</td>
+                        <td>{{ $doc->description }}</td>
+                        <td class="text-right">
+                        <button type="button" class="btn btn-sm btn-danger" disabled title="En caso de querer eliminar un documento ir al formulario padre">
+                        <i class="fas fa-trash"></i>
                         </button>
-                    </td>
-                </tr>
-            @endforeach
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                {{-- El RequestForm es padre  Asi que tiene todos los privilegios --}}
+                @foreach ($requestForm->paymentDocs as $doc)
+                    <tr>
+                        <td>{{ $doc->name }}</td>
+                        <td>{{ $doc->description }}</td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn-sm btn-danger"
+                                wire:click="delete({{ $doc->id }})" {{$requestForm->father?'disabled':''}}>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+
+
+            @endif
+
+
+
 
             @if ($form)
                 <tr>
