@@ -15,6 +15,11 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td>Boleta o Factura</td>
+                <td></td>
+                <td></td>
+            </tr>
             @foreach ($requestForm->paymentDocs as $doc)
                 <tr>
                     <td>{{ $doc->name }}</td>
