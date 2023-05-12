@@ -9,8 +9,12 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th class="text-right">
-                    <button type="button" class="btn btn-sm btn-success" wire:click="showForm"> <i class="fas fa-plus"></i>
-                    </button>
+                    @if (!$requestForm->father)
+                        {{-- El RequestForm es padre  Asi que puede agregar --}}
+                        <button type="button" class="btn btn-sm btn-success" wire:click="showForm"> <i
+                                class="fas fa-plus"></i>
+                        </button>
+                    @endif
                 </th>
             </tr>
         </thead>
@@ -20,17 +24,35 @@
                 <td></td>
                 <td></td>
             </tr>
-            @foreach ($requestForm->paymentDocs as $doc)
-                <tr>
-                    <td>{{ $doc->name }}</td>
-                    <td>{{ $doc->description }}</td>
-                    <td class="text-right">
-                        <button type="button" class="btn btn-sm btn-danger" wire:click="delete({{ $doc->id }})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
+            @if ($requestForm->father)
+                {{-- El RequestForm es hijo  Asi que solo debe ver y recorrer en el foreach del padre --}}
+                @foreach ($requestForm->father->paymentDocs as $doc)
+                    <tr>
+                        <td>{{ $doc->name }}</td>
+                        <td>{{ $doc->description }}</td>
+                        <td class="small">En caso de querer eliminar ir al formulario padre</td>
+                    </tr>
+                @endforeach
+            @else
+                {{-- El RequestForm es padre  Asi que tiene todos los privilegios --}}
+                @foreach ($requestForm->paymentDocs as $doc)
+                    <tr>
+                        <td>{{ $doc->name }}</td>
+                        <td>{{ $doc->description }}</td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn-sm btn-danger"
+                                wire:click="delete({{ $doc->id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                @endforeach
+
+
+            @endif
+
+
+
 
             @if ($form)
                 <tr>
