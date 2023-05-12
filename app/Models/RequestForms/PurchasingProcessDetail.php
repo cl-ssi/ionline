@@ -71,8 +71,22 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         parent::boot();
         //while creating/inserting item into db  
         static::creating(function ($purchasingProcessDetail) {
-            $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-            $purchasingProcessDetail->immediatePurchase->save();
+            if($purchasingProcessDetail->petty_cash_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->pettyCash->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->direct_deal_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->tender_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->tender->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->immediate_purchase_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
         });
     }
 
