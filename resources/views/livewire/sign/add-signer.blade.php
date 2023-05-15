@@ -25,7 +25,7 @@
         </div>
 
         <div class="form-group col-12">
-            <label for="ou">Unidad Organizacional {{ $organizational_unit_id }}</label>
+            <label for="ou">Unidad Organizacional</label>
             <select
                 class="custom-select"
                 wire:model="organizational_unit_id"
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group col-12">
-            <label for="user-id">Usuarios {{ $user_id }}</label>
+            <label for="user-id">Usuarios</label>
             <div class="input-group mb-3">
                 <select
                     class="custom-select"
