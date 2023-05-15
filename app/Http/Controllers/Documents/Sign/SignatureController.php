@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Documents\Sign;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documents\Sign\Signature;
+use App\Models\Documents\Sign\SignatureFlow;
 use App\Services\ImageService;
+use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
@@ -11,6 +14,47 @@ use setasign\Fpdi\Fpdi;
 
 class SignatureController extends Controller
 {
+    /**
+     * Update the status of the signature
+     *
+     * @param Signature $signature
+     * @param User $user
+     * @return void
+     */
+    public function update(Signature $signature, User $user)
+    {
+        /**
+         * Actualiza el archivo en Signature
+         */
+        // $signature->update([
+        //     'file' => $file
+        // ]);
+
+        /**
+         * Obtiene el signatureFlow asociado
+         */
+        $signatureFlow = SignatureFlow::query()
+            ->whereSignatureId($signature->id)
+            ->whereSignerId($user->id)
+            ->first();
+
+        /**
+         * Actualiza el archivo y el estado en el SignatureFlow
+         */
+        $signatureFlow->update([
+            // 'file' => $file,
+            'status' => 'signed'
+        ]);
+
+        session()->flash('success', 'El documento fue firmado exitosamente.');
+        return redirect()->route('v2.documents.signatures.index');
+    }
+
+    /**
+     * Place signature in a position
+     *
+     * @return void
+     */
     public function positionDocumentNumber()
     {
         /**
