@@ -34,7 +34,7 @@
                     <td>{{ $psirequest->updated_at }}</td>
                     <td>
                         @if ($psirequest->result->signedCertificate && $psirequest->result->signedCertificate->hasAllFlowsSigned)
-                            <a href="{{ route('idoneidad.signedSuitabilityCertificate', $psirequest->result->id) }}"
+                            <a href="{{ route('suitability.results.signedSuitabilityCertificate', $psirequest->result->id) }}"
                                 class="btn @if ($psirequest->result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif"
                                 target="_blank">
                                 <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
