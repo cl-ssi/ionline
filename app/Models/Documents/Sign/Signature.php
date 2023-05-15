@@ -380,6 +380,58 @@ class Signature extends Model
         return $this->rightSignatures->every('status', '==', 'signed');
     }
 
+    public function getLeftVisatorClassAttribute()
+    {
+        return $this->visatorClass($this->column_left_visator);
+    }
+
+    public function getCenterVisatorClassAttribute()
+    {
+        return $this->visatorClass($this->column_center_visator);
+    }
+
+    public function getRightVisatorClassAttribute()
+    {
+        return $this->visatorClass($this->column_right_visator);
+    }
+
+    public function visatorClass($column)
+    {
+        return ($column == true) ? 'text-lowercase' : 'text-uppercase';
+    }
+
+    public function getLeftBorderEndorseAttribute()
+    {
+        return $this->endorseBorderColumn($this->column_left_endorse);
+    }
+
+    public function getCenterBorderEndorseAttribute()
+    {
+        return $this->endorseBorderColumn($this->column_center_endorse);
+    }
+
+    public function getRightBorderEndorseAttribute()
+    {
+        return $this->endorseBorderColumn($this->column_right_endorse);
+    }
+
+    public function endorseBorderColumn($endorse)
+    {
+        switch ($endorse) {
+            case 'Obligatorio en Cadena de Responsabilidad':
+                return 'border-en-cadena';
+                break;
+
+            case 'Obligatorio sin Cadena de Responsabilidad':
+                return 'border-sin-cadena';
+                break;
+
+            case 'Opcional':
+                return 'border-opcional';
+                break;
+        }
+    }
+
     public function isEnumerate()
     {
         return $this->number != null;
