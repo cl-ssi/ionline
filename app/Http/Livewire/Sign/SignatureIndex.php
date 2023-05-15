@@ -2,18 +2,14 @@
 
 namespace App\Http\Livewire\Sign;
 
-use App\Models\Documents\Correlative;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
 use App\Services\ImageService;
-use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
-use setasign\Fpdi\Fpdi;
-use setasign\Fpdi\PdfParser\StreamReader;
 
 class SignatureIndex extends Component
 {
@@ -37,8 +33,12 @@ class SignatureIndex extends Component
 
         $signatures = Signature::query()
             ->when(isset($this->search), function ($query) use($search) {
-                $query->where('subject', 'like', $search)
-                    ->OrWhere('description', 'like', $search);
+                $query->whereHas('flows', function($query) {
+                    $query->whereSignerId(auth()->id());
+                })->where(function($query) use($search) {
+                    $query->where('subject', 'like', $search)
+                    ->orWhere('description', 'like', $search);
+                });
             })
             ->when($this->filterBy != "all", function($query) {
                 $query->whereHas('flows', function($query) {
@@ -50,6 +50,7 @@ class SignatureIndex extends Component
                     ->whereSignerId(auth()->id());
                 });
             })
+            ->orderByDesc('id')
             ->whereHas('flows', function($query) {
                 $query->whereSignerId(auth()->id());
             })
@@ -58,6 +59,14 @@ class SignatureIndex extends Component
         return $signatures;
     }
 
+    /**
+     * Pasar al componente: vista o link, usuario id, position: derecha, centro o izquierda, fila 1, ruta 1 y nombre de archivo.
+     * Devolver un callback con el link, modulo drogas, acta 505.
+     * devuelvo el link. Nombre de ruta y parámetros como array.
+     *
+     * @param  Signature $signature
+     * @return void
+     */
     public function signDocument(Signature $signature)
     {
         /**
@@ -144,6 +153,9 @@ class SignatureIndex extends Component
         $heightFirma = 200;
         $widthFirma = 100;
 
+        /**
+         * Set the file data
+         */
         $data = [
             'api_token_key' => $apiToken,
             'token' => $jwt,

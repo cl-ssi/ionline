@@ -30,7 +30,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
@@ -38,10 +38,9 @@
                     <th nowrap>Nro</th>
                     <th>Materia</th>
                     <th>Descripción</th>
-                    <th>Firmas</th>
-                    <th>Anexos</th>
-                    <th>Creador</th>
-                    <th nowrap>Firmar</th>
+                    <th class="text-center">Firmas</th>
+                    <th class="text-center">Creador</th>
+                    <th class="text-center">Firmar</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,73 +69,96 @@
                         <td>
                             {{ $signature->description }}
                         </td>
-                        <td nowrap>
-                            <span
-                                class="d-inline-bloc img-thumbnail border-dark
-                                    bg-{{ $signature->status_color }}
-                                    text-{{ $signature->status_color_text }}
-                                    text-monospace rounded-circle"
-                                tabindex="0"
-                                data-toggle="tooltip"
-                                title="{{ $signature->status_translate }}"
-                            >&nbsp;&nbsp;</span>&nbsp;
-
-                            @foreach($signature->signatures as $itemSigner)
-                            {{-- {{ $firm->signer->initials }} - {{ $firm->signer->tinny_name }} - {{ $firm->row_position }} --}}
-                            <span
-                                class="d-inline-bloc img-thumbnail border-dark
-                                    bg-{{ $itemSigner->status_color }}
-                                    text-{{ $itemSigner->status_color_text }}
-                                    text-monospace rounded-circle"
-                                tabindex="0"
-                                data-toggle="tooltip"
-                                title="{{ $itemSigner->signer->short_name }}"
-                            >{{ substr($itemSigner->signer->initials, 0, 2) }}</span>&nbsp;
-                            @endforeach
-                        </td>
-                        <td>
-                            Anexos
+                        <td  style="padding: 0 !important; margin: 0 !important;">
+                            <table class="table table-sm small table-signature" style="margin: 0 !important; padding: 0 !important;">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" width="33%" style="height: 100%">
+                                            @foreach($signature->leftSignatures as $itemSigner)
+                                                <span
+                                                    class="img-thumbnail border-dark
+                                                        {{ $signature->leftBorderEndorse }}
+                                                        {{ $signature->leftVisatorClass }}
+                                                        bg-{{ $itemSigner->status_color }}
+                                                        text-{{ $itemSigner->status_color_text }}
+                                                        text-monospace rounded-circle"
+                                                    tabindex="0"
+                                                    data-toggle="tooltip"
+                                                    title="{{ $itemSigner->signer->short_name }}"
+                                                >{{ $itemSigner->signer->twoInitials }}</span>
+                                                <div class="my-2"></div>
+                                            @endforeach
+                                        </td>
+                                        <td class="text-center" width="33%">
+                                            @foreach($signature->centerSignatures as $itemSigner)
+                                                <span
+                                                    class="img-thumbnail border-dark
+                                                        {{ $signature->centerBorderEndorse }}
+                                                        {{ $signature->centerVisatorClass }}
+                                                        bg-{{ $itemSigner->status_color }}
+                                                        text-{{ $itemSigner->status_color_text }}
+                                                        text-monospace rounded-circle"
+                                                    tabindex="0"
+                                                    data-toggle="tooltip"
+                                                    title="{{ $itemSigner->signer->short_name }}"
+                                                >{{ $itemSigner->signer->twoInitials }}</span>
+                                                <div class="my-2"></div>
+                                            @endforeach
+                                        </td>
+                                        <td class="text-center" width="33%">
+                                            @foreach($signature->rightSignatures as $itemSigner)
+                                                <span
+                                                    class="img-thumbnail border-dark
+                                                        {{ $signature->rightBorderEndorse }}
+                                                        {{ $signature->rightVisatorClass }}
+                                                        bg-{{ $itemSigner->status_color }}
+                                                        text-{{ $itemSigner->status_color_text }}
+                                                        text-monospace rounded-circle"
+                                                    tabindex="0"
+                                                    data-toggle="tooltip"
+                                                    title="{{ $itemSigner->signer->short_name }}"
+                                                >{{ $itemSigner->signer->twoInitials }}</span>
+                                                <div class="my-2"></div>
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                         <td class="text-center">
                             <span
-                                class="d-inline-bloc img-thumbnail border-dark bg-default text-monospace rounded-circle"
+                                class="d-inline-bloc img-thumbnail border-dark bg-default text-monospace rounded-circle
+                                    bg-{{ $signature->status_color }}
+                                    text-{{ $signature->status_color_text }}"
                                 tabindex="0"
                                 data-toggle="tooltip"
                                 title="{{ $signature->user->short_name }}"
-                            >{{ substr($signature->user->initials, 0, 2) }}</span>&nbsp;
-                            <br>
-                            {{-- <small>
-                                @if($signature->flows->firstWhere('signer_id', auth()->id())->column_position == 'left')
-                                    {{ $signature->column_left_visator == true ? 'Visador' : 'Firmante' }}
-                                @endif
-                                @if($signature->flows->firstWhere('signer_id', auth()->id())->column_position == 'center')
-                                    {{ $signature->column_center_visator == true ? 'Visador' : 'Firmante' }}
-                                @endif
-                                @if($signature->flows->firstWhere('signer_id', auth()->id())->column_position == 'right')
-                                    {{ $signature->column_right_visator == true ? 'Visador' : 'Firmante' }}
-                                @endif
-                            </small> --}}
+                            >{{ $signature->user->twoInitials }}</span>&nbsp;
                         </td>
-                        <td nowrap>
+                        <td class="text-center">
+                            {{ $signature->flows->firstWhere('signer_id', auth()->id())->x }}, {{ $signature->flows->firstWhere('signer_id', auth()->id())->y }}
                             @if($signature->isPending())
-                                <button
-                                    type="button"
-                                    class="btn btn-primary btn-sm"
-                                    data-toggle="modal"
-                                    title="Firmar documento"
-                                    data-target="#sign-to-id-{{ $signature->id }}"
-                                    @if(! $signature->canSign or ! $signature->isSignedForMe) disabled @endif
-                                >
-                                    <i class="fas fa-signature"></i> Firmar
-                                </button>
-
-                                @include('sign.modal-show-document')
+                                @livewire('sign.sign-document', [
+                                    'signatureId' => $signature->id,
+                                    'link' => $signature->link,
+                                    'folder' => 'ionline/sign/signed/',
+                                    'disabled' => (! $signature->canSign or ! $signature->isSignedForMe),
+                                    'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id,
+                                    'user' => auth()->user(),
+                                    'x' => $signature->flows->firstWhere('signer_id', auth()->id())->x,
+                                    'y' => $signature->flows->firstWhere('signer_id', auth()->id())->y,
+                                    'route' => 'v2.documents.signatures.update',
+                                    'routeParams' => [
+                                        'signature' => $signature->id,
+                                        'user' => auth()->id()
+                                    ]
+                                ])
                             @endif
                         </td>
                     </tr>
                 @empty
                 <tr class="text-center">
-                    <td colspan="9">
+                    <td colspan="8">
                         <em>No hay registros</em>
                     </td>
                 </tr>
@@ -154,3 +176,27 @@
         </div>
     </div>
 </div>
+
+@section('custom_css')
+    <style type="text/css">
+        .border-en-cadena {
+            border: 2px solid black !important;
+            border-style: solid !important;
+        }
+
+        .border-sin-cadena {
+            border: 2px solid black !important;
+            border-style: dashed !important;
+        }
+
+        .border-opcional {
+            border: 2px solid black !important;
+            border-style: dotted !important;
+        }
+
+        .table-signature td {
+            border-bottom: none;
+            border-top: none;
+        }
+    </style>
+@endsection
