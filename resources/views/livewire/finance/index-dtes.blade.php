@@ -30,7 +30,7 @@
 
     </div>
 
-    @if ($showManualDTE)
+    @if($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
         </div>
@@ -49,12 +49,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($dtes as $dte)
-
+            @foreach($dtes as $dte)
             <tr>
                 <td>{{ $dte->tipo_documento }}</td>
                 <td>
-                @if ($dte->tipo_documento !='boleta_honorarios')
+                @if($dte->tipo_documento !='boleta_honorarios')
                     <a 
                         href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
                         target="_blank" 
@@ -92,7 +91,11 @@
                         @if($dte->requestForm)
                             @if($dte->requestForm->contractManager)
                                 {{ $dte->requestForm->contractManager->shortName }}
-                                @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id])
+                                @livewire(
+                                    'finance.dte-send-confirmation', 
+                                    ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id],
+                                    key($dte->id)
+                                )
                             @endif
                         @endif
                     @endif

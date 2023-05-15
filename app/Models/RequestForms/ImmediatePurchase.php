@@ -24,7 +24,8 @@ class ImmediatePurchase extends Model implements Auditable
         'resol_supplementary_agree', 'resol_awarding', 'resol_purchase_intention', 'destination_warehouse', 'supplier_specifications',
         'po_status', 'po_discounts', 'po_charges', 'po_net_amount', 'po_tax_percent', 'po_tax_amount', 'po_supplier_name', 
         'po_supplier_activity', 'po_supplier_office_name', 'po_supplier_office_run', 'po_supplier_address', 'po_supplier_commune', 
-        'po_supplier_region', 'po_supplier_contact_name', 'po_supplier_contact_position', 'po_supplier_contact_phone', 'po_supplier_contact_email'
+        'po_supplier_region', 'po_supplier_contact_name', 'po_supplier_contact_position', 'po_supplier_contact_phone', 'po_supplier_contact_email',
+        'request_form_id'
     ];
 
     public $dates = [

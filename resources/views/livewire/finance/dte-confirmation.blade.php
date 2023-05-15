@@ -64,7 +64,7 @@
                 <td>{{ $dte->publicacion }}</td>
                 <td>{{ $dte->emision }}</td>
                 <td class="text-right">$ {{ money($dte->monto_total) }}</td>
-                <td>{{ optional($dte->publicacion)->add('+3 days')->format('Y-m-d') }}</td>
+                <td>{{ optional(optional($dte->publicacion)->add('+3 days'))->format('Y-m-d') }}</td>
                 <td>{{ $dte->folio_oc }}</td>
             </tr>
         </tbody>
