@@ -2037,6 +2037,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
