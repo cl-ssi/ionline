@@ -1,5 +1,12 @@
 <!-- Modal -->
-<div class="modal fade" id="sign-to-id-{{ $signature->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div
+    class="modal fade"
+    id="sign-to-id-{{ $signatureId }}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+>
     <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,10 +16,9 @@
                             class="modal-title"
                             id="exampleModalCenterTitle"
                         >
-                            Firmar Solicitud #{{ $signature->id }}
+                            Firmar #{{ $signatureId }}
                         </h5>
                     </div>
-
                 </div>
                 <div class="col-4">
                     <div class="row">
@@ -30,7 +36,7 @@
                                     <div class="input-group-append">
                                         <button
                                             class="btn btn-primary btn-sm"
-                                            wire:click="signDocument({{ $signature }})"
+                                            wire:click="signDocument"
                                             wire:loading.attr="disabled"
                                             wire:target='signDocument'
                                         >
@@ -69,8 +75,11 @@
             <div class="modal-body text-center">
                 <object
                     type="application/pdf"
-                    data="{{ $signature->link }}"
-                    width="100%" height="400" style="height: 70vh;">
+                    data="{{ $link }}"
+                    width="100%"
+                    height="400"
+                    style="height: 70vh;"
+                >
                 </object>
             </div>
         </div>
