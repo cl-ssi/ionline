@@ -23,7 +23,12 @@ class AddSigner extends Component
 
     public function mount()
     {
-        $this->establishments = Establishment::all();
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+
+        $this->establishments = Establishment::query()
+            ->whereIn('id',$establishments_ids)
+            ->orderBy('official_name')
+            ->get();
         $this->ous = [];
         $this->users = collect();
     }
