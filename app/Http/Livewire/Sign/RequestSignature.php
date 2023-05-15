@@ -48,6 +48,10 @@ class RequestSignature extends Component
     public $documentTypes;
     public $signers;
 
+    public $columnAvailable;
+    public $myColumns;
+    public $lastColumn;
+
     protected $listeners = [
         'setEmailRecipients',
         'setEmailDistributions',
@@ -80,14 +84,48 @@ class RequestSignature extends Component
             'total_signatures' =>
                 $this->left_signatures->count()
                 + $this->center_signatures->count()
-                + $this->right_signatures->count()
+                + $this->right_signatures->count(),
         ], [
-            'total_signatures' => 'required|numeric|min:1'
+            'total_signatures' => 'required|numeric|min:1',
         ]);
 
         if($validator->fails())
         {
             session()->flash('danger', 'La solicitud debe tener al menos un firmante');
+            return;
+        }
+
+        if($this->lastColumn == 'left')
+        {
+            if($this->column_left_endorse == 'Opcional')
+            {
+                session()->flash('danger', 'El tipo de Visacion para la columna izquierda debe ser distinto a opcional.');
+                return;
+            }
+        }
+        elseif($this->lastColumn == 'center')
+        {
+            if($this->column_center_endorse == 'Opcional')
+            {
+                session()->flash('danger', 'El tipo de Visacion para la columna central debe ser distinto a opcional.');
+                return;
+            }
+        }
+        elseif($this->lastColumn == 'right')
+        {
+            if($this->column_right_endorse == 'Opcional')
+            {
+                session()->flash('danger', 'El tipo de Visacion para la columna derecha debe ser distinto a opcional.');
+                return;
+            }
+        }
+
+
+        if($this->myColumns->count() != 0)
+        {
+            $columns = implode(',', $this->myColumns->keys()->toArray());
+
+            session()->flash('danger', "El tipo de Visacion en las columnas: $columns es obligatorio");
             return;
         }
 
@@ -168,6 +206,9 @@ class RequestSignature extends Component
         $this->center_signatures = collect([]);
         $this->right_signatures = collect([]);
 
+        $this->myColumns = collect();
+        $this->columnAvailable = collect(['left' => 0, 'center' => 0, 'right' => 0]);
+
         $this->reset([
             'document_number',
             'type_id',
@@ -176,6 +217,7 @@ class RequestSignature extends Component
             'column_left_endorse',
             'column_center_endorse',
             'column_right_endorse',
+            'lastColumn',
         ]);
     }
 
@@ -202,6 +244,9 @@ class RequestSignature extends Component
         {
             $this->emit('clearSearchUser', false);
         }
+
+        $this->columnAvailable->put('left', $this->columnAvailable->get('left') + 1);
+        $this->getColumns();
     }
 
     public function addCenterSignature($userId)
@@ -217,6 +262,9 @@ class RequestSignature extends Component
         {
             $this->emit('clearSearchUser', false);
         }
+
+        $this->columnAvailable->put('center', $this->columnAvailable->get('center') + 1);
+        $this->getColumns();
     }
 
     public function addRightSignature($userId)
@@ -232,6 +280,9 @@ class RequestSignature extends Component
         {
             $this->emit('clearSearchUser', false);
         }
+
+        $this->columnAvailable->put('right', $this->columnAvailable->get('right') + 1);
+        $this->getColumns();
     }
 
     public function deleteSigner($index, $column)
@@ -240,15 +291,42 @@ class RequestSignature extends Component
             case 'left':
                 $this->left_signatures = $this->left_signatures->forget($index)->values();
                 $this->namesSignaturesLeft = $this->namesSignaturesLeft->forget($index)->values();
+                $this->columnAvailable->put('left', $this->columnAvailable->get('left') - 1);
                 break;
             case 'center':
                 $this->center_signatures = $this->center_signatures->forget($index)->values();
                 $this->namesSignaturesCenter = $this->namesSignaturesCenter->forget($index)->values();
+                $this->columnAvailable->put('center', $this->columnAvailable->get('center') - 1);
                 break;
             case 'right':
                 $this->right_signatures = $this->right_signatures->forget($index)->values();
                 $this->namesSignaturesRight = $this->namesSignaturesRight->forget($index)->values();
+                $this->columnAvailable->put('right', $this->columnAvailable->get('right') - 1);
                 break;
+        }
+        $this->getColumns();
+    }
+
+    public function getColumns()
+    {
+        $this->myColumns = $this->columnAvailable->filter(function ($key, $column) {
+            if($column > 0)
+                return $key;
+        });
+
+        if($this->myColumns->count() == 1)
+        {
+            $this->lastColumn = $this->myColumns->take(1)->keys()->first();
+        }
+        elseif($this->myColumns->count() > 0)
+        {
+            $lastColumn = $this->myColumns->keys();
+            $lastColumn = $lastColumn->last();
+            $this->lastColumn = $lastColumn;
+        }
+        elseif($this->myColumns->count() == 0)
+        {
+            $this->lastColumn = null;
         }
     }
 }

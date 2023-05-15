@@ -201,7 +201,6 @@
                 </span>
             @enderror
         </div>
-
     </div>
 
     <div class="form-row mt-4">
@@ -232,13 +231,9 @@
                         wire:model.debounce.1500ms="column_left_endorse"
                     >
                         <option selected>Selecione Tipo Visación</option>
-                        @if($namesSignaturesLeft->count() >= 1)
-                            <option value="Opcional">Opcional</option>
-                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
-                        @endif
-                        @if($namesSignaturesLeft->count() >= 2)
-                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
-                        @endif
+                        <option value="Opcional">Opcional</option>
+                        <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
                     </select>
                     @error('column_left_endorse')
                         <span class="invalid-feedback" role="alert">
@@ -257,6 +252,8 @@
                         <button
                             class="btn btn-sm btn-danger"
                             wire:click="deleteSigner({{ $indexLeft }}, 'left')"
+                            wire:target="deleteSigner"
+                            wire:loading.attr="disabled"
                         >
                             <i class="fa fa-trash"></i>
                         </button>
@@ -306,13 +303,9 @@
                         wire:model.debounce.1500ms="column_center_endorse"
                     >
                         <option selected>Selecione Tipo Visación</option>
-                        @if($namesSignaturesCenter->count() >= 1)
-                            <option value="Opcional">Opcional</option>
-                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
-                        @endif
-                        @if($namesSignaturesCenter->count() >= 2)
-                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
-                        @endif
+                        <option value="Opcional">Opcional</option>
+                        <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
                     </select>
                     @error('column_center_endorse')
                         <span class="invalid-feedback" role="alert">
@@ -330,7 +323,9 @@
                         2.{{ $indexCenter + 1 }} {{ $itemCenterSignature }}
                         <button
                             class="btn btn-sm btn-danger"
-                            wire:click="deleteSigner({{ $indexCenter }}, 'left')"
+                            wire:click="deleteSigner({{ $indexCenter }}, 'center')"
+                            wire:target="deleteSigner"
+                            wire:loading.attr="disabled"
                         >
                             <i class="fa fa-trash"></i>
                         </button>
@@ -381,13 +376,9 @@
                         wire:model.debounce.1500ms="column_right_endorse"
                     >
                         <option selected>Selecione Tipo Visación</option>
-                        @if($namesSignaturesRight->count() >= 1)
-                            <option value="Opcional">Opcional</option>
-                            <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
-                        @endif
-                        @if($namesSignaturesRight->count() >= 2)
-                            <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
-                        @endif
+                        <option value="Opcional">Opcional</option>
+                        <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
+                        <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
                     </select>
                     @error('column_right_endorse')
                         <span class="invalid-feedback" role="alert">
@@ -405,7 +396,9 @@
                         3.{{ $indexRight + 1 }} {{ $itemRightSignature }}
                         <button
                             class="btn btn-sm btn-danger"
-                            wire:click="deleteSigner({{ $indexRight }}, 'left')"
+                            wire:click="deleteSigner({{ $indexRight }}, 'right')"
+                            wire:target="deleteSigner"
+                            wire:loading.attr="disabled"
                         >
                             <i class="fa fa-trash"></i>
                         </button>
