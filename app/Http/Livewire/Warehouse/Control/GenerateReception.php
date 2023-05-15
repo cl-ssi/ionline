@@ -110,6 +110,14 @@ class GenerateReception extends Component
         $this->error = MercadoPublico::getPurchaseOrderError($purchaseOrder);
         $this->msg = MercadoPublico::getPurchaseOrderErrorMessage($purchaseOrder);
 
+        if($purchaseOrder->charges != 0)
+        {
+            $this->error = true;
+            $this->msg = 'La OC posee cargos asociados.';
+            $this->resetInputReception();
+        }
+
+
         if(!$this->error)
         {
             foreach($purchaseOrder->items as $item)
@@ -287,22 +295,16 @@ class GenerateReception extends Component
 
     public function getRequestFormId()
     {
-        $request_form_id = null;
-        $immediatePurchase = ImmediatePurchase::wherePoId($this->po_search)->first();
-        if($immediatePurchase)
+        $this->request_form = null;
+
+        if(isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm))
         {
-            $purchasingDetail = PurchasingProcessDetail::whereImmediatePurchaseId($immediatePurchase->id)->first();
-            if($purchasingDetail)
-            {
-                $purchasingProcess = PurchasingProcess::find($purchasingDetail->purchasing_process_id);
-                if($purchasingProcess)
-                {
-                    $request_form_id = $purchasingProcess->request_form_id;
-                    $this->request_form = $purchasingProcess->requestForm;
-                }
-            }
+            $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
+            $this->request_form = $requestForm;
+
         }
-        return $request_form_id;
+
+        return $requestForm->id ?? null;
     }
 
     public function getTechnicalSignatureId()
@@ -462,7 +464,7 @@ class GenerateReception extends Component
             'supplier_id' => $supplier->id,
             'po_id' => $this->purchaseOrder->id,
             'request_form_id' => $this->request_form_id,
-            'reception_visator_id' => $this->store->visator->id,
+            'reception_visator_id' => auth()->id(),
             'technical_signer_id' => $this->technical_signer_id,
             'completed_invoices' => false,
         ]);

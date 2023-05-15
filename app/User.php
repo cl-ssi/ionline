@@ -8,11 +8,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\Models\Warehouse\StoreUser;
 use App\Models\Warehouse\Store;
 use App\Models\Suitability\Result;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\Rrhh\NoAttendanceRecord;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Profile\Subrogation;
 use App\Models\Parameters\AccessLog;
@@ -175,8 +177,8 @@ class User extends Authenticatable implements Auditable
     public function manager()
     {
         return $this->hasMany(Authority::class)
-        ->where('type','manager')
-        ->where('date',today());
+            ->where('type','manager')
+            ->where('date',today());
     }
 
     /* Authority relation: Is Secretary from ou */
@@ -193,6 +195,41 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Authority::class)
             ->where('type','delegate')
             ->where('date',today());
+    }
+
+    public function boss()
+    {
+        if($this->organizationalUnit) {
+            return $this->currentBoss($this->organizationalUnit);
+        }
+        else  {
+            /** Retorna una relación nula si no tiene OU asociada */
+            return $this->belongsTo(User::class)->withDefault();
+        }
+    }
+
+    /** Busca recursivamente el jefe, es necearia para la relación de arriba */
+    public function currentBoss(OrganizationalUnit $ou)
+    {
+        if($ou->currentManager) {
+            if($ou->currentManager->user_id == $this->id) {
+                if($ou->father) {
+                    /** Si tiene una OU padre se llama a si misma (recursiva) */
+                    return $this->currentBoss($ou->father);
+                }
+                else {
+                    /** Retorna una relación nula si no tiene una ou padre */
+                    return $this->belongsTo(User::class)->withDefault();
+                }
+            }
+            else {
+                return $ou->currentManager->user();
+            }
+        }
+        else {
+            /** Retorna una relación nula si no tiene current manager */
+            return $this->belongsTo(User::class)->withDefault();
+        }
     }
 
     public function serviceRequests()
@@ -271,6 +308,10 @@ class User extends Authenticatable implements Auditable
         return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
     }
 
+    public function noAttendanceRecords()
+    {
+        return $this->hasMany(NoAttendanceRecord::class);
+    }
 
     public function stores()
     {

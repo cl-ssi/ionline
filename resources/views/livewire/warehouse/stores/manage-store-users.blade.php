@@ -5,12 +5,6 @@
         </div>
     </div>
 
-    @if($store->visator == null)
-    <div class="alert alert-warning" role="alert">
-        Recuerde añadir un visador a la bodega
-    </div>
-    @endif
-
     <div class="row">
         <div class="col">
             <div class="card">
@@ -98,24 +92,6 @@
                             @enderror
                         </fieldset>
 
-                        <fieldset class="form-group col-md-6">
-                            <label for="visator-id">Indique si es visador</label>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input @error('is_visator') is-invalid @enderror"
-                                    wire:model="is_visator"
-                                    id="yes"
-                                    type="checkbox"
-                                >
-                                <label class="form-check-label" for="yes">Es Visador</label>
-                                @error('is_visator')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </fieldset>
-
                         <fieldset class="form-group col-md-12">
                             <button class="btn btn-primary" wire:click="addUser">
                                 Agregar usuario
@@ -168,11 +144,6 @@
                             <tr wire:loading.remove wire:target="search_user">
                                 <td>
                                     <small>{{ $itemUser->user->short_name }}</small>
-                                    @if($itemUser->isVisator())
-                                        <span class="badge badge-secondary">
-                                            Visador
-                                        </span>
-                                    @endif
                                 </td>
                                 <td>
                                     <small>{{ __($itemUser->role->name) }}</small>

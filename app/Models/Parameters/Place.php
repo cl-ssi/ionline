@@ -20,6 +20,7 @@ class Place extends Model
     protected $fillable = [
         'name',
         'description',
+        'architectural_design_code',
         'location_id',
         'establishment_id',
         'floor_number',

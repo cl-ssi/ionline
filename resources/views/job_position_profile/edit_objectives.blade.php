@@ -130,11 +130,33 @@
 </div>
 
 <hr/>
+<br>
+
+<div class="row">
+    <div class="col-md-3">
+        <h5><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h5>
+    </div>
+    <div class="col-md-9">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-plus"></i> Agregar Mensaje
+        </button>
+    </div>
+</div>
+
+@include('job_position_profile.modals.message')
+
+<br>
+
+@livewire('job-position-profile.show-messages', [
+    'jobPositionProfile'    => $jobPositionProfile
+])
+
+@can(['Job Position Profile: audit'])
+<hr/>
 <div style="height: 300px; overflow-y: scroll;">
     @include('partials.audit', ['audits' => $jobPositionProfile->audits()] )
 </div>
-
-
+@endcan
 
 @endsection
 

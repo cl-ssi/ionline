@@ -66,6 +66,30 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        //while creating/inserting item into db  
+        static::creating(function ($purchasingProcessDetail) {
+            if($purchasingProcessDetail->petty_cash_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->pettyCash->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->direct_deal_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->tender_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->tender->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+            if($purchasingProcessDetail->immediate_purchase_id != null){
+                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                $purchasingProcessDetail->immediatePurchase->save();
+            }
+        });
+    }
+
     public function getPurchasingTypeName(){
         if($this->internalPurchaseOrder) return 'OC interna';
         elseif($this->pettyCash) return 'Fondo menor';

@@ -77,9 +77,9 @@
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for_subject">Asunto</label>
+        <label for="for_subject">Asunto*</label>
         <input type="text" class="form-control" id="for_subject" name="subject"
-            value="{{ $parte->subject }}">
+            value="{{ $parte->subject }}" required>
     </fieldset>
 
 

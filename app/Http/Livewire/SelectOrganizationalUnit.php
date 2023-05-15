@@ -54,6 +54,7 @@ class SelectOrganizationalUnit extends Component
     {
         /* TODO: Esperando que la tabla de establecimientos se pueda filtrar por establecimientos dependientes del ss */
         $this->establishments = Establishment::whereIn('id',[1,38,41])->get();
+        //$this->establishments = Establishment::orderBy('official_name', 'asc')->get();
         $this->loadOus();
 
 

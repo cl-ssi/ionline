@@ -12,6 +12,7 @@
 
 <h3 class="mb-3">Logs <small> registros totales: {{ $logs->total() }}</small></h3>
 
+@livewire('parameters.log-statistics')
 
 <table class="table table-sm">
     <tbody>
@@ -28,6 +29,7 @@
             </th>
         </tr>
         <tr><td><b>[user_id] = </b>{{ $log->user_id }} - {{ optional($log->user)->fullName }}</td></tr>
+        <tr><td><b>[module] = </b> {{ $log->module }}</td></tr>
         <tr><td><b>[uri] = </b> <a target="_blank" href="{{ $log->uri }}">{{ $log->uri }}</a></td></tr>
         <tr><td><b>[message] = </b>{{ $log->message }}</td></tr>
         <tr><td><b>[formatted] = </b><pre>{{ substr($log->formatted, 0,1000) }}...</pre></td></tr>
