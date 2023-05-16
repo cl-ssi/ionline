@@ -120,12 +120,27 @@ class RequestSignature extends Component
             }
         }
 
+        $myColumns = $this->myColumns->keys();
 
-        if($this->myColumns->count() != 0)
+        if($myColumns->count() == 0)
         {
-            $columns = implode(',', $this->myColumns->keys()->toArray());
+            session()->flash('danger', 'El tipo de Visacion es un campo requerido.');
+            return;
+        }
 
-            session()->flash('danger', "El tipo de Visacion en las columnas: $columns es obligatorio");
+        if($myColumns->contains('left') && $this->column_left_endorse == null)
+        {
+            session()->flash('danger', "El tipo de Visacion en las columna izquierda es obligatorio");
+            return;
+        }
+        elseif($myColumns->contains('center') && $this->column_center_endorse == null)
+        {
+            session()->flash('danger', "El tipo de Visacion en las columna central es obligatorio");
+            return;
+        }
+        elseif($myColumns->contains('right') && $this->column_right_endorse == null)
+        {
+            session()->flash('danger', "El tipo de Visacion en las columna derecha es obligatorio");
             return;
         }
 
