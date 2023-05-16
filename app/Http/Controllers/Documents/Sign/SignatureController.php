@@ -17,21 +17,22 @@ class SignatureController extends Controller
     /**
      * Update the status of the signature
      *
-     * @param Signature $signature
-     * @param User $user
+     * @param  Signature $signature
+     * @param  User $user
+     * @param  string $filename
      * @return void
      */
-    public function update(Signature $signature, User $user)
+    public function update(Signature $signature, User $user, string $filename)
     {
         /**
          * Actualiza el archivo en Signature
          */
-        // $signature->update([
-        //     'file' => $file
-        // ]);
+        $signature->update([
+            'file' => 'ionline/sign/signed/'.$filename
+        ]);
 
         /**
-         * Obtiene el signatureFlow asociado
+         * Obtiene el signatureFlow asociado dado el Signature y el User
          */
         $signatureFlow = SignatureFlow::query()
             ->whereSignatureId($signature->id)
@@ -42,7 +43,7 @@ class SignatureController extends Controller
          * Actualiza el archivo y el estado en el SignatureFlow
          */
         $signatureFlow->update([
-            // 'file' => $file,
+            'file' => 'ionline/sign/signed/'.$filename,
             'status' => 'signed'
         ]);
 
