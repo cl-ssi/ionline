@@ -130,17 +130,17 @@ class RequestSignature extends Component
 
         if($myColumns->contains('left') && $this->column_left_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en las columna izquierda es obligatorio");
+            session()->flash('danger', "El tipo de Visacion en la columna izquierda es obligatorio");
             return;
         }
         elseif($myColumns->contains('center') && $this->column_center_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en las columna central es obligatorio");
+            session()->flash('danger', "El tipo de Visacion en la columna central es obligatorio");
             return;
         }
         elseif($myColumns->contains('right') && $this->column_right_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en las columna derecha es obligatorio");
+            session()->flash('danger', "El tipo de Visacion en la columna derecha es obligatorio");
             return;
         }
 
