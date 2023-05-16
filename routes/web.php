@@ -1820,6 +1820,7 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('dtes',IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation',DteConfirmation::class)->name('dtes.confirmation');
+    Route::get('payments/own', [PaymentController::class,'indexOwn'])->name('payments.own');
 });
 
 /*formulario de requerimiento compra o servicio */
