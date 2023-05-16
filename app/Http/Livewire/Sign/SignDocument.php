@@ -12,7 +12,7 @@ use Livewire\Component;
 class SignDocument extends Component
 {
     /**
-     * Indica si debe estar deshabilitado el boton
+     * Indica si debe estar deshabilitado el boton de firmar
      *
      * @var bool
      */
@@ -28,21 +28,21 @@ class SignDocument extends Component
     /**
      * Link del Documento a firmar
      *
-     * @var mixed
+     * @var string
      */
     public $link;
 
     /**
-     * Carpeta donde se guardar el documento firmado
+     * Carpeta donde se guardara el documento firmado
      *
-     * @var mixed
+     * @var string
      */
     public $folder;
 
     /**
      * Nombre del archivo del documento firmado
      *
-     * @var [type]
+     * @var string
      */
     public $filename;
 
@@ -56,28 +56,28 @@ class SignDocument extends Component
     /**
      * Eje y para ubicar la firma
      *
-     * @var mixed
+     * @var int
      */
     public $y;
 
     /**
      * Eje x para ubicar la firma
      *
-     * @var mixed
+     * @var int
      */
     public $x;
 
     /**
      * Route a redirigir
      *
-     * @var mixed
+     * @var string
      */
     public $route;
 
     /**
      * Parametros de la ruta a redirigir
      *
-     * @var mixed
+     * @var array
      */
     public $routeParams;
 
@@ -249,21 +249,6 @@ class SignDocument extends Component
         Storage::disk('gcs')
             ->getDriver()
             ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
-
-        // /**
-        //  * Actualiza el archivo en Signature
-        //  */
-        // $signature->update([
-        //     'file' => $file
-        // ]);
-
-        // /**
-        //  * Actualiza el archivo y el estado en el SignatureFlow
-        //  */
-        // $signatureFlow->update([
-        //     'file' => $file,
-        //     'status' => 'signed'
-        // ]);
 
         session()->flash('success', 'El documento fue firmado exitosamente');
         return redirect()->route($this->route, $this->routeParams);
