@@ -1,4 +1,5 @@
 <div>
+    @if($index != 'to_sign')
     <div class="card card-body small">
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
         
@@ -29,19 +30,20 @@
         </div>
 
     </div>
+    @endif
 
     @if($jobPositionProfiles->count() > 0)
+        @if($index != 'to_sign')
         <div class="row">
             <div class="col">
                 <p class="font-weight-lighter">Total de Registros: <b>{{ $jobPositionProfiles->total() }}</b></p>
             </div>
-            {{-- 
-            <div class="col">
-                <a class="btn btn-success btn-sm mb-1 float-right disabled" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
-            </div>
-            --}}
         </div>
-        
+        @endif
+
+        @if($index == 'to_sign')
+        <h5 class="mb-3"><i class="fas fa-inbox"></i> Pendientes: </h5>
+        @endif
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
@@ -106,7 +108,7 @@
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
                                     @endif
-                                    @if($sign->status == 'approved')
+                                    @if($sign->status == 'accepted')
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
                                             style="color: green;"
                                             title="{{ $sign->organizationalUnit->name }}">
@@ -123,26 +125,35 @@
                                 @endforeach
                             @endif
                         </td>
-                        <td class="text-center">    
+                        <td class="text-center">
+                            <!-- MIS PERFILES DE CARGO -->
                             @if($index == 'own')
                                 @if($jobPositionProfile->status == 'saved')
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>
                                 @else
-                                    <a href="{{-- route('allowances.show', $allowance) --}}"
-                                        class="btn btn-outline-secondary btn-sm" title="Ver Viático">
+                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 @endif
                             @endif
+                            <!-- PARA REVISIÓN -->
                             @if($index == 'review')
                                 @if($jobPositionProfile->status == 'review')
                                     <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Aprobar perfil de cargo">
+                                        class="btn btn-outline-secondary btn-sm" title="">
                                         <i class="fas fa-signature"></i>
                                     </a>
                                 @endif    
+                            @endif
+                            <!-- PARA FIRMAR -->
+                            @if($index == 'to_sign')
+                                <a href="{{ route('job_position_profile.to_sign', $jobPositionProfile) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             @endif
                         </td>
                         <td class="text-center">
@@ -171,14 +182,156 @@
             </table>    
         </div>
     @else
-        <div class="row">
-            <div class="col">
-                <p class="font-weight-lighter">Total de Registros: <b>{{ $jobPositionProfiles->total() }}</b></p>
-            </div>
-        </div>
+        @if($index == 'to_sign')
+        <h5 class="mb-3"><i class="fas fa-inbox"></i> Pendientes: </h5>
+        @endif
 
         <div class="alert alert-info" role="alert">
             <b>Estimado usuario</b>: No se encuentran <b>Perfiles de Cargos</b> según los parámetros consultados.
         </div>
+
+        @if($index == 'to_sign')
+        @if($reviewedJobPositionProfiles->count() > 0)
+        <br>
+        <h5 class="mb-3"><i class="fas fa-inbox"></i> Aprobados / Rechazados: </h5>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped table-hover small">
+                <thead>
+                    <tr class="text-center">
+                        <th>ID</th>
+                        <th style="width: 8%">Fecha Creación</th>
+                        <th>Usuario Creador / Unidad Organizacional</th>
+                        <th>Nombre de Perfil de Cargo</th>
+                        <th>Detalle / Calidad Jurídica</th>
+                        <th>Marco Legal</th>
+                        <th>Aprobaciones</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($reviewedJobPositionProfiles as $jobPositionProfile)
+                    <tr>
+                        <th>
+                            {{ $jobPositionProfile->id }} <br>
+                            @switch($jobPositionProfile->status)
+                            @case('saved')
+                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+                                @break
+
+                            @case('sent')
+                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+                                @break
+
+                            @case('rejected')
+                                <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+                                @break
+                            @case('review')
+                                <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+                                @break
+                        @endswitch    
+                        </th>
+                        <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
+                        <td>
+                            <b>{{ $jobPositionProfile->user->FullName }}</b> <br>
+                            {{ $jobPositionProfile->organizationalUnit->name }} <br><br>
+                        </td>
+                        <td>{{ $jobPositionProfile->name }}</td>
+                        <td>
+                            <b>Estamento</b>:   {{ $jobPositionProfile->estament->name }} <br>
+                            <b>Área</b>:        {{ $jobPositionProfile->area->name }} <br>
+                            <b>Condición</b>:   {{ $jobPositionProfile->contractualCondition->name }} - {{ ($jobPositionProfile->degree) ? 'Grado '.$jobPositionProfile->degree : $jobPositionProfile->salary }}
+                        </td>
+                        <td>
+                            <b>Ley</b>:   N°{{ number_format($jobPositionProfile->law, 0, ",", ".") }} <br>
+                            @if($jobPositionProfile->dfl3) DFL N°3/17 <br> @endif
+                            @if($jobPositionProfile->dfl29) DFL N°29 <br> @endif
+                            {{ $jobPositionProfile->working_day }} Horas
+                        </td>
+                        <td class="text-center">
+                            @if($jobPositionProfile->status == 'saved')
+                                <i class="fas fa-save fa-2x"></i>
+                            @else
+                                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                                    @if($sign->status == 'pending' || $sign->status == NULL)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </span>
+                                    @endif
+                                    @if($sign->status == 'accepted')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
+                                            style="color: green;"
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </span>
+                                    @endif
+                                    @if($sign->status == 'rejected')
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                            style="color: Tomato;"
+                                            title="{{ $sign->organizationalUnit->name }}">
+                                            <i class="fas fa-times-circle fa-2x"></i>
+                                        </span>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <!-- MIS PERFILES DE CARGO -->
+                            @if($index == 'own')
+                                @if($jobPositionProfile->status == 'saved')
+                                    <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                @endif
+                            @endif
+                            <!-- PARA REVISIÓN -->
+                            @if($index == 'review')
+                                @if($jobPositionProfile->status == 'review')
+                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="">
+                                        <i class="fas fa-signature"></i>
+                                    </a>
+                                @endif    
+                            @endif
+                            <!-- PARA FIRMAR -->
+                            @if($index == 'to_sign')
+                                <a href="{{ route('job_position_profile.to_sign', $jobPositionProfile) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($jobPositionProfile->status == "completed")
+                                
+                            @else
+                                <a href="{{ route('job_position_profile.document.create_document', $jobPositionProfile) }}"
+                                    class="btn btn-sm btn-outline-secondary" 
+                                    target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
+                                </a>
+                                {{--
+                                <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
+                                    class="btn btn-info btn-sm float-right" 
+                                    title="Selección" 
+                                    target="_blank">
+                                    Exportar Resumen <i class="fas fa-file"></i>
+                                </a>
+                                --}}
+                            @endif
+                        </td>
+                    <tr>
+                    @endforeach
+                </tbody>
+            </table>    
+        </div>
+        @endif
+        @endif
     @endif
 </div>

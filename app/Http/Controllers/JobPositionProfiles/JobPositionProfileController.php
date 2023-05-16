@@ -38,6 +38,11 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.index_review');
     }
 
+    public function index_to_sign()
+    {   
+        return view('job_position_profile.index_to_sign');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -59,7 +64,7 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile = new JobPositionProfile($request->All());
         $jobPositionProfile->status = 'pending';
         $jobPositionProfile->user()->associate(Auth::user());
-        $jobPositionProfile->organizationalUnit()->associate($request->ou_creator_id);
+        $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $jobPositionProfile->estament()->associate($request->estament_id);
         $jobPositionProfile->area()->associate($request->area_id);
         $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
@@ -79,8 +84,13 @@ class JobPositionProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(JobPositionProfile $jobPositionProfile)
-    {
+    {   
         return view('job_position_profile.show', compact('jobPositionProfile'));
+    }
+
+    public function to_sign(JobPositionProfile $jobPositionProfile)
+    {   
+        return view('job_position_profile.to_sign', compact('jobPositionProfile'));
     }
 
     /**

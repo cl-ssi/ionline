@@ -21,6 +21,31 @@ class JobPositionProfileSign extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'organizational_unit_id')->withTrashed();
     }
 
+    public function user() {
+        return $this->belongsTo('App\User')->withTrashed();
+    }
+
+    public function getStatusValueAttribute() {
+        switch($this->status) {
+            case 'pending':
+                return 'Pendiente de Aprobación';
+                break;
+            case 'accepted':
+                return 'Aceptada';
+                break;
+            case 'rejected':
+                return 'Rechazada';
+                break;
+            default:
+                return 'Pendiente de Aprobación';
+                break;
+        }
+    }
+
+    protected $dates = [
+        'date_sign'
+    ];
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];

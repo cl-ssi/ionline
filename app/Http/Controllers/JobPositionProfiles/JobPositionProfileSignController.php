@@ -7,6 +7,8 @@ use App\Models\JobPositionProfiles\JobPositionProfileSign;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Parameters\Parameter;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class JobPositionProfileSignController extends Controller
 {
@@ -150,9 +152,34 @@ class JobPositionProfileSignController extends Controller
      * @param  \App\Models\JobPositionProfiles\JobPositionProfileSign  $jobPositionProfileSign
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, JobPositionProfileSign $jobPositionProfileSign)
+    public function update(Request $request, JobPositionProfileSign $jobPositionProfileSign, $status, JobPositionProfile $jobPositionProfile)
     {
-        //
+        if($status == 'accepted'){
+            $jobPositionProfileSign->user_id = Auth::user()->id;
+            $jobPositionProfileSign->status = $status;
+            $jobPositionProfileSign->date_sign = now();
+            $jobPositionProfileSign->save();
+
+            $nextSign = $jobPositionProfile->jobPositionProfileSigns->where('position', $jobPositionProfileSign->position + 1)->first();
+            
+            if($nextSign){
+                $nextSign->status = 'pending';
+                $nextSign->save();
+                
+                /* 
+                AQUÍ IMPLEMENTAR NOTIFICACIONES
+                */
+
+                session()->flash('success', 'Estimado Usuario: El Perfil de Cargo ha sido Aprobado con exito.');
+                return redirect()->route('replacement_staff.request.to_sign');
+            }
+            else{
+
+            }
+        }
+        else{
+
+        }
     }
 
     /**
