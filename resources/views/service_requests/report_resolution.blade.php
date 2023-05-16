@@ -724,12 +724,18 @@
 
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="">
-        @if($ServiceRequest->profession->category == "A")
-          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico,
+        @if($ServiceRequest->profession)
+            @if($ServiceRequest->profession->category == "A")
+            <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico,
+            @else
+            <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico,
+            @endif
         @else
-          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico,
+            <strong><p style="color:#FF0000";>IMPORTANTE: No se encontró categoría de la profesión para generar este contenido. CONTACTAR A RRHH <br>(CONTRATO NO VÁLIDO).</p></strong>
         @endif
+        
         @if($ServiceRequest == NULL)
+        {{dd($ServiceRequest->profession && $ServiceRequest->profession)}}
           @if($ServiceRequest->profession && $ServiceRequest->profession->category == "A")
             Médico,
           @else

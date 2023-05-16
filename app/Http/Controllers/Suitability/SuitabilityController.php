@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Suitability;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
@@ -178,7 +179,37 @@ class SuitabilityController extends Controller
         }
         return redirect()->back();
     }
+    public function emergency(PsiRequest $psirequest)
+    {
+        // Obtener el resultado asociado al psirequest
+        $result = $psirequest->result;
 
+        // Obtener el signedCertificate correspondiente
+        $signedCertificate = $result->signedCertificate;
+
+        if ($signedCertificate) {
+            // Obtener los flujos de firma asociados al signedCertificate
+            $signaturesFlows = $signedCertificate->signaturesFlows;
+
+            // Eliminar los flujos de firma
+            foreach ($signaturesFlows as $flow) {
+                $flow->delete();
+            }
+
+            // Eliminar el signedCertificate
+            $signedCertificate->delete();
+        }
+
+        // Dejar en null el signed_certificate_id del resultado
+        $result->signed_certificate_id = null;
+        $result->save();
+
+        // Se realiza nuevamente el proceso de firma
+
+        $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
+        session()->flash('success', "Se elimino el certificado  de manera correcta y se creó una nueva solicitud de firma $signatureId");
+        return redirect()->back();
+    }
 
 
 
@@ -322,7 +353,7 @@ class SuitabilityController extends Controller
             $signature->responsable_id = Auth::id();
             $signature->ou_id = Auth::user()->organizational_unit_id;
             $signature->request_date = now();
-            $signature->type_id = Type::where('name','Carta')->first()->id;
+            $signature->type_id = Type::where('name', 'Carta')->first()->id;
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv}, Establecimiento:{$result->psirequest->school->name} ";
             //            $signature->endorse_type = 'Visación opcional';

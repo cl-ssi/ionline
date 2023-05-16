@@ -305,7 +305,7 @@
 				<tbody>
 					<tr>
 						<td>{{$serviceRequest->created_at}}</td>
-						<td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
+						<td>@if($serviceRequest->creator->organizationalUnit){{$serviceRequest->creator->organizationalUnit->name}}@endif</td>
 						<td>{{$serviceRequest->creator->position}}</td>
 						<td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
 						<td>Creador</td>
