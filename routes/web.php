@@ -2202,7 +2202,7 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
     Route::prefix('signatures')->as('signatures.')->group(function () {
         Route::get('/create', RequestSignature::class)->name('create');
         Route::get('/index', SignatureIndex::class)->name('index');
-        Route::get('/signature/{signature}/user/{user}/update', [SignSignatureController::class, 'update'])->name('update');
+        Route::get('/signature/{signature}/user/{user}/filename/{filename}/update', [SignSignatureController::class, 'update'])->name('update');
     });
 });
 
