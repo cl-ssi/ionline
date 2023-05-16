@@ -136,7 +136,6 @@
                             >{{ $signature->user->twoInitials }}</span>&nbsp;
                         </td>
                         <td class="text-center">
-                            {{ $signature->flows->firstWhere('signer_id', auth()->id())->x }}, {{ $signature->flows->firstWhere('signer_id', auth()->id())->y }}
                             @if($signature->isPending())
                                 @livewire('sign.sign-document', [
                                     'signatureId' => $signature->id,
@@ -150,9 +149,10 @@
                                     'route' => 'v2.documents.signatures.update',
                                     'routeParams' => [
                                         'signature' => $signature->id,
-                                        'user' => auth()->id()
+                                        'user' => auth()->id(),
+                                        'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id.'.pdf'
                                     ]
-                                ])
+                                ], key($signature->id))
                             @endif
                         </td>
                     </tr>
