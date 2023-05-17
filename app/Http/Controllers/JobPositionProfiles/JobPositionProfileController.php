@@ -62,7 +62,7 @@ class JobPositionProfileController extends Controller
     public function store(Request $request)
     {
         $jobPositionProfile = new JobPositionProfile($request->All());
-        $jobPositionProfile->status = 'pending';
+        $jobPositionProfile->status = 'saved';
         $jobPositionProfile->user()->associate(Auth::user());
         $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $jobPositionProfile->estament()->associate($request->estament_id);
