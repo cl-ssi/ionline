@@ -890,7 +890,7 @@ class ServiceRequestController extends Controller
   {
     // set_time_limit(7200);
     // ini_set('memory_limit', '2048M');
-
+    
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
     $semester = $request->semester;
@@ -940,14 +940,14 @@ class ServiceRequestController extends Controller
     ->orderBy('request_date', 'asc')
     ->get();
 
-    foreach ($serviceRequests as $key => $serviceRequest) {
-      foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-        // $start_date = Carbon::parse($shiftControl->start_date);
-        // $end_date = Carbon::parse($shiftControl->end_date);
-        $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
-        $serviceRequest->ControlHrs += $dateDiff;
-      }
-    }
+    // foreach ($serviceRequests as $key => $serviceRequest) {
+    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+    //     // $start_date = Carbon::parse($shiftControl->start_date);
+    //     // $end_date = Carbon::parse($shiftControl->end_date);
+    //     $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
+    //     $serviceRequest->ControlHrs += $dateDiff;
+    //   }
+    // }
 
     //solicitudes Rechazadas
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
@@ -993,14 +993,14 @@ class ServiceRequestController extends Controller
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')->get();
     
-    foreach ($serviceRequestsRejected as $key => $serviceRequest) {
-      foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-        // $start_date = Carbon::parse($shiftControl->start_date);
-        // $end_date = Carbon::parse($shiftControl->end_date);
-        $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
-        $serviceRequest->ControlHrs += $dateDiff;
-      }
-    }
+    // foreach ($serviceRequestsRejected as $key => $serviceRequest) {
+    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+    //     // $start_date = Carbon::parse($shiftControl->start_date);
+    //     // $end_date = Carbon::parse($shiftControl->end_date);
+    //     $dateDiff = $shiftControl->start_date->diffInHours($shiftControl->end_date);
+    //     $serviceRequest->ControlHrs += $dateDiff;
+    //   }
+    // }
     
     // if($request->request->count()>0){
     //     // return Excel::download(new ConsolidatedDataExport($request), 'consolidated-data.xlsx');
@@ -1008,7 +1008,8 @@ class ServiceRequestController extends Controller
     //     return (new ConsolidatedMasterDataExport(2018))->download('consolidated-data.xlsx');
     // }
     // return view('service_requests.requests.consolidated_data', compact('request'));
-
+    
+    // dd("");
     return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
   }
 
