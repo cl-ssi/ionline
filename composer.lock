@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2045ac8c1cde856299855c57cca86bb",
+    "content-hash": "ddf52ed59ae06bc8e467940a32d43a3f",
     "packages": [
         {
             "name": "actived/microsoft-teams-notifier",
@@ -247,6 +247,84 @@
                 }
             ],
             "time": "2023-01-12T15:12:49+00:00"
+        },
+        {
+            "name": "barryvdh/laravel-snappy",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-snappy.git",
+                "reference": "2c18a3602981bc6f25b32908cf8aaa05952ab2f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-snappy/zipball/2c18a3602981bc6f25b32908cf8aaa05952ab2f7",
+                "reference": "2c18a3602981bc6f25b32908cf8aaa05952ab2f7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/filesystem": "^6|^7|^8|^9",
+                "illuminate/support": "^6|^7|^8|^9",
+                "knplabs/knp-snappy": "^1",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4|^5|^6|^7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Barryvdh\\Snappy\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "PDF": "Barryvdh\\Snappy\\Facades\\SnappyPdf",
+                        "SnappyImage": "Barryvdh\\Snappy\\Facades\\SnappyImage"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\Snappy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Snappy PDF/Image for Laravel",
+            "keywords": [
+                "image",
+                "laravel",
+                "pdf",
+                "snappy",
+                "wkhtmltoimage",
+                "wkhtmltopdf"
+            ],
+            "support": {
+                "issues": "https://github.com/barryvdh/laravel-snappy/issues",
+                "source": "https://github.com/barryvdh/laravel-snappy/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://fruitcake.nl",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/barryvdh",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-01-29T19:36:49+00:00"
         },
         {
             "name": "brick/math",
@@ -2156,16 +2234,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.6.0",
+            "version": "7.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "733dd89533dd371a0987172727df15f500dab0ef"
+                "reference": "8444a2bacf1960bc6a2b62ed86b8e72e11eebe51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/733dd89533dd371a0987172727df15f500dab0ef",
-                "reference": "733dd89533dd371a0987172727df15f500dab0ef",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/8444a2bacf1960bc6a2b62ed86b8e72e11eebe51",
+                "reference": "8444a2bacf1960bc6a2b62ed86b8e72e11eebe51",
                 "shasum": ""
             },
             "require": {
@@ -2261,7 +2339,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.6.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.6.1"
             },
             "funding": [
                 {
@@ -2277,7 +2355,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-14T11:23:39+00:00"
+            "time": "2023-05-15T20:43:01+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -2478,6 +2556,80 @@
                 }
             ],
             "time": "2023-04-17T16:11:26+00:00"
+        },
+        {
+            "name": "knplabs/knp-snappy",
+            "version": "v1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/snappy.git",
+                "reference": "b66f79334421c26d9c244427963fa2d92980b5d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/b66f79334421c26d9c244427963fa2d92980b5d3",
+                "reference": "b66f79334421c26d9c244427963fa2d92980b5d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "psr/log": "^1.0||^2.0||^3.0",
+                "symfony/process": "~3.4||~4.3||~5.0||~6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16||^3.0",
+                "pedrotroller/php-cs-custom-fixer": "^2.19",
+                "phpstan/phpstan": "^0.12.7",
+                "phpstan/phpstan-phpunit": "^0.12.6",
+                "phpunit/phpunit": "~7.4||~8.5"
+            },
+            "suggest": {
+                "h4cc/wkhtmltoimage-amd64": "Provides wkhtmltoimage-amd64 binary for Linux-compatible machines, use version `~0.12` as dependency",
+                "h4cc/wkhtmltoimage-i386": "Provides wkhtmltoimage-i386 binary for Linux-compatible machines, use version `~0.12` as dependency",
+                "h4cc/wkhtmltopdf-amd64": "Provides wkhtmltopdf-amd64 binary for Linux-compatible machines, use version `~0.12` as dependency",
+                "h4cc/wkhtmltopdf-i386": "Provides wkhtmltopdf-i386 binary for Linux-compatible machines, use version `~0.12` as dependency",
+                "wemersonjanuario/wkhtmltopdf-windows": "Provides wkhtmltopdf executable for Windows, use version `~0.12` as dependency"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Snappy\\": "src/Knp/Snappy"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KNP Labs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://github.com/KnpLabs/snappy/contributors"
+                }
+            ],
+            "description": "PHP library allowing thumbnail, snapshot or PDF generation from a url or a html page. Wrapper for wkhtmltopdf/wkhtmltoimage.",
+            "homepage": "http://github.com/KnpLabs/snappy",
+            "keywords": [
+                "knp",
+                "knplabs",
+                "pdf",
+                "snapshot",
+                "thumbnail",
+                "wkhtmltopdf"
+            ],
+            "support": {
+                "issues": "https://github.com/KnpLabs/snappy/issues",
+                "source": "https://github.com/KnpLabs/snappy/tree/v1.4.2"
+            },
+            "time": "2023-03-17T14:47:54+00:00"
         },
         {
             "name": "laminas/laminas-escaper",
@@ -10180,16 +10332,16 @@
         },
         {
             "name": "fakerphp/faker",
-            "version": "v1.21.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FakerPHP/Faker.git",
-                "reference": "92efad6a967f0b79c499705c69b662f738cc9e4d"
+                "reference": "f85772abd508bd04e20bb4b1bbe260a68d0066d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/92efad6a967f0b79c499705c69b662f738cc9e4d",
-                "reference": "92efad6a967f0b79c499705c69b662f738cc9e4d",
+                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/f85772abd508bd04e20bb4b1bbe260a68d0066d2",
+                "reference": "f85772abd508bd04e20bb4b1bbe260a68d0066d2",
                 "shasum": ""
             },
             "require": {
@@ -10242,9 +10394,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FakerPHP/Faker/issues",
-                "source": "https://github.com/FakerPHP/Faker/tree/v1.21.0"
+                "source": "https://github.com/FakerPHP/Faker/tree/v1.22.0"
             },
-            "time": "2022-12-13T13:54:32+00:00"
+            "time": "2023-05-14T12:31:37+00:00"
         },
         {
             "name": "filp/whoops",
@@ -10936,22 +11088,23 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.20.4",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd"
+                "reference": "6df62b08faef4f899772bc7c3bbabb93d2b7a21c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd",
-                "reference": "7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6df62b08faef4f899772bc7c3bbabb93d2b7a21c",
+                "reference": "6df62b08faef4f899772bc7c3bbabb93d2b7a21c",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
+                "nikic/php-parser": "^4.15",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.5",
@@ -10975,9 +11128,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.20.4"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.21.0"
             },
-            "time": "2023-05-02T09:19:37+00:00"
+            "time": "2023-05-17T13:13:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

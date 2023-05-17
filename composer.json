@@ -13,6 +13,7 @@
         "actived/microsoft-teams-notifier": "*",
         "aquaro/laravel-maintenance-mode": "^0.1.1",
         "barryvdh/laravel-dompdf": "^2.0",
+        "barryvdh/laravel-snappy": "^1.0",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "firebase/php-jwt": "^5.2",
