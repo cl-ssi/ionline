@@ -79,10 +79,11 @@ class PurchasingProcessDetail extends Pivot implements Auditable
                 $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
                 $purchasingProcessDetail->immediatePurchase->save();
             }
-            if($purchasingProcessDetail->tender_id != null){
-                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->tender->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-                $purchasingProcessDetail->immediatePurchase->save();
-            }
+            // 17/05 (jorge/esteban): se comenta puesto que no es una compra inmediata.
+            // if($purchasingProcessDetail->tender_id != null){
+            //     $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+            //     $purchasingProcessDetail->immediatePurchase->save();
+            // }
             if($purchasingProcessDetail->immediate_purchase_id != null){
                 $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
                 $purchasingProcessDetail->immediatePurchase->save();
