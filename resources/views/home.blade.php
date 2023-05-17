@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hogar')
+@section('title', 'Inicio')
 
 @section('content')
 
@@ -13,7 +13,7 @@
 
 <div class="jumbotron mt-4">
     <div class="row">
-        <div class="col-9">
+        <div class="col-8">
             <h1 class="display-4">Intranet Online</h1>
             <p class="lead">{{ env('APP_SS') }}</p>
 
@@ -50,10 +50,21 @@
                 </p>
             </div> -->
 
+            <div class="alert alert-primary" role="alert">
+                A contar del 1 de Junio del 2023, nos pasaremos a llamar <strong>Servicio de Salud Tarapacá</strong>,<br> 
+                puede descargar el nuevo logo en <strong>alta resolución</strong> desde acá:<br>
+                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a> - 
+                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}">SST Pluma</a> - 
+                <a href="{{ asset('images/Logo Hospital Ernesto Torres - RGB.png') }}">HETG Color</a> - 
+                <a href="{{ asset('images/Logo Hospital Ernesto Torres - Pluma.png') }}">HETG Pluma</a> - 
+                <!-- <a href="{{ asset('images/Logo Hospital de Alto Hospicio - RGB.png') }}">HAH Color</a> - 
+                <a href="{{ asset('images/Logo Hospital de Alto Hospicio - Pluma.png') }}">HAH Pluma</a>  -->
+            </div>
+
         </div>
-        <div class="col-md-3 col-12">
+        <div class="col-md-4 col-12">
             <!-- <img src="{{ asset('images/tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
-            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
+            <img src="{{ asset('images/logo_ssi_a_sst.gif') }}" alt="Logo {{ env('APP_SS') }}" class="img-thumbnail">
         </div>
     </div>
 
