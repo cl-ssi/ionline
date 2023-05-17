@@ -22,6 +22,7 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
 use App\Models\Parameters\Program;
 use App\Models\Documents\SignaturesFile;
+use App\Models\Warehouse\Control;
 
 class RequestForm extends Model implements Auditable
 {
@@ -39,7 +40,7 @@ class RequestForm extends Model implements Auditable
 
     public function isBlocked()
     {
-        return in_array($this->id, [172,173,164,176,180,181]); // FR ids con restricción de No generar suministros
+        return in_array($this->id, [172, 173, 164, 176, 180, 181]); // FR ids con restricción de No generar suministros
     }
 
     public function getFolioAttribute($value)
@@ -178,6 +179,11 @@ class RequestForm extends Model implements Auditable
         return $this->hasMany(PaymentDoc::class);
     }
 
+    public function control()
+    {
+        return $this->hasOne(Control::class);
+    }
+
     public function getTotalEstimatedExpense()
     {
         $total = 0;
@@ -187,6 +193,8 @@ class RequestForm extends Model implements Auditable
         }
         return $total;
     }
+
+
 
     public function getTotalExpense()
     {
@@ -394,7 +402,7 @@ class RequestForm extends Model implements Auditable
     {
         $event = $this->eventRequestForms()->where('status', $status)->where('event_type', $event_type)->first();
         if (!is_null($event)) {
-            return $event->signerUser->tinnyName ;
+            return $event->signerUser->tinnyName;
         }
     }
 
@@ -460,126 +468,143 @@ class RequestForm extends Model implements Auditable
     //     return $query;
     // }
 
-    public function scopeSearch($query, $status_search, $status_purchase_search, $id_search, $folio_search, $name_search,
-        $start_date_search, $end_date_search, $requester_search, $requester_ou_id, $admin_search, $admin_ou_id, $purchaser_search, 
-        $program_search, $purchase_order_search, $tender_search, $supplier_search)
-    {
-        if ($status_search OR $status_purchase_search OR $id_search OR $folio_search OR $name_search 
-            OR $start_date_search OR $end_date_search OR $requester_search OR $requester_ou_id OR $admin_search 
-            OR $admin_ou_id OR $purchaser_search OR $program_search OR $purchase_order_search OR $tender_search OR $supplier_search) {
-            if($status_search != ''){
-                $query->where(function($q) use($status_search){
+    public function scopeSearch(
+        $query,
+        $status_search,
+        $status_purchase_search,
+        $id_search,
+        $folio_search,
+        $name_search,
+        $start_date_search,
+        $end_date_search,
+        $requester_search,
+        $requester_ou_id,
+        $admin_search,
+        $admin_ou_id,
+        $purchaser_search,
+        $program_search,
+        $purchase_order_search,
+        $tender_search,
+        $supplier_search
+    ) {
+        if (
+            $status_search or $status_purchase_search or $id_search or $folio_search or $name_search
+            or $start_date_search or $end_date_search or $requester_search or $requester_ou_id or $admin_search
+            or $admin_ou_id or $purchaser_search or $program_search or $purchase_order_search or $tender_search or $supplier_search
+        ) {
+            if ($status_search != '') {
+                $query->where(function ($q) use ($status_search) {
                     $q->where('status', $status_search);
                 });
             }
-            if($status_purchase_search != ''){
-                $query->whereHas('purchasingProcess', function($q) use ($status_purchase_search){
+            if ($status_purchase_search != '') {
+                $query->whereHas('purchasingProcess', function ($q) use ($status_purchase_search) {
                     $q->Where('status', $status_purchase_search);
-                })->when($status_purchase_search == 'in_process', function($q){
+                })->when($status_purchase_search == 'in_process', function ($q) {
                     $q->orWhere('status', 'approved')->doesntHave('purchasingProcess');
                 });
             }
-            if($id_search != ''){
-                $query->where(function($q) use($id_search){
+            if ($id_search != '') {
+                $query->where(function ($q) use ($id_search) {
                     $q->where('id', $id_search);
                 });
             }
-            if($folio_search != ''){
-                $query->where(function($q) use($folio_search){
+            if ($folio_search != '') {
+                $query->where(function ($q) use ($folio_search) {
                     $q->where('folio', $folio_search);
                 });
             }
-            if($name_search != ''){
-                $query->where(function($q) use($name_search){
-                    $q->where('name', 'LIKE', '%'.$name_search.'%');
+            if ($name_search != '') {
+                $query->where(function ($q) use ($name_search) {
+                    $q->where('name', 'LIKE', '%' . $name_search . '%');
                 });
             }
-            if($start_date_search != '' && $end_date_search != ''){
-                $query->where(function($q) use($start_date_search, $end_date_search){
-                    $q->whereBetween('created_at', [$start_date_search, $end_date_search." 23:59:59"])->get();
+            if ($start_date_search != '' && $end_date_search != '') {
+                $query->where(function ($q) use ($start_date_search, $end_date_search) {
+                    $q->whereBetween('created_at', [$start_date_search, $end_date_search . " 23:59:59"])->get();
                 });
             }
             $array_requester_search = explode(' ', $requester_search);
-            foreach($array_requester_search as $word){
-                $query->whereHas('user' ,function($query) use($word){
-                    $query->where('name', 'LIKE', '%'.$word.'%')
-                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+            foreach ($array_requester_search as $word) {
+                $query->whereHas('user', function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
                 });
             }
-            if($requester_ou_id != ''){
-                $query->where(function($q) use($requester_ou_id){
+            if ($requester_ou_id != '') {
+                $query->where(function ($q) use ($requester_ou_id) {
                     $q->where('request_user_ou_id', $requester_ou_id);
                 });
             }
             $array_admin_search = explode(' ', $admin_search);
-            foreach($array_admin_search as $word){
-                $query->whereHas('contractManager' ,function($query) use($word){
-                    $query->where('name', 'LIKE', '%'.$word.'%')
-                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                        ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+            foreach ($array_admin_search as $word) {
+                $query->whereHas('contractManager', function ($query) use ($word) {
+                    $query->where('name', 'LIKE', '%' . $word . '%')
+                        ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                        ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
                 });
             }
-            if($admin_ou_id != ''){
-                $query->where(function($q) use($admin_ou_id){
+            if ($admin_ou_id != '') {
+                $query->where(function ($q) use ($admin_ou_id) {
                     $q->where('contract_manager_ou_id', $admin_ou_id);
                 });
             }
-            if($purchaser_search != null){
+            if ($purchaser_search != null) {
                 $array_purchaser_search = explode(' ', $purchaser_search);
-                foreach($array_purchaser_search as $word){
-                    $query->whereHas('purchasers' ,function($query) use($word){
-                        $query->where('name', 'LIKE', '%'.$word.'%')
-                            ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                            ->orwhere('mothers_family','LIKE', '%'.$word.'%');
+                foreach ($array_purchaser_search as $word) {
+                    $query->whereHas('purchasers', function ($query) use ($word) {
+                        $query->where('name', 'LIKE', '%' . $word . '%')
+                            ->orwhere('fathers_family', 'LIKE', '%' . $word . '%')
+                            ->orwhere('mothers_family', 'LIKE', '%' . $word . '%');
                     });
                 }
             }
-            if($program_search != ''){
-                $query->where(function($q) use($program_search){
-                    $q->where('program', 'LIKE', '%'.$program_search.'%');
-                })->orWhereHas('associateProgram', function($query) use ($program_search){
-                    $query->where('alias_finance', 'LIKE', '%'.$program_search.'%');
+            if ($program_search != '') {
+                $query->where(function ($q) use ($program_search) {
+                    $q->where('program', 'LIKE', '%' . $program_search . '%');
+                })->orWhereHas('associateProgram', function ($query) use ($program_search) {
+                    $query->where('alias_finance', 'LIKE', '%' . $program_search . '%');
                 });
             }
-            if($purchase_order_search != ''){
-                $query->whereHas('purchasingProcess.details', function($q) use ($purchase_order_search){
+            if ($purchase_order_search != '') {
+                $query->whereHas('purchasingProcess.details', function ($q) use ($purchase_order_search) {
                     $q->join('arq_immediate_purchases', function ($join) use ($purchase_order_search) {
                         $join->on('arq_purchasing_process_detail.immediate_purchase_id', '=', 'arq_immediate_purchases.id')
-                             ->where('arq_immediate_purchases.po_id', '=', $purchase_order_search);
+                            ->where('arq_immediate_purchases.po_id', '=', $purchase_order_search);
                     });
                 });
             }
-            if($tender_search != ''){
-                $query->whereHas('purchasingProcess.details', function($q) use ($tender_search){
+            if ($tender_search != '') {
+                $query->whereHas('purchasingProcess.details', function ($q) use ($tender_search) {
                     $q->join('arq_tenders', function ($join) use ($tender_search) {
                         $join->on('arq_purchasing_process_detail.tender_id', '=', 'arq_tenders.id')
-                             ->where('arq_tenders.tender_number', '=', $tender_search);
+                            ->where('arq_tenders.tender_number', '=', $tender_search);
                     });
                 });
             }
 
-            if($supplier_search != ''){
+            if ($supplier_search != '') {
 
-                $query->whereHas('purchasingProcess.details', function($q) use ($supplier_search){
+                $query->whereHas('purchasingProcess.details', function ($q) use ($supplier_search) {
                     $q->join('arq_immediate_purchases', function ($join) use ($supplier_search) {
                         $join->on('arq_purchasing_process_detail.immediate_purchase_id', '=', 'arq_immediate_purchases.id')
-                             ->where('arq_immediate_purchases.po_supplier_name', 'LIKE', '%'.$supplier_search.'%');
-                             //->orwhere('arq_immediate_purchases.po_supplier_office_run','LIKE', '%'.$supplier_search.'%');
+                            ->where('arq_immediate_purchases.po_supplier_name', 'LIKE', '%' . $supplier_search . '%');
+                        //->orwhere('arq_immediate_purchases.po_supplier_office_run','LIKE', '%'.$supplier_search.'%');
                     });
-                }) 
+                })
 
-                ->orWhereHas('purchasingProcess.details', function($q) use ($supplier_search){
-                    $q->join('arq_internal_purchase_orders', function ($join) use ($supplier_search) {
-                        $join->on('arq_purchasing_process_detail.internal_purchase_order_id', '=', 'arq_internal_purchase_orders.id')
-                            ->join('cfg_suppliers', function ($join) use ($supplier_search) {
-                                $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
-                                    ->where('cfg_suppliers.name', 'LIKE', '%'.$supplier_search.'%');
+                    ->orWhereHas('purchasingProcess.details', function ($q) use ($supplier_search) {
+                        $q->join('arq_internal_purchase_orders', function ($join) use ($supplier_search) {
+                            $join->on('arq_purchasing_process_detail.internal_purchase_order_id', '=', 'arq_internal_purchase_orders.id')
+                                ->join('cfg_suppliers', function ($join) use ($supplier_search) {
+                                    $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
+                                        ->where('cfg_suppliers.name', 'LIKE', '%' . $supplier_search . '%');
                                     //->orwhere('arq_immediate_purchases.po_supplier_office_run','LIKE', '%'.$supplier_search.'%');
-                            });
+                                });
+                        });
                     });
-                });
-                
+
 
                 // ->join('cfg_suppliers', function ($join) use ($supplier_search) {
                 //     $join->on('arq_internal_purchase_orders.supplier_id', '=', 'cfg_suppliers.id')
@@ -617,16 +642,17 @@ class RequestForm extends Model implements Auditable
         return $this->approvedAt->addDays($daysToExpire);
     }
 
-    function getPurchasedOnTimeAttribute(){
+    function getPurchasedOnTimeAttribute()
+    {
         $po_sent_dates = [];
-        foreach($this->purchasingProcess->details as $detail){
-            if($detail->pivot->tender && $detail->pivot->tender->oc) $po_sent_dates[] = $detail->pivot->tender->oc->po_sent_date;
-            if($detail->pivot->directDeal && $detail->pivot->directDeal->oc) $po_sent_dates[] = $detail->pivot->directDeal->oc->po_sent_date;
-            if($detail->pivot->immediatePurchase) $po_sent_dates[] = $detail->pivot->immediatePurchase->po_sent_date;
+        foreach ($this->purchasingProcess->details as $detail) {
+            if ($detail->pivot->tender && $detail->pivot->tender->oc) $po_sent_dates[] = $detail->pivot->tender->oc->po_sent_date;
+            if ($detail->pivot->directDeal && $detail->pivot->directDeal->oc) $po_sent_dates[] = $detail->pivot->directDeal->oc->po_sent_date;
+            if ($detail->pivot->immediatePurchase) $po_sent_dates[] = $detail->pivot->immediatePurchase->po_sent_date;
         }
 
         // return '['.implode(', ', $po_sent_dates).']';
-        if(count($po_sent_dates) == 0) return null;
+        if (count($po_sent_dates) == 0) return null;
 
         $max = max(array_map('strtotime', $po_sent_dates));
         return date('d-m-Y H:i', $max);

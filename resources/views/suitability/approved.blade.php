@@ -19,7 +19,7 @@
                 <th>Estado</th>
                 <th>Fecha de Aprobación</th>
                 <th>Certificado</th>
-                <th>Eliminar Certificado y Volver al estado Test Finalizado</th>
+                <th>Eliminar Certificado y Volver a generar una nueva solicitud de Firma</th>
             </tr>
         </thead>
         <tbody>
@@ -40,7 +40,15 @@
                                 <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
                         @endif
                     </td>
-                    <td>Boton Emergencia</td>
+                    <td>
+                        <form method="POST" action="{{ route('suitability.emergency', ['psirequest' => $psirequest]) }}"
+                            onsubmit="return confirm('¿Está seguro de que desea realizar esta acción?')">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">
+                                <span class="fas fa-fire" aria-hidden="true"></span> Botón de Emergencia
+                            </button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
 

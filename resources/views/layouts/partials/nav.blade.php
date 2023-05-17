@@ -395,7 +395,7 @@
 
                             <a class="dropdown-item {{ active('replacement_staff.request.index') }}"
                         href="{{ route('replacement_staff.request.index') }}">
-                        <i class="far fa-id-card"></i> Solicitudes de Contratación
+                        <i class="far fa-id-card "></i> Solicitudes de Contratación
                         </a>
                         @endif --}}
 
@@ -418,7 +418,7 @@
                         <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
 
                         <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
-                            <i class="far fa-id-card"></i> Solicitudes de Contratación
+                            <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
                             {{--
                             @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
                             <span class="badge badge-secondary">
@@ -430,8 +430,8 @@
                         @endif
 
                         @canany(['Job Position Profile: create', 'Job Position Profile: all', 'Job Position Profile: review'])
-                        <a class="dropdown-item" href="{{ route('job_position_profile.index') }}">
-                            <i class="fas fa-id-badge"></i> Perfil de Cargos
+                        <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
+                            <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
                         </a>
                         @endcan
 

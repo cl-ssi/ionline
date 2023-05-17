@@ -543,9 +543,11 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
+    Route::get('/index_to_sign', [JobPositionProfileController::class, 'index_to_sign'])->name('index_to_sign');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
-    Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
     Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
     Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
     Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
@@ -561,6 +563,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
     Route::prefix('sign')->name('sign.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [JobPositionProfileSignController::class, 'store'])->name('store');
+        Route::put('/{jobPositionProfileSign}/{status}/{jobPositionProfile}/update', [JobPositionProfileSignController::class, 'update'])->name('update');
     });
     Route::prefix('message')->name('message.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [MessageController::class, 'store'])->name('store');
@@ -1817,6 +1820,7 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('dtes',IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation',DteConfirmation::class)->name('dtes.confirmation');
+    Route::get('payments/own', [PaymentController::class,'indexOwn'])->name('payments.own');
 });
 
 /*formulario de requerimiento compra o servicio */
@@ -2037,6 +2041,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::get('/reportsigned', [SuitabilityController::class, 'reportsigned'])->name('reportsigned');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
