@@ -30,6 +30,17 @@
             </a>
         </li>
     @endcan
+    @can('be god')
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.upload-excel']) }}"
+                href="{{ route('inventories.upload-excel', $establishment) }}"
+            >
+                <i class="fas fa-file-excel"></i> Carga Excel
+            </a>
+        </li>
+    @endcan
+
     @can('Inventory: place maintainer')
         <li class="nav-item dropdown">
             <a

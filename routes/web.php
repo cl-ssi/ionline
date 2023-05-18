@@ -37,6 +37,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryUploadExcel;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
@@ -1741,6 +1742,8 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
             ->middleware(['can:Inventory: place maintainer']);
 
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
+
+        Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
 
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
