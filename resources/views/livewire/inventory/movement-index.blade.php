@@ -63,7 +63,7 @@
             <li>
                 {{ $movement->created_at->format('Y-m-d') }}
                 - Entrega a responsable
-                <b>{{ $movement->responsibleUser->full_name }}</b>
+                <b>{{ optional($movement->responsibleUser)->full_name }}</b>
                 en
                 <b>{{ $movement->place->location->name }}</b>
                 -
