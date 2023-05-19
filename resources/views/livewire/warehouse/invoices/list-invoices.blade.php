@@ -9,17 +9,17 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($control->invoices as $invoice)
+                @forelse($inventory->dtes as $dte)
                     <tr>
                         <td>
-                            {{ $invoice->number }}
+                            {{ $dte->folio }}
                         </td>
                         <td>
-                            {{ $invoice->date->format('Y-m-d') }}
+                            {{ $dte->emision }}
                         </td>
                         <td class="text-center">
                             <a
-                                href="https://storage.googleapis.com{{ $invoice->url }}"
+                                href="{{ $dte->uri }}"
                                 class="btn btn-sm btn-outline-secondary"
                                 target="_blank"
                                 title="Ver archivo"

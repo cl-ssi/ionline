@@ -104,6 +104,12 @@
     </div>
 
     <br>
+    
+    @livewire('job-position-profile.create-work-team', [
+        'jobPositionProfile' => $jobPositionProfile
+    ])
+    
+    <br>
 
     <h6 class="small"><b>Organigrama.</b></h6> 
 

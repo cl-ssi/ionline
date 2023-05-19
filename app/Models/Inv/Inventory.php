@@ -2,22 +2,24 @@
 
 namespace App\Models\Inv;
 
-use App\Models\Parameters\BudgetItem;
-use App\Models\RequestForms\PurchaseOrder;
-use App\Models\RequestForms\RequestForm;
-use App\Models\Warehouse\Control;
-use App\Models\Warehouse\Product;
+use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
 use App\Models\Warehouse\Store;
-use App\Models\Parameters\Place;
+use App\Models\Warehouse\Product;
+use App\Models\Warehouse\Control;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Resources\Computer;
-use App\Rrhh\OrganizationalUnit;
-use App\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\PurchaseOrder;
+use App\Models\Parameters\Place;
+use App\Models\Parameters\BudgetItem;
+use App\Models\Finance\Dte;
+use App\Models\Finance\AccountingCode;
 
 class Inventory extends Model implements Auditable
 {
@@ -35,6 +37,7 @@ class Inventory extends Model implements Auditable
         'po_code',
         'po_price',
         'po_date',
+        'dte_number',
         'status',
         'observations',
         'discharge_date',
@@ -55,6 +58,7 @@ class Inventory extends Model implements Auditable
         'po_id',
         'request_form_id',
         'budget_item_id',
+        'accounting_code_id',
     ];
 
     protected $dates = [
@@ -66,6 +70,12 @@ class Inventory extends Model implements Auditable
     protected $appends = [
         'have_computer',
     ];
+
+    /** Documentos Tributarios */
+    public function dtes()
+    {
+        return $this->hasMany(Dte::class,'folio_oc','po_code');
+    }
 
     public function establishment()
     {
@@ -145,6 +155,11 @@ class Inventory extends Model implements Auditable
     public function computer()
     {
         return $this->hasOne(Computer::class);
+    }
+
+    public function accountingCode()
+    {
+        return $this->belongsTo(AccountingCode::class);
     }
 
     public function isComputer()

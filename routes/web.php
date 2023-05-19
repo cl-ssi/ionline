@@ -37,6 +37,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryUploadExcel;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
@@ -538,15 +539,19 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 });
 /** Fin Replacement Staff */
 
-/* Replacepent Staff */
+/** Inicio Perfil de Cargos */
 Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
+    Route::get('/index_to_sign', [JobPositionProfileController::class, 'index_to_sign'])->name('index_to_sign');
+    Route::get('/all_index', [JobPositionProfileController::class, 'all_index'])->name('all_index')->middleware('permission:Job Position Profile: all');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
-    Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
     Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
+    Route::put('{jobPositionProfile}/update', [JobPositionProfileController::class, 'update'])->name('update');
     Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
     Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
     Route::get('{jobPositionProfile}/edit_objectives', [JobPositionProfileController::class, 'edit_objectives'])->name('edit_objectives');
@@ -561,6 +566,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
     Route::prefix('sign')->name('sign.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [JobPositionProfileSignController::class, 'store'])->name('store');
+        Route::put('/{jobPositionProfileSign}/{status}/{jobPositionProfile}/update', [JobPositionProfileSignController::class, 'update'])->name('update');
     });
     Route::prefix('message')->name('message.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [MessageController::class, 'store'])->name('store');
@@ -569,10 +575,6 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
         Route::get('/create_document/{jobPositionProfile}', [JobPositionProfileController::class, 'create_document'])->name('create_document');
     });
 });
-/** Inicio Perfil de Cargos */
-
-
-
 /** Fin Perfil de Cargos */
 
 /** Inicio Recursos */
@@ -1738,6 +1740,8 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
             ->middleware(['can:Inventory: place maintainer']);
 
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
+
+        Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
 
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
@@ -1817,6 +1821,7 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('dtes',IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation',DteConfirmation::class)->name('dtes.confirmation');
+    Route::get('payments/own', [PaymentController::class,'indexOwn'])->name('payments.own');
 });
 
 /*formulario de requerimiento compra o servicio */

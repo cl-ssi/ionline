@@ -6,8 +6,7 @@
 
 @include('job_position_profile.partials.nav')
 
-<h5><i class="fas fa-id-badge"></i> Mis Perfiles de Cargo</h5>
-<p>Incluye Perfiles de Cargo de mi Unidad Organizacional: <b>{{ Auth()->user()->organizationalUnit->name }}</p>
+<h5><i class="fas fa-check-circle"></i> Perfiles de Cargo para aprobación</h5>
 
 <br>
 
@@ -15,7 +14,7 @@
 
 <div class="col-sm">
     @livewire('job-position-profile.search-job-position-profiles', [
-        'index' => 'own'
+        'index' => 'to_sign'
     ])
 </div>
 

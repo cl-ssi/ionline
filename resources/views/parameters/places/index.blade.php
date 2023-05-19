@@ -37,12 +37,8 @@
             @endforelse
         </tbody>
         <caption>
-            {{--
             Total de resultados: {{ $places->total() }}
-            --}}
         </caption>
     </table>
 </div>
-{{--
 {{ $places->links() }}
---}}

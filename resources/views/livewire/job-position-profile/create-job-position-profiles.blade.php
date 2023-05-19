@@ -4,7 +4,7 @@
         @csrf
         @method('POST')
     @else
-    <form method="POST" class="form-horizontal" action="{{-- route('job_position_profile.update', $jobPositionProfile) --}}" enctype="multipart/form-data"/>
+    <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.update', $jobPositionProfile) }}" enctype="multipart/form-data"/>
         @csrf
         @method('PUT')
     @endif
@@ -35,21 +35,23 @@
             
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_charges_number">Estamento</label>
-                <select name="estament_id" id="for_estament_id" class="form-control" required>
+                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" required>
                     <option value="">Seleccione...</option>
                     @foreach($estaments as $estament)
-                        <option value="{{ $estament->id }}" {{ ($jobPositionProfile && $jobPositionProfile->estament_id == $estament->id) ? 'selected' : '' }}>{{ $estament->name }}</option>
+                        <option value="{{ $estament->id }}" {{-- ($jobPositionProfile && $jobPositionProfile->estament_id == $estament->id) ? 'selected' : '' --}}>{{ $estament->name }}</option>
                     @endforeach
                 </select>
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_charges_number">Area</label>
-                <select name="area_id" id="for_area_id" class="form-control" required>
+                <select name="area_id" id="for_area_id" class="form-control" wire:model.debounce.500ms="selectedArea" required>
                     <option value="">Seleccione...</option>
+                    @if(!is_null($areas))
                     @foreach($areas as $area)
-                        <option value="{{ $area->id }}"  {{ ($jobPositionProfile && $jobPositionProfile->area_id == $area->id)?'selected':'' }}>{{ $area->name }}</option>
+                        <option value="{{ $area->id }}"  {{ ($jobPositionProfile && $jobPositionProfile->area_id == $areaSelected) ? 'selected' : '' }}>{{ $area->name }}</option>
                     @endforeach
+                    @endif
                 </select>
             </fieldset>
 

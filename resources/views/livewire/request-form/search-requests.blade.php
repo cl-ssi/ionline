@@ -196,7 +196,7 @@
                                 @foreach($requestForm->eventRequestForms as $sign)
                                     @if($sign->status == 'pending' || $sign->status == NULL)
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" 
-                                            @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif">
+                                            @if($sign->event_type != 'pre_finance_event') title="{{ $sign->signerOrganizationalUnit->name }}" @else title="Refrendación Presupuestaria" @endif>
                                             <i class="fas fa-clock fa-2x"></i>
                                         </span>
                                     @endif

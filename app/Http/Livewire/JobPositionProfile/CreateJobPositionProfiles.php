@@ -14,6 +14,9 @@ class CreateJobPositionProfiles extends Component
     public $salaryStateInput = 'readonly';
     public $degreeStateInput = 'readonly';
 
+    public $selectedEstament = null;
+    public $selectedArea = null;
+
     public $selectedLaw = null;
 
     public $lawStateOption = 'disabled';
@@ -21,6 +24,9 @@ class CreateJobPositionProfiles extends Component
     public $action;
 
     public $jobPositionProfile;
+
+    public $areas;
+    public $areaSelected = null;
 
     public function mount(){
         if($this->jobPositionProfile){
@@ -55,17 +61,43 @@ class CreateJobPositionProfiles extends Component
             else{
                 $this->lawStateOption = '';
             }
+
+            //ADMINISTRATIVO
+            $this->selectedEstament = $this->jobPositionProfile->estament_id;
+            $this->selectedArea     = $this->jobPositionProfile->area_id;
+            if($this->selectedEstament == 1){
+                $this->areas = Area::whereIn('id', [2,4])
+                    ->orderBy('id')
+                    ->get();
+            }
+            //AUXILIAR
+            if($this->selectedEstament== 2){
+                $this->areas = Area::whereIn('id', [2,5])
+                    ->orderBy('id')
+                    ->get();
+            }
+            //PROFESIONAL
+            if($this->selectedEstament == 3){
+                $this->areas = Area::whereIn('id', [2,3,4,5])
+                    ->orderBy('id')
+                    ->get();
+            }
+            //TÉCNICO
+            if($this->selectedEstament == 4){
+                $this->areas = Area::whereIn('id', [2,4,5])
+                    ->orderBy('id')
+                    ->get();
+            }
         }
     }
 
     public function render()
     {
         $estaments = Estament::orderBy('id')->get();
-        $areas = Area::orderBy('id')->get();
         $contractualConditions = ContractualCondition::orderBy('id')->get();
 
         return view('livewire.job-position-profile.create-job-position-profiles', 
-            compact('estaments', 'areas', 'contractualConditions'));
+            compact('estaments', 'contractualConditions'));
     }
 
     public function updatedSelectedContractualCondition($selectedContractualConditionId)
@@ -100,6 +132,33 @@ class CreateJobPositionProfiles extends Component
         }
         else{
             $this->lawStateOption = '';
+        }
+    }
+
+    public function updatedSelectedEstament($selectedEstamentId){
+        //ADMINISTRATIVO
+        if($selectedEstamentId == 1){
+            $this->areas = Area::whereIn('id', [2,4])
+                ->orderBy('id')
+                ->get();
+        }
+        //AUXILIAR
+        if($selectedEstamentId == 2){
+            $this->areas = Area::whereIn('id', [2,5])
+                ->orderBy('id')
+                ->get();
+        }
+        //PROFESIONAL
+        if($selectedEstamentId == 3){
+            $this->areas = Area::whereIn('id', [2,3,4,5])
+                ->orderBy('id')
+                ->get();
+        }
+        //TÉCNICO
+        if($selectedEstamentId == 4){
+            $this->areas = Area::whereIn('id', [2,4,5])
+                ->orderBy('id')
+                ->get();
         }
     }
 }

@@ -7,7 +7,7 @@
 @include('job_position_profile.partials.nav')
 
 <h5><i class="fas fa-id-badge"></i> Perfil de Cargo</h5>
-<h6>ID: {{ $jobPositionProfile->id }} 
+<h6>ID: {{ $jobPositionProfile->id }}
 @switch($jobPositionProfile->status)
     @case('saved')
         <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
@@ -17,22 +17,19 @@
         <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
         @break
 
-    @case('review')
-        <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
-        @break
-                                
     @case('pending')
         <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
         @break
-                                
+
     @case('rejected')
         <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
         @break
 
-    @case('complete')
-        <span class="badge badge-success">{{ $jobPositionProfile->StatusValue }}</span>
+    @case('review')
+        <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
         @break
-    @endswitch
+@endswitch
+</h6>
 <hr>
 
 <h6><i class="fas fa-info-circle"></i> I. Identificación de Cargo</h6>
@@ -114,8 +111,8 @@
     <table class="table table-sm table-bordered small">
         <tbody>
             <tr>
-                <th class="table-active" width="25%">REQUISITO GENERAL ({{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->name : '' }}/{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->year : ''  }})</th>
-                <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
+                <th class="table-active" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }}/{{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->year->format('Y') }})</th>
+                <td>{{ $jobPositionProfile->staffDecreeByEstament->description }}</td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
@@ -327,26 +324,67 @@
             <tr>
                 @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
                 <td align="center">
-                    @if($sign->status == 'pending' || $sign->status == NULL)
+                    @if($sign->status == 'pending')
                         Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.update', [$sign, 'status' => 'accepted', $jobPositionProfile]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    
+                                    <button type="submit" class="btn btn-success btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                        title="Aceptar">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
+                                            <i class="fas fa-check-circle"></i></a> Aceptar
+                                        </span>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
+                                        <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                        <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.update', [$sign, 'status' => 'rejected', $jobPositionProfile]) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="form-group">
+                                                <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                title="Rechazar">
+                                                <i class="fas fa-times-circle"></i> Rechazar</a>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endif
 
                     @if($sign->status == 'accepted')
                         <span style="color: green;">
                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }}
-                        </span> 
-                        <br>
+                        </span> <br>
                         <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
-
-                    @if($sign->status == 'rejected')
-                        <span style="color: Tomato;">
-                            <i class="fas fa-times-circle fa-2x"></i> {{ $sign->StatusValue }}
-                        </span> 
-                        <br>
-                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
-                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                    
+                    @if($sign->status == NULL)
+                        Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
                     @endif
                 </td>
                 @endforeach
@@ -354,28 +392,6 @@
         </tbody>
     </table>
 </div>
-
-<hr />
-<br>
-
-<div class="row">
-    <div class="col-md-3">
-        <h5><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h5>
-    </div>
-    <div class="col-md-9">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
-            <i class="fas fa-plus"></i> Agregar Mensaje
-        </button>
-    </div>
-</div>
-
-@include('job_position_profile.modals.message')
-
-<br>
-
-@livewire('job-position-profile.show-messages', [
-    'jobPositionProfile'    => $jobPositionProfile
-])
 
 @can(['Job Position Profile: audit'])
 <hr/>
@@ -388,27 +404,26 @@
 
 @section('custom_js')
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        
-        google.charts.load('current', {packages:["orgchart"]});
-        google.charts.setOnLoadCallback(drawChart);
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-        function drawChart() {
-            
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Name');
-            data.addColumn('string', 'Manager');
-            data.addColumn('string', 'ToolTip');
+<script type="text/javascript">    
+    google.charts.load('current', {packages:["orgchart"]});
+    google.charts.setOnLoadCallback(drawChart);
 
-            // For each orgchart box, provide the name, manager, and tooltip to show.
-            data.addRows({!! $jobPositionProfile->organizationalUnit->treeWithChilds->toJson() !!});
+    function drawChart() {    
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('string', 'Manager');
+        data.addColumn('string', 'ToolTip');
 
-            // Create the chart.
-            var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
-            // Draw the chart, setting the allowHtml option to true for the tooltips.
-            chart.draw(data, {'allowHtml':true});
-        }
-    </script>
+        // For each orgchart box, provide the name, manager, and tooltip to show.
+        data.addRows({!! $jobPositionProfile->organizationalUnit->treeWithChilds->toJson() !!});
+
+        // Create the chart.
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        // Draw the chart, setting the allowHtml option to true for the tooltips.
+        chart.draw(data, {'allowHtml':true});
+    }
+</script>
 
 @endsection

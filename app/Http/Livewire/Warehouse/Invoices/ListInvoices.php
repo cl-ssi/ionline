@@ -2,17 +2,12 @@
 
 namespace App\Http\Livewire\Warehouse\Invoices;
 
-use App\Models\Warehouse\Control;
 use Livewire\Component;
+use App\Models\Inv\Inventory;
 
 class ListInvoices extends Component
 {
-    public $control;
-
-    public function mount(Control $control)
-    {
-        $this->control = $control;
-    }
+    public Inventory $inventory;
 
     public function render()
     {

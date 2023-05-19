@@ -67,11 +67,17 @@ class JobPositionProfile extends Model implements Auditable
             case 'sent':
                 return 'Enviado';
                 break;
-            case 'complete':
-                return 'Finalizado';
+            case 'review':
+                return 'En revisión';
+                break;
+            case 'pending':
+                return 'Pendiente';
                 break;
             case 'rejected':
                 return 'Rechazado';
+                break;
+            case 'complete':
+                return 'Finalizado';
                 break;
         }
     }
