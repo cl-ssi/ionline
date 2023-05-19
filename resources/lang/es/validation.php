@@ -178,6 +178,7 @@ return [
     'attributes' => [
         'active_type'           => 'tipo de activo',
         'act_number'            => 'número de acta',
+        'accounting_code_id'    => 'cuenta contable',
         'address'               => 'dirección',
         'amount'                => 'monto',
         'applicant'             => 'solicitante',
