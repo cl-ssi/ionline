@@ -171,19 +171,49 @@ class JobPositionProfileSignController extends Controller
                 $nextSign->status = 'pending';
                 $nextSign->save();
                 
+                if($nextSign->event_type == 'review'){
+                    $jobPositionProfile->status = 'review';
+                    $jobPositionProfile->save();
+                }
+                if($nextSign->event_type == 'subdir o depto' || $nextSign->event_type == 'subrrhh'){
+                    $jobPositionProfile->status = 'pending';
+                    $jobPositionProfile->save();
+                }
+
                 /* 
                 AQUÍ IMPLEMENTAR NOTIFICACIONES
                 */
 
                 session()->flash('success', 'Estimado Usuario: El Perfil de Cargo ha sido Aprobado con exito.');
-                return redirect()->route('replacement_staff.request.to_sign');
+                return redirect()->route('job_position_profile.index_to_sign');
             }
             else{
-
+                $jobPositionProfile->status = 'complete';
+                $jobPositionProfile->save();
+                
+                /* 
+                AQUÍ IMPLEMENTAR NOTIFICACIONES
+                */
+                
+                session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
+                return redirect()->route('replacement_staff.request.to_sign');
             }
         }
         else{
+            $jobPositionProfileSign->user_id        = Auth::user()->id;
+            $jobPositionProfileSign->status         = $status;
+            $jobPositionProfileSign->observation    = $request->observation;
+            $jobPositionProfileSign->date_sign      = now();
+            $jobPositionProfileSign->save();
 
+            $jobPositionProfile->status = 'rejected';
+            $jobPositionProfile->save();
+
+            //SE NOTIFICA A UNIDAD DE RECLUTAMIENTO
+            //Aquí
+
+            session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');
+            return redirect()->route('job_position_profile.index_to_sign');
         }
     }
 

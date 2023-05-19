@@ -4,32 +4,11 @@
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
         
         <div class="form-row">
-            {{--
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_status_search">Estado Viático</label>
-                <select name="status_search" class="form-control form-control-sm" wire:model.debounce.500ms="selectedStatus">
-                    <option value="">Seleccione...</option>
-                    <option value="pending">Pendiente</option>
-                    <option value="complete">Finalizado</option>
-                    <option value="rejected">Rechazado</option>
-                </select>
-            </fieldset>  
 
-            <fieldset class="form-group col-12 col-md-1">
-                <label for="for_id">ID</label>
-                <input class="form-control form-control-sm" type="number" name="id_search" autocomplete="off" 
-                    placeholder="001" wire:model.debounce.500ms="selectedId">
-            </fieldset>
-
-            <fieldset class="form-group col-12 col-md-3">
-                <label for="for_requester">Funcionario</label>
-                <input class="form-control form-control-sm" type="text" autocomplete="off" placeholder="NOMBRE / APELLIDOS"
-                    name="user_allowance_search" wire:model.debounce.500ms="selectedUserAllowance">
-            </fieldset>
-            --}}
         </div>
 
     </div>
+    <br>
     @endif
 
     @if($jobPositionProfiles->count() > 0)
@@ -64,21 +43,30 @@
                         <th>
                             {{ $jobPositionProfile->id }} <br>
                             @switch($jobPositionProfile->status)
-                            @case('saved')
-                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
+                                @case('saved')
+                                    <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
 
-                            @case('sent')
-                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
+                                @case('sent')
+                                    <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
 
-                            @case('rejected')
-                                <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
-                            @case('review')
-                                <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
-                        @endswitch    
+                                @case('review')
+                                    <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+                                
+                                @case('pending')
+                                    <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+                                
+                                @case('rejected')
+                                    <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+
+                                @case('complete')
+                                    <span class="badge badge-success">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+                            @endswitch
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
@@ -128,7 +116,7 @@
                         <td class="text-center">
                             <!-- MIS PERFILES DE CARGO -->
                             @if($index == 'own')
-                                @if($jobPositionProfile->status == 'saved')
+                                @if($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review")
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>
@@ -139,41 +127,36 @@
                                     </a>
                                 @endif
                             @endif
-                            <!-- PARA REVISIÓN -->
-                            @if($index == 'review')
-                                @if($jobPositionProfile->status == 'review')
-                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="">
-                                        <i class="fas fa-signature"></i>
-                                    </a>
-                                @endif    
+                            <!-- PARA ALL -->
+                            @if($index == 'all')
+                                <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             @endif
                             <!-- PARA FIRMAR -->
                             @if($index == 'to_sign')
                                 <a href="{{ route('job_position_profile.to_sign', $jobPositionProfile) }}"
                                     class="btn btn-outline-secondary btn-sm" title="">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-signature"></i>
                                 </a>
                             @endif
                         </td>
                         <td class="text-center">
-                            @if($jobPositionProfile->status == "completed")
-                                
-                            @else
+                            @if($jobPositionProfile->status != "saved")
                                 <a href="{{ route('job_position_profile.document.create_document', $jobPositionProfile) }}"
                                     class="btn btn-sm btn-outline-secondary" 
                                     target="_blank"
                                     title="Ver documento">
                                     <span class="fas fa-file-pdf" aria-hidden="true"></span>
                                 </a>
-                                {{--
-                                <a href="{{ route('replacement_staff.request.technical_evaluation.create_document', $requestReplacementStaff) }}"
-                                    class="btn btn-info btn-sm float-right" 
-                                    title="Selección" 
-                                    target="_blank">
-                                    Exportar Resumen <i class="fas fa-file"></i>
+                            @else
+                                <a href=""
+                                    class="btn btn-sm btn-outline-secondary disabled" 
+                                    target="_blank"
+                                    title="Ver documento">
+                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
                                 </a>
-                                --}}
                             @endif
                         </td>
                     <tr>
@@ -214,21 +197,26 @@
                         <th>
                             {{ $jobPositionProfile->id }} <br>
                             @switch($jobPositionProfile->status)
-                            @case('saved')
-                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
+                                @case('saved')
+                                    <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
 
-                            @case('sent')
-                                <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
+                                @case('sent')
+                                    <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
 
-                            @case('rejected')
-                                <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
-                            @case('review')
-                                <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
-                                @break
-                        @endswitch    
+                                @case('pending')
+                                    <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+
+                                @case('rejected')
+                                    <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+
+                                @case('review')
+                                    <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+                                    @break
+                            @endswitch
                         </th>
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
@@ -276,31 +264,12 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <!-- MIS PERFILES DE CARGO -->
-                            @if($index == 'own')
-                                @if($jobPositionProfile->status == 'saved')
-                                    <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
-                                    </a>
-                                @else
-                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                @endif
-                            @endif
-                            <!-- PARA REVISIÓN -->
-                            @if($index == 'review')
-                                @if($jobPositionProfile->status == 'review')
-                                    <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="">
-                                        <i class="fas fa-signature"></i>
-                                    </a>
-                                @endif    
-                            @endif
-                            <!-- PARA FIRMAR -->
-                            @if($index == 'to_sign')
-                                <a href="{{ route('job_position_profile.to_sign', $jobPositionProfile) }}"
+                            @if($jobPositionProfile->status == 'saved')
+                                <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                </a>
+                            @else
+                                <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
                                     class="btn btn-outline-secondary btn-sm" title="">
                                     <i class="fas fa-eye"></i>
                                 </a>

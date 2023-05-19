@@ -7,7 +7,29 @@
 @include('job_position_profile.partials.nav')
 
 <h5><i class="fas fa-id-badge"></i> Perfil de Cargo</h5>
-<h6>ID: {{ $jobPositionProfile->id }}</h6>
+<h6>ID: {{ $jobPositionProfile->id }}
+@switch($jobPositionProfile->status)
+    @case('saved')
+        <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('sent')
+        <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('pending')
+        <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('rejected')
+        <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('review')
+        <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+@endswitch
+</h6>
 <hr>
 
 <h6><i class="fas fa-info-circle"></i> I. Identificación de Cargo</h6>
@@ -307,26 +329,48 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.update', [$sign, 'status' => 'accepted', $jobPositionProfile]) }}">
-                                @csrf
-                                @method('PUT')
-                                
-                                <button type="submit" class="btn btn-success btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                    title="Aceptar">
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
-                                        <i class="fas fa-check-circle"></i></a> Aceptar
-                                    </span>
-                                </button>
-                            </form>
-                        </div>
-                        <!-- </div>
-                        <div class="row"> -->
+                                    @csrf
+                                    @method('PUT')
+                                    
+                                    <button type="submit" class="btn btn-success btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                        title="Aceptar">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
+                                            <i class="fas fa-check-circle"></i></a> Aceptar
+                                        </span>
+                                    </button>
+                                </form>
+                            </div>
                             <div class="col-md-6">
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
-                                    <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </span>
+                                <p>
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
+                                        <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <i class="fas fa-times-circle"></i> Rechazar
+                                        </a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                        <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.update', [$sign, 'status' => 'rejected', $jobPositionProfile]) }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="form-group">
+                                                <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                title="Rechazar">
+                                                <i class="fas fa-times-circle"></i> Rechazar</a>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endif

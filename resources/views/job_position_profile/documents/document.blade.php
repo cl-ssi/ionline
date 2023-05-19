@@ -177,7 +177,7 @@
 
 @section('custom_js')
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <!--
     <script type="text/javascript">
         
@@ -208,6 +208,13 @@
     </script>
     -->
     <script type="text/javascript">
+        function init(){
+            google.load('visualization', 1.1, {
+                packages: 'corechart',
+                callback: 'drawVisualizationDaily'
+            });
+        }
+
         function drawVisualizationDaily() {
             // Create and populate the data table.
             var data = google.visualization.arrayToDataTable([

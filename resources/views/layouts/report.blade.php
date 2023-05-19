@@ -6,7 +6,7 @@
         <meta name="author" content="{{ env('APP_SS') }}">
         <link href="{{ asset('css/report.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body onload="init()">
         <div class="content">
             <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>

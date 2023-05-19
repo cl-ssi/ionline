@@ -15,6 +15,7 @@ use App\Models\JobPositionProfiles\Liability;
 use App\Models\JobPositionProfiles\JobPositionProfileLiability;
 use App\Models\JobPositionProfiles\Expertise;
 use App\Models\JobPositionProfiles\ExpertiseProfile;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class JobPositionProfileController extends Controller
 {
@@ -41,6 +42,11 @@ class JobPositionProfileController extends Controller
     public function index_to_sign()
     {   
         return view('job_position_profile.index_to_sign');
+    }
+
+    public function all_index()
+    {   
+        return view('job_position_profile.all_index');
     }
 
     /**
@@ -164,7 +170,18 @@ class JobPositionProfileController extends Controller
      */
     public function update(Request $request, JobPositionProfile $jobPositionProfile)
     {
-        //
+        $jobPositionProfile->fill($request->all());
+        // $jobPositionProfile->status = 'saved';
+        // $jobPositionProfile->user()->associate(Auth::user());
+        // $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        $jobPositionProfile->estament()->associate($request->estament_id);
+        $jobPositionProfile->area()->associate($request->area_id);
+        $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
+
+        $jobPositionProfile->save();
+
+        session()->flash('success', 'Estimado Usuario, se ha actualizado Exitosamente El Perfil de Cargo');
+        return redirect()->route('job_position_profile.edit', $jobPositionProfile);
     }
 
     public function update_formal_requirements(Request $request, JobPositionProfile $jobPositionProfile, $generalRequirements)
@@ -290,9 +307,11 @@ class JobPositionProfileController extends Controller
     public function create_document(JobPositionProfile $jobPositionProfile){
         $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('job_position_profile.documents.document', compact('jobPositionProfile', 'tree'));
+        $pdf = PDF::loadView('job_position_profile.documents.document', compact('jobPositionProfile', 'tree'));
 
         return $pdf->stream('mi-perfil-de-cargo.pdf');
+
+        // return view('job_position_profile.documents.chart', compact('jobPositionProfile', 'tree'));
+        //return view('job_position_profile.index_to_sign');
     }
 }

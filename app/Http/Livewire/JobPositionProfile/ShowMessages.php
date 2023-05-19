@@ -12,7 +12,7 @@ class ShowMessages extends Component
 
     public function render()
     {
-        $messages = Message::where('job_position_profile_id', $this->jobPositionProfile)
+        $messages = Message::where('job_position_profile_id', $this->jobPositionProfile->id)
             ->get();
         return view('livewire.job-position-profile.show-messages', compact('messages'));
     }

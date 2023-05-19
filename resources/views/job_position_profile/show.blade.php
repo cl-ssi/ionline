@@ -7,7 +7,32 @@
 @include('job_position_profile.partials.nav')
 
 <h5><i class="fas fa-id-badge"></i> Perfil de Cargo</h5>
-<h6>ID: {{ $jobPositionProfile->id }}</h6>
+<h6>ID: {{ $jobPositionProfile->id }} 
+@switch($jobPositionProfile->status)
+    @case('saved')
+        <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('sent')
+        <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('review')
+        <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+                                
+    @case('pending')
+        <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+                                
+    @case('rejected')
+        <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('complete')
+        <span class="badge badge-success">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+    @endswitch
 <hr>
 
 <h6><i class="fas fa-info-circle"></i> I. Identificación de Cargo</h6>
@@ -89,8 +114,8 @@
     <table class="table table-sm table-bordered small">
         <tbody>
             <tr>
-                <th class="table-active" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }}/{{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->year->format('Y') }})</th>
-                <td>{{ $jobPositionProfile->staffDecreeByEstament->description }}</td>
+                <th class="table-active" width="25%">REQUISITO GENERAL ({{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->name : '' }}/{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->year : ''  }})</th>
+                <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
@@ -302,45 +327,26 @@
             <tr>
                 @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
                 <td align="center">
-                    @if($sign->status == 'pending')
+                    @if($sign->status == 'pending' || $sign->status == NULL)
                         Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <form method="POST" class="form-horizontal" action="{{ route('job_position_profile.sign.update', [$sign, 'status' => 'accepted', $jobPositionProfile]) }}">
-                                @csrf
-                                @method('PUT')
-                                
-                                <button type="submit" class="btn btn-success btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                    title="Aceptar">
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
-                                        <i class="fas fa-check-circle"></i></a> Aceptar
-                                    </span>
-                                </button>
-                            </form>
-                        </div>
-                        <!-- </div>
-                        <div class="row"> -->
-                            <div class="col-md-6">
-                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Rechazar">
-                                    <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fas fa-times-circle"></i> Rechazar
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
                     @endif
 
                     @if($sign->status == 'accepted')
                         <span style="color: green;">
                             <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }}
-                        </span> <br>
+                        </span> 
+                        <br>
                         <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
-                    
-                    @if($sign->status == NULL)
-                        Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
+
+                    @if($sign->status == 'rejected')
+                        <span style="color: Tomato;">
+                            <i class="fas fa-times-circle fa-2x"></i> {{ $sign->StatusValue }}
+                        </span> 
+                        <br>
+                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
                     @endif
                 </td>
                 @endforeach
@@ -348,6 +354,28 @@
         </tbody>
     </table>
 </div>
+
+<hr />
+<br>
+
+<div class="row">
+    <div class="col-md-3">
+        <h5><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h5>
+    </div>
+    <div class="col-md-9">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-plus"></i> Agregar Mensaje
+        </button>
+    </div>
+</div>
+
+@include('job_position_profile.modals.message')
+
+<br>
+
+@livewire('job-position-profile.show-messages', [
+    'jobPositionProfile'    => $jobPositionProfile
+])
 
 @can(['Job Position Profile: audit'])
 <hr/>
