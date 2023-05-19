@@ -43,10 +43,11 @@ class UpdateInventoryRequest extends FormRequest
             'useful_life'       => 'required',
             'status'            => 'required',
             'depreciation'      => 'required',
+            'accounting_code_id'=> 'required|exists:fin_accounting_codes,id',
             'brand'             => 'nullable|string|min:0|max:255',
             'model'             => 'nullable|string|min:0|max:255',
             'serial_number'     => 'nullable|string|min:0|max:255',
-            'observations'      => 'nullable|string|min:0|max:5000'
+            'observations'      => 'nullable|string|min:0|max:5000',
         ];
     }
 }
