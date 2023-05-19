@@ -13,15 +13,8 @@ class InventoryUploadExcel extends Component
 
     use WithFileUploads;
 
-    public $establishment;
+    public Establishment $establishment;
     public $excelFile;
-    public $showConfirmation = false;
-
-    public function mount(Establishment $establishment)
-    {
-        //
-        $this->establishment = $establishment;
-    }
 
     public function processExcel()
     {
@@ -53,15 +46,12 @@ class InventoryUploadExcel extends Component
         // Limpiar la propiedad del archivo después de procesarlo
         $this->excelFile = null;
 
-        // Mostrar un mensaje de éxito o realizar cualquier otra acción necesaria
-        $this->showConfirmation = true;
+        session()->flash('message', 'El archivo Excel se cargó exitosamente.');
     }
-
-
 
 
     public function render()
     {
-        return view('livewire.inventory.inventory-upload-excel')->extends('layouts.app');
+        return view('livewire.inventory.inventory-upload-excel');
     }
 }
