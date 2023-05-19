@@ -9,7 +9,7 @@
                 type="text"
                 class="form-control form-control-sm"
                 id="responsible"
-                value="{{ $movement->responsibleUser->full_name }}"
+                value="{{ optional($movement->responsibleUser)->full_name }}"
                 readonly
             >
         </fieldset>
