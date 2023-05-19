@@ -35,6 +35,7 @@ class Inventory extends Model implements Auditable
         'po_code',
         'po_price',
         'po_date',
+        'dte_number',
         'status',
         'observations',
         'discharge_date',
@@ -55,6 +56,7 @@ class Inventory extends Model implements Auditable
         'po_id',
         'request_form_id',
         'budget_item_id',
+        'accounting_code_id',
     ];
 
     protected $dates = [

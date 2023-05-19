@@ -7,6 +7,14 @@
 
     <h4>Seleccionar Excel para cargar inventarios</h4>
 
+    <div>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+    </div>
+
     <form wire:submit.prevent="processExcel" enctype="multipart/form-data">
         <div class="form-group">
             <label for="excelFile">Seleccionar archivo Excel</label>
@@ -21,12 +29,5 @@
             <button type="submit" class="btn btn-primary">Cargar Excel</button>
         </div>
     </form>
-
-    @if ($showConfirmation)
-        <div class="alert alert-success" role="alert">
-            El archivo Excel se cargó exitosamente.
-        </div>
-    @endif
-
 
 </div>
