@@ -5,6 +5,8 @@
         'establishment' => $establishment
     ])
 
+    @include('layouts.partials.flash_message')
+
     <div class="row">
         <div class="col">
             <h3 class="mb-3">
@@ -156,14 +158,12 @@
             </span>
             @enderror
         </fieldset>
-        
-        
+
+
 
     </div>
 
     <div class="form-row mb-3">
-
-
         <fieldset class="col-md-2">
             <label for="useful-life" class="form-label">
                 Vida útil
@@ -202,12 +202,24 @@
             <label for="cost-center" class="form-label">
                 Cuenta contable
             </label>
-            <input
+            <select
                 type="text"
-                class="form-control"
+                class="form-control @error('accounting_code_id') is-invalid @enderror"
                 id="cost-center"
-                value="{{ $inventory->accounting_code_id }}"
+                wire:model.1500ms="accounting_code_id"
             >
+                <option value="">Seleccione cuenta contable</option>
+                @foreach($accountingCodes as $accountingCode)
+                    <option value="{{ $accountingCode->id }}">
+                        {{ $accountingCode->description }}
+                    </option>
+                @endforeach
+            </select>
+            @error('accounting_code_id')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </fieldset>
     </div>
 
@@ -271,7 +283,7 @@
                 >
             </fieldset>
         @endif
-        
+
         @if($inventory->control && $inventory->control->requestForm)
             <fieldset class="col-md-3">
                 <label for="financing" class="form-label">
@@ -325,7 +337,7 @@
                 class="form-control"
                 id="dte-number"
                 value="{{ $inventory->dte_number }}"
-    
+
             >
         </fieldset>
 

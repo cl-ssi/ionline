@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Inventory;
 
 use App\Http\Requests\Inventory\UpdateInventoryRequest;
 use App\Models\Establishment;
+use App\Models\Finance\AccountingCode;
 use App\Models\Inv\Inventory;
 use Livewire\Component;
 
@@ -11,6 +12,7 @@ class InventoryEdit extends Component
 {
     public $inventory;
     public $establishment;
+    public $accountingCodes;
 
     public $number_inventory;
     public $useful_life;
@@ -20,6 +22,7 @@ class InventoryEdit extends Component
     public $model;
     public $serial_number;
     public $observations;
+    public $accounting_code_id;
 
     public function render()
     {
@@ -39,6 +42,9 @@ class InventoryEdit extends Component
         $this->model = $this->inventory->model;
         $this->serial_number = $this->inventory->serial_number;
         $this->observations = $this->inventory->observations;
+        $this->accounting_code_id = $this->inventory->accounting_code_id;
+
+        $this->accountingCodes = AccountingCode::all();
     }
 
     public function rules()
@@ -54,6 +60,6 @@ class InventoryEdit extends Component
         $this->inventory->update($dataValidated);
 
         session()->flash('success', 'El item del inventario fue editado exitosamente.');
-        return redirect()->route('inventories.pending-inventory', $this->establishment);
+        return;
     }
 }
