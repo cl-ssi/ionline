@@ -14,7 +14,7 @@ class AddDtePriceToInvInventoriesTable extends Migration
     public function up()
     {
         Schema::table('inv_inventories', function (Blueprint $table) {
-            $table->integer('dte_numbrer')->after('po_date')->nullable();
+            $table->integer('dte_number')->after('po_date')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddDtePriceToInvInventoriesTable extends Migration
     public function down()
     {
         Schema::table('inv_inventories', function (Blueprint $table) {
-            $table->dropColumn('dte_numebr');
+            $table->dropColumn('dte_number');
         });
     }
 }
