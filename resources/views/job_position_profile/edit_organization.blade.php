@@ -109,11 +109,16 @@
         'jobPositionProfile' => $jobPositionProfile
     ])
     
+    <br><br>
+
+    <div class="card">
+        <div class="card-body">
+            <h6 class="small"><b>ORGANIGRAMA</b></h6> 
+            <div id="chart_div"></div>
+        </div>
+    </div>
+
     <br>
-
-    <h6 class="small"><b>Organigrama.</b></h6> 
-
-    <div id="chart_div"></div>
 
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 </form>

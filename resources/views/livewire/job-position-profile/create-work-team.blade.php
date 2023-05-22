@@ -1,5 +1,5 @@
 <div>
-    @if($work_teams->count() > 0)
+    @if($workTeams->count() > 0)
         <div class="form-row">
             <div class="col-12 col-md-3 mt-2">
                 <h5>Listado de Funciones</h5> 
@@ -10,37 +10,35 @@
         </div>
         <br>
         <div class="table-responsive">
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered table-striped">
                 <thead>
-                    <tr class="text-center">
+                    <tr class="text-center table-info">
                         <th width="7%">#</th>
                         <th>Descripción</th>
                         <th width="7%"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{--
-                    @foreach($roles as $role)
+                    @foreach($workTeams as $workTeam)
                     <tr>
                         <th class="text-center">{{ $loop->iteration }}</th>
-                        <td>{{ $role->description }}</td>
+                        <td>{{ $workTeam->description }}</td>
                         <td class="text-center">
                             <a class="btn btn-outline-danger btn-sm"
-                                wire:click="deleteRole({{ $role }})"
+                                wire:click="deleteRole({{ $workTeam }})"
                                 onclick="return confirm('¿Está seguro que desea eliminar la función?')">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
                     </tr>
                     @endforeach
-                    --}}
                 </tbody>
             </table>
         </div>
     @else
         <div class="form-row">
-            <div class="col-12 col-md-4 mt-2">
-                <h5>Descripción de Equipo de Trabajo</h5> 
+            <div class="col-12 col-md-3 mt-2">
+                <h6>Descripción de Equipo de Trabajo</h6> 
             </div>
             <div class="col-12 col-md-8">
                 <button class="btn text-white btn-info" wire:click.prevent="add({{$i}})"><i class="fas fa-plus"></i> Agregar</button>
@@ -49,7 +47,6 @@
     @endif
     
     <br>
-    <hr>
     
     @foreach($inputs as $key => $value)
         <div class="form-row">

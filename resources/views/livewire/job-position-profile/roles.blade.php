@@ -11,9 +11,9 @@
         </div>
         <br>
         <div class="table-responsive">
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered table-striped">
                 <thead>
-                    <tr class="text-center">
+                    <tr class="text-center table-info">
                         <th width="7%">#</th>
                         <th>Descripción</th>
                         <th width="7%"></th>
