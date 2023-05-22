@@ -48,7 +48,11 @@ class ImmediatepurchaesSetRequestformid extends Command
                     $immediatePurchase->request_form_id = $immediatePurchase->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
                 }
                 else {
-                    $immediatePurchase->request_form_id = $immediatePurchase->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                    if($immediatePurchase->purchasingProcessDetail){
+                        if($immediatePurchase->purchasingProcessDetail->purchasingProcess){
+                            $immediatePurchase->request_form_id = $immediatePurchase->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                        }
+                    } 
                 }
                 $immediatePurchase->save();
             }
