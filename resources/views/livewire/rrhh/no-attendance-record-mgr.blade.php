@@ -13,8 +13,18 @@
                 <input type="datetime-local" class="form-control" wire:model.defer="noAttendanceRecord.date">
                 @error('noAttendanceRecord.date') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
-            <div class="form-group col-md-9">
-                <label for="formGroupExampleInput2">Fundamento del no registro</label>
+            <div class="form-group col-md-3">
+                <label for="reason">Motivo</label>
+                <select class="form-control" wire:model.defer="noAttendanceRecord.reason_id">
+                    <option></option>
+                    @foreach($reasons as $reason)
+                        <option value="{{ $reason->id }}">{{ $reason->name }}</option>
+                    @endforeach
+                </select>
+                @error('noAttendanceRecord.reason_id') <span class="text-danger">{{ $message }}</span> @enderror
+            </div>
+            <div class="form-group col-md-6">
+                <label for="observation">Fundamente (otro)</label>
                 <input type="text" class="form-control" wire:model.defer="noAttendanceRecord.observation">
                 @error('noAttendanceRecord.observation') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
@@ -50,7 +60,7 @@
                     <tr>
                         <th></th>
                         <th>Fecha registro</th>
-                        <th>Fundamento</th>
+                        <th>Motivo (fundamento)</th>
                         <th>Autoridad</th>
                         <th>Estado</th>
                         <th>Observación</th>
@@ -70,7 +80,12 @@
                             @endif
                         </td>
                         <td>{{ $record->date }}</td>
-                        <td>{{ $record->observation }}</td>
+                        <td>
+                            {{ $record->reason->name }}
+                            <span class="text-muted">
+                                {{ $record->observation }}
+                            </span>
+                        </td>
                         <td>{{ $record->authority->shortName }}</td>
                             <td>
                                 @if(is_null($record->status))
@@ -96,16 +111,16 @@
 
         {{ $myRecords->links() }}
 
-
-        <h4>Mis aprobaciones como jefatura</h4>
+        <br>
+        <h4 class="mt-3">Mis aprobaciones como jefatura</h4>
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
                     <th>Funcionario</th>
                     <th>Fecha registro</th>
-                    <th>Fundamento</th>
+                    <th>Motivo (fundamento)</th>
                     <th>Estado</th>
-                    <th>Observación</th>
+                    <th>Observación Jefe</th>
                     <th>Fecha revisión</th>
                     <th></th>
                 </tr>
@@ -115,7 +130,12 @@
                     <tr>
                         <td>{{ $authorityRecord->user->shortName }}</td>
                         <td>{{ $authorityRecord->date }}</td>
-                        <td>{{ $authorityRecord->observation }}</td>
+                        <td>
+                            {{ $authorityRecord->reason->name }}
+                            <span class="text-muted">
+                                {{ $authorityRecord->observation }}
+                            </span>
+                        </td>
                         <td>
                             @if(is_null($authorityRecord->status))
                             <i class="fas fa-clock"></i>

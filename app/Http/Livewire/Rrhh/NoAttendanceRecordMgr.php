@@ -6,6 +6,7 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Notifications\Rrhh\NewNoAttendanceRecord;
 use App\Models\Rrhh\NoAttendanceRecord;
+use App\Models\Rrhh\Attendance\Reason;
 
 class NoAttendanceRecordMgr extends Component
 {
@@ -18,6 +19,8 @@ class NoAttendanceRecordMgr extends Component
 
     public $noAttendanceRecord;
 
+    public $reasons;
+
     public $authority;
     public $checkAuthority = false;
     public $message;
@@ -26,13 +29,14 @@ class NoAttendanceRecordMgr extends Component
     {
         return [
             'noAttendanceRecord.date' => 'required|date',
-            'noAttendanceRecord.observation' => 'required',
+            'noAttendanceRecord.reason_id' => 'required',
+            'noAttendanceRecord.observation' => 'nullable',
         ];
     }
 
     protected $messages = [
         'noAttendanceRecord.date.required' => 'La fecha es requerida.',
-        'noAttendanceRecord.observation.required' => 'La observación es requerido.',
+        'noAttendanceRecord.reason_id.required' => 'El motivo es requerido.',
     ];
 
     /**
@@ -44,6 +48,8 @@ class NoAttendanceRecordMgr extends Component
             $this->authority = auth()->user()->boss;
             $this->checkAuthority = true;
         }
+
+        $this->reasons = Reason::all();
     }
 
     public function index()
@@ -63,6 +69,7 @@ class NoAttendanceRecordMgr extends Component
         $this->validate();
         $this->noAttendanceRecord->user_id = auth()->id();
         $this->noAttendanceRecord->authority_id = $this->authority->id;
+        $this->noAttendanceRecord->establishment_id = auth()->user()->organizationalUnit->establishment_id;
         $this->noAttendanceRecord->save();
         
         $this->authority->notify(new NewNoAttendanceRecord($this->noAttendanceRecord));
@@ -71,8 +78,8 @@ class NoAttendanceRecordMgr extends Component
 
     public function render()
     {
-        $myRecords = NoAttendanceRecord::whereUserId(auth()->id())->latest()->paginate(25);
-        $authorityRecrods = NoAttendanceRecord::whereAuthorityId(auth()->id())->latest()->paginate(25);
+        $myRecords = NoAttendanceRecord::with(['reason'])->whereUserId(auth()->id())->latest()->paginate(25);
+        $authorityRecrods = NoAttendanceRecord::with(['reason'])->whereAuthorityId(auth()->id())->latest()->paginate(25);
 
         return view('livewire.rrhh.no-attendance-record-mgr',[
             'myRecords' => $myRecords,
