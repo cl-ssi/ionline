@@ -47,53 +47,68 @@ class InventoryUploadExcel extends Component
 
             //verificar que los usuarios del excel sean válidos.
             if(!$row[10]){
-                $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. \n";$rows_fail+=1;
+                $msg .= "El usuario de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
             }else{
                 $user_using = User::where('id',$row[10])->first();
                 if(!$user_using){
-                    $msg .= "El usuario de la fila " .  ($key+1) . " no se ha encontrado. \n";$rows_fail+=1;
+                    $msg .= "El usuario de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
             //verificar que los responsables del excel sean válidos.
             if(!$row[11]){
-                $msg .= "El responsable de la fila " .  ($key+1) . " no se ha ingresado. \n";$rows_fail+=1;
+                $msg .= "El responsable de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
             }else{
                 $user_responsible = User::where('id',$row[11])->first();
                 if(!$user_responsible){
-                    $msg .= "El responsable de la fila " .  ($key+1) . " no se ha encontrado. \n";$rows_fail+=1;
+                    $msg .= "El responsable de la fila " .  ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
             //verificar que los unspsc_product_id del excel sean válidos.
             if(!$row[2]){
-                $msg .= "El unspsc product_id de la fila " .  ($key+1) . " no se ha ingresado. \n";$rows_fail+=1;
+                $msg .= "El unspsc product_id de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
             }else{
                 $unspsc_product = Product::where('code',$row[2])->first();
                 if(!$unspsc_product){
-                    $msg .= "El unspsc product_id de la fila " . ($key+1) . " no se ha encontrado. \n";$rows_fail+=1;
+                    $msg .= "El unspsc product_id de la fila " . ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
             //verificar que los place_id del excel no sean vacios.
-            if(!$row[10]){
-                $msg .= "El lugar del producto de la fila " .  ($key+1) . " no se ha ingresado. \n";$rows_fail+=1;
+            if(!$row[9]){
+                $msg .= "El lugar del producto de la fila " .  ($key+1) . " no se ha ingresado. <br>";$rows_fail+=1;
                 continue;
             }else{
-                $place = Place::where('id',$row[10])->first();
+                $place = Place::where('id',$row[9])->first();
                 if(!$place){
-                    $msg .= "El lugar del producto de la fila " . ($key+1) . " no se ha encontrado. \n";$rows_fail+=1;
+                    $msg .= "El lugar del producto de la fila " . ($key+1) . " no se ha encontrado. <br>";$rows_fail+=1;
                     continue;
                 }
             }
 
             switch ($row[8]) {
-                case "MALO": $status = -1;
-                case "REGULAR":$status = 0;
-                case "BUENO":$status = 1;
+                case "MALO": 
+                case "Malo": 
+                case "malo": 
+                    $status = -1;
+                    break;
+                case "REGULAR":
+                case "Regular":
+                case "regular":
+                    $status = 0;
+                    break;
+                case "BUENO":
+                case "Bueno":
+                case "bueno":
+                    $status = 1;
+                    break;
+                default: 
+                    $status = 0;
+                    break;
             }
 
             $inventory = Inventory::updateOrCreate([
@@ -135,23 +150,17 @@ class InventoryUploadExcel extends Component
                 'user_using_ou_id' => $user_using->organizational_unit_id,
                 'user_using_id' => $user_using->id
             ]);
-
             
             $rows_ok += 1;
         }
 
-        // Inventory::insert($inventories);
-
         // Limpiar la propiedad del archivo después de procesarlo
         $this->excelFile = null;
 
-        
-        
         if($msg!=""){
-            session()->flash('message', 'El archivo Excel se cargó exitosamente.');
-            session()->flash('warning', $msg);
+            session()->flash('warning', 'El archivo Excel se cargó exitosamente.<br><br>' . $msg);
         }else{
-            session()->flash('message', 'El archivo Excel se cargó exitosamente.');
+            session()->flash('success', 'El archivo Excel se cargó exitosamente.');
         }
     }
 
