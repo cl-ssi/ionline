@@ -4,7 +4,7 @@
             <h3 class="mb-3">Justificaciones de "asistencia no registrada"</h3>
         </div>
         <div class="col-3 text-right">
-            <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-outline-info"> Motivos </a>
+            <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-info"> <i class="fas fa-cog"></i> Mantenedor de Motivos </a>
         </div>
     </div>
     
@@ -18,7 +18,7 @@
                 <th>Jefatura</th>
                 <th>Observación</th>
                 <th>Fecha revisión</th>
-                <th>Registro RRHH</th>
+                <th>Registro en SIRH</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
                             {{ $record->rrhh_at }}
                         @elseif($record->status === 1)
                             <button type="button" class="btn btn-sm btn-primary" wire:click="setOk({{$record}})">
-                                <i class="fas fa-check"></i>
+                                <i class="fas fa-check"></i> Confirmar
                             </button>
                         @endif
                     </td>
