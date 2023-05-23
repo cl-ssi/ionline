@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('replacement_staff.nav')
+
 <h5><i class="fas fa-user-plus"></i> Agregar staff</h5>
 <br>
 <h6>1-. Antecedentes Personales / Contacto</h6>
