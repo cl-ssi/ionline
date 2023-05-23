@@ -48,6 +48,11 @@ class ReplacementStaffController extends Controller
         }
     }
 
+    public function internal_create()
+    {
+        return view('replacement_staff.internal_create');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -89,7 +94,38 @@ class ReplacementStaffController extends Controller
         }
         else{
             session()->flash('danger', 'Error al cargar los archivos');
-            return redirect()->back()->withInput(Input::all());
+            return redirect()->back()->withInput();
+        }
+    }
+
+    public function internal_store(Request $request)
+    {
+        $exist = ReplacementStaff::where('run', $request->run)->get();
+        if($exist->count() > 0){
+            session()->flash('warning', 'Estimado Usuario: El RUN ya se encuentra en registrado');
+            return redirect()->back()->withInput();
+        }
+        else{
+            if($request->hasFile('cv_file')){
+                //SE GUARDA STAFF
+                $replacementStaff = new ReplacementStaff($request->All());
+                $now = Carbon::now()->format('Y_m_d_H_i_s');
+                $file_name = $now.'_cv_'.$replacementStaff->run;
+                $file = $request->file('cv_file');
+                $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+                $replacementStaff->save();
+    
+                Mail::to($replacementStaff->email)
+                    ->cc(env('APP_RYS_MAIL'))
+                    ->send(new NewStaffNotificationUser($replacementStaff));
+    
+                session()->flash('success', 'Se ha creado el postulante exitosamente');
+                return redirect()->route('replacement_staff.index', $replacementStaff);
+            }
+            else{
+                session()->flash('danger', 'Error al cargar los archivos');
+                return redirect()->back()->withInput(Input::all());
+            }
         }
     }
 
