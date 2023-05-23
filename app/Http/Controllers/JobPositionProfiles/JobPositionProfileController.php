@@ -16,6 +16,7 @@ use App\Models\JobPositionProfiles\JobPositionProfileLiability;
 use App\Models\JobPositionProfiles\Expertise;
 use App\Models\JobPositionProfiles\ExpertiseProfile;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\JobPositionProfiles\WorkTeam;
 
 class JobPositionProfileController extends Controller
 {
@@ -171,9 +172,6 @@ class JobPositionProfileController extends Controller
     public function update(Request $request, JobPositionProfile $jobPositionProfile)
     {
         $jobPositionProfile->fill($request->all());
-        // $jobPositionProfile->status = 'saved';
-        // $jobPositionProfile->user()->associate(Auth::user());
-        // $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $jobPositionProfile->estament()->associate($request->estament_id);
         $jobPositionProfile->area()->associate($request->area_id);
         $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
@@ -199,7 +197,6 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile->fill($request->all());
         $jobPositionProfile->save();
 
-        //dd($request);
         if($request->descriptions){
             foreach ($request->descriptions as $key => $description) {
                 $role = new Role();
@@ -217,6 +214,15 @@ class JobPositionProfileController extends Controller
     {
         $jobPositionProfile->fill($request->all());
         $jobPositionProfile->save();
+
+        if($request->descriptions){
+            foreach ($request->descriptions as $key => $description) {
+                $workTeam = new WorkTeam();
+                $workTeam->description = $description;
+                $workTeam->jobPositionProfile()->associate($jobPositionProfile->id);
+                $workTeam->save();
+            }
+        }
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado exitosamente la organización y contexto del cargo');
         return redirect()->route('job_position_profile.edit_organization', $jobPositionProfile);

@@ -33,9 +33,15 @@ class CreateWorkTeam extends Component
         $this->jobPositionProfile = $jobPositionProfile;
     }
 
+    public function deleteRole($workTeam)
+    {
+        $this->workTeam = WorkTeam::find($workTeam['id']);
+        $this->workTeam->delete();
+    }
+
     public function render()
     {
-        $this->work_teams = WorkTeam::where('job_position_profile_id', $this->jobPositionProfile->id)->get();
+        $this->workTeams = WorkTeam::where('job_position_profile_id', $this->jobPositionProfile->id)->get();
         return view('livewire.job-position-profile.create-work-team');
     }
 }
