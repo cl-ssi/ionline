@@ -18,6 +18,7 @@ use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
+use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
@@ -842,6 +843,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('no-records',NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr',NoAttendanceRecordMgr::class)->name('no-records.mgr');
         Route::get('no-records/{noAttendanceRecord}/confirmation',NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
+        Route::get('reasons',ReasonMgr::class)->name('reason.mgr');
     });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
