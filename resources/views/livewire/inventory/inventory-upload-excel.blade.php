@@ -13,6 +13,12 @@
                 {{ session('message') }}
             </div>
         @endif
+
+        @if (session()->has('warning'))
+            <div class="alert alert-warning">
+                {{ session('warning') }}
+            </div>
+        @endif
     </div>
 
     <form wire:submit.prevent="processExcel" enctype="multipart/form-data">
