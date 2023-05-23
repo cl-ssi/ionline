@@ -145,6 +145,7 @@ class EventController extends Controller
 
                     /** Hice esta modificación para que no se caiga si no tienen manager la OU */
                     $manager = Authority::getAuthorityFromDate($userModel->organizationalUnit->id, now(), 'manager');
+                    $isManager = null;
                     if($manager) {
                         $isManager = ($user_ == $manager->user_id);
                     }
