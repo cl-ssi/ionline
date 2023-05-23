@@ -5,12 +5,14 @@ namespace App\Models\ReplacementStaff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
 
-class ReplacementStaff extends Model
+class ReplacementStaff extends Model implements Auditable
 {
     use HasFactory;
     use softDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'run', 'dv', 'birthday', 'name', 'fathers_family',

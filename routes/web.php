@@ -389,6 +389,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::get('/internal_create', [ReplacementStaffController::class, 'internal_create'])->name('internal_create');
+    Route::post('/internal_store', [ReplacementStaffController::class, 'internal_store'])->name('internal_store');
     Route::prefix('staff_manage')->name('staff_manage.')->group(function(){
         Route::get('/', [StaffManageController::class, 'index'])->name('index');
         Route::get('/create', [StaffManageController::class, 'create'])->name('create');
