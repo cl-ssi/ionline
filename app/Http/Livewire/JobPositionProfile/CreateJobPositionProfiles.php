@@ -100,8 +100,29 @@ class CreateJobPositionProfiles extends Component
             compact('estaments', 'contractualConditions'));
     }
 
+    
     public function updatedSelectedContractualCondition($selectedContractualConditionId)
     {
+        if($this->selectedLaw == '18834'){
+            if($selectedContractualConditionId == '1' || $selectedContractualConditionId == '3'){
+                $this->salaryStateInput = 'readonly';
+                $this->degreeStateInput = '';
+            }
+            if($selectedContractualConditionId == '2'){
+                $this->salaryStateInput = '';
+                $this->degreeStateInput = 'readonly';
+            }
+        }
+
+        /*
+        if($selectedContractualConditionId == 1 && $this->selectedLaw == '18834'){
+            $this->salaryStateInput = 'readonly';
+            $this->degreeStateInput = '';
+        }
+        if($selectedContractualConditionId == 1 && $this->selectedLaw == '18834'){
+            $this->salaryStateInput = 'readonly';
+            $this->degreeStateInput = '';
+        }
         switch($selectedContractualConditionId) {
             case 1:
                 $this->salaryStateInput = 'readonly';
@@ -122,15 +143,32 @@ class CreateJobPositionProfiles extends Component
                 $this->salaryStateInput = 'readonly';
                 $this->degreeStateInput = 'readonly';
                 break;
-        }
+        }*/
     }
 
-    public function updatedSelectedLaw($selectedLaw)
+    public function updatedSelectedLaw($selectedLawId)
     {
-        if($selectedLaw == 18834){
+        if($selectedLawId == 18834){
+            // dd($this->selectedContractualCondition);
+            if($this->selectedContractualCondition == 1 || $this->selectedContractualCondition == 3){
+                $this->salaryStateInput = 'readonly';
+                $this->degreeStateInput = '';
+            }
+            if($this->selectedContractualCondition == 2){
+                $this->salaryStateInput = '';
+                $this->degreeStateInput = 'readonly';
+            }
+
             $this->lawStateOption = 'disabled';
         }
         else{
+            //SE INHABILITA SALARIO Y GRADO
+            $this->salaryStateInput = '';
+            $this->salaryStateInput = 'readonly';
+            $this->degreeStateInput = '';
+            $this->degreeStateInput = 'readonly';
+
+            //HORAS DISPONIBLES
             $this->lawStateOption = '';
         }
     }

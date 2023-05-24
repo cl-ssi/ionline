@@ -83,18 +83,6 @@
                 </select>
             </fieldset>
 
-            <fieldset class="form-group col-12 col-md-1">
-                <label for="profiles">Grado</label>
-                <input type="degree" class="form-control" name="degree" id="for_degree" {{ $degreeStateInput }} 
-                    @if($jobPositionProfile) value="{{ $jobPositionProfile->degree }}" @endif required>
-            </fieldset>
-
-            <fieldset class="form-group col-12 col-md-2">
-                <label for="for_user_id">Renta</label>
-                <input type="number" class="form-control" name="salary" id="for_salary" {{ $salaryStateInput }} 
-                    placeholder="$" @if($jobPositionProfile) value="{{ $jobPositionProfile->salary }}" @endif required>
-            </fieldset>
-
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_law">Ley</label>
                 <div class="mt-1">
@@ -107,6 +95,18 @@
                         <label class="form-check-label" for="for_law">N° 19.664</label>
                     </div>
                 </div>
+            </fieldset>
+
+            <fieldset class="form-group col-12 col-md-1">
+                <label for="profiles">Grado</label>
+                <input type="degree" class="form-control" name="degree" id="for_degree" {{ $degreeStateInput }} 
+                    @if($jobPositionProfile) value="{{ $jobPositionProfile->degree }}" @endif required>
+            </fieldset>
+
+            <fieldset class="form-group col-12 col-md-2">
+                <label for="for_user_id">Renta</label>
+                <input type="number" class="form-control" name="salary" id="for_salary" {{ $salaryStateInput }} 
+                    placeholder="$" @if($jobPositionProfile) value="{{ $jobPositionProfile->salary }}" @endif required>
             </fieldset>
 
             <div class="form-group col-12 col-md-3">
