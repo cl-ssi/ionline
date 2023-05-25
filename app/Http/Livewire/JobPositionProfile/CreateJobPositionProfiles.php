@@ -31,36 +31,10 @@ class CreateJobPositionProfiles extends Component
     public function mount(){
         if($this->jobPositionProfile){
             $this->selectedContractualCondition = $this->jobPositionProfile->contractual_condition_id;
-
-            switch($this->selectedContractualCondition) {
-                case 1:
-                    $this->salaryStateInput = 'readonly';
-                    $this->degreeStateInput = '';
-                    break;
-                
-                case 2:
-                    $this->salaryStateInput = '';
-                    $this->degreeStateInput = 'readonly';
-                    break;
-    
-                case 3:
-                    $this->salaryStateInput = 'readonly';
-                    $this->degreeStateInput = '';
-                    break;
-    
-                default:
-                    $this->salaryStateInput = 'readonly';
-                    $this->degreeStateInput = 'readonly';
-                    break;
-            }
+            $this->updatedSelectedContractualCondition($this->selectedContractualCondition);
 
             $this->selectedLaw = $this->jobPositionProfile->law;
-            if($this->selectedLaw == 18834){
-                $this->lawStateOption = 'disabled';
-            }
-            else{
-                $this->lawStateOption = '';
-            }
+            $this->updatedSelectedLaw($this->selectedLaw);
 
             //ADMINISTRATIVO
             $this->selectedEstament = $this->jobPositionProfile->estament_id;
@@ -113,37 +87,6 @@ class CreateJobPositionProfiles extends Component
                 $this->degreeStateInput = 'readonly';
             }
         }
-
-        /*
-        if($selectedContractualConditionId == 1 && $this->selectedLaw == '18834'){
-            $this->salaryStateInput = 'readonly';
-            $this->degreeStateInput = '';
-        }
-        if($selectedContractualConditionId == 1 && $this->selectedLaw == '18834'){
-            $this->salaryStateInput = 'readonly';
-            $this->degreeStateInput = '';
-        }
-        switch($selectedContractualConditionId) {
-            case 1:
-                $this->salaryStateInput = 'readonly';
-                $this->degreeStateInput = '';
-                break;
-            
-            case 2:
-                $this->salaryStateInput = '';
-                $this->degreeStateInput = 'readonly';
-                break;
-
-            case 3:
-                $this->salaryStateInput = 'readonly';
-                $this->degreeStateInput = '';
-                break;
-
-            default:
-                $this->salaryStateInput = 'readonly';
-                $this->degreeStateInput = 'readonly';
-                break;
-        }*/
     }
 
     public function updatedSelectedLaw($selectedLawId)
