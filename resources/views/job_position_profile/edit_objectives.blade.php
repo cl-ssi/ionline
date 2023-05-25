@@ -34,7 +34,7 @@
                     <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
                 </td>
                 <td>
-                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                    @if($jobPositionProfile->staff_decree_by_estament_id  || $jobPositionProfile->general_requirement)
                         <span style="color: green;">
                             <i class="fas fa-check-circle fa-2x"></i>
                         </span>

@@ -98,7 +98,9 @@
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-1">
-                <label for="profiles">Grado</label>
+                <label for="profiles">
+                    Grado <i class="fas fa-info-circle" type="button" data-toggle="modal" data-target="#degreesGuideModal"></i>
+                </label>
                 <input type="degree" class="form-control" name="degree" id="for_degree" {{ $degreeStateInput }} 
                     @if($jobPositionProfile) value="{{ $jobPositionProfile->degree }}" @endif required>
             </fieldset>
