@@ -38,6 +38,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryShow;
 use App\Http\Livewire\Inventory\InventoryUploadExcel;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
@@ -1722,6 +1723,8 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
+    /** Ruta para poder ver la hoja de inventario sin edición  */
+    Route::get('number/{number}', InventoryShow::class)->name('show');
 
     Route::prefix('establishment/{establishment}')->group(function() {
         Route::get('/', InventoryIndex::class)->name('index')
