@@ -114,7 +114,7 @@
     <table class="table table-sm table-bordered small">
         <tbody>
             <tr>
-                <th class="table-active" width="25%">REQUISITO GENERAL ({{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->name : '' }}/{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->StaffDecree->year : ''  }})</th>
+                <th class="table-active" width="25%">REQUISITO GENERAL</th>
                 <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
             </tr>
             <tr>

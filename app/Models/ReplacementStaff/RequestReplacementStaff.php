@@ -179,8 +179,11 @@ class RequestReplacementStaff extends Model implements Auditable
 
     public function getCurrentContinuity($requestReplacementStaff) {
         if($requestReplacementStaff->requestChilds->count() > 0){
-            if($requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString() &&
-                $requestReplacementStaff->requestChilds->last()->request_status != 'pending'){
+            if($requestReplacementStaff->requestChilds->last()->request_status == 'complete' &&
+                $requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
+                return  $currentContinuity = 'no current';
+            }
+            if($requestReplacementStaff->requestChilds->last()->request_status == 'rejected'){
                 return  $currentContinuity = 'no current';
             }
         }

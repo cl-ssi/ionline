@@ -18,6 +18,7 @@ use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
+use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
@@ -37,6 +38,7 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryShow;
 use App\Http\Livewire\Inventory\InventoryUploadExcel;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
@@ -264,14 +266,6 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-
-/* Rutas para test Test */
-Route::prefix('test')->group(function () {
-    /* Maqueteo calendario */
-    Route::get('/calendar', function () {
-        return view('calendar');
-    });
-});
 
 Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
 Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->name('claveunica.callback');
@@ -842,6 +836,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('no-records',NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr',NoAttendanceRecordMgr::class)->name('no-records.mgr');
         Route::get('no-records/{noAttendanceRecord}/confirmation',NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
+        Route::get('reasons',ReasonMgr::class)->name('reason.mgr');
     });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
@@ -1728,6 +1723,8 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
+    /** Ruta para poder ver la hoja de inventario sin edición  */
+    Route::get('number/{number}', InventoryShow::class)->name('show');
 
     Route::prefix('establishment/{establishment}')->group(function() {
         Route::get('/', InventoryIndex::class)->name('index')
@@ -2197,17 +2194,27 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 });
 
 
-Route::view('/some', 'some');
+
 
 /** Test Routes */
+Route::view('/some', 'some');
+
 Route::prefix('test')->as('test.')->group(function () {
     Route::get('/ous',[TestController::class,'ous']);
+
     Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
     // Route::get('/dev/get-ip',[TestController::class,'getIp']);
     // Route::get('/log',[TestController::class,'log']);
     Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
     // Route::get('/info',[TestController::class,'info']);
     Route::get('/job',[TestController::class,'job'])->middleware('auth');
+
+    /* Maqueteo calendario */
+    Route::get('/calendar', function () {
+        return view('calendar');
+    });
+
+    Route::get('/teams',[TestController::class,'SendCardToTeams'])->middleware('auth');
 });
 
 

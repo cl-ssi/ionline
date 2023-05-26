@@ -2,6 +2,7 @@
 
 namespace App\Models\Inv;
 
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -165,6 +166,10 @@ class Inventory extends Model implements Auditable
     public function isComputer()
     {
         return Computer::whereInventoryNumber($this->number)->exists();
+    }
+
+    public function getQrAttribute() {
+        return QrCode::generate(route('inventories.show', ['number' => $this->number]));
     }
 
     public function getMyComputerAttribute()

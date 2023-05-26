@@ -53,18 +53,14 @@ class UserRemController extends Controller
     {
         $establishments = Establishment::whereIn('id', $request->establishment_id)->get();
         foreach ($establishments as $establishment) {
-            $validator = Validator::make($request->all(), [
-                'user_id' => [
-                    'required',
-                    Rule::unique('rem_users')->where(function ($query) use ($establishment) {
-                        $query->where('establishment_id', $establishment->id);
-                    })
-                ],
-            ]);
-            if ($validator->fails()) {
-                $user = User::find($request->user_id);
-                session()->flash('warning', 'El usuario '. $user->fullName . ' ya está asignado al establecimiento ' . $establishment->name);
-                return redirect()->route('rem.users.index');
+            // Verificar si el usuario ya está asignado al establecimiento
+            $existingUserRem = UserRem::where('user_id', $request->user_id)
+                ->where('establishment_id', $establishment->id)
+                ->first();
+
+            if ($existingUserRem) {
+                // Eliminar al usuario asignado al establecimiento
+                $existingUserRem->delete();
             }
 
             $userRem = new UserRem([
@@ -74,9 +70,11 @@ class UserRemController extends Controller
             $userRem->save();
             $userRem->user->givePermissionTo('Rem: user');
         }
+
         session()->flash('info', 'El usuario ha sido asignado a los establecimientos seleccionados.');
         return redirect()->route('rem.users.index');
     }
+
 
 
     /**
@@ -122,9 +120,9 @@ class UserRemController extends Controller
     public function destroy($id)
     {
         $userRem = UserRem::findOrFail($id);
-        $userRem->user->revokePermissionTo(['Rem: user']);
+        //$userRem->user->revokePermissionTo(['Rem: user']);
         $userRem->delete();
-        session()->flash('success', 'Usuario Eliminado de sus funciones como REM');
+        session()->flash('success', 'Usuario Eliminado para cargar al Establecimiento: ' . $userRem->establishment->name . ' de sus funciones como REM');
         return redirect()->route('rem.users.index');
     }
 }

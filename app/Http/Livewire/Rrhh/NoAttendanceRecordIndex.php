@@ -24,7 +24,10 @@ class NoAttendanceRecordIndex extends Component
     public function render()
     {
         return view('livewire.rrhh.no-attendance-record-index',[
-            'records' => NoAttendanceRecord::whereNotNull('status')->latest()->paginate(50),
+            'records' => NoAttendanceRecord::whereNotNull('status')
+                ->where('establishment_id',auth()->user()->organizationalUnit->establishment_id)
+                ->latest()
+                ->paginate(50),
         ]);
     }
 }

@@ -34,7 +34,7 @@
                     <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
                 </td>
                 <td>
-                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                    @if($jobPositionProfile->staff_decree_by_estament_id || $jobPositionProfile->general_requirement)
                         <span style="color: green;">
                             <i class="fas fa-check-circle fa-2x"></i>
                         </span>
@@ -91,14 +91,14 @@
 <hr>
 <br>
 
-@if($jobPositionProfile->staff_decree_by_estament_id == NULL || 
+@if(($jobPositionProfile->staff_decree_by_estament_id == NULL && $jobPositionProfile->general_requirement == NULL) ||
     ($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL) ||
     $jobPositionProfile->working_team == NULL ||
     $jobPositionProfile->jppLiabilities->count() <= 0 ||
     $jobPositionProfile->jppExpertises->count() <= 0)
     <div class="alert alert-danger alert-dismissible fade show">
         Estimado Usuario: Favor completar la siguiente información: <br><br>
-        @if($jobPositionProfile->staff_decree_by_estament_id == NULL)
+        @if($jobPositionProfile->staff_decree_by_estament_id == NULL && $jobPositionProfile->general_requirement == NULL)
             <b>II. REQUISITOS FORMALES</b><br>
         @endif
         @if($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL)
