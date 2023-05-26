@@ -266,14 +266,6 @@ Route::get('/', function () {
 })->name('welcome');
 
 
-/* Rutas para test Test */
-Route::prefix('test')->group(function () {
-    /* Maqueteo calendario */
-    Route::get('/calendar', function () {
-        return view('calendar');
-    });
-});
-
 Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
 Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
@@ -2199,17 +2191,27 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 });
 
 
-Route::view('/some', 'some');
+
 
 /** Test Routes */
+Route::view('/some', 'some');
+
 Route::prefix('test')->as('test.')->group(function () {
     Route::get('/ous',[TestController::class,'ous']);
+
     Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
     // Route::get('/dev/get-ip',[TestController::class,'getIp']);
     // Route::get('/log',[TestController::class,'log']);
     Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
     // Route::get('/info',[TestController::class,'info']);
     Route::get('/job',[TestController::class,'job'])->middleware('auth');
+
+    /* Maqueteo calendario */
+    Route::get('/calendar', function () {
+        return view('calendar');
+    });
+
+    Route::get('/teams',[TestController::class,'SendCardToTeams'])->middleware('auth');
 });
 
 
