@@ -17,6 +17,10 @@ class Program extends Model
         return $this->hasMany('App\Models\Agreements\ProgramResolution')->orderBy('created_at','desc');
     }
 
+    public function quotas_minsal() {
+        return $this->hasMany('App\Models\Agreements\ProgramQuotaMinsal');
+    }
+
     /**
      * Get the ProgramComponent for the model.
      *
