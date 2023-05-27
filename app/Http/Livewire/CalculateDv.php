@@ -15,14 +15,21 @@ class CalculateDv extends Component
     public $runSelected = null;
     public $dvSelected = null;
 
+    protected $listeners = ['disabledRunDv', 'enableRunDv'];
+
+    public $disabled = null;
+
     public function mount() {
         if($this->requestReplacementStaff) {
             $this->run = $this->requestReplacementStaff->run;
-        }
 
-        // if(old('run')) {
-        //     $this->run = old('run');
-        // }
+            if($this->requestReplacementStaff->fundament_manage_id == 4){
+                $this->disabledRunDv();
+            }
+            else{
+                $this->enableRunDv();
+            }
+        }
     }
 
     public function render()
@@ -34,5 +41,13 @@ class CalculateDv extends Component
         $this->dv = chr($s?$s+47:75);
 
         return view('livewire.calculate-dv');
+    }
+
+    public function disabledRunDv(){
+        $this->disabled = 'disabled';
+    }
+
+    public function enableRunDv(){
+        $this->disabled = '';
     }
 }

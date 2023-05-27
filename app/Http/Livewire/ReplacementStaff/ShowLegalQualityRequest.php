@@ -47,6 +47,8 @@ class ShowLegalQualityRequest extends Component
 
     protected $listeners = ['setPosition', 'setIsDisabled'];
 
+    public $disabledNameToReplace = ''; 
+
     public function setInputsRequestReplacementStaff()
     {
         if($this->requestReplacementStaff) {
@@ -77,8 +79,12 @@ class ShowLegalQualityRequest extends Component
                 ->where($this->formType, 1)
                 ->get();
 
-            if($this->selectedFundamentDetail == 4){
-                $this->otherFundamentInput = '';
+            if($this->selectedFundament == 4){
+                $this->otherFundamentInput  = '';
+                $this->emit('disabledRunDv');
+            }
+            else{
+                $this->emit('enableRunDv');
             }
 
             /* PERFIL GRADO */
@@ -117,7 +123,8 @@ class ShowLegalQualityRequest extends Component
                 where($this->formType, 1)
                 ->get(),
 
-            'profiles' => ProfileManage::orderBy('name', 'ASC')->get()
+            'profiles' => ProfileManage::orderBy('name', 'ASC')->get(),
+            'disabledNameToReplace' => $this->disabledNameToReplace
         ]);
     }
 
@@ -150,6 +157,12 @@ class ShowLegalQualityRequest extends Component
 
         if($selected_fundament_id == 4){
             $this->otherFundamentInput = '';
+            $this->emit('disabledRunDv');
+            $this->emit('disabledNameToReplace');
+        }
+        else{
+            $this->emit('enableRunDv');
+            $this->emit('enableNameToReplace');
         }
     }
 
