@@ -2,20 +2,26 @@
 
 namespace App\Http\Livewire\Sign;
 
-use Illuminate\Support\Str;
 use App\Http\Requests\Sign\StoreSignatureRequest;
+use App\Models\Documents\Document;
 use App\Models\Documents\Sign\Signature;
+use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Services\SignService;
 use App\User;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Livewire\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+use PhpOffice\PhpWord\Element\SDT;
 
 class RequestSignature extends Component
 {
     use WithFileUploads;
 
+    public $document;
     public $document_number;
     public $type_id;
     public $subject;
@@ -25,9 +31,12 @@ class RequestSignature extends Component
     public $reserved;
     public $page;
 
+    public $type_annexed;
+    public $annexes;
+    public $annex_file;
+    public $annex_link;
+
     public $document_to_sign;
-    public $annex;
-    public $url;
 
     public $left_signatures;
     public $center_signatures;
@@ -62,13 +71,21 @@ class RequestSignature extends Component
 
     public function mount()
     {
-        $this->resetInput();
+        if(isset($this->document))
+        {
+            $this->setInputs($this->document);
+        }
+        else
+        {
+            $this->resetInput();
+        }
+
         $this->documentTypes = Type::whereNull('partes_exclusive')->pluck('name', 'id');
     }
 
     public function rules()
     {
-        return (new StoreSignatureRequest())->rules();
+        return (new StoreSignatureRequest())->rules($this->document);
     }
 
     public function render()
@@ -163,14 +180,29 @@ class RequestSignature extends Component
         $this->distribution = $distribution->toArray();
 
         /**
-         * Save the file to sign
+         *
          */
         $folder = Signature::getFolder();
         $filename = 'document-sign-' . now()->timestamp;
         $url = $filename.'.pdf';
-        $this->document_to_sign->storeAs($folder, $url, 'gcs');
-
         $file = $folder . "/" . $url;
+
+        /**
+         * Save the file to sign
+         */
+        if(isset($this->document))
+        {
+            $document = $this->document;
+            $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+            $documentFile = \PDF::loadView('documents.templates.'.$document->viewName, compact('document','image'));
+            $base64 = base64_encode($documentFile->stream());
+            Storage::disk('gcs')->put($file, base64_decode($base64));
+
+        }
+        else
+        {
+            $this->document_to_sign->storeAs($folder, $url, 'gcs');
+        }
 
         /**
          * Create the signature request
@@ -196,9 +228,34 @@ class RequestSignature extends Component
         $signatureService->setSignersRight($this->right_signatures);
         $signatureService->setUserId(auth()->id());
         $signatureService->setOuId(auth()->user()->organizational_unit_id);
-        $signatureService->save();
+        $signature = $signatureService->save();
 
-        $this->resetInput();
+        /**
+         *
+         */
+        foreach($this->annexes as $annex)
+        {
+            SignatureAnnex::create([
+                'type' => $annex['type'],
+                'url' => $annex['source'],
+                'file' => null,
+                'signature_id' => $signature->id,
+            ]);
+        }
+
+        if(isset($this->document))
+        {
+            $signature->update([
+                'document_id' => $this->document->id,
+            ]);
+
+            session()->flash('success', "La solicitud de firma fue creada exitosamente.");
+            return redirect()->route('documents.index');
+        }
+        else
+        {
+            $this->resetInput();
+        }
     }
 
     public function resetInput()
@@ -209,6 +266,9 @@ class RequestSignature extends Component
         $this->column_left_visator = false;
         $this->column_center_visator = false;
         $this->column_right_visator = false;
+
+        $this->type_annexed = 'link';
+        $this->annexes = collect();
 
         $this->recipients = collect([]);
         $this->distribution = collect([]);
@@ -234,6 +294,50 @@ class RequestSignature extends Component
             'column_right_endorse',
             'lastColumn',
         ]);
+    }
+
+    public function setInputs(Document $document)
+    {
+        $this->document_to_sign = '';
+        $this->type_id = $document->type_id;
+        $this->document_number = $document->date->format('Y-m-d');
+        $this->subject = $document->subject;
+
+        $distributionString = trim($document->distribution);
+        $distributionString = preg_split('/\s+/', $distributionString);
+        $distributionString = implode(',', $distributionString);
+        $distributionArray = explode(",", $distributionString);
+
+        $this->page = 'last';
+        $this->reserved = false;
+
+        $this->column_left_visator = false;
+        $this->column_center_visator = false;
+        $this->column_right_visator = false;
+
+        $this->recipients = collect([]);
+        $distribution = collect($distributionArray);
+
+        $this->distribution = $distribution->map(function($item) {
+            $itemDistribution['type'] = 'email';
+            $itemDistribution['destination'] = $item;
+
+            return $itemDistribution;
+        });
+
+        $this->type_annexed = 'link';
+        $this->annexes = collect();
+
+        $this->namesSignaturesLeft = collect([]);
+        $this->namesSignaturesCenter = collect([]);
+        $this->namesSignaturesRight = collect([]);
+
+        $this->left_signatures = collect([]);
+        $this->center_signatures = collect([]);
+        $this->right_signatures = collect([]);
+
+        $this->myColumns = collect();
+        $this->columnAvailable = collect(['left' => 0, 'center' => 0, 'right' => 0]);
     }
 
     public function setEmailRecipients($emails)
@@ -343,5 +447,21 @@ class RequestSignature extends Component
         {
             $this->lastColumn = null;
         }
+    }
+
+    public function uploadAnnexed()
+    {
+        $data['type'] = $this->type_annexed;
+
+        if($this->type_annexed == 'link')
+        {
+            $data['source'] = $this->annex_link;
+        }
+
+        $this->annexes->push($data);
+
+        $this->type_annexed = 'link';
+        $this->annex_file = null;
+        $this->annex_link = null;
     }
 }
