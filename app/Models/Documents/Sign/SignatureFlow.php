@@ -14,12 +14,12 @@ class SignatureFlow extends Model
     /**
      * Punto de Partida en Y
      */
-    const START_Y = 2;
+    const START_Y = 30;
 
     /**
      * Espaciado entre una linea y otra
      */
-    const PADDING = 37;
+    const PADDING = 42;
 
     /**
      * The table associated with the model.
