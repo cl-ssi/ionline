@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use App\Models\Documents\Sign\Signature;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -87,6 +88,11 @@ class Document extends Model implements Auditable
     public function establishment()
     {
         return $this->belongsTo(Establishment::class);
+    }
+
+    public function signature()
+    {
+        return $this->hasOne(Signature::class);
     }
 
     /**
