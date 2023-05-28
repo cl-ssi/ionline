@@ -55,7 +55,7 @@ class ImageService
      * Create the image of Visator
      *
      * @param  \App\User $user
-     * @return void
+     * @return string
      */
     public function createVisator(User $user)
     {
@@ -88,12 +88,18 @@ class ImageService
          */
         imagettftext($imagen, 80, 0, $xPading, $yPading, $textColor, $this->fontLight, $user->initials);
 
-        return $imagen;
-
         /**
-         * Save the image
+         * Generate the image in base 64
          */
-        // imagepng($imagen, "signature-visacion.jpg", 9);
+        ob_start();
+
+        imagepng($imagen);
+
+        $imageBase64 = base64_encode(ob_get_clean());
+
+        imagedestroy($imagen);
+
+        return $imageBase64;
     }
 
     /**
@@ -101,8 +107,8 @@ class ImageService
      *
      * @param  string $validationCode
      * @param  string $documentNumber
-     * @param  string $verificationLink
-     * @return void
+     * @param  string $verificationLink TODO: usar app_url
+     * @return string
      */
     public function createDocumentNumber($validationCode, $documentNumber, $verificationLink = "https://i.saludiquique.gob.cl/validador")
     {
@@ -148,26 +154,25 @@ class ImageService
          */
         imagettftext($imagen, $fontSize + 35, 0, $xPading + $widthImage - $widthNumber - 400, $yPading * 6, $textColor, $this->fontConsolasBold, $documentNumber);
 
-        return $imagen;
-
         /**
-         * Save the image
-         */
-        // imagepng($imagen, "signature-document-number.jpg", 9);
-
-        /**
-         * Revisar
+         *  Generate the image in base 64
          */
         ob_start();
+
         imagepng($imagen);
-        $firma_numero = base64_encode(ob_get_clean());
+
+        $imageBase64 = base64_encode(ob_get_clean());
+
+        imagedestroy($imagen);
+
+        return $imageBase64;
     }
 
     /**
      * Create the digital signature image
      *
      * @param  \App\User $user
-     * @return void
+     * @return string
      */
     public function createSignature(User $user)
     {
@@ -233,19 +238,17 @@ class ImageService
          */
         imagettftext($imagen, $fontSize - 1, 0, $xAxis, $yPading * 4.3 + $marginTop + 0.5, $textColor, $this->fontRegular, now());
 
-        return $imagen;
-
         /**
-         * Save the image
-         */
-        imagejpeg($imagen, 'signature-digital.jpg', 100);
-
-        /**
-         * Revisar
+         *  Generate the image in base 64
          */
         ob_start();
+
         imagepng($imagen);
-        $firma = base64_encode(ob_get_clean());
+
+        $imageBase64 = base64_encode(ob_get_clean());
+
         imagedestroy($imagen);
+
+        return $imageBase64;
     }
 }
