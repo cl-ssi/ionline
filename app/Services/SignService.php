@@ -335,6 +335,7 @@ class SignService
             'status_at' => now(),
             'page' => $this->page,
             'file' => $this->file,
+            'signed_file' => $this->file,
             'column_left_visator' => $this->column_left_visator,
             'column_left_endorse' => $this->column_left_endorse,
             'column_center_visator' => $this->column_center_visator,
@@ -389,7 +390,7 @@ class SignService
         {
             $signerRight = SignatureFlow::create([
                 'type' => ($this->column_right_visator) == true ? 'Visador' : 'Firmante',
-                'user_id' => $itemSignerCenter,
+                'user_id' => $itemSignerRight,
                 'file' => $this->file,
                 'column_position' => 'right',
                 'row_position' => $indexRight,
