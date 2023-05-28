@@ -48,6 +48,8 @@ class CreateSignSignatures extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users'); // creado por
             $table->foreignId('ou_id')->nullable()->constrained('organizational_units');
 
+            $table->foreignId('document_id')->nullable()->constrained('documents'); // creado por
+
             $table->softDeletes();
             $table->timestamps();
         });
