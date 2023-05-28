@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents\Sign;
 
+use App\Models\Documents\Document;
 use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Rrhh\OrganizationalUnit;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\StreamReader;
 
 class Signature extends Model
 {
@@ -44,7 +47,7 @@ class Signature extends Model
         'verification_code',
         'signed_file',
         'page',
-        'is blocked',
+        'is_blocked',
         'column_left_visator',
         'column_left_endorse',
         'column_center_visator',
@@ -53,6 +56,7 @@ class Signature extends Model
         'column_right_endorse',
         'user_id',
         'ou_id',
+        'document_id',
     ];
 
     /**
@@ -104,6 +108,11 @@ class Signature extends Model
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
+    }
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class);
     }
 
     public function getStatusTranslateAttribute()
@@ -251,7 +260,18 @@ class Signature extends Model
         return $this->signatures->count();
     }
 
-    public function getLinkAttribute()
+    public function getLinkSignedFileAttribute()
+    {
+        $link = null;
+        if(Storage::disk('gcs')->exists($this->signed_file))
+        {
+            $link = Storage::disk('gcs')->url($this->signed_file);
+        }
+
+        return $link;
+    }
+
+    public function getLinkFileAttribute()
     {
         $link = null;
         if(Storage::disk('gcs')->exists($this->file))
@@ -467,9 +487,66 @@ class Signature extends Model
         return 2;
     }
 
-    public static function modoDesatenidodProduccion()
+    public static function modoDesatendidoProduccion()
     {
         return 3;
+    }
+
+    public function calculateTop($linkDocument)
+    {
+        /**
+         * Obtiene el ancho y largo del pdf
+         */
+        $fileContent = file_get_contents($linkDocument);
+        $pdf = new Fpdi('P', 'mm');
+        $pdf->setSourceFile(StreamReader::createByString($fileContent));
+        $firstPage = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($firstPage);
+
+        /**
+         * Calculo de milimetros a centimetros
+         */
+        $widthFile = $size['width'] / 10;
+        $heightFile = $size['height'] / 10;
+
+        /**
+         * Calculo de centimetros a pulgadas y cada pulgada son 72 ppp (dots per inch - dpi)
+         */
+        $xCoordinate = ($widthFile * 0.393701) * 72;
+        $yCoordinate = ($heightFile * 0.393701) * 72;
+
+        /**
+         * Descifrar porque hay que restar 220 y 135 a las coordenadas
+         */
+        $coordinate['x'] = $xCoordinate - 220;
+        $coordinate['y'] = $yCoordinate - 90;
+
+        return $coordinate;
+    }
+
+    public function calculateRow($position, $isVisator = false)
+    {
+        $padding = ($isVisator == true) ? 15 : SignatureFlow::PADDING;
+
+        return SignatureFlow::START_Y + (($position - 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+    }
+
+    public function calculateColumn($position)
+    {
+        switch ($position)
+        {
+            case 'left':
+                $x = 33;
+                break;
+            case 'center':
+                $x = 215;
+                break;
+            case 'right':
+                $x = 397;
+                break;
+        }
+
+        return $x;
     }
 
     public static function getFolder()
@@ -479,12 +556,17 @@ class Signature extends Model
 
     public static function getFolderSigned()
     {
-        return 'ionline/sign/signed';
+        return 'ionline/sign/signed/';
     }
 
     public static function getFolderEnumerate()
     {
         return 'ionline/sign/enumerate';
+    }
+
+    public static function getFolderAnnexes()
+    {
+        return 'ionline/sign/annexes';
     }
 
     public static function getVerificationCode(Signature $signature)
@@ -505,7 +587,7 @@ class Signature extends Model
             case Signature::modoAtendidoProduccion():
                 $url = env('FIRMA_URL');
                 break;
-            case Signature::modoDesatenidodProduccion():
+            case Signature::modoDesatendidoProduccion():
                 $url = env('FIRMA_URL');
                 break;
             default:
@@ -521,15 +603,16 @@ class Signature extends Model
         {
             case Signature::modoDesatendidoTest():
                 $entity = 'Subsecretaría General de La Presidencia';
+                $entity = 'Servicio de Salud Iquique';
                 break;
             case Signature::modoAtendidoTest():
-                // $entity = 'Subsecretaría General de La Presidencia';
+                $entity = 'Subsecretaría General de La Presidencia';
                 $entity = 'Servicio de Salud Iquique';
                 break;
             case Signature::modoAtendidoProduccion():
                 $entity = 'Servicio de Salud Iquique';
                 break;
-            case Signature::modoDesatenidodProduccion():
+            case Signature::modoDesatendidoProduccion():
                 $entity = 'Servicio de Salud Iquique';
                 break;
             default:
@@ -547,13 +630,13 @@ class Signature extends Model
                 $purpose = 'Desatendido';
                 break;
             case Signature::modoAtendidoTest():
-                // $purpose = 'Propósito General';
+                $purpose = 'Propósito General';
                 $purpose = 'Desatendido';
                 break;
             case Signature::modoAtendidoProduccion():
                 $purpose = 'Propósito General';
                 break;
-            case Signature::modoDesatenidodProduccion():
+            case Signature::modoDesatendidoProduccion():
                 $purpose = 'Desatendido';
                 break;
             default:
@@ -569,15 +652,16 @@ class Signature extends Model
         {
             case Signature::modoDesatendidoTest():
                 $run = 22222222;
+                $run = 15287582;
                 break;
             case Signature::modoAtendidoTest():
-                // $run = 11111111;
+                $run = 11111111;
                 $run = '15287582';
                 break;
             case Signature::modoAtendidoProduccion():
                 $run = $runParameter;
                 break;
-            case Signature::modoDesatenidodProduccion():
+            case Signature::modoDesatendidoProduccion():
                 $run = $runParameter;
                 break;
             default:
@@ -601,5 +685,42 @@ class Signature extends Model
         ];
 
         return $payload;
+    }
+
+    public function getData($document, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, $page = 'LAST')
+    {
+        $base64Pdf = base64_encode(file_get_contents($document));
+
+        $checkSumPdf = md5_file($document);
+
+        return [
+            'api_token_key' => $apiToken,
+            'token' => $jwt,
+            'files' => [
+                [
+                    'content-type' => 'application/pdf',
+                    'content' => $base64Pdf,
+                    'description' => 'str',
+                    'checksum' => $checkSumPdf,
+                    'layout' => "
+                        <AgileSignerConfig>
+                            <Application id=\"THIS-CONFIG\">
+                                <pdfPassword/>
+                                <Signature>
+                                    <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
+                                        <llx>" . ($xCoordinate). "</llx>
+                                        <lly>" . ($yCoordinate). "</lly>
+                                        <urx>" . ($xCoordinate + (170 * 1.3)) . "</urx>
+                                        <ury>" . ($yCoordinate + 48) . "</ury>
+                                        <page>" . $page . "</page>
+                                        <image>BASE64</image>
+                                        <BASE64VALUE>$signatureBase64</BASE64VALUE>
+                                    </Visible>
+                                </Signature>
+                            </Application>
+                        </AgileSignerConfig>"
+                ]
+            ]
+        ];
     }
 }
