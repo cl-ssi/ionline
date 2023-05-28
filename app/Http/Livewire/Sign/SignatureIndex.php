@@ -2,29 +2,131 @@
 
 namespace App\Http\Livewire\Sign;
 
+use App\Jobs\SignDocumentJob;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
+use App\Services\DocumentSignService;
 use App\Services\ImageService;
-use Firebase\JWT\JWT;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+use App\User;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Throwable;
 
 class SignatureIndex extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $selectedSignatures;
     public $filterBy = "all";
     public $search;
     public $otp;
+
+    public $observation;
 
     public function render()
     {
         return view('livewire.sign.signature-index', [
             'signatures' => $this->getSignatures()
         ]);
+    }
+
+    public function mount()
+    {
+        $this->selectedSignatures = collect();
+    }
+
+    public function updateSelected($signatureId)
+    {
+        if($this->selectedSignatures->contains($signatureId))
+        {
+            $this->selectedSignatures = $this->selectedSignatures->filter(function ($itemSelected) use($signatureId){
+                return $itemSelected != $signatureId;
+            });
+        }
+        else
+        {
+            $this->selectedSignatures->push($signatureId);
+        }
+    }
+
+    public function signToMultiple()
+    {
+        $signatures = Signature::query()
+            ->whereIn('id', $this->selectedSignatures->toArray())
+            ->get();
+
+        foreach($signatures as $signature)
+        {
+            /**
+             * Bloquea la firma
+             */
+            $signature->update([
+                'is_blocked' => true,
+            ]);
+
+            /**
+             * Setea el user
+             */
+            $user = User::find(auth()->id());
+
+            /**
+             * Setea el signatureFlow
+             */
+            $signatureFlow = SignatureFlow::query()
+                ->whereSignerId(auth()->id())
+                ->whereSignatureId($signature->id)
+                ->first();
+
+            /**
+             * Setea el base64Image
+             */
+            $base64Image = app(ImageService::class)->createSignature($user);
+
+            dispatch(function () use ($signature, $signatureFlow, $user, $base64Image) {
+
+                /**
+                 * Firma el documento con el servicio
+                 */
+                $documentSignService = new DocumentSignService;
+                $documentSignService->setDocument($signature->link_signed_file);
+                $documentSignService->setFolder(Signature::getFolderSigned());
+                $documentSignService->setFilename($signature->id.'-'.$signatureFlow->id);
+                $documentSignService->setUser($user);
+                $documentSignService->setXCoordinate($signatureFlow->x);
+                $documentSignService->setYCoordinate($signatureFlow->y);
+                $documentSignService->setBase64Image($base64Image);
+                $documentSignService->setPage($signature->page);
+                $documentSignService->setOtp($this->otp);
+                $documentSignService->setEnvironment('TEST');
+                $documentSignService->setModo('ATENDIDO');
+                $documentSignService->sign();
+
+                /**
+                 * Desbloquea la firma
+                 */
+                $signature->update([
+                    'is_blocked' => false,
+                ]);
+
+                /**
+                 * Actualiza el signature flow
+                 */
+                $signatureFlow->update([
+                    'status' => 'signed',
+                ]);
+
+            })->catch(function() {
+                $this->delete();
+                /**
+                 * Desbloquear signature
+                 */
+            })->onQueue('sign');
+        }
+
+        session()->flash('warning', 'El archivos estan en proceso de firma, esto tomara unos segundos.');
+        return redirect()->route('v2.documents.signatures.index');
     }
 
     public function getSignatures()
@@ -59,196 +161,24 @@ class SignatureIndex extends Component
         return $signatures;
     }
 
-    /**
-     * Pasar al componente: vista o link, usuario id, position: derecha, centro o izquierda, fila 1, ruta 1 y nombre de archivo.
-     * Devolver un callback con el link, modulo drogas, acta 505.
-     * devuelvo el link. Nombre de ruta y parámetros como array.
-     *
-     * @param  Signature $signature
-     * @return void
-     */
-    public function signDocument(Signature $signature)
+    public function rejectedSignature(Signature $signature)
     {
-        /**
-         * Obtiene el usuario autenticado
-         */
-        $user = auth()->user();
-
-        /**
-         * Obtiene el signatureFlow asociado
-         */
         $signatureFlow = SignatureFlow::query()
+            ->whereSignerId(auth()->id())
             ->whereSignatureId($signature->id)
-            ->whereSignerId($user->id)
             ->first();
 
-        /**
-         * Setea el otp
-         */
-        $otp = $this->otp;
-
-        /**
-         * Obtiene el link del documento
-         */
-        $document = $signature->link;
-
-        /**
-         * Obtiene el base64 del pdf y el checksum
-         */
-        $base64Pdf = base64_encode(file_get_contents($document));
-        $checkSumPdf = md5_file($document);
-
-        /**
-         * Obtiene la imagen con el numero de Documento
-         */
-        $imageWithDocumentNumber = app(ImageService::class)->createSignature($user);
-        ob_start();
-        imagepng($imageWithDocumentNumber);
-        $signatureBase64 = base64_encode(ob_get_clean());
-        imagedestroy($imageWithDocumentNumber);
-
-        /**
-         * Setea las credenciales de la api desde el env
-         */
-        $url = env('FIRMA_URL');
-        $apiToken = env('FIRMA_API_TOKEN');
-        $secret = env('FIRMA_SECRET');
-
-        /**
-         * Setea la info para firmar un documento
-         */
-        $page = 'LAST';
-
-        /**
-         * Setea el modo para el payload
-         */
-        if(env('FIRMA_MODO') == 'test')
-        {
-            $modo = Signature::modoAtendidoTest();
-        }
-        else
-        {
-            $modo = Signature::modoAtendidoProduccion();
-        }
-
-        /**
-         * Setea el payload del JWT
-         */
-        $payload = app(Signature::class)->getPayload($modo, $user->id);
-
-        /**
-         * Convierte y firma un objeto de php a un string de JWT
-         */
-        $jwt = JWT::encode($payload, $secret);
-
-        /**
-         * Asigna coordenadas
-         */
-        $xCoordinate = $signatureFlow->x;
-        $yCoordinate = $signatureFlow->y;
-
-        /**
-         * Largo y ancho de la imagen
-         */
-        $heightFirma = 200;
-        $widthFirma = 100;
-
-        /**
-         * Set the file data
-         */
-        $data = [
-            'api_token_key' => $apiToken,
-            'token' => $jwt,
-            'files' => [
-                [
-                    'content-type' => 'application/pdf',
-                    'content' => $base64Pdf,
-                    'description' => 'str',
-                    'checksum' => $checkSumPdf,
-                    'layout' => "
-                        <AgileSignerConfig>
-                            <Application id=\"THIS-CONFIG\">
-                                <pdfPassword/>
-                                <Signature>
-                                    <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                        <llx>" . ($xCoordinate). "</llx>
-                                        <lly>" . ($yCoordinate). "</lly>
-                                        <urx>" . ($xCoordinate + $heightFirma) . "</urx>
-                                        <ury>" . ($yCoordinate + $widthFirma + 5) . "</ury>
-                                        <page>" . $page . "</page>
-                                        <image>BASE64</image>
-                                        <BASE64VALUE>$signatureBase64</BASE64VALUE>
-                                    </Visible>
-                                </Signature>
-                            </Application>
-                        </AgileSignerConfig>"
-                ]
-            ]
-        ];
-
-        /**
-         * Peticion a la api para firmar
-         */
-        $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
-
-        $json = $response->json();
-
-        /**
-         * Verifica si existe un error
-         */
-        if (array_key_exists('error', $json)) {
-
-            session()->flash('danger', 'El proceso de firma produjo un error. Codigo 1');
-            return redirect()->route('v2.documents.signatures.index');
-
-            return ['statusOk' => false,
-                'content' => '',
-                'errorMsg' => $json['error'],
-            ];
-        }
-
-        if (!array_key_exists('content', $json['files'][0]))
-        {
-            if (array_key_exists('error', $json))
-            {
-                session()->flash('danger', 'El proceso de firma produjo un error. Codigo 2');
-                return redirect()->route('v2.documents.signatures.index');
-            }
-            else
-            {
-                session()->flash('danger', 'El proceso de firma produjo un error. Codigo 3');
-                return redirect()->route('v2.documents.signatures.index');
-            }
-
-        }
-
-        /**
-         * Guardar el archivo firmado en disco
-         */
-        $folder = Signature::getFolderSigned();
-        $filename = $folder . "/" . $signature->id . "-". $signatureFlow->id;
-        $file = $filename.".pdf";
-
-        Storage::disk('gcs')
-            ->getDriver()
-            ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
-
-        /**
-         * Actualiza el archivo en Signature
-         */
-        $signature->update([
-            'file' => $file
-        ]);
-
-        /**
-         * Actualiza el archivo y el estado en el SignatureFlow
-         */
         $signatureFlow->update([
-            'file' => $file,
-            'status' => 'signed'
+            'status' => 'rejected',
+            'status_at' => now(),
+            'rejected_observation' => $this->observation,
         ]);
 
-        session()->flash('success', 'El documento fue firmado exitosamente');
-        return redirect()->route('v2.documents.signatures.index');
-    }
+        $signature->update([
+            'status' => 'rejected',
+            'status_at' => now(),
+        ]);
+
+        session()->flash('success', "La solicitud de firma #$signature->id fue rechazada.");
+        return redirect()->route('v2.documents.signatures.index');    }
 }
