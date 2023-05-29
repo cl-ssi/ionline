@@ -21,17 +21,16 @@ class StoreSignatureRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($document)
     {
-        return [
+        $rules = [
             'document_number'       => 'required',
             'type_id'               => 'required|integer|exists:doc_types,id',
             'subject'               => 'required|string|min:3|max:255',
             'description'           => 'nullable|string|min:3|max:5000',
             'page'                  => 'required',
-            'document_to_sign'      => 'required|mimes:pdf|max:10240',
-            'distribution'          => 'required',
-            'recipients'            => 'required',
+            'distribution'          => 'nullable',
+            'recipients'            => 'nullable',
             'column_left_endorse'   => 'nullable',
             'column_center_endorse' => 'nullable',
             'column_right_endorse'  => 'nullable',
@@ -39,5 +38,10 @@ class StoreSignatureRequest extends FormRequest
             'center_signatures'     => 'nullable|array|max:5',
             'right_signatures'      => 'nullable|array|max:5',
         ];
+
+        if(! isset($document))
+            $rules['document_to_sign'] = 'required|mimes:pdf|max:10240';
+
+        return $rules;
     }
 }
