@@ -1697,9 +1697,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])
         ->middleware(['can:Store: warehouse manager']);
     Route::get('download-invoice/{invoice}', [ControlController::class,'downloadInvoice'])->name('download-invoice');
+    
+    /** Para ver el acta de ingresos sin el middleware de store */
+    Route::get('control/{control}/show', [ControlController::class, 'pdf'])->name('control.show');
+    
     Route::prefix('store')->group(function () {
         Route::get('welcome', [StoreController::class, 'welcome'])->name('store.welcome');
-
         Route::prefix('{store}')->middleware('ensure.store')->group(function() {
             Route::get('active', [StoreController::class, 'activateStore'])->name('store.active');
             Route::get('users', [StoreController::class, 'users'])->name('stores.users');

@@ -134,16 +134,16 @@
                         @endif
                     </td>
                     <td>
-                        @if ($dte->requestform->control)
-                            <a href="{{ route('warehouse.control.pdf', [
-                                'store' => $dte->requestform->control->store->id,
-                                'control' => $dte->requestform->control->id,
+                        @foreach($dte->controls as $control)
+                            <a href="{{ route('warehouse.control.show', [
+                                'store' => $control->store->id,
+                                'control' => $control->id,
                                 'act_type' => 'reception',
                             ]) }}"
                                 class="btn btn-sm btn-outline-secondary" target="_blank" title="Acta Recepción Técnica">
                                 <i class="fas fa-file-pdf"></i>
                             </a>
-                        @endif
+                        @endforeach
                     </td>
                 </tr>
             @endforeach

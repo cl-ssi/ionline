@@ -115,12 +115,12 @@ class Dte extends Model
     /** Formulario de Requerimientos  */
     public function requestForm()
     {
-        if($this->immediatePurchase AND $this->immediatePurchase->purchasingProcessDetail) {
-            return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
-        }
-        else {
-            return $this->immediatePurchase();
-        }
+        // if($this->immediatePurchase AND $this->immediatePurchase->purchasingProcessDetail) {
+        //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
+        // }
+        // else {
+            return $this->immediatePurchase->requestForm();;
+        // }
     }
 
 
