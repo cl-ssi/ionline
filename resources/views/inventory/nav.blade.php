@@ -10,6 +10,7 @@
             </a>
         </li>
     @endcan
+
     @can('Inventory: last receptions')
         <li class="nav-item">
             <a
@@ -20,6 +21,7 @@
             </a>
         </li>
     @endcan
+
     @can('Inventory: pending inventory')
         <li class="nav-item">
             <a
@@ -30,6 +32,18 @@
             </a>
         </li>
     @endcan
+
+    @can('Inventory: manager')
+        <li class="nav-item">
+            <a
+                class="nav-link {{ active(['inventories.upload-excel']) }}"
+                href="{{ route('inventories.upload-excel', $establishment) }}"
+            >
+                <i class="fas fa-file-excel"></i> Carga Excel
+            </a>
+        </li>
+    @endcan
+
     @can('Inventory: place maintainer')
         <li class="nav-item dropdown">
             <a

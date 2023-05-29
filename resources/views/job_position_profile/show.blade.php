@@ -7,10 +7,33 @@
 @include('job_position_profile.partials.nav')
 
 <h5><i class="fas fa-id-badge"></i> Perfil de Cargo</h5>
+<h6>ID: {{ $jobPositionProfile->id }} 
+@switch($jobPositionProfile->status)
+    @case('saved')
+        <span class="badge badge-primary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
 
-<!-- <h6>Nombre: {{ $jobPositionProfile->name }}</h6> -->
-<h6>ID: {{ $jobPositionProfile->id }}</h6>
-<br>
+    @case('sent')
+        <span class="badge badge-secondary">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('review')
+        <span class="badge badge-info">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+                                
+    @case('pending')
+        <span class="badge badge-warning">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+                                
+    @case('rejected')
+        <span class="badge badge-danger">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+
+    @case('complete')
+        <span class="badge badge-success">{{ $jobPositionProfile->StatusValue }}</span>
+        @break
+    @endswitch
+<hr>
 
 <h6><i class="fas fa-info-circle"></i> I. Identificación de Cargo</h6>
 <div class="table-responsive">
@@ -32,7 +55,7 @@
             </tr>
             <tr>
                 <th class="table-active" width="25%">ESTABLECIMIENTO</th>
-                <td>{{-- $jobPositionProfile->establishment->name --}}</td>
+                <td>{{ $jobPositionProfile->organizationalUnit->establishment->name }}</td>
                 <th class="table-active" width="25%">UNIDAD ORGANIZACIONAL</th>
                 <td>{{ $jobPositionProfile->organizationalUnit->name }}</td>
             </tr>
@@ -91,8 +114,8 @@
     <table class="table table-sm table-bordered small">
         <tbody>
             <tr>
-                <th class="table-active" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }}/{{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->year->format('Y') }})</th>
-                <td>{{ $jobPositionProfile->staffDecreeByEstament->description }}</td>
+                <th class="table-active" width="25%">REQUISITO GENERAL</th>
+                <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
@@ -288,12 +311,77 @@
     </table>
 </div>
 
+<br>
+
+<h6><i class="fas fa-signature"></i> Proceso de aprobación.</h6>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered small">
+        <tbody>
+            <tr>
+                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                <td class="table-active text-center">
+                    <strong>{{ $sign->organizationalUnit->name }}</strong><br>
+                </td>
+                @endforeach
+            </tr>
+            <tr>
+                @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
+                <td align="center">
+                    @if($sign->status == 'pending' || $sign->status == NULL)
+                        Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
+                    @endif
+
+                    @if($sign->status == 'accepted')
+                        <span style="color: green;">
+                            <i class="fas fa-check-circle"></i> {{ $sign->StatusValue }}
+                        </span> 
+                        <br>
+                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                    @endif
+
+                    @if($sign->status == 'rejected')
+                        <span style="color: Tomato;">
+                            <i class="fas fa-times-circle fa-2x"></i> {{ $sign->StatusValue }}
+                        </span> 
+                        <br>
+                        <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
+                    @endif
+                </td>
+                @endforeach
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr />
+<br>
+
+<div class="row">
+    <div class="col-md-3">
+        <h5><i class="fas fa-comment mt-2"></i> Canal de Comunicación</h5>
+    </div>
+    <div class="col-md-9">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-plus"></i> Agregar Mensaje
+        </button>
+    </div>
+</div>
+
+@include('job_position_profile.modals.message')
+
+<br>
+
+@livewire('job-position-profile.show-messages', [
+    'jobPositionProfile'    => $jobPositionProfile
+])
+
 @can(['Job Position Profile: audit'])
 <hr/>
 <div style="height: 300px; overflow-y: scroll;">
     @include('partials.audit', ['audits' => $jobPositionProfile->audits()] )
 </div>
-
 @endcan
 
 @endsection

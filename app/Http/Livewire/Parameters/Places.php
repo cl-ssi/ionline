@@ -105,11 +105,12 @@ class Places extends Component
     public function getPlaces()
     {
         return Place::query()
-            ->orderBy('location_id', 'asc')
+            ->orderBy('name', 'asc')
+            ->with('establishment')
             ->orderBy('name')
             ->when($this->establishment, function($query) {
                 $query->whereEstablishmentId($this->establishment->id);
             })
-            ->get();
+            ->paginate(100);
     }
 }

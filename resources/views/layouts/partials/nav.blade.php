@@ -395,7 +395,7 @@
 
                             <a class="dropdown-item {{ active('replacement_staff.request.index') }}"
                         href="{{ route('replacement_staff.request.index') }}">
-                        <i class="far fa-id-card"></i> Solicitudes de Contratación
+                        <i class="far fa-id-card "></i> Solicitudes de Contratación
                         </a>
                         @endif --}}
 
@@ -408,32 +408,37 @@
                         </a>
                         @endif
 
-                        @if(Auth::user()->hasRole('Replacement Staff: user') ||
-                        App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id) ||
-                        Auth::user()->hasRole('Replacement Staff: personal') ||
-                        Auth::user()->hasRole('Replacement Staff: personal sign') ||
-                        Auth::user()->hasRole('Replacement Staff: admin'))
+                        @if(Auth::user()->manager->count() > 0 ||
+                            Auth::user()->hasRole('Replacement Staff: personal') ||
+                            Auth::user()->hasRole('Replacement Staff: personal sign') ||
+                            Auth::user()->hasRole('Replacement Staff: admin') ||
+                            Auth::user()->hasRole('Replacement Staff: user') ||
+                            Auth::user()->can('Job Position Profile: create') ||
+                            Auth::user()->can('Job Position Profile: all') ||
+                            Auth::user()->can('Job Position Profile: review'))
 
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
-
-                        <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
-                            <i class="far fa-id-card"></i> Solicitudes de Contratación
-                            {{--
-                            @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                            <span class="badge badge-secondary">
-                                {{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }}
-                            </span>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Depto. Desarrollo y Gestión del Talento</h6>
+                            
+                            @if(Auth::user()->manager->count() > 0 ||
+                                Auth::user()->hasRole('Replacement Staff: personal') ||
+                                Auth::user()->hasRole('Replacement Staff: personal sign') ||
+                                Auth::user()->hasRole('Replacement Staff: admin') ||
+                                Auth::user()->hasRole('Replacement Staff: user'))
+                                <a class="dropdown-item {{ active('replacement_staff.request.own_index') }}" href="{{ route('replacement_staff.request.own_index') }}">
+                                    <i class="far fa-id-card fa-fw"></i> Solicitudes de Contratación
+                                </a>
                             @endif
-                            --}}
-                        </a>
+                        
+                            @if(Auth::user()->manager->count() > 0 ||
+                                Auth::user()->can('Job Position Profile: create') ||
+                                Auth::user()->can('Job Position Profile: all') ||
+                                Auth::user()->can('Job Position Profile: review'))
+                                <a class="dropdown-item {{ active('job_position_profile.index') }}" href="{{ route('job_position_profile.index') }}">
+                                    <i class="fas fa-id-badge fa-fw"></i> Perfil de Cargos
+                                </a>
+                            @endif
                         @endif
-
-                        @canany(['Job Position Profile: create', 'Job Position Profile: all', 'Job Position Profile: review'])
-                        <a class="dropdown-item" href="{{ route('job_position_profile.index') }}">
-                            <i class="fas fa-id-badge"></i> Perfil de Cargos
-                        </a>
-                        @endcan
 
                     </div>
 

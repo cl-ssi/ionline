@@ -15,6 +15,8 @@ use App\Models\JobPositionProfiles\Liability;
 use App\Models\JobPositionProfiles\JobPositionProfileLiability;
 use App\Models\JobPositionProfiles\Expertise;
 use App\Models\JobPositionProfiles\ExpertiseProfile;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\JobPositionProfiles\WorkTeam;
 
 class JobPositionProfileController extends Controller
 {
@@ -38,6 +40,16 @@ class JobPositionProfileController extends Controller
         return view('job_position_profile.index_review');
     }
 
+    public function index_to_sign()
+    {   
+        return view('job_position_profile.index_to_sign');
+    }
+
+    public function all_index()
+    {   
+        return view('job_position_profile.all_index');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -57,9 +69,9 @@ class JobPositionProfileController extends Controller
     public function store(Request $request)
     {
         $jobPositionProfile = new JobPositionProfile($request->All());
-        $jobPositionProfile->status = 'pending';
+        $jobPositionProfile->status = 'saved';
         $jobPositionProfile->user()->associate(Auth::user());
-        $jobPositionProfile->organizationalUnit()->associate($request->ou_creator_id);
+        $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
         $jobPositionProfile->estament()->associate($request->estament_id);
         $jobPositionProfile->area()->associate($request->area_id);
         $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
@@ -79,8 +91,13 @@ class JobPositionProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(JobPositionProfile $jobPositionProfile)
-    {
+    {   
         return view('job_position_profile.show', compact('jobPositionProfile'));
+    }
+
+    public function to_sign(JobPositionProfile $jobPositionProfile)
+    {   
+        return view('job_position_profile.to_sign', compact('jobPositionProfile'));
     }
 
     /**
@@ -96,22 +113,31 @@ class JobPositionProfileController extends Controller
 
     public function edit_formal_requirements(JobPositionProfile $jobPositionProfile)
     {
-        $staffDecree = StaffDecree::latest()->first();
+        if($jobPositionProfile->law == '18834'){
+            $staffDecree = StaffDecree::latest()->first();
 
-        $staffDecreeByEstaments = StaffDecreeByEstament::
-            where('staff_decree_id', $staffDecree->id)
-            ->where('estament_id', $jobPositionProfile->estament_id)
-            ->get();
+            $staffDecreeByEstaments = StaffDecreeByEstament::
+                where('staff_decree_id', $staffDecree->id)
+                ->where('estament_id', $jobPositionProfile->estament_id)
+                ->get();
 
-        foreach($staffDecreeByEstaments as $staffDecreeByEstament){
-            if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
-                && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){
-                $generalRequirements = new StaffDecreeByEstament();
-                $generalRequirements = $staffDecreeByEstament;
+            foreach($staffDecreeByEstaments as $staffDecreeByEstament){
+                if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
+                    && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){
+                    $generalRequirements = new StaffDecreeByEstament();
+                    $generalRequirements = $staffDecreeByEstament;
+                }
             }
         }
+        else{
+            /* EVALUAR CAMBIAR POR PARAMETRO */
+            $generalRequirements                = collect(new StaffDecreeByEstament());
+            $generalRequirements->description   = 
+            'Título Profesional otorgado por una Universidad del Estado o instituto profesional del estado o reconocido por éste o aquellos validados en Chile, de acuerdo a la legislación vigente.<br>Acredita dicho título con el certificado de inscripción en el registro nacional de prestadores individuales de salud de la superintendencia de salud, dicho documento será validado para profesionales nacionales y extranjeros provenientes del sector público y privado.';
+        }
 
-        return view('job_position_profile.edit_formal_requirements', compact('jobPositionProfile', 'generalRequirements'));
+        return view('job_position_profile.edit_formal_requirements', 
+            compact('jobPositionProfile', 'generalRequirements'));
     }
 
     public function edit_objectives(JobPositionProfile $jobPositionProfile)
@@ -154,12 +180,25 @@ class JobPositionProfileController extends Controller
      */
     public function update(Request $request, JobPositionProfile $jobPositionProfile)
     {
-        //
+        $jobPositionProfile->fill($request->all());
+        $jobPositionProfile->estament()->associate($request->estament_id);
+        $jobPositionProfile->area()->associate($request->area_id);
+        $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);
+
+        $jobPositionProfile->save();
+
+        session()->flash('success', 'Estimado Usuario, se ha actualizado Exitosamente El Perfil de Cargo');
+        return redirect()->route('job_position_profile.edit', $jobPositionProfile);
     }
 
     public function update_formal_requirements(Request $request, JobPositionProfile $jobPositionProfile, $generalRequirements)
     {
-        $jobPositionProfile->staffDecreeByEstament()->associate($generalRequirements);
+        if($jobPositionProfile->law == '18834'){
+            $jobPositionProfile->staffDecreeByEstament()->associate($generalRequirements);
+        }
+        else{
+            $jobPositionProfile->general_requirement = $request->general_requirement;
+        }
         $jobPositionProfile->fill($request->all());
         $jobPositionProfile->save();
         
@@ -172,7 +211,6 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile->fill($request->all());
         $jobPositionProfile->save();
 
-        //dd($request);
         if($request->descriptions){
             foreach ($request->descriptions as $key => $description) {
                 $role = new Role();
@@ -190,6 +228,15 @@ class JobPositionProfileController extends Controller
     {
         $jobPositionProfile->fill($request->all());
         $jobPositionProfile->save();
+
+        if($request->descriptions){
+            foreach ($request->descriptions as $key => $description) {
+                $workTeam = new WorkTeam();
+                $workTeam->description = $description;
+                $workTeam->jobPositionProfile()->associate($jobPositionProfile->id);
+                $workTeam->save();
+            }
+        }
         
         session()->flash('success', 'Estimado Usuario, se ha actualizado exitosamente la organización y contexto del cargo');
         return redirect()->route('job_position_profile.edit_organization', $jobPositionProfile);
@@ -280,9 +327,11 @@ class JobPositionProfileController extends Controller
     public function create_document(JobPositionProfile $jobPositionProfile){
         $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('job_position_profile.documents.document', compact('jobPositionProfile', 'tree'));
+        $pdf = PDF::loadView('job_position_profile.documents.document', compact('jobPositionProfile', 'tree'));
 
         return $pdf->stream('mi-perfil-de-cargo.pdf');
+
+        // return view('job_position_profile.documents.chart', compact('jobPositionProfile', 'tree'));
+        //return view('job_position_profile.index_to_sign');
     }
 }

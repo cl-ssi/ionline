@@ -413,11 +413,7 @@ class SuitabilityController extends Controller
     public function signedSuitabilityCertificatePDF($id)
     {
         $result = Result::find($id);
-        return Storage::disk('gcs')->response($result->signedCertificate->signed_file);
-        //        header('Content-Type: application/pdf');
-        //        if (isset($result->signedCertificate)) {
-        //            echo base64_decode($result->signedCertificate->signed_file);
-        //        }
+        return Storage::disk('gcs')->response($result->signedCertificate->signed_file);        
     }
 
     public function downloadManualUser()

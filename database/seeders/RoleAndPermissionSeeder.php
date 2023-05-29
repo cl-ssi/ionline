@@ -157,6 +157,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Replacement Staff: staff manage', 'description' => 'Permite gestionar staff por unidad organizacional']);
         Permission::create(['name' => 'Replacement Staff: technical evaluation', 'description' => 'Permite acceder al listado de solicitudes aceptadas para evaluación técnica']);
         Permission::create(['name' => 'Replacement Staff: view requests', 'description' => 'Permite visualizar requerimientos']);
+        Permission::create(['name' => 'Replacement Staff: create staff', 'description' => 'Permite crear staff (postulantes)']);
 
         Permission::create(['name' => 'Allowances: create', 'description' => 'Permite crear viáticos']);
         Permission::create(['name' => 'Allowances: all',    'description' => 'Permite visualizar todos los viáticos']);

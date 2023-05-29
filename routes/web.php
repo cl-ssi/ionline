@@ -18,6 +18,7 @@ use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordIndex;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordConfirmation;
+use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
@@ -37,6 +38,8 @@ use App\Http\Livewire\Inventory\InventoryManageUsers;
 use App\Http\Livewire\Inventory\InventoryLastReceptions;
 use App\Http\Livewire\Inventory\InventoryIndex;
 use App\Http\Livewire\Inventory\InventoryEdit;
+use App\Http\Livewire\Inventory\InventoryShow;
+use App\Http\Livewire\Inventory\InventoryUploadExcel;
 use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
@@ -267,14 +270,6 @@ Route::get('/', function () {
 })->name('welcome');
 
 
-/* Rutas para test Test */
-Route::prefix('test')->group(function () {
-    /* Maqueteo calendario */
-    Route::get('/calendar', function () {
-        return view('calendar');
-    });
-});
-
 Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
 Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
@@ -391,6 +386,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::get('/internal_create', [ReplacementStaffController::class, 'internal_create'])->name('internal_create');
+    Route::post('/internal_store', [ReplacementStaffController::class, 'internal_store'])->name('internal_store');
     Route::prefix('staff_manage')->name('staff_manage.')->group(function(){
         Route::get('/', [StaffManageController::class, 'index'])->name('index');
         Route::get('/create', [StaffManageController::class, 'create'])->name('create');
@@ -541,15 +538,19 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 });
 /** Fin Replacement Staff */
 
-/* Replacepent Staff */
+/** Inicio Perfil de Cargos */
 Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function(){
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
+    Route::get('/index_to_sign', [JobPositionProfileController::class, 'index_to_sign'])->name('index_to_sign');
+    Route::get('/all_index', [JobPositionProfileController::class, 'all_index'])->name('all_index')->middleware('permission:Job Position Profile: all');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
-    Route::get('{jobPositionProfile}/show', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
+    Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
     Route::get('/{jobPositionProfile}/edit', [JobPositionProfileController::class, 'edit'])->name('edit');
+    Route::put('{jobPositionProfile}/update', [JobPositionProfileController::class, 'update'])->name('update');
     Route::get('/{jobPositionProfile}/edit_formal_requirements', [JobPositionProfileController::class, 'edit_formal_requirements'])->name('edit_formal_requirements');
     Route::put('{jobPositionProfile}/update_formal_requirements/{generalRequirements}', [JobPositionProfileController::class, 'update_formal_requirements'])->name('update_formal_requirements');
     Route::get('{jobPositionProfile}/edit_objectives', [JobPositionProfileController::class, 'edit_objectives'])->name('edit_objectives');
@@ -564,6 +565,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
     Route::prefix('sign')->name('sign.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [JobPositionProfileSignController::class, 'store'])->name('store');
+        Route::put('/{jobPositionProfileSign}/{status}/{jobPositionProfile}/update', [JobPositionProfileSignController::class, 'update'])->name('update');
     });
     Route::prefix('message')->name('message.')->group(function(){
         Route::post('/{jobPositionProfile}/store', [MessageController::class, 'store'])->name('store');
@@ -572,10 +574,6 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
         Route::get('/create_document/{jobPositionProfile}', [JobPositionProfileController::class, 'create_document'])->name('create_document');
     });
 });
-/** Inicio Perfil de Cargos */
-
-
-
 /** Fin Perfil de Cargos */
 
 /** Inicio Recursos */
@@ -841,6 +839,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('no-records',NoAttendanceRecordIndex::class)->name('no-records.index');
         Route::get('no-records-mgr',NoAttendanceRecordMgr::class)->name('no-records.mgr');
         Route::get('no-records/{noAttendanceRecord}/confirmation',NoAttendanceRecordConfirmation::class)->name('no-records.confirmation');
+        Route::get('reasons',ReasonMgr::class)->name('reason.mgr');
     });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
@@ -1729,6 +1728,8 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function() {
+    /** Ruta para poder ver la hoja de inventario sin edición  */
+    Route::get('number/{number}', InventoryShow::class)->name('show');
 
     Route::prefix('establishment/{establishment}')->group(function() {
         Route::get('/', InventoryIndex::class)->name('index')
@@ -1743,6 +1744,8 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
             ->middleware(['can:Inventory: place maintainer']);
 
         Route::get('/manage-users', InventoryManageUsers::class)->name('users.manager')->middleware(['can:Inventory: manager']);
+
+        Route::get('/upload-excel', InventoryUploadExcel::class)->name('upload-excel');
     });
 
     Route::get('pending-movements', PendingMovements::class)->name('pending-movements');
@@ -1822,6 +1825,7 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('dtes',IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload',UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation',DteConfirmation::class)->name('dtes.confirmation');
+    Route::get('payments/own', [PaymentController::class,'indexOwn'])->name('payments.own');
 });
 
 /*formulario de requerimiento compra o servicio */
@@ -2209,17 +2213,27 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
     });
 });
 
-Route::view('/some', 'some');
+
 
 /** Test Routes */
+Route::view('/some', 'some');
+
 Route::prefix('test')->as('test.')->group(function () {
     Route::get('/ous',[TestController::class,'ous']);
+
     Route::get('/loop-livewire',[TestController::class,'loopLivewire']);
     // Route::get('/dev/get-ip',[TestController::class,'getIp']);
     // Route::get('/log',[TestController::class,'log']);
     Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
     // Route::get('/info',[TestController::class,'info']);
     Route::get('/job',[TestController::class,'job'])->middleware('auth');
+
+    /* Maqueteo calendario */
+    Route::get('/calendar', function () {
+        return view('calendar');
+    });
+
+    Route::get('/teams',[TestController::class,'SendCardToTeams'])->middleware('auth');
 });
 
 

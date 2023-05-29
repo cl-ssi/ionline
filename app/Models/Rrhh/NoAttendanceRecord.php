@@ -5,6 +5,7 @@ namespace App\Models\Rrhh;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
+use App\Models\Rrhh\Attendance\Reason;
 
 class NoAttendanceRecord extends Model
 {
@@ -18,11 +19,13 @@ class NoAttendanceRecord extends Model
     protected $fillable = [
         'date',
         'user_id',
+        'reason_id',
         'observation',
         'authority_observation',
         'authority_id',
         'rrhh_user_id',
         'rrhh_at',
+        'establishment_id',
     ];
 
     /**
@@ -49,7 +52,12 @@ class NoAttendanceRecord extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function reason()
+    {
+        return $this->belongsTo(Reason::class);
+    }
+
     public function authority()
     {
         return $this->belongsTo(User::class);

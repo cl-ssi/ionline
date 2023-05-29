@@ -1,8 +1,15 @@
 <div>
-    <h3 class="mb-3">Nuevo registro de marca de {{ $noAttendanceRecord->user->shortName }}</h3>
+    <div class="row">
+        <div class="col">
+            <h3 class="mb-3">Nuevo registro de marca de {{ $noAttendanceRecord->user->shortName }}</h3>
+        </div>
+        <div class="col-3 text-right">
+            <a href="{{ route('rrhh.attendance.no-records.mgr') }}" class="btn btn-outline-secondary"> <i class="fas fa-arrow-left"></i> Bandeja </a>
+        </div>
+    </div>
 
     <p>El día: <strong>{{ $noAttendanceRecord->date }}</strong></p>
-    <p>Fundamento: <strong>{{ $noAttendanceRecord->observation }}</strong></p><br>
+    <p>Fundamento: <strong>{{ $noAttendanceRecord->reason->name }}</strong> <span class="text-muted">{{ $noAttendanceRecord->observation }}</span></p><br>
 
     @if($noAttendanceRecord->authority->id == auth()->id())
 
@@ -31,4 +38,5 @@
     @else
         <h3 class="text-danger">Esta confirmación sólo puede ser aprobada por {{ $noAttendanceRecord->authority->shortName }}</h3>
     @endif
+
 </div>

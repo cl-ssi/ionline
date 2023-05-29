@@ -63,7 +63,7 @@ class LoginController extends Controller
             {
                 session()->flash('info', 
                     'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
-                    <b>https://i.saludiquique.gob.cl</b> <br>Muchas gracias.');
+                    <b>https://i.saludtarapaca.gob.cl</b> <br>Muchas gracias.');
                 return redirect()->route('welcome');
             }
         }

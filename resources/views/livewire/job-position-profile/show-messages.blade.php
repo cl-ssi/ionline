@@ -1,5 +1,4 @@
 <div>
-    {{-- dd($messages) --}}
     @foreach($messages as $message)
     <div class="card" id="message">
         <div class="card-header col-sm">

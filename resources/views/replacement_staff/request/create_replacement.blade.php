@@ -95,20 +95,11 @@
 
     <h6 class="small"><b>3. Descripción de Funcionario a Reemplazar</b></h6> <br>
 
-    <div class="form-row">
+    <div class="form-row" id="to_replace">
         @livewire('calculate-dv')
-
-        <fieldset class="form-group col-sm">
-            <label for="for_end_date">Funcionario a Reemplazar</label>
-            <input type="text" class="form-control" name="name_to_replace" id="for_name_to_replace"
-                placeholder="Nombre de Reemplazo"
-                required>
-        </fieldset>
+        
+        @livewire('replacement-staff.name-to-replace')
     </div>
-
-    {{-- <div class="form-row">
-        @livewire('replacement-staff.show-legal-quality-request')
-    </div> --}}
 
     <hr>
 
