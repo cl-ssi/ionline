@@ -65,17 +65,24 @@
     <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="document-signed">Documento a Firmar</label>
-            <input
-                type="file"
-                class="form-control @error('document_to_sign') is-invalid @enderror"
-                id="document-signed"
-                wire:model="document_to_sign"
-            >
-            @error('document_to_sign')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+            <br>
+            @if($document)
+                <a href="{{ route('documents.show.document', $document) }}" target="_blank">
+                    <i class="fas fa-paperclip"></i> Documento
+                </a>
+            @else
+                <input
+                    type="file"
+                    class="form-control @error('document_to_sign') is-invalid @enderror"
+                    id="document-signed"
+                    wire:model="document_to_sign"
+                >
+                @error('document_to_sign')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            @endif
         </fieldset>
 
         <fieldset class="form-group col-8">
@@ -93,41 +100,84 @@
                 </span>
             @enderror
         </fieldset>
-
     </div>
+
+    <h5>
+        Anexos
+    </h5>
 
     <div class="form-row">
-        <fieldset class="form-group col-6">
-            <label for="annex">Anexos</label>
-            <input
-                type="file"
-                class="form-control @error('annex') is-invalid @enderror"
-                id="annex"
-                wire:model="annex"
-                multiple
+        <fieldset class="form-group col-2">
+            <label for="type-annexed">Tipo de Anexo</label>
+            <select
+                class="custom-select @error('type_annexed') is-invalid @enderror"
+                id="type-annexed"
+                wire:model.debounce.1500ms="type_annexed"
             >
-            @error('annex')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                <option>Selecione tipo anexo</option>
+                <option value="file" disabled>Archivo</option>
+                <option value="link">Enlace</option>
+            </select>
         </fieldset>
+        @if($type_annexed == 'file')
+            <fieldset class="form-group col-5">
+                <label for="file">Archivo anexo</label>
+                <input
+                    type="file"
+                    class="form-control @error('annex_file') is-invalid @enderror"
+                    id="file"
+                    wire:model="annex_file"
+                >
+                @error('annex_file')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+        @endif
 
-        <fieldset class="form-group col-6">
-            <label for="url">Link o URL asociado</label>
-            <input
-                type="url"
-                class="form-control @error('url') is-invalid @enderror"
-                id="url"
-                wire:model.debounce.1500ms="url"
+        @if($type_annexed == 'link')
+            <fieldset class="form-group col-5">
+                <label for="link">Enlace anexo</label>
+                <input
+                    type="text"
+                    class="form-control @error('annex_link') is-invalid @enderror"
+                    id="link"
+                    placeholder="Ingrese un enlace"
+                    wire:model.debounce.1500ms="annex_link"
+                >
+                @error('annex_link')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </fieldset>
+        @endif
+
+        <fieldset class="form-group col-3">
+            <label>&nbsp;</label>
+            <br>
+            <button
+                class="btn btn-primary"
+                wire:loading.attr="disabled"
+                wire:click="uploadAnnexed"
             >
-            @error('url')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                Cargar Anexo
+            </button>
         </fieldset>
     </div>
+
+    <ul class="list-group mt-2 mb-3">
+        @foreach($annexes as $i => $itemAnnex)
+            <li class="list-group-item">
+                @if($itemAnnex['type'] == 'link')
+                    <a href="{{ $itemAnnex['source'] }}">{{ $itemAnnex['source'] }}</a>
+                @else
+                    <a href="#">Preview del archivo</a>
+                @endif
+            </li>
+        @endforeach
+    </ul>
 
     <h5>
         Distribución
@@ -363,7 +413,7 @@
                 </span>
             @enderror
 
-            @if($namesSignaturesCenter->count() > 0)
+            @if($namesSignaturesRight->count() > 0)
                 <div class="input-group input-group-sm my-1">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="right-endorse">
