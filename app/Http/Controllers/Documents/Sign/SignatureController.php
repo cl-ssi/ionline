@@ -11,7 +11,6 @@ use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
 
-
 class SignatureController extends Controller
 {
     /**
@@ -28,7 +27,7 @@ class SignatureController extends Controller
          * Actualiza el archivo en Signature
          */
         $signature->update([
-            'file' => 'ionline/sign/signed/'.$filename
+            'signed_file' => 'ionline/sign/signed/'.$filename
         ]);
 
         /**
