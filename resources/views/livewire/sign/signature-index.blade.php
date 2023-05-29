@@ -34,25 +34,45 @@
             <thead>
                 <tr>
                     <th class="text-center">ID</th>
+                    <th class="text-center">Creador</th>
                     <th class="text-center">Fecha Solicitud</th>
-                    <th nowrap>Nro</th>
+                    <th class="text-center" nowrap>Nro</th>
                     <th>Materia</th>
                     <th>Descripción</th>
                     <th class="text-center">Firmas</th>
-                    <th class="text-center">Creador</th>
-                    <th class="text-center">Firmar</th>
+                    <th class="text-center" nowrap>
+                        <button
+                            data-toggle="modal"
+                            title="Firmar multiples"
+                            data-target="#sign-multiple"
+                            class="btn btn-sm btn-block btn-primary"
+                            @if($selectedSignatures->isEmpty()) disabled @endif
+                        >
+                            <i class="fas fa-signature"></i> Firmar
+                        </button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($signatures as $signature)
+                @forelse($signatures as $index => $signature)
                     <tr>
                         <td class="text-center">
                             {{ $signature->id }}
                         </td>
                         <td class="text-center">
+                            <span
+                                class="d-inline-bloc img-thumbnail border-dark bg-default text-monospace rounded-circle
+                                    bg-{{ $signature->status_color }}
+                                    text-{{ $signature->status_color_text }}"
+                                tabindex="0"
+                                data-toggle="tooltip"
+                                title="{{ $signature->user->short_name }}"
+                            >{{ $signature->user->twoInitials }}</span>&nbsp;
+                        </td>
+                        <td class="text-center">
                             {{ $signature->document_number->format('Y-m-d') }}
                         </td>
-                        <td>
+                        <td class="text-center" nowrap>
                             @if($signature->isCompleted() && ! $signature->isEnumerate())
                                 @livewire('sign.enumerate-signature', [
                                     'signature' => $signature
@@ -125,35 +145,61 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td class="text-center">
-                            <span
-                                class="d-inline-bloc img-thumbnail border-dark bg-default text-monospace rounded-circle
-                                    bg-{{ $signature->status_color }}
-                                    text-{{ $signature->status_color_text }}"
-                                tabindex="0"
-                                data-toggle="tooltip"
-                                title="{{ $signature->user->short_name }}"
-                            >{{ $signature->user->twoInitials }}</span>&nbsp;
-                        </td>
-                        <td class="text-center">
-                            @if($signature->isPending())
-                                @livewire('sign.sign-document', [
-                                    'signatureId' => $signature->id,
-                                    'link' => $signature->link,
-                                    'folder' => 'ionline/sign/signed/',
-                                    'disabled' => (! $signature->canSign or ! $signature->isSignedForMe),
-                                    'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id,
-                                    'user' => auth()->user(),
-                                    'x' => $signature->flows->firstWhere('signer_id', auth()->id())->x,
-                                    'y' => $signature->flows->firstWhere('signer_id', auth()->id())->y,
-                                    'route' => 'v2.documents.signatures.update',
-                                    'routeParams' => [
-                                        'signature' => $signature->id,
-                                        'user' => auth()->id(),
-                                        'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id.'.pdf'
-                                    ]
-                                ], key($signature->id))
-                            @endif
+                        <td nowrap>
+                            <div class="form-row text-center">
+                                <div class="col-2 text-center">
+                                    @if($signature->isPending())
+                                        <input
+                                            type="checkbox"
+                                            wire:click='updateSelected({{ $signature->id }})'
+                                            @if(! $signature->canSign or ! $signature->isSignedForMe)
+                                                disabled
+                                            @endif
+                                        >
+                                    @endif
+                                </div>
+                                <div class="col-8 text-center">
+                                    @if($signature->isPending())
+                                        @livewire('sign.sign-document', [
+                                            'signatureId' => $signature->id,
+                                            'link' => $signature->link_signed_file,
+                                            'folder' => 'ionline/sign/signed/',
+                                            'disabled' => (! $signature->canSign or ! $signature->isSignedForMe),
+                                            'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id,
+                                            'user' => auth()->user(),
+                                            'row' => $signature->flows->firstWhere('signer_id', auth()->id())->row_position + 1,
+                                            'column' => $signature->flows->firstWhere('signer_id', auth()->id())->column_position,
+                                            'route' => 'v2.documents.signatures.update',
+                                            'routeParams' => [
+                                                'signature' => $signature->id,
+                                                'user' => auth()->id(),
+                                                'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id.'.pdf'
+                                                ]
+                                            ], key($signature->id))
+                                        <br>
+
+                                        <button
+                                            class="btn btn-sm btn-danger"
+                                            data-toggle="modal"
+                                            title="Rechazar documento"
+                                            data-target="#rejected-signature-to-{{ $signature->id }}"
+                                        >
+                                            <i class="fas fa-times"></i> Rechazar
+                                        </button>
+
+                                        @include('sign.modal-rejected-signature')
+                                    @endif
+                                    @if($signature->isCompleted())
+                                        <a
+                                            class="btn @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
+                                            href="{{ $signature->isEnumerate() ? $signature->link_signed_file : $signature->link_file }}"
+                                            target="_blank"
+                                        >
+                                            <i class="fas fa-file"></i>
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @empty
@@ -175,6 +221,9 @@
             Total de Registros: {{ $signatures->total() }}
         </div>
     </div>
+
+    @include('sign.modal-multiple-signature')
+
 </div>
 
 @section('custom_css')
