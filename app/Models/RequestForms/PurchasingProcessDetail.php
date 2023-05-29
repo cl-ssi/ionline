@@ -69,6 +69,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
     public static function boot()
     {
         parent::boot();
+        
         //while creating/inserting item into db  
         static::creating(function ($purchasingProcessDetail) {
             if($purchasingProcessDetail->petty_cash_id != null){
@@ -79,11 +80,12 @@ class PurchasingProcessDetail extends Pivot implements Auditable
                 $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
                 $purchasingProcessDetail->immediatePurchase->save();
             }
-            // 17/05 (jorge/esteban): se comenta puesto que no es una compra inmediata.
-            // if($purchasingProcessDetail->tender_id != null){
-            //     $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-            //     $purchasingProcessDetail->immediatePurchase->save();
-            // }
+            if($purchasingProcessDetail->tender_id != null){
+                if($purchasingProcessDetail->immediatePurchase){
+                    $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+                    $purchasingProcessDetail->immediatePurchase->save();
+                }
+            }
             if($purchasingProcessDetail->immediate_purchase_id != null){
                 $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
                 $purchasingProcessDetail->immediatePurchase->save();

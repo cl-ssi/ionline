@@ -7,13 +7,7 @@
 
     <h4>Seleccionar Excel para cargar inventarios</h4>
 
-    <div>
-        @if (session()->has('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
-    </div>
+    @include('layouts.partials.flash_message')
 
     <form wire:submit.prevent="processExcel" enctype="multipart/form-data">
         <div class="form-group">

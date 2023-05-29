@@ -10,6 +10,7 @@
             </a>
         </li>
     @endcan
+
     @can('Inventory: last receptions')
         <li class="nav-item">
             <a
@@ -20,6 +21,7 @@
             </a>
         </li>
     @endcan
+
     @can('Inventory: pending inventory')
         <li class="nav-item">
             <a
@@ -30,7 +32,8 @@
             </a>
         </li>
     @endcan
-    @can('be god')
+
+    @can('Inventory: manager')
         <li class="nav-item">
             <a
                 class="nav-link {{ active(['inventories.upload-excel']) }}"

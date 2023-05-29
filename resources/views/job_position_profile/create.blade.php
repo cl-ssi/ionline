@@ -16,6 +16,8 @@
     'action'    => 'store',
 ])
 
+@include('job_position_profile.modals.degrees_guide')
+
 @endsection
 
 @section('custom_js')

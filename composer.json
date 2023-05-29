@@ -30,6 +30,7 @@
         "phpoffice/phpword": "^0.18.1",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^3.13",
         "stackkit/laravel-google-cloud-scheduler": "^2.0",
         "stackkit/laravel-google-cloud-tasks-queue": "^3.5",

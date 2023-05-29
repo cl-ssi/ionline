@@ -160,10 +160,12 @@
 
             <span class="float-right text-muted">{{ $event->id }}</span>
 
+            @if($event->from_user->organizationalUnit)
             <div>
                 Por	<strong>{{ $event->from_user->fullName }}</strong> de
                 <span class="text-info">{{ $event->from_user->organizationalUnit->name }}</span>
             </div>
+            @endif
 
             @if($event->status != 'cerrado' AND $event->status != 'respondido')
                 <div>
@@ -416,9 +418,11 @@
           $("#ou").trigger("change", [true]);
         }else if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
           @if($lastEvent <> null)
-            $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}});
-            $('#organizational_unit_id').val({{$lastEvent->from_user->organizationalUnit->id}});
-            $("#ou").trigger("change", [true]);
+            @if($lastEvent->from_user->organizationalUnit)
+                $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}});
+                $('#organizational_unit_id').val({{$lastEvent->from_user->organizationalUnit->id}});
+                $("#ou").trigger("change", [true]);
+            @endif
           @endif
           // document.getElementById("ou").disabled  = true;
           // document.getElementById("user").disabled  = true;
@@ -427,9 +431,11 @@
 
         }else if(document.getElementById("status").value == "cerrado"){
           @if($firstEvent <> null)
-            $("#ou").val({{$firstEvent->from_user->organizationalUnit->id}});
-            $('#organizational_unit_id').val({{$firstEvent->from_user->organizationalUnit->id}});
-            $("#ou").trigger("change", [true]);
+            @if($lastEvent->from_user->organizationalUnit)
+                $("#ou").val({{$firstEvent->from_user->organizationalUnit->id}});
+                $('#organizational_unit_id').val({{$firstEvent->from_user->organizationalUnit->id}});
+                $("#ou").trigger("change", [true]);
+            @endif
           @endif
           document.getElementById("ou").disabled  = true;
           document.getElementById("user").disabled  = true;

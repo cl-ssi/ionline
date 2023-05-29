@@ -34,7 +34,7 @@
                     <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
                 </td>
                 <td>
-                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                    @if($jobPositionProfile->staff_decree_by_estament_id || $jobPositionProfile->general_requirement)
                         <span style="color: green;">
                             <i class="fas fa-check-circle fa-2x"></i>
                         </span>
@@ -109,11 +109,16 @@
         'jobPositionProfile' => $jobPositionProfile
     ])
     
+    <br><br>
+
+    <div class="card">
+        <div class="card-body">
+            <h6 class="small"><b>ORGANIGRAMA</b></h6> 
+            <div id="chart_div"></div>
+        </div>
+    </div>
+
     <br>
-
-    <h6 class="small"><b>Organigrama.</b></h6> 
-
-    <div id="chart_div"></div>
 
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 </form>

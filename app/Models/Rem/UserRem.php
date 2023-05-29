@@ -15,7 +15,7 @@ class UserRem extends Model
     protected $fillable = [
         'id',
         'establishment_id',
-        'user_id',        
+        'user_id',
     ];
 
     public function user() {

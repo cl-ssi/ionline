@@ -34,7 +34,7 @@
                     <a class="btn btn-link mb-2" href="{{ route('job_position_profile.edit', $jobPositionProfile) }}">Ir</a>
                 </td>
                 <td>
-                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                    @if($jobPositionProfile->staff_decree_by_estament_id || $jobPositionProfile->general_requirement)
                         <span style="color: green;">
                             <i class="fas fa-check-circle fa-2x"></i>
                         </span>
@@ -97,12 +97,27 @@
     <h6 class="small"><b>II. REQUISITOS FORMALES </b></h6> 
     <br>
     
-    Requisito General ({{ $generalRequirements->staffDecree->name }}/2017)
+    Requisito General
     <br><br>
     <div class="alert alert-secondary text-justify" role="alert" >
-        {{--} nl2br(e($generalRequirements->description)) --}}
-        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+        @if($jobPositionProfile->staff_decree_by_estament_id)
+        <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+        @elseif($jobPositionProfile->general_requirement)
+            <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+        @else
+            <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+        @endif
+        </p>
     </div>
+
+    @if($jobPositionProfile->law == '19664')
+    <div class="form-row" hidden>
+        <fieldset class="form-group col-12 col-md-12">  
+            <label for="for_specific_requirement">Requisito General</label>
+            <textarea class="form-control" id="for_general_requirement" name="general_requirement" rows="3">{{ $generalRequirements->description }}</textarea>
+        </filedset>
+    </div>
+    @endif
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-12">  

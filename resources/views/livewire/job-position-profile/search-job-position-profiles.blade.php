@@ -116,7 +116,8 @@
                         <td class="text-center">
                             <!-- MIS PERFILES DE CARGO -->
                             @if($index == 'own')
-                                @if($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review")
+                                @if($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review" ||
+                                    $jobPositionProfile->status == 'sent')
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
                                     </a>

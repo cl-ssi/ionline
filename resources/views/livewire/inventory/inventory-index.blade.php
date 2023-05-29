@@ -235,8 +235,9 @@
                 <tr wire:loading.remove>
                     <td class="text-center">
                         <small class="text-monospace">
-                            {{ $inventory->number }}
+                        <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">{{ $inventory->number }}</a>
                         </small>
+                        {!! $inventory->qr !!}
                     </td>
                     <td>
                         {{ optional($inventory->unspscProduct)->name }}
