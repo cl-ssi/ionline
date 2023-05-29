@@ -100,7 +100,7 @@ class DocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
         $document->establishment()->associate(auth()->user()->organizationalUnit->establishment);
@@ -143,7 +143,7 @@ class DocumentController extends Controller
             session()->flash('danger', 'Lo siento, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
-        /* De lo contrario retorna para editar el documento */ 
+        /* De lo contrario retorna para editar el documento */
         else {
             $types = Type::whereNull('partes_exclusive')->pluck('name','id');
             return view('documents.edit', compact('document','types'));
@@ -298,6 +298,20 @@ class DocumentController extends Controller
         $documentId = $document->id;
 
         return view('documents.signatures.create', compact('signature', 'documentId'));
+    }
+
+    public function sendForSign(Document $document)
+    {
+        return view('documents.send-for-sign', compact('document'));
+    }
+
+    public function showDocument(Document $document)
+    {
+        $image = base64_encode(file_get_contents(public_path('/images/logo_rgb.png')));
+
+        $documentFile = \PDF::loadView('documents.templates.'.$document->viewName, compact('document','image'));
+
+        return $documentFile->stream();
     }
 
     public function signedDocumentPdf($id)
