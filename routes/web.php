@@ -1233,6 +1233,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/add_number', [DocumentController::class,'addNumber'])->name('add_number');
     Route::post('/find', [DocumentController::class,'find'])->name('find');
     Route::get('/report', [DocumentController::class,'report'])->name('report');
+    Route::get('/{document}/sendForSignature/v2', [DocumentController::class,'sendForSign'])->name('sendForSign.v2');
+    Route::get('/{document}/show-document/v2', [DocumentController::class,'showDocument'])->name('show.document');
     Route::get('/{document}/sendForSignature/', [DocumentController::class,'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
