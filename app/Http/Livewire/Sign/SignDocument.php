@@ -54,18 +54,18 @@ class SignDocument extends Component
     public $user;
 
     /**
-     * Eje y para ubicar la firma
+     * Fila para ubicar la firma
      *
      * @var int
      */
-    public $y;
+    public $row;
 
     /**
-     * Eje x para ubicar la firma
+     * Columna para ubicar la firma
      *
-     * @var int
+     * @var string
      */
-    public $x;
+    public $column;
 
     /**
      * Route a redirigir
@@ -96,46 +96,16 @@ class SignDocument extends Component
     public function signDocument()
     {
         /**
-         * Obtiene el usuario autenticado
+         * Obtiene la imagen de la firma
          */
-        $user = $this->user;
+        $signatureBase64 = app(ImageService::class)->createSignature($this->user);
 
         /**
-         * Setea el otp
-         */
-        $otp = $this->otp;
-
-        /**
-         * Obtiene el link del documento
-         */
-        $document = $this->link;
-
-        /**
-         * Obtiene el base64 del pdf y el checksum
-         */
-        $base64Pdf = base64_encode(file_get_contents($document));
-        $checkSumPdf = md5_file($document);
-
-        /**
-         * Obtiene la imagen con el numero de Documento
-         */
-        $imageWithDocumentNumber = app(ImageService::class)->createSignature($user);
-        ob_start();
-        imagepng($imageWithDocumentNumber);
-        $signatureBase64 = base64_encode(ob_get_clean());
-        imagedestroy($imageWithDocumentNumber);
-
-        /**
-         * Setea las credenciales de la api desde el env
+         * Setea las credenciales de la api
          */
         $url = env('FIRMA_URL');
         $apiToken = env('FIRMA_API_TOKEN');
         $secret = env('FIRMA_SECRET');
-
-        /**
-         * Setea la info para firmar un documento
-         */
-        $page = 'LAST';
 
         /**
          * Setea el modo para el payload
@@ -152,7 +122,7 @@ class SignDocument extends Component
         /**
          * Setea el payload del JWT
          */
-        $payload = app(Signature::class)->getPayload($modo, $user->id);
+        $payload = app(Signature::class)->getPayload($modo, $this->user->id);
 
         /**
          * Convierte y firma un objeto de php a un string de JWT
@@ -162,64 +132,32 @@ class SignDocument extends Component
         /**
          * Asigna coordenadas
          */
-        $xCoordinate = $this->x;
-        $yCoordinate = $this->y;
-
-        /**
-         * Largo y ancho de la imagen
-         */
-        $heightFirma = 200;
-        $widthFirma = 100;
+        $xCoordinate = app(Signature::class)->calculateColumn($this->column);
+        $yCoordinate = app(Signature::class)->calculateRow($this->row);
 
         /**
          * Set the file data
          */
-        $data = [
-            'api_token_key' => $apiToken,
-            'token' => $jwt,
-            'files' => [
-                [
-                    'content-type' => 'application/pdf',
-                    'content' => $base64Pdf,
-                    'description' => 'str',
-                    'checksum' => $checkSumPdf,
-                    'layout' => "
-                        <AgileSignerConfig>
-                            <Application id=\"THIS-CONFIG\">
-                                <pdfPassword/>
-                                <Signature>
-                                    <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
-                                        <llx>" . ($xCoordinate). "</llx>
-                                        <lly>" . ($yCoordinate). "</lly>
-                                        <urx>" . ($xCoordinate + $heightFirma) . "</urx>
-                                        <ury>" . ($yCoordinate + $widthFirma + 5) . "</ury>
-                                        <page>" . $page . "</page>
-                                        <image>BASE64</image>
-                                        <BASE64VALUE>$signatureBase64</BASE64VALUE>
-                                    </Visible>
-                                </Signature>
-                            </Application>
-                        </AgileSignerConfig>"
-                ]
-            ]
-        ];
+        $data = app(Signature::class)->getData($this->link, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate);
 
         /**
          * Peticion a la api para firmar
          */
-        $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+        $response = Http::withHeaders(['otp' => $this->otp])->post($url, $data);
 
         $json = $response->json();
 
         /**
          * Verifica si existe un error
          */
+        // TODO: Convertir los errores a algo mas escalable
         if (array_key_exists('error', $json)) {
 
             session()->flash('danger', 'El proceso de firma produjo un error. Codigo 1');
             return redirect()->route('v2.documents.signatures.index');
 
-            return ['statusOk' => false,
+            return [
+                'statusOk' => false,
                 'content' => '',
                 'errorMsg' => $json['error'],
             ];
@@ -237,7 +175,6 @@ class SignDocument extends Component
                 session()->flash('danger', 'El proceso de firma produjo un error. Codigo 3');
                 return redirect()->route('v2.documents.signatures.index');
             }
-
         }
 
         /**
@@ -245,7 +182,6 @@ class SignDocument extends Component
          */
         $filename = $this->folder . $this->filename;
         $file = $filename.".pdf";
-
         Storage::disk('gcs')
             ->getDriver()
             ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
