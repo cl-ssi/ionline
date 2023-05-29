@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sitio web del Servicio de Salud Iquique">
-    <meta name="author" content="Alvaro Torres Fuchslocher">
+    <meta name="author" content="Servicio de Salud Tarapacá">
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
@@ -90,7 +90,7 @@
                     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
                     @if(!env('OLD_SERVER'))
                     <a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
-                        href="https://uni.saludiquique.gob.cl/claveunica/i"
+                        href="https://uni.saludtarapaca.gob.cl/claveunica/i"
                         title="Este es el botón Iniciar sesión de ClaveÚnica">
                         <span class="cl-claveunica"></span>
                         <span class="texto">Iniciar sesión</span>
@@ -211,7 +211,7 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="https://i.saludiquique.cl" class="btn btn-info btn-block disabled">iOnline</a>
+                        <a href="https://i.saludtarapaca.gob.cl" class="btn btn-info btn-block disabled">iOnline</a>
                     </li>
                     <li class="list-group-item">
                         <a href="{{ route('login') }}/external" class="btn btn-outline-info btn-block">Externos</a>
