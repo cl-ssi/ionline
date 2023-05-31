@@ -73,12 +73,14 @@ class ClaveUnicaController extends Controller
             $route          = $request->input('route');
             // $redirect     = base64_decode(substr(base64_decode($state), 40));
             if($route) {
-                return redirect()->to(base64_decode($route))->send();
+                $url_redirect = env('APP_URL') . base64_decode($route) . '/'. $access_token;
             }
-            $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
+            else {
+                $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
+            }
             //$url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
 
-            // return redirect()->to($url_redirect)->send();
+            return redirect()->to($url_redirect)->send();
         } else {
 
             session()->flash('danger', 'Error: clave única devolvió un estado: ' . $response->getStatusCode());
