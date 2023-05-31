@@ -358,7 +358,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           Hospital Dr. Ernesto Torres Galdames de Iquique,
           @else
-          Servicio de salud Iquique,
+          Servicio de salud Tarapacá,
           @endif
           el cual debe venir con las debidas observaciones de la Jefatura directa.
         </b>

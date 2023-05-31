@@ -411,7 +411,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         del Hospital Dr. Ernesto Torres Galdames de Iquique,
         @else
-        de la Dirección del servicio de salud Iquique,
+        de la Dirección del servicio de salud Tarapacá,
         @endif
         el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
@@ -464,7 +464,7 @@
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       del Hospital Dr. Ernesto Torres Galdames de Iquique,
       @else
-      de la Dirección del servicio de salud Iquique,
+      de la Dirección del servicio de salud Tarapacá,
       @endif
       el cual debe venir con las debidas observaciones de la Jefatura directa.
       @endif
@@ -504,7 +504,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Dr. Ernesto Torres Galdames de Iquique,
         @else
-        Servicio de salud Iquique,
+        Servicio de salud Tarapacá,
         @endif
         el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
@@ -530,7 +530,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Dr. Ernesto Torres Galdames de Iquique,
         @else
-        Servicio de salud Iquique,
+        Servicio de salud Tarapacá,
         @endif
         el cual debe venir con las debidas observaciones de la Jefatura directa.
         <br>
