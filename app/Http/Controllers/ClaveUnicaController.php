@@ -26,24 +26,25 @@ class ClaveUnicaController extends Controller
         $redirect         = $request->input('redirect');
         //die($redirect);
 
-        $url_base        = self::URL_BASE_CLAVE_UNICA . "authorize/";
-        $client_id         = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri     = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $url_base       = self::URL_BASE_CLAVE_UNICA . "authorize/";
+        $client_id      = env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri   = urlencode(env("CLAVEUNICA_CALLBACK"));
 
-        $state             = base64_encode(csrf_token() . $redirect);
-        $scope             = self::SCOPE;
+        $state          = base64_encode(csrf_token() . $redirect);
+        $scope          = self::SCOPE;
 
         $params         = '?client_id=' . $client_id .
-            '&redirect_uri=' . $redirect_uri .
-            '&scope=' . $scope .
-            '&response_type=code' .
-            '&state=' . $state;
+                        '&redirect_uri=' . $redirect_uri .
+                        '&scope=' . $scope .
+                        '&response_type=code' .
+                        '&state=' . $state;
 
         return redirect()->to($url_base . $params)->send();
     }
 
     public function callback(Request $request)
     {
+        dd($request);
         $code            = $request->input('code');
         $state           = $request->input('state'); // token
 
