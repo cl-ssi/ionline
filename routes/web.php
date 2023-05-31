@@ -267,14 +267,14 @@ Route::get('/', function () {
 })->name('welcome');
 
 
-Route::get('/claveunica', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
 Route::get('/claveunica/callback', [ClaveUnicaController::class,'callback'])->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', [ClaveUnicaController::class,'callback']);
 Route::get('/claveunica/login/{access_token}', [ClaveUnicaController::class,'login'])->name('claveunica.login');
 Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::class,'loginExternal']);
 // Route::get('/claveunica/store/{access_token}', [ClaveUnicaController::class,'storeUserClaveUnica']);
-
 Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
+Route::get('/claveunica/{route?}', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
+
 
 Route::get('logout', [LoginController::class,'logout'])->name('logout-local');
 /* Para testing, no he probado pero me la pedian en clave única */

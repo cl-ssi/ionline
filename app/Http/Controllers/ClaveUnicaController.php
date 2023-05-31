@@ -19,7 +19,7 @@ class ClaveUnicaController extends Controller
     const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
     const SCOPE = 'openid+run+name+email';
 
-    public function autenticar(Request $request)
+    public function autenticar(Request $request, $route = null)
     {
         /* Primer paso, redireccionar al login de clave única */
         //$redirect = '../monitor/lab/login';
@@ -28,7 +28,7 @@ class ClaveUnicaController extends Controller
 
         $url_base       = self::URL_BASE_CLAVE_UNICA . "authorize/";
         $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
+        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback?route=$route");
 
         $state          = base64_encode(csrf_token() . $redirect);
         $scope          = self::SCOPE;
@@ -69,13 +69,16 @@ class ClaveUnicaController extends Controller
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
         if ($response->getStatusCode() == 200) {
-            $redirect     = base64_decode(substr(base64_decode($state), 40));
             $access_token = json_decode($response)->access_token;
-
+            $route          = $request->input('route');
+            // $redirect     = base64_decode(substr(base64_decode($state), 40));
+            if($route) {
+                return redirect()->to(base64_decode($route))->send();
+            }
             $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
             //$url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
 
-            return redirect()->to($url_redirect)->send();
+            // return redirect()->to($url_redirect)->send();
         } else {
 
             session()->flash('danger', 'Error: clave única devolvió un estado: ' . $response->getStatusCode());
