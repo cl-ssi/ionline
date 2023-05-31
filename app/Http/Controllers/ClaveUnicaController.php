@@ -72,7 +72,8 @@ class ClaveUnicaController extends Controller
             $redirect     = base64_decode(substr(base64_decode($state), 40));
             $access_token = json_decode($response)->access_token;
 
-            $url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
+            $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
+            //$url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
 
             return redirect()->to($url_redirect)->send();
         } else {
