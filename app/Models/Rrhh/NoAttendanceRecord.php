@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\User;
 use App\Models\Rrhh\Attendance\Reason;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NoAttendanceRecord extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
     * The attributes that are mass assignable.
