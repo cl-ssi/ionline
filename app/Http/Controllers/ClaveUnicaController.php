@@ -28,7 +28,7 @@ class ClaveUnicaController extends Controller
 
         $url_base       = self::URL_BASE_CLAVE_UNICA . "authorize/";
         $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri   = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback");
 
         $state          = base64_encode(csrf_token() . $redirect);
         $scope          = self::SCOPE;
@@ -44,14 +44,13 @@ class ClaveUnicaController extends Controller
 
     public function callback(Request $request)
     {
-        dd($request);
         $code            = $request->input('code');
         $state           = $request->input('state'); // token
 
         $url_base        = self::URL_BASE_CLAVE_UNICA . "token/";
         $client_id       = env("CLAVEUNICA_CLIENT_ID");
         $client_secret   = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri    = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $redirect_uri    = urlencode(env('APP_URL')."/claveunica/callback");
 
         try {
             $response = Http::asForm()->post($url_base, [
@@ -66,7 +65,6 @@ class ClaveUnicaController extends Controller
             //logger("Error en callback de clave unica, redirecionando al login ", ['e' => $e]);
             return redirect()->route('welcome');
         }
-
 
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
