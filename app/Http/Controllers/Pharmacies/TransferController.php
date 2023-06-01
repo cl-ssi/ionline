@@ -174,7 +174,7 @@ class TransferController extends Controller
 
         $style = "border: 1px solid black; border-collapse: collapse; padding: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;";
         
-        $content = "<p style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del Servicio de Salud Iquique:</p>
+        $content = "<p style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del Servicio de Salud Tarapacá:</p>
         <p style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>Entrega para establecimiento <b>{$establishment->name}</b></p>
 
         <table style='{$style}' align='center'>

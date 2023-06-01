@@ -19,7 +19,7 @@ class HealthServiceSeeder extends Seeder
             'region_id' => 15
         ]);
         HealthService::create([
-            'name' => 'Servicio de Salud Iquique',
+            'name' => 'Servicio de Salud Tarapacá',
             'region_id' => 1
         ]);
         HealthService::create([

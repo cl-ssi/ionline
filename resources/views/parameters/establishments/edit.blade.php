@@ -82,10 +82,10 @@
             <label for="dependency">Dependencia</label>
             <select class="form-control" id="commune_id" name="dependency" required>
                 <option value="">Seleccione una opción</option>
-                <option value="Servicio de Salud Iquique" @if ($establishment->dependency == 'Servicio de Salud Iquique')
+                <option value="Servicio de Salud Tarapacá" @if ($establishment->dependency == 'Servicio de Salud Tarapacá')
                     selected
                     @endif
-                    >Servicio de Salud Iquique</option>
+                    >Servicio de Salud Tarapacá</option>
                 <option value="SEREMI De Tarapacá" @if ($establishment->dependency == 'SEREMI De Tarapacá')
                     selected
                     @endif
