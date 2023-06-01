@@ -65,12 +65,12 @@ class ClaveUnicaController extends Controller
             //logger("Error en callback de clave unica, redirecionando al login ", ['e' => $e]);
             return redirect()->route('welcome');
         }
-
+        dd($request->input('code'), $request->input('stat'), $request->input('route'));
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
         if ($response->getStatusCode() == 200) {
-            $access_token = json_decode($response)->access_token;
-            $route          = $request->input('route');
+            $access_token    = json_decode($response)->access_token;
+            $route           = $request->input('route');
             // $redirect     = base64_decode(substr(base64_decode($state), 40));
             if($route) {
                 $url_redirect = env('APP_URL') . base64_decode($route) . '/'. $access_token;
