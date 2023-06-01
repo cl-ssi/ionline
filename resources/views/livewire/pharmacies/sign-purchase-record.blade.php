@@ -1,3 +1,4 @@
+<div>
     @if($purchase->signed_record_id)
         <a class="btn btn-success btn-sm"
            title="Ver Acta firmada."
@@ -8,9 +9,10 @@
         </a>
     @else
         {{--modal firmador--}}
-        @php $idModelModal = $purchase->id;
-					$routePdfSignModal = "/pharmacies/products/purchase/record-pdf/$idModelModal/";
-					$routeCallbackSignModal = 'pharmacies.products.callbackFirmaRecord';
+        @php
+            $idModelModal = $purchase->id;
+            $routePdfSignModal = "/pharmacies/products/purchase/record-pdf/$idModelModal/";
+            $routeCallbackSignModal = 'pharmacies.products.callbackFirmaRecord';            
         @endphp
 
         @include('documents.signatures.partials.sign_file')
@@ -19,3 +21,4 @@
                 data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> <i
                 class="fas fa-signature"></i></button>
     @endif
+</div>

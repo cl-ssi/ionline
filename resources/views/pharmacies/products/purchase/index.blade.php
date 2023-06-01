@@ -67,7 +67,7 @@
 						<span class="fas fa-file" aria-hidden="true"></span>
 					</a>
 					@can('Pharmacy: sign')
-					    @livewire('pharmacies.sign-purchase-record', ['purchase' => $purchase])
+					    @livewire('pharmacies.sign-purchase-record', ['purchase' => $purchase], key($purchase->id))
 					@endcan
 				</td>
 			</tr>

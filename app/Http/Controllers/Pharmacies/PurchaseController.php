@@ -172,6 +172,7 @@ class PurchaseController extends Controller
       $purchase->signed_record_id = $signaturesFile->id;
       $purchase->save();
       session()->flash('success', $message);
+      //return redirect()->back();
       return redirect()->route('pharmacies.products.purchase.index');
     }
 }
