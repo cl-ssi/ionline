@@ -457,7 +457,7 @@
 
     //TITULO
     let title = chart.titles.create();
-    title.text = "Cobertura "+ mes +" vs Año 2018 - Servicio de Salud Iquique";
+    title.text = "Cobertura "+ mes +" vs Año 2018 - Servicio de Salud Tarapacá";
     title.fontSize = 15;
     title.marginBottom = 10;
 
