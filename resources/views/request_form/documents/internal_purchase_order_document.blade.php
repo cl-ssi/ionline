@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>OC Interna: Abastecimiento</title>
   <meta name="description" content="">
-  <meta name="author" content="Servicio de Salud Iquique">
+  <meta name="author" content="Servicio de Salud Tarapacá">
   <style media="screen">
     body {
       font-family: Arial, Helvetica, sans-serif;

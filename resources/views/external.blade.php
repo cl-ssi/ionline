@@ -2,15 +2,12 @@
 
 @section('content')
 
-<!-- <div class="jumbotron">
-  <h1 class="display-4">Bienvenido!</h1>
-  <p class="lead">Te presentamos el nuevo portal externo del Servicio de Salud Iquique.</p>
-</div> -->
+
 
 <br>
 
 <h1 class="display-4">Bienvenido!</h1>
-<!-- <h5 class="display-5">Este es el nuevo portal externo del Servicio de Salud Iquique.</h5> -->
+
 
 <hr>
 
@@ -22,10 +19,10 @@
         <h5 class="card-title">Reclutamiento y Selección</h5>
         <p class="card-text" align="justify">
             Ingresa tus antecedentes curriculares para postular al <b>Staff de Reemplazos</b>
-            de la Unidad de Reclutamiento y Selección del Servicio de Salud Iquique.
+            de la Unidad de Reclutamiento y Selección del Servicio de Salud Tarapacá.
             <br><br>
             Las postulaciones realizadas por este medio no son vinculantes a las convocatorias
-            publicadas en portal de <b>Empleos Públicos</b> y/o en la página web del <b>Servicio de Salud Iquique</b>.
+            publicadas en portal de <b>Empleos Públicos</b> y/o en la página web del <b>Servicio de Salud Tarapacá</b>.
         </p>
         <div class="float-right">
           <a href="{{ route('replacement_staff.create') }}" class="btn btn-primary">Ingresar</a>
