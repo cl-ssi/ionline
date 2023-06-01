@@ -140,7 +140,8 @@
   <div class="content">
 
     <div class="content">
-      <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
+      <!-- <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br> -->
+      <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png" width="120" alt="Logo Servicio de Salud"><br>
 
 
       <div class="siete" style="padding-top: 3px;">
@@ -198,7 +199,7 @@
 
       <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
-      <p>Solicito a Ud.(s) remitir al Servicio Salud Iquique los siguientes articulos y/o  servicios:</p>
+      <p>Solicito a Ud.(s) remitir al Servicio Salud Tarapacá los siguientes articulos y/o  servicios:</p>
 
       <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
@@ -250,7 +251,7 @@
 
       <p><strong>OBSERVACIONES</strong></p>
       <p>DATOS FACTURACIÓN:</p>
-      <p>A Nombre del: Servicio de Salud Iquique.</p>
+      <p>A Nombre del: Servicio de Salud Tarapacá.</p>
       <p>Rut: 61.606.100-3</p>
 
     </div>
