@@ -85,10 +85,10 @@
                 </div>
                 <div class="card-body">
 
+                    @if(!env('OLD_SERVER'))
                     <h6 class="mb-3 text-center">Utilizando tu Clave Única</h6>
 
                     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-                    @if(!env('OLD_SERVER'))
                     <a class="btn-cu  btn-m btn-color-estandar m-auto"
                         href="{{ route('claveunica.autenticar') }}"
                         title="Este es el botón Iniciar sesión de ClaveÚnica">
@@ -101,7 +101,7 @@
                 
                 <hr>
                 
-                <h6 class="mb-3 text-center">O con tu cuenta del sistema</h6>
+                <h6 class="mb-3 text-center">Con tu cuenta del sistema</h6>
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
@@ -217,7 +217,7 @@
                         <a href="https://esmeralda.saludtarapaca.gob.cl" class="btn btn-outline-info btn-block">Esmeralda</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a>
+                        <a href="{{ route('claveunica.autenticar') }}?L3NpcmVteC9sb2dpbmN1" class="btn btn-outline-info btn-block">Siremx</a>
                     </li>
                 </ul>
             </div>
@@ -227,7 +227,7 @@
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-3 col-md-3">
-                    <img class="mb-2" src="{{ asset('images/logo_ssi_100px.png') }}" alt="Logo Servicio de Salud Iquique">
+                    <img class="mb-2" src="{{ asset('images/logo_sst_100px.png') }}" alt="Logo Servicio de Salud Iquique">
                 </div>
                 <div class="col-1 col-md-6">
 
@@ -235,8 +235,8 @@
                 <div class="col-7 col-md-3">
                     <h5>Desarrollado por</h5>
                     <ul class="list-unstyled text-small">
-                        <li>Departamento TIC del SSI</li>
-                        <li><a class="text-muted" href="mailto:sistemas.ssi@redsalud.gobc.">sistemas.ssi@redsalud.gob.cl</a></li>
+                        <li>Departamento TIC del SST</li>
+                        <li><a class="text-muted" href="mailto:sistemas.sst@redsalud.gobc.">sistemas.sst@redsalud.gob.cl</a></li>
                         <small class="d-block mb-3 text-muted">2021</small>
                     </ul>
                 </div>
