@@ -29,21 +29,12 @@
         <div class="mt-4">
             <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
             @isset($url)
-            <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4tZXh0ZXJuYWw="
-                title="Este es el botón Iniciar sesión de ClaveÚnica">
-                <span class="cl-claveunica"></span>
-                <span class="texto">Iniciar sesión</span>
-            </a>
-            @else
-                <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
-                <a class="btn-cu  btn-m btn-color-estandar m-auto bg-success" 
-                    href="https://uni.saludiquique.gob.cl/claveunica/i"
+                <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4tZXh0ZXJuYWw="
                     title="Este es el botón Iniciar sesión de ClaveÚnica">
                     <span class="cl-claveunica"></span>
                     <span class="texto">Iniciar sesión</span>
                 </a>
-
-                <hr>
+            @else
                 <a class="btn-cu btn-m btn-color-estandar m-auto" 
                     href="{{ route('claveunica.autenticar') }}"
                     title="Este es el botón Iniciar sesión de ClaveÚnica">
