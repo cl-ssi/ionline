@@ -275,6 +275,8 @@ Route::get('/claveunica/login-external/{access_token}', [ClaveUnicaController::c
 Route::get('/claveunica/logout', [ClaveUnicaController::class,'logout'])->name('logout');
 Route::get('/claveunica/{route?}', [ClaveUnicaController::class,'autenticar'])->name('claveunica.autenticar');
 
+// Route::get('/siremx/logincu/{access_token}', [ClaveUnicaController::class,'siremx'])->name('claveunica.siremx');
+
 
 Route::get('logout', [LoginController::class,'logout'])->name('logout-local');
 /* Para testing, no he probado pero me la pedian en clave única */

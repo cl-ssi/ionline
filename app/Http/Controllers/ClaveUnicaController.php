@@ -291,4 +291,14 @@ class ClaveUnicaController extends Controller
         /** Store clave unica information */
         dispatch(new StoreUserCU($access_token));
     }
+
+    /**
+    * Login temporal Siremx
+    */
+    // public function siremx($access_token)
+    // {
+    //     //https://siremx.saludtarapaca.gob.cl/authenticate/logincu/{access_token}
+    //     $url = 'https://siremx.saludtarapaca.gob.cl/siremx/login';
+    //     return redirect()->to($url)->send();
+    // }
 }
