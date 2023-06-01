@@ -6,7 +6,7 @@
 
 <div style="width: 49%; display: inline-block;">
     <div class="siete">
-        Servicio de Salud Iquique
+        Servicio de Salud Tarapacá
     </div>
 </div>
 
