@@ -7,7 +7,7 @@
 
 
 <ul>
-    <li>Está dirigido a funcionarios que poseen contrato a Honorario para la DSSI</li>
+    <li>Está dirigido a funcionarios que poseen contrato a Honorario para la DSST</li>
     <li>Podrás ver el estado de tus solicitudes de pago</li>     
 </ul>
 
