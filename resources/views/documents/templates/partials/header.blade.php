@@ -16,7 +16,7 @@
 
 
         /** Confeccionar URL pública del logo */
-        /** El código está acá poder reutilizar este include en otro documento
+        /** El código está acá para poder reutilizar este include en otro documento
         * EJ:  
         * '/images/logo_rgb_SSI.png'
         * '/images/logo_pluma_SSI_HAH.png'
