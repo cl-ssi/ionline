@@ -65,7 +65,7 @@ class ClaveUnicaController extends Controller
             //logger("Error en callback de clave unica, redirecionando al login ", ['e' => $e]);
             return redirect()->route('welcome');
         }
-        dd($request->input('code'), $request->input('stat'), $request->input('route'));
+        dd($request->input('code'), $request->input('state'), $request->input('route'));
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
         if ($response->getStatusCode() == 200) {
