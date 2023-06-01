@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Sitio web del Servicio de Salud Iquique">
+    <meta name="description" content="Sitio web del Servicio de Salud Tarapacá">
     <meta name="author" content="Servicio de Salud Tarapacá">
     <title>{{ config('app.name') }}</title>
 
