@@ -13,11 +13,11 @@
             <tr>
                 <th>Id</th>
                 <th>Funcionario</th>
-                <th>Fecha registro</th>
+                <th width="95">Fecha registro</th>
                 <th>Motivo (Fundamento)</th>
                 <th>Jefatura</th>
                 <th>Observación</th>
-                <th>Fecha revisión</th>
+                <th width="95">Fecha revisión</th>
                 <th>Registro en SIRH</th>
             </tr>
         </thead>
