@@ -42,7 +42,7 @@ class ClaveUnicaController extends Controller
         return redirect()->to($url_base . $params)->send();
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, $route = null)
     {
         $code            = $request->input('code');
         $state           = $request->input('state'); // token
