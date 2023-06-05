@@ -2193,7 +2193,7 @@ Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
         Route::get('/create', [MeetingController::class, 'create'])->name('create');
         Route::post('/store', [MeetingController::class, 'store'])->name('store');
         Route::get('/edit/{meeting}', [MeetingController::class, 'edit'])->name('edit');
-        Route::post('/update/{meeting}', [MeetingController::class, 'update'])->name('update');
+        Route::put('/update/{meeting}', [MeetingController::class, 'update'])->name('update');
     });
 });
 

@@ -12,7 +12,7 @@ class MeetingController extends Controller
     public function index()
     {
         $meetings = Meeting::latest()->paginate(100);
-        return view('lobby.index',compact('meetings'));
+        return view('lobby.index', compact('meetings'));
     }
 
     public function create()
@@ -30,7 +30,15 @@ class MeetingController extends Controller
 
     public function edit(Meeting $meeting)
     {
-        
+
         return view('lobby.edit', compact('meeting'));
+    }
+
+    public function update(Request $request, Meeting $meeting)
+    {
+        $meeting->fill($request->all());
+        $meeting->save();
+        session()->flash('success', 'Lobby actualizado exitosamente');
+        return redirect()->route('lobby.meeting.index');
     }
 }
