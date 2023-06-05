@@ -29,7 +29,7 @@
         <div class="mt-4">
             <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
             @isset($url)
-                <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4tZXh0ZXJuYWw="
+                <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?route=L2NsYXZldW5pY2EvbG9naW4tZXh0ZXJuYWw="
                     title="Este es el botón Iniciar sesión de ClaveÚnica">
                     <span class="cl-claveunica"></span>
                     <span class="texto">Iniciar sesión</span>
