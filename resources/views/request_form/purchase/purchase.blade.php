@@ -1326,8 +1326,8 @@
         if(document.getElementById("for_tender_number").value != '')
         {
             $('#btn_licitacion').prop('disabled', true).html("Cargando...");
-            // axios.get('http://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
-            axios.get('/request_forms/supply/mercado-publico-api/licitaciones/' + document.getElementById("for_tender_number").value)
+            axios.get('https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo='+document.getElementById("for_tender_number").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            // axios.get('/request_forms/supply/mercado-publico-api/licitaciones/' + document.getElementById("for_tender_number").value)
             .then(function(response) {
                 // handle success
                 console.log(response.data);
@@ -1413,8 +1413,8 @@
         if(document.getElementById("for_po_id").value != '')
         {
             $('#btn_oc').prop('disabled', true).html("Cargando...");
-            // axios.get('http://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
-            axios.get('/request_forms/supply/mercado-publico-api/ordenesdecompra/' + document.getElementById("for_po_id").value, { timeout: 10000})
+            axios.get('https://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json?codigo='+document.getElementById("for_po_id").value+'&ticket=E08630E0-4621-4986-8B75-68A172A386EE')
+            // axios.get('/api/request_forms/supply/mercado-publico-api/ordenesdecompra/' + document.getElementById("for_po_id").value)
             .then(function(response) {
                 // handle success
                 console.log(response.data);
