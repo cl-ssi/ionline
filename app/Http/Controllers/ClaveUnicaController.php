@@ -22,7 +22,7 @@ class ClaveUnicaController extends Controller
     public function autenticar(Request $request, $route = null)
     {
         /* Primer paso, redireccionar al login de clave única */
-        //$redirect = '../monitor/lab/login';
+        //$redirect = '../monitor/lab/login';        
         $redirect         = $request->input('redirect');
         //die($redirect);
 
