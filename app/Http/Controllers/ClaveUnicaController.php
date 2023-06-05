@@ -66,6 +66,18 @@ class ClaveUnicaController extends Controller
             return redirect()->route('welcome');
         }
 
+        $access_token = json_decode($response)->access_token ?? null;
+
+        /** Si no existe el acces token */
+        if(is_null($access_token))
+        {
+            session()->flash(
+                'info',
+                'No se pudo iniciar Sesión con Clave Única'
+            );
+            return redirect()->route('welcome');
+        }
+
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
         if ($response->getStatusCode() == 200) {
