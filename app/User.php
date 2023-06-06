@@ -204,7 +204,7 @@ class User extends Authenticatable implements Auditable
         }
         else  {
             /** Retorna una relación nula si no tiene OU asociada */
-            return $this->belongsTo(User::class)->withDefault();
+            return $this->belongsTo(User::class);
         }
     }
     
@@ -219,7 +219,7 @@ class User extends Authenticatable implements Auditable
                 }
                 else {
                     /** Retorna una relación nula si no tiene una ou padre */
-                    return $this->belongsTo(User::class)->withDefault();
+                    return $this->belongsTo(User::class);
                 }
             }
             else {
@@ -228,7 +228,7 @@ class User extends Authenticatable implements Auditable
         }
         else {
             /** Retorna una relación nula si no tiene current manager */
-            return $this->belongsTo(User::class)->withDefault();
+            return $this->belongsTo(User::class);
         }
     }
 
