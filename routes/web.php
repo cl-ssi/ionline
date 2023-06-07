@@ -1192,7 +1192,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {
         Route::get('/{module?}', [LogController::class, 'index'])->name('index');
-        Route::get('{log}', [LogController::class, 'show'])->name('show')->where('id', '[0-9]+');
+        Route::get('/show/{log}', [LogController::class, 'show'])->name('show')->where('id', '[0-9]+');
         // Route::get('{log}/edit', [LogController::class, 'edit'])->name('edit');
         // Route::put('{log}', [LogController::class, 'update'])->name('update');
         Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
