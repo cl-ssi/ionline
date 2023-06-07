@@ -125,7 +125,12 @@ class Derive extends Component
         }
 
         /* Mostrar sólo usuarios que tengan solicitudes para derivara para alivianar la vista */
-        $this->users = User::orderBy('name','ASC')->get();
+        //$this->users = User::orderBy('name','ASC')->get();
+
+         // Carga solo los campos necesarios de los usuarios
+         $this->users = User::select('id', 'name', 'fathers_family', 'mothers_family')
+         ->orderBy('name', 'ASC')
+         ->get();
         return view('livewire.service-request.derive');
     }
 }
