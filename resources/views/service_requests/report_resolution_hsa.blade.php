@@ -135,12 +135,12 @@
 
 <body>
   <footer>
-      <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+      <div class="pagenum-container">ID {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
   </footer>
   <main>
   <div class="content">
 
-      <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
+      <img style="padding-bottom: 4px;" src="images/logo_pluma_SST.png" width="120" alt="Logo Servicio de Salud Tarapacá"><br>
 
 
       <div class="siete" style="padding-top: 3px;">
@@ -152,7 +152,7 @@
         SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
       </div>
       <div class="seis" style="padding-top: 4px;">
-        N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
+        N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
         @foreach($ServiceRequest->SignatureFlows as $SignatureFlow)
           {{$SignatureFlow->user->Initials}},
         @endforeach
