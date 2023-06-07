@@ -22,14 +22,21 @@ class MeetingMgr extends Component
     public $compromises = [];
     public $participants = [];
 
+    public $responsable;
+
     public $filter = [];
 
     public $delete_compromises = [];
 
+    public $userResponsible;
+    public $addParticipant;
+
 
     protected $listeners = [
         'userSelected',
-        'addUser' => 'addParticipant'
+        //'addUser' => 'addParticipant',
+        'addParticipant',
+        'userResponsible'
     ];
 
 
@@ -85,7 +92,7 @@ class MeetingMgr extends Component
     public function addCompromise()
     {
         $this->compromises[] = Compromise::make([
-            'name' => '', 
+            'name' => '',
             'date' => '',
             'status' => ''
         ]);
@@ -95,9 +102,6 @@ class MeetingMgr extends Component
     {
         unset($this->compromises[$key]);
         $this->compromises = array_values($this->compromises);
-        // $compromise_id = $this->compromises[$index]['id'];
-        // $this->delete_compromises[] = $compromise_id;
-        // array_splice($this->compromises, $index, 1);
     }
 
 
@@ -111,7 +115,7 @@ class MeetingMgr extends Component
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
         $this->compromises = $this->meeting->compromises->toArray();
-        $this->participants = $meeting->participants->map(function($participant) {
+        $this->participants = $meeting->participants->map(function ($participant) {
             return [
                 'user_id' => $participant->id,
                 'name' => $participant->shortName,
@@ -126,6 +130,7 @@ class MeetingMgr extends Component
     public function save()
     {
         $this->validate();
+        $this->meeting->responsible_id = $this->responsable;
         $this->meeting->save();
 
         /** Guardar los participantes */
@@ -138,11 +143,13 @@ class MeetingMgr extends Component
             }
         }
 
+        //dd($this->meeting->responsible_id);
+
         /** Guardar los compromisos */
         $this->meeting->compromises()->delete();
         $this->meeting->compromises()->createMany($this->compromises);
 
-        $this->participants= [];
+        $this->participants = [];
         $this->compromises = [];
         $this->index();
     }
@@ -167,5 +174,10 @@ class MeetingMgr extends Component
     public function search()
     {
         $this->resetPage();
+    }
+
+    public function userResponsible(User $user_responsible)
+    {
+        $this->responsable =  $user_responsible->id;
     }
 }
