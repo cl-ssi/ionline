@@ -19,30 +19,30 @@ class ClaveUnicaController extends Controller
     const URL_BASE_CLAVE_UNICA = 'https://accounts.claveunica.gob.cl/openid/';
     const SCOPE = 'openid+run+name+email';
 
-    public function autenticar(Request $request)
+    public function autenticar(Request $request, $route = null)
     {
         /* Primer paso, redireccionar al login de clave única */
-        //$redirect = '../monitor/lab/login';
+        //$redirect = '../monitor/lab/login';        
         $redirect         = $request->input('redirect');
         //die($redirect);
 
-        $url_base        = self::URL_BASE_CLAVE_UNICA . "authorize/";
-        $client_id         = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri     = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $url_base       = self::URL_BASE_CLAVE_UNICA . "authorize/";
+        $client_id      = env("CLAVEUNICA_CLIENT_ID");
+        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback?route=$route");
 
-        $state             = base64_encode(csrf_token() . $redirect);
-        $scope             = self::SCOPE;
+        $state          = base64_encode(csrf_token() . $redirect);
+        $scope          = self::SCOPE;
 
         $params         = '?client_id=' . $client_id .
-            '&redirect_uri=' . $redirect_uri .
-            '&scope=' . $scope .
-            '&response_type=code' .
-            '&state=' . $state;
+                        '&redirect_uri=' . $redirect_uri .
+                        '&scope=' . $scope .
+                        '&response_type=code' .
+                        '&state=' . $state;
 
         return redirect()->to($url_base . $params)->send();
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, $route = null)
     {
         $code            = $request->input('code');
         $state           = $request->input('state'); // token
@@ -50,7 +50,7 @@ class ClaveUnicaController extends Controller
         $url_base        = self::URL_BASE_CLAVE_UNICA . "token/";
         $client_id       = env("CLAVEUNICA_CLIENT_ID");
         $client_secret   = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri    = urlencode(env("CLAVEUNICA_CALLBACK"));
+        $redirect_uri    = urlencode(env('APP_URL')."/claveunica/callback");
 
         try {
             $response = Http::asForm()->post($url_base, [
@@ -66,14 +66,31 @@ class ClaveUnicaController extends Controller
             return redirect()->route('welcome');
         }
 
+        $access_token = json_decode($response)->access_token ?? null;
+
+        /** Si no existe el acces token */
+        if(is_null($access_token))
+        {
+            session()->flash(
+                'info',
+                'No se pudo iniciar Sesión con Clave Única'
+            );
+            return redirect()->route('welcome');
+        }
 
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
         if ($response->getStatusCode() == 200) {
-            $redirect     = base64_decode(substr(base64_decode($state), 40));
-            $access_token = json_decode($response)->access_token;
-
-            $url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
+            $access_token    = json_decode($response)->access_token;
+            $route           = $request->input('route');
+            // $redirect     = base64_decode(substr(base64_decode($state), 40));
+            if($route) {
+                $url_redirect = env('APP_URL') . base64_decode($route) . '/'. $access_token;
+            }
+            else {
+                $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
+            }
+            //$url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
 
             return redirect()->to($url_redirect)->send();
         } else {
@@ -286,4 +303,14 @@ class ClaveUnicaController extends Controller
         /** Store clave unica information */
         dispatch(new StoreUserCU($access_token));
     }
+
+    /**
+    * Login temporal Siremx
+    */
+    // public function siremx($access_token)
+    // {
+    //     //https://siremx.saludtarapaca.gob.cl/authenticate/logincu/{access_token}
+    //     $url = 'https://siremx.saludtarapaca.gob.cl/siremx/login';
+    //     return redirect()->to($url)->send();
+    // }
 }

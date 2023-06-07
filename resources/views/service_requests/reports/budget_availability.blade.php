@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Certificado de cumplimiento</title>
         <meta name="description" content="">
-        <meta name="author" content="Servicio de Salud Iquique">
+        <meta name="author" content="Servicio de Salud Tarapacá">
         <style media="screen">
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -146,11 +146,11 @@
 @if($serviceRequest->SignatureFlows->count() == 0)
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Iquique
+      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Tarapacá
       cuenta con el Presupuesto para contratación de don (ña) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b>
       desde el <b>{{$serviceRequest->start_date->format('d-m-Y') }} hasta el {{$serviceRequest->end_date->format('d-m-Y') }}</b>
       por contingencia originada por la Pandemia Coronavirus (COVID-19), con cargo al SUBTITULO 21-03-001-001-02, personal no médico, 
-      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Iquique"</u>
+      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Tarapacá"</u>
           <!-- Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
           del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>. -->
@@ -159,11 +159,11 @@
 @else
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Iquique
+      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Tarapacá
       cuenta con el Presupuesto para contratación de don (ña) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b>
       desde el <b>{{$serviceRequest->start_date->format('d-m-Y') }} hasta el {{$serviceRequest->end_date->format('d-m-Y') }}</b>
       por contingencia originada por la Pandemia Coronavirus (COVID-19), con cargo al SUBTITULO 21-03-001-001-02, personal no médico, 
-      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Iquique"</u>
+      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Tarapacá"</u>
           <!-- Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
           del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>,

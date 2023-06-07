@@ -23,7 +23,7 @@ class PurchaseController extends Controller
       $purchases = Purchase::where('pharmacy_id',session('pharmacy_id'))
                             ->with('supplier')
                             ->orderBy('id','DESC')
-                            ->paginate(200);
+                            ->paginate(100);
       foreach ($purchases as $key => $purchase) {
         $purchase->purchase_order_amount = "$".str_replace (",",".",number_format(round($purchase->purchase_order_amount * 1.19)));
       }
@@ -172,6 +172,7 @@ class PurchaseController extends Controller
       $purchase->signed_record_id = $signaturesFile->id;
       $purchase->save();
       session()->flash('success', $message);
+      //return redirect()->back();
       return redirect()->route('pharmacies.products.purchase.index');
     }
 }

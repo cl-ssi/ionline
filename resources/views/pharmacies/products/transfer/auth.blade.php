@@ -74,11 +74,12 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
     <body>
 
         <div class="content">
-            <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt="Logo servicio de salud"><br>
+            <!-- <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt="Logo servicio de salud"><br> -->
+            <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png" width="120" alt="Logo Servicio de Salud"><br>
             <div class="left seis" style="padding-bottom: 6px; color: #999">N° interno AATT: _________</div>
 
             <p class="right">Iquique, {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}.</p>
-            <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud iquique:</p>
+            <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud tarapacá:</p>
             <p>Entrega para establecimiento <b>{{$establishment->name}}</b></p>
 			<table>
 				<thead>

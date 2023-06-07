@@ -18,7 +18,7 @@ class AddParameterToCfgParametersTable extends Migration
             'module'     => 'ou',
             'parameter'  => 'DireccionSSI',
             'value'      => 1,
-            'description'=> 'Dirección del Servicio Salud Iquique']);
+            'description'=> 'Dirección del Servicio Salud Tarapacá']);
     }
 
     /**

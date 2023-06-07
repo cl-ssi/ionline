@@ -9,7 +9,7 @@
     <body>
         <div class="content">
             <div style="padding-bottom: 0.3rem">
-                <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg"
+                <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
             </div>
 

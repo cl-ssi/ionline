@@ -285,11 +285,11 @@ class WordTestController extends Controller
         
         //remove signature blocks
         // if($agreements->period >= 2022){
-            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique año');
-            $innerXml .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Tarapacá año');
+            $innerXml .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
         // }else{
         //     $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
-        //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
         // }
 
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
@@ -473,7 +473,7 @@ class WordTestController extends Controller
             $subtitulos = ($subtitulo22->count() > 0 ? 'Subtítulo 22 destinado a compra de Bienes y Servicios de Consumo' : '') . ($subtitulo22->isNotEmpty() && $subtitulo21->isNotEmpty() ? ' y ' : '') . ($subtitulo21->count() > 0 ? 'Subtítulo 21 destinado a Contratación de Personal' : '');
 
             //CLONE BLOCK SEGUN ESTABLECIMIENTO
-            if($establecimiento == 'Servicio de Salud Iquique'){
+            if($establecimiento == 'Servicio de Salud Tarapacá'){
                 $templateProcesor->cloneBlock('SSI_OPTION_BLOCK', 1, true, false);
                 $templateProcesor->cloneBlock('HOSPITAL_OPTION_BLOCK', 0);
             }else{

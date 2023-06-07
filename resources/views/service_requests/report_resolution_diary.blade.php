@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Resolucion</title>
   <meta name="description" content="">
-  <meta name="author" content="Servicio de Salud Iquique">
+  <meta name="author" content="Servicio de Salud Tarapacá">
   <style media="screen">
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -143,13 +143,13 @@
 
 <body>
   <footer>
-      <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+      <div class="pagenum-container">ID {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
   </footer>
   <main>
   <div class="content">
 
     <div class="content">
-      <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
+      <img style="padding-bottom: 4px;" src="images/logo_pluma_SST.png" width="120" alt="Logo Servicio de Salud Tarapacá"><br>
 
 
       <div class="siete" style="padding-top: 3px;">
@@ -161,7 +161,7 @@
         SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
       </div>
       <div class="seis" style="padding-top: 4px;">
-        N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
+        N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
         @foreach($ServiceRequest->SignatureFlows as $SignatureFlow)
           {{$SignatureFlow->user->Initials}},
         @endforeach
@@ -222,7 +222,7 @@
         <strong>RESUELVO:</strong><br>
         <!-- {{$ServiceRequest->resolve}}<br><br> -->
 
-        <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Iquique, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
+        <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Tarapacá, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
       </p>
 
@@ -262,9 +262,9 @@
       </p>
       @else
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD IQUIQUE</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD TARAPACÁ</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
         Pinto N°815 de la ciudad de Iquique, representado por su Director <b>{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "El Director del Servicio de Salud Iquique", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        adelante , "La Directora del Servicio de Salud Tarapacá", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
 
@@ -276,8 +276,8 @@
       @else
       <p class="justify">
         <strong>PRIMERO:</strong>
-        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
-        @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Iquique.
+        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Tarapacá, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+        @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Tarapacá.
       </p>
       @endif
 
@@ -294,7 +294,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
         @else
-        Servicio de Salud Iquique,
+        Servicio de Salud Tarapacá,
         @endif
         el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 
@@ -358,7 +358,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           Hospital Dr. Ernesto Torres Galdames de Iquique,
           @else
-          Servicio de salud Iquique,
+          Servicio de salud Tarapacá,
           @endif
           el cual debe venir con las debidas observaciones de la Jefatura directa.
         </b>

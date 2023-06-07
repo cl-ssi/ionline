@@ -8,7 +8,7 @@
 
   <br>
 
-  <p align="justify">El Servicio de Salud Iquique agradece su interés de postular a ser parte de nuestro
+  <p align="justify">El Servicio de Salud Tarapacá agradece su interés de postular a ser parte de nuestro
     Staff de Reemplazos, sus antecedentes han sido ingresados a nuestra base de datos
     para ser considerados en los requerimientos de nuestra institución.
   </p>

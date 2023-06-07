@@ -88,7 +88,7 @@
     </div>
 </div>
 
-{{--@livewire('agreements.add-quotas-minsal',['program' => $program])--}}
+@livewire('agreements.add-quotas-minsal',['program' => $program])
 
 @include('agreements/programs/modal_add_resolution')
 

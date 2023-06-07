@@ -16,7 +16,7 @@ class HealthGoal extends Model
 
     public function indicators()
     {
-        return $this->morphMany(Indicator::class, 'indicatorable');
+        return $this->morphMany(Indicator::class, 'indicatorable')->orderBy('number');
     }
 
     public function getCompliance()

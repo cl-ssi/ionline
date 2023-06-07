@@ -16,7 +16,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:60%;">
-            <th class="text-center align-middle table-dark" colspan="18">PROGRAMA  ANUAL DE CAPACITACION  PERSONAL ESTATUTO ATENCIÓN PRIMARIA (LEY 19.378) SERVCIO DE SALUD IQUIQUE   </th>
+            <th class="text-center align-middle table-dark" colspan="18">PROGRAMA  ANUAL DE CAPACITACION  PERSONAL ESTATUTO ATENCIÓN PRIMARIA (LEY 19.378) SERVCIO DE SALUD TARAPACÁ   </th>
         </tr>
         <tr style="font-size:60%;">
             <th class="text-center align-middle" colspan="3"></th>

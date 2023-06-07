@@ -6,7 +6,7 @@
 
 <div style="width: 49%; display: inline-block;">
     <div class="siete">
-        Servicio de Salud Iquique
+        Servicio de Salud Tarapacá
     </div>
 </div>
 
@@ -19,7 +19,7 @@
 <div style="text-align: justify;">
     De conformidad a lo dispuesto en el Artículo 11 de Ley 21.516 del Ministerio de Hacienda, 
     que aprueba el presupuesto del Sector Público para el año 2023, vengo en certificar que la 
-    Dirección del Servicio de Salud Iquique, cuenta con presupuesto para la contratación del 
+    Dirección del Servicio de Salud Tarapacá, cuenta con presupuesto para la contratación del 
     funcionario (a) que se individualiza, por el periodo señalado en la presente solicitud y resolución, 
     con cargo al subtítulo <u>{{ $requestReplacementStaff->budgetItem->code }}, {{ $requestReplacementStaff->budgetItem->name }}</u>.
 </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Formulario de Requerimientos: Abastecimiento</title>
   <meta name="description" content="">
-  <meta name="author" content="Servicio de Salud Iquique">
+  <meta name="author" content="Servicio de Salud Tarapacá">
   <style media="screen">
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -140,7 +140,7 @@
   <div class="content">
 
     <div class="content">
-      <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
+      <img style="padding-bottom: 4px;" src="images/Logo Servicio de Salud Tarapacá - Pluma.png" width="120" alt="Logo Servicio de Salud"><br>
 
 
       <!-- <div class="siete" style="padding-top: 3px;">

@@ -32,6 +32,8 @@ class SearchSelectUser extends Component
     public $small_option = false;
     public $addUsers = false;
 
+    public $selectedUsers = [];
+
     public function resetx()
     {
         $this->query = '';
@@ -59,6 +61,7 @@ class SearchSelectUser extends Component
     public function addUser()
     {
         /** Emite a cualquier otro componente que user_id seleccionó */
+        $this->selectedUsers[] = $this->user;
         $this->emit('addUser',$this->user);
         $this->resetx();
     }

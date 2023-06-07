@@ -6,7 +6,7 @@
 
 @include('indicators.partials.nav')
 
-<h3 class="mb-3">SERVICIO DE SALUD IQUIQUE
+<h3 class="mb-3">SERVICIO DE SALUD TARAPACÁ
     <small>
         - Cumplimiento : {{ number_format($data1['aporte'] +
                                   $data2['aporte'] +
