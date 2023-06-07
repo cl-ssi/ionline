@@ -2,7 +2,8 @@
     <fieldset class="col-12 col-md-5">
         <label for="">Responsable*</label>
         @livewire('search-select-user', [
-            //'selected_id' => 'responsible_id',
+            //'selected_id' => $responsable,
+            'user' => $responsable,
             'required' => 'required',
             'emit_name' => 'userResponsible',
         ])

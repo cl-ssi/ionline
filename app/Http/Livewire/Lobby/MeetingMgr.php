@@ -23,6 +23,7 @@ class MeetingMgr extends Component
     public $participants = [];
 
     public $responsable;
+    public $responsable_id;
 
     public $filter = [];
 
@@ -30,6 +31,7 @@ class MeetingMgr extends Component
 
     public $userResponsible;
     public $addParticipant;
+    
 
 
     protected $listeners = [
@@ -114,6 +116,7 @@ class MeetingMgr extends Component
     public function form(Meeting $meeting)
     {
         $this->meeting = Meeting::firstOrNew(['id' => $meeting->id]);
+        $this->responsable = $this->meeting->responsible;        
         $this->compromises = $this->meeting->compromises->toArray();
         $this->participants = $meeting->participants->map(function ($participant) {
             return [
@@ -130,7 +133,7 @@ class MeetingMgr extends Component
     public function save()
     {
         $this->validate();
-        $this->meeting->responsible_id = $this->responsable;
+        $this->meeting->responsible_id = $this->responsable_id;
         $this->meeting->save();
 
         /** Guardar los participantes */
@@ -178,6 +181,6 @@ class MeetingMgr extends Component
 
     public function userResponsible(User $user_responsible)
     {
-        $this->responsable =  $user_responsible->id;
+        $this->responsable_id =  $user_responsible->id;
     }
 }
