@@ -40,7 +40,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['database','single'],
+            'channels' => ['database','teams'],
             'ignore_exceptions' => false,
         ],
 
