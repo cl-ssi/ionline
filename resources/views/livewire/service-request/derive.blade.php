@@ -2,35 +2,29 @@
     <div class="col">
         <fieldset class="form-group col">
             <label for="for_type">Usuario origen</label>
-            <div id="for-picker-t" wire:ignore>
-                <select wire:model.lazy="user_from_id" class="form-control selectpicker" data-live-search="true"
-                    data-size="5" data-container="#for-picker-t">
-                    <option value=""></option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->getFullNameAttribute() }}</option>
-                    @endforeach
-                </select>
+            <div id="for-picker-t">
+                @livewire('search-select-user', [
+                    'selected_id' => $user_from_id,
+                    'emit_name' => 'userFromSelected'
+                    ])
             </div>
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_type">Usuario destino</label>
-            <div id="for-picker" wire:ignore>
-                <select wire:model.lazy="user_to_id" class="form-control selectpicker" data-live-search="true"
-                    data-size="5" required data-container="#for-picker">
-                    <option value=""></option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->getFullNameAttribute() }}</option>
-                    @endforeach
-                </select>
+            <div id="for-picker">
+                @livewire('search-select-user', [
+                    'selected_id' => $user_to_id,
+                    'emit_name' => 'userToSelected'
+                    ])
             </div>
         </fieldset>
 
         <fieldset class="form-group col">
             <button
                 onclick="confirm('Esta acción no se puede deshacer, ¿desea continuar?') || event.stopImmediatePropagation()"
-                wire:click="derivar()" class="btn btn-primary form-control"
-                {{ (!$user_from_id or !$user_to_id) ? 'disabled' : '' }} onclick="">Derivar</button>
+                wire:click="derivar" class="btn btn-primary form-control"
+                >Derivar</button>
         </fieldset>
     </div>
 
