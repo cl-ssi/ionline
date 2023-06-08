@@ -207,8 +207,9 @@ class WordMandateAgreeController extends Controller
         
         //remove signature blocks
         // if($agreements->period >= 2022){
-            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Tarapacá año');
-            $innerXml .= 'Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
+            // $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Tarapacá año');
+            $innerXml = Str::beforeLast($innerXml, 'Tarapacá');
+            $innerXml .= 'Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
         // }else{
         //     $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
         //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
