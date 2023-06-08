@@ -113,13 +113,13 @@
                         </a>
                         @endcan
 
-                        <a class="dropdown-item {{ active('quality_aps.*') }}" href="{{ route('quality_aps.index') }}">
+                        {{--<a class="dropdown-item {{ active('quality_aps.*') }}" href="{{ route('quality_aps.index') }}">
                             <i class="fas fa-file-alt"></i> Acreditación de Calidad
                         </a>
 
                         <a class="dropdown-item {{ active('health_plan.*') }}" href="{{ route('health_plan.index', ['iquique']) }}">
                             <i class="fas fa-file-powerpoint"></i> Planes Comunales
-                        </a>
+                        </a>--}}
                     </div>
                 </li>
 
