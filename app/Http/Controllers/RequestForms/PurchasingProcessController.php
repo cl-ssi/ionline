@@ -166,6 +166,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -221,6 +222,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -270,6 +272,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -318,6 +321,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -398,6 +402,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -462,6 +467,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -529,6 +535,7 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
