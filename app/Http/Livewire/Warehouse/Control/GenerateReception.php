@@ -10,6 +10,7 @@ use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PurchasingProcessDetail;
+use App\Models\RequestForms\RequestForm;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
@@ -296,11 +297,11 @@ class GenerateReception extends Component
     {
         $this->request_form = null;
 
-        if(isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm))
+        if(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm())
         {
-            $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
-            $this->request_form = $requestForm;
-
+            $requestFormId = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm();
+            $this->request_form = RequestForm::find($requestFormId);
+            $requestForm = $this->request_form;
         }
 
         return $requestForm->id ?? null;
