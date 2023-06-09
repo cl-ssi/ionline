@@ -258,7 +258,7 @@
 
             @livewire('sign.add-signer', [
                 'eventName' => 'addLeftSignature',
-            ])
+            ], key(1))
 
             <input type="hidden" name="left_signatures" class="@error('left_signatures') is-invalid @enderror">
             @error('left_signatures')
@@ -330,7 +330,7 @@
 
             @livewire('sign.add-signer', [
                 'eventName' => 'addCenterSignature',
-            ])
+            ], key(2))
 
             <input type="hidden" name="center_signatures" class="@error('center_signatures') is-invalid @enderror">
             @error('center_signatures')
@@ -403,7 +403,7 @@
 
             @livewire('sign.add-signer', [
                 'eventName' => 'addRightSignature',
-            ])
+            ], key(3))
 
             <input type="hidden" name="right_signatures" class="@error('right_signatures') is-invalid @enderror">
             @error('right_signatures')
