@@ -41,6 +41,10 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Documents: add number', 'description' => 'Agregar número a documento y subir archivo']);
         Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Firmas y distribución']);
         Permission::create(['name' => 'Documents: delete document', 'description' => 'Permite eliminar un documento que no tenga archivo adjunto o firmas']);
+        Permission::create([
+            'name' => 'Documents: create signature request v2',
+            'description' => 'Permite acceder al crear solicitud de firma nuevo modulo v2'
+        ]);
 
         Permission::create(['name' => 'Resources: create', 'description' => 'Crear un recurso']);
         Permission::create(['name' => 'Resources: edit', 'description' => 'Editar un recurso']);
