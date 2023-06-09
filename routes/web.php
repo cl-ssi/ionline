@@ -2206,6 +2206,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(function () {
+    Route::get('/{signature}/file', [SignSignatureController::class, 'showFile'])->name('show.file');
+    Route::get('/{signature}/signed-file', [SignSignatureController::class, 'showSignedFile'])->name('show.signed.file');
+
     Route::prefix('signatures')->as('signatures.')->group(function () {
         Route::get('/create', RequestSignature::class)->name('create');
         Route::get('/index', SignatureIndex::class)->name('index');
