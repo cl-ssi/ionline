@@ -297,14 +297,13 @@ class GenerateReception extends Component
     {
         $this->request_form = null;
 
-        if(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm())
+        if(isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm))
         {
-            $requestFormId = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm();
-            $this->request_form = RequestForm::find($requestFormId);
-            $requestForm = $this->request_form;
+            $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
+            $this->request_form = $requestForm;
         }
 
-        return $requestForm->id ?? null;
+        return $this->request_form ? $this->request_form->id : null;
     }
 
     public function getTechnicalSignatureId()
