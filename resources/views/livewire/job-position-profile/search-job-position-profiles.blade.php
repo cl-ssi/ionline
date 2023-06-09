@@ -34,7 +34,7 @@
                         <th>Detalle / Calidad Jurídica</th>
                         <th>Marco Legal</th>
                         <th>Aprobaciones</th>
-                        <th colspan="2"></th>
+                        <th colspan="3"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,12 +119,12 @@
                                 @if($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review" ||
                                     $jobPositionProfile->status == 'sent')
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
+                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit fa-fw"></i>
                                     </a>
                                 @else
                                     <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
                                         class="btn btn-outline-secondary btn-sm" title="">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-eye fa-fw"></i>
                                     </a>
                                 @endif
                             @endif
@@ -132,14 +132,14 @@
                             @if($index == 'all')
                                 <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
                                     class="btn btn-outline-secondary btn-sm" title="">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-eye fa-fw"></i>
                                 </a>
                             @endif
                             <!-- PARA FIRMAR -->
                             @if($index == 'to_sign')
                                 <a href="{{ route('job_position_profile.to_sign', $jobPositionProfile) }}"
                                     class="btn btn-outline-secondary btn-sm" title="">
-                                    <i class="fas fa-signature"></i>
+                                    <i class="fas fa-signature fa-fw"></i>
                                 </a>
                             @endif
                         </td>
@@ -149,15 +149,32 @@
                                     class="btn btn-sm btn-outline-secondary" 
                                     target="_blank"
                                     title="Ver documento">
-                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
+                                    <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
                                 </a>
                             @else
                                 <a href=""
                                     class="btn btn-sm btn-outline-secondary disabled" 
                                     target="_blank"
                                     title="Ver documento">
-                                    <span class="fas fa-file-pdf" aria-hidden="true"></span>
+                                    <span class="fas fa-file-pdf fa-fw" aria-hidden="true"></span>
                                 </a>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if($jobPositionProfile->status == 'saved' || 
+                                $jobPositionProfile->status == 'sent')
+                                <form method="POST" style="display:inline-block;"
+                                    action="{{ route('job_position_profile.destroy', $jobPositionProfile) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <i class="fas fa-trash fa-fw"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button type="submit" class="btn btn-outline-danger btn-sm disabled">
+                                    <i class="fas fa-trash fa-fw"></i>
+                                </button>
                             @endif
                         </td>
                     <tr>

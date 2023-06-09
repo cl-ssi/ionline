@@ -166,12 +166,132 @@
             <th align="left" style="background-color: #b4c6e7">Organigrama</th>
         </tr>
         <tr>
-            <td><img id="chartImg" /></td>
+            <td>
+                Aquí organigrama
+            </td>
         </tr>
     </tbody>
 </table>
 
-{{-- <div id="chart_div"></div> --}}
+<br>
+
+<table class="siete">
+    <tbody>
+        <tr>
+            <th align="left" style="background-color: #2f5496; color: white" colspan="2">V. RESPONSABILIDAD DEL CARGO</th>
+        </tr>
+        <tr>
+            <th width="30%" style="background-color: #b4c6e7">Categorías de Responsabilidades</th>
+            <th style="background-color: #b4c6e7">Si/No</th>
+        </tr>
+        @foreach($jobPositionProfile->jppLiabilities as $Jppliability)
+            <tr>
+                <td style="background-color: #b4c6e7" width="30%">
+                    {{ $Jppliability->liability->name }}
+                </td>
+                <td align="center">
+                    {{ $Jppliability->YesNoValue }}
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
+<br>
+
+<table class="siete">
+    <tbody>
+        <tr>
+            <th align="left" style="background-color: #2f5496; color: white" colspan="2">
+                VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ
+            </th>
+        </tr>
+        <tr>
+            <td width="30%" style="background-color: #b4c6e7">Orientación a la excelencia</td>
+            <td align="justify">
+                Habilidad para realizar un trabajo de calidad y excelencia, orientado a los objetivos actuales y futuros, 
+                monitoreando permanentemente sus resultados y detectando y corrigiendo errores según corresponda
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" style="background-color: #b4c6e7">Vocación de servicio público</td>
+            <td align="justify">
+                    Actuar teniendo como guía el compromiso con la sociedad y el bien común, actuando y decidiendo de manera ética y 
+                    responsable (accountability), guiado por los valores y principios de probidad y transparencia que rigen al 
+                    Servicio de Salud Tarapacá.
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" style="background-color: #b4c6e7">Reflexión crítica y pensamiento sistémico</td>
+            <td align="ustify">
+                    Habilidad para analizar críticamente problemas, desafíos o decisiones, comprendiendo los hechos que componen un fenómeno 
+                    y su relación, siendo capaz de escuchar y aceptar diversas visiones, y desarrollando ideas y modelos de relaciones sistémicas.
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" style="background-color: #b4c6e7">Colaboración y trabajo en equipo</td>
+            <td align="justify">
+                    Habilidad para colaborar transversalmente, apoyar e integrar a equipos de trabajo inter e intra-áreas, 
+                    con interdisciplinariedad y transdisciplinariedad, superando los silos organizacionales y facilitando 
+                    el cumplimiento de los objetivos colectivos.
+            </td>
+        </tr>
+        <tr>
+            <td width="30%" style="background-color: #b4c6e7">Respeto y empatía</td>
+            <td align="justify">
+                    Habilidad para relacionarse de manera amable, cordial y respetuosa con los demás y realizar acciones 
+                    para fomentar un ambiente de trabajo positivo basado en el respeto, la inclusividad, la valoración y 
+                    la solidaridad con el otro, dando a conocer que entiende y comprende su problemática y entregando 
+                    respuestas oportunas, equitativas, inclusivas, con igualdad de género y no discriminatoria, promoviendo 
+                    la valoración de la diversidad.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+
+<table class="siete">
+    <tbody>
+        <tr style="background-color: #b4c6e7">
+            <th rowspan="2" width="30%">Nombre</th>
+            <th rowspan="2" width="50%">Descripción</th>
+            <th colspan="4">Nivel requerido <br> (según corresponda)</th>
+        </tr>
+        <tr style="background-color: #b4c6e7">
+            <th width="5%">1</th>
+            <th width="5%">2</th>
+            <th width="5%">3</th>
+            <th width="5%">4</th>
+        </tr>
+        @foreach($jobPositionProfile->jppExpertises as $jppExpertise)
+            <tr>
+                <td style="background-color: #b4c6e7">{{ $jppExpertise->expertise->name }}</td>
+                <td align="justify">{{ $jppExpertise->expertise->description }}</td>
+                <td align="center">
+                    @if($jppExpertise->value == 1)
+                        X
+                    @endif
+                </td>
+                <td align="center">
+                    @if($jppExpertise->value == 2)
+                        X
+                    @endif
+                </td>
+                <td align="center">
+                    @if($jppExpertise->value == 3)
+                        X
+                    @endif
+                </td>
+                <td align="center">
+                    @if($jppExpertise->value == 4)
+                        X
+                    @endif
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
 
 @endsection
 

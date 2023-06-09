@@ -729,7 +729,7 @@ class RequestFormController extends Controller {
         }
 
         $requestForm->load('eventRequestForms');
-        $counter = $requestForm->has_increased_expense ? -1 : -2;
+        $counter = $requestForm->has_increased_expense ? -1 : -3;
         foreach($requestForm->eventRequestForms->take($counter) as $event){
             $event->update(['signer_user_id' => null, 'position_signer_user' => null, 'status' => 'pending', 'signature_date' => null]);
         }
@@ -740,9 +740,10 @@ class RequestFormController extends Controller {
             $requestForm->signatures_file_id = $requestForm->old_signatures_file_id;
             $requestForm->old_signatures_file_id = null;
         }else{
-            $requestForm->purchasers()->detach();
+            // $requestForm->purchasers()->detach();
             $requestForm->signatures_file_id = null;
             $requestForm->status = 'pending';
+            $requestForm->approved_at = null;
         }
 
         $requestForm->save();

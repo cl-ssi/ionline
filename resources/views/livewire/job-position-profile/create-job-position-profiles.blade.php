@@ -35,7 +35,7 @@
             
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_charges_number">Estamento</label>
-                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" required>
+                <select name="estament_id" id="for_estament_id" class="form-control" wire:model.debounce.500ms="selectedEstament" @if($jobPositionProfile) readonly @endif required>
                     <option value="">Seleccione...</option>
                     @foreach($estaments as $estament)
                         <option value="{{ $estament->id }}" {{-- ($jobPositionProfile && $jobPositionProfile->estament_id == $estament->id) ? 'selected' : '' --}}>{{ $estament->name }}</option>

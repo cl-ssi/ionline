@@ -66,7 +66,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function request_form(){
+    public function requestForm(){
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
