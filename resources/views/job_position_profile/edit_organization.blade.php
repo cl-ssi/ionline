@@ -118,6 +118,64 @@
         </div>
     </div>
 
+    {{--
+
+    <br>
+    <hr>
+    <br>
+
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-12">Parent</div>
+        </div>
+        <div class="row">
+            <div class="col-6 right-line"></div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-3 right-line"></div>
+            <div class="col-3 right-line top-line"></div>
+            <div class="col-3 right-line top-line"></div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-2">Child</div>
+            <div class="col-4">Bigger Child</div>
+            <div class="col-2">Child</div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-6 right-line"></div>
+            <div class="col-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-3 p-0">
+            <div class="halved right-line"></div>
+            <div class="halved top-line"></div>
+            </div>
+            <div class="col-3 p-0">
+            <div class="halved right-line top-line"></div>
+            <div class="halved top-line"></div>
+            </div>
+            <div class="col-3 p-0">
+            <div class="halved right-line top-line"></div>
+            <div class="halved top-line"></div>
+            </div>
+            <div class="col-3 p-0">
+            <div class="halved right-line top-line"></div>
+            <div class="halved"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">GrandChild</div>
+            <div class="col-3">GrandChild</div>
+            <div class="col-3">GrandChild</div>
+            <div class="col-3">GrandChild</div>
+        </div>
+    </div>
+    --}}
+
     <br>
 
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
@@ -193,5 +251,21 @@
             chart.draw(data, {'allowHtml':true});
         }
     </script>
+
+    <style>
+        .right-line {
+        border-right: 5px #ccc solid;
+        height:2em
+        }
+
+        .top-line {
+        border-top: 5px #ccc solid;
+        }
+
+        .halved {
+        width: 50%;
+        float:left;
+        }
+    </style>
 
 @endsection
