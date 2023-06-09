@@ -3,7 +3,7 @@
         Solicitudes de firmas y distribución
     </h3>
 
-    <div class="row my-2">
+    <div class="form-row g-1 my-2">
         <div class="col-3">
             <label for="document-type">Filtrar por</label>
             <select
@@ -40,6 +40,7 @@
                     <th>Materia</th>
                     <th>Descripción</th>
                     <th class="text-center">Firmas</th>
+                    <th>Anexos</th>
                     <th class="text-center" nowrap>
                         <button
                             data-toggle="modal"
@@ -89,11 +90,11 @@
                         <td>
                             {{ $signature->description }}
                         </td>
-                        <td  style="padding: 0 !important; margin: 0 !important;">
-                            <table class="table table-sm small table-signature" style="margin: 0 !important; padding: 0 !important;">
-                                <tbody>
+                        <td style="padding: 0 !important; margin: 0 !important;">
+                            <table class="table table-sm small table-signature" style="margin: 0 !important; padding: 0 !important">
+                                <tbody style="border: none">
                                     <tr>
-                                        <td class="text-center" width="33%" style="height: 100%">
+                                        <td class="text-center" width="33%" style="height: 100%; border: 1px solid white">
                                             @foreach($signature->leftSignatures as $itemSigner)
                                                 <span
                                                     class="img-thumbnail border-dark
@@ -109,7 +110,7 @@
                                                 <div class="my-2"></div>
                                             @endforeach
                                         </td>
-                                        <td class="text-center" width="33%">
+                                        <td class="text-center" width="33%" style="border: 1px solid white">
                                             @foreach($signature->centerSignatures as $itemSigner)
                                                 <span
                                                     class="img-thumbnail border-dark
@@ -125,7 +126,7 @@
                                                 <div class="my-2"></div>
                                             @endforeach
                                         </td>
-                                        <td class="text-center" width="33%">
+                                        <td class="text-center" width="33%" style="border: 1px solid white">
                                             @foreach($signature->rightSignatures as $itemSigner)
                                                 <span
                                                     class="img-thumbnail border-dark
@@ -145,26 +146,49 @@
                                 </tbody>
                             </table>
                         </td>
+                        <th>
+                            @foreach($signature->annexes as $annex)
+                                @if($annex->isLink())
+                                    <a class="annex" href="{{ $annex->url }}" target="_blank">
+                                        <i class="fas fa-paperclip" title="Enlace"></i>&nbsp
+                                    </a>
+                                @endif
+                                @if($annex->isFile())
+                                    <a class="annex" href="{{ $annex->link_file }}" target="_blank">
+                                        <i class="fas fa-paperclip" title="Archivo"></i>&nbsp
+                                    </a>
+                                @endif
+                            @endforeach
+                        </th>
                         <td nowrap>
                             <div class="form-row text-center">
                                 <div class="col-2 text-center">
-                                    @if($signature->isPending())
+                                    @if($signature->isPending() AND ! $signature->isRejected() AND $signature->isSignedForMe)
                                         <input
                                             type="checkbox"
                                             wire:click='updateSelected({{ $signature->id }})'
-                                            @if(! $signature->canSign or ! $signature->isSignedForMe)
-                                                disabled
-                                            @endif
                                         >
                                     @endif
                                 </div>
                                 <div class="col-8 text-center">
+                                    @if($signature->isCompleted())
+                                        <a
+                                            class="btn btn-sm btn-primary"
+                                            title="Ver documento"
+                                            target="_blank"
+                                            class="btn @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
+                                            href="{{ route('v2.documents.show.signed.file', $signature) }}"
+                                        >
+                                            <i class="fas fa-file"></i>
+                                        </a>
+                                    @endif
+
                                     @if($signature->isPending())
                                         @livewire('sign.sign-document', [
                                             'signatureId' => $signature->id,
                                             'link' => $signature->link_signed_file,
                                             'folder' => 'ionline/sign/signed/',
-                                            'disabled' => (! $signature->canSign or ! $signature->isSignedForMe),
+                                            'disabled' => (! $signature->canSignature),
                                             'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id,
                                             'user' => auth()->user(),
                                             'row' => $signature->flows->firstWhere('signer_id', auth()->id())->row_position + 1,
@@ -175,28 +199,32 @@
                                                 'user' => auth()->id(),
                                                 'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id.'.pdf'
                                                 ]
-                                            ], key($signature->id))
-                                        <br>
+                                            ]
+                                        , key($signature->id))
+                                    @endif
 
+                                    @if($signature->isPending() AND $signature->isSignedForMe)
                                         <button
-                                            class="btn btn-sm btn-danger"
+                                            class="btn btn-sm btn-outline-danger"
                                             data-toggle="modal"
                                             title="Rechazar documento"
                                             data-target="#rejected-signature-to-{{ $signature->id }}"
                                         >
-                                            <i class="fas fa-times"></i> Rechazar
+                                            <i class="fas fa-times"></i>
                                         </button>
 
                                         @include('sign.modal-rejected-signature')
                                     @endif
-                                    @if($signature->isCompleted())
-                                        <a
-                                            class="btn @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
-                                            href="{{ $signature->isEnumerate() ? $signature->link_signed_file : $signature->link_file }}"
-                                            target="_blank"
+
+                                    @if($signature->isAuthCreator() AND $signature->isPending())
+                                        <button
+                                            class="btn btn-sm btn-danger"
+                                            data-toggle="modal"
+                                            title="Eliminar solicitud"
+                                            wire:click="deleteRequestSignature({{ $signature }})"
                                         >
-                                            <i class="fas fa-file"></i>
-                                        </a>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     @endif
                                 </div>
                             </div>
@@ -204,7 +232,7 @@
                     </tr>
                 @empty
                 <tr class="text-center">
-                    <td colspan="8">
+                    <td colspan="9">
                         <em>No hay registros</em>
                     </td>
                 </tr>
@@ -246,6 +274,10 @@
         .table-signature td {
             border-bottom: none;
             border-top: none;
+        }
+
+        .annex:hover{
+            text-decoration: none;
         }
     </style>
 @endsection
