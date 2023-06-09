@@ -87,6 +87,7 @@ class NewUploadRem extends Component
     public function save()
     {
 
+        $this->validate();
         if ($this->type == 'Original') {
             $this->folder = $this->folderOriginal;
         } else {
