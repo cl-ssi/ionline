@@ -1,4 +1,5 @@
-<div>
+<div style="display: inline-block">
+
     <button
         type="button"
         class="btn btn-primary btn-sm"
@@ -7,7 +8,7 @@
         data-target="#sign-to-id-{{ $signatureId }}"
         @if($disabled) disabled @endif
     >
-        <i class="fas fa-signature"></i> Firmar
+        <i class="fas fa-signature"></i>
     </button>
 
     <div class="row">
