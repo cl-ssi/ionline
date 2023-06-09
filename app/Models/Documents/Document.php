@@ -123,10 +123,10 @@ class Document extends Model implements Auditable
     public function getFromHtmlSignAttribute()
     {
         /*
-         * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD IQUIQUE"
+         * Esta funcion elimina del firmante la frase "SERVICIO DE SALUD TARAPACÁ"
          * para evitar que salga duplicado en la firmante
          */
-        $chars    = array("/", "SERVICIO DE SALUD IQUIQUE", "Servicio de Salud Iquique");
+        $chars    = array("/", "SERVICIO DE SALUD TARAPACÁ", "Servicio de Salud Tarapacá");
         $htmlchar = array("<br>", "", "");
 
         return str_replace($chars, $htmlchar, $this->from);

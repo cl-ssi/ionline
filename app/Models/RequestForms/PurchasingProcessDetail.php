@@ -18,7 +18,7 @@ class PurchasingProcessDetail extends Pivot implements Auditable
     public $incrementing = true;
 
     protected $fillable = [
-        'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
+        'id', 'purchasing_process_id', 'item_request_form_id', 'request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'tender_id',
         'direct_deal_id', 'immediate_purchase_id', 'user_id', 'quantity', 'unit_value', 'tax', 'expense', 'status', 'release_observation',
         'supplier_run', 'supplier_name', 'supplier_specifications', 'charges', 'discounts', 'passenger_request_form_id'
     ];
@@ -66,32 +66,36 @@ class PurchasingProcessDetail extends Pivot implements Auditable
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        
-        //while creating/inserting item into db  
-        static::creating(function ($purchasingProcessDetail) {
-            if($purchasingProcessDetail->petty_cash_id != null){
-                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->pettyCash->purchasingProcess->requestForm()->first()->id;
-                $purchasingProcessDetail->immediatePurchase->save();
-            }
-            if($purchasingProcessDetail->direct_deal_id != null){
-                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-                $purchasingProcessDetail->immediatePurchase->save();
-            }
-            if($purchasingProcessDetail->tender_id != null){
-                if($purchasingProcessDetail->immediatePurchase){
-                    $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-                    $purchasingProcessDetail->immediatePurchase->save();
-                }
-            }
-            if($purchasingProcessDetail->immediate_purchase_id != null){
-                $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
-                $purchasingProcessDetail->immediatePurchase->save();
-            }
-        });
+    public function requestForm(){
+        return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+        
+    //     //while creating/inserting item into db  
+    //     static::creating(function ($purchasingProcessDetail) {
+    //         if($purchasingProcessDetail->petty_cash_id != null){
+    //             $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->pettyCash->purchasingProcess->requestForm()->first()->id;
+    //             $purchasingProcessDetail->immediatePurchase->save();
+    //         }
+    //         if($purchasingProcessDetail->direct_deal_id != null){
+    //             $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->directDeal->purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //             $purchasingProcessDetail->immediatePurchase->save();
+    //         }
+    //         if($purchasingProcessDetail->tender_id != null){
+    //             if($purchasingProcessDetail->immediatePurchase){
+    //                 $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //                 $purchasingProcessDetail->immediatePurchase->save();
+    //             }
+    //         }
+    //         if($purchasingProcessDetail->immediate_purchase_id != null){
+    //             $purchasingProcessDetail->immediatePurchase->request_form_id = $purchasingProcessDetail->purchasingProcess->requestForm()->first()->id;
+    //             $purchasingProcessDetail->immediatePurchase->save();
+    //         }
+    //     });
+    // }
 
     public function getPurchasingTypeName(){
         if($this->internalPurchaseOrder) return 'OC interna';

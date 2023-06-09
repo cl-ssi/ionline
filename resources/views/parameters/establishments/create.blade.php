@@ -75,7 +75,7 @@
             <label for="dependency">Dependencia</label>
             <select class="form-control" id="commune_id" name="dependency" required>
                 <option value="">Seleccione una opción</option>
-                <option value="Servicio de Salud Iquique">Servicio de Salud Iquique</option>
+                <option value="Servicio de Salud Tarapacá">Servicio de Salud Tarapacá</option>
                 <option value="SEREMI De Tarapacá">SEREMI De Tarapacá</option>
                 <option value="No Aplica">No Aplica</option>
             </select>

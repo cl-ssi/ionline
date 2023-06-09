@@ -208,7 +208,7 @@
 
 <br>
 
-<h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Iquique</h6>
+<h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Tarapacá</h6>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
@@ -230,7 +230,7 @@
                 <td class="text-justify">
                     Actuar teniendo como guía el compromiso con la sociedad y el bien común, actuando y decidiendo de manera ética y 
                     responsable (accountability), guiado por los valores y principios de probidad y transparencia que rigen al 
-                    Servicio de Salud Iquique.
+                    Servicio de Salud Tarapacá.
                 </td>
             </tr>
             <tr>

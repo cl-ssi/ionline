@@ -1,14 +1,23 @@
 <div class="form-row mb-3">
     <fieldset class="col-12 col-md-5">
         <label for="">Responsable*</label>
-        @livewire('search-select-user', ['selected_id' => 'responsible_id', 'required' => 'required', 'user' => $meeting->responsible])
-        @error('meeting.responsible_id') <span class="text-danger">{{ $message }}</span> @enderror
+        @livewire('search-select-user', [
+            //'selected_id' => $responsable,
+            'user' => $responsable,
+            'required' => 'required',
+            'emit_name' => 'userResponsible',
+        ])
+        @error('meeting.responsible_id')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 
     <fieldset class="col-12 col-md-5">
         <label for="for-petitioner">Solicitante*</label>
         <input type="text" wire:model.defer="meeting.petitioner" class="form-control">
-        @error('meeting.petitioner') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('meeting.petitioner')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 
     <fieldset class="col-12 col-md-2">
@@ -18,33 +27,44 @@
             <option>Videoconferencia</option>
             <option>Presencial</option>
         </select>
-        @error('meeting.mecanism') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('meeting.mecanism')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 </div>
 
 <div class="form-row mb-3">
     <fieldset class="col-12 col-md-6">
         <label for="for-subject">Asunto*</label>
-        <input type="text" wire:model.defer="meeting.subject" class="form-control @error('meeting.subject') is-invalid @enderror">
-        @error('meeting.subject') <span class="text-danger">{{ $message }}</span> @enderror
+        <input type="text" wire:model.defer="meeting.subject"
+            class="form-control @error('meeting.subject') is-invalid @enderror">
+        @error('meeting.subject')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 
     <fieldset class="col-12 col-md-2">
         <label for="for-date">Fecha*</label>
         <input type="date" wire:model.defer="meeting.date" class="form-control">
-        @error('meeting.date') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('meeting.date')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 
     <fieldset class="col-12 col-md-2">
         <label for="for-start_at">Hora inicio</label>
         <input type="time" wire:model.defer="meeting.start_at" class="form-control">
-        @error('meeting.start_at') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('meeting.start_at')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 
     <fieldset class="col-12 col-md-2">
         <label for="for-end_at">Hora término</label>
         <input type="time" wire:model.defer="meeting.end_at" class="form-control">
-        @error('meeting.end_at') <span class="text-danger">{{ $message }}</span> @enderror
+        @error('meeting.end_at')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </fieldset>
 </div>
 
@@ -54,12 +74,13 @@
             {{ __('Exponentes') }} (Relacionado con el solicitante)
         </label>
 
-        <textarea wire:model.defer="meeting.exponents" id="exponents" class="form-control @error('meeting.exponents') is-invalid @enderror" autocomplete="exponents"></textarea>
+        <textarea wire:model.defer="meeting.exponents" id="exponents"
+            class="form-control @error('meeting.exponents') is-invalid @enderror" autocomplete="exponents"></textarea>
 
         @error('meeting.exponents')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 </div>
@@ -69,29 +90,33 @@
         <label for="participants" class="form-label">
             {{ __('Participantes') }} (relacionado con el servicio)
         </label>
-        @livewire('search-select-user', ['selected_id' => 'participants', 'addUsers' => 'true'])
+        @livewire('search-select-user', [
+            //            'selected_id' => 'participants',
+            'addUsers' => 'true',
+            'emit_name' => 'addParticipant',
+        ])
 
         <table class="table table-sm table-bordered">
             <tbody>
-                @foreach($participants as $key => $participant)
-                <tr>
-                    <td>{{ $participant['name'] }}</td>
-                    <td>{{ $participant['position'] }}</td>
-                    <td>{{ $participant['organizationalUnit'] }}</td>
-                    <td>{{ $participant['establishment'] }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-danger" wire:click="removeParticipant({{ $key }})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
+                @foreach ($participants as $key => $participant)
+                    <tr>
+                        <td>{{ $participant['name'] }}</td>
+                        <td>{{ $participant['position'] }}</td>
+                        <td>{{ $participant['organizationalUnit'] }}</td>
+                        <td>{{ $participant['establishment'] }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" wire:click="removeParticipant({{ $key }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
         @error('meeting.participants')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 </div>
@@ -102,12 +127,13 @@
             {{ __('Detalle') }}
         </label>
 
-        <textarea id="details" wire:model.defer="meeting.details" class="form-control @error('meeting.details') is-invalid @enderror" autocomplete="details"></textarea>
+        <textarea id="details" wire:model.defer="meeting.details"
+            class="form-control @error('meeting.details') is-invalid @enderror" autocomplete="details"></textarea>
 
         @error('meeting.details')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 </div>
@@ -129,26 +155,32 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($compromises as $key => $compromise)
-            <tr>
-                <td>
-                    <input type="text" wire:model="compromises.{{$key}}.name" class="form-control" value="{{$compromise['name']}}" required>
-                </td>
-                <td>
-                    <input type="date" wire:model="compromises.{{$key}}.date" class="form-control" value="{{$compromise['date']}}" required>
-                </td>
-                <td>
-                    <select wire:model="compromises.{{$key}}.status" class="form-control" required>
-                        <option value="">Seleccione estado</option>
-                        <option value="pendiente" {{ $compromise['status'] == 'pendiente' ? 'selected' : '' }}>pendiente</option>
-                        <option value="en curso" {{ $compromise['status'] == 'en curso' ? 'selected' : '' }}>en curso</option>
-                        <option value="terminado" {{ $compromise['status'] == 'terminado' ? 'selected' : '' }}>terminado</option>
-                    </select>
-                </td>
-                <td>
-                    <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i> </button>
-                </td>
-            </tr>
+            @foreach ($compromises as $key => $compromise)
+                <tr>
+                    <td>
+                        <input type="text" wire:model="compromises.{{ $key }}.name" class="form-control"
+                            value="{{ $compromise['name'] }}" required>
+                    </td>
+                    <td>
+                        <input type="date" wire:model="compromises.{{ $key }}.date" class="form-control"
+                            value="{{ $compromise['date'] }}" required>
+                    </td>
+                    <td>
+                        <select wire:model="compromises.{{ $key }}.status" class="form-control" required>
+                            <option value="">Seleccione estado</option>
+                            <option value="pendiente" {{ $compromise['status'] == 'pendiente' ? 'selected' : '' }}>
+                                pendiente</option>
+                            <option value="en curso" {{ $compromise['status'] == 'en curso' ? 'selected' : '' }}>en
+                                curso</option>
+                            <option value="terminado" {{ $compromise['status'] == 'terminado' ? 'selected' : '' }}>
+                                terminado</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button wire:click="removeCompromise({{ $key }})" class="btn btn-danger btn-sm"> <i
+                                class="fas fa-trash"></i> </button>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -172,9 +204,9 @@
         </select>
 
         @error('meeting.status')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </fieldset>
 

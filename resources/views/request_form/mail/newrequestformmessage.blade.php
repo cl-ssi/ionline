@@ -13,6 +13,6 @@
 
 @endsection
 
-@section('firmante', 'Servicio de Salud Iquique')
+@section('firmante', 'Servicio de Salud Tarapacá')
 
 @section('linea1', 'Anexo Minsal: 579502 - 579503')

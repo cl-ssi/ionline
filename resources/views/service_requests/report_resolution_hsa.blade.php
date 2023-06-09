@@ -135,12 +135,12 @@
 
 <body>
   <footer>
-      <div class="pagenum-container">ID Phuqhaña {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
+      <div class="pagenum-container">ID {{$ServiceRequest->id}} - Página <span class="pagenum"></span></div>
   </footer>
   <main>
   <div class="content">
 
-      <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
+      <img style="padding-bottom: 4px;" src="images/logo_pluma_SST.png" width="120" alt="Logo Servicio de Salud Tarapacá"><br>
 
 
       <div class="siete" style="padding-top: 3px;">
@@ -152,7 +152,7 @@
         SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
       </div>
       <div class="seis" style="padding-top: 4px;">
-        N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
+        N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
         @foreach($ServiceRequest->SignatureFlows as $SignatureFlow)
           {{$SignatureFlow->user->Initials}},
         @endforeach
@@ -194,8 +194,8 @@
       @else
       <p class="justify">
         <strong>VISTOS:</strong><br>
-        <!-- 07/03: Ajuste solicitado por Carol Pérez  -->
-        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del Ministerio de Hacienda, Circular Nº 2C/45 de 1998 del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, Ley Nº 21.516/2022 de Presupuesto del Sector Público para el año 2023 D.F.L. Nº01/05 que fija texto refundido, coordinado y sistematizado, del Ministerio de Salud, Decreto Ley Nº 2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Decreto N° 140/04, del Ministerio de Salud que aprobó el Reglamento Orgánico de los Servicios de Salud;  Decreto Afecto N° 56, de 29 de diciembre de 2022, del Ministerio de Salud, Resolución Nº6/2019, Resolución N° 18/2017, Resol N° 2/2022.<br>
+        <!-- 07/06/2023: Ajuste solicitado por Carol Pérez  -->
+        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del Ministerio de Hacienda, Circular Nº 2C/45 de 1998 del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, Ley Nº 21.516/2022 de Presupuesto del Sector Público para el año 2023 D.F.L. Nº01/05 que fija texto refundido, coordinado y sistematizado, del Ministerio de Salud, Decreto Ley Nº 2.763 de 1979 y de las Leyes Nos. 18.933 y 18.469; Decreto N° 140/04, del Ministerio de Salud que aprobó el Reglamento Orgánico de los Servicios de Salud;  Decreto Afecto N° 56, de 29 de diciembre de 2022, del Ministerio de Salud<br>
       </p>
 
       @endif
@@ -209,14 +209,14 @@
 
         <b>- Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br>
 
-        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br>
+        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Tarapacá @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br>
       </p>
 
       <p class="justify">
         <strong>RESUELVO:</strong><br>
         <!-- {{$ServiceRequest->resolve}}<br><br> -->
 
-        <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Iquique, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
+        <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Tarapacá, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
       </p>
 
@@ -256,9 +256,9 @@
       </p>
       @else
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD IQUIQUE</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD TARAPACÁ</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
         Pinto N°815 de la ciudad de Iquique, representado por su {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} <b>{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "{{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} del Servicio de Salud Iquique", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        adelante , "{{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} del Servicio de Salud Tarapacá", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
 
@@ -270,8 +270,8 @@
       @else
       <p class="justify">
         <strong>PRIMERO:</strong>
-        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
-        @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Iquique.
+        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->position}} del Servicio de Salud Tarapacá, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+        @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Tarapacá.
       </p>
       @endif
 
@@ -288,7 +288,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
         @else
-        Servicio de Salud Iquique,
+        Servicio de Salud Tarapacá,
         @endif
         el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 
@@ -314,7 +314,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este convenio sin expresión de causa, previo aviso por escrito a la afectada con a lo menos 1 mes de anticipación.
         @else
-        El Servicio de Salud Iquique podrá poner término anticipadamente a este convenio sin expresión de causa, previo aviso por escrito a la afectada con a lo menos 1 mes de anticipación.
+        El Servicio de Salud Tarapacá podrá poner término anticipadamente a este convenio sin expresión de causa, previo aviso por escrito a la afectada con a lo menos 1 mes de anticipación.
         @endif
       </p>
 
@@ -324,7 +324,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
         @else
-        El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
+        El Servicio de Salud Tarapacá, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
         @endif
       </p>
 
@@ -333,11 +333,11 @@
 
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="justify">
-        <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+        <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}} PESOS), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
         @else
-        Servicio de Salud Iquique,
+        Servicio de Salud Tarapacá,
         @endif
         en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -350,7 +350,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           Hospital Dr. Ernesto Torres Galdames de Iquique,
           @else
-          Servicio de salud Iquique,
+          Servicio de salud Tarapacá,
           @endif
           el cual debe venir con las debidas observaciones de la Jefatura directa.
         </b>
@@ -381,7 +381,7 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           Hospital Dr. Ernesto Torres Galdames de Iquique,
           @else
-          Servicio de salud Iquique,
+          Servicio de salud Tarapacá,
           @endif
           el cual debe venir con las debidas observaciones de la Jefatura directa.
         </b>
@@ -440,7 +440,7 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
+        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el trabajador se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Tarapacá.
       </p>
 
         

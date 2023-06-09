@@ -51,7 +51,7 @@
             </div> -->
 
             <div class="alert alert-primary" role="alert">
-                A contar del 1 de Junio del 2023, nos pasaremos a llamar <strong>Servicio de Salud Tarapacá</strong>,<br> 
+                A contar del 1 de Junio del 2023, somos el <strong>Servicio de Salud Tarapacá</strong>,<br> 
                 puede descargar el nuevo logo en <strong>alta resolución</strong> desde acá:<br>
                 <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a> - 
                 <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}">SST Pluma</a> - 
@@ -64,7 +64,7 @@
         </div>
         <div class="col-md-4 col-12">
             <!-- <img src="{{ asset('images/tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
-            <img src="{{ asset('images/logo_ssi_a_sst.gif') }}" alt="Logo {{ env('APP_SS') }}" class="img-thumbnail">
+            <img src="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}" alt="Logo {{ env('APP_SS') }}" class="img-thumbnail">
         </div>
     </div>
 

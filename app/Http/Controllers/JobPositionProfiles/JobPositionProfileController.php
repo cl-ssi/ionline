@@ -80,8 +80,6 @@ class JobPositionProfileController extends Controller
 
         session()->flash('success', 'Estimado Usuario, se ha creado Exitosamente El Perfil de Cargo');
         return redirect()->route('job_position_profile.edit', $jobPositionProfile);
-
-        //return view('job_position_profile.edit', compact('jobPositionProfile'))->with('success', 'Estimados Usuario, se ha creado Exitosamente El Perfil de Cargo');
     }
 
     /**
@@ -321,7 +319,7 @@ class JobPositionProfileController extends Controller
      */
     public function destroy(JobPositionProfile $jobPositionProfile)
     {
-        //
+        dd('hola');
     }
 
     public function create_document(JobPositionProfile $jobPositionProfile){

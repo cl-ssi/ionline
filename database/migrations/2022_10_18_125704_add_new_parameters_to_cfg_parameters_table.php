@@ -22,13 +22,13 @@ class AddNewParametersToCfgParametersTable extends Migration
             'module'     => 'ou',
             'parameter'  => 'AbastecimientoSSI',
             'value'      => 37,
-            'description'=> 'Departamento de Gestión de Abastecimiento y Logística del Servicio Salud Iquique']);
+            'description'=> 'Departamento de Gestión de Abastecimiento y Logística del Servicio Salud Tarapacá']);
 
         Parameter::Create([
             'module'     => 'ou',
             'parameter'  => 'FinanzasSSI',
             'value'      => 40,
-            'description'=> 'Departamento de Gestión Financiera del Servicio Salud Iquique']);
+            'description'=> 'Departamento de Gestión Financiera del Servicio Salud Tarapacá']);
     }
 
     /**

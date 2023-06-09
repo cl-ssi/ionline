@@ -187,11 +187,17 @@ class WordMandatePFCAgreeController extends Controller
         
         //remove signature blocks
         // if($agreements->period >= 2022){
-            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique año');
-            $innerXml .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+            // $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Tarapacá año');
+            $innerXmlTemp = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique');
+            if($innerXmlTemp === $innerXml){ // No encontró las palabras prueba con Tarapacá
+                $innerXmlTemp = Str::beforeLast($innerXml, 'Tarapacá');
+                $innerXmlTemp .= 'Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
+            }else{
+                $innerXmlTemp .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+            }
         // }else{
         //     $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
-        //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        //     $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Tarapacá año '.$agreements->period.'”.</w:t></w:r></w:p>';
         // }
 
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
@@ -204,7 +210,7 @@ class WordMandatePFCAgreeController extends Controller
         // inject internal xml inside main template 
         $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
  
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXmlTemp . '</w:body>', $mainXml);
         $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
 
         $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);

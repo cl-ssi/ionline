@@ -36,7 +36,7 @@
 
         <div class="center" style="text-transform: uppercase;">
             <strong style="text-transform: uppercase;">
-                {{ optional($document->type)->name }} {{ $document->subject }}
+                {{ $document->subject }}
             </strong>
         </div>
 

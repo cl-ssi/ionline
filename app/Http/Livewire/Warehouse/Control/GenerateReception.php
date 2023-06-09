@@ -10,6 +10,7 @@ use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\PurchasingProcessDetail;
+use App\Models\RequestForms\RequestForm;
 use App\Models\Unspsc\Product as UnspscProduct;
 use App\Models\Warehouse\Control;
 use App\Models\Warehouse\ControlItem;
@@ -110,13 +111,12 @@ class GenerateReception extends Component
         $this->error = MercadoPublico::getPurchaseOrderError($purchaseOrder);
         $this->msg = MercadoPublico::getPurchaseOrderErrorMessage($purchaseOrder);
 
-        if($purchaseOrder->charges != 0)
+        if(! is_int($purchaseOrder) && $purchaseOrder->charges != 0)
         {
             $this->error = true;
             $this->msg = 'La OC posee cargos asociados.';
             $this->resetInputReception();
         }
-
 
         if(!$this->error)
         {
@@ -301,10 +301,9 @@ class GenerateReception extends Component
         {
             $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
             $this->request_form = $requestForm;
-
         }
 
-        return $requestForm->id ?? null;
+        return $this->request_form ? $this->request_form->id : null;
     }
 
     public function getTechnicalSignatureId()

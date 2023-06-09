@@ -29,7 +29,7 @@
 
 @endsection
 
-@section('firmante', 'Intranet Servicio de Salud Iquique')
+@section('firmante', 'Intranet Servicio de Salud Tarapacá')
 
 @section('linea1', 'Módulo de .....')
 

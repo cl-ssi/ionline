@@ -12,7 +12,7 @@
     }
 </style>
 
-<h3 class="mb-3">SERVICIO DE SALUD IQUIQUE</h3>
+<h3 class="mb-3">SERVICIO DE SALUD TARAPACÁ</h3>
 
 <hr>
 

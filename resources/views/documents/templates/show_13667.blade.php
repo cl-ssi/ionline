@@ -200,19 +200,19 @@
                 <div class="firma margen-central">
                     <span class="firma-digital">Firmado digitalmente de acuerdo a la ley 19.779</span><br>
                     <b>José Ignacio Donoso Carrera </b><br>
-                    <span class="firma-servicio">Servicio de Salud Iquique</span><br>
+                    <span class="firma-servicio">Servicio de Salud Tarapacá</span><br>
                     <span class="firma-fecha">21-02-2023 16:45</span><br>
                 </div>
                 <div class="firma margen-central">
                     <b>María Paz Iturriaga Lisbona </b><br>
                     <span class="firma-ou">Director</span><br>
-                    <span class="firma-servicio">Servicio de Salud Iquique</span><br>
+                    <span class="firma-servicio">Servicio de Salud Tarapacá</span><br>
                     <span class="firma-fecha">21-02-2023 16:45</span><br>
                 </div>
                 <div class="firma">
                     <b>José Ignacio Donoso Carrera </b><br>
                     <span class="firma-ou">Subdirector de Gestión Asistencial</span><br>
-                    <span class="firma-servicio">Servicio de Salud Iquique</span><br>
+                    <span class="firma-servicio">Servicio de Salud Tarapacá</span><br>
                     <span class="firma-fecha">21-02-2023 16:45</span><br>
                 </div>
             </div>

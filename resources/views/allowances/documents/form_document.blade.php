@@ -7,7 +7,7 @@
     <title>Viático</title>
 
     <meta name="description" content="">
-    <meta name="author" content="Servicio de Salud Iquique">
+    <meta name="author" content="Servicio de Salud Tarapacá">
 
     <style media="screen">
         body {

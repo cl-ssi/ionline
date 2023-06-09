@@ -113,13 +113,13 @@
                         </a>
                         @endcan
 
-                        <a class="dropdown-item {{ active('quality_aps.*') }}" href="{{ route('quality_aps.index') }}">
+                        {{--<a class="dropdown-item {{ active('quality_aps.*') }}" href="{{ route('quality_aps.index') }}">
                             <i class="fas fa-file-alt"></i> Acreditación de Calidad
                         </a>
 
                         <a class="dropdown-item {{ active('health_plan.*') }}" href="{{ route('health_plan.index', ['iquique']) }}">
                             <i class="fas fa-file-powerpoint"></i> Planes Comunales
-                        </a>
+                        </a>--}}
                     </div>
                 </li>
 
@@ -706,8 +706,12 @@
 
                         <div class="dropdown-divider"></div>
 
+                        <a class="dropdown-item" href="{{ route('profile.signature') }}">
+                            <i class="fas fa-fw fa-envelope"></i> Plantilla Firma Correo
+                        </a>
+
                         <a class="dropdown-item" href="{{ route('rrhh.users.password.edit') }}">
-                            <i class="fas fa-cog fa-key"></i> Cambio de clave
+                            <i class="fas fa-fw fa-key"></i> Cambio de clave
                         </a>
 
                         <a class="dropdown-item" href="{{ route('logout') }}">
