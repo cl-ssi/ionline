@@ -561,6 +561,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::get('{jobPositionProfile}/edit_expertise_map', [JobPositionProfileController::class, 'edit_expertise_map'])->name('edit_expertise_map');
     Route::post('{jobPositionProfile}/store_expertises', [JobPositionProfileController::class, 'store_expertises'])->name('store_expertises');
     Route::put('{jobPositionProfile}/update_expertises', [JobPositionProfileController::class, 'update_expertises'])->name('update_expertises');
+    Route::delete('{jobPositionProfile}/destroy', [JobPositionProfileController::class, 'destroy'])->name('destroy');
     Route::prefix('sign')->name('sign.')->group(function () {
         Route::post('/{jobPositionProfile}/store', [JobPositionProfileSignController::class, 'store'])->name('store');
         Route::put('/{jobPositionProfileSign}/{status}/{jobPositionProfile}/update', [JobPositionProfileSignController::class, 'update'])->name('update');

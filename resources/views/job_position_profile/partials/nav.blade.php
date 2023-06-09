@@ -1,15 +1,15 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active(['job.position.profile.*']) }}" href="#" id="navbardrop" data-toggle="dropdown">
-            <i class="fas fa-id-badge"></i> Perfiles de Cargo
+            <i class="fas fa-id-badge fa-fw"></i> Perfiles de Cargo
         </a>
 
         <div class="dropdown-menu">
-            <a class="dropdown-item {{ active(['job_position_profile.index']) }}" href="{{ route('job_position_profile.own_index') }}"><i class="fas fa-id-badge"></i> Mis Perfiles de Cargos</a>
-            <a class="dropdown-item {{ active(['job_position_profile.create']) }}" href="{{ route('job_position_profile.create') }}"><i class="fas fa-plus"></i> Nuevo Perfil de Cargo</a>
+            <a class="dropdown-item {{ active(['job_position_profile.index']) }}" href="{{ route('job_position_profile.own_index') }}"><i class="fas fa-id-badge fa-fw"></i> Mis Perfiles de Cargos</a>
+            <a class="dropdown-item {{ active(['job_position_profile.create']) }}" href="{{ route('job_position_profile.create') }}"><i class="fas fa-plus fa-fw"></i> Nuevo Perfil de Cargo</a>
             @can(['Job Position Profile: all'])
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item {{ active(['job_position_profile.all_index']) }}" href="{{ route('job_position_profile.all_index') }}"><i class="fas fa-id-badge"></i> Todos los Perfiles de Cargos</a>
+                <a class="dropdown-item {{ active(['job_position_profile.all_index']) }}" href="{{ route('job_position_profile.all_index') }}"><i class="fas fa-id-badge fa-fw"></i> Todos los Perfiles de Cargos</a>
             @endcan
         </div>
     </li>
