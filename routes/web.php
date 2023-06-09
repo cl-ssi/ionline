@@ -2219,6 +2219,11 @@ Route::prefix('test')->as('test.')->group(function () {
         return view('calendar');
     });
 
+    /* Maqueta urgencias para wordpress */
+    Route::get('/urgency', function () {
+        return view('test.urgency');
+    });
+
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });
 
