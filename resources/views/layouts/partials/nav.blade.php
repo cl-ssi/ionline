@@ -706,8 +706,12 @@
 
                         <div class="dropdown-divider"></div>
 
+                        <a class="dropdown-item" href="{{ route('profile.signature') }}">
+                            <i class="fas fa-fw fa-envelope"></i> Plantilla Firma Correo
+                        </a>
+
                         <a class="dropdown-item" href="{{ route('rrhh.users.password.edit') }}">
-                            <i class="fas fa-cog fa-key"></i> Cambio de clave
+                            <i class="fas fa-fw fa-key"></i> Cambio de clave
                         </a>
 
                         <a class="dropdown-item" href="{{ route('logout') }}">

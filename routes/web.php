@@ -377,6 +377,7 @@ Route::get('vc/{alias}', [UserController::class, 'getVcLink'])->name('vc');
 
 Route::prefix('profile')->as('profile.')->middleware('auth')->group(function () {
     Route::get('/subrogations', App\Http\Livewire\Profile\Subrogations::class)->name('subrogations');
+    Route::view('/signature', 'profile.signature')->name('signature');
 });
 
 /* Replacepent Staff */
