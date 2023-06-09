@@ -139,13 +139,6 @@
                     <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary"  @if(!$doc->number) onclick="return confirm('Enviará a firmar un documento sin Numerar' ) @endif">
                         <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma"></span>
                     </a>
-                    @can('Documents: create signature request v2')
-                        @if(! isset($doc->signature))
-                            <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
-                                <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma al nuevo modulo"></span>
-                            </a>
-                        @endif
-                    @endcan
                 @endif
 
                 @if($doc->fileToSign)
@@ -157,6 +150,27 @@
                     @endif
                 @endif
             </td>
+            @can('Documents: create signature request v2')
+            <td>
+                @if(! isset($doc->signature))
+                    <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
+                        <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma al nuevo modulo"></span>
+                    </a>
+                @else
+                    @if($doc->signature->isPending())
+                        <a href="{{ route('v2.documents.show.file', $doc->signature) }}" class="btn btn-sm btn-outline-primary">
+                            <span class="fas fa-fw fa-file" aria-hidden="true" title="Ver el documento solicitud #{{ $doc->signature->id }}"></span>
+                        </a>
+                    @endif
+
+                    @if($doc->signature->isCompleted())
+                        <a href="{{ route('v2.documents.show.signed.file', $doc->signature) }}" class="btn btn-sm btn-outline-success">
+                            <span class="fas fa-fw fa-file" aria-hidden="true" title="Ver el documento firmado #{{ $doc->signature->id }}"></span>
+                        </a>
+                    @endif
+                @endif
+            </td>
+            @endcan
         </tr>
         @endforeach
     </tbody>
@@ -180,6 +194,7 @@
             <th>De</th>
             <th>Para</th>
             <th class="small" width="70">Creador</th>
+            <th nowrap></th>
             <th nowrap></th>
             <th nowrap></th>
             <th nowrap></th>
@@ -232,20 +247,35 @@
                     <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
                         <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma"></span>
                     </a>
-                    @can('Documents: create signature request v2')
-                        @if(! isset($doc->signature))
-                            <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
-                                <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma al nuevo modulo"></span>
-                            </a>
-                        @endif
-                    @endcan
                 @endif
 
                 @if($doc->fileToSign && $doc->fileToSign->hasSignedFlow)
-                <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}" class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
-                    <span class="fas fa-fw fa-file-contract" aria-hidden="true"></span></a>
+                    <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}" class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
+                    <span class="fas fa-fw fa-file-contract" aria-hidden="true"></span>
+                </a>
                 @endif
             </td>
+            @can('Documents: create signature request v2')
+            <td>
+                @if(! isset($doc->signature))
+                    <a href="{{ route('documents.sendForSign.v2', $doc) }}" class="btn btn-sm btn-outline-danger">
+                        <span class="fas fa-fw fa-signature" aria-hidden="true" title="Enviar a firma al nuevo modulo"></span>
+                    </a>
+                @else
+                    @if($doc->signature->isPending())
+                        <a href="{{ route('v2.documents.show.file', $doc->signature) }}" class="btn btn-sm btn-outline-primary">
+                            <span class="fas fa-fw fa-file" aria-hidden="true" title="Ver el documento solicitud #{{ $doc->signature->id }}"></span>
+                        </a>
+                    @endif
+
+                    @if($doc->signature->isCompleted())
+                        <a href="{{ route('v2.documents.show.signed.file', $doc->signature) }}" class="btn btn-sm btn-outline-success">
+                            <span class="fas fa-fw fa-file" aria-hidden="true" title="Ver el documento firmado #{{ $doc->signature->id }}"></span>
+                        </a>
+                    @endif
+                @endif
+            </td>
+            @endcan
         </tr>
         @endforeach
     </tbody>
