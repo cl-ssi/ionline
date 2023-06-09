@@ -56,7 +56,6 @@ class Signature extends Model
         'column_right_endorse',
         'user_id',
         'ou_id',
-        'document_id',
     ];
 
     /**
@@ -77,17 +76,17 @@ class Signature extends Model
 
     public function leftSignatures()
     {
-        return $this->hasMany(SignatureFlow::class)->where('column_position', 'left');
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'left')->orderby('row_position');
     }
 
     public function centerSignatures()
     {
-        return $this->hasMany(SignatureFlow::class)->where('column_position', 'center');
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'center')->orderby('row_position');
     }
 
     public function rightSignatures()
     {
-        return $this->hasMany(SignatureFlow::class)->where('column_position', 'right');
+        return $this->hasMany(SignatureFlow::class)->where('column_position', 'right')->orderby('row_position');
     }
 
     public function annexes()
@@ -108,11 +107,6 @@ class Signature extends Model
     public function organizationalUnit()
     {
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
-    }
-
-    public function document()
-    {
-        return $this->belongsTo(Document::class);
     }
 
     public function getStatusTranslateAttribute()
@@ -186,6 +180,122 @@ class Signature extends Model
         return $leftSignatures->merge($centerSignatures)->merge($rightSignatures);
     }
 
+    public function canSign($signatureFlow)
+    {
+        if($this->typeByColumn($signatureFlow->column_position) == 'Opcional')
+        {
+            if($signatureFlow->status == 'signed') {
+                $can = false;
+            } else {
+                $can = true;
+            }
+        }
+        elseif($this->typeByColumn($signatureFlow->column_position) == 'Obligatorio sin Cadena de Responsabilidad')
+        {
+            if($signatureFlow->status == 'signed') {
+                $can = false;
+            } else {
+                $can = true;
+            }
+        }
+        elseif($this->typeByColumn($signatureFlow->column_position) == 'Obligatorio en Cadena de Responsabilidad')
+        {
+            $signers = $this->signersByColumn($signatureFlow->column_position);
+
+            if($signatureFlow->row_position == 0)
+            {
+                $can = $signatureFlow->status == 'pending' ? true : false;
+            }
+            else
+            {
+                $signerPrevious = $signers->firstWhere('row_position', $signatureFlow->row_position - 1);
+
+                $can = (isset($signerPrevious) && $signerPrevious->status == 'signed' && $signatureFlow->status == 'pending') ? true : false;
+            }
+        }
+
+        return $can;
+    }
+
+    public function getCanSignatureAttribute()
+    {
+        $signatureFlow = $this->flows->firstWhere('signer_id', auth()->id());
+
+        $position = $this->columnAvailable->search(function ($column) use($signatureFlow) {
+            return $column == $signatureFlow->column_position;
+        });
+
+        if($position == 0)
+        {
+            return $this->canSign($signatureFlow);
+        }
+        else
+        {
+            if($this->columnAvailable->count() > 0)
+            {
+                $previous = $this->allSignedByColumn($this->columnAvailable->get($position - 1));
+            }
+
+            return  $previous && $this->canSign($signatureFlow);
+        }
+    }
+
+    public function typeByColumn($columnPosition)
+    {
+        if($columnPosition == 'left')
+        {
+            $type = $this->column_left_endorse;
+        }
+        elseif($columnPosition == 'center')
+        {
+            $type = $this->column_center_endorse;
+
+        }
+        elseif($columnPosition == 'right')
+        {
+            $type = $this->column_right_endorse;
+        }
+
+        return $type;
+    }
+
+    public function signersByColumn($columnPosition)
+    {
+        if($columnPosition == 'left')
+        {
+            $signers = $this->leftSignatures;
+        }
+        elseif($columnPosition == 'center')
+        {
+            $signers = $this->centerSignatures;
+
+        }
+        elseif($columnPosition == 'right')
+        {
+            $signers = $this->rightSignatures;
+        }
+
+        return $signers;
+    }
+
+    public function allSignedByColumn($columnPosition)
+    {
+        if($columnPosition == 'left')
+        {
+            $allSigned = $this->leftAllSigned;
+        }
+        elseif($columnPosition == 'center')
+        {
+            $allSigned = $this->centerAllSigned;
+        }
+        elseif($columnPosition == 'right')
+        {
+            $allSigned = $this->rightAllSigned;
+        }
+
+        return $allSigned;
+    }
+
     public function getCanSignAttribute()
     {
         /**
@@ -202,7 +312,7 @@ class Signature extends Model
         elseif($columnPosition == 'center')
         {
             $type = $this->column_center_endorse;
-            $signers = $this->centerSignatures();
+            $signers = $this->centerSignatures;
 
         }
         elseif($columnPosition == 'right')
@@ -224,7 +334,7 @@ class Signature extends Model
             if(!isset($signer))
                 $canSign = false;
 
-            if($signer->row_position == 0 && $signer->status == 'pending')
+            if($signer->row_position == 0 && $signer->status == 'pending' && $statusByColum && $this->columnAvailable->first() )
                 $canSign = true;
             else {
                 $signerPrevious = $signers->firstWhere('row_position', $signer->row_position - 1);
@@ -245,7 +355,7 @@ class Signature extends Model
     {
         $signedForMe = $this->flows->firstWhere('signer_id', auth()->id());
 
-        if(isset($signedForMe) && $signedForMe->status == 'pending' )
+        if(isset($signedForMe) && $signedForMe->status == 'pending')
         {
             return true;
         }
@@ -253,6 +363,26 @@ class Signature extends Model
         {
             return false;
         }
+    }
+
+    public function getIsReadyAttribute()
+    {
+        $last = $this->columnAvailable->last();
+
+        if($last == 'left')
+        {
+            $isReady = $this->leftAllSigned;
+        }
+        elseif($last == 'center')
+        {
+            $isReady = $this->centerAllSigned;
+        }
+        elseif($last == 'right')
+        {
+            $isReady = $this->rightAllSigned;
+        }
+
+        return $isReady;
     }
 
     public function getCounterAttribute()
@@ -400,6 +530,30 @@ class Signature extends Model
         return $this->rightSignatures->every('status', '==', 'signed');
     }
 
+    public function getSignedByAllAttribute()
+    {
+        $signedByColumn = collect();
+
+        if($this->leftSignatures->count() > 0)
+        {
+            $signedByColumn->push($this->allSignedByColumn('left'));
+        }
+
+        if($this->centerSignatures->count() > 0)
+        {
+            $signedByColumn->push($this->allSignedByColumn('center'));
+        }
+
+        if($this->rightSignatures->count() > 0)
+        {
+            $signedByColumn->push($this->allSignedByColumn('right'));
+        }
+
+        return $signedByColumn->every(function($item) {
+            return $item == true;
+        });
+    }
+
     public function getLeftVisatorClassAttribute()
     {
         return $this->visatorClass($this->column_left_visator);
@@ -413,6 +567,11 @@ class Signature extends Model
     public function getRightVisatorClassAttribute()
     {
         return $this->visatorClass($this->column_right_visator);
+    }
+
+    public function isAuthCreator()
+    {
+        return $this->user_id == auth()->id();
     }
 
     public function visatorClass($column)
@@ -710,8 +869,8 @@ class Signature extends Model
                                     <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
                                         <llx>" . ($xCoordinate). "</llx>
                                         <lly>" . ($yCoordinate). "</lly>
-                                        <urx>" . ($xCoordinate + (170 * 1.3)) . "</urx>
-                                        <ury>" . ($yCoordinate + 48) . "</ury>
+                                        <urx>" . ($xCoordinate + (175)) . "</urx>
+                                        <ury>" . ($yCoordinate + 35) . "</ury>
                                         <page>" . $page . "</page>
                                         <image>BASE64</image>
                                         <BASE64VALUE>$signatureBase64</BASE64VALUE>
