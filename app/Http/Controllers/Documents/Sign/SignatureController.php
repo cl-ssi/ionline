@@ -9,6 +9,7 @@ use App\Services\ImageService;
 use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
 
 class SignatureController extends Controller
@@ -24,13 +25,6 @@ class SignatureController extends Controller
     public function update(Signature $signature, User $user, string $filename)
     {
         /**
-         * Actualiza el archivo en Signature
-         */
-        $signature->update([
-            'signed_file' => 'ionline/sign/signed/'.$filename
-        ]);
-
-        /**
          * Obtiene el signatureFlow asociado dado el Signature y el User
          */
         $signatureFlow = SignatureFlow::query()
@@ -44,6 +38,14 @@ class SignatureController extends Controller
         $signatureFlow->update([
             'file' => 'ionline/sign/signed/'.$filename,
             'status' => 'signed'
+        ]);
+
+        /**
+         * Actualiza el archivo y el status en Signature
+         */
+        $signature->update([
+            'signed_file' => 'ionline/sign/signed/'.$filename,
+            'status' => ($signature->signedByAll == true) ? 'completed' : $signature->status,
         ]);
 
         session()->flash('success', 'El documento fue firmado exitosamente.');
@@ -208,5 +210,17 @@ class SignatureController extends Controller
         echo base64_decode($json['files'][0]['content']);
 
         die();
+    }
+
+    public function showFile(Signature $signature)
+    {
+        return Storage::disk('gcs')->download($signature->file);
+
+    }
+
+    public function showSignedFile(Signature $signature)
+    {
+        return Storage::disk('gcs')->download($signature->signed_file);
+
     }
 }
