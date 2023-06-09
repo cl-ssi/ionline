@@ -19,7 +19,7 @@ class SignatureFlow extends Model
     /**
      * Espaciado entre una linea y otra
      */
-    const PADDING = 42;
+    const PADDING = 37;
 
     /**
      * The table associated with the model.
