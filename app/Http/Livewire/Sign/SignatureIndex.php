@@ -180,5 +180,14 @@ class SignatureIndex extends Component
         ]);
 
         session()->flash('success', "La solicitud de firma #$signature->id fue rechazada.");
-        return redirect()->route('v2.documents.signatures.index');    }
+        return redirect()->route('v2.documents.signatures.index');
+    }
+
+    public function deleteRequestSignature(Signature $signature)
+    {
+        $signature->delete();
+
+        session()->flash('success', "La solicitud de firma #$signature->id fue eliminada.");
+        return redirect()->route('v2.documents.signatures.index');
+    }
 }
