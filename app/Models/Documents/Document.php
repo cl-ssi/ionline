@@ -38,6 +38,7 @@ class Document extends Model implements Auditable
         'content',
         'file_to_sign_id',
         'establishment_id',
+        'signature_id',
     ];
 
     /**
@@ -92,7 +93,7 @@ class Document extends Model implements Auditable
 
     public function signature()
     {
-        return $this->hasOne(Signature::class);
+        return $this->belongsTo(Signature::class);
     }
 
     /**
