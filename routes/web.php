@@ -251,6 +251,9 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+use App\Http\Controllers\Documents\Sign\SignatureController as SignSignatureController;
+use App\Http\Livewire\Sign\RequestSignature;
+use App\Http\Livewire\Sign\SignatureIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -1216,14 +1219,16 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}', MeetingShow::class)->name('lobby.show');
 
-    Route::post('/create_from_previous', [DocumentController::class, 'createFromPrevious'])->name('createFromPrevious');
-    Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
-    Route::put('/{document}/store_number', [DocumentController::class, 'storeNumber'])->name('store_number');
-    Route::delete('/{document}/delete_file', [DocumentController::class, 'deleteFile'])->name('delete_file');
-    Route::get('/add_number', [DocumentController::class, 'addNumber'])->name('add_number');
-    Route::post('/find', [DocumentController::class, 'find'])->name('find');
-    Route::get('/report', [DocumentController::class, 'report'])->name('report');
-    Route::get('/{document}/sendForSignature/', [DocumentController::class, 'sendForSignature'])->name('sendForSignature');
+    Route::post('/create_from_previous', [DocumentController::class,'createFromPrevious'])->name('createFromPrevious');
+    Route::get('/{document}/download', [DocumentController::class,'download'])->name('download');
+    Route::put('/{document}/store_number', [DocumentController::class,'storeNumber'])->name('store_number');
+    Route::delete('/{document}/delete_file', [DocumentController::class,'deleteFile'])->name('delete_file');
+    Route::get('/add_number', [DocumentController::class,'addNumber'])->name('add_number');
+    Route::post('/find', [DocumentController::class,'find'])->name('find');
+    Route::get('/report', [DocumentController::class,'report'])->name('report');
+    Route::get('/{document}/sendForSignature/v2', [DocumentController::class,'sendForSign'])->name('sendForSign.v2');
+    Route::get('/{document}/show-document/v2', [DocumentController::class,'showDocument'])->name('show.document');
+    Route::get('/{document}/sendForSignature/', [DocumentController::class,'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
@@ -2199,6 +2204,23 @@ Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
     });
 });
 
+/**
+ * Rutas de Modulo Sign
+ */
+Route::middleware('auth')->group(function () {
+    Route::get('/position-document-number', [SignSignatureController::class, 'positionDocumentNumber']);
+});
+
+Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(function () {
+    Route::get('/{signature}/file', [SignSignatureController::class, 'showFile'])->name('show.file');
+    Route::get('/{signature}/signed-file', [SignSignatureController::class, 'showSignedFile'])->name('show.signed.file');
+
+    Route::prefix('signatures')->as('signatures.')->group(function () {
+        Route::get('/create', RequestSignature::class)->name('create');
+        Route::get('/index', SignatureIndex::class)->name('index');
+        Route::get('/signature/{signature}/user/{user}/filename/{filename}/update', [SignSignatureController::class, 'update'])->name('update');
+    });
+});
 
 
 

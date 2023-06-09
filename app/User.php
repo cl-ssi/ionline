@@ -180,7 +180,7 @@ class User extends Authenticatable implements Auditable
             ->where('type','manager')
             ->where('date',today());
     }
-    
+
     /* Authority relation: Is Secretary from ou */
     public function secretary()
     {
@@ -197,7 +197,7 @@ class User extends Authenticatable implements Auditable
             ->where('date',today());
     }
 
-    public function boss() 
+    public function boss()
     {
         if($this->organizationalUnit) {
             return $this->currentBoss($this->organizationalUnit);
@@ -207,9 +207,9 @@ class User extends Authenticatable implements Auditable
             return $this->belongsTo(User::class);
         }
     }
-    
+
     /** Busca recursivamente el jefe, es necearia para la relación de arriba */
-    public function currentBoss(OrganizationalUnit $ou) 
+    public function currentBoss(OrganizationalUnit $ou)
     {
         if($ou->currentManager) {
             if($ou->currentManager->user_id == $this->id) {
@@ -308,12 +308,10 @@ class User extends Authenticatable implements Auditable
         return $this->belongsToMany(Meeting::class, 'lobby_meeting_user');
     }
 
-
     public function noAttendanceRecords()
     {
         return $this->hasMany(NoAttendanceRecord::class);
     }
-    
 
     public function stores()
     {
@@ -690,6 +688,11 @@ class User extends Authenticatable implements Auditable
         return $name[0].$fathers[0].$mothers[0];
     }
 
+    public function getTwoInitialsAttribute()
+    {
+        return substr($this->initials, 0, 2);
+    }
+
     public function getActiveStoreAttribute()
     {
         $storeActive = $this->stores->where('pivot.status', '=', 1)->first();
@@ -738,17 +741,17 @@ class User extends Authenticatable implements Auditable
     }
 
     /** Devuelve si soy subrogante de alguien, que no es un subrogancia
-     * de autoridad, si no subrogancia de simple persona, 
+     * de autoridad, si no subrogancia de simple persona,
      * ej: C. Caronna con Pricilla
      * Rojas Con Toby
      */
     public function getIAmSubrogantNoAuthorityAttribute()
-    {        
+    {
         return Subrogation::where('organizational_unit_id',null)
             ->where('type',null)
             ->where('subrogant_id',auth()->user()->id)
             ->get();
-        
+
     }
 
     /**
@@ -802,6 +805,6 @@ class User extends Authenticatable implements Auditable
         }else{
             return false;
         }
-        
+
     }
 }
