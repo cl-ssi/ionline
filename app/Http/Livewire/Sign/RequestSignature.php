@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
-use Livewire\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
-use PhpOffice\PhpWord\Element\SDT;
+use Illuminate\Support\Str;
+use Livewire\TemporaryUploadedFile;
 
 class RequestSignature extends Component
 {
@@ -180,7 +180,7 @@ class RequestSignature extends Component
         $this->distribution = $distribution->toArray();
 
         /**
-         *
+         * Save the document
          */
         $folder = Signature::getFolder();
         $filename = 'document-sign-' . now()->timestamp;
@@ -231,22 +231,39 @@ class RequestSignature extends Component
         $signature = $signatureService->save();
 
         /**
-         *
+         * Save the annexes
          */
+        if($this->annex_file)
+        {
+            foreach($this->annex_file as $fileItem)
+            {
+                $folder = 'ionline/sign/annexes/';
+                $filename = Str::uuid(12).'.pdf';
+                $file = $folder . $filename;
+
+                $fileItem->storeAs($folder, $filename, 'gcs');
+
+                SignatureAnnex::create([
+                    'type' => 'file',
+                    'file' => $file,
+                    'signature_id' => $signature->id,
+                ]);
+            }
+        }
+
         foreach($this->annexes as $annex)
         {
             SignatureAnnex::create([
-                'type' => $annex['type'],
+                'type' => 'link',
                 'url' => $annex['source'],
-                'file' => null,
                 'signature_id' => $signature->id,
             ]);
         }
 
         if(isset($this->document))
         {
-            $signature->update([
-                'document_id' => $this->document->id,
+            $this->document->update([
+                'signature_id' => $signature->id,
             ]);
 
             session()->flash('success', "La solicitud de firma fue creada exitosamente.");
@@ -463,5 +480,10 @@ class RequestSignature extends Component
         $this->type_annexed = 'link';
         $this->annex_file = null;
         $this->annex_link = null;
+    }
+
+    public function deleteAnnexes($index)
+    {
+        $this->annexes = $this->annexes->forget($index)->values();
     }
 }
