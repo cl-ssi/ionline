@@ -107,54 +107,40 @@
     </h5>
 
     <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="type-annexed">Tipo de Anexo</label>
-            <select
-                class="custom-select @error('type_annexed') is-invalid @enderror"
-                id="type-annexed"
-                wire:model.debounce.1500ms="type_annexed"
+        <fieldset class="form-group col-12">
+            <label for="file">Archivo anexo</label>
+            <input
+                type="file"
+                class="form-control @error('annex_file') is-invalid @enderror"
+                id="file"
+                wire:model="annex_file"
+                accept=".pdf"
+                multiple
             >
-                <option>Selecione tipo anexo</option>
-                <option value="file" disabled>Archivo</option>
-                <option value="link">Enlace</option>
-            </select>
+            @error('annex_file')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </fieldset>
-        @if($type_annexed == 'file')
-            <fieldset class="form-group col-5">
-                <label for="file">Archivo anexo</label>
-                <input
-                    type="file"
-                    class="form-control @error('annex_file') is-invalid @enderror"
-                    id="file"
-                    wire:model="annex_file"
-                >
-                @error('annex_file')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </fieldset>
-        @endif
 
-        @if($type_annexed == 'link')
-            <fieldset class="form-group col-5">
-                <label for="link">Enlace anexo</label>
-                <input
-                    type="text"
-                    class="form-control @error('annex_link') is-invalid @enderror"
-                    id="link"
-                    placeholder="Ingrese un enlace"
-                    wire:model.debounce.1500ms="annex_link"
-                >
-                @error('annex_link')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </fieldset>
-        @endif
+        <fieldset class="form-group col-4">
+            <label for="link">Enlace anexo</label>
+            <input
+                type="text"
+                class="form-control @error('annex_link') is-invalid @enderror"
+                id="link"
+                placeholder="Ingrese un enlace"
+                wire:model.debounce.1500ms="annex_link"
+            >
+            @error('annex_link')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </fieldset>
 
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-2">
             <label>&nbsp;</label>
             <br>
             <button
@@ -162,22 +148,35 @@
                 wire:loading.attr="disabled"
                 wire:click="uploadAnnexed"
             >
-                Cargar Anexo
+                Cargar Enlace
             </button>
+        </fieldset>
+
+        <fieldset class="form-group col-6">
+            <label for="type-annexed">Enlaces</label>
+            <ul class="list-group mb-3">
+                @forelse($annexes as $indexAnnex => $itemAnnex)
+                    <li class="list-group-item d-flex justify-content-between align-items-center pt-2">
+                        <a href="{{ $itemAnnex['source'] }}">{{ $itemAnnex['source'] }}</a>
+
+                        <button
+                            class="btn btn-sm btn-danger"
+                            wire:click="deleteAnnexes({{ $indexAnnex }})"
+                            title="Eliminar"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </li>
+                @empty
+                    <li class="list-group-item p-2">
+                        No hay enlaces
+                    </li>
+                @endforelse
+            </ul>
         </fieldset>
     </div>
 
-    <ul class="list-group mt-2 mb-3">
-        @foreach($annexes as $i => $itemAnnex)
-            <li class="list-group-item">
-                @if($itemAnnex['type'] == 'link')
-                    <a href="{{ $itemAnnex['source'] }}">{{ $itemAnnex['source'] }}</a>
-                @else
-                    <a href="#">Preview del archivo</a>
-                @endif
-            </li>
-        @endforeach
-    </ul>
+
 
     <h5>
         Distribución
