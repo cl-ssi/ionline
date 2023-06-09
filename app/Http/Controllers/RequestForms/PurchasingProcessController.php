@@ -166,7 +166,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -222,7 +221,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -272,7 +270,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -321,7 +318,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -345,6 +341,7 @@ class PurchasingProcessController extends Controller
         //Registrar oc de la licitacion como compra inmediata
         if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata') && $request->status == 'adjudicada') {
             $oc = new ImmediatePurchase($request->all());
+            $oc->request_form_id = $requestForm->id;
             $oc->description = $request->po_description;
             $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
             $tender->oc()->save($oc);
@@ -394,6 +391,7 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $oc = new ImmediatePurchase($request->all());
+        $oc->request_form_id = $requestForm->id;
         $oc->description = $request->po_description;
         $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
         $oc->save();
@@ -402,7 +400,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -461,13 +458,13 @@ class PurchasingProcessController extends Controller
         if (!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $cm = new ImmediatePurchase($request->all());
+        $cm->request_form_id = $requestForm->id;
         $cm->save();
 
         $items = $request->has('item_id') ? $request->item_id : $request->passenger_id;
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -535,7 +532,6 @@ class PurchasingProcessController extends Controller
         foreach ($items as $key => $item) {
             $detail = new PurchasingProcessDetail();
             $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
-            $detail->request_form_id            = $requestForm->id;
             if($request->has('item_id')){
                 $detail->item_request_form_id       = $item;
                 $detail->supplier_run               = $request->supplier_run[$key];
@@ -559,6 +555,7 @@ class PurchasingProcessController extends Controller
         //Registrar oc del trato directo como compra inmediata
         if (!$requestForm->father && Str::contains($requestForm->subtype, 'inmediata')) {
             $oc = new ImmediatePurchase($request->all());
+            $oc->request_form_id = $requestForm->id;
             $oc->description = $request->po_description;
             $oc->supplier_specifications = null; // Las especificaciones tecnicas del proveedor son propias del item y no de la OC
             $directdeal->oc()->save($oc);

@@ -82,8 +82,8 @@ class ImmediatePurchase extends Model implements Auditable
         //     return $this->purchasingProcessDetail->purchasingProcess->requestForm();
         // }
 
-        // return $this->belongsTo(RequestForm::class, 'request_form_id');
-        return $this->purchasingProcessDetail->requestForm();
+        return $this->belongsTo(RequestForm::class, 'request_form_id');
+        // return $this->purchasingProcessDetail->requestForm();
         // 1. Migracion y agregar request_form_id;
         // 2. Comando que recorra todos los immediatepurchases y le setee el request_form_id
         // 3. Dejar la relacion con bleongTo 
