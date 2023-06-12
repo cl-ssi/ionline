@@ -28,10 +28,6 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
     Route::get('/existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts']);
 });
 
-Route::get('/purchase-order/{code}', function (Request $request) {
-    //http://localhost:8000/api/purchase-order/1077499-170-AG23
-    return MercadoPublico::getPurchaseOrderTest($request->code);
-});
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
 // Route::get('/get-request-inputs',[TestController::class,'storeRequestInputs']);
