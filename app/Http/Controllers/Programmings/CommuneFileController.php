@@ -160,17 +160,16 @@ class CommuneFileController extends Controller
         }
 
         if($request->hasFile('file_a')){
-
-            Storage::delete($communeFile->file_a);
-            $communeFile->file_a = $request->file('file_a')->store('programmings');
+            Storage::disk('gcs')->delete($communeFile->file_a);
+            $communeFile->file_a = $request->file('file_a')->store('ionline/programmings', ['disk', 'gcs']);
         }
         if($request->hasFile('file_b')){
-            Storage::delete($communeFile->file_b);
-            $communeFile->file_b = $request->file('file_b')->store('programmings');
+            Storage::disk('gcs')->delete($communeFile->file_b);
+            $communeFile->file_b = $request->file('file_b')->store('ionline/programmings', ['disk', 'gcs']);
         }
         if($request->hasFile('file_c')){
-            Storage::delete($communeFile->file_c);
-            $communeFile->file_c = $request->file('file_c')->store('programmings');
+            Storage::disk('gcs')->delete($communeFile->file_c);
+            $communeFile->file_c = $request->file('file_c')->store('ionline/programmings', ['disk', 'gcs']);
         }
         
         $communeFile->save();
@@ -180,16 +179,16 @@ class CommuneFileController extends Controller
 
     public function download(CommuneFile $file)
     {
-        return Storage::response($file->file_a, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file_a, mb_convert_encoding($file->name,'ASCII'));
     }
     public function downloadFileB(CommuneFile $file)
     {
-        return Storage::response($file->file_b, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file_b, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function downloadFileC(CommuneFile $file)
     {
-        return Storage::response($file->file_c, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file_c, mb_convert_encoding($file->name,'ASCII'));
     }
 
 }
