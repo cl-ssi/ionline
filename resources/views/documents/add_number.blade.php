@@ -56,16 +56,20 @@
         <strong>Fecha:</strong> {{ $document->date ? $document->date->format('d-m-Y'):'' }} -
         <strong>Archivo:</strong>
             @if($document->file)
-                <a href="{{ route('documents.download', $document) }}" target="_blank">
-                    <i class="fas fa-file-pdf fa-lg"></i>
-                </a>
-                <form action="{{ route('documents.delete_file', $document) }}" method="POST" class="form-inline">
-                    @method('DELETE')
-                    @csrf
-                    <button class="btn btn-sm btn-outline-danger" >
-                        <i class="fas fa-trash fa-lg"></i> Eliminar archivo
-                    </button>
-                </form>
+                @if($document->updated_at->diffInDays('now') <= 7)
+                    <a href="{{ route('documents.download', $document) }}" target="_blank">
+                        <i class="fas fa-file-pdf fa-lg"></i>
+                    </a>
+                    <form action="{{ route('documents.delete_file', $document) }}" method="POST" class="form-inline">
+                        @method('DELETE')
+                        @csrf
+                        <button class="btn btn-sm btn-outline-danger" >
+                            <i class="fas fa-trash fa-lg"></i> Eliminar archivo
+                        </button>
+                    </form>
+                @else
+                    <strong class="text-danger">No se puede borrar, tiene más de 7 días de antiguedad</strong>
+                @endif
             @endif
 
     @else
