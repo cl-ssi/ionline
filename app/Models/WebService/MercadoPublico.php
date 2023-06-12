@@ -83,4 +83,38 @@ class MercadoPublico extends Model
             $msg = 'Disculpe, no pudimos obtener los datos de la orden de compra, intente nuevamente.';
         return $msg;
     }
+
+
+    /** Ruta temporar para probar api de mercado publico */
+    public static function getPurchaseOrderTest($code)
+    {
+
+        $purchaseOrder = 4;
+
+        $response = Http::get('https://api.mercadopublico.cl/servicios/v1/publico/ordenesdecompra.json', [
+            'codigo' => $code,
+            'ticket' => env('TICKET_MERCADO_PUBLICO')
+        ]);
+
+        if($response->successful())
+        {
+            $objOC = json_decode($response);
+
+            if($objOC->Cantidad == 0) // OC No Valida, Eliminada o No Aceptada
+                $purchaseOrder = 2;
+            elseif($objOC->Listado[0]->Estado == 'Cancelada') // OC Cancelada
+                $purchaseOrder = 3;
+
+            if(($objOC->Cantidad > 0) && ($objOC->Listado[0]->Estado != 'Cancelada')) // OC Bien
+            {
+                $purchaseOrder = PurchaseOrder::create([
+                    'code' => $objOC->Listado[0]->Codigo,
+                    'date' => Carbon::parse($objOC->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s'),
+                    'data' => $response,
+                ]);
+            }
+        }
+
+        return $purchaseOrder;
+    }
 }

@@ -30,7 +30,7 @@ Route::prefix('service_request')->name('service_request.')->middleware('client')
 
 Route::get('/purchase-order/{code}', function (Request $request) {
     //http://localhost:8000/api/purchase-order/1077499-170-AG23
-    return MercadoPublico::getPurchaseOrder($request->code);
+    return MercadoPublico::getPurchaseOrderTest($request->code);
 });
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
