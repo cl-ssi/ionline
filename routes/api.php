@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
-use App\Http\Controllers\ServiceRequests\ServiceRequestController;
+use App\Models\WebService\MercadoPublico;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('service_request')->name('service_request.')->middleware('client')->group(function (){
     Route::get('/existing_contracts_by_prof/{user_id}', [ServiceRequestController::class, 'existing_contracts_by_prof']);
     Route::get('/existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts']);
+});
+
+Route::get('/purchase-order/{code}', function (Request $request) {
+    //http://localhost:8000/api/purchase-order/1077499-170-AG23
+    return MercadoPublico::getPurchaseOrder($request->code);
 });
 
 // Route::post('/post-request-inputs',[TestController::class,'storeRequestInputs']);
