@@ -8,7 +8,7 @@
 </div>
 
 <div class="seis" style="padding-top: 4px; color: #999">
-    Código de Solicitud de Idoneidad Interno: {{ $result->psirequest->id ?? ''  }}    
+    Código de Solicitud de Idoneidad Interno: {{ $result->psirequest->id ?? ''  }}
 </div>
 
 <div id="titulo">
@@ -32,7 +32,12 @@
 <br>
 <br>
 <p class="justify" style="font-size:18px; line-height:150%;">
-    De acuerdo al resultado de esta evaluación, la persona obtiene la categoría de:<strong>IDONEO</strong>,
+    De acuerdo al resultado de esta evaluación, la persona obtiene la categoría de:
+    @if($result->psirequest->status == 'Aprobado')
+    <strong>IDONEO</strong>,
+    @else
+    <strong>NO IDONEO</strong>,
+    @endif
     para desempeñarse como Asistente de la Educación en el citado establecimiento, según el
     perfil de cargo establecido para dicha función
 </p>

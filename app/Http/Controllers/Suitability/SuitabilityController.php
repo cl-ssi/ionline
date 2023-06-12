@@ -171,12 +171,9 @@ class SuitabilityController extends Controller
 
         $psirequest->status = $result;
         $psirequest->save();
-        if ($result === 'Aprobado') {
-            $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
-            session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
-        } else {
-            session()->flash('success', "Se dio resultado de manera correcta.");
-        }
+        $signatureId =  $this->sendForSignature($psirequest->result()->last()->id);
+        session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
+
         return redirect()->back();
     }
     public function emergency(PsiRequest $psirequest)
@@ -413,7 +410,7 @@ class SuitabilityController extends Controller
     public function signedSuitabilityCertificatePDF($id)
     {
         $result = Result::find($id);
-        return Storage::disk('gcs')->response($result->signedCertificate->signed_file);        
+        return Storage::disk('gcs')->response($result->signedCertificate->signed_file);
     }
 
     public function downloadManualUser()

@@ -12,12 +12,12 @@
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
         <i class="fas fa-gavel"></i> Idoneidad
         </a>        
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">            
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{{ route('suitability.pending') }}"><i class="fas fa-list"></i>  Aceptar/Rechazar</a>
             <a class="dropdown-item" href="{{ route('suitability.configSignature') }}"><i class="fas fa-signature"></i>  Configurar Firmantes</a>
-            <hr>            
+            <hr>
             <a class="dropdown-item" href="{{ route('suitability.approved') }}"><i class="fas fa-check"></i>  Listado Aceptados</a>
-            <a class="dropdown-item" href="{{ route('suitability.rejected') }}"><i class="fas fa-minus-circle"></i>  Listado Rechazados</a>            
+            <a class="dropdown-item" href="{{ route('suitability.rejected') }}"><i class="fas fa-minus-circle"></i>  Listado Rechazados</a>
             
         </div>
     </div>
