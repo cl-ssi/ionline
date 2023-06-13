@@ -25,11 +25,9 @@ class SearchSelectReplacementStaff extends Component
             //'professionManage' => ProfessionManage::orderBy('name', 'ASC')->get(),
             'replacementStaff' => ReplacementStaff::latest()
                 ->search($this->selectedSearch,$this->selectedProfile,$this->selectedProfession, NULL, 0)
-                ->whereNotIn('status', ['selected'])
                 ->take(10)
                 ->get()
         ]);
-        // return view('livewire.replacement-staff.search-select-replacement-staff');
     }
 
     public function updatedselectedProfile($profile_id){
