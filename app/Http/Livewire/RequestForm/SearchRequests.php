@@ -110,7 +110,7 @@ class SearchRequests extends Component
                 'itemRequestForms');
         }
 
-        return ($isPaginated) ? $query->paginate(50) : $query->get();
+        return ($isPaginated) ? $query->paginate(50) : $query->limit(100)->get();
     }
 
     public function render()
