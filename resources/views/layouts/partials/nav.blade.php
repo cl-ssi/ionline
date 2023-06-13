@@ -344,14 +344,21 @@
                         <a class="dropdown-item {{ active('rrhh.users.birthdayGrettings') }}" href="{{ route('rrhh.users.birthdayGrettings') }}">
                             <i class="fas fa-fw fa-birthday-cake"></i> Correo cumpleaños
                         </a>
-                        @endcan
+                        @endcanany
 
                         @canany(['Rrhh: wellfair', 'be god'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
                         </a>
-                        @endcan
+                        @endcanany
+
+                        @canany(['be god'])
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('summary.index') }}">                            
+                            <i class="fas fa-balance-scale"></i> Sumario
+                        </a>
+                        @endcanany
 
                         <div class="dropdown-divider"></div>
 

@@ -2164,7 +2164,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
     Route::get('/rem_correccion', [RemFileController::class, 'rem_correccion'])->name('files.rem_correccion');
 });
 
-/* Rutas de Módulo de Binestar */
+/* Rutas de Módulo de Bienestar */
 Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () {
     Route::get('/', [WelfareController::class, 'index'])->name('index');
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
@@ -2186,6 +2186,22 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
+    });
+});
+
+
+/* Rutas de Módulo de Sumario*/
+use App\Http\Controllers\Summary\SummaryController;
+use App\Http\Controllers\Summary\EventController as SummaryEventController;
+Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
+    Route::get('/', [SummaryController::class, 'index'])->name('index');
+    Route::prefix('events')->as('events.')->group(function () {
+        Route::get('/', [SummaryEventController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
+        Route::get('/edit/{event}', [SummaryEventController::class, 'edit'])->name('edit');
+        Route::put('/update/{event}', [SummaryEventController::class, 'update'])->name('update');
+        Route::delete('{event}/destroy', [SummaryEventController::class, 'destroy'])->name('destroy');
     });
 });
 
