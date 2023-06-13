@@ -171,7 +171,7 @@ class SuitabilityController extends Controller
 
         $psirequest->status = $result;
         $psirequest->save();
-        $signatureId =  $this->sendForSignature($psirequest->result()->last()->id);
+        $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
         session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
 
         return redirect()->back();
