@@ -12,6 +12,30 @@
 
 <br>
 
+<div class="alert alert-info alert-sm" role="alert">
+    <div class="row">
+        <div class="col-sm">
+            <i class="fas fa-info-circle"></i> <b>Guía instructiva 2023</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10">
+            <br />
+            El <b>Depto. Desarrollo y Gestión del Talento</b> dispone este instructivo para facilitar la creación de 
+            Perfiles de cargo en iOnline.
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <a class="btn btn-secondary btn-sm float-right" href="{{ route('job_position_profile.instructivo_2023') }}"
+                target="blank">
+                <i class="far fa-file-pdf"></i> Descargar aquí
+            </a>
+        </div>
+    </div>
+</div>
+
+<br>
+
 @livewire('job-position-profile.create-job-position-profiles', [
     'action'    => 'store',
 ])

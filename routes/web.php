@@ -548,6 +548,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::get('/index_to_sign', [JobPositionProfileController::class, 'index_to_sign'])->name('index_to_sign');
     Route::get('/all_index', [JobPositionProfileController::class, 'all_index'])->name('all_index')->middleware('permission:Job Position Profile: all');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
+    Route::get('/info/instructivo_2023', function () {
+        return Storage::disk('gcs')->response('ionline/job_position_profile/info/instructivo_2023.pdf');
+    })->name('instructivo_2023');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
     Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
     Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
