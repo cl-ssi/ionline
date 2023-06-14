@@ -64,7 +64,19 @@ class NoAttendanceRecordMgr extends Component
         $this->form = true;
     }
 
-    public function save()
+    /**
+    * Save cuando ya fue editada y rechazada por RRHH
+    */
+    public function saveAfterEdit()
+    {
+        $this->noAttendanceRecord->rrhh_status = null;
+        $this->noAttendanceRecord->rrhh_user_id = null;
+        $this->noAttendanceRecord->rrhh_at = null;
+        $this->noAttendanceRecord->authority_at = null;
+        $this->saveFirstTime();
+    }
+
+    public function saveFirstTime()
     {
         $this->validate();
         $this->noAttendanceRecord->user_id = auth()->id();
@@ -79,7 +91,10 @@ class NoAttendanceRecordMgr extends Component
     public function render()
     {
         $myRecords = NoAttendanceRecord::with(['reason'])->whereUserId(auth()->id())->latest()->paginate(25);
-        $authorityRecrods = NoAttendanceRecord::with(['reason'])->whereAuthorityId(auth()->id())->latest()->paginate(25);
+        $authorityRecrods = NoAttendanceRecord::with(['reason'])
+            ->whereAuthorityId(auth()->id())->latest()
+            ->whereNull('rrhh_status')
+            ->paginate(25);
 
         return view('livewire.rrhh.no-attendance-record-mgr',[
             'myRecords' => $myRecords,
