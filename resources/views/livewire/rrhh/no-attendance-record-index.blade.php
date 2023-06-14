@@ -32,6 +32,13 @@
                         <span class="text-muted">
                             {{ $record->observation }}
                         </span>
+                        @if($record->rrhh_observation)
+                            <br>
+                            <span class="text-danger">
+                                <strong>RRHH: </strong>
+                                {{ $record->rrhh_observation }}
+                            </span>
+                        @endif
                     </td>
                     <td>
                         @if(is_null($record->status))
@@ -50,12 +57,32 @@
                         @if($record->rrhh_at)
                             {{ $record->rrhh_at }}
                         @elseif($record->status === 1)
-                            <button type="button" class="btn btn-sm btn-primary" wire:click="setOk({{$record}})">
-                                <i class="fas fa-check"></i> Confirmar
+                            <button type="button" class="btn btn-sm btn-success" wire:click="setOk({{$record}})">
+                                <i class="fas fa-check"></i> 
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" wire:click="reject({{$record}})">
+                                <i class="fas fa-ban"></i>
                             </button>
                         @endif
                     </td>
                 </tr>
+                @if($rejectForm == $record->id)
+                <tr>
+                    <td colspan="8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" wire:model.defer="rrhh_observation" placeholder="Mensaje de rechazo para devolver el registro">
+                            <div class="input-group-append" id="button-rejected">
+                                <button class="btn btn-outline-primary" title="Guardar" type="button" wire:click="saveRejectForm({{$record}})">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="Cerrar" type="button" wire:click="closeRejectForm">
+                                    <i class="fas fa-window-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

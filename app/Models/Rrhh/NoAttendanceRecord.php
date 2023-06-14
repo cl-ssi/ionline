@@ -27,6 +27,8 @@ class NoAttendanceRecord extends Model
         'authority_id',
         'rrhh_user_id',
         'rrhh_at',
+        'rrhh_observation',
+        'rrhh_status',
         'establishment_id',
     ];
 
@@ -69,6 +71,5 @@ class NoAttendanceRecord extends Model
     {
         return $this->belongsTo(User::class,'rrhh_user_id')->withTrashed();
     }
-    
 
 }

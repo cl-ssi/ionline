@@ -31,7 +31,11 @@
         </form>
         <div class="form-row">
             <div class="mt-3 col-12">
-                <button type="button" class="btn btn-success" wire:click="save()">Guardar</button>
+                @if(!is_null($noAttendanceRecord->rrhh_status) AND $noAttendanceRecord->rrhh_status == false)
+                    <button type="button" class="btn btn-primary" wire:click="saveAfterEdit()">Corregir</button>
+                @else
+                    <button type="button" class="btn btn-success" wire:click="saveFirstTime()">Guardar</button>
+                @endif
                 <button type="button" class="btn btn-outline-secondary" wire:click="index()">Cancelar</button>
             </div>
         </div>
@@ -40,25 +44,25 @@
 
     @else
         <div class="form-row">
-                <div class="col">
-                    <h3 class="mb-3">Justificaciones de no registro de asistencia</h3>
-                </div>
-                <div class="col-3 text-end">
-                    @if($checkAuthority)
-                    <button class="btn btn-success float-right" wire:click="form()">
-                        <i class="fas fa-plus"></i> Nueva justificación
-                    </button>
-                    @else
-                    <h5 class="text-danger">No tiene jefatura asociada</h5>
-                    @endif
-                </div>
-
+            <div class="col">
+                <h3 class="mb-3">Justificaciones de no registro de asistencia</h3>
             </div>
+            <div class="col-3 text-end">
+                @if($checkAuthority)
+                <button class="btn btn-success float-right" wire:click="form()">
+                    <i class="fas fa-plus"></i> Nueva justificación
+                </button>
+                @else
+                <h5 class="text-danger">No tiene jefatura asociada</h5>
+                @endif
+            </div>
+
+        </div>
 
             <table class="table table-sm table-bordered">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>ID</th>
                         <th>Fecha registro</th>
                         <th>Motivo (fundamento)</th>
                         <th>Autoridad</th>
@@ -78,6 +82,7 @@
                                     wire:click="delete({{$record}})"><i class="fas fa-trash"></i>
                                 </button> -->
                                 @endif
+                                {{ $record->id }}
                             </td>
                             <td>{{ $record->date }}</td>
                             <td>
@@ -85,6 +90,13 @@
                                 <span class="text-muted">
                                     {{ $record->observation }}
                                 </span>
+                                @if(!is_null($record->rrhh_status) AND $record->rrhh_status == false)
+                                    <br>
+                                    <span class="text-danger">
+                                        <strong>RRHH: </strong>
+                                        {{ $record->rrhh_observation }}
+                                    </span>
+                                @endif
                             </td>
                             <td>{{ optional($record->authority)->shortName }}</td>
                             <td>
@@ -116,6 +128,7 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Funcionario</th>
                     <th>Fecha registro</th>
                     <th>Motivo (fundamento)</th>
@@ -128,6 +141,7 @@
             <tbody>
                 @foreach($authorityRecrods as $authorityRecord)
                     <tr>
+                        <td>{{ $authorityRecord->id }}</td>
                         <td>{{ $authorityRecord->user->shortName }}</td>
                         <td>{{ $authorityRecord->date }}</td>
                         <td>
@@ -135,6 +149,13 @@
                             <span class="text-muted">
                                 {{ $authorityRecord->observation }}
                             </span>
+                            @if($authorityRecord->rrhh_observation)
+                                <br>
+                                <span class="text-danger">
+                                    <strong>RRHH Observación para corregir: </strong>
+                                    {{ $authorityRecord->rrhh_observation }}
+                                </span>
+                            @endif
                         </td>
                         <td>
                             @if(is_null($authorityRecord->status))
