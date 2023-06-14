@@ -3,7 +3,7 @@
 
     @if ($form)
         <h3 class="mb-3">Ingresar justificación de ausencia de registro de asistencia</h3>
-        <h4>La autoridad que tiene usted asignada es: <strong>{{ $authority->shortName }}</strong></h4>
+        <h4>La autoridad que tiene usted asignada es: <strong>{{ optional($authority)->shortName }}</strong></h4>
         <small class="mb-3">(*Si no corresponde, por favor solicitar la corrección de la autoridad con su secretaria antes de hacer el registro)</small>
 
 
@@ -72,21 +72,21 @@
                     @foreach($myRecords as $record)
                         <tr>
                             <td>
-                            @if(is_null($record->status))
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                onclick="confirm('¿Está seguro que desea borrar el feriado {{ $record->date }}?') || event.stopImmediatePropagation()" 
-                                wire:click="delete({{$record}})"><i class="fas fa-trash"></i>
-                            </button>
-                            @endif
-                        </td>
-                        <td>{{ $record->date }}</td>
-                        <td>
-                            {{ $record->reason->name }}
-                            <span class="text-muted">
-                                {{ $record->observation }}
-                            </span>
-                        </td>
-                        <td>{{ $record->authority->shortName }}</td>
+                                @if(is_null($record->status))
+                                <!-- <button type="button" class="btn btn-sm btn-danger" 
+                                    onclick="confirm('¿Está seguro que desea borrar el feriado {{ $record->date }}?') || event.stopImmediatePropagation()" 
+                                    wire:click="delete({{$record}})"><i class="fas fa-trash"></i>
+                                </button> -->
+                                @endif
+                            </td>
+                            <td>{{ $record->date }}</td>
+                            <td>
+                                {{ $record->reason->name }}
+                                <span class="text-muted">
+                                    {{ $record->observation }}
+                                </span>
+                            </td>
+                            <td>{{ optional($record->authority)->shortName }}</td>
                             <td>
                                 @if(is_null($record->status))
                                 <i class="fas fa-clock"></i>
