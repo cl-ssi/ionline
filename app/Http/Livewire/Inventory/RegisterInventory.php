@@ -148,9 +148,12 @@ class RegisterInventory extends Component
             'po_search' => 'required'
         ]);
 
-        $purchaseOrder = MercadoPublico::getPurchaseOrder($this->po_search);
-        $this->error = MercadoPublico::getPurchaseOrderError($purchaseOrder);
-        $this->msg = MercadoPublico::getPurchaseOrderErrorMessage($purchaseOrder);
+        try {
+            $purchaseOrder = MercadoPublico::getPurchaseOrder($this->po_search);
+        } catch (\Throwable $th) {
+            $this->error = true;
+            $this->msg = $th->getMessage();
+        }
 
         if(!$this->error)
         {
