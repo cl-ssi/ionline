@@ -39,15 +39,11 @@ class AddApprovedAtRequestForms extends Command
      */
     public function handle()
     {
-        $requestForms = RequestForm::all();
+        $requestForms = RequestForm::with('eventRequestForms')->where('status', 'approved')->whereNull('approved_at')->get();
 
         foreach ($requestForms as $requestForm) {
-            $supplyEvent = $requestForm->eventRequestForms->last();
-
-            if($supplyEvent && $supplyEvent->status === 'approved'){
-                $requestForm->approved_at = $supplyEvent->signature_date;
-                $requestForm->save();
-            }
+            $requestForm->approved_at = $requestForm->eventRequestForms->where('event_type', 'supply_event')->where('status', 'approved')->last()->signature_date;
+            $requestForm->save();
         }
 
         return 0;

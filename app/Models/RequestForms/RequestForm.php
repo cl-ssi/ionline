@@ -310,20 +310,20 @@ class RequestForm extends Model implements Auditable
         return $this->type_of_currency == 'peso' ? 0 : 2;
     }
 
-    public function getApprovedAtAttribute()
-    {
-        if ($this->eventRequestForms()->count() === 0) {
-            return null;
-        }
+    // public function getApprovedAtAttribute()
+    // {
+    //     if ($this->eventRequestForms()->count() === 0) {
+    //         return null;
+    //     }
 
-        return $this->eventRequestForms()
-            ->orderBy('cardinal_number', 'desc')
-            ->first('signature_date')
-            // ->where('event_type', 'supply_event')
-            // ->where('status', 'approved')
-            // ->first()
-            ->signature_date;
-    }
+    //     return $this->eventRequestForms()
+    //         ->orderBy('cardinal_number', 'desc')
+    //         ->first('signature_date')
+    //         // ->where('event_type', 'supply_event')
+    //         // ->where('status', 'approved')
+    //         // ->first()
+    //         ->signature_date;
+    // }
 
     /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
     public function eventSign($event_type)
@@ -634,12 +634,12 @@ class RequestForm extends Model implements Auditable
      */
     function getExpireAtAttribute()
     {
-        if ($this->getApprovedAtAttribute() == null) {
+        if ($this->approved_at == null) {
             return null;
         }
 
         $daysToExpire = $this->purchaseType->supply_continuous_day;
-        return $this->approvedAt->addDays($daysToExpire);
+        return $this->approved_at->addDays($daysToExpire);
     }
 
     function getPurchasedOnTimeAttribute()
@@ -709,6 +709,10 @@ class RequestForm extends Model implements Auditable
     {
         //return number_format($this->available_balance, 0, ',', '.');
     }
+
+    protected $dates = [
+        'approved_at',
+    ];
 
     /**
      * The table associated with the model.

@@ -59,7 +59,7 @@
                     </td>
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                    <td title="Aprobación: {{$requestForm->approvedAt}}" >
+                    <td title="Aprobación: {{$requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i') : ''}}" >
                         {{ $requestForm->expireAt }}
                         <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>
                     </td>
@@ -146,7 +146,7 @@
                     <td>{{ $requestForm->quantityOfItems() }}</td>
                     <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
                     <td>{{ $requestForm->created_at->diffForHumans() }}</td>
-                    <td title="Aprobación: {{$requestForm->approvedAt}}">
+                    <td title="Aprobación: {{$requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i') : ''}}"">
                         {{ $requestForm->expireAt }}
                         <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>
                     </td>
