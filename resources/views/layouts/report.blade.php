@@ -8,7 +8,7 @@
     </head>
     <body onload="init()">
         <div class="content">
-            <img style="padding-bottom: 4px;" src="{{ asset('images/logo_pluma.jpg') }}"
+            <img style="padding-bottom: 4px;" src="{{ asset('images//Logo Servicio de Salud Tarapacá - Pluma.png') }}"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>
             @yield('content', $slot ?? '')
 
