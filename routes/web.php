@@ -2193,6 +2193,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 /* Rutas de Módulo de Sumario*/
 use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\EventController as SummaryEventController;
+use App\Http\Controllers\Summary\LinkController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
@@ -2204,6 +2205,11 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/edit/{event}', [SummaryEventController::class, 'edit'])->name('edit');
         Route::put('/update/{event}', [SummaryEventController::class, 'update'])->name('update');
         Route::delete('{event}/destroy', [SummaryEventController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('links')->as('links.')->group(function () {
+        Route::get('/', [LinkController::class, 'index'])->name('index');
+        Route::get('/create', [LinkController::class, 'create'])->name('create');
+        Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
 });
 

@@ -10,4 +10,10 @@
             <i class="fas fa-list-alt"></i> Eventos
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ active('summary.links.index') }}" href="{{ route('summary.links.index') }}">
+            <i class="fas fa-link"></i> Vínculos
+        </a>
+    </li>
 </ul>
