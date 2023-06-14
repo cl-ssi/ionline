@@ -136,6 +136,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function getTree($getBrothers = false, $getChilds = false)
     {
+        // ARBOL PARA GOOGLE CHART
         $tree = collect([]);
         $root = $this;
 
@@ -153,6 +154,7 @@ class OrganizationalUnit extends Model implements Auditable
 
             $sheet = [$info, $root->father->name ?? '', ''];
             $tree->push($sheet);
+
             $root = $root->father;
         }
 
@@ -175,6 +177,27 @@ class OrganizationalUnit extends Model implements Auditable
         }
 
         return $tree;
+    }
+
+    public function getTreeDocPdf()
+    {
+        $root = $this;
+        $tree_doc_pdf = array();
+
+        for($i = 1; $i <= $this->level; $i++)
+        {
+            $info_doc_pdf['level'] = $root->level;
+            $info_doc_pdf['name'] = $root->name;
+            $tree_doc_pdf[] = $info_doc_pdf;
+            $root = $root->father;
+        }
+
+        $print = array_multisort(array_column($tree_doc_pdf, "level"), SORT_ASC, $tree_doc_pdf);
+
+        $col = array_column( $tree_doc_pdf, "level" );
+        array_multisort( $col, SORT_ASC, $tree_doc_pdf );
+
+        return $tree_doc_pdf;
     }
 
     public function getTreeAttribute()
