@@ -123,7 +123,7 @@
             
                     </div>
                     <div class="form-group col-6">
-                        <label for="text3">Nombre del funcionario/a A REEMPLAZAR, según motivos señalados en pregunta anterior.</label> 
+                        <label for="text3">Nombre del funcionario/a A REEMPLAZAR, según motivo del requerimiento</label> 
                         <input id="text3" name="text3" type="text" class="form-control">
                         <small id="emailHelp" class="form-text text-muted">Si no es una suplencia o reemplazo, indique NO CORRESPONDE</small>
                     </div>
