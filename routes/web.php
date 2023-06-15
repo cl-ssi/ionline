@@ -55,6 +55,8 @@ use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
+use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
+
 use App\Http\Controllers\WebserviceController;
 
 use App\Http\Controllers\Warehouse\StoreController;
@@ -2189,6 +2191,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
+        Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
     });
 });
 
