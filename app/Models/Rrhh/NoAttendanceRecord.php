@@ -27,6 +27,8 @@ class NoAttendanceRecord extends Model
         'authority_id',
         'rrhh_user_id',
         'rrhh_at',
+        'rrhh_observation',
+        'rrhh_status',
         'establishment_id',
     ];
 
@@ -52,7 +54,7 @@ class NoAttendanceRecord extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function reason()
@@ -62,13 +64,12 @@ class NoAttendanceRecord extends Model
 
     public function authority()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function rrhhUser()
     {
-        return $this->belongsTo(User::class,'rrhh_user_id');
+        return $this->belongsTo(User::class,'rrhh_user_id')->withTrashed();
     }
-    
 
 }

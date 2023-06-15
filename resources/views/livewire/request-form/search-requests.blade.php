@@ -225,8 +225,7 @@
                                 <i class="fas fa-save fa-2x"></i>
                             @endif
                         </td>
-                        @php($dateSupplyEvent = $requestForm->eventRequestForms->where('event_type', 'supply_event')->where('status', 'approved')->last())
-                        <td>{{ $dateSupplyEvent ? $dateSupplyEvent->signature_date->format('d-m-Y H:i') : 'No se ha firmado Documento' }}</td>
+                        <td>{{ $requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i') : 'No se ha firmado Documento' }}</td>
 
                         <td>
                             <a href="{{ route('request_forms.show', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Mostrar"><i class="fas fa-eye"></i>
@@ -325,7 +324,7 @@
                         </td>
                         <td>{{ $requestForm->quantityOfItems() }}</td>
                         <td class="text-right">{{$requestForm->symbol_currency}}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}</td>
-                        <td title="Aprobación: {{$requestForm->approvedAt ? $requestForm->approvedAt->format('d-m-Y H:i') : ''}}" >
+                        <td title="Aprobación: {{$requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i') : ''}}" >
                             {{ $requestForm->expireAt ? $requestForm->expireAt->format('d-m-Y H:i') : '' }}
                             <div style="font-weight: bold">{{' (' . $requestForm->daysToExpire . ' días)' }}</div>
                             {{--@if($requestForm->purchasingProcess && in_array($requestForm->purchasingProcess->status, ['purchased', 'finalized']))

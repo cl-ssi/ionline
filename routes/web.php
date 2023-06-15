@@ -548,6 +548,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
     Route::get('/index_to_sign', [JobPositionProfileController::class, 'index_to_sign'])->name('index_to_sign');
     Route::get('/all_index', [JobPositionProfileController::class, 'all_index'])->name('all_index')->middleware('permission:Job Position Profile: all');
     Route::get('/create', [JobPositionProfileController::class, 'create'])->name('create');
+    Route::get('/info/instructivo_2023', function () {
+        return Storage::disk('gcs')->response('ionline/job_position_profile/info/instructivo_2023.pdf');
+    })->name('instructivo_2023');
     Route::post('/store', [JobPositionProfileController::class, 'store'])->name('store');
     Route::get('{jobPositionProfile}/show/', [JobPositionProfileController::class, 'show'])->name('show');
     Route::get('{jobPositionProfile}/to_sign/', [JobPositionProfileController::class, 'to_sign'])->name('to_sign');
@@ -2193,8 +2196,11 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 /* Rutas de Módulo de Sumario*/
 use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\EventController as SummaryEventController;
+use App\Http\Controllers\Summary\LinkController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
+    Route::get('/create', [SummaryController::class, 'create'])->name('create');
+    Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::prefix('events')->as('events.')->group(function () {
         Route::get('/', [SummaryEventController::class, 'index'])->name('index');
         Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
@@ -2202,6 +2208,11 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/edit/{event}', [SummaryEventController::class, 'edit'])->name('edit');
         Route::put('/update/{event}', [SummaryEventController::class, 'update'])->name('update');
         Route::delete('{event}/destroy', [SummaryEventController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('links')->as('links.')->group(function () {
+        Route::get('/', [LinkController::class, 'index'])->name('index');
+        Route::get('/create', [LinkController::class, 'create'])->name('create');
+        Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
 });
 

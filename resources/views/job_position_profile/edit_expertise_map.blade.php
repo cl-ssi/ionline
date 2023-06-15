@@ -119,7 +119,7 @@
     </div>
 @endif
 
-<h6 class="small"><b>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD IQUIQUE</b></h6> 
+<h6 class="small"><b>VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ</b></h6> 
 
 <br>
 

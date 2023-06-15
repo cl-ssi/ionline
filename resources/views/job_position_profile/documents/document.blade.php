@@ -167,7 +167,115 @@
         </tr>
         <tr>
             <td>
-                Aquí organigrama
+                <ul>
+                    @foreach($jobPositionProfile->organizationalUnit->getTreeDocPdf() as $treeDocPdf)
+                        @if($treeDocPdf['level'] == 1)
+                            <br>
+                            <li>
+                                {{ $treeDocPdf['name'] }}
+                                @if($treeDocPdf['level'] == $jobPositionProfile->organizationalUnit->level)
+                                    <br><strong>(Funcionario)</strong>
+                                    <br><br>
+                                    <ul>
+                                        @foreach($jobPositionProfile->organizationalUnit->childs as $child)
+                                            <li>
+                                                {{ $child->name }}
+                                            </li>
+                                        @endforeach
+                                    </ul>    
+                                @endif
+                            </li>
+                        @endif
+                        @if($treeDocPdf['level'] == 2)
+                            <br>
+                            <ul>
+                                <li>
+                                    {{ $treeDocPdf['name'] }}
+                                    @if($treeDocPdf['level'] == $jobPositionProfile->organizationalUnit->level)
+                                        <br><strong>(Funcionario)</strong>
+                                        <br><br>
+                                        <ul>
+                                            @foreach($jobPositionProfile->organizationalUnit->childs as $child)
+                                                <li>
+                                                    {{ $child->name }}
+                                                </li>
+                                            @endforeach
+                                        </ul>    
+                                    @endif
+                                </li>
+                            </ul>
+                        @endif
+                        @if($treeDocPdf['level'] == 3)
+                            <br>
+                            <ul>
+                                <ul>
+                                    <li>
+                                        {{ $treeDocPdf['name'] }}
+                                        @if($treeDocPdf['level'] == $jobPositionProfile->organizationalUnit->level)
+                                            <br><strong>(Funcionario)</strong>
+                                            <br><br>
+                                            <ul>
+                                                @foreach($jobPositionProfile->organizationalUnit->childs as $child)
+                                                <li>
+                                                    {{ $child->name }}
+                                                </li>
+                                                @endforeach
+                                            </ul>    
+                                        @endif
+                                    </li>
+                                </ul>
+                            </ul>
+                        @endif
+                        @if($treeDocPdf['level'] == 4)  
+                            <br>
+                            <ul>
+                                <ul>
+                                    <ul>
+                                        <li>
+                                            {{ $treeDocPdf['name'] }}
+                                            @if($treeDocPdf['level'] == $jobPositionProfile->organizationalUnit->level)
+                                                <br><strong>(Funcionario)</strong>
+                                                <br><br>
+                                                <ul>
+                                                    @foreach($jobPositionProfile->organizationalUnit->childs as $child)
+                                                    <li>
+                                                        {{ $child->name }}
+                                                    </li>
+                                                    @endforeach
+                                                </ul>    
+                                            @endif
+                                        </li>
+                                    </ul>
+                                </ul>
+                            </ul>
+                        @endif
+                        @if($treeDocPdf['level'] == 5)  
+                            <br>
+                            <ul>
+                                <ul>
+                                    <ul>
+                                        <ul>
+                                            <li>
+                                                {{ $treeDocPdf['name'] }}
+                                                @if($treeDocPdf['level'] == $jobPositionProfile->organizationalUnit->level)
+                                                    <br><strong>(Funcionario)</strong>
+                                                    <br><br>
+                                                    <ul>
+                                                        @foreach($jobPositionProfile->organizationalUnit->childs as $child)
+                                                        <li>
+                                                            {{ $child->name }}
+                                                        </li>
+                                                        @endforeach
+                                                    </ul>    
+                                                @endif
+                                            </li>
+                                        </ul>
+                                    </ul>
+                                </ul>
+                            </ul>
+                        @endif
+                    @endforeach
+                </ul>
             </td>
         </tr>
     </tbody>

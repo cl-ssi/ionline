@@ -146,6 +146,7 @@ class JobPositionProfileController extends Controller
     public function edit_organization(JobPositionProfile $jobPositionProfile)
     {   
         $tree = $jobPositionProfile->organizationalUnit->treeWithChilds->toJson();
+
         return view('job_position_profile.edit_organization', compact('jobPositionProfile', 'tree'));
     }
 
@@ -332,4 +333,5 @@ class JobPositionProfileController extends Controller
         // return view('job_position_profile.documents.chart', compact('jobPositionProfile', 'tree'));
         //return view('job_position_profile.index_to_sign');
     }
+    
 }
