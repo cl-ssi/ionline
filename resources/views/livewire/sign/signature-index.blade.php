@@ -150,7 +150,7 @@
                             @foreach($signature->annexes as $annex)
                                 @if($annex->isLink())
                                     <a class="annex" href="{{ $annex->url }}" target="_blank">
-                                        <i class="fas fa-paperclip" title="Enlace"></i>&nbsp
+                                        <i class="fas fa-link" title="Enlace"></i>&nbsp
                                     </a>
                                 @endif
                                 @if($annex->isFile())
