@@ -61,6 +61,9 @@ class RequestSignature extends Component
     public $myColumns;
     public $lastColumn;
 
+    public $iterationDocument;
+    public $iterationAnnex;
+
     protected $listeners = [
         'setEmailRecipients',
         'setEmailDistributions',
@@ -71,6 +74,9 @@ class RequestSignature extends Component
 
     public function mount()
     {
+        $this->iterationDocument = 1;
+        $this->iterationAnnex = 1;
+
         if(isset($this->document))
         {
             $this->setInputs($this->document);
@@ -106,6 +112,7 @@ class RequestSignature extends Component
             'total_signatures' => 'required|numeric|min:1',
         ]);
 
+        /*
         if($validator->fails())
         {
             session()->flash('danger', 'La solicitud debe tener al menos un firmante');
@@ -159,7 +166,7 @@ class RequestSignature extends Component
         {
             session()->flash('danger', "El tipo de Visacion en la columna derecha es obligatorio.");
             return;
-        }
+        }*/
 
         /**
          * Map the recipients
@@ -216,14 +223,14 @@ class RequestSignature extends Component
         $signatureService->setRecipients($this->recipients);
         $signatureService->setPage($this->page);
         $signatureService->setColumnLeftVisator($this->column_left_visator);
-        $signatureService->setColumnLeftEndorse($this->column_left_endorse);
+        $signatureService->setColumnLeftEndorse('Obligatorio sin Cadena de Responsabilidad');
         $signatureService->setColumnCenterVisator($this->column_center_visator);
         $signatureService->setColumnCenterEndorse($this->column_center_endorse);
         $signatureService->setColumnRightVisator($this->column_right_visator);
         $signatureService->setColumnRightEndorse($this->column_right_endorse);
         $signatureService->setFile($file);
         $signatureService->setAnnexes(null);
-        $signatureService->setSignersLeft($this->left_signatures);
+        $signatureService->setSignersLeft(collect(['15287582']));
         $signatureService->setSignersCenter($this->center_signatures);
         $signatureService->setSignersRight($this->right_signatures);
         $signatureService->setUserId(auth()->id());
@@ -233,12 +240,12 @@ class RequestSignature extends Component
         /**
          * Save the annexes
          */
-        if($this->annex_file)
+        if(isset($this->annex_file))
         {
             foreach($this->annex_file as $fileItem)
             {
                 $folder = 'ionline/sign/annexes/';
-                $filename = Str::uuid(12).'.pdf';
+                $filename = $signature->id . '-' . Str::uuid(12) . '.' . $fileItem->getClientOriginalExtension();
                 $file = $folder . $filename;
 
                 $fileItem->storeAs($folder, $filename, 'gcs');
@@ -251,6 +258,9 @@ class RequestSignature extends Component
             }
         }
 
+        /**
+         * Save the files
+         */
         foreach($this->annexes as $annex)
         {
             SignatureAnnex::create([
@@ -271,8 +281,10 @@ class RequestSignature extends Component
         }
         else
         {
+            session()->flash('success', "La solicitud de firma fue creada exitosamente.");
             $this->resetInput();
         }
+
     }
 
     public function resetInput()
@@ -301,6 +313,9 @@ class RequestSignature extends Component
         $this->myColumns = collect();
         $this->columnAvailable = collect(['left' => 0, 'center' => 0, 'right' => 0]);
 
+        $this->iterationDocument++;
+        $this->iterationAnnex++;
+
         $this->reset([
             'document_number',
             'type_id',
@@ -310,6 +325,8 @@ class RequestSignature extends Component
             'column_center_endorse',
             'column_right_endorse',
             'lastColumn',
+            'document_to_sign',
+            'annex_file',
         ]);
     }
 
@@ -478,7 +495,6 @@ class RequestSignature extends Component
         $this->annexes->push($data);
 
         $this->type_annexed = 'link';
-        $this->annex_file = null;
         $this->annex_link = null;
     }
 
