@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         //
-        $events = Event::orderBy('name')->get();
+        $events = Event::all();
         return view('summary.events.index', compact('events'));
     }
 
@@ -39,7 +39,11 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        Event::create($request->all());
+        $event = new Event($request->All());
+        $event->user = isset($request->user);
+        $event->file = isset($request->file);
+        $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
+        $event->save();
         session()->flash('success', 'Se ha añadido el evento correctamente.');
         return redirect()->route('summary.events.index');
     }
@@ -79,6 +83,7 @@ class EventController extends Controller
         $event->duration = $request->input('duration');
         $event->user = isset($request->user);
         $event->file = isset($request->file);
+        $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $event->save();
         session()->flash('success', 'Evento Actualizado Exitosamente');
         return redirect()->route('summary.events.index');
