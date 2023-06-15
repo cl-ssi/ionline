@@ -6,6 +6,8 @@ namespace App\Models\Summary;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
+use App\Models\Establishment;
+use App\Models\Summary\SummaryEvent;
 
 class Summary extends Model
 {
@@ -22,5 +24,15 @@ class Summary extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+
+    public function summaryEvents()
+    {
+        return $this->hasMany(SummaryEvent::class, 'summary_id');
     }
 }

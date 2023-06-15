@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Summary;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Summary\SummaryEvent;
+use App\Models\Summary\Event;
+
+use Carbon\Carbon;
 
 
 class SummaryController extends Controller
@@ -39,11 +42,34 @@ class SummaryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {        
+    {
         $summary = new Summary($request->All());
-        $summary->creator_id = Auth::id();
-        $summary->save();
-        session()->flash('success', 'Se creo el sumario correctamente.');
+        $summary->creator_id = auth()->user()->id;
+        $summary->status = "En Proceso";
+        $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
+
+        $event = Event::first(); // Obtiene el primer registro de la tabla Event
+        if ($event) {
+            $summary->save();
+            $summaryevent = new SummaryEvent();
+            $summaryevent->event_id = $event->id;
+            $summaryevent->start_date = Carbon::now();
+            $summaryevent->summary_id = $summary->id;
+            $summaryevent->save();
+            session()->flash('success', 'Se creo el sumario correctamente.');
+        } else {
+            session()->flash('warning', 'No existe creado el primer evento del sumario');
+        }
+
+        return redirect()->route('summary.index');
+    }
+
+    public function nextEventStore(Request $request)
+    {
+        $summaryevent = new SummaryEvent($request->all());
+        $summaryevent->start_date = Carbon::now();
+        $summaryevent->save();
+        session()->flash('success', 'Se creo el Proximo evento exitosamente');
         return redirect()->route('summary.index');
     }
 
@@ -67,6 +93,21 @@ class SummaryController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    public function body(SummaryEvent $summaryEvent)
+    {
+        //
+
+        return view('summary.body.edit', compact('summaryEvent'));
+    }
+
+    public function bodyUpdate(Request $request, SummaryEvent $summaryEvent)
+    {
+        $summaryEvent->fill($request->all());
+        $summaryEvent->save();
+        session()->flash('success', 'Evento ' . $summaryEvent->event->name . 'del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
+        return redirect()->route('summary.index');
     }
 
     /**

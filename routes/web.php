@@ -55,6 +55,8 @@ use App\Http\Livewire\Finance\DteConfirmation;
 use App\Http\Controllers\Welfare\WelfareController;
 use App\Http\Controllers\Welfare\LoanController;
 use App\Http\Controllers\Welfare\AmipassController;
+use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
+
 use App\Http\Controllers\WebserviceController;
 
 use App\Http\Controllers\Warehouse\StoreController;
@@ -2189,6 +2191,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
+        Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
     });
 });
 
@@ -2200,7 +2203,10 @@ use App\Http\Controllers\Summary\LinkController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
+    Route::get('/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
+    Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
+    Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
     Route::prefix('events')->as('events.')->group(function () {
         Route::get('/', [SummaryEventController::class, 'index'])->name('index');
         Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
