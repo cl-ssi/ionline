@@ -9,6 +9,9 @@ class Percapita extends Model
 {
     protected $connection = 'mysql_rem';
 
+    protected $primaryKey   = 'RUN';
+    public $incrementing = false;
+
     protected $year = null;
 
     public function setYear($year)

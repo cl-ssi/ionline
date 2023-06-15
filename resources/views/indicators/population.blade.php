@@ -52,7 +52,7 @@
 @if($request->has('type') && $total_pob->count() > 0)
 		<h4>Total población: <b>{{ number_format($total_pob->sum('valor'),0,",",".") }}</b>
 		@auth
-		<form method="POST" class="form-inline float-right" action="{{ route('indicators.population.export') }}" >
+		<form method="POST" class="form-inline float-right" action="{{ route('indicators.population.export') }}" onsubmit="this.submit_button.disabled = true;">
 			@csrf
 			@method('POST')
 			<input type="hidden" name="type" value="{{ $request->type }}">
@@ -66,7 +66,7 @@
 			@foreach($request->establishment_id as $establishment_id)
 			<input type="hidden" name="establishment_id[]" value="{{ $establishment_id }}">
 			@endforeach
-			<button type="submit" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Exportar</button>
+			<button type="submit" name="submit_button" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Exportar</button>
 		</form>
 		@endauth
 		</h4>
