@@ -64,7 +64,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-4">
-            <label for="document-signed">Documento a Firmar</label>
+            <label for="document-{{ $iterationDocument }}">Documento a Firmar</label>
             <br>
             @if($document)
                 <a href="{{ route('documents.show.document', $document) }}" target="_blank">
@@ -74,8 +74,8 @@
                 <input
                     type="file"
                     class="form-control @error('document_to_sign') is-invalid @enderror"
-                    id="document-signed"
-                    wire:model="document_to_sign"
+                    id="document-{{ $iterationDocument }}"
+                    wire:model.defer="document_to_sign"
                 >
                 @error('document_to_sign')
                     <span class="invalid-feedback" role="alert">
@@ -108,13 +108,13 @@
 
     <div class="form-row">
         <fieldset class="form-group col-12">
-            <label for="file">Archivo anexo</label>
+            <label for="file{{ $iterationAnnex }}">Archivo anexo</label>
             <input
                 type="file"
                 class="form-control @error('annex_file') is-invalid @enderror"
-                id="file"
-                wire:model="annex_file"
-                accept=".pdf"
+                id="file-{{ $iterationAnnex }}"
+                wire:model.debounce.900ms="annex_file"
+                accept=".pdf,.xls,.xlsx,.doc,.docx"
                 multiple
             >
             @error('annex_file')
@@ -479,8 +479,26 @@
                 id="submitBtn"
                 class="btn btn-primary"
                 wire:click="save"
+                wire:loading.attr="disabled"
+                wire:target='save'
             >
-                <i class="fa fa-file"></i> Crear Solicitud
+                <span
+                    wire:loading.remove
+                    wire:target="save"
+                >
+                    <i class="fas fa-file"></i>
+                </span>
+
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    wire:loading
+                    wire:target="save"
+                    aria-hidden="true"
+                >
+                </span>
+
+                Crear Solicitud
             </button>
         </div>
 
