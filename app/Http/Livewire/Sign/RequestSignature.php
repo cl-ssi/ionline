@@ -229,7 +229,7 @@ class RequestSignature extends Component
         $signatureService->setColumnRightVisator($this->column_right_visator);
         $signatureService->setColumnRightEndorse($this->column_right_endorse);
         $signatureService->setFile($file);
-        $signatureService->setAnnexes(null);
+        // $signatureService->setAnnexes(null);
         $signatureService->setSignersLeft(collect(['15287582']));
         $signatureService->setSignersCenter($this->center_signatures);
         $signatureService->setSignersRight($this->right_signatures);
