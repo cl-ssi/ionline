@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\SummaryEvent;
 use App\Models\Summary\Event;
+use App\Models\Summary\SummaryEventFile;
+use Illuminate\Support\Facades\Storage;
 
 use Carbon\Carbon;
 
@@ -106,7 +108,24 @@ class SummaryController extends Controller
     {
         $summaryEvent->fill($request->all());
         $summaryEvent->save();
-        session()->flash('success', 'Evento ' . $summaryEvent->event->name . 'del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
+
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $file) {
+                $summaryEventFile = new SummaryEventFile();
+                $filename = $file->getClientOriginalName();
+                $summaryEventFile->summary_event_id = $summaryEvent->id;
+                $summaryEventFile->summary_id = $summaryEvent->summary->id;
+                $summaryEventFile->name = $file->getClientOriginalName();
+
+                $summaryEventFile->file = $file->storeAs('ionline/summary/' .
+                    $summaryEvent->summary->id, $filename, ['disk' => 'gcs']);
+
+                $summaryEventFile->save();
+            }
+        }
+
+        session()->flash('success', 'Evento ' . $summaryEvent->event->name . ' del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
         return redirect()->route('summary.index');
     }
 
@@ -120,6 +139,19 @@ class SummaryController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function downloadFile(SummaryEventFile $file)
+    {
+        return Storage::disk('gcs')->download($file->file);
+    }
+
+    public function deleteFile(SummaryEventFile $file)
+    {
+        $file->delete();
+        Storage::disk('gcs')->delete($file->file);
+        session()->flash('danger', 'Su Archivo ha sido eliminado Exitosamente.');
+        return redirect()->route('summary.index');
     }
 
     /**

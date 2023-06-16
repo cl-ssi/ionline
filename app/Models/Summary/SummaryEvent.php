@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\Event;
 use App\Models\Summary\Summary;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SummaryEvent extends Model
 {
@@ -34,6 +35,11 @@ class SummaryEvent extends Model
     public function summary()
     {
         return $this->belongsTo(Summary::class, 'summary_id');
+    }
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(SummaryEventFile::class, 'summary_event_id');
     }
 
 }

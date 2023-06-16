@@ -12,8 +12,8 @@
     <div class="card-body">
         <h4 style="margin: 0;">Evento: {{ $summaryEvent->event->name ?? '' }}</h4>
         <hr>
-        <form method="POST" class="form-horizontal"
-            action="{{ route('summary.bodyUpdate', ['summaryEvent' => $summaryEvent->id]) }}"">
+        <form method="POST" class="form-horizontal" enctype="multipart/form-data"
+            action="{{ route('summary.bodyUpdate', ['summaryEvent' => $summaryEvent->id]) }}">
             @csrf
             @method('PUT')
             <div class="form-row">
@@ -31,11 +31,52 @@
                 </div>
             </div>
 
-              <div class="form-row">
+            <div class="form-row">
                 <div class="form-group col-12">
                     <label for="for_body">Cuerpo del Evento {{ $summaryEvent->event->name ?? '' }}</label>
                     <textarea class="form-control" name="body" rows="5">{{ $summaryEvent->body ?? '' }}</textarea>
                 </div>
+            </div>
+
+            <div class="form-row">
+                @if ($summaryEvent->event->file === 1)
+                    <hr>
+                    <div class="form-group col-12">
+                        <label for="file">Cargar Archivos</label>
+                        <input type="file" name="files[]" multiple>
+                    </div>
+
+                    @if ($summaryEvent->files && count($summaryEvent->files) > 0)
+                    <div class="form-group col-12">
+                        <label>Listado de Archivos Cargados al Evento</label>
+                        <ul>
+                            @foreach ($summaryEvent->files as $file)
+                                <li>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a
+                                            href="{{ route('summary.downloadFile', ['file' => $file->id]) }}">{{ $file->name }}</a>
+
+                                        <a href="{{ route('summary.deleteFile', ['file' => $file->id]) }}"
+                                            class="btn btn-sm"
+                                            onclick="return confirm('¿Está seguro/a de eliminar este Archivo?');">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                @endif
+
+                @if ($summaryEvent->event->user === 1)
+                    <hr>
+                    <div class="form-group col-12">
+                        <label for="for_user_allowance_id">Funcionario Asociado al Evento:</label>
+                        @livewire('search-select-user', ['selected_id' => 'user[]', 'addUsers' => 'true'])
+                    </div>
+                @endif
+
             </div>
 
 

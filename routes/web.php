@@ -2207,6 +2207,8 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
     Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
+    Route::get('/summary/download/{file}', [SummaryController::class, 'downloadFile'])->name('downloadFile');
+    Route::get('/summary/delete/{file}', [SummaryController::class, 'deleteFile'])->name('deleteFile');
     Route::prefix('events')->as('events.')->group(function () {
         Route::get('/', [SummaryEventController::class, 'index'])->name('index');
         Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
