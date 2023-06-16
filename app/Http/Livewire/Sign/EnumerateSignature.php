@@ -34,7 +34,7 @@ class EnumerateSignature extends Component
         /**
          * Obtengo el usuario que puede firmar de forma desantendida
          */
-        $user = User::find(15287582);
+        $user = User::find(auth()->id());
 
         /**
          * Muestra un mensaje de error en caso de estar enumerado un documento o incompleto.
@@ -48,10 +48,10 @@ class EnumerateSignature extends Component
         /**
          * Guarda el numero correlativo en Signature
          */
-        $signature->update([
-            'number' => Correlative::getCorrelativeFromType($signature->type_id),
-            'verification_code' => Signature::getVerificationCode($signature),
-        ]);
+        // $signature->update([
+        //     'number' => Correlative::getCorrelativeFromType($signature->type_id),
+        //     'verification_code' => Signature::getVerificationCode($signature),
+        // ]);
 
         /**
          * Obtiene la imagen con el numero de Documento en Base 64
@@ -62,8 +62,8 @@ class EnumerateSignature extends Component
          * Setea las credenciales de la api desde el env
          */
         $url = env('FIRMA_URL');
-        $apiToken = env('FIRMA_API_TOKEN');
-        $secret = env('FIRMA_SECRET');
+        $apiToken = env('FIRMA_API_TOKEN_DESATENDIDO');
+        $secret = env('FIRMA_SECRET_DESATENDIDO');
 
         /**
          * Setea el modo para el payload
@@ -99,7 +99,7 @@ class EnumerateSignature extends Component
         $json = $response->json();
 
         logger()->info($json);
-        logger()->info(json_decode($json));
+        // logger()->info(json_decode($json));
         /**
          * Verifica si existe un error
          */
