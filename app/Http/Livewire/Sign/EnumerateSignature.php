@@ -68,7 +68,7 @@ class EnumerateSignature extends Component
         /**
          * Setea el modo para el payload
          */
-        $modo = (env('FIRMA_MODO') == 'test') ? Signature::modoDesatendidoTest() : Signature::modoDesatenidoProduccion();
+        $modo = (env('FIRMA_MODO') == 'test') ? Signature::modoDesatendidoTest() : Signature::modoDesatendidoProduccion();
 
         /**
          * Setea el payload del JWT
