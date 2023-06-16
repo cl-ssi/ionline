@@ -98,6 +98,8 @@ class EnumerateSignature extends Component
         $response = Http::post($url, $data);
         $json = $response->json();
 
+        logger()->info($json);
+        logger()->info(json_decode($json));
         /**
          * Verifica si existe un error
          */
@@ -133,6 +135,8 @@ class EnumerateSignature extends Component
         $folder = Signature::getFolderEnumerate();
         $filename = $folder . "/" . $signature->number . "-". now()->timestamp;
         $file = $filename.".pdf";
+        
+        logger()->info($file);
 
         Storage::disk('gcs')
             ->getDriver()
