@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\SummaryEvent;
 use App\Models\Summary\Event;
+use App\Models\Summary\SummaryEventFile;
+use Illuminate\Support\Facades\Storage;
 
 use Carbon\Carbon;
 
@@ -46,6 +48,7 @@ class SummaryController extends Controller
         $summary = new Summary($request->All());
         $summary->creator_id = auth()->user()->id;
         $summary->status = "En Proceso";
+        $summary->start_date = Carbon::now();
         $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
 
         $event = Event::first(); // Obtiene el primer registro de la tabla Event
@@ -71,6 +74,24 @@ class SummaryController extends Controller
         $summaryevent->save();
         session()->flash('success', 'Se creo el Proximo evento exitosamente');
         return redirect()->route('summary.index');
+    }
+
+
+    public function closeSummary(Request $request, $summaryId)
+    {
+
+        $closeDate = $request->input('closeDate');
+        $observation = $request->input('observation');
+
+        $summary = Summary::find($summaryId);
+        $summary->end_date = $closeDate;
+        $summary->observation = $observation;
+
+
+        $summary->save();
+
+        // Redireccionar o mostrar mensaje de éxito
+        return redirect()->back()->with('success', 'Sumario cerrado exitosamente');
     }
 
     /**
@@ -106,7 +127,24 @@ class SummaryController extends Controller
     {
         $summaryEvent->fill($request->all());
         $summaryEvent->save();
-        session()->flash('success', 'Evento ' . $summaryEvent->event->name . 'del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
+
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $file) {
+                $summaryEventFile = new SummaryEventFile();
+                $filename = $file->getClientOriginalName();
+                $summaryEventFile->summary_event_id = $summaryEvent->id;
+                $summaryEventFile->summary_id = $summaryEvent->summary->id;
+                $summaryEventFile->name = $file->getClientOriginalName();
+
+                $summaryEventFile->file = $file->storeAs('ionline/summary/' .
+                    $summaryEvent->summary->id, $filename, ['disk' => 'gcs']);
+
+                $summaryEventFile->save();
+            }
+        }
+
+        session()->flash('success', 'Evento ' . $summaryEvent->event->name . ' del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
         return redirect()->route('summary.index');
     }
 
@@ -120,6 +158,19 @@ class SummaryController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function downloadFile(SummaryEventFile $file)
+    {
+        return Storage::disk('gcs')->download($file->file);
+    }
+
+    public function deleteFile(SummaryEventFile $file)
+    {
+        $file->delete();
+        Storage::disk('gcs')->delete($file->file);
+        session()->flash('danger', 'Su Archivo ha sido eliminado Exitosamente.');
+        return redirect()->route('summary.index');
     }
 
     /**

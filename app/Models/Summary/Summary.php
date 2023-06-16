@@ -17,6 +17,11 @@ class Summary extends Model
     protected $fillable = [
         'name', 
         'status',
+        'start_date',
+        'end_date',
+        'observation',
+        'investigator_id',
+        'actuary_id',
         'establishment_id',
         'creator_id',
     ];

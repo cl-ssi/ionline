@@ -22,6 +22,7 @@
                     <th>Eventos <small>(apretar en evento para editar o añadir eventos)</small></th>
                     <th>Estado</th>
                     <th>Usuario Creador</th>
+                    <th>Finalizar Sumario</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,6 +113,46 @@
     </td>
     <td>{{ $summary->status ?? '' }}</td>
     <td>{{ $summary->creator->fullname ?? '' }}</td>
+
+    <td>
+        @if (!$summary->end_date)
+            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#closeSummaryModal{{ $summary->id }}">
+                <i class="fas fa-times"></i> Cerrar Sumario
+            </button>
+        @endif
+    </td>
+
+    <!-- Modal -->
+    <div class="modal fade" id="closeSummaryModal{{ $summary->id }}" tabindex="-1" role="dialog"
+        aria-labelledby="closeSummaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="closeSummaryModalLabel{{ $summary->id }}">Cerrar Sumario
+                        {{ $summary->name ?? '' }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('summary.closeSummary', ['summaryId' => $summary->id]) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="closeDate">Fecha y Hora de Cierre</label>
+                            <input type="datetime-local" class="form-control" id="closeDate" name="closeDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="observation">Observación</label>
+                            <textarea class="form-control" id="observation" name="observation" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cerrar Sumario</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </tr>
     @endforeach
     </tbody>
