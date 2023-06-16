@@ -48,6 +48,7 @@ class SummaryController extends Controller
         $summary = new Summary($request->All());
         $summary->creator_id = auth()->user()->id;
         $summary->status = "En Proceso";
+        $summary->start_date = Carbon::now();
         $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
 
         $event = Event::first(); // Obtiene el primer registro de la tabla Event
