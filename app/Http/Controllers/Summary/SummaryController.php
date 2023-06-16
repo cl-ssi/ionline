@@ -76,6 +76,24 @@ class SummaryController extends Controller
         return redirect()->route('summary.index');
     }
 
+
+    public function closeSummary(Request $request, $summaryId)
+    {
+
+        $closeDate = $request->input('closeDate');
+        $observation = $request->input('observation');
+
+        $summary = Summary::find($summaryId);
+        $summary->end_date = $closeDate;
+        $summary->observation = $observation;
+
+
+        $summary->save();
+
+        // Redireccionar o mostrar mensaje de éxito
+        return redirect()->back()->with('success', 'Sumario cerrado exitosamente');
+    }
+
     /**
      * Display the specified resource.
      *
