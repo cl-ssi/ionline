@@ -136,7 +136,7 @@ class EnumerateSignature extends Component
 
         Storage::disk('gcs')
             ->getDriver()
-            ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
+            ->put($file, base64_decode($json['files'][0]['content']));
 
         /**
          * Actualiza el link del documento
