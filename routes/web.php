@@ -1309,6 +1309,9 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/population', [SingleParameterController::class, 'population'])->name('population');
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
     Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
+    Route::get('/population/percapita/{year}', function ($year) {
+        return Storage::disk('gcs')->response('ionline/population/percapita_preliminar_'.$year.'.xlsx');
+    })->name('population.percapita');
 
     Route::prefix('rni_db')->as('rni_db.')->group(function () {
         Route::get('/', [RNIdbController::class, 'index'])->middleware('auth')->name('index');
@@ -1920,6 +1923,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::prefix('reports')->as('reports.')->middleware('auth')->group(function () {
         Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
         Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
+        Route::get('/show_amounts_by_program', [RequestFormController::class, 'show_amounts_by_program'])->name('show_amounts_by_program');
     });
 
     /* DOCUMENTS */

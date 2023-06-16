@@ -5,6 +5,43 @@
 @section('content')
 <h4 class="mb-3"><i class="fas fa-chart-pie"></i> Tablero de Población</h4>
 
+@auth
+<div class="alert alert-info alert-sm" role="alert">
+    <div class="row">
+        <div class="col-sm">
+            <i class="fas fa-info-circle"></i> <b>Población preliminar</b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <br />
+            Para efectos de consultas a población preliminar en su totalidad se dispone de enlaces a archivos excel para su descarga según año de interés.
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2021) }}"
+                target="blank">
+                <i class="far fa-file-pdf"></i> Descargar preliminar 2021
+            </a>
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2022) }}"
+                target="blank">
+                <i class="far fa-file-pdf"></i> Descargar preliminar 2022
+            </a>
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <a class="btn btn-secondary btn-sm float-right" href="{{ route('indicators.population.percapita', 2023) }}"
+                target="blank">
+                <i class="far fa-file-pdf"></i> Descargar preliminar 2023
+            </a>
+        </div>
+    </div>
+</div>
+@endauth
+
 <div class="card">
 	  <div class="card-body">
 				<form method="GET" class="form-horizontal" action="{{ route('indicators.population') }}">

@@ -63,13 +63,14 @@ class PercapitaExport implements FromView, WithHeadings, WithMapping, ShouldAuto
         }
 
         $exports = Percapita::year($this->request->year)
+            ->select(['NOMBRE_CENTRO', 'comuna', 'EDAD', 'GENERO'])
             ->join($this->request->year . 'establecimientos', 'COD_CENTRO', '=', $this->request->year . 'establecimientos.Codigo')
             ->where('ACEPTADO_RECHAZADO', 'ACEPTADO')
             ->whereIn('COD_CENTRO', $this->request->establishment_id)
             ->whereIn('GENERO', $this->request->gender_id)
             ->when(count($this->request->etario_id) != 101, function ($query) use ($new_etario) {
                 $query->whereIn('Edad', $new_etario);
-            })->get(['NOMBRE_CENTRO', 'comuna', 'EDAD', 'GENERO']);
+            })->cursor();
 
         return view('indicators.population_export', compact('exports'));
     }
