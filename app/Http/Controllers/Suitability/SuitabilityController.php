@@ -118,6 +118,16 @@ class SuitabilityController extends Controller
         return view('suitability.reportsigned', compact('request'));
     }
 
+    public function reportAllRequest(Request $request)
+    {
+
+        $desde = $request->input('from');
+        $hasta = $request->input('to');
+    
+        $psirequests = PsiRequest::whereBetween('created_at', [$desde, $hasta])->get();
+        return view('suitability.report.request', compact('request','psirequests'));
+    }
+
     public function createExternal(School $school)
     {
 

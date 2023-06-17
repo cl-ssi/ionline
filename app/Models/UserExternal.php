@@ -36,6 +36,11 @@ class UserExternal extends Authenticatable
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
     }
 
+    public function getRunFormatAttribute()
+    {
+      return number_format($this->id, 0, '.', '.') . '-' . $this->dv;
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
