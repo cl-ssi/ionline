@@ -53,7 +53,12 @@ class SelectOrganizationalUnit extends Component
     public function mount()
     {
         /* TODO: Esperando que la tabla de establecimientos se pueda filtrar por establecimientos dependientes del ss */
-        $this->establishments = Establishment::whereIn('id',[1,34,35,36,38,41])->get();
+
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+
+        $this->establishments = Establishment::whereIn('id',$establishments_ids)->orderBy('official_name')->get();
+
+        //$this->establishments = Establishment::whereIn('id',[1,34,35,36,38,41])->get();
         //$this->establishments = Establishment::orderBy('official_name', 'asc')->get();
         $this->loadOus();
 
