@@ -15,16 +15,6 @@
         </div>
 
         <div class="form-group col-12">
-            <label for="">Buscar Unidad Organizacional</label>
-            <input
-                type="text"
-                class="form-control"
-                placeholder="Ingrese una unidad"
-                wire:model="search_organizational_unit"
-            >
-        </div>
-
-        <div class="form-group col-12">
             <label for="ou">Unidad Organizacional</label>
             <select
                 class="custom-select"
@@ -41,32 +31,41 @@
 
         <div class="form-group col-12">
             <label for="user-id">Usuarios</label>
-            <div class="input-group mb-3">
+            <div class="input-group">
                 <select
                     class="custom-select"
+                    title="Seleccione usuario"
                     wire:model="user_id"
-                    id="user-id"
                 >
-                    <option>Seleccione usuario</option>
+                    <option value="">Seleccione un usuario</option>
                     @foreach($users as $user)
-                        <option value="{{ $user->id }}">
-                            @if($organizationalUnit->currentManager && $organizationalUnit->currentManager->user)
-                                @if($organizationalUnit->currentManager->user->id == $user->id)
-                                👑
-                                @endif
-                            @endif
-                            {{ $user->short_name }}
-                        </option>
+                        <option value="{{ $user->id }}">{{ $user->short_name }}</option>
                     @endforeach
                 </select>
-
                 <div class="input-group-append">
                     <button
-                        class="btn btn-md btn-primary"
+                        class="btn btn-primary"
+                        wire:target="add"
+                        wire:loading.attr="disabled"
                         wire:click="add"
-                        @if($user_id == '') disabled @endif
+                        title="Agregar"
+                        @if($users->isEmpty()) disabled @endif
                     >
-                        <i class="fa fa-plus"></i>
+                        <span
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                            wire:loading
+                            wire:target="add"
+                            aria-hidden="true"
+                        >
+                        </span>
+
+                        <span
+                            wire:loading.remove
+                            wire:target="add"
+                        >
+                            <i class="fas fa-plus"></i>
+                        </span>
                     </button>
                 </div>
             </div>
