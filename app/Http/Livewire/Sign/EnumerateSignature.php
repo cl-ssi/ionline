@@ -48,10 +48,10 @@ class EnumerateSignature extends Component
         /**
          * Guarda el numero correlativo en Signature
          */
-        // $signature->update([
-        //     'number' => Correlative::getCorrelativeFromType($signature->type_id),
-        //     'verification_code' => Signature::getVerificationCode($signature),
-        // ]);
+        $signature->update([
+            'number' => Correlative::getCorrelativeFromType($signature->type_id),
+            'verification_code' => Signature::getVerificationCode($signature),
+        ]);
 
         /**
          * Obtiene la imagen con el numero de Documento en Base 64
@@ -98,35 +98,38 @@ class EnumerateSignature extends Component
         $response = Http::post($url, $data);
         $json = $response->json();
 
-        logger()->info($json);
-        // logger()->info(json_decode($json));
+        // logger()->info($json);
+
+        $message = null;
+
         /**
          * Verifica si existe un error
          */
         if (array_key_exists('error', $json))
         {
-            return ['statusOk' => false,
-                'content' => '',
-                'errorMsg' => $json['error'],
-            ];
+            $message = $json['error'];
         }
-
-        if (!array_key_exists('content', $json['files'][0]))
+        elseif(!array_key_exists('content', $json['files'][0]))
         {
             if (array_key_exists('error', $json))
             {
-                return ['statusOk' => false,
-                    'content' => '',
-                    'errorMsg' => $json['error'],
-                ];
+                $message = $json['error'];
             }
             else
             {
-                return ['statusOk' => false,
-                    'content' => '',
-                    'errorMsg' => $json['files'][0]['status'],
-                ];
+                $message = $json['files'][0]['status'];
             }
+        }
+
+        if(isset($message))
+        {
+            $signature->update([
+                'number' => null,
+                'verification_code' => null,
+            ]);
+
+            session()->flash('danger', "Error: $message");
+            return redirect()->route('v2.documents.signatures.index');
         }
 
         /**
@@ -135,7 +138,7 @@ class EnumerateSignature extends Component
         $folder = Signature::getFolderEnumerate();
         $filename = $folder . "/" . $signature->number . "-". now()->timestamp;
         $file = $filename.".pdf";
-        
+
         logger()->info($file);
 
         Storage::disk('gcs')
