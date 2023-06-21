@@ -173,7 +173,7 @@
                                 <div class="col-8 text-center">
                                     @if($signature->isCompleted())
                                         <a
-                                            class="btn btn-sm btn-primary"
+                                            class="btn btn-sm @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
                                             title="Ver documento"
                                             target="_blank"
                                             class="btn @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
