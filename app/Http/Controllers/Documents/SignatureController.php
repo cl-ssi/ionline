@@ -206,7 +206,7 @@ class SignatureController extends Controller
 
         DB::beginTransaction();
 
-        try {
+        try {            
             $signature = new Signature($request->All());
             $signature->status = 'pending';
             $signature->user_id = Auth::id();
