@@ -9,7 +9,7 @@ class OuUsers extends Component
 {
     public $ou_id = 20;
     public $users = [];
-    public $authority_id;
+    public $authority_id=0;
     public $listeners = ["getOuId" => "getUsersFromOu"];
 
 
