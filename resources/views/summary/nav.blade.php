@@ -5,6 +5,7 @@
         </a>
     </li>
 
+    {{-- @canany(['Summary: manager', 'god']) --}}
     <li class="nav-item">
         <a class="nav-link {{ active('summary.events.index') }}" href="{{ route('summary.events.index') }}">
             <i class="fas fa-list-alt"></i> Eventos
@@ -16,4 +17,5 @@
             <i class="fas fa-link"></i> Vínculos
         </a>
     </li>
+    {{-- @endcanany --}}
 </ul>

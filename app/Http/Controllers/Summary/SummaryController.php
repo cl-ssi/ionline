@@ -70,6 +70,7 @@ class SummaryController extends Controller
     public function nextEventStore(Request $request)
     {
         $summaryevent = new SummaryEvent($request->all());
+        /* TODO: UTILIZAR el helper, now(), today() no es neceario importar carbón para esto */
         $summaryevent->start_date = Carbon::now();
         $summaryevent->save();
         session()->flash('success', 'Se creo el Proximo evento exitosamente');
@@ -111,9 +112,9 @@ class SummaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Summary $summary)
     {
-        //
+        return view('summary.edit', compact('summary'));
     }
 
     public function body(SummaryEvent $summaryEvent)

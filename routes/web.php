@@ -2208,7 +2208,9 @@ use App\Http\Controllers\Summary\LinkController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
-    Route::get('/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
+    Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
+
+    Route::get('/event/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
     Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
