@@ -221,7 +221,7 @@ class RequestSignature extends Component
         $signatureService->setRecipients($this->recipients);
         $signatureService->setPage($this->page);
         $signatureService->setColumnLeftVisator($this->column_left_visator);
-        $signatureService->setColumnLeftEndorse('Obligatorio sin Cadena de Responsabilidad');
+        $signatureService->setColumnLeftEndorse($this->column_left_endorse);
         $signatureService->setColumnCenterVisator($this->column_center_visator);
         $signatureService->setColumnCenterEndorse($this->column_center_endorse);
         $signatureService->setColumnRightVisator($this->column_right_visator);
