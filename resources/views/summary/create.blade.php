@@ -8,8 +8,8 @@
         @method('POST')
         <div class="form-row mb-3">
             <div class="col-12 col-md-4">
-                <label for="for-name">Nombre*</label>
-                <input type="text" class="form-control" name="name" autocomplete="off" required>
+                <label for="for-name">Asunto*</label>
+                <input type="text" class="form-control" name="subject" autocomplete="off" required>
             </div>
         </div>
 

@@ -16,8 +16,11 @@ class Summary extends Model
     protected $table = 'sum_summaries';
 
     protected $fillable = [
+        'subject', 
         'name', 
         'status',
+        'start_at',
+        'end_at',
         'start_date',
         'end_date',
         'observation',
@@ -34,7 +37,9 @@ class Summary extends Model
     */
     protected $dates = [
         'start_date',
+        'start_at',
         'end_date',
+        'end_at',
     ];
 
     public function investigator()

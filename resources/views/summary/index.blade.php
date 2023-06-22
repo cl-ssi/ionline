@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('summary.nav')
+    @include('summary.nav')
 
     <div class="form-row">
         <div class="col">
@@ -31,50 +31,49 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($summaries as $summary)
-            <tr>
-                <td>{{ $summary->id }}</td>
-                <td>{{ $summary->name }}</td>
-                <td>{{ $summary->status }}</td>
-                <td>{{ $summary->start_date->diffInDays(now()) }}</td>
-                <td>{{ optional($summary->investigator)->tinnyName }}</td>
-                <td>{{ optional($summary->actuary)->tinnyName }}</td>
-                <td>
-                    <a href="{{ route('summary.edit', $summary) }}" class="btn btn-primary">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                </td>
-            </tr>
+            @foreach ($summaries as $summary)
+                <tr>
+                    <td>{{ $summary->id ?? '' }}</td>
+                    <td>{{ $summary->subject ?? '' }}</td>
+                    <td>{{ $summary->status ?? '' }}</td>
+                    <td>{{ $summary->start_at->diffInDays(now()) }}</td>
+                    <td>{{ optional($summary->investigator)->tinnyName }}</td>
+                    <td>{{ optional($summary->actuary)->tinnyName }}</td>
+                    <td>
+                        <a href="{{ route('summary.edit', $summary) }}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
     <ul>
         <li>Agrear creador de evento</li>
-        <li>Cambiar name por subject</li>
-        <li>Cambiar stard_date y end_date por start_at y end_at</li>
         <li>Cambiar modelo summaryEvents a Events</li>
         <li>Cambiar model Events a EventType</li>
         <li>El event type agrega opcion: Se repite? si / no / numero de veces</li>
         <li>Cambiar atributos al tipo de evento, require_user, require_files</li>
-        <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej: $event->type->riquire_user</li>
-        <li>Tablas: 
+        <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
+            $event->type->riquire_user</li>
+        <li>Tablas:
             <ul>
 
                 <li>
                     sum_summaries,
                 </li>
                 <li>
-                    sum_summary_events, 
+                    sum_summary_events,
                 </li>
                 <li>
                     sum_summary_event_files
                 </li>
                 <li>
-                    sum_event_types, 
+                    sum_event_types,
                 </li>
                 <li>
-                    sum_event_links, 
+                    sum_event_links,
                 </li>
             </ul>
         </li>
@@ -124,7 +123,8 @@
                                                         action="{{ route('summary.nextEventStore') }}">
                                                         @csrf
                                                         @method('POST')
-                                                        <input type="hidden" name="summary_id" value="{{ $summary->id }}">
+                                                        <input type="hidden" name="summary_id"
+                                                            value="{{ $summary->id }}">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
                                                                 id="exampleModalLabel{{ $summaryEvent->id }}">Evento Actual
