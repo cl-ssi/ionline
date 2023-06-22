@@ -675,10 +675,10 @@ class Signature extends Model
         $yCoordinate = ($heightFile * 0.393701) * 72;
 
         /**
-         * Descifrar porque hay que restar 220 y 135 a las coordenadas
+         * Descifrar porque hay que restar 290 y 110 a las coordenadas
          */
-        $coordinate['x'] = $xCoordinate - 220;
-        $coordinate['y'] = $yCoordinate - 90;
+        $coordinate['x'] = $xCoordinate - 290;
+        $coordinate['y'] = $yCoordinate - 110;
 
         return $coordinate;
     }
@@ -846,11 +846,14 @@ class Signature extends Model
         return $payload;
     }
 
-    public function getData($document, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, $page = 'LAST')
+    public function getData($document, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, $isEnumerate, $page = 'LAST')
     {
         $base64Pdf = base64_encode(file_get_contents($document));
 
         $checkSumPdf = md5_file($document);
+
+        $width = $isEnumerate ? 260 : 175;
+        $height = $isEnumerate ? 100 : 35;
 
         return [
             'api_token_key' => $apiToken,
@@ -869,8 +872,8 @@ class Signature extends Model
                                     <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"2\">
                                         <llx>" . ($xCoordinate). "</llx>
                                         <lly>" . ($yCoordinate). "</lly>
-                                        <urx>" . ($xCoordinate + (175)) . "</urx>
-                                        <ury>" . ($yCoordinate + 35) . "</ury>
+                                        <urx>" . ($xCoordinate + $width) . "</urx>
+                                        <ury>" . ($yCoordinate + $height) . "</ury>
                                         <page>" . $page . "</page>
                                         <image>BASE64</image>
                                         <BASE64VALUE>$signatureBase64</BASE64VALUE>
