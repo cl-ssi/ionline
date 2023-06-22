@@ -23,8 +23,10 @@
                 id="ou"
             >
                 <option value="">Seleccione unidad</option>
-                @foreach($ous as $id => $ou)
-                    <option value="{{ $id }}">{{ $ou }}</option>
+                @foreach($ous as $ou)
+                    <option value="{{ $ou['id'] }}">
+                        {{ $ou['name'] }}
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -39,7 +41,14 @@
                 >
                     <option value="">Seleccione un usuario</option>
                     @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->short_name }}</option>
+                        <option value="{{ $user->id }}">
+                            @if($organizationalUnit->currentManager && $organizationalUnit->currentManager->user)
+                                @if($organizationalUnit->currentManager->user->id == $user->id)
+                                👑
+                                @endif
+                            @endif
+                            {{ $user->short_name }}
+                        </option>
                     @endforeach
                 </select>
                 <div class="input-group-append">
