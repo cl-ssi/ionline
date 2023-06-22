@@ -2253,6 +2253,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(function () {
+    Route::get('/test', [SignSignatureController::class, 'test'])->name('test');
+
     Route::get('/{signature}/file', [SignSignatureController::class, 'showFile'])->name('show.file');
     Route::get('/{signature}/signed-file', [SignSignatureController::class, 'showSignedFile'])->name('show.signed.file');
 
@@ -2290,4 +2292,3 @@ Route::prefix('test')->as('test.')->group(function () {
 
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });
-

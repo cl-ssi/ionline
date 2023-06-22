@@ -9,13 +9,11 @@ use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Services\SignService;
 use App\User;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
-use Livewire\TemporaryUploadedFile;
 
 class RequestSignature extends Component
 {
@@ -112,7 +110,7 @@ class RequestSignature extends Component
             'total_signatures' => 'required|numeric|min:1',
         ]);
 
-        /*
+
         if($validator->fails())
         {
             session()->flash('danger', 'La solicitud debe tener al menos un firmante');
@@ -148,25 +146,25 @@ class RequestSignature extends Component
 
         if($myColumns->count() == 0)
         {
-            session()->flash('danger', 'El tipo de Visacion es un campo obligatorio.');
+            session()->flash('danger', 'El Tipo de Firma es un campo obligatorio.');
             return;
         }
 
         if($myColumns->contains('left') && $this->column_left_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en la columna izquierda es obligatorio.");
+            session()->flash('danger', "El Tipo de Firma en la columna izquierda es obligatorio.");
             return;
         }
         elseif($myColumns->contains('center') && $this->column_center_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en la columna central es obligatorio.");
+            session()->flash('danger', "El Tipo de Firma en la columna central es obligatorio.");
             return;
         }
         elseif($myColumns->contains('right') && $this->column_right_endorse == null)
         {
-            session()->flash('danger', "El tipo de Visacion en la columna derecha es obligatorio.");
+            session()->flash('danger', "El Tipo de Firma en la columna derecha es obligatorio.");
             return;
-        }*/
+        }
 
         /**
          * Map the recipients
@@ -230,7 +228,7 @@ class RequestSignature extends Component
         $signatureService->setColumnRightEndorse($this->column_right_endorse);
         $signatureService->setFile($file);
         // $signatureService->setAnnexes(null);
-        $signatureService->setSignersLeft(collect(['15287582']));
+        $signatureService->setSignersLeft($this->left_signatures);
         $signatureService->setSignersCenter($this->center_signatures);
         $signatureService->setSignersRight($this->right_signatures);
         $signatureService->setUserId(auth()->id());

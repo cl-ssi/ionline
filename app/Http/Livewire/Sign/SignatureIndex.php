@@ -2,16 +2,13 @@
 
 namespace App\Http\Livewire\Sign;
 
-use App\Jobs\SignDocumentJob;
 use App\Models\Documents\Sign\Signature;
 use App\Models\Documents\Sign\SignatureFlow;
 use App\Services\DocumentSignService;
 use App\Services\ImageService;
 use App\User;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Throwable;
 
 class SignatureIndex extends Component
 {

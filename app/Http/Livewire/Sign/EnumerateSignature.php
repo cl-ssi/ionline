@@ -37,11 +37,11 @@ class EnumerateSignature extends Component
         $user = User::find(auth()->id());
 
         /**
-         * Muestra un mensaje de error en caso de estar enumerado un documento o incompleto.
+         * Muestra un mensaje de error en caso de estar numerado un documento o incompleto.
          */
         if(! $signature->isCompleted())
         {
-            session()->flash('danger', 'El documento no esta completado o ya esta enumerado');
+            session()->flash('danger', 'El documento no esta completado o ya esta numerado');
             return redirect()->route('v2.documents.signatures.index', ['pendientes']);
         }
 
@@ -90,15 +90,13 @@ class EnumerateSignature extends Component
         /**
          * Obtengo la data del signature
          */
-        $data = app(Signature::class)->getData($signature->link_signed_file, $jwt, $documentNumberBase64, $apiToken, $xCoordinate, $yCoordinate, 1);
+        $data = app(Signature::class)->getData($signature->link_signed_file, $jwt, $documentNumberBase64, $apiToken, $xCoordinate, $yCoordinate, true, 1);
 
         /**
          * Peticion la api para firmar
          */
         $response = Http::post($url, $data);
         $json = $response->json();
-
-        // logger()->info($json);
 
         $message = null;
 
@@ -133,7 +131,7 @@ class EnumerateSignature extends Component
         }
 
         /**
-         * Guardar el archivo enumerado en disco
+         * Guardar el archivo numerado en disco
          */
         $folder = Signature::getFolderEnumerate();
         $filename = $folder . "/" . $signature->number . "-". now()->timestamp;
@@ -152,7 +150,7 @@ class EnumerateSignature extends Component
             'signed_file' => $file,
         ]);
 
-        session()->flash('success', 'El documento fue enumerado exitosamente');
+        session()->flash('success', 'El documento fue numerado exitosamente');
         return redirect()->route('v2.documents.signatures.index');
     }
 }

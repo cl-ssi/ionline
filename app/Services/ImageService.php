@@ -116,9 +116,9 @@ class ImageService
          * Define the parameters
          */
         $widthNumber = 100;
-        $widthImage = 900;
+        $widthImage = 1150;
         $heightImage = 200;
-        $fontSize = 17;
+        $fontSize = 25;
         $xPading = 15;
         $yPading = 33;
 

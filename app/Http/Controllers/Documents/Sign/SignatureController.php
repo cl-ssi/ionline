@@ -215,12 +215,18 @@ class SignatureController extends Controller
     public function showFile(Signature $signature)
     {
         return Storage::disk('gcs')->download($signature->file);
-
     }
 
     public function showSignedFile(Signature $signature)
     {
         return Storage::disk('gcs')->download($signature->signed_file);
+    }
 
+    public function test()
+    {
+        $base64 = app(ImageService::class)->createDocumentNumber("2342-Xdf4", "13.089");
+        $imagen = '<img src="data:image/png;base64,' . $base64 . '" />';
+
+        return $imagen;
     }
 }

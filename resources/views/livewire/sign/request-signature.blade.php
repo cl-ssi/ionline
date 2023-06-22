@@ -279,7 +279,7 @@
                         id="left-endorse"
                         wire:model.debounce.1500ms="column_left_endorse"
                     >
-                        <option>Selecione Tipo Visación</option>
+                        <option>Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
@@ -351,7 +351,7 @@
                         id="center-endorse"
                         wire:model.debounce.1500ms="column_center_endorse"
                     >
-                        <option>Selecione Tipo Visación</option>
+                        <option>Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
@@ -424,7 +424,7 @@
                         id="right-endorse"
                         wire:model.debounce.1500ms="column_right_endorse"
                     >
-                        <option>Selecione Tipo Visación</option>
+                        <option>Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
