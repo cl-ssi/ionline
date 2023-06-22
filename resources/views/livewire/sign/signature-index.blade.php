@@ -29,6 +29,83 @@
         </div>
     </div>
 
+    <div class="text-right">
+        Leyenda bordes:
+        <span
+            class="img-thumbnail border-dark
+                border-en-cadena
+                text-uppercase
+                bg-default
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Obligatorio en Cadena de Responsabilidad"
+        >AB</span>
+
+        <span
+            class="img-thumbnail border-dark
+                border-sin-cadena
+                text-uppercase
+                bg-default
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Obligatorio sin Cadena de Responsabilidad"
+        >BC</span>
+
+        <span
+            class="img-thumbnail border-dark
+                border-opcional
+                text-uppercase
+                bg-default
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Opcional"
+        >CD</span>
+        -
+        Leyenda colores:
+        <span
+            class="img-thumbnail border-dark
+                border-en-cadena
+                text-uppercase
+                bg-default
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Pendiente por firmar"
+        >AA</span>
+
+        <span
+            class="img-thumbnail border-dark
+                border-sin-cadena
+                text-uppercase
+                bg-success
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Firmado"
+        >BB</span>
+
+        <span
+            class="img-thumbnail border-dark
+                border-opcional
+                text-uppercase
+                bg-danger
+                text-dark
+                text-monospace rounded-circle"
+            tabindex="0"
+            data-toggle="tooltip"
+            title="Rechazado"
+        >CC</span>
+        <div class="my-2"></div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>
@@ -36,7 +113,7 @@
                     <th class="text-center">ID</th>
                     <th class="text-center">Creador</th>
                     <th class="text-center">Fecha Solicitud</th>
-                    <th class="text-center" nowrap>Nro</th>
+                    <th class="text-center">Nro</th>
                     <th>Materia</th>
                     <th>Descripción</th>
                     <th class="text-center">Firmas</th>
@@ -52,6 +129,7 @@
                             <i class="fas fa-signature"></i> Firmar
                         </button>
                     </th>
+                    <th class="text-center" nowrap>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,13 +151,7 @@
                         <td class="text-center">
                             {{ $signature->document_number->format('Y-m-d') }}
                         </td>
-                        <td class="text-center" nowrap>
-                            @if($signature->isCompleted() && ! $signature->isEnumerate())
-                                @livewire('sign.enumerate-signature', [
-                                    'signature' => $signature
-                                ])
-                            @endif
-
+                        <td class="text-center">
                             @if ($signature->isEnumerate() && $signature->isCompleted())
                                 {{ $signature->number }}
                             @endif
@@ -146,7 +218,7 @@
                                 </tbody>
                             </table>
                         </td>
-                        <th>
+                        <td>
                             @foreach($signature->annexes as $annex)
                                 @if($annex->isLink())
                                     <a class="annex" href="{{ $annex->url }}" target="_blank">
@@ -159,7 +231,7 @@
                                     </a>
                                 @endif
                             @endforeach
-                        </th>
+                        </td>
                         <td nowrap>
                             <div class="form-row text-center">
                                 <div class="col-2 text-center">
@@ -177,7 +249,7 @@
                                             title="Ver documento"
                                             target="_blank"
                                             class="btn @if($signature->isEnumerate()) btn-success @else btn-primary @endif"
-                                            href="{{ route('v2.documents.show.signed.file', $signature) }}"
+                                            href="{{ $signature->link_signed_file }}"
                                         >
                                             <i class="fas fa-file"></i>
                                         </a>
@@ -228,6 +300,13 @@
                                     @endif
                                 </div>
                             </div>
+                        </td>
+                        <td class="text-center" nowrap>
+                            @if($signature->isCompleted() && ! $signature->isEnumerate())
+                                @livewire('sign.enumerate-signature', [
+                                    'signature' => $signature
+                                ])
+                            @endif
                         </td>
                     </tr>
                 @empty
