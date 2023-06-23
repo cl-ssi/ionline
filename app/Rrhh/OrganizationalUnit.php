@@ -3,10 +3,11 @@
 namespace App\Rrhh;
 
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Requirements\Category;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Profile\Subrogation;
 
 class OrganizationalUnit extends Model implements Auditable
 {
@@ -104,6 +105,12 @@ class OrganizationalUnit extends Model implements Auditable
             ->with('user')
             ->where('date',today())
             ->where('type','secretary');
+    }
+
+    public function subrogationsManager()
+    {
+        return $this->hasMany(Subrogation::class)
+            ->where('type','manager');
     }
 
     public function scopeSearch($query, $name)
