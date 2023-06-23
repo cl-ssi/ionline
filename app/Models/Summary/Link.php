@@ -4,7 +4,7 @@ namespace App\Models\Summary;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Summary\Event;
+use App\Models\Summary\EventType;
 
 class Link extends Model
 {
@@ -19,11 +19,11 @@ class Link extends Model
 
     public function beforeEvent()
     {
-        return $this->belongsTo(Event::class, 'before_event_id');
+        return $this->belongsTo(EventType::class, 'before_event_id');
     }
 
     public function afterEvent()
     {
-        return $this->belongsTo(Event::class, 'after_event_id');
+        return $this->belongsTo(EventType::class, 'after_event_id');
     }
 }

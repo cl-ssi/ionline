@@ -4,7 +4,7 @@ namespace App\Models\Summary;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Summary\Event;
+use App\Models\Summary\EventType;
 use App\Models\Summary\Summary;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\User;
@@ -31,7 +31,7 @@ class SummaryEvent extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id');
+        return $this->belongsTo(EventType::class, 'event_id');
     }
 
     public function creator()

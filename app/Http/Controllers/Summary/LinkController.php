@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Summary;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Summary\Link;
-use App\Models\Summary\Event;
+use App\Models\Summary\EventType;
 
 class LinkController extends Controller
 {
@@ -17,7 +17,7 @@ class LinkController extends Controller
     public function index()
     {
         //
-        $events = Event::all();
+        $events = EventType::all();
         return view('summary.links.index', compact('events'));
     }
 
@@ -29,7 +29,7 @@ class LinkController extends Controller
     public function create()
     {
         //
-        $events = Event::all();
+        $events = EventType::all();
         return view('summary.links.create', compact('events'));
     }
 

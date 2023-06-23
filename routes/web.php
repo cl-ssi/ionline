@@ -2203,7 +2203,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
 /* Rutas de Módulo de Sumario*/
 use App\Http\Controllers\Summary\SummaryController;
-use App\Http\Controllers\Summary\EventController as SummaryEventController;
+use App\Http\Controllers\Summary\EventTypeController as SummaryEventController;
 use App\Http\Controllers\Summary\LinkController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\Link;
 
-class Event extends Model
+class EventType extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'sum_events';
+    public $table = 'sum_event_types';
 
     protected $fillable = [
         'id',

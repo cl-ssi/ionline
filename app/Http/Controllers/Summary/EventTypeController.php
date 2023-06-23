@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Summary;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Summary\Event;
+use App\Models\Summary\EventType;
 
-class EventController extends Controller
+class EventTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         //
-        $events = Event::all();
+        $events = EventType::all();
         return view('summary.events.index', compact('events'));
     }
 
@@ -39,7 +39,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new Event($request->All());
+        $event = new EventType($request->All());
         $event->require_user = isset($request->require_user);
         $event->require_file = isset($request->require_file);
         $event->start = isset($request->start);
@@ -70,7 +70,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit(EventType $event)
     {
         return view('summary.events.edit', compact('event'));
     }
@@ -82,7 +82,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, EventType $event)
     {
         $event->name = $request->input('name');
         $event->duration = $request->input('duration');
@@ -106,7 +106,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(EventType $event)
     {
         //
         $event->delete();

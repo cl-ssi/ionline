@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\SummaryEvent;
-use App\Models\Summary\Event;
+use App\Models\Summary\EventType;
 use App\Models\Summary\SummaryEventFile;
 use Illuminate\Support\Facades\Storage;
 
-use Carbon\Carbon;
+
 
 
 class SummaryController extends Controller
@@ -51,7 +51,7 @@ class SummaryController extends Controller
         $summary->start_at = now();
         $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
 
-        $event = Event::first(); // Obtiene el primer registro de la tabla Event
+        $event = EventType::first(); // Obtiene el primer registro de la tabla Event
         if ($event) {
             $summary->save();
             $summaryevent = new SummaryEvent();

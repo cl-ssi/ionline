@@ -50,8 +50,7 @@
     </table>
 
     <ul>        
-        <li>Cambiar modelo summaryEvents a Events</li>
-        <li>Cambiar model Events a EventType</li>
+        <li>Cambiar modelo summaryEvents a Events</li>        
         <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
             $event->type->riquire_user</li>
         <li>Tablas:
