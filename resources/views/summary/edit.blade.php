@@ -12,7 +12,6 @@
 
     @foreach ($summary->summaryEvents as $event)
         @include('summary.partials.event')
-        <br>
     @endforeach
 
     @include('summary.partials.add_event')
