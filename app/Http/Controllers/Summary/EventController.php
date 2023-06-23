@@ -40,8 +40,8 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $event = new Event($request->All());
-        $event->user = isset($request->user);
-        $event->file = isset($request->file);
+        $event->require_user = isset($request->require_user);
+        $event->require_file = isset($request->require_file);
         $event->start = isset($request->start);
         $event->end = isset($request->end);
         $event->investigator = isset($request->investigator);
@@ -86,8 +86,8 @@ class EventController extends Controller
     {
         $event->name = $request->input('name');
         $event->duration = $request->input('duration');
-        $event->user = isset($request->user);
-        $event->file = isset($request->file);
+        $event->require_user = isset($request->require_user);
+        $event->require_file = isset($request->require_file);
         $event->start = isset($request->start);
         $event->end = isset($request->end);
         $event->investigator = isset($request->investigator);

@@ -19,7 +19,9 @@ class Event extends Model
         'name',
         'duration',
         'user',
+        'require_user',
         'file',
+        'require_file',
         'start',
         'end',
         'investigator',
@@ -33,12 +35,12 @@ class Event extends Model
 
     public function getUserTextAttribute()
     {
-        return $this->user ? 'Sí' : 'No';
+        return $this->require_user ? 'Sí' : 'No';
     }
 
     public function getFileTextAttribute()
     {
-        return $this->file ? 'Sí' : 'No';
+        return $this->require_file ? 'Sí' : 'No';
     }
 
     public function getStartTextAttribute()

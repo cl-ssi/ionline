@@ -21,16 +21,16 @@
             <div class="col-12 col-md-3">
                 <label for="for-user">Usuario</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="user" value="1"
-                        {{ $event->user ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" name="require_user" value="1"
+                        {{ $event->require_user ? 'checked' : '' }}>
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
                 <label for="for-file">Archivo</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="file" value="1"
-                        {{ $event->file ? 'checked' : '' }}>
+                    <input class="form-check-input" type="checkbox" name="require_file" value="1"
+                        {{ $event->require_file ? 'checked' : '' }}>
                 </div>
             </div>
         </div>

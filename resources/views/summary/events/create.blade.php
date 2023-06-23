@@ -20,14 +20,14 @@
             <div class="col-12 col-md-3">
                 <label for="for-user">Usuario</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="user" value="1">
+                    <input class="form-check-input" type="checkbox" name="require_user" value="1">
                 </div>
             </div>
 
             <div class="col-12 col-md-3">
                 <label for="for-file">Archivo</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="file" value="1">
+                    <input class="form-check-input" type="checkbox" name="require_file" value="1">
                 </div>
             </div>
         </div>
