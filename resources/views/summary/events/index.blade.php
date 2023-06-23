@@ -19,7 +19,8 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Duracción</th>
+                    <th>Descripción</th>
+                    <th>Duración</th>
                     <th>Usuario</th>
                     <th>Archivo</th>
                     <th>Inicio</th>
@@ -34,8 +35,9 @@
             <tbody>
                 @foreach ($events as $event)
                     <tr>
-                        <td>{{ $event->id ?? '' }}</td>
-                        <td>{{ $event->name ?? '' }}</td>
+                        <td>{{ $event->id }}</td>
+                        <td>{{ $event->name }}</td>
+                        <td>{{ $event->description ?? '' }}</td>
                         <td>{{ $event->duration ?? '' }}</td>
                         <td>{{ $event->user_text ?? '' }}</td>
                         <td>{{ $event->file_text ?? '' }}</td>

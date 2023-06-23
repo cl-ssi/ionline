@@ -85,6 +85,7 @@ class EventTypeController extends Controller
     public function update(Request $request, EventType $event)
     {
         $event->name = $request->input('name');
+        $event->description = $request->input('description');
         $event->duration = $request->input('duration');
         $event->require_user = isset($request->require_user);
         $event->require_file = isset($request->require_file);
