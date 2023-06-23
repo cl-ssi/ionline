@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\Event;
 use App\Models\Summary\Summary;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\User;
 
 class SummaryEvent extends Model
 {
@@ -20,6 +21,7 @@ class SummaryEvent extends Model
         'start_date',
         'end_date',
         'summary_id',
+        'creator_id',
     ];
 
     protected $dates = [
@@ -30,6 +32,11 @@ class SummaryEvent extends Model
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     public function summary()

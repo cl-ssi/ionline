@@ -58,6 +58,7 @@ class SummaryController extends Controller
             $summaryevent->event_id = $event->id;
             $summaryevent->start_date = now();
             $summaryevent->summary_id = $summary->id;
+            $summaryevent->creator_id = auth()->user()->id;
             $summaryevent->save();
             session()->flash('success', 'Se creo el sumario correctamente.');
         } else {
@@ -71,7 +72,8 @@ class SummaryController extends Controller
     {
         $summaryevent = new SummaryEvent($request->all());
         /* TODO: UTILIZAR el helper, now(), today() no es neceario importar carbón para esto */
-        $summaryevent->start_date = Carbon::now();
+        $summaryevent->start_date = now();
+        $summaryevent->creator_id = auth()->user()->id;
         $summaryevent->save();
         session()->flash('success', 'Se creo el Proximo evento exitosamente');
         return redirect()->route('summary.index');

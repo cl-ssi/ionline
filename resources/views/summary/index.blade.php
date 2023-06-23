@@ -49,11 +49,9 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>Agrear creador de evento</li>
+    <ul>        
         <li>Cambiar modelo summaryEvents a Events</li>
         <li>Cambiar model Events a EventType</li>
-        <li>Cambiar atributos al tipo de evento, require_user, require_files</li>
         <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
             $event->type->riquire_user</li>
         <li>Tablas:
