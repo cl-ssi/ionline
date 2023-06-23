@@ -107,10 +107,15 @@ class SearchRequests extends Component
 
         if($this->inbox == 'report: form-items'){
             $query->with('eventRequestForms', 'associateProgram', 'purchasingProcess.details', 
-                'itemRequestForms');
+                'itemRequestForms')
+                ->doesntHave('passengers');
+                /*
+                ->select(['id', 'status', 'folio', 'created_at', 'subtype', 'name', 'type_of_currency', 'estimated_expense',
+                'approved_at']);
+                */
         }
 
-        return ($isPaginated) ? $query->paginate(50) : $query->limit(100)->get();
+        return ($isPaginated) ? $query->paginate(50) : $query->cursor();
     }
 
     public function render()

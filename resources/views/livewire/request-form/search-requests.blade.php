@@ -364,9 +364,7 @@
                 <p class="font-weight-lighter">Total de Formularios: <b>{{ $request_forms->total() }}</b></p>
             </div>
             <div class="col">
-                {{--
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="exportFormItems"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
-                --}}
             </div>
         </div>
         
@@ -427,7 +425,6 @@
                     @if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
                     @foreach($requestForm->purchasingProcess->details as $key => $detail)
                     <tr>
-                        {{-- dd($detail)  --}}
                         <td class="text-right" nowrap>{{ $requestForm->id }}</td>
                         <td class="text-center" nowrap>{{ $requestForm->getStatus() }}</td>
                         <td class="text-right" nowrap>{{ $requestForm->folio }}</td>
@@ -443,7 +440,7 @@
                         <td nowrap>
                             {{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}
                         </td>
-                        <td nowrap>{{ $requestForm->name }}</td>
+                        <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
                         <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
                         <td nowrap>{{ $requestForm->user->FullName }}</td>
                         <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
@@ -469,12 +466,9 @@
                         </td>
                         <td nowrap>
                             @if($loop->first)
-                                @foreach($requestForm->eventRequestForms->where('event_type', 'pre_finance_event') as $event)
-                                    {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}
-                                @endforeach
+                                {{ $requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i:s') : '' }}
                             @endif
                         </td>
-                        
                         <td class="text-center">
                             {{ $loop->iteration }}
                         </td>
@@ -529,6 +523,90 @@
                         <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->discounts,$requestForm->precision_currency,",",".") }}</td>
                         <td>{{ $detail->pivot->tax ?? $detail->tax }}</td>
                         <td align="right">{{$requestForm->symbol_currency}}{{ number_format($detail->pivot->expense,$requestForm->precision_currency,",",".") }}</td>
+                    </tr>
+                    @endforeach
+                    @else
+                    @foreach($requestForm->itemRequestForms as $key => $detail)
+                    <tr>
+                        <td class="text-right" nowrap>{{ $requestForm->id }}</td>
+                        <td class="text-center" nowrap>{{ $requestForm->getStatus() }}</td>
+                        <td class="text-right" nowrap>{{ $requestForm->folio }}</td>
+                        <td class="text-right" nowrap>
+                            @if($requestForm->father)
+                                {{ $requestForm->father->folio }}
+                            @endif
+                        </td>
+                        <td class="text-center" nowrap>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                        <td nowrap>
+                            {{ $requestForm->SubtypeValue }}
+                        </td>
+                        <td nowrap>
+                            {{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}
+                        </td>
+                        <td nowrap>{{ substr($requestForm->name, 0, 100) }}</td>
+                        <td nowrap>{{ $requestForm->associateProgram ? $requestForm->associateProgram->alias_finance.' '.$requestForm->associateProgram->period : $requestForm->program }}</td>
+                        <td nowrap>{{ $requestForm->user->FullName }}</td>
+                        <td nowrap>{{ $requestForm->userOrganizationalUnit->name }}</td>
+                        <td nowrap>{{ $requestForm->purchasers->first()->FullName ?? 'No asignado' }}</td>
+                        <td class="text-center">
+                            @if($loop->first)
+                                {{ $requestForm->itemRequestForms->count() }}
+                            @endif
+                        </td>
+                        <td class="text-right">
+                            @if($loop->first)
+                                {{ $requestForm->symbol_currency }}{{ number_format($requestForm->estimated_expense,$requestForm->precision_currency,",",".") }}
+                            @endif
+                        </td>
+                        <td nowrap>
+                            @if($loop->first)
+                                @if($requestForm->purchasingProcess)
+                                    {{ $requestForm->purchasingProcess->getStatus() }}
+                                @else
+                                    {{ $requestForm->getStatus() }}
+                                @endif
+                            @endif
+                        </td>
+                        <td nowrap>
+                            @if($loop->first)
+                                {{ $requestForm->approved_at ? $requestForm->approved_at->format('d-m-Y H:i:s') : '' }}
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            {{ $loop->iteration }}
+                        </td>
+                        <td class="text-right">{{ $detail->id ?? '' }}</td>
+                        <td class="text-right" nowrap>{{ $detail->budgetItem ? $detail->budgetItem->fullName() : '' }}</td>
+                        <td nowrap>
+                            @if($detail->product_id)
+                                {{ optional($detail->product)->code }} {{ optional($detail->product)->name }}
+                            @else
+                                {{ $detail->article }}
+                            @endif
+                        </td>
+                        <td class="text-center">{{ $detail->unit_of_measurement }}</td>
+                        <td nowrap>{{ substr($detail->specification, 0, 100) }}</td>
+                        <td class="text-center">{{ $detail->quantity }}</td>
+                        <td class="text-right">{{ str_replace(',00', '', number_format($detail->unit_value, 2,",",".")) }}</td>
+                        <td class="text-center">{{ $detail->tax }}</td>
+                        <td class="text-right">{{ number_format($detail->expense,$requestForm->precision_currency,",",".") }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     @endforeach
                     @endif

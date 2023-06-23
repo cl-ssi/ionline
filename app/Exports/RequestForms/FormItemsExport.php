@@ -38,6 +38,9 @@ class FormItemsExport implements FromView /*FromCollection, WithHeadings, WithMa
 
     public function view(): View
     {
+        set_time_limit(3600);
+        ini_set('memory_limit', '1024M');
+        
         return view('request_form.reports.items', [
             'request_forms' => $this->resultSearch
         ]);
