@@ -52,8 +52,7 @@
     <ul>
         <li>Agrear creador de evento</li>
         <li>Cambiar modelo summaryEvents a Events</li>
-        <li>Cambiar model Events a EventType</li>
-        <li>El event type agrega opcion: Se repite? si / no / numero de veces</li>
+        <li>Cambiar model Events a EventType</li>        
         <li>Cambiar atributos al tipo de evento, require_user, require_files</li>
         <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
             $event->type->riquire_user</li>
@@ -76,10 +75,7 @@
                     sum_event_links,
                 </li>
             </ul>
-        </li>
-        <li>
-            Agregar boolean: inicio, fin, acutario, fiscal
-        </li>
+        </li>        
     </ul>
     <hr>
 
@@ -99,7 +95,7 @@
                 @foreach ($summaries as $summary)
                     <tr>
                         <td>{{ $summary->id ?? '' }}</td>
-                        <td>{{ $summary->name ?? '' }}</td>
+                        <td>{{ $summary->subject ?? '' }}</td>
                         <td>
                             <ul>
                                 @foreach ($summary->summaryEvents as $summaryEvent)

@@ -39,3 +39,7 @@
     </form>
 
 @endsection
+
+@section('custom_js')
+
+@endsection

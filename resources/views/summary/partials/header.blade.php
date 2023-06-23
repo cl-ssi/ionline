@@ -1,26 +1,25 @@
-
 <table class="table table-sm table-bordered">
     <tbody>
         <tr>
             <th>Estado</th>
-            <td>{{ $summary->status }} (3 días)
+            <td>{{ $summary->status ?? '' }} (3 días)
             </td>
         </tr>
         <tr>
             <th>Fecha inicio</th>
-            <td>{{ $summary->start_date }}</td>
+            <td>{{ $summary->start_at ?? '' }}</td>
         </tr>
         <tr>
             <th>Fecha término</th>
-            <td>{{ $summary->end_date }}</td>
+            <td>{{ $summary->end_at ?? '' }}</td>
         </tr>
         <tr>
             <th>Fiscal</th>
-            <td>{{ $summary->investigator->shortName }}</td>
+            <td>{{ $summary->investigator->shortName ?? '' }}</td>
         </tr>
         <tr>
             <th>Actuario</th>
-            <td>{{ $summary->actuary->shortName }}</td>
+            <td>{{ $summary->actuary->shortName ?? '' }}</td>
         </tr>
         <tr>
             <th>Observaciones</th>

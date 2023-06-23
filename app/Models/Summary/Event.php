@@ -20,6 +20,12 @@ class Event extends Model
         'duration',
         'user',
         'file',
+        'start',
+        'end',
+        'investigator',
+        'actuary',
+        'repeat',
+        'num_repeat',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -34,6 +40,33 @@ class Event extends Model
     {
         return $this->file ? 'Sí' : 'No';
     }
+
+    public function getStartTextAttribute()
+    {
+        return $this->start ? 'Sí' : 'No';
+    }
+
+    public function getEndTextAttribute()
+    {
+        return $this->end ? 'Sí' : 'No';
+    }
+
+    public function getInvestigatorTextAttribute()
+    {
+        return $this->investigator ? 'Sí' : 'No';
+    }
+
+    public function getActuaryTextAttribute()
+    {
+        return $this->actuary ? 'Sí' : 'No';
+    }
+
+    public function getRepeatTextAttribute()
+    {
+        return $this->repeat ? 'Sí' : 'No';
+    }
+
+
 
     public function linksBefore()
     {
