@@ -17,7 +17,7 @@
                 {{ $event->body }}
             </p>
 
-            @if ($event->event->user)
+            @if ($event->event->require_user)
                 <span class="fas fa-user"></span> Alvaro Torres Fuchslohcer (reemplasar por ShortName)
             @endif
         @else
@@ -35,10 +35,10 @@
 
 
         <blockquote class="blockquote mb-0 mt-3">
-            <footer class="blockquote-footer">{{ $event->creator->ShortName ?? '' }}</cite></footer>
+            <footer class="blockquote-footer">{{ $event->creator->shortName ?? '' }}</cite></footer>
         </blockquote>
     </div>
-    @if ($event->event->file)
+    @if ($event->event->require_file)
         <div class="card-footer text-muted">
             <li>
                 <a href=""><i class="fas fa-paperclip"></i> nombre del archivo 1</a>
