@@ -72,7 +72,8 @@ class EventTypeController extends Controller
      */
     public function edit(EventType $event)
     {
-        return view('summary.events.edit', compact('event'));
+        $types = EventType::all();
+        return view('summary.events.edit', compact('event','types'));
     }
 
     /**
@@ -84,6 +85,8 @@ class EventTypeController extends Controller
      */
     public function update(Request $request, EventType $event)
     {
+        /** Puse este DD para ver si me llega bien el array de links, el par de valores, befores and after */
+        dd($request->all());
         $event->name = $request->input('name');
         $event->description = $request->input('description');
         $event->duration = $request->input('duration');

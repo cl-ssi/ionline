@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <label for="for-num_repeat" class="col-sm-4 col-form-label">Número de repeticiones</label>
+        <label for="for-num_repeat" class="col-sm-3 col-form-label">Número de repeticiones:</label>
         <div class="col-sm-2">
             <input type="number" 
                 class="form-control" 
@@ -113,15 +113,26 @@
         </div>
     </fieldset>
 
+    <h5>Al terminar este evento, se vincúla con el/los siguientes eventos:</h5>
 
-    <div class="form-group row">
+    @foreach($types as $type)
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" name="links[{{ $type->id }}]"
+                {{ $event->links->contains('after_event_id',$type->id) ? 'checked': ''}}>
+            <label class="form-check-label" for="for-links">
+                {{ $type->name }}
+            </label>
+        </div>
+    @endforeach
+
+
+    <div class="form-group row mt-3">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-success mr-3">Actualizar</button>
             <a href="{{ route('summary.events.index') }}" class="btn btn-outline-secondary">Cancelar</a>
         </div>
     </div>
 </form>
-
 @endsection
 
 

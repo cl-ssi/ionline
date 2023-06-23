@@ -21,12 +21,6 @@
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Duración</th>
-                    <th>Usuario</th>
-                    <th>Archivo</th>
-                    <th>Inicio</th>
-                    <th>Fin</th>
-                    <th>Investigador</th>
-                    <th>Actuario</th>
                     <th>Repetición</th>
                     <th>Num Rep.</th>
                     <th>Estado</th>
@@ -37,16 +31,10 @@
                     <tr>
                         <td>{{ $event->id }}</td>
                         <td>{{ $event->name }}</td>
-                        <td>{{ $event->description ?? '' }}</td>
-                        <td>{{ $event->duration ?? '' }}</td>
-                        <td>{{ $event->user_text ?? '' }}</td>
-                        <td>{{ $event->file_text ?? '' }}</td>
-                        <td>{{ $event->start_text ?? '' }}</td>
-                        <td>{{ $event->end_text ?? '' }}</td>
-                        <td>{{ $event->investigator_text ?? '' }}</td>
-                        <td>{{ $event->actuary_text ?? '' }}</td>
-                        <td>{{ $event->repeat_text ?? '' }}</td>
-                        <td>{{ $event->num_repeat ?? '' }}</td>
+                        <td>{{ $event->description }}</td>
+                        <td>{{ $event->duration }}</td>
+                        <td>{{ $event->repeat_text }}</td>
+                        <td>{{ $event->num_repeat }}</td>
                         <td>
                             <div class="d-flex ">
                                 <a class="btn btn-sm btn-primary me-2" href="{{ route('summary.events.edit', $event) }}">

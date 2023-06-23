@@ -69,7 +69,11 @@ class EventType extends Model
         return $this->repeat ? 'Sí' : 'No';
     }
 
-
+    /** Cuál es la utilidad del link before? */
+    public function links()
+    {
+        return $this->hasMany(Link::class, 'before_event_id');
+    }
 
     public function linksBefore()
     {
