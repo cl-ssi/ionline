@@ -10,19 +10,31 @@
     @include('layouts.partials.flash_message')
 
     <form wire:submit.prevent="processExcel" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="excelFile">Seleccionar archivo Excel</label>
-            <input type="file" class="form-control-file @error('excelFile') is-invalid @enderror" id="excelFile"
-                wire:model="excelFile" accept=".xlsx,.xls">
-            @error('excelFile')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+        <div class="form-row">
+            <div class="col-10">
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Cargar Excel</button>
+                <div class="form-group">
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input @error('excelFile') is-invalid @enderror" 
+                            id="excelFile" 
+                            wire:model="excelFile" 
+                            accept=".xlsx,.xls" 
+                            required
+                            >
+                        <label class="custom-file-label" for="excelFile" data-browse="Examinar">Seleccionar archivo Excel</label>
+                        @error('excelFile')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">Cargar Excel</button>
+                </div>
+                <div wire:loading wire:target="excelFile">Cargando...</div>
+            </div>
         </div>
-        <div wire:loading wire:target="excelFile">Cargando...</div>
     </form>
 
 </div>
