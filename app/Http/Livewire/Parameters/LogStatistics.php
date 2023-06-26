@@ -18,7 +18,7 @@ class LogStatistics extends Component
                 $log->save();
             }
             elseif (preg_match('/service_request/', $log->uri)) {
-                $log->module = 'Staff de reemplazo';
+                $log->module = 'Honorarios';
                 $log->save();
             }
             elseif (preg_match('/replacement_staff/', $log->uri)) {
