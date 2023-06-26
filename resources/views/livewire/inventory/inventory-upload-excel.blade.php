@@ -22,6 +22,7 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Cargar Excel</button>
         </div>
+        <div wire:loading wire:target="excelFile">Cargando...</div>
     </form>
 
 </div>
