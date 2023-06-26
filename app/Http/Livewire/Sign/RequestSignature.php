@@ -144,27 +144,27 @@ class RequestSignature extends Component
 
         $myColumns = $this->myColumns->keys();
 
-        // if($myColumns->count() == 0)
-        // {
-        //     session()->flash('danger', 'El Tipo de Firma es un campo obligatorio.');
-        //     return;
-        // }
+        if(! isset($this->myColumns) || $myColumns->count() == 0)
+        {
+            session()->flash('danger', 'El Tipo de Firma es un campo obligatorio.');
+            return;
+        }
 
-        // if($myColumns->contains('left') && $this->column_left_endorse == null)
-        // {
-        //     session()->flash('danger', "El Tipo de Firma en la columna izquierda es obligatorio.");
-        //     return;
-        // }
-        // elseif($myColumns->contains('center') && $this->column_center_endorse == null)
-        // {
-        //     session()->flash('danger', "El Tipo de Firma en la columna central es obligatorio.");
-        //     return;
-        // }
-        // elseif($myColumns->contains('right') && $this->column_right_endorse == null)
-        // {
-        //     session()->flash('danger', "El Tipo de Firma en la columna derecha es obligatorio.");
-        //     return;
-        // }
+        if($myColumns->contains('left') && $this->column_left_endorse == null)
+        {
+            session()->flash('danger', "El Tipo de Firma en la columna izquierda es obligatorio.");
+            return;
+        }
+        elseif($myColumns->contains('center') && $this->column_center_endorse == null)
+        {
+            session()->flash('danger', "El Tipo de Firma en la columna central es obligatorio.");
+            return;
+        }
+        elseif($myColumns->contains('right') && $this->column_right_endorse == null)
+        {
+            session()->flash('danger', "El Tipo de Firma en la columna derecha es obligatorio.");
+            return;
+        }
 
         /**
          * Map the recipients
@@ -390,14 +390,14 @@ class RequestSignature extends Component
             $user = User::find($userId);
             $this->namesSignaturesLeft->push($user->short_name);
             $this->emit('clearSearchUser');
+
+            $this->columnAvailable->put('left', $this->columnAvailable->get('left') + 1);
+            $this->getColumns();
         }
         else
         {
             $this->emit('clearSearchUser', false);
         }
-
-        $this->columnAvailable->put('left', $this->columnAvailable->get('left') + 1);
-        $this->getColumns();
     }
 
     public function addCenterSignature($userId)
@@ -408,14 +408,14 @@ class RequestSignature extends Component
             $user = User::find($userId);
             $this->namesSignaturesCenter->push($user->short_name);
             $this->emit('clearSearchUser');
+
+            $this->columnAvailable->put('center', $this->columnAvailable->get('center') + 1);
+            $this->getColumns();
         }
         else
         {
             $this->emit('clearSearchUser', false);
         }
-
-        $this->columnAvailable->put('center', $this->columnAvailable->get('center') + 1);
-        $this->getColumns();
     }
 
     public function addRightSignature($userId)
@@ -426,14 +426,14 @@ class RequestSignature extends Component
             $user = User::find($userId);
             $this->namesSignaturesRight->push($user->short_name);
             $this->emit('clearSearchUser');
+
+            $this->columnAvailable->put('right', $this->columnAvailable->get('right') + 1);
+            $this->getColumns();
         }
         else
         {
             $this->emit('clearSearchUser', false);
         }
-
-        $this->columnAvailable->put('right', $this->columnAvailable->get('right') + 1);
-        $this->getColumns();
     }
 
     public function deleteSigner($index, $column)
