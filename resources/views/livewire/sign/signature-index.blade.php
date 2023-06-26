@@ -310,11 +310,11 @@
                         </td>
                     </tr>
                 @empty
-                <tr class="text-center">
-                    <td colspan="9">
-                        <em>No hay registros</em>
-                    </td>
-                </tr>
+                    <tr class="text-center">
+                        <td colspan="10">
+                            <em>No hay registros</em>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
