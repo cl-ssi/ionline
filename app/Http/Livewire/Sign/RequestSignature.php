@@ -392,7 +392,27 @@ class RequestSignature extends Component
             $this->emit('clearSearchUser');
 
             $this->columnAvailable->put('left', $this->columnAvailable->get('left') + 1);
-            $this->getColumns();
+            
+            $this->myColumns = $this->columnAvailable->filter(function ($key, $column) {
+                if($column > 0)
+                    return $key;
+            });
+    
+            if($this->myColumns->count() == 1)
+            {
+                $this->lastColumn = $this->myColumns->take(1)->keys()->first();
+            }
+            elseif($this->myColumns->count() > 0)
+            {
+                $lastColumn = $this->myColumns->keys();
+                $lastColumn = $lastColumn->last();
+                $this->lastColumn = $lastColumn;
+            }
+            elseif($this->myColumns->count() == 0)
+            {
+                $this->lastColumn = null;
+            }
+            // $this->getColumns();
         }
         else
         {
