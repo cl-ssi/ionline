@@ -133,14 +133,14 @@ class InventoryUploadExcel extends Component
                 'observations' => $row[12],
                 'po_price' => $row[13],
                 'accounting_code_id' => $row[14],
-                'dte_number' => $row[15]
+                'dte_number' => $row[15],
             ]);
 
             InventoryMovement::updateOrCreate([
                 'inventory_id' => $inventory->id,
             ],[
                 'reception_confirmation' => 1,
-                'reception_date' => now(),
+                'reception_date' => ($row[16]) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[16]) : null,
                 // 'installation_date',
                 'observations' => $row[12],
                 'inventory_id' => $inventory->id,
