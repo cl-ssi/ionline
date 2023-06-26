@@ -252,6 +252,19 @@
         </div>
     </div>
 
+    <div>
+        myColumns @json($myColumns)
+        <br>
+        myColumnsKeys @json($myColumns->keys())
+        <br>
+        myColumnsCount @json($myColumns->count())
+        <br>
+        columnAvailable @json($columnAvailable)
+        <br>
+        lastColumn @json($lastColumn)
+        <br>
+    </div>
+
     <div class="form-row mt-4">
         <fieldset class="form-group col-4">
             <label for="left-signatures">1. Firmantes Columna Izquierda</label>
@@ -277,9 +290,9 @@
                     <select
                         class="custom-select custom-select-sm @error('column_left_endorse') is-invalid @enderror"
                         id="left-endorse"
-                        wire:model.debounce.1500ms="column_left_endorse"
+                        wire:model.debounce.1000ms="column_left_endorse"
                     >
-                        <option>Selecione Tipo Firma</option>
+                        <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
@@ -349,9 +362,9 @@
                     <select
                         class="custom-select custom-select-sm @error('column_center_endorse') is-invalid @enderror"
                         id="center-endorse"
-                        wire:model.debounce.1500ms="column_center_endorse"
+                        wire:model.debounce.1000ms="column_center_endorse"
                     >
-                        <option>Selecione Tipo Firma</option>
+                        <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
@@ -422,9 +435,9 @@
                     <select
                         class="custom-select custom-select-sm @error('column_right_endorse') is-invalid @enderror"
                         id="right-endorse"
-                        wire:model.debounce.1500ms="column_right_endorse"
+                        wire:model.debounce.1000ms="column_right_endorse"
                     >
-                        <option>Selecione Tipo Firma</option>
+                        <option value="">Selecione Tipo Firma</option>
                         <option value="Opcional">Opcional</option>
                         <option value="Obligatorio sin Cadena de Responsabilidad">Obligatorio sin Cadena de Responsabilidad</option>
                         <option value="Obligatorio en Cadena de Responsabilidad">Obligatorio en Cadena de Responsabilidad</option>
