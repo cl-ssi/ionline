@@ -5,7 +5,7 @@
             <select
                 class="custom-select"
                 id="establishment-id"
-                wire:model="establishment_id"
+                wire:model.debounce.1000.ms="establishment_id"
             >
                 <option value="">Seleccione establecimiento</option>
                 @foreach($establishments->sortBy('name') as $establishment)
@@ -18,7 +18,7 @@
             <label for="ou">Unidad Organizacional</label>
             <select
                 class="custom-select"
-                wire:model="organizational_unit_id"
+                wire:model.debounce.1000ms="organizational_unit_id"
                 style="font-family:monospace;"
                 id="ou"
             >
@@ -37,7 +37,7 @@
                 <select
                     class="custom-select"
                     title="Seleccione usuario"
-                    wire:model="user_id"
+                    wire:model.debounce.1000.ms="user_id"
                 >
                     <option value="">Seleccione un usuario</option>
                     @foreach($users as $user)
