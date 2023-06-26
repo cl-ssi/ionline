@@ -169,7 +169,7 @@ class Inventory extends Model implements Auditable
     }
 
     public function getQrAttribute() {
-        return QrCode::generate(route('inventories.show', ['number' => $this->number]));
+        return QrCode::size(150)->generate(route('inventories.show', ['number' => $this->number]));
     }
 
     public function getMyComputerAttribute()
