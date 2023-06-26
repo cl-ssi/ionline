@@ -24,6 +24,7 @@ use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
 use App\Http\Livewire\Requirements\Categories;
+use App\Http\Livewire\Parameters\Program\BudgetMgr;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
 use App\Http\Livewire\Parameters\Parameter\ParameterEdit;
 use App\Http\Livewire\Parameters\Parameter\ParameterCreate;
@@ -1208,6 +1209,8 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
     });
 
+    Route::get('/programs/budgets', BudgetMgr::class)->name('budgetMgr');
+    
     Route::resource('programs', ParametersProgramController::class)->only(['index', 'create', 'edit']);
 
     Route::prefix('labels')->as('labels.')->group(function () {

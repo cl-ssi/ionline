@@ -28,9 +28,9 @@ class InventoryUploadExcel extends Component
             'excelFile' => 'required|mimes:xlsx,xls',
         ]);
 
-        $path = $this->excelFile->getRealPath();
+        //$path = $this->excelFile->path();
 
-        $data = collect(Excel::toArray([], $path)[0])
+        $data = collect(Excel::toArray([], $this->excelFile)[0])
             ->skip(2) // Omitir las primeras dos filas (encabezados)
             ->filter(function ($row) {
                 // Filtrar las filas que contienen datos
@@ -133,14 +133,14 @@ class InventoryUploadExcel extends Component
                 'observations' => $row[12],
                 'po_price' => $row[13],
                 'accounting_code_id' => $row[14],
-                'dte_number' => $row[15]
+                'dte_number' => $row[15],
             ]);
 
             InventoryMovement::updateOrCreate([
                 'inventory_id' => $inventory->id,
             ],[
                 'reception_confirmation' => 1,
-                'reception_date' => now(),
+                'reception_date' => ($row[16]) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[16]) : null,
                 // 'installation_date',
                 'observations' => $row[12],
                 'inventory_id' => $inventory->id,

@@ -237,7 +237,6 @@
                         <small class="text-monospace">
                         <a href="{{ route('inventories.show', ['number' => $inventory->number]) }}">{{ $inventory->number }}</a>
                         </small>
-                        {!! $inventory->qr !!}
                     </td>
                     <td>
                         {{ optional($inventory->unspscProduct)->name }}
