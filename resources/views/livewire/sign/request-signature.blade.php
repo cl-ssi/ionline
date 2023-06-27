@@ -256,7 +256,7 @@
         myColumns @json($myColumns)
         <br>
         myColumnsKeys @json($myColumns->keys())
-        <br> AAAA
+        <br>
         myColumnsCount @json($myColumns->count())
         <br>
         columnAvailable @json($columnAvailable)

@@ -13,6 +13,9 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
+            <a href="{{ route('indicators.programming_aps.show', [2023, 6]) }}">2023</a>
+        </li>
+        <li class="list-group-item">
             <a href="{{ route('indicators.programming_aps.show', [2022, 6]) }}">2022</a>
         </li>
         <li class="list-group-item">
