@@ -271,6 +271,7 @@ class ReceptionController extends Controller
                 'resultSubstance',
                 'reception.sampleToIsp',
                 'reception.recordToCourt',
+                'reception.partePoliceUnit',
             ])
             ->orderBy('reception_id', 'desc')
             ->paginate(1000);
