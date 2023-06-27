@@ -224,6 +224,9 @@ use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 
+use App\Http\Controllers\HotelBooking\HotelController;
+use App\Http\Controllers\HotelBooking\RoomController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1694,6 +1697,28 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
                 Route::get('add-products', [ControlController::class, 'addProduct'])->name('control.add-product');
             });
         });
+    });
+});
+
+Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(function () {
+    Route::view('/index', 'hotel_booking.home')->name('index');
+
+    Route::prefix('hotels')->as('hotels.')->middleware('auth')->group(function () {
+        Route::get('/', [HotelController::class, 'index'])->name('index');   
+        Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit'); 
+        Route::put('/update/{hotel}', [HotelController::class, 'update'])->name('update');
+        Route::get('/create', [HotelController::class, 'create'])->name('create');
+        Route::post('/store', [HotelController::class, 'store'])->name('store');
+        Route::delete('/{hotel}/destroy', [HotelController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('rooms')->as('rooms.')->middleware('auth')->group(function () {
+        Route::get('/', [RoomController::class, 'index'])->name('index');   
+        Route::get('/edit/{room}', [RoomController::class, 'edit'])->name('edit'); 
+        Route::put('/update/{room}', [RoomController::class, 'update'])->name('update');
+        Route::get('/create', [RoomController::class, 'create'])->name('create');
+        Route::post('/store', [RoomController::class, 'store'])->name('store');
+        Route::delete('/{room}/destroy', [RoomController::class, 'destroy'])->name('destroy');
     });
 });
 
