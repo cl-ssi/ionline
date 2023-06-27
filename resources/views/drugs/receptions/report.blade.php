@@ -39,6 +39,7 @@
             <th>N° Rec</th>
             <th>Fecha</th>
             <th>Oficio</th>
+            <th>Policia</th>
             <th style="width: 30px; word-wrap: break-word">Parte</th>
             <th>Fiscalia</th>
             <th>NUE</th>
@@ -63,6 +64,7 @@
             <td class="text-right"><a href="{{ route('drugs.receptions.show', $item->reception_id) }}">{{ $item->reception_id }}</a></td>
             <td nowrap>{{ $item->reception->date->format('d-m-Y') }}</td>
             <td class="text-center">{{ $item->reception->document_number }}</td>
+            <td class="text-center">{{ $item->reception->partePoliceUnit->name ?? '' }}</td>
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
             <td>{{ $item->nue }}</td>
