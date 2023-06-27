@@ -213,6 +213,8 @@ use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceController;
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
 use App\Http\Controllers\Agreements\WordTestController;
 use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
@@ -2169,9 +2171,6 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
 
 /* Rutas de Módulo de Sumario*/
-use App\Http\Controllers\Agreements\ProgramController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
