@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Summary;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
-use App\Models\Summary\SummaryEvent;
+use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
 use App\Models\Summary\SummaryEventFile;
 use Illuminate\Support\Facades\Storage;
@@ -54,7 +54,7 @@ class SummaryController extends Controller
         $event = EventType::first(); // Obtiene el primer registro de la tabla Event
         if ($event) {
             $summary->save();
-            $summaryevent = new SummaryEvent();
+            $summaryevent = new Event();
             $summaryevent->event_id = $event->id;
             $summaryevent->start_date = now();
             $summaryevent->summary_id = $summary->id;
@@ -70,7 +70,7 @@ class SummaryController extends Controller
 
     public function nextEventStore(Request $request)
     {
-        $summaryevent = new SummaryEvent($request->all());
+        $summaryevent = new Event($request->all());
         /* TODO: UTILIZAR el helper, now(), today() no es neceario importar carbón para esto */
         $summaryevent->start_date = now();
         $summaryevent->creator_id = auth()->user()->id;
@@ -119,14 +119,14 @@ class SummaryController extends Controller
         return view('summary.edit', compact('summary'));
     }
 
-    public function body(SummaryEvent $summaryEvent)
+    public function body(Event $summaryEvent)
     {
         //
 
         return view('summary.body.edit', compact('summaryEvent'));
     }
 
-    public function bodyUpdate(Request $request, SummaryEvent $summaryEvent)
+    public function bodyUpdate(Request $request, Event $summaryEvent)
     {
         $summaryEvent->fill($request->all());
         $summaryEvent->save();

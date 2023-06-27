@@ -9,7 +9,7 @@ use App\Models\Summary\Summary;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\User;
 
-class SummaryEvent extends Model
+class Event extends Model
 {
     use SoftDeletes;
 

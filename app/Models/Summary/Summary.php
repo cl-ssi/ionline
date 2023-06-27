@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 use App\Models\Establishment;
-use App\Models\Summary\SummaryEvent;
+use App\Models\Summary\Event;
 
 class Summary extends Model
 {
@@ -64,7 +64,7 @@ class Summary extends Model
     
     public function summaryEvents()
     {
-        return $this->hasMany(SummaryEvent::class, 'summary_id');
+        return $this->hasMany(Event::class, 'summary_id');
     }
 
 }

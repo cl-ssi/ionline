@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Summary;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Summary\EventType;
+use App\Models\Summary\Link;
 
 class EventTypeController extends Controller
 {
@@ -73,7 +74,7 @@ class EventTypeController extends Controller
     public function edit(EventType $event)
     {
         $types = EventType::all();
-        return view('summary.events.edit', compact('event','types'));
+        return view('summary.events.edit', compact('event', 'types'));
     }
 
     /**
@@ -86,7 +87,7 @@ class EventTypeController extends Controller
     public function update(Request $request, EventType $event)
     {
         /** Puse este DD para ver si me llega bien el array de links, el par de valores, befores and after */
-        dd($request->all());
+        //dd($request->all());
         $event->name = $request->input('name');
         $event->description = $request->input('description');
         $event->duration = $request->input('duration');
@@ -100,6 +101,25 @@ class EventTypeController extends Controller
         $event->num_repeat = $request->input('num_repeat');
         $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $event->save();
+
+
+        // Actualizar los enlaces entre eventos
+        $links = $request->input('links', []);
+
+        // Eliminar los enlaces existentes para el evento
+        $event->links()->delete();
+
+        // Crear y guardar nuevos enlaces según los seleccionados en el formulario
+        foreach ($links as $typeId => $value) {
+            if ($value == 1) {
+                $link = new Link();
+                $link->before_event_id = $event->id;
+                $link->after_event_id = $typeId;
+                $link->save();
+            }
+        }
+
+        // Actualizar los enlaces entre eventos con Link $link = new Link();
         session()->flash('success', 'Tipo de Evento Actualizado Exitosamente');
         return redirect()->route('summary.events.index');
     }
