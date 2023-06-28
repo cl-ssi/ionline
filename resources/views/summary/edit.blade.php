@@ -14,7 +14,7 @@
         @include('summary.partials.event')
     @endforeach
 
-    @if ($summary->lastNonSubEvent)
+    @if ($summary->lastEvent->end_date)
         @include('summary.partials.add_event')
     @endif
     
