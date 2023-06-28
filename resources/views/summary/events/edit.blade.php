@@ -110,6 +110,12 @@
                     Este evento asigna al actuario del sumario
                 </label>
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="sub_event" id="for-sub_event" value="1" {{ $event->sub_event ? 'checked' : '' }}>
+                <label class="form-check-label" for="for-sub_event">
+                    Este evento corresponde a un subevento
+                </label>
+            </div>
         </div>
     </fieldset>
 

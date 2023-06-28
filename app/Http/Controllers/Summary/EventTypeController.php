@@ -48,6 +48,7 @@ class EventTypeController extends Controller
         $event->investigator = isset($request->investigator);
         $event->actuary = isset($request->actuary);
         $event->repeat = isset($request->repeat);
+        $event->sub_event = isset($request->sub_event);
         $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $event->save();
         session()->flash('success', 'Se ha añadido el tipo de evento correctamente.');
@@ -96,6 +97,7 @@ class EventTypeController extends Controller
         $event->investigator = isset($request->investigator);
         $event->actuary = isset($request->actuary);
         $event->repeat = isset($request->repeat);
+        $event->sub_event = isset($request->sub_event);
         $event->num_repeat = $request->input('num_repeat');
         $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $event->save();

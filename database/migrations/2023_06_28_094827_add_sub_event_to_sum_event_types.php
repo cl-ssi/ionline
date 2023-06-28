@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameTableSumLinksToSumEventLinks extends Migration
+class AddSubEventToSumEventTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class RenameTableSumLinksToSumEventLinks extends Migration
      */
     public function up()
     {
-        Schema::table('sum_links', function (Blueprint $table) {
+        Schema::table('sum_event_types', function (Blueprint $table) {
             //
-            Schema::rename('sum_links', 'sum_event_links');
+            $table->boolean('sub_event')->after('actuary')->nullable();
         });
     }
 
@@ -26,9 +26,9 @@ class RenameTableSumLinksToSumEventLinks extends Migration
      */
     public function down()
     {
-        Schema::table('sum_links', function (Blueprint $table) {
+        Schema::table('sum_event_types', function (Blueprint $table) {
             //
-            Schema::rename('sum_event_links', 'sum_links');
+            $table->dropColumn('sub_event');
         });
     }
 }

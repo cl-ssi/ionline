@@ -27,6 +27,7 @@ class EventType extends Model
         'end',
         'investigator',
         'actuary',
+        'sub_event',
         'repeat',
         'num_repeat',
         'created_at',
