@@ -40,6 +40,7 @@
             <th>Fecha</th>
             <th>Oficio</th>
             <th>Policia</th>
+            <th>Funcionario que entrega</th>
             <th style="width: 30px; word-wrap: break-word">Parte</th>
             <th>Fiscalia</th>
             <th>NUE</th>
@@ -65,6 +66,7 @@
             <td nowrap>{{ $item->reception->date->format('d-m-Y') }}</td>
             <td class="text-center">{{ $item->reception->document_number }}</td>
             <td class="text-center">{{ $item->reception->partePoliceUnit->name ?? '' }}</td>
+            <td class="text-center">{{ $item->reception->delivery }}</td>
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
             <td>{{ $item->nue }}</td>
