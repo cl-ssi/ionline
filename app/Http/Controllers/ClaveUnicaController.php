@@ -154,7 +154,7 @@ class ClaveUnicaController extends Controller
                     /** Es para almacenar el json del usuario de CU, ya no ocupa */
                     //$this->storeUserClaveUnica($access_token);
                 } else {
-                    session()->flash('danger', 'Error en clave única: ' . json_decode($response));
+                    session()->flash('danger', 'Error en clave única: ' . $response->body());
                     return redirect()->route('login');
                 }
             } elseif (env('APP_ENV') == 'local') {
