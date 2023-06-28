@@ -20,6 +20,7 @@ class Event extends Model
         'body',
         'start_date',
         'end_date',
+        'user_id',
         'summary_id',
         'creator_id',
     ];
@@ -32,6 +33,11 @@ class Event extends Model
     public function type()
     {
         return $this->belongsTo(EventType::class, 'event_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function creator()

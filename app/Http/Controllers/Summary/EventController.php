@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
-use App\Models\Summary\Event;
 use Illuminate\Http\Request;
+use App\Models\Summary\Summary;
+use App\Models\Summary\Event;
+use App\Http\Controllers\Controller;
 
 class EventController extends Controller
 {
@@ -15,9 +16,16 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Summary $summary)
     {
-        //
+        Event::create([
+            'event_id' => $request->input('event_id'),
+            'start_date' => now(),
+            'summary_id' => $summary->id,
+            'creator_id' => auth()->id(),
+        ]);
+
+        return redirect()->back();
     }
 
     /**
@@ -39,39 +47,53 @@ class EventController extends Controller
      * @param  \App\Models\Summary\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, Summary $summary, Event $event)
     {
-
         $event->fill($request->all());
-        /** Preguntar si asigna fiscla */
-        if ($event->type->investigator) {
-            // Lógica para asignar fiscal
+
+        /** Preguntar si asigna fiscal */
+        if ($event->type->investigator == true) {
+            if($request->input('user_id')) {
+                $summary->investigator_id = $request->input('user_id');
+                $summary->save();
+            }
         }
 
-        /** Preungar si asigna actuario */
-        if ($event->type->actuary) {
-            // Lógica para asignar actuario
+        /** Preguntar si asigna actuario */
+        if ($event->type->actuary == true) {
+            if($request->input('user_id')) {
+                $summary->actuary_id = $request->input('user_id');
+                $summary->save();
+            }
         }
 
         /** Preguntar si es ultimo evento y cerrar el sumario */
 
         /** Parte de último evento que cierra sumario */
         if ($event->type->end) {
-            // Lógica para cierre de sumario
+            /* Lógica para cierre de sumario */
             $event->end_date = now();
-            $event->summary->end_at = now();
-            $event->summary->save();
+
+            $summary->end_at = now();
+            $summary->save();
         }
 
-        // Verificar si es el último evento y cerrar el sumario
+        /* Verificar si es el último evento y cerrar el sumario */
         if ($request->input('save') === 'save&close') {
-            // Lógica para cerrar el sumario
-            $event->end_date = now();
-        }        
+            /* Lógica para cerrar el evento */
+            if(is_null($event->user_id)) {
+                session()->flash('danger', 'Debe incluir un usuario');
+            }
+            else {
+                $event->end_date = now();
+            }
+        }
         
         $event->save();
-        session()->flash('success', 'Evento ' . $event->type->name . ' del sumario ' . $event->summary->name . ' Actualizado exitosamente');
-        return redirect()->route('summary.index');
+
+        session()->flash('success', 'El evento ' . $event->type->name . ' se actualizado exitosamente');
+
+        return redirect()->back();
     }
 
     /**

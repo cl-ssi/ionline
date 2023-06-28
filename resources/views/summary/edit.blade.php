@@ -10,11 +10,11 @@
 
     @include('summary.partials.header')
 
-    @foreach ($summary->summaryEvents as $event)
+    @foreach ($summary->events as $event)
         @include('summary.partials.event')
     @endforeach
 
-    @if ($summary->lastEvent)
+    @if ($summary->lastNonSubEvent)
         @include('summary.partials.add_event')
     @endif
     

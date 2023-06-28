@@ -11,18 +11,22 @@
             </p>
 
             @if ($event->type->require_user)
-                <span class="fas fa-user"></span> Alvaro Torres Fuchslohcer (reemplazar por shortName)
+                <span class="fas fa-user"></span> {{ $event->user->shortName}}
             @endif
         @else
             <!-- Cuando el evento está abierto -->
-            <form method="post" action="{{ route('summary.event.update', $event) }}">
+            <form method="post" action="{{ route('summary.event.update', [$event->summary,$event]) }}">
                 @csrf
                 @method('PUT')
 
                 <textarea class="form-control mb-3" name="body">{{ $event->body }}</textarea>
                 
                 @if ($event->type->require_user)
-                    @livewire('search-select-user', ['selected_id' => 'user_id'])
+                    @if($event->user_id)
+                        @livewire('search-select-user', ['selected_id' => 'user_id', 'user' => $event->user])
+                    @else
+                        @livewire('search-select-user', ['selected_id' => 'user_id'])
+                    @endif
                 @endif
                 
                 <hr>

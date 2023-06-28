@@ -2203,8 +2203,8 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
 
-    Route::prefix('event')->as('event.')->group(function () {
-        // Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
+    Route::prefix('{summary}/event')->as('event.')->group(function () {
+        Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
         Route::put('/{event}', [SummaryEventController::class, 'update'])->name('update');
     });
 

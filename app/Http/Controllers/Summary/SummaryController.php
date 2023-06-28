@@ -113,7 +113,12 @@ class SummaryController extends Controller
      */
     public function edit(Summary $summary)
     {
-        return view('summary.edit', compact('summary'));
+        foreach($summary->events as $event) {
+            if($event->type->sub_event == false) {
+                $lastNonSubEvent = $event;
+            }
+        }
+        return view('summary.edit', compact('summary','lastNonSubEvent'));
     }
 
     /**

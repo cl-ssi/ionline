@@ -66,8 +66,8 @@ class Summary extends Model
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
-
-    public function summaryEvents()
+    
+    public function events()
     {
         return $this->hasMany(Event::class, 'summary_id');
     }
