@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
+use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
@@ -17,8 +18,12 @@ class SummaryController extends Controller
      */
     public function index()
     {
-        /* TODO: mostrar sólo eventos en los que soy creador, fiscal o actuario */
-        $summaries = Summary::all();
+
+        $user_id = Auth::id();
+        $summaries = Summary::where('investigator_id', $user_id)
+            ->orWhere('actuary_id', $user_id)
+            ->orWhere('creator_id', $user_id)
+            ->get();
         return view('summary.index', compact('summaries'));
     }
 
@@ -109,6 +114,7 @@ class SummaryController extends Controller
         //
     }
 
+    
 
     /**
      * Remove the specified resource from storage.

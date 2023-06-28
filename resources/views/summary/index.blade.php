@@ -73,7 +73,7 @@
             <del>Crear controler FileController que se preocupe, de cargar, borrar y descargar los documentos.</del>
         </li>
         <li>
-            El index, que muestre los eventos en los que yo soy Fiscal o Actuario o creador
+            <del>El index, que muestre los eventos en los que yo soy Fiscal o Actuario o creador</del>
         </li>
         <li>
             Un sumario cerrado, no debe permitir agregar eventos.
