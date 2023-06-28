@@ -55,9 +55,12 @@ class EventController extends Controller
 
         /** Preguntar si es ultimo evento y cerrar el sumario */
 
-        /** Preungar si asigna actuario */
+        /** Parte de último evento que cierra sumario */
         if ($event->type->end) {
-            // Lógica para asignar actuario
+            // Lógica para cierre de sumario
+            $event->end_date = now();
+            $event->summary->end_at = now();
+            $event->summary->save();
         }
 
         // Verificar si es el último evento y cerrar el sumario

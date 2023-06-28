@@ -116,7 +116,7 @@ class EventTypeController extends Controller
         /* Actualizar los enlaces entre eventos con Link $link = new Link(); */
         session()->flash('success', 'Tipo de Evento actualizado exitosamente');
 
-        return redirect()->route('summary.events.index');
+        return redirect()->route('summary.event-types.index');
     }
 
     /**
