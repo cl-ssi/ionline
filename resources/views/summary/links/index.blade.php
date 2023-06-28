@@ -17,15 +17,14 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th>Evento</th>
                     <th>Evento Anterior</th>
+                    <th>Evento</th>
                     <th>Evento Sucesor</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($events as $event)
                     <tr>
-                        <td>{{ $event->name ?? '' }}</td>
                         <td>
                             <ul>
                                 @foreach ($event->linksBefore as $linkBefore)
@@ -33,6 +32,7 @@
                                 @endforeach
                             </ul>
                         </td>
+                        <td>{{ $event->name ?? '' }}</td>
                         <td>
                             <ul>
                                 @foreach ($event->linksAfter as $linkAfter)
