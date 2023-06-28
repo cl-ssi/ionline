@@ -102,7 +102,8 @@ class DigitalSignatureController extends Controller
         return redirect()->route($callbackRoute, [
             'message' => "El documento $modelId se ha firmado correctamente.",
             'modelId' => $modelId,
-            'signaturesFile' => $signaturesFile->id
+            'signaturesFile' => $signaturesFile->id,
+            'comment' => $request->comment
         ]);
     }
 

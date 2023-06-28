@@ -23,6 +23,7 @@
                             <input type="hidden" name="route" value={{$routePdfSignModal}}>
                             <input type="hidden" name="model_id" value={{$idModelModal}}>
                             <input type="hidden" name="callback_route" value={{$routeCallbackSignModal}}>
+                            <input type="hidden" name="comment" value="{{$comment}}">
                         </div>
                     </div>
                 </div>
