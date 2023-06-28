@@ -57,6 +57,9 @@ class EventController extends Controller
                 $summary->investigator_id = $request->input('user_id');
                 $summary->save();
             }
+            else {
+                session()->flash('danger', 'Debe incluir un usuario');
+            }
         }
 
         /** Preguntar si asigna actuario */
@@ -64,6 +67,9 @@ class EventController extends Controller
             if($request->input('user_id')) {
                 $summary->actuary_id = $request->input('user_id');
                 $summary->save();
+            }
+            else {
+                session()->flash('danger', 'Debe incluir un usuario');
             }
         }
 
@@ -81,12 +87,7 @@ class EventController extends Controller
         /* Verificar si es el último evento y cerrar el sumario */
         if ($request->input('save') === 'save&close') {
             /* Lógica para cerrar el evento */
-            if(is_null($event->user_id)) {
-                session()->flash('danger', 'Debe incluir un usuario');
-            }
-            else {
-                $event->end_date = now();
-            }
+            $event->end_date = now();
         }
         
         $event->save();
