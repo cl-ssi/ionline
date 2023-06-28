@@ -53,7 +53,42 @@
     </tbody>
 </table>
 
-<ul>        
+<ul>
+    <li>
+        Programar el update de evento:
+        <ul>
+            <li>Cierre de sumario</li>
+            <li>Asignación de fiscal</li>
+            <li>Asignación de actuario</li>
+        </ul>
+    </li>
+    <li>
+        Columna Estado, mostrar el nombre del tipo del ultimo evento $event->type->name (que no sea subevento)
+    </li>
+    <li>
+        Mostrar el Cuadro verde de "Agregar nuevo evento" sólo si el evento anterior está cerrado ( que no sea de tipo sub evento el anterior)
+    </li>
+    <li>
+        Crear controler FileController que se preocupe, de cargar, borrar y descargar los documentos.
+    </li>
+    <li>
+        El index, que muestre los eventos en los que yo soy Fiscal o Actuario o creador
+    </li>
+    <li>
+        Un sumario cerrado, no debe permitir agregar eventos.
+    </li>
+    <li>
+        Si un evento tiene vinculos de sub eventos, mostrar el cuadro verde dentro del card del evento, para poder crearle sub eventos sin que se haya cerrado. 
+        Una vez cerrario, no mostrar el cuadro verde para cargarle sub eventos.
+    </li>
+    <li>
+        Al editar un EventType, mostrar las 3 columnas de vinculos (como la hoja de vinculos), 
+        previous | current event | next  (las dos primeras informativas la ultima es la de los checkbox)
+    </li>
+    <li>
+        Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas
+    </li>
+
     <del><li>Cambiar modelo summaryEvents a Events</li></del>
     <li><del>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
         $event->type->riquire_user</del></li>
