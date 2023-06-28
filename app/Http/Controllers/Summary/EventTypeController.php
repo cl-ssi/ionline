@@ -86,8 +86,6 @@ class EventTypeController extends Controller
      */
     public function update(Request $request, EventType $event)
     {
-        /** Puse este DD para ver si me llega bien el array de links, el par de valores, befores and after */
-        //dd($request->all());
         $event->name = $request->input('name');
         $event->description = $request->input('description');
         $event->duration = $request->input('duration');
@@ -102,25 +100,20 @@ class EventTypeController extends Controller
         $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $event->save();
 
-
-        // Actualizar los enlaces entre eventos
-        $links = $request->input('links', []);
-
-        // Eliminar los enlaces existentes para el evento
+        /* Eliminar los enlaces existentes para el evento */
         $event->links()->delete();
 
-        // Crear y guardar nuevos enlaces según los seleccionados en el formulario
-        foreach ($links as $typeId => $value) {
-            if ($value == 1) {
-                $link = new Link();
-                $link->before_event_id = $event->id;
-                $link->after_event_id = $typeId;
-                $link->save();
-            }
+        /* Crear los nuevos enlaces según los seleccionados en el formulario */
+        foreach ($request->input('links', []) as $type_id => $value) {
+            Link::create([
+                "before_event_id" => $event->id,
+                "after_event_id" => $type_id,
+            ]);
         }
 
-        // Actualizar los enlaces entre eventos con Link $link = new Link();
-        session()->flash('success', 'Tipo de Evento Actualizado Exitosamente');
+        /* Actualizar los enlaces entre eventos con Link $link = new Link(); */
+        session()->flash('success', 'Tipo de Evento actualizado exitosamente');
+
         return redirect()->route('summary.events.index');
     }
 
