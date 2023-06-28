@@ -29,7 +29,7 @@ class Event extends Model
         'end_date',
     ];
 
-    public function event()
+    public function type()
     {
         return $this->belongsTo(EventType::class, 'event_id');
     }

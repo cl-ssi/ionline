@@ -8,7 +8,7 @@
             <div class="col">
                 <select name="" id="" class="form-control">
                     <option value=""></option>
-                    @foreach ($event->event->linksAfter as $linkAfter)
+                    @foreach ($event->type->linksAfter as $linkAfter)
                         <option
                         value="{{ $linkAfter->afterEvent->id }}">
                         {{ $linkAfter->afterEvent->name ?? '' }}

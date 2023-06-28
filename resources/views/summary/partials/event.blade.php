@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">
-            {{ $event->event->name }}
+            {{ $event->type->name }}
         </h5>
 
         @if ($event->end_date)
@@ -10,7 +10,7 @@
                 {{ $event->body }}
             </p>
 
-            @if ($event->event->require_user)
+            @if ($event->type->require_user)
                 <span class="fas fa-user"></span> Alvaro Torres Fuchslohcer (reemplazar por shortName)
             @endif
         @else
@@ -21,7 +21,7 @@
 
                 <textarea class="form-control mb-3">{{ $event->body }}</textarea>
                 
-                @if ($event->event->require_user)
+                @if ($event->type->require_user)
                     @livewire('search-select-user', ['selected_id' => 'user_id'])
                 @endif
                 
@@ -47,7 +47,7 @@
             </footer>
         </blockquote>
     </div>
-    @if ($event->event->require_file)
+    @if ($event->type->require_file)
         <div class="card-footer text-muted">
             <div class="row">
 

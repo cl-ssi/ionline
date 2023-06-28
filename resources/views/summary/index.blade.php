@@ -55,8 +55,8 @@
 
 <ul>        
     <del><li>Cambiar modelo summaryEvents a Events</li></del>
-    <li>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
-        $event->type->riquire_user</li>
+    <li><del>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:
+        $event->type->riquire_user</del></li>
     <li>Tablas:
         <ul>
 
