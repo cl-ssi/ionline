@@ -13,7 +13,7 @@ class Event extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'sum_summaries_events';
+    protected $table = 'sum_summary_events';
 
     protected $fillable = [
         'event_id',

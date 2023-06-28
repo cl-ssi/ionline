@@ -10,7 +10,7 @@ use App\Models\Summary\Event;
 class SummaryEventFile extends Model
 {
     use SoftDeletes;
-    protected $table = 'sum_summaries_events_files';
+    protected $table = 'sum_summary_event_files';
 
     protected $fillable = [
         'name',

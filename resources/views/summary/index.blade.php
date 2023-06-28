@@ -57,19 +57,19 @@
         <ul>
 
             <li>
-                sum_summaries,
+                <del>sum_summaries,</del>
             </li>
             <li>
-                sum_summary_events,
+                <del>sum_summary_events,</del>
             </li>
             <li>
-                sum_summary_event_files
+                <del>sum_summary_event_files</del>
             </li>
             <li>
-                sum_event_types,
+                <del>sum_event_types</del>
             </li>
             <li>
-                sum_event_links,
+                <del>sum_event_links</del>
             </li>
         </ul>
     </li>
