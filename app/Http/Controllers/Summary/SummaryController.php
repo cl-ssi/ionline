@@ -122,38 +122,6 @@ class SummaryController extends Controller
         return view('summary.edit', compact('summary'));
     }
 
-    public function body(Event $summaryEvent)
-    {
-        //
-
-        return view('summary.body.edit', compact('summaryEvent'));
-    }
-
-    public function bodyUpdate(Request $request, Event $summaryEvent)
-    {
-        $summaryEvent->fill($request->all());
-        $summaryEvent->save();
-
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
-                $summaryEventFile = new SummaryEventFile();
-                $filename = $file->getClientOriginalName();
-                $summaryEventFile->summary_event_id = $summaryEvent->id;
-                $summaryEventFile->summary_id = $summaryEvent->summary->id;
-                $summaryEventFile->name = $file->getClientOriginalName();
-
-                $summaryEventFile->file = $file->storeAs('ionline/summary/' .
-                    $summaryEvent->summary->id, $filename, ['disk' => 'gcs']);
-
-                $summaryEventFile->save();
-            }
-        }
-
-        session()->flash('success', 'Evento ' . $summaryEvent->event->name . ' del sumario ' . $summaryEvent->summary->name . ' Actualizado exitosamente');
-        return redirect()->route('summary.index');
-    }
-
     /**
      * Update the specified resource in storage.
      *

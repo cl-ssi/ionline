@@ -6,7 +6,7 @@
     </li>
     
     <li class="nav-item">
-        <a class="nav-link {{ active('summary.events.index') }}" href="{{ route('summary.events.index') }}">
+        <a class="nav-link {{ active('summary.event-types.index') }}" href="{{ route('summary.event-types.index') }}">
             <i class="fas fa-list-alt"></i> Tipos de Eventos
         </a>
     </li>

@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Editar Tipo Evento</h3>
 
-<form method="POST" action="{{ route('summary.events.update', $event) }}">
+<form method="POST" action="{{ route('summary.event-types.update', $event) }}">
     @csrf
     @method('PUT')
     <div class="form-group row">
@@ -135,7 +135,7 @@
     <div class="form-group row mt-3">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-success mr-3">Actualizar</button>
-            <a href="{{ route('summary.events.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+            <a href="{{ route('summary.event-types.index') }}" class="btn btn-outline-secondary">Cancelar</a>
         </div>
     </div>
 </form>

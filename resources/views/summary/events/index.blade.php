@@ -1,13 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Módulo de Sumario - Eventos')
+
+@section('title', 'Módulo de Sumario - Tipos de Eventos')
+
 @section('content')
-    @include('summary.nav')
+
+@include('summary.nav')
     <div class="form-row">
         <div class="col">
             <h3 class="mb-3">Listado de Tipos de Eventos</h3>
         </div>
         <div class="col text-end">
-            <a class="btn btn-success float-right" href="{{ route('summary.events.create') }}">
+            <a class="btn btn-success float-right" href="{{ route('summary.event-types.create') }}">
                 <i class="fas fa-plus"></i> Nuevo Tipo de Evento
             </a>
         </div>
@@ -37,10 +40,10 @@
                         <td>{{ $event->num_repeat }}</td>
                         <td>
                             <div class="d-flex ">
-                                <a class="btn btn-sm btn-primary me-2" href="{{ route('summary.events.edit', $event) }}">
+                                <a class="btn btn-sm btn-primary me-2" href="{{ route('summary.event-types.edit', $event) }}">
                                     <i class="fas fa-fw fa-edit"></i>
                                 </a>
-                                <form method="POST" action="{{ route('summary.events.destroy', $event) }}">
+                                <form method="POST" action="{{ route('summary.event-types.destroy', $event) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
