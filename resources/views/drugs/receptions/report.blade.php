@@ -47,6 +47,8 @@
             <th>Imputado</th>
             <th>Sustancia Presunta</th>
             <th>Sustancia Determinda</th>
+            <th>P.Oficio</th>
+            <th>P.Bruto</th>
             <th>P.Neto</th>
             <th>Muestra</th>
             <th>C.Muestra</th>
@@ -78,6 +80,8 @@
                 @endforeach
                 {{ ($item->resultSubstance) ? $item->resultSubstance->name:'' }}
             </td>
+            <td class="text-right">{{ $item->document_weight }}</td>
+            <td class="text-right">{{ $item->gross_weight }}</td>
             <td class="text-right">{{ $item->net_weight }}</td>
             <td class="text-right">{{ $item->sample }}</td>
             <td class="text-right">{{ $item->countersample }}</td>
