@@ -19,7 +19,7 @@
                 @csrf
                 @method('PUT')
 
-                <textarea class="form-control mb-3">{{ $event->body }}</textarea>
+                <textarea class="form-control mb-3" name="body">{{ $event->body }}</textarea>
                 
                 @if ($event->type->require_user)
                     @livewire('search-select-user', ['selected_id' => 'user_id'])

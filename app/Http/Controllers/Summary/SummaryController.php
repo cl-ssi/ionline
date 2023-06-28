@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
-use App\Models\Summary\SummaryEventFile;
-use Illuminate\Support\Facades\Storage;
 
 class SummaryController extends Controller
 {
@@ -130,18 +128,7 @@ class SummaryController extends Controller
         //
     }
 
-    public function downloadFile(SummaryEventFile $file)
-    {
-        return Storage::disk('gcs')->download($file->file);
-    }
-
-    public function deleteFile(SummaryEventFile $file)
-    {
-        $file->delete();
-        Storage::disk('gcs')->delete($file->file);
-        session()->flash('danger', 'Su Archivo ha sido eliminado Exitosamente.');
-        return redirect()->route('summary.index');
-    }
+    
 
     /**
      * Remove the specified resource from storage.

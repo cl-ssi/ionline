@@ -41,36 +41,36 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+
+        $event->fill($request->all());
         /** Preguntar si asigna fiscla */
+        if ($event->type->investigator) {
+            // Lógica para asignar fiscal
+        }
 
         /** Preungar si asigna actuario */
+        if ($event->type->actuary) {
+            // Lógica para asignar actuario
+        }
 
         /** Preguntar si es ultimo evento y cerrar el sumario */
 
-
-        dd($request->all());
-        $event->fill($request->all());
-        $event->save();
-
-        /** Sacar el código de carga y eliminación de archivo a otros metodos de archivos */
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
-                $summaryEventFile = new SummaryEventFile();
-                $filename = $file->getClientOriginalName();
-                $summaryEventFile->summary_event_id = $event->id;
-                $summaryEventFile->summary_id = $event->summary->id;
-                $summaryEventFile->name = $file->getClientOriginalName();
-
-                $summaryEventFile->file = $file->storeAs('ionline/summary/' .
-                    $event->summary->id, $filename, ['disk' => 'gcs']);
-
-                $summaryEventFile->save();
-            }
+        /** Parte de último evento que cierra sumario */
+        if ($event->type->end) {
+            // Lógica para cierre de sumario
+            $event->end_date = now();
+            $event->summary->end_at = now();
+            $event->summary->save();
         }
 
+        // Verificar si es el último evento y cerrar el sumario
+        if ($request->input('save') === 'save&close') {
+            // Lógica para cerrar el sumario
+            $event->end_date = now();
+        }        
+        
+        $event->save();
         session()->flash('success', 'Evento ' . $event->type->name . ' del sumario ' . $event->summary->name . ' Actualizado exitosamente');
-
         return redirect()->route('summary.index');
     }
 
