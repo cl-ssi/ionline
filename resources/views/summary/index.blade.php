@@ -90,6 +90,9 @@
         <li>
             Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas
         </li>
+        <li>
+            La clave foranea de Eventos a EventType debería llamarse "event_type_id"
+        </li>
 
         <li><del>Cambiar modelo summaryEvents a Events</del></li>
         <li><del>El modelo evento tiene que tener relación con EventType con el nombre Type solamente ej:

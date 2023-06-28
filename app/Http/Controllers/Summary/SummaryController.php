@@ -17,7 +17,7 @@ class SummaryController extends Controller
      */
     public function index()
     {
-        //
+        /* TODO: mostrar sólo eventos en los que soy creador, fiscal o actuario */
         $summaries = Summary::all();
         return view('summary.index', compact('summaries'));
     }
@@ -41,57 +41,31 @@ class SummaryController extends Controller
     public function store(Request $request)
     {
 
-        $event = EventType::first(); // Obtiene el primer registro de la tabla Event
+        /** Obtiene el evento marcado como primer evento de un sumario */
+        $eventType = EventType::where('start',true)->first();
 
-        $summary = new Summary($request->All());
-        $summary->creator_id = auth()->user()->id;
-        $summary->status = $event->name;
-        $summary->start_at = now();
-        $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
-
-        
-        if ($event) {
+        if(is_null($eventType)) {
+            session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario"');
+        }
+        else {
+            $summary = new Summary($request->All());
+            $summary->creator_id = auth()->user()->id;
+            $summary->status = $event->name;
+            $summary->start_at = now();
+            $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
             $summary->save();
-            $summaryevent = new Event();
-            $summaryevent->event_id = $event->id;
-            $summaryevent->start_date = now();
-            $summaryevent->summary_id = $summary->id;
-            $summaryevent->creator_id = auth()->user()->id;
-            $summaryevent->save();
+            
+            $event = new Event();
+            $event->event_id = $eventType->id;
+            $event->start_date = now();
+            $event->summary_id = $summary->id;
+            $event->creator_id = auth()->id();
+            $event->save();
+
             session()->flash('success', 'Se creo el sumario correctamente.');
-        } else {
-            session()->flash('warning', 'No existe creado el primer evento del sumario');
         }
 
         return redirect()->route('summary.index');
-    }
-
-    public function nextEventStore(Request $request)
-    {
-        $summaryevent = new Event($request->all());
-        $summaryevent->start_date = now();
-        $summaryevent->creator_id = auth()->user()->id;
-        $summaryevent->save();
-        session()->flash('success', 'Se creo el Proximo evento exitosamente');
-        return redirect()->route('summary.index');
-    }
-
-
-    public function closeSummary(Request $request, $summaryId)
-    {
-
-        $closeDate = $request->input('closeDate');
-        $observation = $request->input('observation');
-
-        $summary = Summary::find($summaryId);
-        $summary->end_date = $closeDate;
-        $summary->observation = $observation;
-
-
-        $summary->save();
-
-        // Redireccionar o mostrar mensaje de éxito
-        return redirect()->back()->with('success', 'Sumario cerrado exitosamente');
     }
 
     /**
@@ -100,7 +74,7 @@ class SummaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Summary $summary)
     {
         //
     }
@@ -108,24 +82,26 @@ class SummaryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Summary  $summary
      * @return \Illuminate\Http\Response
      */
     public function edit(Summary $summary)
     {
-        foreach($summary->events as $event) {
-            if($event->type->sub_event == false) {
-                $lastNonSubEvent = $event;
-            }
-        }
-        return view('summary.edit', compact('summary','lastNonSubEvent'));
+        /** Esto ya no se necesita, ya que está implementado lastEvent */
+        // foreach($summary->events as $event) {
+        //     if($event->type->sub_event == false) {
+        //         $lastNonSubEvent = $event;
+        //     }
+        // }
+
+        return view('summary.edit', compact('summary'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Summary  $summary
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -133,12 +109,11 @@ class SummaryController extends Controller
         //
     }
 
-    
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Summary  $summary
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
