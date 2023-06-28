@@ -1,12 +1,16 @@
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">
-            {{ $event->type->name }}
+            {{ $event->type->name }} 
+            <small class="text-muted">
+                ({{ $event->type->description }})
+            </small>
         </h5>
 
         @if ($event->end_date)
             <!-- Cuando el evento está terminado -->
             <p class="card-text">
+                <label for="for-body">Observaciones de este paso:</label><br>
                 {{ $event->body }}
             </p>
 
@@ -19,7 +23,10 @@
                 @csrf
                 @method('PUT')
 
-                <textarea class="form-control mb-3" name="body">{{ $event->body }}</textarea>
+                <div class="form-group">
+                    <label for="for-body">Observaciones de este paso: </label>
+                    <textarea class="form-control mb-3" name="body">{{ $event->body }}</textarea>
+                </div>
                 
                 @if ($event->type->require_user)
                     @if($event->user_id)
