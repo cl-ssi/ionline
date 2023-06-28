@@ -45,13 +45,16 @@ class SummaryController extends Controller
      */
     public function store(Request $request)
     {
+
+        $event = EventType::first(); // Obtiene el primer registro de la tabla Event
+
         $summary = new Summary($request->All());
         $summary->creator_id = auth()->user()->id;
-        $summary->status = "En Proceso";
+        $summary->status = $event->name;
         $summary->start_at = now();
         $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
 
-        $event = EventType::first(); // Obtiene el primer registro de la tabla Event
+        
         if ($event) {
             $summary->save();
             $summaryevent = new Event();

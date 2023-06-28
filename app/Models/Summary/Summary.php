@@ -19,6 +19,9 @@ class Summary extends Model
         'subject', 
         'name', 
         'status',
+        'resolution_number',
+        'resolution_date',
+        'type',
         'start_at',
         'end_at',
         'start_date',
@@ -36,6 +39,7 @@ class Summary extends Model
     * @var array
     */
     protected $dates = [
+        'resolution_date',
         'start_date',
         'start_at',
         'end_date',

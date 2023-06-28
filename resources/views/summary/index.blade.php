@@ -23,7 +23,9 @@
         <tr>
             <th>Id</th>
             <th>Asunto</th>
-            <th>Estado</th>
+            <th>Nº Res.</th>
+            <th>Fecha Res.</th>
+            <th>Estado/Último Evento</th>
             <th>Duración</th>
             <th>Fiscal</th>
             <th>Actuario</th>
@@ -35,6 +37,8 @@
             <tr>
                 <td>{{ $summary->id }}</td>
                 <td>{{ $summary->subject }}</td>
+                <td>{{ $summary->resolution_number }}</td>
+                <td>{{ $summary->resolution_date }}</td>
                 <td>{{ $summary->status }}</td>
                 <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                 <td>{{ optional($summary->investigator)->tinnyName }}</td>
