@@ -45,4 +45,29 @@ class SummaryFileController extends Controller
             }
         }
     }
+
+    public function store(Request $request)
+    {        
+        // Cargar el modelo Event usando el evento ID
+        $event = Event::findOrFail($request->input('event_id'));        
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+
+            foreach ($files as $file) {
+                $summaryEventFile = new SummaryEventFile();
+                $filename = $file->getClientOriginalName();
+                $summaryEventFile->summary_event_id = $event->id;
+                $summaryEventFile->summary_id = $event->summary_id;
+                $summaryEventFile->name = $file->getClientOriginalName();
+
+                $summaryEventFile->file = $file->storeAs('ionline/summary/' .
+                    $event->summary->id, $filename, ['disk' => 'gcs']);
+
+                $summaryEventFile->save();
+            }            
+            return redirect()->back()->with('success', 'Archivos adjuntados correctamente.');
+        }
+        
+        return redirect()->back()->with('error', 'No se seleccionaron archivos.');
+    }
 }

@@ -71,6 +71,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\EventController as SummaryEventController;
 use App\Http\Controllers\Summary\LinkController;
+use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\EventTypeController as SummaryEventTypeController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
@@ -2209,8 +2210,9 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
     });
 
     Route::prefix('files')->as('files.')->group(function () {
-        Route::get('/{file}/delete', [SummaryController::class, 'deleteFile'])->name('delete');
-        Route::get('/{file}/download', [SummaryController::class, 'downloadFile'])->name('download');
+        Route::post('/store', [SummaryFileController::class, 'store'])->name('store');
+        Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
+        Route::get('/{file}/download', [SummaryFileController::class, 'downloadFile'])->name('download');
     });
 
     Route::prefix('event-types')->as('event-types.')->group(function () {
