@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <th>Estado</th>
-            <td>{{ $summary->status ?? '' }} (3 días)
+            <td>{{ $summary->status ?? '' }} ({{ Carbon\Carbon::parse($summary->start_at)->diffInDays(now()) }} días)</td>
             </td>
         </tr>
         <tr>
