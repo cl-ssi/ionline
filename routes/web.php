@@ -2200,6 +2200,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
+    Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
 
     Route::prefix('event')->as('event.')->group(function () {

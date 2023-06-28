@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Establishment;
 use App\Models\Summary\Event;
 
+
 class Summary extends Model
 {
     use SoftDeletes;
@@ -16,8 +17,8 @@ class Summary extends Model
     protected $table = 'sum_summaries';
 
     protected $fillable = [
-        'subject', 
-        'name', 
+        'subject',
+        'name',
         'status',
         'resolution_number',
         'resolution_date',
@@ -34,10 +35,10 @@ class Summary extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'resolution_date',
         'start_date',
@@ -65,10 +66,20 @@ class Summary extends Model
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
     }
-    
+
     public function summaryEvents()
     {
         return $this->hasMany(Event::class, 'summary_id');
     }
 
+    public function lastEvent()
+    {
+        return $this->hasOne(Event::class, 'summary_id')
+            ->where(function ($query) {
+                $query->whereHas('type', function ($query) {
+                    $query->where('sub_event', 0)->orWhereNull('sub_event');
+                });
+            })
+            ->latest();
+    }
 }

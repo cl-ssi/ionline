@@ -14,10 +14,8 @@
         @include('summary.partials.event')
     @endforeach
 
-    @foreach ($summary->summaryEvents as $event)
-        @if ($event->type->sub_event != 1 && $event->end_date != null)
-            @include('summary.partials.add_event')
-        @endif
-    @endforeach
-
+    @if ($summary->lastEvent)
+        @include('summary.partials.add_event')
+    @endif
+    
 @endsection
