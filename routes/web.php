@@ -2202,11 +2202,10 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
 
-    // Route::get('/event/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
-    // Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
-    // Route::post('/store', [SummaryController::class, 'store'])->name('store');
-    // Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
-    // Route::post('/summary/close/{summaryId}', [SummaryController::class, 'closeSummary'])->name('closeSummary');
+    Route::prefix('event')->as('event.')->group(function () {
+        // Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
+        Route::put('/{event}', [SummaryEventController::class, 'update'])->name('update');
+    });
 
     Route::prefix('files')->as('files.')->group(function () {
         Route::get('/{file}/delete', [SummaryController::class, 'deleteFile'])->name('delete');
@@ -2217,9 +2216,9 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/', [SummaryEventTypeController::class, 'index'])->name('index');
         Route::get('/create', [SummaryEventTypeController::class, 'create'])->name('create');
         Route::post('/store', [SummaryEventTypeController::class, 'store'])->name('store');
-        Route::get('/edit/{event}', [SummaryEventTypeController::class, 'edit'])->name('edit');
-        Route::put('/update/{event}', [SummaryEventTypeController::class, 'update'])->name('update');
-        Route::delete('{event}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
+        Route::get('/{event}/edit', [SummaryEventTypeController::class, 'edit'])->name('edit');
+        Route::put('/{event}/update', [SummaryEventTypeController::class, 'update'])->name('update');
+        Route::delete('/{event}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('links')->as('links.')->group(function () {

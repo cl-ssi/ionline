@@ -10,9 +10,6 @@ use App\Models\Summary\EventType;
 use App\Models\Summary\SummaryEventFile;
 use Illuminate\Support\Facades\Storage;
 
-
-
-
 class SummaryController extends Controller
 {
     /**
@@ -74,7 +71,6 @@ class SummaryController extends Controller
     public function nextEventStore(Request $request)
     {
         $summaryevent = new Event($request->all());
-        /* TODO: UTILIZAR el helper, now(), today() no es neceario importar carbón para esto */
         $summaryevent->start_date = now();
         $summaryevent->creator_id = auth()->user()->id;
         $summaryevent->save();

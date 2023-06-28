@@ -15,18 +15,23 @@
             @endif
         @else
             <!-- Cuando el evento está abierto -->
-            <textarea class="form-control mb-3">{{ $event->body }}</textarea>
+            <form method="post" action="{{ route('summary.event.update', $event) }}">
+                @csrf
+                @method('PUT')
 
-            @if ($event->event->require_user)
-                @livewire('search-select-user', ['selected_id' => 'user_id'])
-            @endif
-
-            <hr>
-
-            <div class="float-right">
-                <button class="btn btn-outline-primary" type="button">Guardar</button>
-                <button class="btn btn-primary " type="button">Guardar y Finalizar</button>
-            </div>
+                <textarea class="form-control mb-3">{{ $event->body }}</textarea>
+                
+                @if ($event->event->require_user)
+                    @livewire('search-select-user', ['selected_id' => 'user_id'])
+                @endif
+                
+                <hr>
+                
+                <div class="float-right">
+                    <button type="submit" name="save" class="btn btn-outline-primary" value="save">Guardar</button>
+                    <button type="submit" name="save" class="btn btn-primary " value="save&close">Guardar y Finalizar</button>
+                </div>
+            </form>
         @endif
 
 
@@ -43,10 +48,12 @@
         </blockquote>
     </div>
     @if ($event->event->require_file)
-        <div class="card-footer text-muted row">
-            <div class="col">
-                <li>
-                    <a href=""><i class="fas fa-paperclip"></i> nombre del archivo 1</a>
+        <div class="card-footer text-muted">
+            <div class="row">
+
+                <div class="col">
+                    <li>
+                        <a href=""><i class="fas fa-paperclip"></i> nombre del archivo 1</a>
                 </li>
                 <li>
                     <a href=""><i class="fas fa-paperclip"></i> nombre del archivo 2</a>
@@ -66,7 +73,8 @@
                             </button>
                         </div>
                     </div>
-                @endif
+                    @endif
+                </div>
             </div>
         </div>
     @endif

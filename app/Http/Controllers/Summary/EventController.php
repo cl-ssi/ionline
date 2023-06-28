@@ -8,15 +8,6 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -40,16 +31,6 @@ class EventController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Summary\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -60,9 +41,18 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        /** Preguntar si asigna fiscla */
+
+        /** Preungar si asigna actuario */
+
+        /** Preguntar si es ultimo evento y cerrar el sumario */
+
+
+        dd($request->all());
         $event->fill($request->all());
         $event->save();
 
+        /** Sacar el código de carga y eliminación de archivo a otros metodos de archivos */
         if ($request->hasFile('files')) {
             $files = $request->file('files');
             foreach ($files as $file) {
@@ -80,6 +70,7 @@ class EventController extends Controller
         }
 
         session()->flash('success', 'Evento ' . $event->type->name . ' del sumario ' . $event->summary->name . ' Actualizado exitosamente');
+
         return redirect()->route('summary.index');
     }
 
