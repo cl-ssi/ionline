@@ -71,7 +71,7 @@ class SummaryController extends Controller
             $summary->save();
             
             $event = new Event();
-            $event->event_id = $eventType->id;
+            $event->event_type_id = $eventType->id;
             $event->start_date = now();
             $event->summary_id = $summary->id;
             $event->creator_id = auth()->id();

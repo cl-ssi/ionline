@@ -16,7 +16,7 @@ class Event extends Model
     protected $table = 'sum_summary_events';
 
     protected $fillable = [
-        'event_id',
+        'event_type_id',
         'body',
         'start_date',
         'end_date',
@@ -32,7 +32,7 @@ class Event extends Model
 
     public function type()
     {
-        return $this->belongsTo(EventType::class, 'event_id');
+        return $this->belongsTo(EventType::class, 'event_type_id');
     }
 
     public function user()

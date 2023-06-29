@@ -55,7 +55,7 @@
 
     <ul>
         <li>
-            La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"
+            <del>La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"</del>
         </li>
         <li>
             
