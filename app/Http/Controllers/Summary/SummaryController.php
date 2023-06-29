@@ -34,7 +34,16 @@ class SummaryController extends Controller
      */
     public function create()
     {
-        return view('summary.create');
+        $eventType = EventType::where('start',true)->first();
+
+        if(is_null($eventType)) {
+            session()->flash('danger', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario"');
+            return redirect()->back();
+        }
+        else {
+            return view('summary.create');
+        }
+
     }
 
     /**
