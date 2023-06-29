@@ -88,8 +88,8 @@
             Una vez cerrario, no mostrar el cuadro verde para cargarle sub eventos.
         </li>
         <li>
-            Al editar un EventType, mostrar las 3 columnas de vinculos (como la hoja de vinculos),
-            previous | current event | next (las dos primeras informativas la ultima es la de los checkbox)
+            <del>Al editar un EventType, mostrar las 3 columnas de vinculos (como la hoja de vinculos),
+            previous | current event | next (las dos primeras informativas la ultima es la de los checkbox)</del>
         </li>
         <li>
             Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas
