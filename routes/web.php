@@ -2219,9 +2219,9 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/', [SummaryEventTypeController::class, 'index'])->name('index');
         Route::get('/create', [SummaryEventTypeController::class, 'create'])->name('create');
         Route::post('/store', [SummaryEventTypeController::class, 'store'])->name('store');
-        Route::get('/{event}/edit', [SummaryEventTypeController::class, 'edit'])->name('edit');
-        Route::put('/{event}/update', [SummaryEventTypeController::class, 'update'])->name('update');
-        Route::delete('/{event}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
+        Route::get('/{eventType}/edit', [SummaryEventTypeController::class, 'edit'])->name('edit');
+        Route::put('/{eventType}/update', [SummaryEventTypeController::class, 'update'])->name('update');
+        Route::delete('/{eventType}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('links')->as('links.')->group(function () {
