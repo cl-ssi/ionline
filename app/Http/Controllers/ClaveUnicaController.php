@@ -154,6 +154,7 @@ class ClaveUnicaController extends Controller
                     /** Es para almacenar el json del usuario de CU, ya no ocupa */
                     //$this->storeUserClaveUnica($access_token);
                 } else {
+                    /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
                     $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
                     $response_wssi = Http::get($url);
 
@@ -169,14 +170,17 @@ class ClaveUnicaController extends Controller
                         $user->email = $user_cu->email;
                     }
 
-                    logger()->info('Utilizando el ByPass de CU a través del WSSI', ['access_token' => $access_token]);
+                    logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $response->body(),
+                    ]);
+                    /** Acá termina, para volver todo a la normalidad, hay que descomentar el flash y el return de abajo */
 
                     // logger()->info($response_wssi);
 
                     // $json_response = json_decode($response);
-                    // logger()->info($json_response->sub);
+                    // logger()->info($response->body());
 
-                    logger()->info($response->body());
                     // session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
                     // return redirect()->route('login');
                 }
