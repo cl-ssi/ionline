@@ -158,8 +158,11 @@ class ClaveUnicaController extends Controller
                     $response_wssi = Http::get($url);
 
                     logger()->info($access_token);
-                    
+
                     logger()->info($response_wssi);
+
+                    $json_response = json_decode($response);
+                    logger()->info($json_response->sub);
 
                     logger()->info($response->body());
                     session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
