@@ -157,8 +157,8 @@ class ClaveUnicaController extends Controller
                     $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
                     $response_wssi = Http::get($url);
 
-                    logger()->info($response_wssi->body());
-                    
+                    logger()->info(json_decode($response_wssi));
+
                     logger()->info($access_token);
                     logger()->info($response->body());
                     session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
