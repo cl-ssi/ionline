@@ -154,6 +154,11 @@ class ClaveUnicaController extends Controller
                     /** Es para almacenar el json del usuario de CU, ya no ocupa */
                     //$this->storeUserClaveUnica($access_token);
                 } else {
+                    $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
+                    $response_wssi = Http::get($url);
+
+                    logger()->info($response_wssi->body());
+                    
                     logger()->info($access_token);
                     logger()->info($response->body());
                     session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
