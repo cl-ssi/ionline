@@ -55,11 +55,15 @@
 
     <ul>
         <li>
-            Programar el update de evento:
+            La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"
+        </li>
+        <li>
+            
+            <del>Programar el update de evento:</del>
             <ul>
-                <li>Cierre de sumario</li>
-                <li>Asignación de fiscal</li>
-                <li>Asignación de actuario</li>
+                <li><del>Cierre de sumario</del></li>
+                <li><del>Asignación de fiscal</del></li>
+                <li><del>Asignación de actuario</del></li>
             </ul>
         </li>
         <li>
@@ -89,9 +93,6 @@
         </li>
         <li>
             Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas
-        </li>
-        <li>
-            La clave foranea de Eventos a EventType debería llamarse "event_type_id"
         </li>
 
         <li><del>Cambiar modelo summaryEvents a Events</del></li>
