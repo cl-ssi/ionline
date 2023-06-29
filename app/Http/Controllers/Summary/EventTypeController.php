@@ -16,9 +16,8 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        //
-        $events = EventType::all();
-        return view('summary.events.index', compact('events'));
+        $eventTypes = EventType::all();
+        return view('summary.events.index', compact('eventTypes'));
     }
 
     /**
@@ -40,17 +39,17 @@ class EventTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new EventType($request->All());
-        $event->require_user = isset($request->require_user);
-        $event->require_file = isset($request->require_file);
-        $event->start = isset($request->start);
-        $event->end = isset($request->end);
-        $event->investigator = isset($request->investigator);
-        $event->actuary = isset($request->actuary);
-        $event->repeat = isset($request->repeat);
-        $event->sub_event = isset($request->sub_event);
-        $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
-        $event->save();
+        $eventType = new EventType($request->All());
+        $eventType->require_user = isset($request->require_user);
+        $eventType->require_file = isset($request->require_file);
+        $eventType->start = isset($request->start);
+        $eventType->end = isset($request->end);
+        $eventType->investigator = isset($request->investigator);
+        $eventType->actuary = isset($request->actuary);
+        $eventType->repeat = isset($request->repeat);
+        $eventType->sub_event = isset($request->sub_event);
+        $eventType->establishment_id = auth()->user()->organizationalUnit->establishment->id;
+        $eventType->save();
         session()->flash('success', 'Se ha añadido el tipo de evento correctamente.');
         return redirect()->route('summary.events.index');
     }
@@ -72,10 +71,10 @@ class EventTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(EventType $event)
+    public function edit(EventType $eventType)
     {
-        $types = EventType::all();
-        return view('summary.events.edit', compact('event', 'types'));
+        $eventTypes = EventType::all();
+        return view('summary.events.edit', compact('eventType', 'eventTypes'));
     }
 
     /**
@@ -85,30 +84,30 @@ class EventTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, EventType $event)
+    public function update(Request $request, EventType $eventType)
     {
-        $event->name = $request->input('name');
-        $event->description = $request->input('description');
-        $event->duration = $request->input('duration');
-        $event->require_user = isset($request->require_user);
-        $event->require_file = isset($request->require_file);
-        $event->start = isset($request->start);
-        $event->end = isset($request->end);
-        $event->investigator = isset($request->investigator);
-        $event->actuary = isset($request->actuary);
-        $event->repeat = isset($request->repeat);
-        $event->sub_event = isset($request->sub_event);
-        $event->num_repeat = $request->input('num_repeat');
-        $event->establishment_id = auth()->user()->organizationalUnit->establishment->id;
-        $event->save();
+        $eventType->name = $request->input('name');
+        $eventType->description = $request->input('description');
+        $eventType->duration = $request->input('duration');
+        $eventType->require_user = isset($request->require_user);
+        $eventType->require_file = isset($request->require_file);
+        $eventType->start = isset($request->start);
+        $eventType->end = isset($request->end);
+        $eventType->investigator = isset($request->investigator);
+        $eventType->actuary = isset($request->actuary);
+        $eventType->repeat = isset($request->repeat);
+        $eventType->sub_event = isset($request->sub_event);
+        $eventType->num_repeat = $request->input('num_repeat');
+        $eventType->establishment_id = auth()->user()->organizationalUnit->establishment->id;
+        $eventType->save();
 
         /* Eliminar los enlaces existentes para el evento */
-        $event->links()->delete();
+        $eventType->links()->delete();
 
         /* Crear los nuevos enlaces según los seleccionados en el formulario */
         foreach ($request->input('links', []) as $type_id => $value) {
             Link::create([
-                "before_event_id" => $event->id,
+                "before_event_id" => $eventType->id,
                 "after_event_id" => $type_id,
             ]);
         }
@@ -125,10 +124,10 @@ class EventTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EventType $event)
+    public function destroy(EventType $eventType)
     {
         //
-        $event->delete();
+        $eventType->delete();
         session()->flash('danger', 'El Evento ha sido eliminado.');
         return redirect()->route('summary.events.index');
     }
