@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\Link;
+use App\Models\Summary\Template;
 
 class EventType extends Model
 {
@@ -84,5 +85,10 @@ class EventType extends Model
     public function linksAfter()
     {
         return $this->hasMany(Link::class, 'before_event_id');
+    }
+
+    public function templates()
+    {
+        return $this->hasMany(Template::class, 'event_type_id');
     }
 }

@@ -72,6 +72,7 @@ use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\EventController as SummaryEventController;
 use App\Http\Controllers\Summary\LinkController;
 use App\Http\Controllers\Summary\SummaryFileController;
+use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
 use App\Http\Controllers\Summary\EventTypeController as SummaryEventTypeController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
@@ -2229,6 +2230,19 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/create', [LinkController::class, 'create'])->name('create');
         Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
+
+
+    Route::prefix('templates')->as('templates.')->group(function () {
+        Route::get('/', [SummaryTemplateController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryTemplateController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryTemplateController::class, 'store'])->name('store');
+        Route::get('/{file}/download', [SummaryTemplateController::class, 'download'])->name('download');
+        //Route::get('/create', [LinkController::class, 'create'])->name('create');
+        //Route::post('/store', [LinkController::class, 'store'])->name('store');
+    });
+
+
+
 });
 
 

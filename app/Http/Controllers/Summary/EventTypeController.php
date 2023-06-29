@@ -51,7 +51,7 @@ class EventTypeController extends Controller
         $eventType->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $eventType->save();
         session()->flash('success', 'Se ha añadido el tipo de evento correctamente.');
-        return redirect()->route('summary.events.index');
+        return redirect()->route('summary.event-types.index');
     }
 
     /**

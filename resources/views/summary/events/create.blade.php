@@ -6,7 +6,7 @@
 
     @include('summary.nav')
     <h3 class="mb-3">Crear Tipo Evento</h3>
-    <form method="POST" class="form-horizontal" action="{{ route('summary.events.store') }}">
+    <form method="POST" class="form-horizontal" action="{{ route('summary.event-types.store') }}">
         @csrf
         @method('POST')
         <div class="form-group row">
@@ -104,7 +104,7 @@
         <div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-success mr-3">Guardar</button>
-                <a href="{{ route('summary.events.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <a href="{{ route('summary.event-types.index') }}" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </div>
 
