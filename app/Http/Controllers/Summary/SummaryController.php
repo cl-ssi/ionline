@@ -64,7 +64,8 @@ class SummaryController extends Controller
         else {
             $summary = new Summary($request->All());
             $summary->creator_id = auth()->user()->id;
-            $summary->status = $eventType->name;
+            /** El estado lo sacaremos de lastEvent */
+            // $summary->status = $eventType->name;
             $summary->start_at = now();
             $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
             $summary->save();

@@ -39,7 +39,7 @@
                     <td>{{ $summary->subject }}</td>
                     <td>{{ $summary->resolution_number }}</td>
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
-                    <td>{{ $summary->status }}</td>
+                    <td>{{ $summary->lastEvent->type->name }}</td>
                     <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
                     <td>{{ optional($summary->actuary)->tinnyName }}</td>
@@ -67,7 +67,7 @@
             </ul>
         </li>
         <li>
-            Columna Estado, mostrar el nombre del tipo del ultimo evento $event->type->name (que no sea subevento)
+            <del>Columna Estado, mostrar el nombre del tipo del ultimo evento $event->type->name (que no sea subevento)</del>
         </li>
         <li>
             <del>Mostrar el Cuadro verde de "Agregar nuevo evento" sólo si el evento anterior está cerrado ( que no sea de tipo
