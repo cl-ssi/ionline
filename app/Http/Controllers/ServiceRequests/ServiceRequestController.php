@@ -36,6 +36,8 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+use App\Exports\ServiceRequest\ConsolidatedReport;
+
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -893,6 +895,7 @@ class ServiceRequestController extends Controller
     
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
+    $year = $request->year;
     $semester = $request->semester;
     // $month = $request->month;
 
@@ -906,7 +909,7 @@ class ServiceRequestController extends Controller
     ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
-    ->whereYear('start_date',$request->year)
+    ->whereYear('start_date',$year)
     ->when($semester == 1, function ($q) use ($semester) {
         // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
         return $q->where(function($query) {
@@ -938,7 +941,7 @@ class ServiceRequestController extends Controller
     // ->whereMonth('start_date',$month)
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')
-    ->get();
+    ->paginate(50);
 
     // foreach ($serviceRequests as $key => $serviceRequest) {
     //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
@@ -1009,8 +1012,11 @@ class ServiceRequestController extends Controller
     // }
     // return view('service_requests.requests.consolidated_data', compact('request'));
     
-    // dd("");
     return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
+  }
+
+  public function consolidated_data_excel_download($establishment_id, $year, $semester){
+        return Excel::download(new ConsolidatedReport($establishment_id, $year, $semester), 'consolidated.xlsx');
   }
 
   public function export_sirh()

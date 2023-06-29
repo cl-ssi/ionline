@@ -951,6 +951,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            Route::get('/consolidated-data-excel-download/{establishment_id}/{year}/{semester}', [ServiceRequestController::class, 'consolidated_data_excel_download'])->name('consolidated_data_excel_download');
             // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
             Route::get('/export-sirh', [ReportController::class, 'export_sirh'])->name('export_sirh');
             Route::get('/export-sirh-txt', [ReportController::class, 'export_sirh_txt'])->name('export-sirh-txt');
