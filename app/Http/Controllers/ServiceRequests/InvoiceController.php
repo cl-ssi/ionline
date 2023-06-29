@@ -42,16 +42,7 @@ class InvoiceController extends Controller
                     $response_wssi = Http::get($url);
 
                     $user_cu = json_decode($response_wssi);
-
-                    $user = new User();
-                    $user->id = $user_cu->RolUnico->numero;
-                    $user->dv = $user_cu->RolUnico->DV;
-                    $user->name = implode(' ', $user_cu->name->nombres);
-                    $user->fathers_family = (array_key_exists(0, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[0] : '';
-                    $user->mothers_family = (array_key_exists(1, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[1] : '';
-                    if (isset($user_cu->email)) {
-                        $user->email = $user_cu->email;
-                    }
+                    $user_id = $user_cu->RolUnico->numero;
 
                     logger()->info('Utilizando el ByPass de CU a través del WSSI', [
                         'cu_access_token' => $access_token,
