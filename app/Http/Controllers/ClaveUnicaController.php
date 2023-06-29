@@ -157,7 +157,7 @@ class ClaveUnicaController extends Controller
                     $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
                     $response_wssi = Http::get($url);
 
-                    logger()->info(json_decode($response_wssi));
+                    logger()->info($response_wssi);
 
                     logger()->info($access_token);
                     logger()->info($response->body());
@@ -190,19 +190,6 @@ class ClaveUnicaController extends Controller
                         $u->email_personal = $user->email;
                     }
                     $u->save();
-                }
-
-                /** No permitir login si tiene permiso "Nuevo iOnline" */
-                if(env('OLD_SERVER'))
-                {
-                    if($u AND $u->can('Nuevo iOnline'))
-                    {
-                        session()->flash('info', 
-                            'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
-                            <b>https://i.saludtarapaca.gob.cl</b> <br>Muchas gracias.');
-                        return redirect()->route('welcome');
-                    }
-                    /* TODO: cerrar sessión en CU al no permitir el login al usuario */
                 }
 
                 Auth::login($u, true);
