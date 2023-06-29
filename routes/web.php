@@ -69,8 +69,11 @@ use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Summary\SummaryController;
+use App\Http\Controllers\Summary\EventController as SummaryEventController;
 use App\Http\Controllers\Summary\LinkController;
-use App\Http\Controllers\Summary\EventTypeController as SummaryEventController;
+use App\Http\Controllers\Summary\SummaryFileController;
+use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
+use App\Http\Controllers\Summary\EventTypeController as SummaryEventTypeController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\SchoolsController;
@@ -2200,28 +2203,47 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
+    Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
 
-    Route::get('/event/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
-    Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
-    Route::post('/store', [SummaryController::class, 'store'])->name('store');
-    Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
-    Route::get('/summary/download/{file}', [SummaryController::class, 'downloadFile'])->name('downloadFile');
-    Route::get('/summary/delete/{file}', [SummaryController::class, 'deleteFile'])->name('deleteFile');
-    Route::post('/summary/close/{summaryId}', [SummaryController::class, 'closeSummary'])->name('closeSummary');
-    Route::prefix('events')->as('events.')->group(function () {
-        Route::get('/', [SummaryEventController::class, 'index'])->name('index');
-        Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
+    Route::prefix('{summary}/event')->as('event.')->group(function () {
         Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
-        Route::get('/edit/{event}', [SummaryEventController::class, 'edit'])->name('edit');
-        Route::put('/update/{event}', [SummaryEventController::class, 'update'])->name('update');
-        Route::delete('{event}/destroy', [SummaryEventController::class, 'destroy'])->name('destroy');
+        Route::put('/{event}', [SummaryEventController::class, 'update'])->name('update');
     });
+
+    Route::prefix('files')->as('files.')->group(function () {
+        Route::post('/store', [SummaryFileController::class, 'store'])->name('store');
+        Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
+        Route::get('/{file}/download', [SummaryFileController::class, 'downloadFile'])->name('download');
+    });
+
+    Route::prefix('event-types')->as('event-types.')->group(function () {
+        Route::get('/', [SummaryEventTypeController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryEventTypeController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryEventTypeController::class, 'store'])->name('store');
+        Route::get('/{eventType}/edit', [SummaryEventTypeController::class, 'edit'])->name('edit');
+        Route::put('/{eventType}/update', [SummaryEventTypeController::class, 'update'])->name('update');
+        Route::delete('/{eventType}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
+    });
+
     Route::prefix('links')->as('links.')->group(function () {
         Route::get('/', [LinkController::class, 'index'])->name('index');
         Route::get('/create', [LinkController::class, 'create'])->name('create');
         Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
+
+
+    Route::prefix('templates')->as('templates.')->group(function () {
+        Route::get('/', [SummaryTemplateController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryTemplateController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryTemplateController::class, 'store'])->name('store');
+        Route::get('/{file}/download', [SummaryTemplateController::class, 'download'])->name('download');
+        //Route::get('/create', [LinkController::class, 'create'])->name('create');
+        //Route::post('/store', [LinkController::class, 'store'])->name('store');
+    });
+
+
+
 });
 
 

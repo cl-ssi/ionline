@@ -10,7 +10,7 @@ class Link extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'sum_links';
+    protected $table = 'sum_event_links';
 
     protected $fillable = [
         'before_event_id',

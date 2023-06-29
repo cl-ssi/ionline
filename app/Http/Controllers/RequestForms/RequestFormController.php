@@ -196,7 +196,7 @@ class RequestFormController extends Controller {
         foreach($events_type as $event_type){
             if(in_array($event_type, ['pre_finance_event', 'finance_event', 'supply_event']) || in_array(Auth::user()->organizationalUnit->id, $ouSearch)){
                 $not_pending_forms = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
-                        ->where('status', '!=', 'pending')->latest('id')->paginate(15, ['*'], 'p1');
+                        ->whereNotIn('status', ['saved', 'pending'])->latest('id')->paginate(15, ['*'], 'p1');
             }
         }
 
@@ -450,7 +450,8 @@ class RequestFormController extends Controller {
               'signature_date'       => Carbon::now(),
               'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
-              'signer_user_id'       => auth()->id()
+              'signer_user_id'       => auth()->id(),
+              'comment'              => request()->comment
             ]);
 
             $nextEvent = $requestForm->eventRequestForms->where('cardinal_number', $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->cardinal_number + 1);
@@ -518,7 +519,8 @@ class RequestFormController extends Controller {
               'signature_date'       => Carbon::now(),
               'position_signer_user' => OrganizationalUnit::find($event->ou_signer_user)->currentManager->position,
               'status'               => 'approved',
-              'signer_user_id'       => auth()->id()
+              'signer_user_id'       => auth()->id(),
+              'comment'              => request()->comment 
             ]);
 
             $oldSignatureFile = new OldSignatureFile();

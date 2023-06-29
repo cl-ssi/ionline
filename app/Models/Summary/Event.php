@@ -9,17 +9,18 @@ use App\Models\Summary\Summary;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\User;
 
-class SummaryEvent extends Model
+class Event extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'sum_summaries_events';
+    protected $table = 'sum_summary_events';
 
     protected $fillable = [
-        'event_id',
+        'event_type_id',
         'body',
         'start_date',
         'end_date',
+        'user_id',
         'summary_id',
         'creator_id',
     ];
@@ -29,9 +30,14 @@ class SummaryEvent extends Model
         'end_date',
     ];
 
-    public function event()
+    public function type()
     {
-        return $this->belongsTo(EventType::class, 'event_id');
+        return $this->belongsTo(EventType::class, 'event_type_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function creator()

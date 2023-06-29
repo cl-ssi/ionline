@@ -5,8 +5,8 @@
 @section('content')
 
     @include('summary.nav')
-    <h3 class="mb-3">Creat Tipo Evento</h3>
-    <form method="POST" class="form-horizontal" action="{{ route('summary.events.store') }}">
+    <h3 class="mb-3">Crear Tipo Evento</h3>
+    <form method="POST" class="form-horizontal" action="{{ route('summary.event-types.store') }}">
         @csrf
         @method('POST')
         <div class="form-group row">
@@ -92,13 +92,19 @@
                         Este evento asigna al actuario del sumario
                     </label>
                 </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="sub_event" id="for-sub_event" value="1">
+                    <label class="form-check-label" for="for-sub_event">
+                        Este evento corresponde a un subevento
+                    </label>
+                </div>
             </div>
         </fieldset>
 
         <div class="form-group row">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-success mr-3">Guardar</button>
-                <a href="{{ route('summary.events.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <a href="{{ route('summary.event-types.index') }}" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </div>
 

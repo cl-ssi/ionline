@@ -5,12 +5,12 @@ namespace App\Models\Summary;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Summary\Summary;
-use App\Models\Summary\SummaryEvent;
+use App\Models\Summary\Event;
 
 class SummaryEventFile extends Model
 {
     use SoftDeletes;
-    protected $table = 'sum_summaries_events_files';
+    protected $table = 'sum_summary_event_files';
 
     protected $fillable = [
         'name',
@@ -25,6 +25,6 @@ class SummaryEventFile extends Model
 
     public function summaryEvent()
     {
-        return $this->belongsTo(SummaryEvent::class, 'summary_event_id');
+        return $this->belongsTo(Event::class, 'summary_event_id');
     }
 }

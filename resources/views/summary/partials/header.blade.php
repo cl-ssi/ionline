@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <th>Estado</th>
-            <td>{{ $summary->status ?? '' }} (3 días)
+            <td>{{ $summary->status ?? '' }} ({{ Carbon\Carbon::parse($summary->start_at)->diffInDays(now()) }} días)</td>
             </td>
         </tr>
         <tr>
@@ -24,8 +24,7 @@
         <tr>
             <th>Observaciones</th>
             <td>
-                <textarea class="form-control" cols="30" rows="4">{{ $summary->observation }}</textarea>
-                <button type="button" class="btn btn-primary float-right mt-2">Actualizar</button>
+                @livewire('summary.update-observation',['summary' => $summary])
             </td>
         </tr>
     </tbody>

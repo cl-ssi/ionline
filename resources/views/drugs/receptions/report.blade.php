@@ -40,12 +40,15 @@
             <th>Fecha</th>
             <th>Oficio</th>
             <th>Policia</th>
+            <th>Funcionario que entrega</th>
             <th style="width: 30px; word-wrap: break-word">Parte</th>
             <th>Fiscalia</th>
             <th>NUE</th>
             <th>Imputado</th>
             <th>Sustancia Presunta</th>
             <th>Sustancia Determinda</th>
+            <th>P.Oficio</th>
+            <th>P.Bruto</th>
             <th>P.Neto</th>
             <th>Muestra</th>
             <th>C.Muestra</th>
@@ -65,6 +68,7 @@
             <td nowrap>{{ $item->reception->date->format('d-m-Y') }}</td>
             <td class="text-center">{{ $item->reception->document_number }}</td>
             <td class="text-center">{{ $item->reception->partePoliceUnit->name ?? '' }}</td>
+            <td class="text-center">{{ $item->reception->delivery }}</td>
             <td class="text-center">{{ $item->reception->parte }}</td>
             <td>{{ $item->reception->court->name }}</td>
             <td>{{ $item->nue }}</td>
@@ -76,6 +80,8 @@
                 @endforeach
                 {{ ($item->resultSubstance) ? $item->resultSubstance->name:'' }}
             </td>
+            <td class="text-right">{{ $item->document_weight }}</td>
+            <td class="text-right">{{ $item->gross_weight }}</td>
             <td class="text-right">{{ $item->net_weight }}</td>
             <td class="text-right">{{ $item->sample }}</td>
             <td class="text-right">{{ $item->countersample }}</td>
