@@ -26,9 +26,29 @@
                 La Jefatura directa del funcionario, es la encargada de realizar la solicitud de Beneficio Alimentación Amipass.
             </h5>
             <p class="card-text">
+            
 
+                <div class="form-row">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                        <label class="form-check-label" for="exampleRadios1">
+                            Yo:
+                        </label>
+                    </div>
+                    <div class="form-group col">
+                        <label for="text">Nombre de la Jefatura *</label> 
+                        <input id="text" name="text" type="text" class="form-control" 
+                        value="serach-select-user precargado auth()->user()" required="required">
+                    </div>
+                </div>
                 
                 <div class="form-row">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                        <label class="form-check-label" for="exampleRadios1">
+                            Otro:
+                        </label>
+                    </div>
                     <div class="form-group col">
                         <label for="text">Nombre de la Jefatura *</label> 
                         <input id="text" name="text" type="text" class="form-control" required="required">
