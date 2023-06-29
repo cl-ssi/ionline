@@ -35,7 +35,28 @@ class InvoiceController extends Controller
                     $user_id = $user_cu->RolUnico->numero;
                 }
                 else {
-                    return redirect()->route('invoice.welcome');
+                    // return redirect()->route('invoice.welcome');
+
+                    /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
+                    $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
+                    $response_wssi = Http::get($url);
+
+                    $user_cu = json_decode($response_wssi);
+
+                    $user = new User();
+                    $user->id = $user_cu->RolUnico->numero;
+                    $user->dv = $user_cu->RolUnico->DV;
+                    $user->name = implode(' ', $user_cu->name->nombres);
+                    $user->fathers_family = (array_key_exists(0, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[0] : '';
+                    $user->mothers_family = (array_key_exists(1, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[1] : '';
+                    if (isset($user_cu->email)) {
+                        $user->email = $user_cu->email;
+                    }
+
+                    logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $response->body(),
+                    ]);
                 }
                 
             } else if (env('APP_ENV') == 'local') {
