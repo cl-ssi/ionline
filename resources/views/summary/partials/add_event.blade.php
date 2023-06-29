@@ -9,7 +9,7 @@
 
             <div class="row">
                 <div class="col">
-                    <select name="event_id" id="" class="form-control">
+                    <select name="event_type_id" id="" class="form-control">
                         <option value=""></option>
                         @foreach ($event->type->linksAfter as $linkAfter)
                         <option

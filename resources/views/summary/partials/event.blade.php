@@ -3,7 +3,7 @@
         <h5 class="card-title">
             {{ $event->type->name }}
             <small class="text-muted">
-                ({{ $event->type->description }})
+                {{ $event->type->description }}
             </small>
         </h5>
 
