@@ -157,16 +157,28 @@ class ClaveUnicaController extends Controller
                     $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
                     $response_wssi = Http::get($url);
 
-                    logger()->info($access_token);
+                    $user_cu = json_decode($response_wssi);
 
-                    logger()->info($response_wssi);
+                    $user = new User();
+                    $user->id = $user_cu->RolUnico->numero;
+                    $user->dv = $user_cu->RolUnico->DV;
+                    $user->name = implode(' ', $user_cu->name->nombres);
+                    $user->fathers_family = (array_key_exists(0, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[0] : '';
+                    $user->mothers_family = (array_key_exists(1, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[1] : '';
+                    if (isset($user_cu->email)) {
+                        $user->email = $user_cu->email;
+                    }
 
-                    $json_response = json_decode($response);
-                    logger()->info($json_response->sub);
+                    logger()->info('Utilizando el ByPass de CU a través del WSSI', ['access_token' => $access_token]);
+
+                    // logger()->info($response_wssi);
+
+                    // $json_response = json_decode($response);
+                    // logger()->info($json_response->sub);
 
                     logger()->info($response->body());
-                    session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
-                    return redirect()->route('login');
+                    // session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
+                    // return redirect()->route('login');
                 }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
