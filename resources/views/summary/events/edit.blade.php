@@ -111,29 +111,33 @@
         </fieldset>
 
         <div class="table-responsive">
-            <table class="table table-sm table-bordered table-striped table-hover">
+            <table class="table table-sm table-bordered">
                 <thead>
                     <tr class="text-center">
-                        <th>Eventos Anteriores</th>
-                        <th>Evento Actual</th>
-                        <th>Al terminar este evento, se vincúla con el/los siguientes eventos:</th>
+                        <th class="align-top">Eventos Anteriores</th>
+                        <th class="bg-light align-top">Evento Actual</th>
+                        <th>Eventos Posteriores <br>
+                            <small>Al terminar este evento, se vincúla con el/los siguientes eventos</small>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
+                        <td class="align-middle">
                             <ul>
                                 @foreach ($eventType->linksBefore as $linkBefore)
                                     <li>{{ $linkBefore->beforeEvent->name }}</li>
                                 @endforeach
                             </ul>
                         </td>
-                        <td>
+                        <td class="bg-light align-middle">
                             <ul>
-                                <li>{{ $eventType->name }}</li>
+                                <li>
+                                    {{ $eventType->name }}
+                                </li>
                             </ul>
                         </td>
-                        <td>
+                        <td class="align-middle;">
                             @foreach ($eventTypes as $type)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="1"

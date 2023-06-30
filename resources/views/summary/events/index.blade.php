@@ -26,7 +26,7 @@
                 <th>Duración</th>
                 <th>Repetición</th>
                 <th>Num Rep.</th>
-                <th>Estado</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -57,16 +57,17 @@
                     <td>{{ $type->repeat_text }}</td>
                     <td>{{ $type->num_repeat }}</td>
                     <td>
-                        <div class="d-flex ">
-                            <a class="btn btn-sm btn-primary me-2" href="{{ route('summary.event-types.edit', $type) }}">
+                        <div class="d-flex">
+                            <a class="btn btn-sm btn-primary" href="{{ route('summary.event-types.edit', $type) }}">
                                 <i class="fas fa-fw fa-edit"></i>
                             </a>
+                            &nbsp;&nbsp;
                             <form method="POST" action="{{ route('summary.event-types.destroy', $type) }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger"
                                     onclick="return confirm('¿Está seguro que desea eliminar el tipo de evento {{ $type->name }}? ' )">
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="fas fa-fw fa-trash-alt"></i>
                                 </button>
                             </form>
                         </div>
