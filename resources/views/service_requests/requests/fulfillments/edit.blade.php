@@ -220,7 +220,7 @@
     $('.end_hour').val('');
     if (this.value == "Inasistencia Injustificada" || this.value == "Permiso") {
     }
-    if (this.value == "Licencia no covid") {
+    if (this.value == "Licencia no covid" || this.value == "Licencia media jornada no covid") {
       $('.start_hour').attr('readonly', true);
       $('.end_hour').attr('readonly', true);
       $('.texto_renuncia').hide();

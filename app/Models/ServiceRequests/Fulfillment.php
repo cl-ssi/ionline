@@ -395,6 +395,11 @@ class Fulfillment extends Model implements Auditable
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                     break;
+                case 'Licencia media jornada no covid':
+                    $mes_completo = false;
+                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                    $dias_descuento = $dias_descuento / 2;
+                    break;
                 case 'Abandono de funciones':
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
@@ -511,23 +516,23 @@ class Fulfillment extends Model implements Auditable
             $periods = iterator_to_array($periods);
             foreach ($periods as $key => $period) {
                 if ($key === array_key_first($periods)) {
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                    if ($this->items_verification(intval($period->format("m")))) {
+                      $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                     }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                      $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                     }
                 } else if ($key === array_key_last($periods)) {
-                    $this->items_verification($period->month);
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                    $this->items_verification(intval($period->format("m")));
+                    if ($this->items_verification(intval($period->format("m")))) {
+                      $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                     }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                      $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                     }
                 } else {
-                    if ($this->items_verification($period->month)) {
-                      $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                    if ($this->items_verification(intval($period->format("m")))) {
+                      $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                     }else{
-                      $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                      $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                     }
                 }
             }
@@ -569,22 +574,22 @@ class Fulfillment extends Model implements Auditable
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente1));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente1));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else if ($key === array_key_last($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente2));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente2));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         }
                     }
@@ -602,22 +607,22 @@ class Fulfillment extends Model implements Auditable
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else if ($key === array_key_last($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         }
                     }
@@ -634,22 +639,22 @@ class Fulfillment extends Model implements Auditable
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else if ($key === array_key_last($periods)) {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(false, intval($period->format("m")), $valor_diferente));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         } else {
-                            if ($this->items_verification($period->month)) {
-                              $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
+                            if ($this->items_verification(intval($period->format("m")))) {
+                              $valores_mensualizados[intval($period->format("m"))] = number_format($this->monto_con_inasistencias(true, intval($period->format("m")), $valor_mensual));
                             }else{
-                              $valores_mensualizados[$period->month] = "Revise los datos ingresados en el cuadro de responsable.";
+                              $valores_mensualizados[intval($period->format("m"))] = "Revise los datos ingresados en el cuadro de responsable.";
                             }
                         }
                     }

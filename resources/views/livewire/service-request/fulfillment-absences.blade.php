@@ -9,6 +9,7 @@
           <option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
           <option value="Licencia médica">LICENCIA MÉDICA COVID</option>
           <option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
+          <option value="Licencia media jornada no covid">LICENCIA MÉDICA MEDIA JORNADA - NO COVID</option>
           <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA (EFECTIVA DESDE)</option>
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
           <option value="Permiso">PERMISO ADMINISTRATIVO</option>

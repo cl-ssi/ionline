@@ -48,6 +48,11 @@ class FulfillmentAbsences extends Component
           $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
           return;
         }
+    case 'Licencia media jornada no covid':
+        if($this->end_date==null and $this->start_date==null){
+            $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
+            return;
+        }
       case 'Abandono de funciones':
         if($this->end_date==null and $this->start_date==null){
           $this->msg = "No se pudo ingresar, debe existir fecha de inicio y fecha de término";
@@ -115,6 +120,7 @@ class FulfillmentAbsences extends Component
         case 'Permiso Parental':
         case 'Permiso Excepcional':
         case 'Licencia no covid':
+        case 'Licencia media jornada no covid':
         case 'Fuero maternal':
         //case 'Permiso':
         case 'Feriado':
@@ -170,6 +176,7 @@ class FulfillmentAbsences extends Component
           case 'Permiso Parental':
           case 'Permiso Excepcional':
           case 'Licencia no covid':
+          case 'Licencia media jornada no covid':
           case 'Fuero maternal':
           case 'Feriado':
             $this->select_start_hour = 'disabled';
