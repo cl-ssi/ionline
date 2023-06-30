@@ -14,7 +14,9 @@ class Link extends Model
 
     protected $fillable = [
         'before_event_id',
-        'after_event_id'
+        'before_sub_event',
+        'after_event_id',
+        'after_sub_event',
     ];
 
     public function beforeEvent()

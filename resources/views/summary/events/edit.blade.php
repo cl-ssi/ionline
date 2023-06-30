@@ -140,7 +140,7 @@
                         <td class="align-middle;">
                             @foreach ($eventTypes as $type)
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="1"
+                                    <input class="form-check-input" type="checkbox" value="{{$type->id}}"
                                         name="links[{{ $type->id }}]"
                                         {{ $eventType->links->contains('after_event_id', $type->id) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="for-links">
