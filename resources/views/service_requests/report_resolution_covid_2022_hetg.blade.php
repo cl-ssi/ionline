@@ -682,9 +682,14 @@
         @endif
 
         <p class="center">
-          <strong>
-            ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
-          </strong>
+            <strong>
+            <!-- ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR. -->
+            @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                ANÓTESE, REGÍSTRESE Y COMUNÍQUESE
+            @else
+                ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
+            @endif
+            </strong>
         </p>
 
         <div id="firmas">
