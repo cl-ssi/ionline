@@ -100,13 +100,6 @@
                         Este evento asigna al actuario del sumario
                     </label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="sub_event" id="for-sub_event" value="1"
-                        {{ $eventType->sub_event ? 'checked' : '' }}>
-                    <label class="form-check-label" for="for-sub_event">
-                        Este evento corresponde a un subevento
-                    </label>
-                </div>
             </div>
         </fieldset>
 
@@ -114,11 +107,27 @@
             <table class="table table-sm table-bordered">
                 <thead>
                     <tr class="text-center">
-                        <th class="align-top">Eventos Anteriores</th>
-                        <th class="bg-light align-top">Evento Actual</th>
-                        <th>Eventos Posteriores <br>
+                        <th class="align-top" rowspan="2">
+                            Eventos Anteriores
+                        </th>
+                        <th class="bg-light align-top">
+                            Evento Actual
+                        </th>
+                        <th rowspan="2">
+                            Eventos Posteriores <br>
                             <small>Al terminar este evento, se vincúla con el/los siguientes eventos</small>
                         </th>
+                    </tr>
+                    <tr>
+                        <td class="bg-light">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sub_event" id="for-sub_event" value="1"
+                                    {{ $eventType->sub_event ? 'checked' : '' }}>
+                                <label class="form-check-label" for="for-sub_event">
+                                    Es un subevento
+                                </label>
+                            </div>
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -126,7 +135,12 @@
                         <td class="align-middle">
                             <ul>
                                 @foreach ($eventType->linksBefore as $linkBefore)
-                                    <li>{{ $linkBefore->beforeEvent->name }}</li>
+                                    <li>
+                                        <a href="{{ route('summary.event-types.edit', $linkBefore->beforeEvent) }}">
+                                            @if($linkBefore->beforeEvent->sub_event) &nbsp;&nbsp; @endif
+                                            {{ $linkBefore->beforeEvent->name }}
+                                        </a>
+                                    </li>
                                 @endforeach
                             </ul>
                         </td>
@@ -140,11 +154,14 @@
                         <td class="align-middle;">
                             @foreach ($eventTypes as $type)
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="{{$type->id}}"
+                                    <input class="form-check-input" type="checkbox" value="{{ $type->id }}"
                                         name="links[{{ $type->id }}]"
-                                        {{ $eventType->links->contains('after_event_id', $type->id) ? 'checked' : '' }}>
+                                        {{ $eventType->linksAfter->contains('after_event_id', $type->id) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="for-links">
-                                        {{ $type->name }}
+                                        <a href="{{ route('summary.event-types.edit', $type) }}">
+                                            @if($type->sub_event) &nbsp;&nbsp; @endif
+                                            {{ $type->name }}
+                                        </a>
                                     </label>
                                 </div>
                             @endforeach
@@ -157,7 +174,7 @@
         <div class="form-group row mt-3">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-success mr-3">Actualizar</button>
-                <a href="{{ route('summary.event-types.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <a href="{{ route('summary.event-types.index') }}" class="btn btn-outline-secondary">Volver</a>
             </div>
         </div>
     </form>
@@ -175,10 +192,8 @@
             function toggleNumRepeatInput() {
                 if (repeatCheckbox.is(':checked')) {
                     numRepeatInput.prop('disabled', false);
-                    numRepeatInput.prop('required', true);
                 } else {
                     numRepeatInput.prop('disabled', true);
-                    numRepeatInput.prop('required', false);
                 }
             }
 

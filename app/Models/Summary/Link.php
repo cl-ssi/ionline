@@ -3,13 +3,10 @@
 namespace App\Models\Summary;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Summary\EventType;
 
 class Link extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'sum_event_links';
 
     protected $fillable = [

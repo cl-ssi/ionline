@@ -74,7 +74,6 @@ class EventTypeController extends Controller
     public function edit(EventType $eventType)
     {
         $eventTypes = EventType::all();
-        dd($eventType->linksBeforeSubEvent);
         return view('summary.events.edit', compact('eventType', 'eventTypes'));
     }
 
@@ -103,10 +102,7 @@ class EventTypeController extends Controller
         $eventType->save();
 
         /* Eliminar los enlaces existentes para el evento */
-        $eventType->links()->delete();
-
-        
-        
+        $eventType->linksAfter()->delete();
 
 
         /* Crear los nuevos enlaces según los seleccionados en el formulario */
@@ -125,7 +121,7 @@ class EventTypeController extends Controller
         /* Actualizar los enlaces entre eventos con Link $link = new Link(); */
         session()->flash('success', 'Tipo de Evento actualizado exitosamente');
 
-        return redirect()->route('summary.event-types.index');
+        return redirect()->back();
     }
 
     /**
