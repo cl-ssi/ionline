@@ -63,7 +63,7 @@
 	@endcan
 	<div class="form-group col">
 		<h5 class="sub-header">Búsqueda por
-		@canany(['Pharmacy: transfer view ortesis'])
+		@canany(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])
 		<form method="GET" action="{{route('pharmacies.products.transfer.index')}}" class="d-inline">
 			<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
 				@foreach ($establishments as $establishment)
@@ -71,7 +71,7 @@
 				@endforeach
 			</select>
 		</form>
-		@if(!$products_by_establishment->isEmpty())<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
+		@if(!$products_by_establishment->isEmpty() && Auth::user()->can('Pharmacy: transfer view ortesis'))<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
 		@else
 			{{$establishment->name}}
 		@endcan

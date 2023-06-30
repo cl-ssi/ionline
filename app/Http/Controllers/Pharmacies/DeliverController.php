@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pharmacies;
 use App\Models\Documents\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Parameters\Parameter;
 use App\Models\Pharmacies\Deliver;
 use App\Models\Pharmacies\Establishment;
 use App\Models\Pharmacies\Product;
@@ -24,15 +25,22 @@ class DeliverController extends Controller
         $establishments = null;
         $pending_deliveries_list = null;
         $pendings_by_product = null;
-        if(Auth::user()->can('Pharmacy: transfer view ortesis')){
-
+        if(Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])){
             $establishments = Establishment::where('pharmacy_id',session('pharmacy_id'))
                                             ->whereNotIn('id', [148, 128])
+                                            ->when(Auth::user()->can('Pharmacy: transfer view IQQ'), function($q) {
+                                                $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsIQQ')->first()->value;
+                                                return $q->whereIn('id', explode(',', $establishmentsSearch));
+                                            })
+                                            ->when(Auth::user()->can('Pharmacy: transfer view AHO'), function($q) {
+                                                $establishmentsSearch = Parameter::where('module', 'frm')->where('parameter', 'EstablishmentsAHO')->first()->value;
+                                                return $q->whereIn('id', explode(',', $establishmentsSearch));
+                                            })
                                             ->orderBy('name','ASC')->get();
 
-            $filter = $request->get('filter');
+            $filter = $request->get('filter') ?? $establishments->pluck('id')->toArray();
             $filterEstablishment = function($query) use ($filter) {
-                $query->where('id', $filter);
+                $query->whereIn('id', (array) $filter);
             };
 
             $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name', 'document:id')
