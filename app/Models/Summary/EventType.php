@@ -82,10 +82,22 @@ class EventType extends Model
         return $this->hasMany(Link::class, 'after_event_id');
     }
 
+    public function linksBeforeSubEvent()
+    {
+        return $this->hasMany(Link::class, 'after_event_id')->where('after_sub_event',true);
+    }
+
     public function linksAfter()
     {
         return $this->hasMany(Link::class, 'before_event_id');
     }
+
+    public function linksAfterSubEvent()
+    {
+        return $this->hasMany(Link::class, 'before_event_id')->where('before_sub_event',true);
+    }
+
+
 
     public function templates()
     {
