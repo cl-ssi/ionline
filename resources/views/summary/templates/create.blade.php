@@ -13,7 +13,7 @@
         <div class="form-group row">
             <label for="for-name" class="col-sm-2 col-form-label">Nombre</label>
             <div class="col-sm-5">
-                <input type="text" class="form-control" placeholder="sin espacios y en minuscula" id="for-name">
+                <input type="text" class="form-control" id="for-name">
             </div>
         </div>
 
@@ -27,23 +27,41 @@
         <fieldset class="form-group row">
             <legend class="col-form-label col-sm-2 float-sm-left pt-0">Campos</legend>
             <div class="col-sm-8">
+
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="for-description">
-                    <div class="input-group-append">
-                        <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
+                    <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option selected>Tipo</option>
+                        <option value="1">String</option>
+                        <option value="2">Text</option>
+                    </select>
+                    <div class="input-group-append mr-2">
+                        <input type="text" class="form-control" id="for-description">
                     </div>
+                    <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
                 </div>
+
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="for-description">
-                    <div class="input-group-append">
-                        <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
+                    <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option selected>Tipo</option>
+                        <option value="1">String</option>
+                        <option value="2">Text</option>
+                    </select>
+                    <div class="input-group-append mr-2">
+                        <input type="text" class="form-control" id="for-description">
                     </div>
+                    <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
                 </div>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="for-description">
-                    <div class="input-group-append">
-                        <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
+
+                <div class="input-group mb-2">
+                    <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                        <option selected>Tipo</option>
+                        <option value="1">String</option>
+                        <option value="2">Text</option>
+                    </select>
+                    <div class="input-group-append mr-2">
+                        <input type="text" class="form-control" id="for-description">
                     </div>
+                    <button class="btn btn-danger" type="button" id="button-addon2"><i class="fas fa-trash"></i></button>
                 </div>
 
             </div>
