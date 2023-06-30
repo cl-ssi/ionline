@@ -14,7 +14,7 @@ class AddDescriptionAndFieldsToSumTemplatesTable extends Migration
     public function up()
     {
         Schema::table('sum_templates', function (Blueprint $table) {
-            $table->string('fields')->after('name')->nullable();
+            $table->text('fields')->after('name')->nullable();
             $table->string('description')->after('name')->nullable();
         });
     }
