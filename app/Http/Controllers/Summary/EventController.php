@@ -19,7 +19,7 @@ class EventController extends Controller
     public function store(Request $request, Summary $summary)
     {
         Event::create([
-            'event_id' => $request->input('event_id'),
+            'event_type_id' => $request->input('event_type_id'),
             'start_date' => now(),
             'summary_id' => $summary->id,
             'creator_id' => auth()->id(),
@@ -50,6 +50,7 @@ class EventController extends Controller
     public function update(Request $request, Summary $summary, Event $event)
     {
         $event->fill($request->all());
+        $event->user_id = auth()->id();
 
         /** Preguntar si asigna fiscal */
         if ($event->type->investigator == true) {

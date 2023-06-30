@@ -7,7 +7,7 @@
 @include('pharmacies.nav')
 
 <h3>Listado de Entregas 
-	@canany(['Pharmacy: transfer view ortesis'])
+	@canany(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO'])
 	por 
 	<form method="GET" action="{{route('pharmacies.products.deliver.index')}}" class="d-inline">
 	<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
@@ -19,8 +19,8 @@
 	</form>
 	@endcan
 </h3>
+@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis', 'Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
 <div class="mb-3">
-	@cannot(['Pharmacy: transfer view ortesis'])
 	<a class="btn btn-primary"
 		href="{{ route('pharmacies.products.deliver.create') }}">
 		<i class="fas fa-dolly"></i> Nueva entrega</a>
@@ -28,10 +28,9 @@
 	<button type="button" class="btn btn-outline-success" href="" onclick="tableToExcel('tabla_stock', 'Listado de stock')">
 		Descargar <i class="fas fa-download"></i>
 	</button>
-	@endcan
 	
 </div>
-@cannot(['Pharmacy: transfer view ortesis'])
+
 <div class="form-row">
 	<div class="form-group col">
 		<h5 class="sub-header">Búsqueda por {{$filter->name}}</h5>
@@ -66,7 +65,7 @@
 		{{ $products_by_establishment->appends(Request::input())->links() }}
 	</div>
 </div>
-@endcan
+@endif
 
 <h3>Entregas pendientes</h3>
 <p><button type="button" class="btn btn-outline-success" href="" onclick="tableToExcel('tabla_pending_deliveries', 'Entregas pendientes')">
@@ -89,7 +88,7 @@
 				<th scope="col" align="left">Folio</th>
 				<th scope="col" align="left">Observaciones</th>
 				@canany(['Pharmacy: transfer view ortesis']) <th nowrap scope="col" width="100" align="left">N° interno</th> @endcan
-				<th scope="col" align="left">Acciones</th>
+				@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))<th scope="col" align="left">Acciones</th>@endif
 			</tr>
 		</thead>
 		<tbody>
@@ -107,7 +106,7 @@
 				<td>{{$delivery->doctor_name}}</td>
 				<td>{{$delivery->invoice}}</td>
 				<td>{{$delivery->remarks}}</td>
-				@cannot(['Pharmacy: transfer view ortesis'])
+				@if(!Auth::user()->hasAnyPermission(['Pharmacy: transfer view ortesis','Pharmacy: transfer view IQQ', 'Pharmacy: transfer view AHO']))
 				<td>
 					@foreach($products_by_establishment as $product)
 						@if($product->id == $delivery->product_id && $product->quantity >= $delivery->quantity)
@@ -126,7 +125,7 @@
 					<a href="{{ route('documents.show', $delivery->document->id) }}" class="btn btn-sm btn-outline-info" target="_blank" data-toggle="tooltip" data-placement="top" title="Memo de respaldo stock para esta entrega"><i class="fas fa-file"></i></a>
 					@endif
 				</td>
-				@endcan
+				@endif
 				@canany(['Pharmacy: transfer view ortesis'])
 				<td align="right">
 					@if($delivery->document != null)

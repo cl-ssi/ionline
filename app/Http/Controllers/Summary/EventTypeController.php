@@ -102,20 +102,26 @@ class EventTypeController extends Controller
         $eventType->save();
 
         /* Eliminar los enlaces existentes para el evento */
-        $eventType->links()->delete();
+        $eventType->linksAfter()->delete();
+
 
         /* Crear los nuevos enlaces según los seleccionados en el formulario */
-        foreach ($request->input('links', []) as $type_id => $value) {
+        foreach ($request->input('links', []) as $type_id) {
+            //Se añaden los boleanos del evento anterior (actual editando) y el siguiente, (el guardado en el store)
+            $afterTypeEvent = EventType::findorFail($type_id);
             Link::create([
                 "before_event_id" => $eventType->id,
+                "before_sub_event" => $eventType->sub_event,
                 "after_event_id" => $type_id,
+                "after_sub_event" => $afterTypeEvent->sub_event
             ]);
+            
         }
 
         /* Actualizar los enlaces entre eventos con Link $link = new Link(); */
         session()->flash('success', 'Tipo de Evento actualizado exitosamente');
 
-        return redirect()->route('summary.event-types.index');
+        return redirect()->back();
     }
 
     /**
