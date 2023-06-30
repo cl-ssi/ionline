@@ -13,7 +13,7 @@
     @include('summary.partials.event', ['events' => $summary->events])
 
     @if ($summary->lastEvent->end_date && !$summary->end_at)
-        @include('summary.partials.add_event', ['links' => $event->type->linksEvents])
+        @include('summary.partials.add_event', ['links' => $summary->lastEvent->type->linksEvents])
     @endif
     
 @endsection

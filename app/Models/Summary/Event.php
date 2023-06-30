@@ -23,6 +23,7 @@ class Event extends Model
         'user_id',
         'summary_id',
         'creator_id',
+        'father_event_id',
     ];
 
     protected $dates = [
@@ -58,6 +59,11 @@ class Event extends Model
     public function files(): HasMany
     {
         return $this->hasMany(SummaryEventFile::class, 'summary_event_id');
+    }
+
+    public function father()
+    {
+        return $this->belongsTo(Event::class, 'father_event_id');
     }
 
 }

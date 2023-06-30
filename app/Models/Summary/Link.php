@@ -8,6 +8,7 @@ use App\Models\Summary\EventType;
 class Link extends Model
 {
     protected $table = 'sum_event_links';
+    
 
     protected $fillable = [
         'before_event_id',
