@@ -76,8 +76,8 @@
                     @include('summary.partials.event', ['events' => $event->childs])
                 @endif
 
-                @if ($event->type->linksSubEvents()->exists() and !$event->type->sub_event)
-                    @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents])
+                @if($event->type->linksSubEvents()->exists() AND !$event->type->sub_event)
+                    @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents, 'childs' => true])
                 @endif
 
                 @if ($event->type->templates()->exists())

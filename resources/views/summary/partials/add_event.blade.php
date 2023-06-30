@@ -3,11 +3,12 @@
         <h5 class="card-title">Agregar nuevo paso</h5>
     </div>
     <div class="card-body">
-        @if ($event->father)
+        @if ($childs)
             <form action="{{ route('summary.event.store', ['summary' => $summary, 'event' => $event]) }}" method="post">
         @else
             <form action="{{ route('summary.event.store', ['summary' => $summary, 'event' => null]) }}" method="post">
         @endif
+
         @csrf
         @method('POST')
 

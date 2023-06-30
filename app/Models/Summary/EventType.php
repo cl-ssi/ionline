@@ -77,12 +77,14 @@ class EventType extends Model
     /** Cuál es la utilidad del link before? */
     public function linksEvents()
     {
-        return $this->hasMany(Link::class, 'before_event_id')->where('after_sub_event',false);
+        return $this->hasMany(Link::class, 'before_event_id')
+            ->where('after_sub_event',false);
     }
 
     public function linksSubEvents()
     {
-        return $this->hasMany(Link::class, 'before_event_id')->where('after_sub_event',true);
+        return $this->hasMany(Link::class, 'before_event_id')
+            ->where('after_sub_event',true);
     }
 
 
