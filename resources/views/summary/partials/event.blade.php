@@ -38,11 +38,30 @@
                                     <span class="fas fa-user"></span> {{ $event->user->shortName }}
                                 @endif
                             </div>
+                            @if (!$event->end_date OR ($event->end_date AND $event->files()->exists()))
+                            <div class="card-footer text-muted">
+                                @foreach ($event->files as $file)
+                                    <li>
+                                        <a href="{{ route('summary.files.download', ['file' => $file->id]) }}"><i
+                                            class="fas fa-paperclip"></i> {{ $file->name }}</a>
+                                    </li>
+                                @endforeach
+                            </div>
+                            @endif
                         </div>
                     @endforeach
                 @endif
             @else
                 <!-- Cuando el evento está abierto -->
+
+                @if ($event->childs()->exists())
+                    @include('summary.partials.event', ['events' => $event->childs])
+                @endif
+
+                @if($event->type->linksSubEvents()->exists() AND !$event->type->sub_event)
+                    @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents, 'childs' => true])
+                @endif
+
                 <form method="post" action="{{ route('summary.event.update', [$event->summary, $event]) }}">
                     @csrf
                     @method('PUT')
@@ -70,21 +89,13 @@
                     </div>
                 </form>
 
-                <div class="clearfix mb-3"></div>
-
-                @if ($event->childs()->exists())
-                    @include('summary.partials.event', ['events' => $event->childs])
-                @endif
-
-                @if($event->type->linksSubEvents()->exists() AND !$event->type->sub_event)
-                    @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents, 'childs' => true])
-                @endif
+                <div class="clearfix mb-2"></div>
 
                 @if ($event->type->templates()->exists())
-                    <h6>Templates</h6>
+                    <h6>Plantillas</h6>
                     @foreach ($event->type->templates as $template)
                         <li>
-                            <a href="{{ route('summary.templates.show', [$summary, $template]) }}">
+                            <a target="_blank" href="{{ route('summary.templates.show', [$summary, $template]) }}">
                                 {{ $template->name }}
                             </a>
                         </li>
@@ -107,43 +118,45 @@
 
         </div>
         @if ($event->type->require_file)
-            <div class="card-footer text-muted">
-                <div class="row">
-                    <div class="col">
-                        @foreach ($event->files as $file)
-                            <li>
-                                <a href="{{ route('summary.files.download', ['file' => $file->id]) }}"><i
+            @if (!$event->end_date OR ($event->end_date AND $event->files()->exists()))
+                <div class="card-footer text-muted">
+                    <div class="row">
+                        <div class="col">
+                            @foreach ($event->files as $file)
+                                <li>
+                                    <a href="{{ route('summary.files.download', ['file' => $file->id]) }}"><i
                                         class="fas fa-paperclip"></i> {{ $file->name }}</a>
-                            </li>
-                        @endforeach
-                    </div>
-                    <div class="col">
-                        @if (is_null($event->end_date))
-                            <!-- Si el evento no está terminado mostramos el input de archivos -->
-                            <form method="post" action="{{ route('summary.files.store') }}"
+                                </li>
+                            @endforeach
+                        </div>
+                        <div class="col">
+                            @if (is_null($event->end_date))
+                                <!-- Si el evento no está terminado mostramos el input de archivos -->
+                                <form method="post" action="{{ route('summary.files.store') }}"
 
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('POST')
-                                <input type="hidden" class="form-control" name="event_id" value="{{$event->id}}">
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="inputGroupFile04"
-                                            aria-describedby="inputGroupFileAddon04" name="files[]">
-                                        <label class="custom-file-label" for="customFileLangHTML"
-                                            data-browse="Examinar">Seleccione un archivo</label>
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="hidden" class="form-control" name="event_id" value="{{$event->id}}">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="inputGroupFile04"
+                                                aria-describedby="inputGroupFileAddon04" name="files[]">
+                                            <label class="custom-file-label" for="customFileLangHTML"
+                                                data-browse="Examinar">Seleccione un archivo</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-primary" type="submit" id="attache">
+                                                <i class="fas fa-arrow-up"></i> Adjuntar
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary" type="submit" id="attache">
-                                            <i class="fas fa-arrow-up"></i> Adjuntar
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        @endif
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         @endif
     </div>
 @endforeach

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-header text-white bg-success">
         <h5 class="card-title">Agregar nuevo paso</h5>
     </div>

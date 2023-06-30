@@ -122,10 +122,8 @@
             repeatCheckbox.on('change', function() {
                 if ($(this).is(':checked')) {
                     numRepeatInput.prop('disabled', false);
-                    numRepeatInput.prop('required', true);
                 } else {
                     numRepeatInput.prop('disabled', true);
-                    numRepeatInput.prop('required', false);
                 }
             });
         });
