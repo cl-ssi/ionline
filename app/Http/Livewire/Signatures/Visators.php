@@ -70,6 +70,11 @@ class Visators extends Component
 
     public function render()
     {
+
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+
+
+
         if($this->inputs){
             $this->requiredVisator = 'required';
         }
@@ -92,7 +97,7 @@ class Visators extends Component
                 'childs.childs.childs.childs',
             ])
             ->where('level', 1)
-            ->whereIn('establishment_id', [38, 1, 41])
+            ->whereIn('establishment_id', $establishments_ids)
             ->get();
 
         return view('livewire.signatures.visators', compact('ouRoots'));
