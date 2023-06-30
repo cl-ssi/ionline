@@ -2,8 +2,13 @@
     <tbody>
         <tr>
             <th>Estado</th>
-            <td>{{ $summary->status ?? '' }} ({{ Carbon\Carbon::parse($summary->start_at)->diffInDays(now()) }} días)</td>
+            <td>
+                {{ $summary->lastEvent->type->name }} ({{ $summary->start_at->diffInDays(now()) }} días)</td>
             </td>
+        </tr>
+        <tr>
+            <th>Resolución</th>
+            <td>{{ $summary->resolution_number }} / {{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
         </tr>
         <tr>
             <th>Fecha inicio</th>
