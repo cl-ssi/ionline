@@ -16,13 +16,15 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Summary $summary)
+    public function store(Request $request, Summary $summary, Event $event)
     {
+
         Event::create([
             'event_type_id' => $request->input('event_type_id'),
             'start_date' => now(),
             'summary_id' => $summary->id,
             'creator_id' => auth()->id(),
+            'father_event_id' => $event->id,
         ]);
 
         return redirect()->back();
@@ -69,6 +71,7 @@ class EventController extends Controller
         /** Preguntar si es subevento */
         if ($event->type->sub_event == true) {
             // TODO
+            //$event->father
             //
             
         }

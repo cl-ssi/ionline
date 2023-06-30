@@ -46,7 +46,7 @@
                     <td>{{ $summary->subject }}</td>
                     <td>{{ $summary->resolution_number }}</td>
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
-                    <td>{{ $summary->lastEvent->type->name }}</td>
+                    <td>{{ $summary->lastEvent->type->name ?? '' }}</td>
                     <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
                     <td>{{ optional($summary->actuary)->tinnyName }}</td>

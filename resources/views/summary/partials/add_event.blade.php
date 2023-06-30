@@ -3,7 +3,7 @@
         <h5 class="card-title">Agregar nuevo paso</h5>
     </div>
     <div class="card-body">
-        <form action="{{ route('summary.event.store',[$summary]) }}" method="post">
+        <form action="{{ route('summary.event.store',[$summary, $event]) }}" method="post">
             @csrf
             @method('POST')
 
