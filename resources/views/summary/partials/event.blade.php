@@ -1,3 +1,4 @@
+@foreach($events as $event)
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">
@@ -36,17 +37,23 @@
                     @endif
                 @endif
 
-                <hr>
-
                 <div class="float-right">
                     @if($event->type->duration)
                     <button type="submit" name="save" class="btn btn-outline-primary"
-                        value="save">Guardar</button>
+                    value="save">Guardar</button>
                     @endif
                     <button type="submit" name="save" class="btn btn-primary " value="save&close">Guardar y
                         Finalizar</button>
-                </div>
-            </form>
+                    </div>
+                </form>
+
+                <div class="clearfix mb-3"></div>
+
+                
+
+                @if($event->type->has('linksSubEvents'))
+                    @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents])
+                @endif
         @endif
 
 
@@ -99,3 +106,4 @@
         </div>
     @endif
 </div>
+@endforeach

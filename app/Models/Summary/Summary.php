@@ -69,7 +69,12 @@ class Summary extends Model
     
     public function events()
     {
-        return $this->hasMany(Event::class, 'summary_id');
+        return $this->hasMany(Event::class, 'summary_id')
+            ->where(function ($query) {
+                $query->whereHas('type', function ($query) {
+                    $query->where('sub_event', false);
+                });
+            });
     }
 
     public function lastEvent()

@@ -10,12 +10,10 @@
 
     @include('summary.partials.header')
 
-    @foreach ($summary->events as $event)
-        @include('summary.partials.event')
-    @endforeach
+    @include('summary.partials.event', ['events' => $summary->events])
 
     @if ($summary->lastEvent->end_date && !$summary->end_at)
-        @include('summary.partials.add_event')
+        @include('summary.partials.add_event', ['links' => $event->type->linksEvents])
     @endif
     
 @endsection
