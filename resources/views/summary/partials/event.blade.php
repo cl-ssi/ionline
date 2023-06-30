@@ -60,13 +60,13 @@
                         @endif
                     @endif
 
-                    <div class="float-right">
+                    <div class="float-right mt-2">
                         @if ($event->type->duration)
                             <button type="submit" name="save" class="btn btn-outline-primary"
                                 value="save">Guardar</button>
                         @endif
-                        <button type="submit" name="save" class="btn btn-primary " value="save&close">Guardar y
-                            Finalizar</button>
+                        <button type="submit" name="save" class="btn btn-primary " 
+                            value="save&close">Guardar y Finalizar</button>
                     </div>
                 </form>
 
