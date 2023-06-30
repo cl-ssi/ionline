@@ -18,6 +18,29 @@
             @if ($event->type->require_user)
                 <span class="fas fa-user"></span> {{ $event->user->shortName }}
             @endif
+
+            @if($event->has('childs'))
+                @foreach($event->childs as $event)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ $event->type->name }}
+                                <small class="text-muted">
+                                    {{ $event->type->description }}
+                                </small>
+                            </h5>
+                            <p class="card-text">
+                                <label for="for-body">Observaciones de este paso:</label><br>
+                                {{ $event->body }}
+                            </p>
+
+                            @if ($event->type->require_user)
+                                <span class="fas fa-user"></span> {{ $event->user->shortName }}
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         @else
             <!-- Cuando el evento está abierto -->
             <form method="post" action="{{ route('summary.event.update', [$event->summary, $event]) }}">
@@ -49,9 +72,11 @@
 
                 <div class="clearfix mb-3"></div>
 
-                
+                @if($event->childs()->exists())
+                    @include('summary.partials.event', ['events' => $event->childs])
+                @endif
 
-                @if($event->type->has('linksSubEvents') AND !$event->type->sub_event)
+                @if($event->type->linksSubEvents()->exists() AND !$event->type->sub_event)
                     @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents])
                 @endif
 

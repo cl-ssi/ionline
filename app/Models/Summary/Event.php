@@ -31,11 +31,6 @@ class Event extends Model
         'end_date',
     ];
 
-    public function subEvents()
-    {
-        /** TODO: */
-    }
-
     public function type()
     {
         return $this->belongsTo(EventType::class, 'event_type_id');
@@ -64,6 +59,11 @@ class Event extends Model
     public function father()
     {
         return $this->belongsTo(Event::class, 'father_event_id');
+    }
+
+    public function childs()
+    {
+        return $this->hasMany(Event::class, 'father_event_id');
     }
 
 }
