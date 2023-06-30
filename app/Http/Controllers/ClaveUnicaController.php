@@ -273,7 +273,7 @@ class ClaveUnicaController extends Controller
                     $url = env('WSSSI_CHILE_URL') . '/claveunica/login/' . $access_token;
                     $response_wssi = Http::get($url);
 
-                    $user_cu = json_decode($response);
+                    $user_cu = json_decode($response_wssi);
                     if ($user_cu) {
                         //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
 
