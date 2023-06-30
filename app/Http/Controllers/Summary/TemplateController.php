@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Summary\Template;
 use App\Models\Summary\EventType;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class TemplateController extends Controller
 {
@@ -17,9 +17,8 @@ class TemplateController extends Controller
      */
     public function index()
     {
-        //
-        $eventTypes = EventType::whereHas('templates')->get();
-        return view('summary.templates.index', compact('eventTypes'));
+        $templates = Template::all();
+        return view('summary.templates.index', compact('templates'));
     }
 
     /**

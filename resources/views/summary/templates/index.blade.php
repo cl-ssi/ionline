@@ -17,27 +17,38 @@
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
+                    <th>Nombre</th>
                     <th>Tipo de Evento</th>
-                    <th>Plantillas</th>
+                    <th>Campos</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($eventTypes as $eventType)
+                @foreach ($templates as $template)
                     <tr>
-                        <td>{{ $eventType->name }}</td>
+                        <td>
+                            {{ $template->name }}<br>
+                            <small>
+                                {{ $template->description }}
+                            </small>
+                        </td>
+                        <td>
+                            {{ $template->eventType->name }}
+                        </td>
                         <td>
                             <ul>
-                                @foreach ($eventType->templates as $template)
-                                    <li>
-                                        <a href="{{ route('summary.templates.download', ['file' => $template->id]) }}"><i
-                                                class="fas fa-paperclip"></i> {{ $template->name }}</a>
-                                    </li>
+                                @foreach($template->fields as $name => $type)
+                                <li>{{ $name }} ({{ $type }})</li>
                                 @endforeach
                             </ul>
                         </td>
+                        <td>
+                            <a href="#">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
     </div>

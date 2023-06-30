@@ -19,7 +19,11 @@ class Template extends Model
         'event_type_id',
     ];
 
-    public function type()
+    protected $casts = [
+        'fields' => 'array'
+    ];
+
+    public function eventType()
     {
         return $this->belongsTo(EventType::class, 'event_type_id');
     }
