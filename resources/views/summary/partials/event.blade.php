@@ -121,9 +121,11 @@
                         @if (is_null($event->end_date))
                             <!-- Si el evento no está terminado mostramos el input de archivos -->
                             <form method="post" action="{{ route('summary.files.store') }}"
+
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('POST')
+                                <input type="hidden" class="form-control" name="event_id" value="{{$event->id}}">
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="inputGroupFile04"

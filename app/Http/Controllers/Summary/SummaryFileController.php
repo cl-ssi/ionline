@@ -48,8 +48,9 @@ class SummaryFileController extends Controller
 
     public function store(Request $request)
     {        
+        
         // Cargar el modelo Event usando el evento ID
-        $event = Event::findOrFail($request->input('event_id'));        
+        $event = Event::findOrFail($request->input('event_id'));
         if ($request->hasFile('files')) {
             $files = $request->file('files');
 
