@@ -35,7 +35,14 @@
         <tbody>
             @foreach ($summaries as $summary)
                 <tr>
-                    <td>{{ $summary->id }}</td>
+                    <td>
+                        {{ $summary->id }}
+                        @if ($summary->end_at)
+                            <i class="fas fa-lock"></i>
+                        @else
+                            <i class="fas fa-lock-open"></i>
+                        @endif
+                    </td>
                     <td>{{ $summary->subject }}</td>
                     <td>{{ $summary->resolution_number }}</td>
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
@@ -58,7 +65,7 @@
             <del>La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"</del>
         </li>
         <li>
-            
+
             <del>Programar el update de evento:</del>
             <ul>
                 <li><del>Cierre de sumario</del></li>
@@ -67,11 +74,13 @@
             </ul>
         </li>
         <li>
-            <del>Columna Estado, mostrar el nombre del tipo del ultimo evento $event->type->name (que no sea subevento)</del>
+            <del>Columna Estado, mostrar el nombre del tipo del ultimo evento $event->type->name (que no sea
+                subevento)</del>
         </li>
         <li>
-            <del>Mostrar el Cuadro verde de "Agregar nuevo evento" sólo si el evento anterior está cerrado ( que no sea de tipo
-            sub evento el anterior)</del>
+            <del>Mostrar el Cuadro verde de "Agregar nuevo evento" sólo si el evento anterior está cerrado ( que no sea de
+                tipo
+                sub evento el anterior)</del>
         </li>
         <li>
             <del>Crear controler FileController que se preocupe, de cargar, borrar y descargar los documentos.</del>
@@ -80,7 +89,7 @@
             <del>El index, que muestre los eventos en los que yo soy Fiscal o Actuario o creador</del>
         </li>
         <li>
-            Un sumario cerrado, no debe permitir agregar eventos.
+            <del>Un sumario cerrado, no debe permitir agregar eventos.</del>
         </li>
         <li>
             Si un evento tiene vinculos de sub eventos, mostrar el cuadro verde dentro del card del evento, para poder
@@ -89,10 +98,10 @@
         </li>
         <li>
             <del>Al editar un EventType, mostrar las 3 columnas de vinculos (como la hoja de vinculos),
-            previous | current event | next (las dos primeras informativas la ultima es la de los checkbox)</del>
+                previous | current event | next (las dos primeras informativas la ultima es la de los checkbox)</del>
         </li>
         <li>
-            Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas
+            <del>Crear modelo Plantilla (template) asociado a EventType, un eventType puede tener 1 a n plantillas</del>
         </li>
 
         <li><del>Cambiar modelo summaryEvents a Events</del></li>

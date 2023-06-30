@@ -50,6 +50,7 @@ class EventController extends Controller
     public function update(Request $request, Summary $summary, Event $event)
     {
         $event->fill($request->all());
+        $event->user_id = auth()->id();
 
         /** Preguntar si asigna fiscal */
         if ($event->type->investigator == true) {
