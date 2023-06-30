@@ -93,22 +93,22 @@
             @endif
 
 
-
-            <footer class="blockquote-footer">
-                {{ $event->creator->shortName ?? '' }} -
-                {{ $event->start_date }} -
-                @if ($event->end_date)
-                    {{ $event->end_date }} - {{ $event->end_date->diffInDays($event->start_date) }} dias
-                @else
-                    12 días hasta ahora
-                @endif
-            </footer>
+            <blockquote class="blockquote mb-0 mt-3">
+                <footer class="blockquote-footer">
+                    {{ $event->creator->shortName ?? '' }} -
+                    {{ $event->start_date }} -
+                    @if ($event->end_date)
+                        {{ $event->end_date }} - {{ $event->end_date->diffInDays($event->start_date) }} dias
+                    @else
+                        12 días hasta ahora
+                    @endif
+                </footer>
+            </blockquote>
 
         </div>
         @if ($event->type->require_file)
             <div class="card-footer text-muted">
                 <div class="row">
-
                     <div class="col">
                         @foreach ($event->files as $file)
                             <li>
