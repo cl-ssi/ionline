@@ -52,9 +52,6 @@ class EventController extends Controller
     public function update(Request $request, Summary $summary, Event $event)
     {
         $event->fill($request->all());
-        $event->user_id = auth()->id();
-
-
 
         /** Preguntar si asigna fiscal */
         if ($event->type->investigator == true) {
@@ -65,15 +62,6 @@ class EventController extends Controller
             else {
                 session()->flash('danger', 'Debe incluir un usuario');
             }
-        }
-
-
-        /** Preguntar si es subevento */
-        if ($event->type->sub_event == true) {
-            // TODO
-            //$event->father
-            //
-            
         }
 
         /** Preguntar si asigna actuario */
