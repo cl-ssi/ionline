@@ -352,117 +352,118 @@ class Fulfillment extends Model implements Auditable
     // funcion que calcula monto considerando inasistencias del período indicado
     public function monto_con_inasistencias($mes_completo, $mes, $monto)
     {
-      $fulfillment = $this->serviceRequest->fulfillments->where('month',$mes)->first();
+        $fulfillment = $this->serviceRequest->fulfillments->where('month',$mes)->first();
 
-      if ($fulfillment) {
-        $total_dias_trabajados = 0;
-        $mes_completo = true;
+        if ($fulfillment) 
+        {
+            $total_dias_trabajados = 0;
+            $mes_completo = true;
 
-        /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
-        if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
-            $fulfillment->end_date = $renuncia->end_date;
-        }
-
-        /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
-        if ($fulfillment->start_date and $fulfillment->end_date) {
-            if (
-                $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
-                and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
-            ) {
-                $total_dias_trabajados = 30;
-                $mes_completo = true;
+            /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
+            if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
+                $fulfillment->end_date = $renuncia->end_date;
             }
 
-            /* De lo contrario es la diferencia entre el primer y último día */ else {
-                $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
-                $mes_completo = false;
+            /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
+            if ($fulfillment->start_date and $fulfillment->end_date) {
+                if (
+                    $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
+                    and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
+                ) {
+                    $total_dias_trabajados = 30;
+                    $mes_completo = true;
+                }
+
+                /* De lo contrario es la diferencia entre el primer y último día */ else {
+                    $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+                    $mes_completo = false;
+                }
             }
-        }
 
-        /* Restar las ausencias */
-        $dias_descuento = 0;
-        $dias_trabajado_antes_retiro = 0;
-        $hrs_descuento = 0;
-        $mins_descuento = 0;
+            /* Restar las ausencias */
+            $dias_descuento = 0;
+            $dias_trabajado_antes_retiro = 0;
+            $hrs_descuento = 0;
+            $mins_descuento = 0;
 
-        foreach ($fulfillment->fulfillmentItems as $item) {
-            switch ($item->type) {
-                case 'Inasistencia Injustificada':
-                    $mes_completo = false;
-                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                    break;
-                case 'Licencia no covid':
-                    $mes_completo = false;
-                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                    break;
-                case 'Licencia media jornada no covid':
-                    $mes_completo = false;
-                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                    $dias_descuento = $dias_descuento / 2;
-                    break;
-                case 'Abandono de funciones':
-                    $mes_completo = false;
-                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                    $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
-                    break;
-                case 'Renuncia voluntaria':
-                    $mes_completo = false;
-                    // evita ocurrir error si no existe end_date
-                    if ($item->end_date == null) {
-                      $dias_trabajado_antes_retiro = 0;
-                      break;
-                    }
-                    $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
-                    $dias_descuento += 1;
-                    break;
-                case 'Término de contrato anticipado':
+            foreach ($fulfillment->fulfillmentItems as $item) {
+                switch ($item->type) {
+                    case 'Inasistencia Injustificada':
+                        $mes_completo = false;
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        break;
+                    case 'Licencia no covid':
+                        $mes_completo = false;
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        break;
+                    case 'Licencia media jornada no covid':
+                        $mes_completo = false;
+                        $dias_descuento_t = $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_descuento += ($dias_descuento_t / 2);
+                        break;
+                    case 'Abandono de funciones':
+                        $mes_completo = false;
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
+                        break;
+                    case 'Renuncia voluntaria':
                         $mes_completo = false;
                         // evita ocurrir error si no existe end_date
                         if ($item->end_date == null) {
-                          $dias_trabajado_antes_retiro = 0;
-                          break;
+                        $dias_trabajado_antes_retiro = 0;
+                        break;
                         }
                         $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                         $dias_descuento += 1;
                         break;
-                case 'Atraso':
-                    $mes_completo = false;
-                    $mins_descuento += $item->end_date->diffInMinutes($item->start_date);
-                    break;
+                    case 'Término de contrato anticipado':
+                            $mes_completo = false;
+                            // evita ocurrir error si no existe end_date
+                            if ($item->end_date == null) {
+                            $dias_trabajado_antes_retiro = 0;
+                            break;
+                            }
+                            $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                            $dias_descuento += 1;
+                            break;
+                    case 'Atraso':
+                        $mes_completo = false;
+                        $mins_descuento += $item->end_date->diffInMinutes($item->start_date);
+                        break;
+                }
             }
-        }
 
-        $total_dias_trabajados -= $dias_descuento;
+            $total_dias_trabajados -= $dias_descuento;
 
-        // se verifica si hay retiro para calcular la cantidad de dias trabajados
-        if ($mes_completo) {
-            $total = $monto - ($dias_descuento * ($monto / 30));
-        } else {
-            if ($dias_trabajado_antes_retiro == 0) {
+            // se verifica si hay retiro para calcular la cantidad de dias trabajados
+            if ($mes_completo) {
+                $total = $monto - ($dias_descuento * ($monto / 30));
+            } else {
+                if ($dias_trabajado_antes_retiro == 0) {
 
+                }
+                if ($dias_trabajado_antes_retiro != 0) {
+
+                    $total_dias_trabajados = $dias_trabajado_antes_retiro;
+                }
+                $total = $total_dias_trabajados * ($monto / 30);
             }
-            if ($dias_trabajado_antes_retiro != 0) {
 
-                $total_dias_trabajados = $dias_trabajado_antes_retiro;
-            }
-            $total = $total_dias_trabajados * ($monto / 30);
-        }
-
-        if ($hrs_descuento != 0) {
-          $valor_hora = ($monto / 30 / 8.8);
-          $total_dcto_horas = $hrs_descuento * $valor_hora;
-          $total = $total - $total_dcto_horas;
-        }
-
-        if ($mins_descuento >= 60) {
+            if ($hrs_descuento != 0) {
             $valor_hora = ($monto / 30 / 8.8);
-            $hrs_descuento = floor($mins_descuento/60);
             $total_dcto_horas = $hrs_descuento * $valor_hora;
             $total = $total - $total_dcto_horas;
-          }
+            }
 
-        return $total;
-      }
+            if ($mins_descuento >= 60) {
+                $valor_hora = ($monto / 30 / 8.8);
+                $hrs_descuento = floor($mins_descuento/60);
+                $total_dcto_horas = $hrs_descuento * $valor_hora;
+                $total = $total - $total_dcto_horas;
+            }
+
+            return $total;
+        }
 
     }
 
@@ -473,6 +474,7 @@ class Fulfillment extends Model implements Auditable
               switch ($item->type) {
                   case 'Inasistencia Injustificada':
                   case 'Licencia no covid':
+                  case 'Licencia media jornada no covid':
                   case 'Abandono de funciones':
                   case 'Atraso':
                     if ($item->end_date == null) {
@@ -514,6 +516,7 @@ class Fulfillment extends Model implements Auditable
             $interval = DateInterval::createFromDateString('1 month');
             $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
             $periods = iterator_to_array($periods);
+
             foreach ($periods as $key => $period) {
                 if ($key === array_key_first($periods)) {
                     if ($this->items_verification(intval($period->format("m")))) {
