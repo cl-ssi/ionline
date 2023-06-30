@@ -51,8 +51,19 @@
 
                 
 
-                @if($event->type->has('linksSubEvents'))
+                @if($event->type->has('linksSubEvents') AND !$event->type->sub_event)
                     @include('summary.partials.add_event', ['links' => $event->type->linksSubEvents])
+                @endif
+
+                @if($event->type->templates()->exists())
+                    <h6>Templates</h6>
+                    @foreach($event->type->templates as $template)
+                        <li>
+                            <a href="{{ route('summary.templates.show',[$summary, $template]) }}">
+                                {{ $template->name }}
+                            </a>
+                        </li>
+                    @endforeach
                 @endif
         @endif
 

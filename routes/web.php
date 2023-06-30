@@ -17,6 +17,7 @@ use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 
 use App\Http\Livewire\TicResources;
+use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
@@ -68,12 +69,12 @@ use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\Summary\SummaryController;
-use App\Http\Controllers\Summary\EventController as SummaryEventController;
-use App\Http\Controllers\Summary\LinkController;
-use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
+use App\Http\Controllers\Summary\SummaryFileController;
+use App\Http\Controllers\Summary\SummaryController;
+use App\Http\Controllers\Summary\LinkController;
 use App\Http\Controllers\Summary\EventTypeController as SummaryEventTypeController;
+use App\Http\Controllers\Summary\EventController as SummaryEventController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\SchoolsController;
@@ -162,8 +163,8 @@ use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
-use App\Http\Controllers\Programmings\ActivitiesItemController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
@@ -195,6 +196,8 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\HotelBooking\RoomController;
+use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
@@ -216,8 +219,6 @@ use App\Http\Controllers\AssigmentController;
 use App\Http\Controllers\Allowances\AllowanceSignController;
 use App\Http\Controllers\Allowances\AllowanceFileController;
 use App\Http\Controllers\Allowances\AllowanceController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\WordWithdrawalAgreeController;
 use App\Http\Controllers\Agreements\WordTestController;
 use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
@@ -225,10 +226,9 @@ use App\Http\Controllers\Agreements\WordMandateAgreeController;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
-use App\Http\Controllers\Agreements\ProgramResolutionController;
 
-use App\Http\Controllers\HotelBooking\HotelController;
-use App\Http\Controllers\HotelBooking\RoomController;
+use App\Http\Controllers\Agreements\ProgramResolutionController;
+use App\Http\Controllers\Agreements\AgreementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -2238,6 +2238,7 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         Route::get('/create', [SummaryTemplateController::class, 'create'])->name('create');
         Route::post('/store', [SummaryTemplateController::class, 'store'])->name('store');
         Route::get('/{file}/download', [SummaryTemplateController::class, 'download'])->name('download');
+        Route::get('/{summary}/{template}', ShowTemplate::class)->name('show');
         //Route::get('/create', [LinkController::class, 'create'])->name('create');
         //Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
@@ -2249,6 +2250,7 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
+use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
 
