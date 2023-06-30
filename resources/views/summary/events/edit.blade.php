@@ -119,7 +119,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <td class="bg-light">
+                        <td class="bg-light text-center">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="sub_event" id="for-sub_event" value="1"
                                     {{ $eventType->sub_event ? 'checked' : '' }}>

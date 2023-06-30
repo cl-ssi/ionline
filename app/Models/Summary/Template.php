@@ -12,9 +12,11 @@ class Template extends Model
     protected $table = 'sum_templates';
 
     protected $fillable = [
-        'event_type_id',
         'name',
-        'file'
+        'description',
+        'fields',
+        'file',
+        'event_type_id',
     ];
 
     public function type()
