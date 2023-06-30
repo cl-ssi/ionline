@@ -36,9 +36,6 @@ class Kernel extends ConsoleKernel
         //     $schedule->command('command:birthdayGretting')->dailyAt('08:30');
         //     $schedule->command('change:staffStatus')->daily();
         // }
-
-        $schedule->command('command:birthdayGretting')->dailyAt('08:30');
-        $schedule->command('change:staffStatus')->daily();
     }
 
     /**
