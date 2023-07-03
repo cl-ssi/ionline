@@ -28,6 +28,9 @@ class BeneficiaryRequest extends Model
         'ha_utilizado_amipass',
         'fecha_nacimiento',
         'establecimiento',
+        'estado',
+        'ami_manager_id',
+        'ami_manager_at',
     ];
     
 }
