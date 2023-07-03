@@ -4,8 +4,17 @@
 
     @include('layouts.partials.errors')
     @include('layouts.partials.flash_message')
+
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('welfare.amipass.new-beneficiary-request') }}">
+            Agregar Solicitud de Beneficio AmiPass
+        </a>
+    </div>
+</div>
     
     <h3 class="mb-3">Solicitudes de beneficio AmiPass</h3>
+    
 
     <table class="table table-sm table-bordered">
         <thead>

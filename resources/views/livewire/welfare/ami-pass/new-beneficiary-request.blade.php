@@ -1,5 +1,9 @@
 <div>
 
+    @include('welfare.nav')
+    @include('layouts.partials.errors')
+    @include('layouts.partials.flash_message')
+
     <h3 class="mb-3">Solicitud de Beneficio de Alimentación - AMIPASS</h3>
 
     <div class="alert alert-info" role="alert">
@@ -40,7 +44,7 @@
                 <div class="form-group col">
                     <label for="text">Nombre de la Jefatura *</label>
                     <input id="text" name="text" type="text" class="form-control"
-                        value="serach-select-user precargado auth()->user()" required="required">
+                        value="{{Auth::user()->full_name}}" required="required" disabled>
                 </div>
             </div>
 
@@ -113,7 +117,8 @@
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Suplencia o Reemplazo por Permiso sin Goce de Sueldo" wire:model="motivoRequerimiento">
+                                value="Suplencia o Reemplazo por Permiso sin Goce de Sueldo"
+                                wire:model="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Suplencia o Reemplazo por Permiso sin Goce de Sueldo
                             </label>
@@ -148,7 +153,8 @@
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Ingreso de Funcionario en Comisión de Servicios en la DSST" wire:model="motivoRequerimiento">
+                                value="Ingreso de Funcionario en Comisión de Servicios en la DSST"
+                                wire:model="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Ingreso de Funcionario en Comisión de Servicios en la DSST
                             </label>
@@ -166,7 +172,8 @@
                 </div>
                 <div class="form-group col-6">
                     <label for="text3">Nombre del funcionario/a A REEMPLAZAR, según motivo del requerimiento</label>
-                    <input id="text3" name="text3" type="text" class="form-control" wire:model="nombreFuncionarioReemplazar">
+                    <input id="text3" name="text3" type="text" class="form-control"
+                        wire:model="nombreFuncionarioReemplazar">
                     <small id="emailHelp" class="form-text text-muted">Si no es una suplencia o reemplazo, indique NO
                         CORRESPONDE</small>
                 </div>
@@ -196,41 +203,48 @@
                 </div>
                 <div class="form-group col-6">
                     <label for="text6">Nombre Completo (nombres y apellidos) *</label>
-                    <input id="text6" name="text6" type="text" class="form-control" wire:model="nombreCompleto">
+                    <input id="text6" name="text6" type="text" class="form-control"
+                        wire:model="nombreCompleto">
                 </div>
                 <div class="form-group col-3">
                     <label for="text9">Fecha de Nacimiento *</label>
-                    <input id="text9" name="text9" type="date" required="required" class="form-control" wire:model="fechaNacimiento">
+                    <input id="text9" name="text9" type="date" required="required" class="form-control"
+                        wire:model="fechaNacimiento">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col">
                     <label for="text7">Correo electrónico "PERSONAL" *</label>
-                    <input id="text7" name="text7" type="text" class="form-control" wire:model="correoPersonal">
+                    <input id="text7" name="text7" type="text" class="form-control"
+                        wire:model="correoPersonal">
                 </div>
                 <div class="form-group col">
                     <label for="text8">Número de celular (9-12345678) *</label>
-                    <input id="text8" name="text8" type="text" required="required" class="form-control" wire:model="celular">
+                    <input id="text8" name="text8" type="text" required="required" class="form-control"
+                        wire:model="celular">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group col-3">
                     <label for="text11">Fecha de inicio de contrato</label>
-                    <input id="text11" name="text11" type="date" class="form-control" wire:model="fechaInicioContrato">
+                    <input id="text11" name="text11" type="date" class="form-control"
+                        wire:model="fechaInicioContrato">
                     <small id="emailHelp" class="form-text text-muted">Contrata, suplencia y/o reemplazo</small>
                 </div>
                 <div class="form-group col-3">
                     <label for="text12">Fecha de termino de contrato</label>
-                    <input id="text12" name="text12" type="date" class="form-control" wire:model="fechaTerminoContrato">
+                    <input id="text12" name="text12" type="date" class="form-control"
+                        wire:model="fechaTerminoContrato">
                     <small id="emailHelp" class="form-text text-muted">De acuerdo a los respaldos existentes Ej.
                         duración de Licencia Médica, suplencia, etc.</small>
                 </div>
 
                 <div class="form-group col-6">
                     <label for="text10">Donde cumplirá funciones (especificar)</label>
-                    <input id="text10" name="text10" type="text" class="form-control" wire:model="dondeCumpliraFunciones">
+                    <input id="text10" name="text10" type="text" class="form-control"
+                        wire:model="dondeCumpliraFunciones">
                     <small id="emailHelp" class="form-text text-muted">Unidad organizacional, Establecimiento o
                         Residencia</small>
                 </div>
@@ -264,6 +278,16 @@
                         <input name="radio1" id="radio1_4" type="radio" class="custom-control-input"
                             value="SAMU Periférico" wire:model="jornadaLaboral">
                         <label for="radio1_4" class="custom-control-label">SAMU Periférico</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="radio1" id="radio1_5" type="radio" class="custom-control-input"
+                            value="SAMU Diurno" wire:model="jornadaLaboral">
+                        <label for="radio1_5" class="custom-control-label">SAMU Diurno</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="radio1" id="radio1_6" type="radio" class="custom-control-input"
+                            value="SAMU Turno" wire:model="jornadaLaboral">
+                        <label for="radio1_6" class="custom-control-label">SAMU Turno</label>
                     </div>
                 </div>
             </div>
