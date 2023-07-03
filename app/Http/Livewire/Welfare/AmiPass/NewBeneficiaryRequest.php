@@ -68,9 +68,26 @@ class NewBeneficiaryRequest extends Component
 
     public function save()
     {
-        // Aquí puedes realizar la lógica necesaria para guardar los datos en el store
-
-        // Por ejemplo, puedes utilizar el método `create` del modelo correspondiente:
+        $this->validate([
+            'jefatura' => 'required',
+            'correoElectronico' => 'required|email',
+            'cargoUnidad' => 'required',
+            'selectedEstablishmentId' => 'required',
+            'motivoRequerimiento' => 'required',
+            'nombreFuncionarioReemplazar' => 'nullable',
+            'nombreCompleto' => 'required',
+            'rutFuncionario' => 'required',
+            'fechaNacimiento' => 'required|date',
+            'correoPersonal' => 'required|email',
+            'celular' => 'required',
+            'fechaInicioContrato' => 'nullable|date',
+            'fechaTerminoContrato' => 'nullable|date',
+            'dondeCumpliraFunciones' => 'nullable',
+            'jornadaLaboral' => 'nullable',
+            'residencia' => 'nullable',
+            'haUtilizadoAmipass' => 'nullable',
+        ]);
+        
         BeneficiaryRequest::create([
             'nombre_jefatura' => $this->jefatura,
             'cargo_unidad_departamento' => $this->cargoUnidad,
@@ -91,6 +108,9 @@ class NewBeneficiaryRequest extends Component
             'ha_utilizado_amipass' => $this->haUtilizadoAmipass,
             
         ]);
+
+        session()->flash('success', 'Se ha creado exitosamente');
+        return redirect()->route('welfare.amipass.requests-manager');
 
         
     }
