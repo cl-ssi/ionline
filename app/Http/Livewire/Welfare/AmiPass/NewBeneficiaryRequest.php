@@ -30,11 +30,11 @@ class NewBeneficiaryRequest extends Component
     public $jornadaLaboral = '';
     public $residencia = '';
     public $haUtilizadoAmipass = '';
-    public $fechaNacimiento = '';
-    public $establecimiento = '';
+    public $fechaNacimiento = '';    
     public $estado = '';
     public $amiManagerId = '';
     public $amiManagerAt = '';
+    public $establishmentModel = '';
 
 
     public function render()
@@ -87,12 +87,16 @@ class NewBeneficiaryRequest extends Component
             'residencia' => 'nullable',
             'haUtilizadoAmipass' => 'nullable',
         ]);
-        
+
+        $this->establishmentModel = Establishment::findOrFail($this->selectedEstablishmentId);
+
+
+
         BeneficiaryRequest::create([
             'nombre_jefatura' => $this->jefatura,
             'cargo_unidad_departamento' => $this->cargoUnidad,
             'correo_jefatura' => $this->correoElectronico,
-            'establecimiento' => $this->selectedEstablishmentId,
+            'establecimiento' => $this->establishmentModel->name,
             'motivo_requerimiento' => $this->motivoRequerimiento,
             'nombre_funcionario_reemplazar' => $this->nombreFuncionarioReemplazar,
             'nombre_completo' => $this->nombreCompleto,
@@ -106,12 +110,10 @@ class NewBeneficiaryRequest extends Component
             'jornada_laboral' => $this->jornadaLaboral,
             'residencia' => $this->residencia,
             'ha_utilizado_amipass' => $this->haUtilizadoAmipass,
-            
+
         ]);
 
         session()->flash('success', 'Se ha creado exitosamente');
         return redirect()->route('welfare.amipass.requests-manager');
-
-        
     }
 }

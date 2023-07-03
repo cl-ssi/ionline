@@ -594,6 +594,7 @@ class RequestFormController extends Controller {
         $newRequestForm->status = 'saved';
         $newRequestForm->signatures_file_id = null;
         $newRequestForm->old_signatures_file_id = null;
+        $newRequestForm->approved_at = null;
         $newRequestForm->push();
 
         $total = 0;

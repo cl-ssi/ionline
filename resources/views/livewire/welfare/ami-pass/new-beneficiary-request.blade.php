@@ -279,6 +279,16 @@
                             value="SAMU Periférico" wire:model="jornadaLaboral">
                         <label for="radio1_4" class="custom-control-label">SAMU Periférico</label>
                     </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="radio1" id="radio1_5" type="radio" class="custom-control-input"
+                            value="SAMU Diurno" wire:model="jornadaLaboral">
+                        <label for="radio1_5" class="custom-control-label">SAMU Diurno</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input name="radio1" id="radio1_6" type="radio" class="custom-control-input"
+                            value="SAMU Turno" wire:model="jornadaLaboral">
+                        <label for="radio1_6" class="custom-control-label">SAMU Turno</label>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
