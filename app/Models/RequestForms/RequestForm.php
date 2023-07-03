@@ -206,6 +206,15 @@ class RequestForm extends Model implements Auditable
         return $total;
     }
 
+    public function getTotalDtes()
+    {
+        $total = 0;
+        foreach($this->immediatePurchases as $oc){
+            $total += $oc->dtes->sum('monto_total');
+        }
+        return $total;
+    }
+
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
     public static function boot()
     {
