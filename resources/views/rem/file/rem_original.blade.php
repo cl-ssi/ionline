@@ -1,4 +1,14 @@
 @extends('layouts.app')
+@section('custom_css')
+<style>
+	.sticky-left {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: #fff; /* Cambia esto al color de fondo deseado */
+}
+</style>
+@endsection
 @section('content')
     @include('rem.nav')
 
@@ -10,14 +20,14 @@
         <table class="table table-bordered table-sm small">
             <thead>
                 <tr class="text-center">
-                    <th>Establecimiento/Período</th>
+                    <th class="sticky-left">Establecimiento/Período</th>
                     @foreach ($periods as $period)
                         <th>{{ $period->year ?? '' }}-{{ $period->month ?? '' }}</th>
                     @endforeach
                 </tr>
                 @foreach (auth()->user()->remEstablishments as $remEstablishment)
                     <tr>
-                        <td class="text-center font-weight-bold ">
+                        <td class="text-center font-weight-bold sticky-left">
                             {{ $remEstablishment->establishment->official_name ?? '' }}
                             ({{ $remEstablishment->establishment->establishmentType->name ?? '' }})
                             ({{ $remEstablishment->establishment->new_deis_without_first_character ?? '' }})
