@@ -12,10 +12,11 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 
 
+use App\Http\Livewire\Welfare\Amipass\RequestMgr;
+
 use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
 
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
-
 use App\Http\Livewire\TicResources;
 use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
@@ -162,8 +163,8 @@ use App\Http\Controllers\Programmings\ParticipationController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
-use App\Http\Controllers\Programmings\ActivitiesProgramController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
@@ -225,10 +226,9 @@ use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
 use App\Http\Controllers\Agreements\WordMandateAgreeController;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
-use App\Http\Controllers\Agreements\SignerController;
 
+use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
-use App\Http\Controllers\Agreements\AgreementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -2195,6 +2195,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
+        Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
     });
 });
 
@@ -2250,6 +2251,7 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
+use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;

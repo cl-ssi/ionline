@@ -50,4 +50,10 @@
         </div>
     </li>
     @endcan
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
+            <i class="fas fa-utensils"></i> Solicitudes Amipass
+        </a>
+    </li>
 </ul>
