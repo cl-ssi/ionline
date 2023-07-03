@@ -47,7 +47,7 @@
             <tr>
                 <th class="table-active" width="25%">ESTAMENTO</th>
                 <td width="25%">{{ $jobPositionProfile->estament->name }}</td>
-                <th class="table-active" width="25%">AREA</th>
+                <th class="table-active" width="25%">FAMILIA DEL CARGO</th>
                 <td width="25%">{{ $jobPositionProfile->area->name }}</td>
             </tr>
             <tr>

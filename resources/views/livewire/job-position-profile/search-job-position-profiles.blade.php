@@ -76,7 +76,7 @@
                         <td>{{ $jobPositionProfile->name }}</td>
                         <td>
                             <b>Estamento</b>:   {{ $jobPositionProfile->estament->name }} <br>
-                            <b>Área</b>:        {{ $jobPositionProfile->area->name }} <br>
+                            <b>Familia del Cargo</b>:        {{ $jobPositionProfile->area->name }} <br>
                             <b>Condición</b>:   {{ $jobPositionProfile->contractualCondition->name }} - {{ ($jobPositionProfile->degree) ? 'Grado '.$jobPositionProfile->degree : $jobPositionProfile->salary }}
                         </td>
                         <td>

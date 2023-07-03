@@ -44,7 +44,7 @@
             </fieldset>
 
             <fieldset class="form-group col-12 col-md-3">
-                <label for="for_charges_number">Area</label>
+                <label for="for_charges_number">Familia del Cargo</label>
                 <select name="area_id" id="for_area_id" class="form-control" wire:model.debounce.500ms="selectedArea" required>
                     <option value="">Seleccione...</option>
                     @if(!is_null($areas))
