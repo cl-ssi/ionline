@@ -32,7 +32,7 @@
         </li>
     @endcanany
 
-    @canany(['amiPASS', 'be god'])
+    @canany([, 'be god'])
         <li class="nav-item dropdown ">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -45,12 +45,12 @@
                 </a>
 
                 <a class="dropdown-item" href="{{ route('welfare.amipass.dashboard') }}">
-                    <i class="fas fa-file-upload"></i> Dashbard
+                    <i class="fas fa-file-upload"></i> Dashboard
                 </a>
             </div>
         </li>
 
-
+    @canany(['amiPASS', 'be god'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
                 <i class="fas fa-utensils"></i> Solicitudes Amipass
