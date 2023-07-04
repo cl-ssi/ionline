@@ -27,7 +27,7 @@ class InvoiceController extends Controller
         if ($access_token) {
 
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
 
                 if($response->getStatusCode() == 200) {

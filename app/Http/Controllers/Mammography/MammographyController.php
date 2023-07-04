@@ -22,7 +22,7 @@ class MammographyController extends Controller
             // dd("");
             if (env('APP_ENV') == 'production') {
                 // $access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
 
