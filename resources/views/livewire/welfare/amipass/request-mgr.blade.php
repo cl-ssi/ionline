@@ -14,6 +14,17 @@
 </div>
     
     <h3 class="mb-3">Solicitudes de beneficio AmiPass</h3>
+
+    <div class="row mb-3">
+        <div class="col-lg-6">
+            <input type="text" wire:model.defer="filter" class="form-control" placeholder="Buscar por RUN o nombre">
+        </div>
+        <div class="col-lg-1">
+            <button class="btn btn-primary" wire:click="searchBeneficiary">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
     
 
     <table class="table table-sm table-bordered">

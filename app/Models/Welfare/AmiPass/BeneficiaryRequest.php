@@ -32,5 +32,14 @@ class BeneficiaryRequest extends Model
         'ami_manager_id',
         'ami_manager_at',
     ];
+
+    public function scopeSearch($query, $filter)
+    {
+
+        return $query->where('nombre_jefatura', 'LIKE', '%'.$filter.'%')
+                ->orWhere('rut_funcionario', 'LIKE', '%'.$filter.'%')
+                ->orWhere('nombre_completo', 'LIKE', '%'.$filter.'%');
+
+    }
     
 }
