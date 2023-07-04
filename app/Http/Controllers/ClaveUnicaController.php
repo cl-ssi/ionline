@@ -133,7 +133,7 @@ class ClaveUnicaController extends Controller
             //dd($access_token);
             if (env('APP_ENV') == 'production' or env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
 
                 if ($response->getStatusCode() == 200) {
@@ -242,7 +242,7 @@ class ClaveUnicaController extends Controller
             //dd($access_token);
             if (env('APP_ENV') == 'production' or env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
                 if ($response->getStatusCode() == 200) {
 
