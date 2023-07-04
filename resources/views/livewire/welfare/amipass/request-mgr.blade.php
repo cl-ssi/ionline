@@ -7,7 +7,7 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route('welfare.amipass.new-beneficiary-request') }}">
+        <a class="btn btn-success" href="{{ route('welfare.amipass.new-beneficiary-request') }}" target="blank">
             Agregar Solicitud de Beneficio AmiPass
         </a>
     </div>

@@ -1,6 +1,5 @@
 <div>
-
-    @include('welfare.nav')
+    
     @include('layouts.partials.errors')
     @include('layouts.partials.flash_message')
 

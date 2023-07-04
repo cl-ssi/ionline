@@ -349,7 +349,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['Rrhh: wellfair', 'be god'])
+                        @canany(['Rrhh: wellfair', 'be god', 'amiPASS'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
