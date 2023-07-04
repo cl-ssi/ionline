@@ -1,12 +1,15 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
 
-    @canany(['be god'])
+    @canany(['amiPASS', 'be god'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.index') }}">
                 <i class="fas fa-home"></i> home
             </a>
         </li>
+    @endcanany
 
+
+    @canany(['be god'])
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.balances') }}">
                 <i class="fas fa-balance-scale"></i> Balance
@@ -20,10 +23,10 @@
         </li>
 
         <!--li class="nav-item">
-            <a class="nav-link" href="{{ route('welfare.loans.index') }}">
-                <i class="fas fa-file-excel"></i> Carga Excel de préstamos
-            </a>
-        </li-->
+                <a class="nav-link" href="{{ route('welfare.loans.index') }}">
+                    <i class="fas fa-file-excel"></i> Carga Excel de préstamos
+                </a>
+            </li-->
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.report') }}">
@@ -49,12 +52,13 @@
                 </a>
             </div>
         </li>
-
-    @canany(['amiPASS', 'be god'])
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
-                <i class="fas fa-utensils"></i> Solicitudes Amipass
-            </a>
-        </li>
     @endcanany
-</ul>
+
+        @canany(['amiPASS', 'be god'])
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('welfare.amipass.requests-manager') }}">
+                    <i class="fas fa-utensils"></i> Solicitudes Amipass
+                </a>
+            </li>
+        @endcanany
+    </ul>
