@@ -46,16 +46,16 @@ class InvoiceController extends Controller
                     if($user_cu){
                         $user_id = $user_cu->RolUnico->numero;
 
-                        logger()->info('Utilizando el ByPass de CU a través del WSSI', [
-                            'cu_access_token' => $access_token,
-                            'error_de_cu' => $response->body(),
-                        ]);
+                        // logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        //     'cu_access_token' => $access_token,
+                        //     'error_de_cu' => $response->body(),
+                        // ]);
 
                     }
                     else{
-                        logger()->info('ByPass - $user_cu - vacío', [
-                            'user_cu' => $user_cu,
-                        ]);
+                        // logger()->info('ByPass - $user_cu - vacío', [
+                        //     'user_cu' => $user_cu,
+                        // ]);
                         return view('service_requests.invoice.welcome');
                     }
                 }
