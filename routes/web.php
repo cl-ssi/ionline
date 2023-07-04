@@ -230,6 +230,11 @@ use App\Http\Controllers\Agreements\StageController;
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
 
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -2251,11 +2256,6 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-
 Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
     Route::prefix('meeting')->as('meeting.')->group(function () {
         Route::get('/', [MeetingController::class, 'index'])->name('index');
