@@ -42,12 +42,19 @@ class InvoiceController extends Controller
                     $response_wssi = Http::get($url);
 
                     $user_cu = json_decode($response_wssi);
-                    $user_id = $user_cu->RolUnico->numero;
 
-                    logger()->info('Utilizando el ByPass de CU a través del WSSI', [
-                        'cu_access_token' => $access_token,
-                        'error_de_cu' => $response->body(),
-                    ]);
+                    if($user_cu){
+                        $user_id = $user_cu->RolUnico->numero;
+
+                        logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                            'cu_access_token' => $access_token,
+                            'error_de_cu' => $response->body(),
+                        ]);
+                    }else{
+                        logger()->info('Error en ByPass de CU - $user_cu', [
+                            'user_cu' => $user_cu,
+                        ]);
+                    }
                 }
                 
             } else if (env('APP_ENV') == 'local') {
