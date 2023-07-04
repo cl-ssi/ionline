@@ -43,9 +43,7 @@ class InvoiceController extends Controller
 
                     $user_cu = json_decode($response_wssi);
 
-                    if(!$user_cu->RolUnico){
-                        logger()->info('Error ByPass de CU a través del WSSI - $user_cu', ['user_cu' => $user_cu]);
-                    }
+                    logger()->info('ByPass - $user_cu: ' . $user_cu);
 
                     $user_id = $user_cu->RolUnico->numero;
 
