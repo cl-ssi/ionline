@@ -200,7 +200,18 @@ class User extends Authenticatable implements Auditable
     public function boss()
     {
         if($this->organizationalUnit) {
-            return $this->currentBoss($this->organizationalUnit);
+            if($this->organizationalUnit->level == 1) {
+                if($this->organizationalUnit->establishment->father_organizational_unit_id) {
+                    return $this->currentBoss($this->organizationalUnit->establishment->ouFather);
+                }
+                else {
+                    /** Retorna una relación nula si no tiene OU asociada */
+                    return $this->belongsTo(User::class);
+                }
+            }
+            else {
+                return $this->currentBoss($this->organizationalUnit);
+            }
         }
         else  {
             /** Retorna una relación nula si no tiene OU asociada */
