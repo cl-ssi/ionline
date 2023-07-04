@@ -519,7 +519,7 @@ class DigitalSignatureController extends Controller
             "run" => $run
         ];
 
-        $jwt = JWT::encode($payload, $secret,'HS256');
+        $jwt = JWT::encode($payload, $secret, 'HS256');
         // die($jwt);
 
         $page = 'LAST';
@@ -793,7 +793,7 @@ class DigitalSignatureController extends Controller
             "run" => $run
         ];
 
-        $jwt = JWT::encode($payload, $secret);
+        $jwt = JWT::encode($payload, $secret, 'HS256');
         //die($jwt);
 
         $page = 'LAST';
