@@ -54,3 +54,39 @@ post_max_size = 66M
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+# Update to Laravel 9.0
+composer update
+
+composer remove and require after update:
+
+barryvdh/laravel-dompdf 
+firebase/php-jwt 
+guzzlehttp/guzzle 
+maatwebsite/excel
+owen-it/laravel-auditing 
+phpoffice/phpword 
+setasign/fpdf 
+setasign/fpdi 
+simplesoftwareio/simple-qrcode 
+spatie/laravel-permission 
+stackkit/laravel-google-cloud-scheduler
+laravel/passport
+
+
+stackkit/laravel-google-cloud-tasks-queue:*  depende de monolog 3
+
+/** Actualizar archivo filesystem.php */
+superbalist/laravel-google-cloud-storage => spatie/laravel-google-cloud-storage
+
+actived/microsoft-teams-notifier:*
+ 
+
+--dev 
+barryvdh/laravel-debugbar
+barryvdh/laravel-ide-helper
+
+composer remove fruitcake/laravel-cors
+composer remove fideloper/proxy
+Update archivo Kernel.php, TrustProxies y AuthServiceProvider

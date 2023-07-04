@@ -26,8 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
  
-        if (! $this->app->routesAreCached()) {
-            Passport::routes();
-        }
+        /** Update to laravel 9.0 */
+        // if (! $this->app->routesAreCached()) {
+        //     Passport::routes();
+        // }
     }
 }

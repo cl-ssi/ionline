@@ -50,6 +50,7 @@ class InvoiceController extends Controller
                             'cu_access_token' => $access_token,
                             'error_de_cu' => $response->body(),
                         ]);
+
                     }
                     else{
                         logger()->info('ByPass - $user_cu - vacío', [
