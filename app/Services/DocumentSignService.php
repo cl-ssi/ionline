@@ -282,6 +282,6 @@ class DocumentSignService
          */
         $filename = $this->folder . $this->filename;
         $file = $filename.".pdf";
-        Storage::disk('gcs')->getDriver()->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
+        Storage::disk('gcs')->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
     }
 }

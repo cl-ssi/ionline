@@ -188,13 +188,13 @@ class DigitalSignatureController extends Controller
                 $newFilePath = $filePathWithoutSignatureNumber . '_' . ($newSignatureNumber) . '.pdf';
                 $signaturesFlow->signaturesFile->signed_file = $newFilePath;
                 $signaturesFlow->signaturesFile->save();
-                Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+                Storage::disk('gcs')->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
                 Storage::disk('gcs')->delete($oldFilePath);
             } else {
                 $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
                 $signaturesFlow->signaturesFile->signed_file = $filePath;
                 $signaturesFlow->signaturesFile->save();
-                Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+                Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
             }
 
             if ($type === 'firmante') {
