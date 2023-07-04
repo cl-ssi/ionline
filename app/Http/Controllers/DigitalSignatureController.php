@@ -212,8 +212,11 @@ class DigitalSignatureController extends Controller
                 $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
-                Mail::to($emails[0])
+
+                if(!empty($emails[0]) {
+                    Mail::to($emails[0])
                     ->send(new SignedDocument($signaturesFlow->signature));
+                }
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
