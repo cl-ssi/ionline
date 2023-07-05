@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Summary\Summary;
 use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
-use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
@@ -18,12 +17,13 @@ class SummaryController extends Controller
      */
     public function index()
     {
-
-        $user_id = Auth::id();
+        $user_id = auth()->id();
         $summaries = Summary::where('investigator_id', $user_id)
             ->orWhere('actuary_id', $user_id)
             ->orWhere('creator_id', $user_id)
+            ->latest()
             ->get();
+
         return view('summary.index', compact('summaries'));
     }
 

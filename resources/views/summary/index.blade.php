@@ -60,9 +60,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <del>La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"</del>
-        </li>
-    </ul>
 @endsection

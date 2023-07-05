@@ -4,7 +4,7 @@
             <i class="fas fa-book"></i> Mis Sumarios
         </a>
     </li>
-    
+
     <li class="nav-item">
         <a class="nav-link {{ active('summary.event-types.*') }}" href="{{ route('summary.event-types.index') }}">
             <i class="fas fa-list-alt"></i> Tipos de Eventos
@@ -12,14 +12,14 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{ active('summary.templates.*') }}" href="{{ route('summary.templates.index') }}">
-            <i class="far fa-file-alt"></i> Plantillas a tipos de Eventos
+        <a class="nav-link {{ active('summary.links.*') }}" href="{{ route('summary.links.index') }}">
+            <i class="fas fa-link"></i> Vínculos entre tipos de eventos
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{ active('summary.links.*') }}" href="{{ route('summary.links.index') }}">
-            <i class="fas fa-link"></i> Vínculos
+        <a class="nav-link {{ active('summary.templates.*') }}" href="{{ route('summary.templates.index') }}">
+            <i class="far fa-file-alt"></i> Plantillas
         </a>
-    </li>    
+    </li>
 </ul>
