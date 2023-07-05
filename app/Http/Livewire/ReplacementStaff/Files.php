@@ -8,7 +8,6 @@ class Files extends Component
 {
     public $inputs = [];
     public $i = 1;
-    public $users;
     public $technicalEvaluation;
     public $count = 0;
 
@@ -26,14 +25,16 @@ class Files extends Component
         $this->count--;
     }
 
-    public function mount($users, $technicalEvaluation)
+    public function mount($technicalEvaluation)
     {
-        $this->users = $users;
         $this->technicalEvaluation = $technicalEvaluation;
     }
 
     public function render()
     {
-        return view('livewire.replacement-staff.files', compact($this->users, $this->technicalEvaluation));
+        return view('livewire.replacement-staff.files',
+            [
+                'technicalEvaluation' => $this->technicalEvaluation
+            ]);
     }
 }
