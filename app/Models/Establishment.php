@@ -161,6 +161,24 @@ class Establishment extends Model implements Auditable
         return $this->options;
     }
 
+    public function getOuTreeWithAliasByLevelAttribute($level)
+    {
+        $ous_lv1 = $this->organizationalUnits()->where('id',1)->get()->toArray();
+        $ous_lv_param = $this->organizationalUnits()
+            ->select('id','level','name','organizational_unit_id as father_id')
+            ->orderBy('name')
+            ->where('level',$level)
+            ->get()
+            ->toArray();
+
+        $ous = array_merge($ous_lv1, $ous_lv_param);
+    
+        foreach($ous as $key => $ou){
+            $this->options[$ou['id']] = $ou['name'];
+        }
+        return $this->options;
+    }
+
     public function getNewDeisWithoutFirstCharacterAttribute()
     {
         return substr($this->new_deis, 1);
