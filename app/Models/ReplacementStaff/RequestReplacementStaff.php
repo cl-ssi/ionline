@@ -177,7 +177,7 @@ class RequestReplacementStaff extends Model implements Auditable
         return $numberDays;
     }
 
-    public function getCurrentContinuity($requestReplacementStaff) {
+    public static function getCurrentContinuity($requestReplacementStaff) {
         if($requestReplacementStaff->requestChilds->count() > 0){
             if($requestReplacementStaff->requestChilds->last()->request_status == 'complete' &&
                 $requestReplacementStaff->requestChilds->last()->end_date < now()->toDateString()){
