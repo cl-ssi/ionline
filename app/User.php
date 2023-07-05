@@ -21,6 +21,7 @@ use App\Models\Parameters\AccessLog;
 use App\Models\Lobby\Meeting;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Establishment;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements Auditable
 {
@@ -199,8 +200,20 @@ class User extends Authenticatable implements Auditable
 
     public function boss()
     {
+        
         if($this->organizationalUnit) {
-            return $this->currentBoss($this->organizationalUnit);
+            if($this->organizationalUnit->level == 1 and ($this->organizationalUnit->currentManager->user_id == auth()->id())) {
+                if($this->organizationalUnit->establishment->father_organizational_unit_id) {
+                    return $this->currentBoss($this->organizationalUnit->establishment->ouFather);
+                }
+                else {
+                    /** Retorna una relación nula si no tiene OU asociada */
+                    return $this->belongsTo(User::class);
+                }
+            }
+            else {
+                return $this->currentBoss($this->organizationalUnit);
+            }
         }
         else  {
             /** Retorna una relación nula si no tiene OU asociada */

@@ -87,6 +87,12 @@ class Establishment extends Model implements Auditable
         return $this->belongsTo(Establishment::class,'new_mother_code','new_deis');
     }
 
+    /** Unidad Organizacional Padre, para el caso de los cosams, que dependen de una OU (salud mental) */
+    public function ouFather()
+    {
+        return $this->belongsTo(OrganizationalUnit::class,'father_organizational_unit_id');
+    }
+
     public function usersInventories()
     {
         return $this->belongsToMany(User::class, 'inv_establishment_user')

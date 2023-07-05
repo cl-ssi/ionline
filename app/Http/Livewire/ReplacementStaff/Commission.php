@@ -8,7 +8,7 @@ class Commission extends Component
 {
     public $inputs = [];
     public $i = 1;
-    public $users;
+    // public $users;
     public $technicalEvaluation;
     public $count = 0;
 
@@ -26,15 +26,16 @@ class Commission extends Component
         $this->count--;
     }
 
-    public function mount($users, $technicalEvaluation)
+    public function mount($technicalEvaluation)
     {
-        $this->users = $users;
+        // $this->users = $users;
         $this->technicalEvaluation = $technicalEvaluation;
     }
 
     public function render()
     {
-        return view('livewire.replacement-staff.commission', ['users' => $this->users,
-            'technicalEvaluation' => $this->technicalEvaluation]);
+        return view('livewire.replacement-staff.commission', [
+            'technicalEvaluation' => $this->technicalEvaluation
+        ]);
     }
 }

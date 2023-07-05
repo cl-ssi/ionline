@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Welfare\Amipass;
+namespace App\Http\Livewire\Welfare\AmiPass;
 
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -9,15 +9,16 @@ use App\Models\Welfare\AmiPass\BeneficiaryRequest;
 class RequestMgr extends Component
 {
     use WithPagination;
-    protected $paginationTheme ='bootstrap';
+    protected $paginationTheme = 'bootstrap';
 
     /** Variable para mostrar o no el show del objeto */
     public $element = false;
     public $beneficiaryRequest;
+    public $filter = '';
 
     /**
-    * Show
-    */
+     * Show
+     */
     public function showElement($id)
     {
         $this->element = $id;
@@ -25,8 +26,8 @@ class RequestMgr extends Component
     }
 
     /**
-    * Close Show
-    */
+     * Close Show
+     */
     public function closeElement()
     {
         app('debugbar')->info('close');
@@ -35,23 +36,30 @@ class RequestMgr extends Component
     }
 
     /**
-    * Set AmiPass Ok
-    */
+     * Set AmiPass Ok
+     */
     public function amiOk($id)
     {
-        BeneficiaryRequest::where('id',$id)
+        BeneficiaryRequest::where('id', $id)
             ->update([
                 'estado' => 'Ok',
-                'ami_manager_id'=> auth()->id(),
-                'ami_manager_at'=> now(),
+                'ami_manager_id' => auth()->id(),
+                'ami_manager_at' => now(),
             ]);
-        
+
         session()->flash("success", "Listoco !");
     }
 
+    public function searchBeneficiary()
+    {
+        $this->resetPage();
+        $this->render();
+    }
+
+
     public function render()
     {
-        $requests = BeneficiaryRequest::latest()->paginate(100);
+        $requests = BeneficiaryRequest::search($this->filter)->latest()->paginate(100);
         return view('livewire.welfare.amipass.request-mgr', [
             'requests' => $requests,
         ]);

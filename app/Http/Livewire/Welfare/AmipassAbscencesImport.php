@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\welfare;
+namespace App\Http\Livewire\Welfare;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
