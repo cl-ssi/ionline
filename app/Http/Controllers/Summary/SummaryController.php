@@ -59,10 +59,12 @@ class SummaryController extends Controller
     {
 
         /** Obtiene el evento marcado como primer evento de un sumario */
-        $eventType = EventType::where('start',true)->first();
+        $eventType = EventType::where('start',true)
+            ->where('summary_type_id',$request->input('type_id'))
+            ->first();
 
         if(is_null($eventType)) {
-            session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario"');
+            session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario para este tipo de investigación"');
         }
         else {
             $summary = new Summary($request->All());
@@ -105,13 +107,6 @@ class SummaryController extends Controller
      */
     public function edit(Summary $summary)
     {
-        /** Esto ya no se necesita, ya que está implementado lastEvent */
-        // foreach($summary->events as $event) {
-        //     if($event->type->sub_event == false) {
-        //         $lastNonSubEvent = $event;
-        //     }
-        // }
-
         return view('summary.edit', compact('summary'));
     }
 

@@ -14,11 +14,8 @@
         <div class="form-group row">
             <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
             <div class="col-sm-5">
-                <select class="form-control" name="summary_type_id" required>
-                    <option value=""></option>
-                    @foreach($summaryTypes as $id => $name)
-                        <option value="{{ $id }}" @selected($eventType->summary_type_id == $id)>{{ $name }}</option>
-                    @endforeach
+                <select class="form-control" name="summary_type_id" disabled>
+                    <option value="{{ $eventType->summary_type_id }}">{{ $eventType->summaryType->name }}</option>
                 </select>
             </div>
         </div>
@@ -164,7 +161,7 @@
                             </ul>
                         </td>
                         <td class="align-middle;">
-                            @foreach ($eventTypes as $type)
+                            @foreach ($eventType->summaryType->eventTypes as $type)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{ $type->id }}"
                                         name="links[{{ $type->id }}]"

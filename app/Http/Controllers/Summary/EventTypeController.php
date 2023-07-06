@@ -75,9 +75,7 @@ class EventTypeController extends Controller
      */
     public function edit(EventType $eventType)
     {
-        $summaryTypes = Type::pluck('name','id');
-        $eventTypes = EventType::all();
-        return view('summary.events.edit', compact('eventType', 'eventTypes','summaryTypes'));
+        return view('summary.events.edit', compact('eventType'));
     }
 
     /**

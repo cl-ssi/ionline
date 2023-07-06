@@ -1,6 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Módulo de Vinculos')
+
+@section('title', 'Vinculos entre tipos de eventos')
+
 @section('content')
+
     @include('summary.nav')
     <div class="form-row">
         <div class="col">
@@ -13,42 +16,47 @@
         </div> -->
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Evento Anterior</th>
-                    <th class="bg-light">Evento</th>
-                    <th>Evento Sucesor</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($events as $event)
+    @foreach($summaryTypes as $summaryType)
+        <h5>
+            {{ $summaryType->name }}
+        </h5>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+                <thead>
                     <tr>
-                        <td>
-                            <ul>
-                                @foreach ($event->linksBefore as $linkBefore)
-                                    <li>{{ $linkBefore->beforeEvent->name ?? '' }}</li>
-                                @endforeach
-                            </ul>
-                        </td>
-                        <td class="bg-light">
-                            <a class="btn btn-sm btn-primary" href="{{ route('summary.event-types.edit', $event) }}">
-                                <i class="fas fa-fw fa-edit"></i>
-                            </a>
-                            {{ $event->name ?? '' }}
-                        </td>
-                        <td>
-                            <ul>
-                                @foreach ($event->linksAfter as $linkAfter)
-                                    <li>{{ $linkAfter->afterEvent->name ?? '' }}</li>
-                                @endforeach
-
-                            </ul>
-                        </td>
+                        <th>Evento Anterior</th>
+                        <th class="bg-light">Evento</th>
+                        <th>Evento Sucesor</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($summaryType->eventTypes as $eventType)
+                        <tr>
+                            <td>
+                                <ul>
+                                    @foreach ($eventType->linksBefore as $linkBefore)
+                                        <li>{{ $linkBefore->beforeEvent->name ?? '' }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
+                            <td class="bg-light">
+                                <a class="btn btn-sm btn-primary" href="{{ route('summary.event-types.edit', $eventType) }}">
+                                    <i class="fas fa-fw fa-edit"></i>
+                                </a>
+                                {{ $eventType->name ?? '' }}
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach ($eventType->linksAfter as $linkAfter)
+                                        <li>{{ $linkAfter->afterEvent->name ?? '' }}</li>
+                                    @endforeach
+
+                                </ul>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endforeach
 @endsection
