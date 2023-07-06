@@ -111,60 +111,60 @@
     @endif
 
     <!-- Rellena con cuadros en blanco para cuando el mes no comienza en el primer cuadro -->
-    @for($i = 1; $i < $blankDays; $i++) <div class="dia_calendario small p-2 text-center border-white">
-</div>
-@endfor
+    @for($i = 1; $i < $blankDays; $i++) 
+        <div class="dia_calendario small p-2 text-center border-white"></div>
+    @endfor
 
-<!-- Muestra el calendario -->
-@foreach($data as $date => $authority)
-<div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
+    <!-- Muestra el calendario -->
+    @foreach($data as $date => $authority)
+    <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }}">
 
-    <span class="{{ ($authority['holiday'] OR $authority['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
-        {{ $date }}
-    </span>
+        <span class="{{ ($authority['holiday'] OR $authority['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
+            {{ $date }}
+        </span>
 
-    <hr class="mt-1 mb-1">
-    {{ optional($authority['manager'])->tinnyName }}
-    <a href="#" class="link-primary" wire:click="edit('{{ $date }}','manager')">
-        <i class="fas fa-edit"></i>
-    </a>
-    @if($authority['manager'])
-    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['manager']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})" >
-        <i class="fas fa-trash-alt text-danger"></i>
-    </a>
-    @endif
-    <br>
-    <em class="text-muted">{{ optional($authority['manager'])->position }}</em>
+        <hr class="mt-1 mb-1">
+        {{ optional($authority['manager'])->tinnyName }}
+        <a href="#" class="link-primary" wire:click="edit('{{ $date }}','manager')">
+            <i class="fas fa-edit"></i>
+        </a>
+        @if($authority['manager'])
+        <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['manager']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})" >
+            <i class="fas fa-trash-alt text-danger"></i>
+        </a>
+        @endif
+        <br>
+        <em class="text-muted">{{ optional($authority['manager'])->position }}</em>
 
-    <hr class="mt-1 mb-1">
-    {{ optional($authority['secretary'])->tinnyName }}
-    <a href="#" class="link-primary" wire:click="edit('{{ $date }}','secretary')">
-        <i class="fas fa-edit"></i>
-    </a>
-    @if($authority['secretary'])
-    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro  de {{$authority['secretary']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}}y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
-        <i class="fas fa-trash-alt text-danger"></i>
-    </a>
-    @endif
-    <br>
-    <em class="text-muted">{{ optional($authority['secretary'])->position }}</em>
+        <hr class="mt-1 mb-1">
+        {{ optional($authority['secretary'])->tinnyName }}
+        <a href="#" class="link-primary" wire:click="edit('{{ $date }}','secretary')">
+            <i class="fas fa-edit"></i>
+        </a>
+        @if($authority['secretary'])
+        <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro  de {{$authority['secretary']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}}y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
+            <i class="fas fa-trash-alt text-danger"></i>
+        </a>
+        @endif
+        <br>
+        <em class="text-muted">{{ optional($authority['secretary'])->position }}</em>
 
-    <hr class="mt-1 mb-1">
-    {{ optional($authority['delegate'])->tinnyName }}
-    <a href="#" class="link-primary" wire:click="edit('{{ $date }}','delegate')">
-        <i class="fas fa-edit"></i>
-    </a>
-    @if($authority['delegate'])
-    <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['delegate']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
-        <i class="fas fa-trash-alt text-danger"></i>
-    </a>
-    @endif
-    <br>
-    <em class="text-muted">{{ optional($authority['delegate'])->position }}</em>
+        <hr class="mt-1 mb-1">
+        {{ optional($authority['delegate'])->tinnyName }}
+        <a href="#" class="link-primary" wire:click="edit('{{ $date }}','delegate')">
+            <i class="fas fa-edit"></i>
+        </a>
+        @if($authority['delegate'])
+        <a href="#" class="link-danger ml-2" onclick="confirm('¿Está seguro que desea eliminar el registro de {{$authority['delegate']->tinnyName}}? Esto eliminará este registro desde la fecha: {{$date}} y lo que queda del año') || event.stopImmediatePropagation()" wire:click="delete({{ $authority['authority_id'] }})">
+            <i class="fas fa-trash-alt text-danger"></i>
+        </a>
+        @endif
+        <br>
+        <em class="text-muted">{{ optional($authority['delegate'])->position }}</em>
 
 
-</div>
-@endforeach
+    </div>
+    @endforeach
 
 
 
