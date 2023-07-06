@@ -12,11 +12,11 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 
 
+use App\Http\Livewire\Welfare\AmiPass\RequestMgr;
 use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
-
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
-
 use App\Http\Livewire\TicResources;
+use App\Http\Livewire\Summary\Template\ShowTemplate;
 use App\Http\Livewire\Sign\SignatureIndex;
 use App\Http\Livewire\Sign\RequestSignature;
 use App\Http\Livewire\Rrhh\NoAttendanceRecordMgr;
@@ -68,9 +68,12 @@ use App\Http\Controllers\Unspsc\ProductController;
 use App\Http\Controllers\Unspsc\FamilyController;
 use App\Http\Controllers\Unspsc\ClassController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Summary\TemplateController as SummaryTemplateController;
+use App\Http\Controllers\Summary\SummaryFileController;
 use App\Http\Controllers\Summary\SummaryController;
 use App\Http\Controllers\Summary\LinkController;
-use App\Http\Controllers\Summary\EventTypeController as SummaryEventController;
+use App\Http\Controllers\Summary\EventTypeController as SummaryEventTypeController;
+use App\Http\Controllers\Summary\EventController as SummaryEventController;
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\SchoolsController;
@@ -158,9 +161,9 @@ use App\Http\Controllers\Programmings\ParticipationController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
+//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
-//use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\Programmings\ActionTypeController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Http\Controllers\Pharmacies\PharmacyController;
@@ -192,6 +195,8 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\HotelBooking\RoomController;
+use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
@@ -219,8 +224,14 @@ use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
 use App\Http\Controllers\Agreements\WordMandateAgreeController;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
+
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
+
+use App\Http\Controllers\Agreements\AgreementController;
+use App\Http\Controllers\Agreements\AddendumController;
+use App\Http\Controllers\Agreements\AccountabilityDetailController;
+use App\Http\Controllers\Agreements\AccountabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -946,6 +957,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            Route::get('/consolidated-data-excel-download/{establishment_id}/{year}/{semester}', [ServiceRequestController::class, 'consolidated_data_excel_download'])->name('consolidated_data_excel_download');
             // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
             Route::get('/export-sirh', [ReportController::class, 'export_sirh'])->name('export_sirh');
             Route::get('/export-sirh-txt', [ReportController::class, 'export_sirh_txt'])->name('export-sirh-txt');
@@ -1695,6 +1707,28 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
     });
 });
 
+Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(function () {
+    Route::view('/index', 'hotel_booking.home')->name('index');
+
+    Route::prefix('hotels')->as('hotels.')->middleware('auth')->group(function () {
+        Route::get('/', [HotelController::class, 'index'])->name('index');   
+        Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit'); 
+        Route::put('/update/{hotel}', [HotelController::class, 'update'])->name('update');
+        Route::get('/create', [HotelController::class, 'create'])->name('create');
+        Route::post('/store', [HotelController::class, 'store'])->name('store');
+        Route::delete('/{hotel}/destroy', [HotelController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('rooms')->as('rooms.')->middleware('auth')->group(function () {
+        Route::get('/', [RoomController::class, 'index'])->name('index');   
+        Route::get('/edit/{room}', [RoomController::class, 'edit'])->name('edit'); 
+        Route::put('/update/{room}', [RoomController::class, 'update'])->name('update');
+        Route::get('/create', [RoomController::class, 'create'])->name('create');
+        Route::post('/store', [RoomController::class, 'store'])->name('store');
+        Route::delete('/{room}/destroy', [RoomController::class, 'destroy'])->name('destroy');
+    });
+});
+
 // Inventories
 Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function () {
     /** Ruta para poder ver la hoja de inventario sin edición  */
@@ -2161,50 +2195,66 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
+        Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
+        Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
     });
 });
 
 
 /* Rutas de Módulo de Sumario*/
-use App\Http\Controllers\Agreements\ProgramController;
-use App\Http\Controllers\Agreements\AgreementController;
-use App\Http\Controllers\Agreements\AddendumController;
 Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
+    Route::post('/store', [SummaryController::class, 'store'])->name('store');
     Route::get('/edit/{summary}', [SummaryController::class, 'edit'])->name('edit');
 
-    Route::get('/event/edit/{summaryEvent}', [SummaryController::class, 'body'])->name('body');
-    Route::put('/update/{summaryEvent}', [SummaryController::class, 'bodyUpdate'])->name('bodyUpdate');
-    Route::post('/store', [SummaryController::class, 'store'])->name('store');
-    Route::post('/nexteventstore', [SummaryController::class, 'nextEventStore'])->name('nextEventStore');
-    Route::get('/summary/download/{file}', [SummaryController::class, 'downloadFile'])->name('downloadFile');
-    Route::get('/summary/delete/{file}', [SummaryController::class, 'deleteFile'])->name('deleteFile');
-    Route::post('/summary/close/{summaryId}', [SummaryController::class, 'closeSummary'])->name('closeSummary');
-    Route::prefix('events')->as('events.')->group(function () {
-        Route::get('/', [SummaryEventController::class, 'index'])->name('index');
-        Route::get('/create', [SummaryEventController::class, 'create'])->name('create');
-        Route::post('/store', [SummaryEventController::class, 'store'])->name('store');
-        Route::get('/edit/{event}', [SummaryEventController::class, 'edit'])->name('edit');
-        Route::put('/update/{event}', [SummaryEventController::class, 'update'])->name('update');
-        Route::delete('{event}/destroy', [SummaryEventController::class, 'destroy'])->name('destroy');
+    Route::prefix('{summary}/event')->as('event.')->group(function () {
+        Route::post('/store/{event?}', [SummaryEventController::class, 'store'])->name('store');
+        Route::put('/{event}', [SummaryEventController::class, 'update'])->name('update');
     });
+
+    Route::prefix('files')->as('files.')->group(function () {
+        Route::post('/store', [SummaryFileController::class, 'store'])->name('store');
+        Route::get('/{file}/delete', [SummaryFileController::class, 'deleteFile'])->name('delete');
+        Route::get('/{file}/download', [SummaryFileController::class, 'downloadFile'])->name('download');
+    });
+
+    Route::prefix('event-types')->as('event-types.')->group(function () {
+        Route::get('/', [SummaryEventTypeController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryEventTypeController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryEventTypeController::class, 'store'])->name('store');
+        Route::get('/{eventType}/edit', [SummaryEventTypeController::class, 'edit'])->name('edit');
+        Route::put('/{eventType}/update', [SummaryEventTypeController::class, 'update'])->name('update');
+        Route::delete('/{eventType}/destroy', [SummaryEventTypeController::class, 'destroy'])->name('destroy');
+    });
+
     Route::prefix('links')->as('links.')->group(function () {
         Route::get('/', [LinkController::class, 'index'])->name('index');
         Route::get('/create', [LinkController::class, 'create'])->name('create');
         Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
+
+
+    Route::prefix('templates')->as('templates.')->group(function () {
+        Route::get('/', [SummaryTemplateController::class, 'index'])->name('index');
+        Route::get('/create', [SummaryTemplateController::class, 'create'])->name('create');
+        Route::post('/store', [SummaryTemplateController::class, 'store'])->name('store');
+        Route::get('/{file}/download', [SummaryTemplateController::class, 'download'])->name('download');
+        Route::get('/{summary}/{template}', ShowTemplate::class)->name('show');
+        //Route::get('/create', [LinkController::class, 'create'])->name('create');
+        //Route::post('/store', [LinkController::class, 'store'])->name('store');
+    });
+
+
+
 });
 
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
-use App\Http\Controllers\Agreements\AccountabilityDetailController;
-use App\Http\Controllers\Agreements\AccountabilityController;
-
 Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
     Route::prefix('meeting')->as('meeting.')->group(function () {
         Route::get('/', [MeetingController::class, 'index'])->name('index');

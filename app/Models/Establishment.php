@@ -87,6 +87,12 @@ class Establishment extends Model implements Auditable
         return $this->belongsTo(Establishment::class,'new_mother_code','new_deis');
     }
 
+    /** Unidad Organizacional Padre, para el caso de los cosams, que dependen de una OU (salud mental) */
+    public function ouFather()
+    {
+        return $this->belongsTo(OrganizationalUnit::class,'father_organizational_unit_id');
+    }
+
     public function usersInventories()
     {
         return $this->belongsToMany(User::class, 'inv_establishment_user')
@@ -157,6 +163,24 @@ class Establishment extends Model implements Auditable
         }
         foreach ($this->options as $key => $option) {
             $this->options[$key] = $this->alias . ' ' .$option;
+        }
+        return $this->options;
+    }
+
+    public function getOuTreeWithAliasByLevelAttribute($level)
+    {
+        $ous_lv1 = $this->organizationalUnits()->where('id',1)->get()->toArray();
+        $ous_lv_param = $this->organizationalUnits()
+            ->select('id','level','name','organizational_unit_id as father_id')
+            ->orderBy('name')
+            ->where('level',$level)
+            ->get()
+            ->toArray();
+
+        $ous = array_merge($ous_lv1, $ous_lv_param);
+    
+        foreach($ous as $key => $ou){
+            $this->options[$ou['id']] = $ou['name'];
         }
         return $this->options;
     }

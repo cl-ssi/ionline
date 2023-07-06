@@ -149,6 +149,9 @@
                         </a>
                         @endif
 
+                        <!-- <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
+                            <i class="fas fa-fw fa-user"></i> Reserva Cabañas
+                        </a> -->
 
                         @can('Payments')
                         <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">
@@ -346,7 +349,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['Rrhh: wellfair', 'be god'])
+                        @canany(['Rrhh: wellfair', 'be god', 'amiPASS'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('welfare.index') }}">
                             <i class="fas fa-money-check"></i> Bienestar
@@ -700,6 +703,10 @@
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
+                            <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia AmiPass') }}
                         </a>
 
                         @role('god')

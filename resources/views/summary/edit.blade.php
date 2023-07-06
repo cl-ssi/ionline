@@ -10,10 +10,26 @@
 
     @include('summary.partials.header')
 
-    @foreach ($summary->summaryEvents as $event)
-        @include('summary.partials.event')
-    @endforeach
+    @include('summary.partials.event', ['events' => $summary->events])
 
-    @include('summary.partials.add_event')
+    @if ($summary->lastEvent->end_date && !$summary->end_at)
+        @include('summary.partials.add_event', [
+            'links' => $summary->lastEvent->type->linksEvents, 
+            'event' => $summary->lastEvent,
+            'childs' => false
+        ])
+    @endif
+    
+@endsection
 
+@section('custom_js')
+<script type="text/javascript">
+
+    $('.custom-file input').change(function (e) {
+        if (e.target.files.length) {
+            $(this).next('.custom-file-label').html(e.target.files[0].name);
+        }
+    });
+
+</script>
 @endsection

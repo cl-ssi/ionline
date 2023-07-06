@@ -485,8 +485,9 @@
 
         @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
           Auth::user()->hasRole('Replacement Staff: admin'))
-            @livewire('replacement-staff.commission', ['users' => $users,
-                      'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation])
+            @livewire('replacement-staff.commission', [
+                'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
+            ])
         @endif
     </div>
     <br>
@@ -687,9 +688,9 @@
 
       <h6>Busqueda de Postulantes</h6>
 
-      @livewire('replacement-staff.search-select-applicants',
-          ['technicalEvaluation' => $requestReplacementStaff->technicalEvaluation])
-
+      @livewire('replacement-staff.search-select-applicants', [
+        'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
+        ])
       @endif
 
     </div>
@@ -932,8 +933,9 @@
         </div>
         @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
           Auth::user()->hasRole('Replacement Staff: admin'))
-            @livewire('replacement-staff.files', ['users' => $users,
-                      'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation])
+            @livewire('replacement-staff.files', [
+                'technicalEvaluation' => $requestReplacementStaff->technicalEvaluation
+            ])
         @endif
     </div>
     <br>

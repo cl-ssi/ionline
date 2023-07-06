@@ -6,32 +6,37 @@
         <div class="col">
             <h3 class="mb-3">Listado de Vínculos</h3>
         </div>
-        <div class="col text-end">
+        <!-- <div class="col text-end">
             <a class="btn btn-success float-right" href="{{ route('summary.links.create') }}">
                 <i class="fas fa-plus"></i> Nuevo Vínculo
             </a>
-        </div>
+        </div> -->
     </div>
 
     <div class="table-responsive">
         <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th>Evento</th>
                     <th>Evento Anterior</th>
+                    <th class="bg-light">Evento</th>
                     <th>Evento Sucesor</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($events as $event)
                     <tr>
-                        <td>{{ $event->name ?? '' }}</td>
                         <td>
                             <ul>
                                 @foreach ($event->linksBefore as $linkBefore)
                                     <li>{{ $linkBefore->beforeEvent->name ?? '' }}</li>
                                 @endforeach
                             </ul>
+                        </td>
+                        <td class="bg-light">
+                            <a class="btn btn-sm btn-primary" href="{{ route('summary.event-types.edit', $event) }}">
+                                <i class="fas fa-fw fa-edit"></i>
+                            </a>
+                            {{ $event->name ?? '' }}
                         </td>
                         <td>
                             <ul>

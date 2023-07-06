@@ -102,7 +102,8 @@ class DigitalSignatureController extends Controller
         return redirect()->route($callbackRoute, [
             'message' => "El documento $modelId se ha firmado correctamente.",
             'modelId' => $modelId,
-            'signaturesFile' => $signaturesFile->id
+            'signaturesFile' => $signaturesFile->id,
+            'comment' => $request->comment
         ]);
     }
 
@@ -187,13 +188,13 @@ class DigitalSignatureController extends Controller
                 $newFilePath = $filePathWithoutSignatureNumber . '_' . ($newSignatureNumber) . '.pdf';
                 $signaturesFlow->signaturesFile->signed_file = $newFilePath;
                 $signaturesFlow->signaturesFile->save();
-                Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+                Storage::disk('gcs')->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
                 Storage::disk('gcs')->delete($oldFilePath);
             } else {
                 $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
                 $signaturesFlow->signaturesFile->signed_file = $filePath;
                 $signaturesFlow->signaturesFile->save();
-                Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+                Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
             }
 
             if ($type === 'firmante') {
@@ -211,8 +212,11 @@ class DigitalSignatureController extends Controller
                 $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
 
                 preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
-                Mail::to($emails[0])
+
+                if(!empty($emails[0])) {
+                    Mail::to($emails[0])
                     ->send(new SignedDocument($signaturesFlow->signature));
+                }
 
                 $destinatarios = $signaturesFlow->signature->recipients;
 
@@ -518,7 +522,7 @@ class DigitalSignatureController extends Controller
             "run" => $run
         ];
 
-        $jwt = JWT::encode($payload, $secret);
+        $jwt = JWT::encode($payload, $secret, 'HS256');
         // die($jwt);
 
         $page = 'LAST';
@@ -792,7 +796,7 @@ class DigitalSignatureController extends Controller
             "run" => $run
         ];
 
-        $jwt = JWT::encode($payload, $secret);
+        $jwt = JWT::encode($payload, $secret, 'HS256');
         //die($jwt);
 
         $page = 'LAST';

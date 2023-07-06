@@ -40,7 +40,7 @@
         <tr>
             <th align="left" style="background-color: #b4c6e7" width="25%">ESTAMENTO</th>
             <td width="25%">{{ $jobPositionProfile->estament->name }}</td>
-            <th align="left" style="background-color: #b4c6e7" width="25%">AREA</th>
+            <th align="left" style="background-color: #b4c6e7" width="25%">FAMILIA DEL CARGO</th>
             <td width="25%">{{ $jobPositionProfile->area->name }}</td>
         </tr>
         <tr>

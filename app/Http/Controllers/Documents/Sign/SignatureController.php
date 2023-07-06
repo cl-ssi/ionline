@@ -111,7 +111,7 @@ class SignatureController extends Controller
         /**
          * Convierte y firma un objeto de php a un string de JWT
          */
-        $jwt = JWT::encode($payload, $secret);
+        $jwt = JWT::encode($payload, $secret, 'HS256');
 
         /**
          * De milimetros a centimetros

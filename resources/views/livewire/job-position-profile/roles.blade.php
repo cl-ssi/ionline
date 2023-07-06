@@ -3,13 +3,9 @@
     @if($roles->count() > 0)
         <div class="form-row">
             <div class="col-12 col-md-3 mt-2">
-                <h5>Listado de Funciones</h5> 
-            </div>
-            <div class="col-12 col-md-9">
-                <button class="btn text-white btn-info" wire:click.prevent="add({{$i}})"><i class="fas fa-plus"></i> Agregar</button>
+                <h6><i class="fas fa-list-ol"></i> Listado de Funciones</h6> 
             </div>
         </div>
-        <br>
         <div class="table-responsive">
             <table class="table table-sm table-bordered table-striped">
                 <thead>
@@ -36,12 +32,18 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="form-row">
+            <div class="col-12">
+                <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})"><i class="fas fa-plus"></i> Agregar</button>
+            </div>
+        </div>
     @else
         <div class="form-row">
-            <div class="col-12 col-md-2 mt-2">
-                <h5>Funciones</h5> 
+            <div class="col-12 col-md-3 mt-2">
+                <h6><i class="fas fa-list-ol"></i> Listado de Funciones</h6> 
             </div>
-            <div class="col-12 col-md-10">
+            <div class="col-12 col-md-9">
                 <button class="btn text-white btn-info" wire:click.prevent="add({{$i}})"><i class="fas fa-plus"></i> Agregar</button>
             </div>
         </div>

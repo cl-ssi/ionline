@@ -9,6 +9,7 @@ use App\Rrhh\OrganizationalUnit;
 use App\Models\Establishment;
 use App\Rrhh\Authority;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class RequirementReceivers extends Component
@@ -26,12 +27,32 @@ class RequirementReceivers extends Component
 
     public function mount()
     {
+        // dd(Authority::where('id',1));
+        
         $this->ouRoots = array();
         $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-        foreach($establishments_ids as $establishment) {
-            $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
+
+        // para verificar si usuario logeado es director(a) del servicio
+        $auth_user_id = Auth::user()->id;
+        $manager_user_id = OrganizationalUnit::where('level',1)
+                                            // ->whereIn('establishment_id',$establishments_ids)
+                                            ->where('establishment_id',38)
+                                            ->first()
+                                            ->currentManager
+                                            ->user_id;
+
+        if($auth_user_id == $manager_user_id && $this->parte_id!=null){
+            $ouTree = Establishment::find(38)->getOuTreeWithAliasByLevelAttribute(2);
             foreach($ouTree as $key => $outree){
                 $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
+            }
+        }
+        else{
+            foreach($establishments_ids as $establishment) {
+                $ouTree = Establishment::find($establishment)->ouTreeWithAlias;
+                foreach($ouTree as $key => $outree){
+                    $this->ouRoots[] = array('id'=> $key, 'name' => $outree);
+                }
             }
         }
 

@@ -49,8 +49,10 @@ class Profile extends Component
     {
         $this->profiles = ProfileManage::all();
 
-        return view('livewire.replacement-staff.profile',
-            compact($this->profiles, $this->replacementStaff));
+        return view('livewire.replacement-staff.profile', [
+            'profiles'          => $this->profiles,
+            'replacementStaff'  => $this->replacementStaff
+        ]);
     }
 
 }

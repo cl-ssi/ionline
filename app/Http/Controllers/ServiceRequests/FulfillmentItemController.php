@@ -65,7 +65,7 @@ class FulfillmentItemController extends Controller
         $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
         $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
       }
-      if ($request->type == "Licencia no covid") {
+      if ($request->type == "Licencia no covid" || $request->type == "Licencia media jornada no covid") {
         $fulfillmentItem->start_date = $request->start_date;
         $fulfillmentItem->end_date = $request->end_date;
       }

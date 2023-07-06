@@ -66,6 +66,10 @@ class MonthlyQuotes extends Component
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                     break;
+                case 'Licencia media jornada no covid':
+                    $mes_completo = false;
+                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 0.5;
+                    break;
                 case 'Abandono de funciones':
                     $mes_completo = false;
                     $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
@@ -153,6 +157,7 @@ class MonthlyQuotes extends Component
               switch ($item->type) {
                   case 'Inasistencia Injustificada':
                   case 'Licencia no covid':
+                  case 'Licencia media jornada no covid':
                   case 'Abandono de funciones':
                   case 'Atraso':
                     if ($item->end_date == null) {
@@ -185,6 +190,9 @@ class MonthlyQuotes extends Component
         /* TODO: Que pasa si un contrato pasa al siguiente año? */
         $year = $serviceRequest->start_date->year;
 
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        // $fecha = Carbon::parse($inputs['Fecha']);
+        // $mes = $meses[($fecha->format('n')) - 1];
 
         if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
             $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
@@ -195,12 +203,12 @@ class MonthlyQuotes extends Component
             $periods = iterator_to_array($periods);
             foreach ($periods as $key => $period) {
                 if ($key === array_key_first($periods)) {
-                    $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                    $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                 } else if ($key === array_key_last($periods)) {
-                    $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
-                    $this->items_verification($period->month);
+                    $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1] . ";";
+                    $this->items_verification(intval($period->format('m')));
                 } else {
-                    $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                    $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                 }
             }
         } else
@@ -228,11 +236,11 @@ class MonthlyQuotes extends Component
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            $string .= " una de $" . number_format($valor_diferente1) . " el mes de " . $period->monthName;
+                            $string .= " una de $" . number_format($valor_diferente1) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         } else if ($key === array_key_last($periods)) {
-                            $string .= " y una de $" . number_format($valor_diferente2) . " el mes de " . $period->monthName . ";";
+                            $string .= " y una de $" . number_format($valor_diferente2) . " el mes de " . $meses[(intval($period->format('m'))) - 1] . ";";
                         } else {
-                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         }
                     }
                 } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
@@ -250,11 +258,11 @@ class MonthlyQuotes extends Component
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
+                            $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         } else if ($key === array_key_last($periods)) {
-                            $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
+                            $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1] . ";";
                         } else {
-                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         }
                     }
                 }
@@ -271,11 +279,11 @@ class MonthlyQuotes extends Component
 
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
-                            $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         } else if ($key === array_key_last($periods)) {
-                            $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName . ";";
+                            $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $meses[(intval($period->format('m'))) - 1] . ";";
                         } else {
-                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $meses[(intval($period->format('m'))) - 1];
                         }
                     }
                 }

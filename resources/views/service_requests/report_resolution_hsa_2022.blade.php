@@ -599,7 +599,9 @@
         <br>
         <p class="center">
             <strong>
-                TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE.
+                <!-- TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE. -->
+                <!-- 30/06/2023: Juan Carlos Vega solicita el cambio. -->
+                ANÓTESE, REGÍSTRESE Y COMUNÍQUESE
             </strong>
         </p>
 

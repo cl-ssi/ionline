@@ -6,6 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 use App\Models\Requirements\Category;
 use App\Models\Profile\Subrogation;
 
@@ -40,7 +41,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function users()
     {
-        return $this->hasMany('\App\User');
+        return $this->hasMany(User::class)->orderBy('name');
     }
 
     public function father()

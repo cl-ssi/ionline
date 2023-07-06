@@ -1,24 +1,32 @@
-<div class="card">
+<div class="card mb-3">
     <div class="card-header text-white bg-success">
-        <h5 class="card-title">Agregar nuevo evento</h5>
+        <h5 class="card-title">Agregar nuevo paso</h5>
     </div>
     <div class="card-body">
-        
+        @if ($childs)
+            <form action="{{ route('summary.event.store', ['summary' => $summary, 'event' => $event]) }}" method="post">
+        @else
+            <form action="{{ route('summary.event.store', ['summary' => $summary, 'event' => null]) }}" method="post">
+        @endif
+
+        @csrf
+        @method('POST')
+
         <div class="row">
             <div class="col">
-                <select name="" id="" class="form-control">
+                <select name="event_type_id" id="" class="form-control">
                     <option value=""></option>
-                    @foreach ($event->event->linksAfter as $linkAfter)
-                        <option
-                        value="{{ $linkAfter->afterEvent->id }}">
-                        {{ $linkAfter->afterEvent->name ?? '' }}
+                    @foreach ($links as $linkAfter)
+                        <option value="{{ $linkAfter->afterEvent->id }}">
+                            {{ $linkAfter->afterEvent->name ?? '' }}
                         </option>
                     @endforeach
                 </select>
             </div>
             <div class="col-2">
-                <button class="btn btn-success form-control">Agregar</button>
+                <button type="submit" class="btn btn-success form-control">Agregar</button>
             </div>
         </div>
+        </form>
     </div>
 </div>

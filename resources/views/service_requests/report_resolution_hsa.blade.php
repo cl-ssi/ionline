@@ -516,7 +516,9 @@
         <strong>
             <!-- 07/03: Ajuste solicitado por Carol Pérez  -->
             @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-                TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE.
+                <!-- TÓMESE RAZÓN, REGISTRESE Y COMUNIQUESE. -->
+                <!-- 30/06/2023: Juan Carlos Vega solicita el cambio. -->
+                ANÓTESE, REGÍSTRESE Y COMUNÍQUESE
             @else
                 ANÓTESE, COMUNIQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
             @endif

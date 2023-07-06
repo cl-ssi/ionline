@@ -27,7 +27,7 @@ class InvoiceController extends Controller
         if ($access_token) {
 
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
 
                 if($response->getStatusCode() == 200) {
@@ -35,7 +35,29 @@ class InvoiceController extends Controller
                     $user_id = $user_cu->RolUnico->numero;
                 }
                 else {
-                    return redirect()->route('invoice.welcome');
+                    // return redirect()->route('invoice.welcome');
+
+                    /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
+                    $url = env('WSSSI_CHILE_URL').'/claveunica/login/'.$access_token;
+                    $response_wssi = Http::get($url);
+
+                    $user_cu = json_decode($response_wssi);
+
+                    if($user_cu){
+                        $user_id = $user_cu->RolUnico->numero;
+
+                        // logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        //     'cu_access_token' => $access_token,
+                        //     'error_de_cu' => $response->body(),
+                        // ]);
+
+                    }
+                    else{
+                        // logger()->info('ByPass - $user_cu - vacío', [
+                        //     'user_cu' => $user_cu,
+                        // ]);
+                        return view('service_requests.invoice.welcome');
+                    }
                 }
                 
             } else if (env('APP_ENV') == 'local') {

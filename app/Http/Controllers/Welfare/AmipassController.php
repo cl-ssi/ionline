@@ -16,4 +16,12 @@ class AmipassController extends Controller
 
         return view('welfare.amipass.dashboard', compact('employeeInformations'));
     }
+
+    public function questionMyIndex()
+    {
+        
+        return view('welfare.amipass.questionmyindex');
+    }
+
+
 }

@@ -28,16 +28,16 @@ class ClaveUnicaController extends Controller
 
         $url_base       = self::URL_BASE_CLAVE_UNICA . "authorize/";
         $client_id      = env("CLAVEUNICA_CLIENT_ID");
-        $redirect_uri   = urlencode(env('APP_URL')."/claveunica/callback?route=$route");
+        $redirect_uri   = urlencode(env('APP_URL') . "/claveunica/callback?route=$route");
 
         $state          = base64_encode(csrf_token() . $redirect);
         $scope          = self::SCOPE;
 
         $params         = '?client_id=' . $client_id .
-                        '&redirect_uri=' . $redirect_uri .
-                        '&scope=' . $scope .
-                        '&response_type=code' .
-                        '&state=' . $state;
+            '&redirect_uri=' . $redirect_uri .
+            '&scope=' . $scope .
+            '&response_type=code' .
+            '&state=' . $state;
 
         return redirect()->to($url_base . $params)->send();
     }
@@ -50,7 +50,7 @@ class ClaveUnicaController extends Controller
         $url_base        = self::URL_BASE_CLAVE_UNICA . "token/";
         $client_id       = env("CLAVEUNICA_CLIENT_ID");
         $client_secret   = env("CLAVEUNICA_SECRET_ID");
-        $redirect_uri    = urlencode(env('APP_URL')."/claveunica/callback");
+        $redirect_uri    = urlencode(env('APP_URL') . "/claveunica/callback");
 
         try {
             $response = Http::asForm()->post($url_base, [
@@ -69,8 +69,7 @@ class ClaveUnicaController extends Controller
         $access_token = json_decode($response)->access_token ?? null;
 
         /** Si no existe el acces token */
-        if(is_null($access_token))
-        {
+        if (is_null($access_token)) {
             session()->flash(
                 'info',
                 'No se pudo iniciar Sesión con Clave Única'
@@ -84,10 +83,9 @@ class ClaveUnicaController extends Controller
             $access_token    = json_decode($response)->access_token;
             $route           = $request->input('route');
             // $redirect     = base64_decode(substr(base64_decode($state), 40));
-            if($route) {
-                $url_redirect = env('APP_URL') . base64_decode($route) . '/'. $access_token;
-            }
-            else {
+            if ($route) {
+                $url_redirect = env('APP_URL') . base64_decode($route) . '/' . $access_token;
+            } else {
                 $url_redirect = env('APP_URL') . '/claveunica/login/' . $access_token;
             }
             //$url_redirect = env('APP_URL') . $redirect . '/' . $access_token;
@@ -135,7 +133,7 @@ class ClaveUnicaController extends Controller
             //dd($access_token);
             if (env('APP_ENV') == 'production' or env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
 
                 if ($response->getStatusCode() == 200) {
@@ -154,8 +152,35 @@ class ClaveUnicaController extends Controller
                     /** Es para almacenar el json del usuario de CU, ya no ocupa */
                     //$this->storeUserClaveUnica($access_token);
                 } else {
-                    session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-                    return redirect()->route('login');
+                    /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
+                    $url = env('WSSSI_CHILE_URL') . '/claveunica/login/' . $access_token;
+                    $response_wssi = Http::get($url);
+
+                    $user_cu = json_decode($response_wssi);
+
+                    $user = new User();
+                    $user->id = $user_cu->RolUnico->numero;
+                    $user->dv = $user_cu->RolUnico->DV;
+                    $user->name = implode(' ', $user_cu->name->nombres);
+                    $user->fathers_family = (array_key_exists(0, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[0] : '';
+                    $user->mothers_family = (array_key_exists(1, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[1] : '';
+                    if (isset($user_cu->email)) {
+                        $user->email = $user_cu->email;
+                    }
+
+                    logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $response->body(),
+                    ]);
+                    /** Acá termina, para volver todo a la normalidad, hay que descomentar el flash y el return de abajo */
+
+                    // logger()->info($response_wssi);
+
+                    // $json_response = json_decode($response);
+                    // logger()->info($response->body());
+
+                    // session()->flash('danger', 'Error en clave única: No pudimos iniciar sesión');
+                    // return redirect()->route('login');
                 }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
@@ -171,11 +196,12 @@ class ClaveUnicaController extends Controller
 
             if ($u) {
                 /* Almacenar sólo si los valores son diferentes a los registrados */
-                if ($u->name != $user->name OR 
-                    $u->fathers_family != $user->fathers_family OR 
-                    $u->mothers_family != $user->mothers_family OR
-                    $u->email_personal != $user->email) 
-                {
+                if (
+                    $u->name != $user->name or
+                    $u->fathers_family != $user->fathers_family or
+                    $u->mothers_family != $user->mothers_family or
+                    $u->email_personal != $user->email
+                ) {
                     $u->name = $user->name;
                     $u->fathers_family = $user->fathers_family;
                     $u->mothers_family = $user->mothers_family;
@@ -185,25 +211,12 @@ class ClaveUnicaController extends Controller
                     $u->save();
                 }
 
-                /** No permitir login si tiene permiso "Nuevo iOnline" */
-                if(env('OLD_SERVER'))
-                {
-                    if($u AND $u->can('Nuevo iOnline'))
-                    {
-                        session()->flash('info', 
-                            'Estimado usuario.<br> Deberá ingresar a iOnline a través de la siguiente dirección: 
-                            <b>https://i.saludtarapaca.gob.cl</b> <br>Muchas gracias.');
-                        return redirect()->route('welcome');
-                    }
-                    /* TODO: cerrar sessión en CU al no permitir el login al usuario */
-                }
-
                 Auth::login($u, true);
 
                 /** Log access */
                 auth()->user()->accessLogs()->create([
                     'type' => 'clave única',
-                    'enviroment' => env('OLD_SERVER') ? 'Servidor':'Cloud Run'
+                    'enviroment' => env('OLD_SERVER') ? 'Servidor' : 'Cloud Run'
                 ]);
 
                 /** Check if user have a gravatar */
@@ -229,29 +242,61 @@ class ClaveUnicaController extends Controller
             //dd($access_token);
             if (env('APP_ENV') == 'production' or env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $url_base = "https://accounts.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
-                $user_cu = json_decode($response);
+                if ($response->getStatusCode() == 200) {
 
-                if ($user_cu) {
-                    //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
+                    $user_cu = json_decode($response);
 
-                    $user = UserExternal::find($user_cu->RolUnico->numero);
-                    if (!$user) {
-                        $user = new UserExternal();
-                        $user->id = $user_cu->RolUnico->numero;
-                        $user->dv = $user_cu->RolUnico->DV;
-                        $user->name = implode(' ', $user_cu->name->nombres);
-                        $user->fathers_family = $user_cu->name->apellidos[0];
-                        $user->mothers_family = $user_cu->name->apellidos[1];
-                        if (isset($user_cu->email)) {
-                            $user->email = $user_cu->email;
+                    if ($user_cu) {
+                        //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
+
+                        $user = UserExternal::find($user_cu->RolUnico->numero);
+                        if (!$user) {
+                            $user = new UserExternal();
+                            $user->id = $user_cu->RolUnico->numero;
+                            $user->dv = $user_cu->RolUnico->DV;
+                            $user->name = implode(' ', $user_cu->name->nombres);
+                            $user->fathers_family = $user_cu->name->apellidos[0];
+                            $user->mothers_family = $user_cu->name->apellidos[1];
+                            if (isset($user_cu->email)) {
+                                $user->email = $user_cu->email;
+                            }
+                            $user->save();
                         }
-                        $user->save();
                     }
                 } else {
-                    session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-                    return redirect()->route('login');
+                    //session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
+                    //return redirect()->route('login');
+
+                    /** Este fragmento es para logear en caso de bloqueo de CU a través de WSSI */
+                    $url = env('WSSSI_CHILE_URL') . '/claveunica/login/' . $access_token;
+                    $response_wssi = Http::get($url);
+
+                    $user_cu = json_decode($response_wssi);
+                    if ($user_cu) {
+                        //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
+
+                        $user = UserExternal::find($user_cu->RolUnico->numero);
+                        if (!$user) {
+                            $user = new UserExternal();
+                            $user->id = $user_cu->RolUnico->numero;
+                            $user->dv = $user_cu->RolUnico->DV;
+                            $user->name = implode(' ', $user_cu->name->nombres);
+                            $user->fathers_family = $user_cu->name->apellidos[0];
+                            $user->mothers_family = $user_cu->name->apellidos[1];
+                            if (isset($user_cu->email)) {
+                                $user->email = $user_cu->email;
+                            }
+                            $user->save();
+                        }
+                    }
+
+
+                    logger()->info('Utilizando el ByPass de CU a través del WSSI', [
+                        'cu_access_token' => $access_token,
+                        'error_de_cu' => $response->body(),
+                    ]);
                 }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
@@ -273,10 +318,9 @@ class ClaveUnicaController extends Controller
     public function logout()
     {
         /** Si el login fue local */
-        if(session('loginType') == 'local' OR env('APP_ENV') == 'local') {
+        if (session('loginType') == 'local' or env('APP_ENV') == 'local') {
             return redirect()->route('logout-local');
-        }
-        else {
+        } else {
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
             $url_redirect = env('APP_URL') . "/logout";
             $url = $url_logout . urlencode($url_redirect);
@@ -284,7 +328,7 @@ class ClaveUnicaController extends Controller
              * Clave única se mantiene abierto por 60 segundos
              **/
             $response = Http::withOptions([
-                'allow_redirects'=>true,
+                'allow_redirects' => true,
             ])->get($url);
             /** Si ejecuto cualquiera de estas, al pasar los 60 segundos
              * Clave única no redirecciona al logout que se le pasó en redirect=xxxxx
@@ -305,8 +349,8 @@ class ClaveUnicaController extends Controller
     }
 
     /**
-    * Login temporal Siremx
-    */
+     * Login temporal Siremx
+     */
     // public function siremx($access_token)
     // {
     //     //https://siremx.saludtarapaca.gob.cl/authenticate/logincu/{access_token}

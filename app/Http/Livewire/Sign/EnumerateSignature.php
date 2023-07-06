@@ -78,7 +78,7 @@ class EnumerateSignature extends Component
         /**
          * Convierte y firma un objeto de php a un string de JWT
          */
-        $jwt = JWT::encode($payload, $secret);
+        $jwt = JWT::encode($payload, $secret, 'HS256');
 
         /**
          * Obtengo la coordenada top para ubicar el numero de documento
