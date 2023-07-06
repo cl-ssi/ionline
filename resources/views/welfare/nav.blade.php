@@ -60,5 +60,14 @@
                     <i class="fas fa-utensils"></i> Solicitudes Amipass
                 </a>
             </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('welfare.amipass.question-all-index') }}">
+                    <i class="fas fa-question-circle"></i> Consultas/Sugerencia Amipass
+                </a>
+            </li>
+
+
         @endcanany
     </ul>
