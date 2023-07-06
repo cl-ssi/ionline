@@ -115,23 +115,23 @@
         <tbody>
             <tr>
                 <th class="table-active" width="25%">REQUISITO GENERAL</th>
-                <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
+                <td><p style="white-space: pre-wrap;">{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
-                <td>{{ $jobPositionProfile->specific_requirement }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->specific_requirement }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">CAPACITACIÓN PERTINENTE</th>
-                <td>{{ $jobPositionProfile->training }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->training }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">EXPERIENCIA CALIFICADA</th>
-                <td>{{ $jobPositionProfile->experience }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->experience }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">COMPETENCIAS TÉCNICAS</th>
-                <td>{{ $jobPositionProfile->technical_competence }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->technical_competence }}</p></td>
             </tr>
         </tbody>
     </table>
@@ -213,9 +213,11 @@
 
 <h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Tarapacá</h6>
 
+<br>
+
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
-        <thead class="table-active text-center">
+        <thead class="table-active">
                 <tr>
                     <th colspan="2">Competencias Institucionales</th>
                 </tr>
@@ -264,6 +266,8 @@
         </tbody>
     </table>
 </div>
+
+<h6 class="small"><b>Competencias Distintivas del Estamento</b></h6>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">

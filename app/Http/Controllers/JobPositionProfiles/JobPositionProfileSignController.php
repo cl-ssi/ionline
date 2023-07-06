@@ -40,7 +40,6 @@ class JobPositionProfileSignController extends Controller
      */
     public function store(Request $request, JobPositionProfile $jobPositionProfile)
     {   
-        //dd("aquí");
         if(($jobPositionProfile->staff_decree_by_estament_id == NULL && $jobPositionProfile->general_requirement == NULL) ||
             ($jobPositionProfile->roles->count() <= 0 && $jobPositionProfile->objective == NULL) ||
             $jobPositionProfile->working_team == NULL ||

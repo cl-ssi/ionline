@@ -123,6 +123,8 @@
 
 <br>
 
+<h6 class="small"><b>Competencias Distintivas del Estamento</b></h6>
+
 <div class="alert alert-info" role="alert">
   El mapa de competencias se presenta de acuerdo al estamento <b>{{ $jobPositionProfile->estament->name }}</b> y área <b>{{ $jobPositionProfile->area->name }}</b>
 </div>
