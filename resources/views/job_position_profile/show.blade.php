@@ -274,10 +274,22 @@
                 <th colspan="4">Nivel requerido <br> (según corresponda)</th>
             </tr>
             <tr class="text-center">
-                <th width="5%">1</th>
-                <th width="5%">2</th>
-                <th width="5%">3</th>
-                <th width="5%">4</th>
+                <th width="5%">
+                    4 <br>
+                    Desarrollo Insuficiente
+                </th>
+                <th width="5%">
+                    3 <br>
+                    Desarrollo Regular
+                </th>
+                <th width="5%">
+                    2 <br>
+                    Desarrollo Avanzado
+                </th>
+                <th width="5%">
+                    1 <br>
+                    Desarrollo Óptimo
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -286,12 +298,7 @@
                 <td>{{ $jppExpertise->expertise->name }}</td>
                 <td>{{ $jppExpertise->expertise->description }}</td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 1)
-                        <i class="far fa-check-square fa-2x"></i>
-                    @endif
-                </td>
-                <td class="text-center align-middle">
-                    @if($jppExpertise->value == 2)
+                    @if($jppExpertise->value == 4)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>
@@ -301,7 +308,12 @@
                     @endif
                 </td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 4)
+                    @if($jppExpertise->value == 2)
+                        <i class="far fa-check-square fa-2x"></i>
+                    @endif
+                </td>
+                <td class="text-center align-middle">
+                    @if($jppExpertise->value == 1)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>

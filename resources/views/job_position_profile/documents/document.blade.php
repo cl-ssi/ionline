@@ -367,22 +367,29 @@
             <th colspan="4">Nivel requerido <br> (según corresponda)</th>
         </tr>
         <tr style="background-color: #b4c6e7">
-            <th width="5%">1</th>
-            <th width="5%">2</th>
-            <th width="5%">3</th>
-            <th width="5%">4</th>
+            <th width="5%">
+                4
+                Desarrollo Insuficiente
+            </th>
+            <th width="5%">
+                3
+                Desarrollo Regular
+            </th>
+            <th width="5%">
+                2
+                Desarrollo Avanzado
+            </th>
+            <th width="5%">
+                1
+                Desarrollo Óptimo
+            </th>
         </tr>
         @foreach($jobPositionProfile->jppExpertises as $jppExpertise)
             <tr>
                 <td style="background-color: #b4c6e7">{{ $jppExpertise->expertise->name }}</td>
                 <td align="justify">{{ $jppExpertise->expertise->description }}</td>
                 <td align="center">
-                    @if($jppExpertise->value == 1)
-                        X
-                    @endif
-                </td>
-                <td align="center">
-                    @if($jppExpertise->value == 2)
+                    @if($jppExpertise->value == 4)
                         X
                     @endif
                 </td>
@@ -392,7 +399,12 @@
                     @endif
                 </td>
                 <td align="center">
-                    @if($jppExpertise->value == 4)
+                    @if($jppExpertise->value == 2)
+                        X
+                    @endif
+                </td>
+                <td align="center">
+                    @if($jppExpertise->value == 1)
                         X
                     @endif
                 </td>

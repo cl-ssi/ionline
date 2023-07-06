@@ -142,7 +142,7 @@
                         <th colspan="4">Nivel requerido (según corresponda)</th>
                     </tr>
                     <tr class="text-center">
-                        <th colspan="4">Valor</th>
+                        <th colspan="4">Valor <i class="fas fa-info-circle" type="button" data-toggle="modal" data-target="#valueExpertiseGuideModal"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,14 +153,9 @@
                         <td>
                             <div class="text-center">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="1" 
-                                    {{ ($jppExpertise->value == 1)?'checked':'' }} required>
-                                    <label class="form-check-label" for="for_value">1</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="2" 
-                                    {{ ($jppExpertise->value == 2)?'checked':'' }} required>                                    
-                                    <label class="form-check-label" for="for_value">2</label>
+                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="4" 
+                                    {{ ($jppExpertise->value == 4)?'checked':'' }} required>
+                                    <label class="form-check-label" for="for_value">4</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="3" 
@@ -168,9 +163,14 @@
                                     <label class="form-check-label" for="for_value">3</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="4" 
-                                    {{ ($jppExpertise->value == 4)?'checked':'' }} required>                                    
-                                    <label class="form-check-label" for="for_value">4</label>
+                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="2" 
+                                    {{ ($jppExpertise->value == 2)?'checked':'' }} required>                                    
+                                    <label class="form-check-label" for="for_value">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="values[{{ $jppExpertise->expertise_id }}]" id="for_value_{{ $jppExpertise->expertise_id }}" value="1" 
+                                    {{ ($jppExpertise->value == 1)?'checked':'' }} required>                                    
+                                    <label class="form-check-label" for="for_value">1</label>
                                 </div>
                             </div>
                         </td>
@@ -201,7 +201,7 @@
                         <th colspan="4">Nivel requerido (según corresponda)</th>
                     </tr>
                     <tr class="text-center">
-                        <th colspan="4">Valor</th>
+                        <th colspan="4">Valor <i class="fas fa-info-circle" type="button" data-toggle="modal" data-target="#valueExpertiseGuideModal"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -212,20 +212,20 @@
                         <td>
                             <div class="text-center">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="1" required>
-                                    <label class="form-check-label" for="for_value">1</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="2" required>                                    
-                                    <label class="form-check-label" for="for_value">2</label>
+                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="4" required>
+                                    <label class="form-check-label" for="for_value">4</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="3" required>                                    
                                     <label class="form-check-label" for="for_value">3</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="4" required>                                    
-                                    <label class="form-check-label" for="for_value">4</label>
+                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="2" required>                                    
+                                    <label class="form-check-label" for="for_value">2</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="values[{{ $expertise->id }}]" id="for_value_{{ $loop->iteration }}" value="1" required>                                    
+                                    <label class="form-check-label" for="for_value">1</label>
                                 </div>
                             </div>
                         </td>
@@ -244,6 +244,9 @@
         </div>
     </form>
 @endif
+
+<!-- Modal Guía -->
+@include('job_position_profile.modals.value_expertise_guide')
 
 <br>
 
