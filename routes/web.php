@@ -2195,6 +2195,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
+        Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
