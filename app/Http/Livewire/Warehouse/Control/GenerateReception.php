@@ -166,7 +166,7 @@ class GenerateReception extends Component
             if(count($this->po_items) == 0)
             {
                 $this->error = true;
-                $this->msg = 'Todos los productos de la orden de compra fueron recibidos.';
+                $this->msg = 'Todos los productos de la orden de compra fueron ingresados en bodega.';
                 $this->resetInputReception();
             }
 
@@ -175,7 +175,7 @@ class GenerateReception extends Component
              * No se admite OC sin FR.
              * Se debe relacionar el FR a la OC en caso de no tener FR.
              */
-            if(!$this->request_form)
+            if(! isset($this->request_form) && !$this->error)
             {
                 session()->flash('danger', 'La Orden de Compra no tiene un FR relacionado.');
             }
@@ -306,7 +306,7 @@ class GenerateReception extends Component
             $this->request_form = $requestForm;
         }
 
-        return $this->request_form ? $this->request_form->id : null;
+        return isset($this->request_form) ? $this->request_form->id : null;
     }
 
     public function getTechnicalSignatureId()

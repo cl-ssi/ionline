@@ -29,6 +29,13 @@ class RequestForm extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     use SoftDeletes;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'arq_request_forms';
+
     protected $fillable = [
         'request_form_id', 'estimated_expense', 'program', 'contract_manager_id',
         'name', 'subtype', 'justification', 'superior_chief',
@@ -36,6 +43,10 @@ class RequestForm extends Model implements Auditable
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency',
         'folio', 'has_increased_expense', 'signatures_file_id', 'old_signatures_file_id', 'approved_at'
+    ];
+
+    protected $dates = [
+        'approved_at',
     ];
 
     public function isBlocked()
@@ -718,15 +729,4 @@ class RequestForm extends Model implements Auditable
     {
         //return number_format($this->available_balance, 0, ',', '.');
     }
-
-    protected $dates = [
-        'approved_at',
-    ];
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'arq_request_forms';
 }
