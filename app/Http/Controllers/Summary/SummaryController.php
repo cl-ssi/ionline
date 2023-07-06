@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Summary\Type;
 use App\Models\Summary\Summary;
-use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
+use App\Models\Summary\Event;
+use App\Http\Controllers\Controller;
 
 class SummaryController extends Controller
 {
@@ -34,6 +35,8 @@ class SummaryController extends Controller
      */
     public function create()
     {
+        $types = Type::pluck('name','id');
+
         $eventType = EventType::where('start',true)->first();
 
         if(is_null($eventType)) {
@@ -41,7 +44,7 @@ class SummaryController extends Controller
             return redirect()->back();
         }
         else {
-            return view('summary.create');
+            return view('summary.create', compact('types'));
         }
 
     }

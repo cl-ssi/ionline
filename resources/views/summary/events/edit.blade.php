@@ -13,6 +13,18 @@
         @method('PUT')
         <div class="form-group row">
             <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
+            <div class="col-sm-5">
+                <select class="form-control" name="summary_type_id" required>
+                    <option value=""></option>
+                    @foreach($summaryTypes as $id => $name)
+                        <option value="{{ $id }}" @selected($eventType->summary_type_id == $id)>{{ $name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="name" value="{{ $eventType->name }}" autocomplete="off"
                     required>
