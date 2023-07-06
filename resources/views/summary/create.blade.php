@@ -21,8 +21,9 @@
             <label for="for-type">Tipo*</label>
             <select name="type" id="for_type" class="form-control" required>
                 <option value=""></option>
-                <option value="Sumario Administrativo">Sumario Administrativo</option>
-                <option value="Investigación Sumaria">Investigación Sumaria</option>
+                @foreach($types as $id => $name)
+                    <option value="{{ $id }}">{{ $name }}</option>
+                @endforeach
             </select>
         </div>
 
