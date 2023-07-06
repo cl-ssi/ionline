@@ -1186,7 +1186,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
     Route::get('/programs/budgets', BudgetMgr::class)->name('budgetMgr');
-    
+
     Route::resource('programs', ParametersProgramController::class)->only(['index', 'create', 'edit']);
 
     Route::prefix('labels')->as('labels.')->group(function () {
@@ -1203,16 +1203,16 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}', MeetingShow::class)->name('lobby.show');
 
-    Route::post('/create_from_previous', [DocumentController::class,'createFromPrevious'])->name('createFromPrevious');
-    Route::get('/{document}/download', [DocumentController::class,'download'])->name('download');
-    Route::put('/{document}/store_number', [DocumentController::class,'storeNumber'])->name('store_number');
-    Route::delete('/{document}/delete_file', [DocumentController::class,'deleteFile'])->name('delete_file');
-    Route::get('/add_number', [DocumentController::class,'addNumber'])->name('add_number');
-    Route::post('/find', [DocumentController::class,'find'])->name('find');
-    Route::get('/report', [DocumentController::class,'report'])->name('report');
-    Route::get('/{document}/sendForSignature/v2', [DocumentController::class,'sendForSign'])->name('sendForSign.v2');
-    Route::get('/{document}/show-document/v2', [DocumentController::class,'showDocument'])->name('show.document');
-    Route::get('/{document}/sendForSignature/', [DocumentController::class,'sendForSignature'])->name('sendForSignature');
+    Route::post('/create_from_previous', [DocumentController::class, 'createFromPrevious'])->name('createFromPrevious');
+    Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
+    Route::put('/{document}/store_number', [DocumentController::class, 'storeNumber'])->name('store_number');
+    Route::delete('/{document}/delete_file', [DocumentController::class, 'deleteFile'])->name('delete_file');
+    Route::get('/add_number', [DocumentController::class, 'addNumber'])->name('add_number');
+    Route::post('/find', [DocumentController::class, 'find'])->name('find');
+    Route::get('/report', [DocumentController::class, 'report'])->name('report');
+    Route::get('/{document}/sendForSignature/v2', [DocumentController::class, 'sendForSign'])->name('sendForSign.v2');
+    Route::get('/{document}/show-document/v2', [DocumentController::class, 'showDocument'])->name('show.document');
+    Route::get('/{document}/sendForSignature/', [DocumentController::class, 'sendForSignature'])->name('sendForSignature');
     Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
@@ -1289,7 +1289,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::resource('single_parameter', SingleParameterController::class)->middleware('auth');
     Route::post('/population/export', [SingleParameterController::class, 'export'])->name('population.export');
     Route::get('/population/percapita/{year}', function ($year) {
-        return Storage::disk('gcs')->response('ionline/population/percapita_preliminar_'.$year.'.xlsx');
+        return Storage::disk('gcs')->response('ionline/population/percapita_preliminar_' . $year . '.xlsx');
     })->name('population.percapita');
 
     Route::prefix('rni_db')->as('rni_db.')->group(function () {
@@ -1711,8 +1711,8 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(
     Route::view('/index', 'hotel_booking.home')->name('index');
 
     Route::prefix('hotels')->as('hotels.')->middleware('auth')->group(function () {
-        Route::get('/', [HotelController::class, 'index'])->name('index');   
-        Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit'); 
+        Route::get('/', [HotelController::class, 'index'])->name('index');
+        Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit');
         Route::put('/update/{hotel}', [HotelController::class, 'update'])->name('update');
         Route::get('/create', [HotelController::class, 'create'])->name('create');
         Route::post('/store', [HotelController::class, 'store'])->name('store');
@@ -1720,8 +1720,8 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(
     });
 
     Route::prefix('rooms')->as('rooms.')->middleware('auth')->group(function () {
-        Route::get('/', [RoomController::class, 'index'])->name('index');   
-        Route::get('/edit/{room}', [RoomController::class, 'edit'])->name('edit'); 
+        Route::get('/', [RoomController::class, 'index'])->name('index');
+        Route::get('/edit/{room}', [RoomController::class, 'edit'])->name('edit');
         Route::put('/update/{room}', [RoomController::class, 'update'])->name('update');
         Route::get('/create', [RoomController::class, 'create'])->name('create');
         Route::post('/store', [RoomController::class, 'store'])->name('store');
@@ -2196,6 +2196,12 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
     Route::prefix('amipass')->as('amipass.')->group(function () {
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
+        Route::get('/question-all-index', [AmipassController::class, 'questionAllIndex'])->name('question-all-index');
+        Route::get('/question/create', [AmipassController::class, 'questionCreate'])->name('question-create');
+        Route::post('/question/store', [AmipassController::class, 'questionStore'])->name('question-store');
+        Route::get('/question/{id}/edit', [AmipassController::class, 'questionEdit'])->name('question-edit');
+        Route::put('/question/{id}', [AmipassController::class, 'questionUpdate'])->name('question-update');
+
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
@@ -2247,9 +2253,6 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
         //Route::get('/create', [LinkController::class, 'create'])->name('create');
         //Route::post('/store', [LinkController::class, 'store'])->name('store');
     });
-
-
-
 });
 
 
