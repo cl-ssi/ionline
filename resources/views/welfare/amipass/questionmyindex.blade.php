@@ -8,9 +8,9 @@
             <h3 class="mb-3">Mis Consultas/Sugerencia de Amipass</h3>
         </div>
         <div class="col-3 text-end">
-            <button class="btn btn-success float-right">
+            <a class="btn btn-success float-right" href="{{ route('welfare.amipass.question-create') }}">
                 <i class="fas fa-plus"></i> Nueva Consulta/Sugerencia
-            </button>
+            </a>
         </div>
     </div>
 
@@ -23,8 +23,22 @@
                 <th>Motivo</th>
                 <th>Consulta o Sugerencia</th>
                 <th>Fecha Respuesta</th>
-                <th>Respuesta</th>                
+                <th>Respuesta</th>
             </tr>
         </thead>
+        <tbody>
+            @foreach ($doubts as $doubt)
+            <tr>
+            <td>{{$doubt->id}}</td>
+            <td>{{$doubt->question_at}}</td>
+            <td>{{$doubt->motivo}}</td>
+            <td>{{$doubt->consulta}}</td>
+            <td>{{$doubt->answer_at}}</td>
+            <td>{{$doubt->respuesta}}</td>
+            </tr>
+            @endforeach
+
+        </tbody>
+
     </table>
 @endsection

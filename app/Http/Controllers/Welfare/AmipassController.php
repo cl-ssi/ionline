@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\models\Welfare\Abscence;
 use App\models\Welfare\EmployeeInformation;
+use App\models\Welfare\Doubt;
 
 class AmipassController extends Controller
 {
@@ -19,9 +20,51 @@ class AmipassController extends Controller
 
     public function questionMyIndex()
     {
-        
-        return view('welfare.amipass.questionmyindex');
+
+        $questionerId = auth()->id();
+
+        $doubts = Doubt::where('questioner_id', $questionerId)->get();
+        return view('welfare.amipass.questionmyindex', compact('doubts'));
+    }
+
+    public function questionCreate()
+    {
+        $user = auth()->user();
+        return view('welfare.amipass.questioncreate', compact('user'));
     }
 
 
+    public function questionStore(Request $request)
+    {
+        // Obtener los datos del formulario
+        $nombreCompleto = $request->input('nombre_completo');
+        $rut = $request->input('rut');
+        $correo = $request->input('correo');
+        $establecimiento = $request->input('establecimiento');
+        $motivo = $request->input('motivo');
+        $consulta = $request->input('consulta');
+
+
+        $questionerId = auth()->id();
+
+
+        Doubt::create([
+            'nombre_completo' => $nombreCompleto,
+            'rut' => $rut,
+            'correo' => $correo,
+            'establecimiento' => $establecimiento,
+            'motivo' => $motivo,
+            'consulta' => $consulta,
+            'respuesta' => null,
+            'questioner_id' => $questionerId,
+            'question_at' => now(),
+            'answerer_id' => null, // Dejarlo como null inicialmente
+            'answer_at' => null, // Dejarlo como null inicialmente
+        ]);
+
+        session()->flash('success', 'Consulta de AmiPass ingresada exitosamente');
+
+
+        return redirect()->route('welfare.amipass.question-my-index');
+    }
 }
