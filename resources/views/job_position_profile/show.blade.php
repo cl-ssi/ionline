@@ -115,7 +115,20 @@
         <tbody>
             <tr>
                 <th class="table-active" width="25%">REQUISITO GENERAL</th>
-                <td><p style="white-space: pre-wrap;">{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</p></td>
+                <td>
+                    {{--
+                    <p style="white-space: pre-wrap;">
+                        {{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}
+                    </p>
+                    --}}
+                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                        <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+                    @elseif($jobPositionProfile->general_requirement)
+                        <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+                    @else
+                        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>

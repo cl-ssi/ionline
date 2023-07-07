@@ -107,7 +107,6 @@
         @else
             <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
         @endif
-        </p>
     </div>
 
     @if($jobPositionProfile->law == '19664')

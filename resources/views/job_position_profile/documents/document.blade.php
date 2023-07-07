@@ -102,8 +102,22 @@
             <th align="left" colspan="2" style="background-color: #2f5496; color: white">II. REQUISITOS FORMALES</th>
         </tr>   
         <tr>
-            <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }})</th>
-            <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p></td>
+            <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO GENERAL</th>
+            <td>
+                {{--
+                <p style="white-space: pre-wrap;"> $jobPositionProfile->staffDecreeByEstament->description
+                    {{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}
+                </p>
+                --}}
+
+                @if($jobPositionProfile->staff_decree_by_estament_id)
+                    <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+                @elseif($jobPositionProfile->general_requirement)
+                    <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+                @else
+                    <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                @endif
+            </td>
         </tr>
         <tr>
             <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO ESPECÍFICO</th>
