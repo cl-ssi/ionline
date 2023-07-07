@@ -124,7 +124,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function getInitialsAttribute()
     {
-        $words = explode(' ', $this->name);
+        $words = explode(' ', preg_replace('/\s+/', ' ', $this->name));
         $initials = '';
         foreach ($words as $word) {
             if ($word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
