@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Welfare;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\models\Welfare\Abscence;
-use App\models\Welfare\EmployeeInformation;
-use App\models\Welfare\Doubt;
+use App\Models\Welfare\Abscence;
+use App\Models\Welfare\EmployeeInformation;
+use App\Models\Welfare\Doubt;
 
 class AmipassController extends Controller
 {
