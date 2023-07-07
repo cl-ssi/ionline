@@ -44,6 +44,8 @@ class OrganizationalUnitController extends Controller
         $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
         $organizationalUnit->father()->associate($father);
         $organizationalUnit->level = $father->level + 1;
+        /** Limpia que no tenga doble espacios */
+        $organizationalUnit->name = preg_replace('/\s+/', ' ', $organizationalUnit->name);
         $organizationalUnit->save();
 
         session()->flash('info', 'La unidad organizacional '.$organizationalUnit->name.' ha sido creada.');
@@ -84,6 +86,9 @@ class OrganizationalUnitController extends Controller
     public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
         $organizationalUnit->fill($request->all());
+        /** Limpia que no tenga doble espacios */
+        $organizationalUnit->name = preg_replace('/\s+/', ' ', $organizationalUnit->name);
+        
         $father = OrganizationalUnit::find($request->input('organizational_unit_id'));
         $organizationalUnit->father()->associate($father);
         $organizationalUnit->level = $father->level + 1;
