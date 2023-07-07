@@ -29,6 +29,14 @@ class LogStatistics extends Component
                 $log->module = 'Staff de reemplazo';
                 $log->save();
             }
+            elseif (preg_match('/job_position_profile/', $log->uri)) {
+                $log->module = 'Perfil de cargos';
+                $log->save();
+            }
+            elseif (preg_match('/job-position-profile/', $log->uri)) {
+                $log->module = 'Perfil de cargos';
+                $log->save();
+            }
             elseif (preg_match('/drugs/', $log->uri)) {
                 $log->module = 'Drogas';
                 $log->save();
