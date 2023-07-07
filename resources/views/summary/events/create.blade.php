@@ -10,7 +10,7 @@
         @csrf
         @method('POST')
         <div class="form-group row">
-            <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
+            <label for="for-name" class="col-sm-2 col-form-label">Tipo*</label>
             <div class="col-sm-5">
                 <select class="form-control" name="summary_type_id" required>
                     <option value=""></option>
