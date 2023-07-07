@@ -90,7 +90,7 @@ class Inventory extends Model implements Auditable
 
     public function requestUser()
     {
-        return $this->belongsTo(User::class, 'request_user_id');
+        return $this->belongsTo(User::class, 'request_user_id')->withTrashed();
     }
 
     public function product()
@@ -135,12 +135,12 @@ class Inventory extends Model implements Auditable
 
     public function responsible()
     {
-        return $this->belongsTo(User::class, 'user_responsible_id');
+        return $this->belongsTo(User::class, 'user_responsible_id')->withTrashed();
     }
 
     public function using()
     {
-        return $this->belongsTo(User::class, 'user_using_id');
+        return $this->belongsTo(User::class, 'user_using_id')->withTrashed();
     }
 
     public function place()
@@ -203,13 +203,13 @@ class Inventory extends Model implements Auditable
         return money($this->po_price);
     }
 
-	public function getEstadoAttribute()
-	{
-		switch($this->status)
-		{
-			case 1: return 'Bueno'; break;
-			case 0: return 'Regular'; break;
-			case -1: return 'Malo'; break;
-		}
-	}
+    public function getEstadoAttribute()
+    {
+        switch($this->status)
+        {
+            case 1: return 'Bueno'; break;
+            case 0: return 'Regular'; break;
+            case -1: return 'Malo'; break;
+        }
+    }
 }
