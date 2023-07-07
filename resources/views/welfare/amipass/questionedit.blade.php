@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Responder Pregunta/Sugerencia Amipass')
 @section('content')
+@include('welfare.nav')
 
     <div class="container">
         <h3 class="mb-3">Responder Pregunta/Sugerencia AmiPass</h3>

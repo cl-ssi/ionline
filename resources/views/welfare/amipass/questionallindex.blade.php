@@ -3,6 +3,8 @@
 @section('title', 'Mis Preguntas/Sugerencias Amipass')
 
 @section('content')
+
+@include('welfare.nav')
     <div class="form-row">
         <div class="col">
             <h3 class="mb-3">Consultas/Sugerencia</h3>

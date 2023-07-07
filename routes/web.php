@@ -2201,6 +2201,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
         Route::post('/question/store', [AmipassController::class, 'questionStore'])->name('question-store');
         Route::get('/question/{id}/edit', [AmipassController::class, 'questionEdit'])->name('question-edit');
         Route::put('/question/{id}', [AmipassController::class, 'questionUpdate'])->name('question-update');
+        Route::get('/question/{id}', [AmipassController::class, 'questionShow'])->name('question-show');
 
         // Route::post('/import', [WelfareController::class, 'dosimport'])->name('import');
         Route::view('/upload', 'welfare.amipass.index')->name('upload');

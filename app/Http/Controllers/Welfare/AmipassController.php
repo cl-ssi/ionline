@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Welfare\Abscence;
 use App\Models\Welfare\EmployeeInformation;
 use App\Models\Welfare\Doubt;
+use App\User;
 
 class AmipassController extends Controller
 {
@@ -90,8 +91,20 @@ class AmipassController extends Controller
 
         $doubt->save();
 
+        $user = User::findOrFail($doubt->questioner_id);
+
+
+
+        $user->notify(new \App\Notifications\Amipass\ResponseDoubt($doubt->id));
+
         session()->flash('success', 'Respuesta actualizada exitosamente');
 
         return redirect()->route('welfare.amipass.question-all-index');
+    }
+
+    public function questionShow($id)
+    {
+        $doubt = Doubt::findOrFail($id);
+        return view('welfare.amipass.questionshow', compact('doubt'));
     }
 }
