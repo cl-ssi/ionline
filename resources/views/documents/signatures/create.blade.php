@@ -39,8 +39,7 @@
                         <label for="for_request_date">Fecha Documento*</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{ isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date') }}"
-                            max="{{ date('Y-m-d') }}"
-                            required>
+                            max="{{ date('Y-m-d') }}" required>
                     </fieldset>
 
                     <fieldset class="form-group col-6 col-md-2">
@@ -178,9 +177,7 @@
 
                     <fieldset class="form-group col-12 col-md-6">
                         <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
-                            placeholder="En caso que en distribución esté el correo del director director.ssi@redsalud.gob.cl 
-                                este entrará automáticamente como parte"> {{ isset($signature) ? str_replace(PHP_EOL, ',', $signature->recipients) : old('recipients') }} </textarea>
+                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"placeholder="En caso que en distribución esté el correo del director/a director.ssi@redsalud.gob.cleste entrará automáticamente como parte">{{ isset($signature) ? str_replace(PHP_EOL, ',', $signature->recipients) : old('recipients') }}</textarea>
                     </fieldset>
                 </div>
             </div>
