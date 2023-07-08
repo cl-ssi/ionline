@@ -50,7 +50,7 @@ class ProgramApsController extends Controller
     {
         $communes = array(1 => 'COLCHANE', 2 => 'HUARA', 3 => 'CAMIÑA', 4 => 'POZO ALMONTE', 5 => 'PICA', 6 => 'IQUIQUE', 7 => 'ALTO HOSPICIO', 8 => 'HECTOR REYNO');
         $establishments = array();
-        $innerHR = $year == 2022; // Se indica que CGU Dr. Héctor Reyno no programó para este año, su producción debe ser sumada a la comuna de Alto Hospicio
+        $innerHR = $year >= 2022; // Se indica que CGU Dr. Héctor Reyno no programó para este año en adelante, su producción debe ser sumada a la comuna de Alto Hospicio
         // Procesamos los numerador por rem
         foreach($program_aps->tracers as $tracer){
             //Comsultas REM numerador
