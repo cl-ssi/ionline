@@ -6,7 +6,7 @@
 
     @include('summary.nav')
 
-    <h3 class="mb-3">Sumario: {{ $summary->id }} - {{ $summary->subject ?? '' }}</h3>
+    <h3 class="mb-3">{{ $summary->type->name }}: {{ $summary->id }} - {{ $summary->subject ?? '' }}</h3>
 
     @include('summary.partials.header')
 
@@ -20,4 +20,16 @@
         ])
     @endif
     
+@endsection
+
+@section('custom_js')
+<script type="text/javascript">
+
+    $('.custom-file input').change(function (e) {
+        if (e.target.files.length) {
+            $(this).next('.custom-file-label').html(e.target.files[0].name);
+        }
+    });
+
+</script>
 @endsection

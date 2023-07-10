@@ -8,7 +8,9 @@
         </tr>
         <tr>
             <th>Resolución</th>
-            <td>{{ $summary->resolution_number }} / {{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
+            <td> 
+                {{ $summary->resolution_number }} / 
+                {{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
         </tr>
         <tr>
             <th>Fecha inicio</th>

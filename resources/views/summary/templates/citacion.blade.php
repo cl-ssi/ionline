@@ -11,7 +11,7 @@ CITACION SIMPLE<br>
 </p>
 
 <p class="text-justify">
-    Cítese a declarar en <b>{{ $summary->type }}</b> instruido mediante 
+    Cítese a declarar en <b>{{ optional($summary->type)->name }}</b> instruido mediante 
     Resolución Exenta Nº <b>{{ $summary->resolution_number }} / {{ optional($summary->resolution_date)->year }}</b>, a
     don/doña <b>{{ $template->nombre ?? '' }}</b> , el día 
     <b>{{ $template->fecha ?? '' }}</b> en <b>{{ $template->ubicacion ?? '' }}</b>.
@@ -22,11 +22,11 @@ CITACION SIMPLE<br>
 <div class="row">
     <div class="col text-center">
         <br><br>
-        {{ $summary->actuary->shortName }}<br>
+        {{ optional($summary->actuary)->shortName }}<br>
         A C T U A R I O
     </div>
     <div class="col text-center">
-        {{ $summary->investigator->shortName }}<br>
+        {{ optional($summary->investigator)->shortName }}<br>
         <b>F I S C A L</b>
     </div>
 </div>

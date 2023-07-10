@@ -537,13 +537,16 @@ class SignatureController extends Controller
                     Storage::disk('gcs')->delete($signaturesFile->signed_file);
                 }
 
-                // borro partes files y partes
+                /* borro partes files y partes */
                 if ($signaturesFile->parteFile) {
-                    $signaturesFile->parteFile->delete();
-                    $signaturesFile->parteFile->event->delete();
+                    if($signaturesFile->parteFile->event) {
+                        $signaturesFile->parteFile->event->delete();
+                    }
+                    if($signaturesFile->parteFile) {
+                        $signaturesFile->parteFile->delete();
+                    }
                 }
                 $signaturesFile->delete();
-
 
             }
             $signature->delete();
@@ -562,7 +565,14 @@ class SignatureController extends Controller
     {
         if ($signaturesFile->file_type == 'documento') {
             if ($signaturesFile->signed_file) {
-                return Storage::disk('gcs')->response($signaturesFile->signed_file);
+                if(Storage::disk('gcs')->exists($signaturesFile->signed_file)) {
+                    return Storage::disk('gcs')->response($signaturesFile->signed_file);
+                }
+                else {
+                    return "El archivo de la solicitud de firma {$signaturesFile->signature->id} fue borrado.<br>
+                    Es posible que <b>{$signaturesFile->signature->user->shortName} </b>
+                    deba crear una nueva solicitud.";
+                }
             } else {
                 return Storage::disk('gcs')->response($signaturesFile->file);
             }

@@ -6,6 +6,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 use App\Models\Requirements\Category;
 use App\Models\Profile\Subrogation;
 
@@ -40,7 +41,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function users()
     {
-        return $this->hasMany('\App\User');
+        return $this->hasMany(User::class)->orderBy('name');
     }
 
     public function father()
@@ -123,7 +124,7 @@ class OrganizationalUnit extends Model implements Auditable
 
     public function getInitialsAttribute()
     {
-        $words = explode(' ', $this->name);
+        $words = explode(' ', preg_replace('/\s+/', ' ', $this->name));
         $initials = '';
         foreach ($words as $word) {
             if ($word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'

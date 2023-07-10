@@ -18,7 +18,9 @@ class SearchJobPositionProfiles extends Component
         if($this->index == 'own'){
             return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
-                    latest()
+                    with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
+                        'user', 'estament', 'area', 'contractualCondition')
+                    ->latest()
                     ->Where('user_creator_id', Auth::user()->id)
                     ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
                     ->paginate(50)
@@ -45,7 +47,7 @@ class SearchJobPositionProfiles extends Component
             return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
-                        'user')
+                        'user', 'estament', 'area', 'contractualCondition')
                     ->whereHas('jobPositionProfileSigns', function($q) use ($iam_authorities_in){
                         $q->WhereIn('organizational_unit_id', $iam_authorities_in)
                         ->Where('status', 'pending');
@@ -53,7 +55,7 @@ class SearchJobPositionProfiles extends Component
                     ->paginate(50),
                 'reviewedJobPositionProfiles' => JobPositionProfile::
                     with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
-                        'user')
+                        'user', 'estament', 'area', 'contractualCondition')
                     ->whereHas('jobPositionProfileSigns', function($q) use ($iam_authorities_in){
                         $q->WhereIn('organizational_unit_id', $iam_authorities_in)
                         ->Where(function ($j){
@@ -68,7 +70,9 @@ class SearchJobPositionProfiles extends Component
         if($this->index == 'all'){
             return view('livewire.job-position-profile.search-job-position-profiles', [
                 'jobPositionProfiles' => JobPositionProfile::
-                    latest()
+                    with('organizationalUnit', 'jobPositionProfileSigns', 'jobPositionProfileSigns.organizationalUnit',
+                    'user', 'estament', 'area', 'contractualCondition')
+                    ->latest()
                     ->paginate(50)
             ]);
         }

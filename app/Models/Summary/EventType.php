@@ -2,11 +2,12 @@
 
 namespace App\Models\Summary;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Summary\Link;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Summary\Type;
 use App\Models\Summary\Template;
+use App\Models\Summary\Link;
 
 class EventType extends Model
 {
@@ -30,6 +31,7 @@ class EventType extends Model
         'actuary',
         'sub_event',
         'repeat',
+        'summary_type_id',
         'num_repeat',
         'created_at',
         'updated_at',
@@ -99,7 +101,10 @@ class EventType extends Model
         return $this->hasMany(Link::class, 'before_event_id');
     }
 
-
+    public function summaryType()
+    {
+        return $this->belongsTo(Type::class);
+    }
 
     public function templates()
     {

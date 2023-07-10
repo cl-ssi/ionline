@@ -10,6 +10,16 @@ class BeneficiaryRequest extends Model
 
     protected $table = 'well_ami_beneficiary_requests';
 
+    /**
+    * The attributes that should be mutated to dates.
+    *
+    * @var array
+    */
+    protected $dates = [
+        'fecha_inicio_contrato',
+        'fecha_nacimiento',
+    ];
+
     protected $fillable = [
         'nombre_jefatura',
         'cargo_unidad_departamento',

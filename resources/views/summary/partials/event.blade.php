@@ -16,7 +16,7 @@
                 </p>
 
                 @if ($event->type->require_user)
-                    <span class="fas fa-user"></span> {{ $event->user->shortName }}
+                    <span class="fas fa-user"></span> {{ optional($event->user)->shortName }}
                 @endif
 
                 @if ($event->has('childs'))

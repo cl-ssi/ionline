@@ -16,6 +16,8 @@
     </div>
 </div>
 
+@foreach($summaryTypes as $summaryType)
+<h5>{{ $summaryType->name }}</h5>
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
         <thead>
@@ -30,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($eventTypes as $type)
+            @foreach ($summaryType->eventTypes as $type)
                 <tr>
                     <td>{{ $type->id }}</td>
                     <td>
@@ -77,5 +79,6 @@
         </tbody>
     </table>
 </div>
-
+    
+@endforeach
 @endsection

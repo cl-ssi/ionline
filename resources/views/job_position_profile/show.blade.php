@@ -115,23 +115,36 @@
         <tbody>
             <tr>
                 <th class="table-active" width="25%">REQUISITO GENERAL</th>
-                <td>{{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}</td>
+                <td>
+                    {{--
+                    <p style="white-space: pre-wrap;">
+                        {{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}
+                    </p>
+                    --}}
+                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                        <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+                    @elseif($jobPositionProfile->general_requirement)
+                        <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+                    @else
+                        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
-                <td>{{ $jobPositionProfile->specific_requirement }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->specific_requirement }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">CAPACITACIÓN PERTINENTE</th>
-                <td>{{ $jobPositionProfile->training }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->training }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">EXPERIENCIA CALIFICADA</th>
-                <td>{{ $jobPositionProfile->experience }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->experience }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">COMPETENCIAS TÉCNICAS</th>
-                <td>{{ $jobPositionProfile->technical_competence }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->technical_competence }}</p></td>
             </tr>
         </tbody>
     </table>
@@ -213,9 +226,11 @@
 
 <h6><i class="fas fa-info-circle"></i> VI. Mapa de Competencias del Servicio de Salud Tarapacá</h6>
 
+<br>
+
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
-        <thead class="table-active text-center">
+        <thead class="table-active">
                 <tr>
                     <th colspan="2">Competencias Institucionales</th>
                 </tr>
@@ -265,6 +280,8 @@
     </table>
 </div>
 
+<h6 class="small"><b>Competencias Distintivas del Estamento</b></h6>
+
 <div class="table-responsive">
     <table class="table table-sm table-bordered small">
         <thead class="table-active">
@@ -274,10 +291,22 @@
                 <th colspan="4">Nivel requerido <br> (según corresponda)</th>
             </tr>
             <tr class="text-center">
-                <th width="5%">1</th>
-                <th width="5%">2</th>
-                <th width="5%">3</th>
-                <th width="5%">4</th>
+                <th width="5%">
+                    4 <br>
+                    Desarrollo Insuficiente
+                </th>
+                <th width="5%">
+                    3 <br>
+                    Desarrollo Regular
+                </th>
+                <th width="5%">
+                    2 <br>
+                    Desarrollo Avanzado
+                </th>
+                <th width="5%">
+                    1 <br>
+                    Desarrollo Óptimo
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -286,12 +315,7 @@
                 <td>{{ $jppExpertise->expertise->name }}</td>
                 <td>{{ $jppExpertise->expertise->description }}</td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 1)
-                        <i class="far fa-check-square fa-2x"></i>
-                    @endif
-                </td>
-                <td class="text-center align-middle">
-                    @if($jppExpertise->value == 2)
+                    @if($jppExpertise->value == 4)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>
@@ -301,7 +325,12 @@
                     @endif
                 </td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 4)
+                    @if($jppExpertise->value == 2)
+                        <i class="far fa-check-square fa-2x"></i>
+                    @endif
+                </td>
+                <td class="text-center align-middle">
+                    @if($jppExpertise->value == 1)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>

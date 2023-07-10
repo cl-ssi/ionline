@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Summary\Type;
 use App\Models\Summary\Link;
-use App\Models\Summary\EventType;
+use App\Http\Controllers\Controller;
 
 class LinkController extends Controller
 {
@@ -16,9 +16,8 @@ class LinkController extends Controller
      */
     public function index()
     {
-        //
-        $events = EventType::all();
-        return view('summary.links.index', compact('events'));
+        $summaryTypes = Type::with(['EventTypes'])->get();
+        return view('summary.links.index', compact('summaryTypes'));
     }
 
     /**
@@ -41,7 +40,6 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
         Link::create($request->all());
         session()->flash('success', 'Se ha añadido el Vinculo correctamente.');
         return redirect()->route('summary.links.index');

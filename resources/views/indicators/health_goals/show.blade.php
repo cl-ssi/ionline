@@ -69,7 +69,8 @@
                 <tbody>
                 <!-- numerador comuna -->
                     <tr class="text-center">
-                        <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{ $indicator->getSourceAbbreviated('numerador') }}</span> @if($indicator->getSourceAbbreviated('numerador') != $indicator->numerator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->numerator_source}}"><span class="fa fa-info"></span></span>@endif</td>
+                        @php($result = $indicator->getSourceAbbreviated('numerador'))
+                        <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{ $result }}</span> @if($result != $indicator->numerator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->numerator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                         <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                         <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2($commune, null), 2, ',', '.')}}%</td>
                         <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', $commune, null) : $indicator->getValuesAcum2('numerador', $commune, null), 0, ',', '.')}}</td>
@@ -582,7 +583,8 @@
                             <tbody>
                             <!-- numerador -->
                             <tr class="text-center">
-                                <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></td>
+                                @php($result = $indicator->getSourceAbbreviated('numerador'))
+                                <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{ $result }}</span> @if($result != $indicator->numerator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->numerator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                                 <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                                 <td rowspan="2" class="text-center align-middle">{{$indicator->weighting}}%</td>
                                 <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance(), 2, ',', '.')}}{{Str::contains($indicator->goal, 'días') ? '' : '%'}} <br> <small>Aporte: {{number_format($indicator->getContribution(), 2, ',', '.')}}%</small></td>
@@ -601,7 +603,8 @@
                             <!-- denominador -->
                             @if($indicator->denominator)
                             <tr class="text-center">
-                                <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
+                                 @php($result = $indicator->getSourceAbbreviated('denominador'))
+                                <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{ $result }}</span> @if($result != $indicator->denominator_source)<span class="badge badge-pill badge-dark" data-toggle="tooltip" data-placement="bottom" title="{{$indicator->denominator_source}}"><span class="fa fa-info"></span></span>@endif</td>
                                 @if(isset($indicator->denominator_acum_last_year))
                                 <td class="text-right">{{number_format($indicator->denominator_acum_last_year, 0, ',', '.')}}</td>
                                 @endif

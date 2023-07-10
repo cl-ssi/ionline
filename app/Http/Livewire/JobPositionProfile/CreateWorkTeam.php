@@ -13,6 +13,8 @@ class CreateWorkTeam extends Component
     public $jobPositionProfile;
     public $workTeams = null;
     public $workTeam = null;
+    public $editWorkTeamIdRender = null;
+    public $description = null;
 
     public function add($i)
     {
@@ -33,10 +35,29 @@ class CreateWorkTeam extends Component
         $this->jobPositionProfile = $jobPositionProfile;
     }
 
-    public function deleteRole($workTeam)
+    public function deleteWorkTeam($workTeam)
     {
         $this->workTeam = WorkTeam::find($workTeam['id']);
         $this->workTeam->delete();
+    }
+
+    public function editWorkTeam($workTeam)
+    {
+        $this->editWorkTeamIdRender = $workTeam['id'];
+        $this->description      = $workTeam['description'];
+    }
+
+    public function saveEditWorkTeam($workTeam)
+    {
+        $this->workTeam = WorkTeam::find($workTeam['id']);
+        $this->workTeam->description = $this->description;
+        
+        $this->workTeam->save();
+        $this->editWorkTeamIdRender = null;
+    }
+
+    public function cancelEdit(){
+        $this->editWorkTeamIdRender = null;
     }
 
     public function render()

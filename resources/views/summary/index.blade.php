@@ -43,7 +43,10 @@
                             <i class="fas fa-lock-open"></i>
                         @endif
                     </td>
-                    <td>{{ $summary->subject }}</td>
+                    <td>
+                        {{ $summary->type->name }}:<br>
+                        {{ $summary->subject }}
+                    </td>
                     <td>{{ $summary->resolution_number }}</td>
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
                     <td>{{ $summary->lastEvent->type->name ?? '' }}</td>
@@ -60,9 +63,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <del>La clave foranea de Events que referencia a EventType debería llamarse "event_type_id"</del>
-        </li>
-    </ul>
 @endsection

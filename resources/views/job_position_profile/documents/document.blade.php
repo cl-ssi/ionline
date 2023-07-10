@@ -102,24 +102,38 @@
             <th align="left" colspan="2" style="background-color: #2f5496; color: white">II. REQUISITOS FORMALES</th>
         </tr>   
         <tr>
-            <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }}/{{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->year->format('Y') }})</th>
-            <td>{{ $jobPositionProfile->staffDecreeByEstament->description }}</td>
+            <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO GENERAL</th>
+            <td>
+                {{--
+                <p style="white-space: pre-wrap;"> $jobPositionProfile->staffDecreeByEstament->description
+                    {{ ($jobPositionProfile->staffDecreeByEstament) ? $jobPositionProfile->staffDecreeByEstament->description : '' }}
+                </p>
+                --}}
+
+                @if($jobPositionProfile->staff_decree_by_estament_id)
+                    <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+                @elseif($jobPositionProfile->general_requirement)
+                    <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+                @else
+                    <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                @endif
+            </td>
         </tr>
         <tr>
             <th align="left" style="background-color: #b4c6e7" width="25%">REQUISITO ESPECÍFICO</th>
-            <td>{{ $jobPositionProfile->specific_requirement }}</td>
+            <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->specific_requirement }}</p></td>
         </tr>
         <tr>
-            <th align="left" style="background-color: #b4c6e7" width="25%">CAPACITACIÓN PERTINENTE</th>
-            <td>{{ $jobPositionProfile->training }}</td>
+            <th align="left" style="background-color: #b4c6e7" width="25%">CAPACITACIÓN PERTINENTE</p></th>
+            <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->training }}</p></td>
         </tr>
         <tr>
             <th align="left" style="background-color: #b4c6e7" width="25%">EXPERIENCIA CALIFICADA</th>
-            <td>{{ $jobPositionProfile->experience }}</td>
+            <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->experience }}</p></td>
         </tr>
         <tr>
             <th align="left" style="background-color: #b4c6e7" width="25%">COMPETENCIAS TÉCNICAS</th>
-            <td>{{ $jobPositionProfile->technical_competence }}</td>
+            <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->technical_competence }}</p></td>
         </tr>
     </tbody>
 </table>
@@ -314,6 +328,18 @@
                 VI. MAPA DE COMPETENCIAS DEL SERVICIO DE SALUD TARAPACÁ
             </th>
         </tr>
+    </tbody>
+</table>
+
+<br>
+
+<table class="siete">
+    <tbody>
+        <tr>
+            <th align="left" style="background-color: #2f5496; color: white" colspan="2">
+                Competencias Institucionales
+            </th>
+        </tr>
         <tr>
             <td width="30%" style="background-color: #b4c6e7">Orientación a la excelencia</td>
             <td align="justify">
@@ -361,28 +387,40 @@
 
 <table class="siete">
     <tbody>
+        <tr>
+            <th align="left" style="background-color: #2f5496; color: white" colspan="6">
+                Competencias Distintivas del Estamento
+            </th>
+        </tr>
         <tr style="background-color: #b4c6e7">
             <th rowspan="2" width="30%">Nombre</th>
             <th rowspan="2" width="50%">Descripción</th>
             <th colspan="4">Nivel requerido <br> (según corresponda)</th>
         </tr>
         <tr style="background-color: #b4c6e7">
-            <th width="5%">1</th>
-            <th width="5%">2</th>
-            <th width="5%">3</th>
-            <th width="5%">4</th>
+            <th width="5%">
+                4
+                Desarrollo Insuficiente
+            </th>
+            <th width="5%">
+                3
+                Desarrollo Regular
+            </th>
+            <th width="5%">
+                2
+                Desarrollo Avanzado
+            </th>
+            <th width="5%">
+                1
+                Desarrollo Óptimo
+            </th>
         </tr>
         @foreach($jobPositionProfile->jppExpertises as $jppExpertise)
             <tr>
                 <td style="background-color: #b4c6e7">{{ $jppExpertise->expertise->name }}</td>
                 <td align="justify">{{ $jppExpertise->expertise->description }}</td>
                 <td align="center">
-                    @if($jppExpertise->value == 1)
-                        X
-                    @endif
-                </td>
-                <td align="center">
-                    @if($jppExpertise->value == 2)
+                    @if($jppExpertise->value == 4)
                         X
                     @endif
                 </td>
@@ -392,7 +430,12 @@
                     @endif
                 </td>
                 <td align="center">
-                    @if($jppExpertise->value == 4)
+                    @if($jppExpertise->value == 2)
+                        X
+                    @endif
+                </td>
+                <td align="center">
+                    @if($jppExpertise->value == 1)
                         X
                     @endif
                 </td>
