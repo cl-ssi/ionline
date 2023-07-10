@@ -30,7 +30,7 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Fecha estimada entrega</th>
-                                <td>{{ $detail->pivot->internalPurchaseOrder->estimated_delivery_date->format('d-m-Y') }}</td>
+                                <td>{{ ($detail->pivot->internalPurchaseOrder->supplier) ? $detail->pivot->internalPurchaseOrder->estimated_delivery_date->format('d-m-Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Registrado por</th>
