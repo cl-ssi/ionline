@@ -12,8 +12,7 @@
                     <tr class="text-center table-info">
                         <th width="7%">#</th>
                         <th>Descripción</th>
-                        <th width="7%"></th>
-                        <th width="7%"></th>
+                        <th width="14%" colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,7 +31,7 @@
                                     <a class="btn btn-primary" wire:click="saveEditRole({{$role}})"><i class="fas fa-save"></i></a>
                                 </fieldset>
                                 <fieldset class="form-group col-md-2">
-                                    <button class="btn btn-danger btn-block" wire:click="saveEditRole">Cancelar</button>
+                                    <a class="btn btn-danger btn-block" wire:click="cancelEdit()">Cancelar</a>
                                 </fieldset>
                             </div>
                             @endif

@@ -56,6 +56,10 @@ class Roles extends Component
         $this->editRoleIdRender = null;
     }
 
+    public function cancelEdit(){
+        $this->editRoleIdRender = null;
+    }
+
     public function render()
     {
         $this->roles = Role::where('job_position_profile_id', $this->jobPositionProfile->id)->get();

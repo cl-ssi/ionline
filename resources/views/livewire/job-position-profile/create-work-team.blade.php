@@ -11,17 +11,39 @@
                     <tr class="text-center table-info">
                         <th width="7%">#</th>
                         <th>Descripción</th>
-                        <th width="7%"></th>
+                        <th width="14%" colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($workTeams as $workTeam)
                     <tr>
                         <th class="text-center">{{ $loop->iteration }}</th>
-                        <td>{{ $workTeam->description }}</td>
+                        <td>
+                            @if($editWorkTeamIdRender != $workTeam->id)
+                                {{ $workTeam->description }}
+                            @else
+                            <div class="form-row">
+                                <fieldset class="form-group col-md">
+                                    <input type="text" class="form-control" name="description" id="for_description" wire:model="description" required>
+                                </fieldset>
+                                <fieldset class="form-group col-md-1">
+                                    <a class="btn btn-primary" wire:click="saveEditWorkTeam({{$workTeam}})"><i class="fas fa-save"></i></a>
+                                </fieldset>
+                                <fieldset class="form-group col-md-2">
+                                    <a class="btn btn-danger btn-block" wire:click="cancelEdit()">Cancelar</a>
+                                </fieldset>
+                            </div>
+                            @endif
+                        </td>
                         <td class="text-center">
-                            <a class="btn btn-outline-danger btn-sm"
-                                wire:click="deleteRole({{ $workTeam }})"
+                            <a class="btn btn-secondary btn-sm"
+                                wire:click="editWorkTeam({{ $workTeam }})">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-danger btn-sm"
+                                wire:click="deleteWorkTeam({{ $workTeam }})"
                                 onclick="return confirm('¿Está seguro que desea eliminar la función?')">
                                 <i class="fas fa-trash"></i>
                             </a>
