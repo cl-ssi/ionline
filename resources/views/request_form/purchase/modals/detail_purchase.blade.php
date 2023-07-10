@@ -31,7 +31,7 @@
                             <tr>
                                 <th class="table-active" style="width: 33%">Fecha estimada entrega</th>
                                 <td>
-                                    {{ ($detail->pivot->internalPurchaseOrder) ? $detail->pivot->internalPurchaseOrder->estimated_delivery_date->format('d-m-Y') : '' }}
+                                    {{ ($detail->pivot->internalPurchaseOrder->estimated_delivery_date) ? $detail->pivot->internalPurchaseOrder->estimated_delivery_date->format('d-m-Y') : '' }}
                                 </td>
                             </tr>
                             <tr>
