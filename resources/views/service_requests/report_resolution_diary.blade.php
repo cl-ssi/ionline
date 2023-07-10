@@ -170,7 +170,15 @@
 
       <div class="right" style="float: right; width: 280px;">
         <div class="left" style="padding-bottom: 6px;">
-          <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+            @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+                @if($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG" or $ServiceRequest->programm_name == "LEQ Fonasa" or $ServiceRequest->programm_name == "CONTINGENCIA RESPIRATORIA")
+                    <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
+                @else
+                    <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+                @endif
+            @else
+                <strong>RESOLUCIÓN N°: {{$ServiceRequest->resolution_number}}</strong>
+            @endif
         </div>
         <div class="left" style="padding-bottom: 2px;">
           <strong>IQUIQUE,</strong>
