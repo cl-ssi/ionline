@@ -269,6 +269,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 Route::get('corrige_firmas', [ServiceRequestController::class, 'corrige_firmas'])->middleware('auth');
+Route::get('last_contracts', [ServiceRequestController::class, 'last_contracts'])->name('last_contracts');
+Route::get('existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts'])->name('existing_active_contracts');
 
 Route::get('/open-notification/{notification}', [UserController::class, 'openNotification'])->middleware('auth')->name('openNotification');
 Route::get('/all-notifications', [UserController::class, 'allNotifications'])->middleware('auth')->name('allNotifications');

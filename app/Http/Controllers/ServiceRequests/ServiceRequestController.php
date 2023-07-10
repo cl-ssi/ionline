@@ -1714,7 +1714,13 @@ class ServiceRequestController extends Controller
   }
 
   public function existing_active_contracts($start_date, $end_date){
-    $date = Carbon::today();
+    $start_date = Carbon::parse($start_date);
+    $end_date = Carbon::parse($end_date);
+
+    if($start_date->diffInYears($end_date)>0){
+        return "El rango de fecha máximo de búsqueda es un año.";
+    }
+
     $serviceRequests = ServiceRequest::where('end_date','>=',$start_date)
                                       ->where('end_date','<=',$end_date)
                                       ->whereDoesntHave("fulfillments", function ($subQuery) {
@@ -1732,7 +1738,8 @@ class ServiceRequestController extends Controller
                                           $subQuery->where('type', 'Término de contrato anticipado');
                                         });
                                       })
-                                      ->orderBy('start_date')
+                                      ->groupBy('user_id')
+                                      ->orderBy('end_date','DESC')
                                       ->get();
 
     $array = array();
@@ -1747,28 +1754,6 @@ class ServiceRequestController extends Controller
       $array[$key]['contract']['type'] = $serviceRequest->contract_type;
       $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
     }
-    return $array;
-  }
-
-  public function last_contracts(){
-    $users = User::all();
-    $key = 0;
-    foreach($users as $user){
-        if($user->serviceRequests->count()>0){
-            $serviceRequest = $user->serviceRequests->last();
-
-            $array[$key]['employee']['run'] = $serviceRequest->employee->runFormat();
-            $array[$key]['employee']['name'] = $serviceRequest->employee->getFullNameAttribute();
-            $array[$key]['employee']['email'] = $serviceRequest->email;
-            $array[$key]['employee']['phone'] = $serviceRequest->phone_number;
-
-            $array[$key]['contract']['number'] = $serviceRequest->contract_number;
-            $array[$key]['contract']['type'] = $serviceRequest->contract_type;
-            $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
-            $key += 1;
-        }
-    }
-        
     return $array;
   }
 }
