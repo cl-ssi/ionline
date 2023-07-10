@@ -1749,4 +1749,27 @@ class ServiceRequestController extends Controller
     }
     return $array;
   }
+
+  public function last_contracts(){
+    $users = User::all();
+    $key = 0;
+    foreach($users as $user){
+        if($user->serviceRequests->count()>0){
+            $serviceRequest = $user->serviceRequests->last();
+
+            $array[$key]['employee']['run'] = $serviceRequest->employee->runFormat();
+            $array[$key]['employee']['name'] = $serviceRequest->employee->getFullNameAttribute();
+            $array[$key]['employee']['email'] = $serviceRequest->email;
+            $array[$key]['employee']['phone'] = $serviceRequest->phone_number;
+
+            $array[$key]['contract']['number'] = $serviceRequest->contract_number;
+            $array[$key]['contract']['type'] = $serviceRequest->contract_type;
+            $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
+            dd($array);
+            $key += 1;
+        }
+    }
+        
+    return $array;
+  }
 }
