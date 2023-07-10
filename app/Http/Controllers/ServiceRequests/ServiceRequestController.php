@@ -1765,7 +1765,6 @@ class ServiceRequestController extends Controller
             $array[$key]['contract']['number'] = $serviceRequest->contract_number;
             $array[$key]['contract']['type'] = $serviceRequest->contract_type;
             $array[$key]['contract']['end_date'] = $serviceRequest->end_date->format("d-m-Y");
-            dd($array);
             $key += 1;
         }
     }
