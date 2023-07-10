@@ -17,6 +17,7 @@ use App\Models\JobPositionProfiles\Expertise;
 use App\Models\JobPositionProfiles\ExpertiseProfile;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\JobPositionProfiles\WorkTeam;
+use App\Rrhh\Authority;
 
 class JobPositionProfileController extends Controller
 {
@@ -95,7 +96,14 @@ class JobPositionProfileController extends Controller
 
     public function to_sign(JobPositionProfile $jobPositionProfile)
     {   
-        return view('job_position_profile.to_sign', compact('jobPositionProfile'));
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+        $iam_authorities_in = array();
+
+        foreach ($authorities as $authority){
+            $iam_authorities_in[] = $authority->organizational_unit_id;
+        }
+
+        return view('job_position_profile.to_sign', compact('jobPositionProfile','iam_authorities_in'));
     }
 
     /**

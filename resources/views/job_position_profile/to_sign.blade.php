@@ -345,7 +345,7 @@
             <tr>
                 @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
                 <td align="center">
-                    @if($sign->status == 'pending')
+                    @if(($sign->status == 'pending' || $sign->status == NULL) && in_array($sign->organizational_unit_id, $iam_authorities_in))
                         Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
                         <div class="row">
                             <div class="col-md-6">
@@ -394,6 +394,10 @@
                                 </div>
                             </div>
                         </div>
+                    @else
+                        @if($sign->status == 'pending' || $sign->status == NULL)
+                            Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br> 
+                        @endif
                     @endif
 
                     @if($sign->status == 'accepted')
@@ -402,10 +406,6 @@
                         </span> <br>
                         <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                    @endif
-                    
-                    @if($sign->status == NULL)
-                        Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
                     @endif
                 </td>
                 @endforeach
