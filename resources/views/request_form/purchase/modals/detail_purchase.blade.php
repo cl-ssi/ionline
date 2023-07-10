@@ -19,7 +19,10 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Proveedor</th>
-                                <td>{{ $detail->pivot->internalPurchaseOrder->supplier->name}}</td>
+                                <td>
+                                    
+                                    {{ ($detail->pivot->internalPurchaseOrder->supplier) ? $detail->pivot->internalPurchaseOrder->supplier->name : ''}}
+                                </td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Condición de pago</th>
