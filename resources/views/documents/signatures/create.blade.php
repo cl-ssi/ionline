@@ -121,8 +121,25 @@
                 <h5 class="card-header">
                     Firmante
                 </h5>
-                <div class="card-body">
+                {{-- <div class="card-body">
                     @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+                </div> --}}
+                <div class="card-body mt-4">
+                    <div class="form-row">
+                        <div class="col-12 col-md-8">
+                            {{-- @livewire('signatures.signer') --}}
+                            <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
+                            @livewire('select-organizational-unit', [
+                                'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                                'selected_id' => 'ou_id_signer',
+                                'emitToListener' => 'getOuId',
+                            ])
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="forUsers">Usuarios</label>
+                            @livewire('rrhh.ou-users')
+                        </div>
+                    </div>
                 </div>
             </div>
             {{-- @endif --}}
