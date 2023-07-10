@@ -13,6 +13,8 @@ class Roles extends Component
     public $jobPositionProfile;
     public $roles = null;
     public $role = null;
+    public $editRoleIdRender = null;
+    public $description = null;
 
     public function add($i)
     {
@@ -37,6 +39,21 @@ class Roles extends Component
     {
         $this->role = Role::find($role['id']);
         $this->role->delete();
+    }
+
+    public function editRole($role)
+    {
+        $this->editRoleIdRender = $role['id'];
+        $this->description      = $role['description'];
+    }
+
+    public function saveEditRole($role)
+    {
+        $this->role = Role::find($role['id']);
+        $this->role->description = $this->description;
+        
+        $this->role->save();
+        $this->editRoleIdRender = null;
     }
 
     public function render()
