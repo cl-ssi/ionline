@@ -1,6 +1,6 @@
 <div>
     {{-- The best athlete wants his opponent at his best. --}}
-    <select class="form-control" name="user_signer" required>
+    <select class="form-control" name="user_signer" {{ $required ? 'required' : '' }}>
         <option value="" > Seleccionar Usuario</option>
         @foreach ($users as $user)
             <option value="{{ $user->id }}"
