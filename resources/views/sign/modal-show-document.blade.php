@@ -25,9 +25,12 @@
                                             type="text"
                                             class="form-control form-control-sm"
                                             placeholder="Ingrese el OTP"
-                                            aria-label="Recipient's username"
+                                            aria-label="Ingrese el OTP"
                                             aria-describedby="button-addon2"
                                             wire:model.defer="otp"
+                                            wire:keydown.enter="signDocument"
+                                            autofocus
+                                            autocomplete="off"
                                         >
                                         <div class="input-group-append">
                                             <button

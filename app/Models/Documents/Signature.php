@@ -36,7 +36,7 @@ class Signature extends Model implements Auditable
         'endorse_type',
         'recipients',
         'distribution',
-        'user_id', 
+        'user_id',
         'visatorAsSignature',
         'url'
     ];
@@ -65,7 +65,7 @@ class Signature extends Model implements Auditable
     {
         return $this->belongsTo(Type::class)->withTrashed();
     }
-    
+
 
     /**
      * @return mixed Retorna model

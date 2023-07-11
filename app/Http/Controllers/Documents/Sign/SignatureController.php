@@ -30,13 +30,14 @@ class SignatureController extends Controller
         $signatureFlow = SignatureFlow::query()
             ->whereSignatureId($signature->id)
             ->whereSignerId($user->id)
+            ->whereStatus('pending')
             ->first();
 
         /**
          * Actualiza el archivo y el estado en el SignatureFlow
          */
         $signatureFlow->update([
-            'file' => 'ionline/sign/signed/'.$filename,
+            'file' => 'ionline/sign/signed/'.$filename.'.pdf',
             'status' => 'signed'
         ]);
 
@@ -44,7 +45,7 @@ class SignatureController extends Controller
          * Actualiza el archivo y el status en Signature
          */
         $signature->update([
-            'signed_file' => 'ionline/sign/signed/'.$filename,
+            'signed_file' => 'ionline/sign/signed/'.$filename.'.pdf',
             'status' => ($signature->signedByAll == true) ? 'completed' : $signature->status,
         ]);
 

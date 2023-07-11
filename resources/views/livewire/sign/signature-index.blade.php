@@ -1,7 +1,20 @@
 <div>
-    <h3>
-        Solicitudes de firmas y distribución
-    </h3>
+    <div class="row">
+        <div class="col">
+            <h3>
+                Solicitudes de firmas y distribución
+            </h3>
+        </div>
+        <div class="col text-right">
+            <a
+                href="{{ route('v2.documents.signatures.create') }}"
+                class="btn btn-primary"
+            >
+                <i class="fas fa-plus"></i> Crear solicitud firma
+            </a>
+        </div>
+    </div>
+
 
     <div class="form-row g-1 my-2">
         <div class="col-3">
@@ -157,6 +170,7 @@
                             @endif
                         </td>
                         <td>
+                            {{ $signature->type->name }} -
                             {{ $signature->subject }}
                         </td>
                         <td>
@@ -256,23 +270,25 @@
                                     @endif
 
                                     @if($signature->isPending())
-                                        @livewire('sign.sign-document', [
-                                            'signatureId' => $signature->id,
-                                            'link' => $signature->link_signed_file,
-                                            'folder' => 'ionline/sign/signed/',
-                                            'disabled' => (! $signature->canSignature),
-                                            'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id,
-                                            'user' => auth()->user(),
-                                            'row' => $signature->flows->firstWhere('signer_id', auth()->id())->row_position + 1,
-                                            'column' => $signature->flows->firstWhere('signer_id', auth()->id())->column_position,
-                                            'route' => 'v2.documents.signatures.update',
-                                            'routeParams' => [
-                                                'signature' => $signature->id,
-                                                'user' => auth()->id(),
-                                                'filename' => $signature->id.'-'.$signature->flows->firstWhere('signer_id', auth()->id())->id.'.pdf'
+                                        @if($signature->canSignature)
+                                            @livewire('sign.sign-document', [
+                                                'signatureId' => $signature->id,
+                                                'link' => $signature->link_signed_file,
+                                                'folder' => 'ionline/sign/signed/',
+                                                'disabled' => (! $signature->canSignature),
+                                                'filename' => $signature->id.'-'.$signature->signerFlow->id,
+                                                'user' => auth()->user() ,
+                                                'row' => $signature->row + 1,
+                                                'column' => $signature->column,
+                                                'route' => 'v2.documents.signatures.update',
+                                                'routeParams' => [
+                                                    'signature' => $signature->id,
+                                                    'user' => auth()->id(),
+                                                    'filename' => $signature->id.'-'.$signature->signerFlow->id
+                                                    ]
                                                 ]
-                                            ]
-                                        , key($signature->id))
+                                            , key($signature->id))
+                                        @endif
                                     @endif
 
                                     @if($signature->isPending() AND $signature->isSignedForMe)

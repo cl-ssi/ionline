@@ -10,6 +10,7 @@ class OuUsers extends Component
     public $users = [];
     public $authority_id = null;
     public $listeners = ["getOuId" => "getUsersFromOu"];
+    public $required = true;
 
     public function render()
     {

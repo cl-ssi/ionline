@@ -2,7 +2,6 @@
 
 namespace App\Models\Documents\Sign;
 
-use App\Models\Documents\Document;
 use App\Models\Documents\Sign\SignatureAnnex;
 use App\Models\Documents\Type;
 use App\Rrhh\OrganizationalUnit;
@@ -217,17 +216,68 @@ class Signature extends Model
         return $can;
     }
 
+    public function getColumnBySignatureAttribute()
+    {
+        $statusByColumn = collect();
+
+        foreach($this->columnAvailable as $column)
+        {
+            $status = $this->allSignedByColumn($column);
+            $statusByColumn->push($status);
+        }
+
+        $index = $statusByColumn->search(false);
+
+        return $columnBySignature = $this->columnAvailable->get($index);
+
+        return $this->signersByColumn($columnBySignature);
+    }
+
     public function getCanSignatureAttribute()
     {
-        $signatureFlow = $this->flows->firstWhere('signer_id', auth()->id());
+        /**
+         * Determina los firmantes para el flujo actual
+         */
+        $signaturesFlows = $this->signersByColumn($this->columnBySignature);
 
-        $position = $this->columnAvailable->search(function ($column) use($signatureFlow) {
-            return $column == $signatureFlow->column_position;
-        });
+        /**
+         * Obtiene el firmante del auth
+         */
+        $signer = auth()->id();
+
+        $canSigner = $this->flows->where('status', 'pending')->firstWhere('signer_id', $signer)->signer ?? null;
+
+        $columnFlow = $this->flows->where('status', 'pending')->firstWhere('signer_id', $signer);
+
+        $typeFlow = $columnFlow ? $this->typeByColumn($columnFlow->column_position) : null;
+
+        /**
+         * Si la columna es Opcional, puede firmar sin importa el orden del flujo
+         */
+        if(isset($canSigner) && isset($typeFlow)) {
+            if($typeFlow == 'Opcional') {
+                return true;
+            }
+        }
+
+        $signatureFlow = $signaturesFlows->where('status', 'pending')->firstWhere('signer_id', $signer);
+
+        if(!isset($signatureFlow) && isset($signer))
+        {
+            $signatureFlow = $signaturesFlows->where('status', 'pending')->firstWhere('signer_id', $signer);
+        }
+
+        $position = 0;
+
+        if(isset($signatureFlow)) {
+            $position = $this->columnAvailable->search(function ($column) use($signatureFlow) {
+                return $column == $signatureFlow->column_position;
+            });
+        }
 
         if($position == 0)
         {
-            return $this->canSign($signatureFlow);
+            return $signatureFlow ? $this->canSign($signatureFlow) : false;
         }
         else
         {
@@ -236,7 +286,7 @@ class Signature extends Model
                 $previous = $this->allSignedByColumn($this->columnAvailable->get($position - 1));
             }
 
-            return  $previous && $this->canSign($signatureFlow);
+            return $previous && ($signatureFlow ? $this->canSign($signatureFlow) : false);
         }
     }
 
@@ -302,7 +352,7 @@ class Signature extends Model
          * TODO: ¿Que pasa con el subrrogante?
          */
 
-        $columnPosition = $this->flows->firstWhere('signer_id', auth()->id())->column_position;
+        $columnPosition = $this->columnBySignature;
 
         if($columnPosition == 'left')
         {
@@ -345,7 +395,6 @@ class Signature extends Model
                     $canSign = false;
                 }
             }
-
         }
 
         return $canSign;
@@ -594,6 +643,41 @@ class Signature extends Model
         return $this->endorseBorderColumn($this->column_right_endorse);
     }
 
+    public function getSignerFlowAttribute()
+    {
+        $signatureFlow = $this->flows->where('status', 'pending')->firstWhere('signer_id', auth()->id());
+
+        return $signatureFlow;
+    }
+
+    public function getColumnAttribute()
+    {
+        $signerFlow = $this->flows->where('status', 'pending')->firstWhere('signer_id', auth()->id());
+
+        $columnPosition = null;
+
+        if(isset($signerFlow))
+        {
+            $columnPosition = $signerFlow->column_position;
+        }
+
+        return $columnPosition;
+    }
+
+    public function getRowAttribute()
+    {
+        $signerFlow = $this->flows->where('status', 'pending')->firstWhere('signer_id', auth()->id());
+
+        $rowPosition = null;
+
+        if(isset($signerFlow))
+        {
+            $rowPosition = $signerFlow->row_position;
+        }
+
+        return $rowPosition;
+    }
+
     public function endorseBorderColumn($endorse)
     {
         switch ($endorse) {
@@ -675,10 +759,10 @@ class Signature extends Model
         $yCoordinate = ($heightFile * 0.393701) * 72;
 
         /**
-         * Descifrar porque hay que restar 290 y 110 a las coordenadas
+         * Resta 290 y 120 a las coordenadas
          */
         $coordinate['x'] = $xCoordinate - 290;
-        $coordinate['y'] = $yCoordinate - 110;
+        $coordinate['y'] = $yCoordinate - 120;
 
         return $coordinate;
     }

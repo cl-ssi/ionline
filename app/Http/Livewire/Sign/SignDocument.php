@@ -150,7 +150,6 @@ class SignDocument extends Component
         /**
          * Verifica si existe un error
          */
-        // TODO: Convertir los errores a algo mas escalable
         if (array_key_exists('error', $json)) {
 
             session()->flash('danger', 'El proceso de firma produjo un error. Codigo 1');
@@ -182,8 +181,8 @@ class SignDocument extends Component
          */
         $filename = $this->folder . $this->filename;
         $file = $filename.".pdf";
+
         Storage::disk('gcs')
-            ->getDriver()
             ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
 
         session()->flash('success', 'El documento fue firmado exitosamente');
