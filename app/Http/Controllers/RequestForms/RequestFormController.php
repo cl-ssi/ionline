@@ -768,4 +768,10 @@ class RequestFormController extends Controller {
     public function show_amounts_by_program(){
         return view('request_form.reports.show_amounts_by_program');
     }
+
+    public function show_globals_amounts(){
+        return view('request_form.reports.show_globals_amounts');
+    }
+
+
 }

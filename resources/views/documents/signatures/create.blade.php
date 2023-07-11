@@ -133,11 +133,14 @@
                                 'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
                                 'selected_id' => 'ou_id_signer',
                                 'emitToListener' => 'getOuId',
+                                'required' => false,
                             ])
                         </div>
                         <div class="col-12 col-md-4">
                             <label for="forUsers">Usuarios</label>
-                            @livewire('rrhh.ou-users')
+                            @livewire('rrhh.ou-users',[
+                                'required' => false,
+                                ])
                         </div>
                     </div>
                 </div>

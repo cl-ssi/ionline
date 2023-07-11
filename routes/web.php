@@ -1927,6 +1927,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
         Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
         Route::get('/show_amounts_by_program', [RequestFormController::class, 'show_amounts_by_program'])->name('show_amounts_by_program');
+        Route::get('/show_globals_amounts', [RequestFormController::class, 'show_globals_amounts'])->name('show_globals_amounts');
     });
 
     /* DOCUMENTS */
