@@ -431,7 +431,7 @@ class ReportController extends Controller
   public function resolutionPDF(ServiceRequest $ServiceRequest)
   {
     if($ServiceRequest->id <= 105){
-      dd("");
+      dd("No se pueden imprimir resoluciones menores al id 150.");
     }
 
     $formatter = new NumeroALetras();
