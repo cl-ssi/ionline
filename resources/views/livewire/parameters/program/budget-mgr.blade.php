@@ -5,7 +5,7 @@
         <h3>{{ $budget->id ? 'Editar' : 'Crear' }} Presupuesto</h3>
 
         <div class="form-row mb-3">
-            <fieldset class="col-12 col-md-3">
+            <fieldset class="col-12 col-md-2">
                 <label for="for-year">Año</label>
                 <select class="form-control" wire:model="year" wire:change="updatePrograms">
                     <option value="">Seleccionar Año</option>
@@ -14,10 +14,10 @@
                 </select>
             </fieldset>
 
-            <fieldset class="col-12 col-md-4">
+            <fieldset class="col-12 col-md-2">
                 <label for="for-subtitle">Subtítulo</label>
                 <select class="form-control" wire:model="selectedSubtitle" wire:change="updatePrograms">
-                    <option value="">Seleccionar Subtítulo</option>
+                    <option value="">Seleccionar Subt</option>
                     @foreach ($subtitles as $id => $name)
                         <option value="{{ $id }}">{{ $name }}</option>
                     @endforeach
@@ -36,7 +36,7 @@
 
             <fieldset class="col-12 col-md-3">
                 <label for="for-ammount">Monto*</label>
-                <input type="text" wire:model.defer="ammount" class="form-control">
+                <input type="number" wire:model.defer="ammount" class="form-control" min="0">
                 @error('ammount')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -66,7 +66,6 @@
                 <tr>
                     <th>Editar</th>
                     <th>Programa</th>
-                    <th>Periodo</th>
                     <th>Monto</th>
                     <th></th>
                 </tr>
@@ -79,7 +78,6 @@
                                 wire:click="form({{ $budget }})"><i class="fas fa-edit"></i></button>
                         </td>
                         <td>{{ $budget->program->name }}</td>
-                        <td>{{ $budget->period->format('Y-m') }}</td>
                         <td>{{ $budget->ammount }}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger"
