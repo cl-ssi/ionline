@@ -27,6 +27,9 @@ class ConsolidatedReport implements FromCollection, WithTitle, WithHeadings
 
     public function collection()
     {
+        set_time_limit(7200);
+        ini_set('memory_limit', '2048M');
+
         $establishment_id = $this->establishment_id;
         $year = $this->year;
         $semester = $this->semester;
@@ -41,31 +44,32 @@ class ConsolidatedReport implements FromCollection, WithTitle, WithHeadings
             return $q->whereNotIn('establishment_id', [1, 12]);
             })
             ->whereYear('start_date',$year)
-            ->when($semester == 1, function ($q) use ($semester) {
-                return $q->where(function($query) {
-                            $query->whereMonth('start_date',1)
-                                    ->orWhereMonth('start_date',2)
-                                    ->orWhereMonth('start_date',3)
-                                    ->orWhereMonth('start_date',4);
-                        });
-            })
-            ->when($semester == 2, function ($q) use ($semester) {
-                return $q->where(function($query) {
-                            $query->whereMonth('start_date',5)
-                                    ->orWhereMonth('start_date',6)
-                                    ->orWhereMonth('start_date',7)
-                                    ->orWhereMonth('start_date',8);
-                        });
-            })
-            ->when($semester == 3, function ($q) use ($semester) {
-                return $q->where(function($query) {
-                            $query->whereMonth('start_date',7)
-                                    ->orWhereMonth('start_date',9)
-                                    ->orWhereMonth('start_date',10)
-                                    ->orWhereMonth('start_date',11)
-                                    ->orWhereMonth('start_date',12);
-                        });
-            })
+            // ->when($semester == 1, function ($q) use ($semester) {
+            //     return $q->where(function($query) {
+            //                 $query->whereMonth('start_date',1)
+            //                         ->orWhereMonth('start_date',2)
+            //                         ->orWhereMonth('start_date',3)
+            //                         ->orWhereMonth('start_date',4);
+            //             });
+            // })
+            // ->when($semester == 2, function ($q) use ($semester) {
+            //     return $q->where(function($query) {
+            //                 $query->whereMonth('start_date',5)
+            //                         ->orWhereMonth('start_date',6)
+            //                         ->orWhereMonth('start_date',7)
+            //                         ->orWhereMonth('start_date',8);
+            //             });
+            // })
+            // ->when($semester == 3, function ($q) use ($semester) {
+            //     return $q->where(function($query) {
+            //                 $query->whereMonth('start_date',7)
+            //                         ->orWhereMonth('start_date',9)
+            //                         ->orWhereMonth('start_date',10)
+            //                         ->orWhereMonth('start_date',11)
+            //                         ->orWhereMonth('start_date',12);
+            //             });
+            // })
+            ->whereMonth('start_date',$semester)
             ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
             ->orderBy('request_date', 'asc')
             ->get();

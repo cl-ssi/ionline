@@ -910,35 +910,35 @@ class ServiceRequestController extends Controller
       return $q->whereNotIn('establishment_id', [1, 12]);
     })
     ->whereYear('start_date',$year)
-    ->when($semester == 1, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',1)
-                            ->orWhereMonth('start_date',2)
-                            ->orWhereMonth('start_date',3)
-                            ->orWhereMonth('start_date',4);
-                });
-      })
-      ->when($semester == 2, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',5)
-                            ->orWhereMonth('start_date',6)
-                            ->orWhereMonth('start_date',7)
-                            ->orWhereMonth('start_date',8);
-                });
-      })
-    ->when($semester == 3, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',7)
-                            ->orWhereMonth('start_date',9)
-                            ->orWhereMonth('start_date',10)
-                            ->orWhereMonth('start_date',11)
-                            ->orWhereMonth('start_date',12);
-                });
-    })
-    // ->whereMonth('start_date',$month)
+    // ->when($semester == 1, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',1)
+    //                         ->orWhereMonth('start_date',2)
+    //                         ->orWhereMonth('start_date',3)
+    //                         ->orWhereMonth('start_date',4);
+    //             });
+    //   })
+    //   ->when($semester == 2, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',5)
+    //                         ->orWhereMonth('start_date',6)
+    //                         ->orWhereMonth('start_date',7)
+    //                         ->orWhereMonth('start_date',8);
+    //             });
+    //   })
+    // ->when($semester == 3, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',7)
+    //                         ->orWhereMonth('start_date',9)
+    //                         ->orWhereMonth('start_date',10)
+    //                         ->orWhereMonth('start_date',11)
+    //                         ->orWhereMonth('start_date',12);
+    //             });
+    // })
+    ->whereMonth('start_date',$semester)
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')
     ->paginate(50);
@@ -964,35 +964,35 @@ class ServiceRequestController extends Controller
     })
     // ->where('start_date','>=','2023-01-01 00:00')
     ->whereYear('start_date',$request->year)
-    ->when($semester == 1, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',1)
-                            ->orWhereMonth('start_date',2)
-                            ->orWhereMonth('start_date',3)
-                            ->orWhereMonth('start_date',4);
-                });
-      })
-      ->when($semester == 2, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',5)
-                            ->orWhereMonth('start_date',6)
-                            ->orWhereMonth('start_date',7)
-                            ->orWhereMonth('start_date',8);
-                });
-      })
-    ->when($semester == 3, function ($q) use ($semester) {
-        // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
-        return $q->where(function($query) {
-                    $query->whereMonth('start_date',7)
-                            ->orWhereMonth('start_date',9)
-                            ->orWhereMonth('start_date',10)
-                            ->orWhereMonth('start_date',11)
-                            ->orWhereMonth('start_date',12);
-                });
-    })
-    // ->whereMonth('start_date',$month)
+    // ->when($semester == 1, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',1)
+    //                         ->orWhereMonth('start_date',2)
+    //                         ->orWhereMonth('start_date',3)
+    //                         ->orWhereMonth('start_date',4);
+    //             });
+    //   })
+    //   ->when($semester == 2, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [1,2,3,4,5,6]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',5)
+    //                         ->orWhereMonth('start_date',6)
+    //                         ->orWhereMonth('start_date',7)
+    //                         ->orWhereMonth('start_date',8);
+    //             });
+    //   })
+    // ->when($semester == 3, function ($q) use ($semester) {
+    //     // return $q->whereIn(DB::raw('MONTH(start_date)'), [7,8,9,10,11,12]);
+    //     return $q->where(function($query) {
+    //                 $query->whereMonth('start_date',7)
+    //                         ->orWhereMonth('start_date',9)
+    //                         ->orWhereMonth('start_date',10)
+    //                         ->orWhereMonth('start_date',11)
+    //                         ->orWhereMonth('start_date',12);
+    //             });
+    // })
+    ->whereMonth('start_date',$semester)
     ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
     ->orderBy('request_date', 'asc')->get();
     
