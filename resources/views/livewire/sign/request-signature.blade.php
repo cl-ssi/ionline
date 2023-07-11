@@ -252,19 +252,6 @@
         </div>
     </div>
 
-    <div>
-        myColumns @json($myColumns)
-        <br>
-        myColumnsKeys @json($myColumns->keys())
-        <br>
-        myColumnsCount @json($myColumns->count())
-        <br>
-        columnAvailable @json($columnAvailable)
-        <br>
-        lastColumn @json($lastColumn)
-        <br>
-    </div>
-
     <div class="form-row mt-4">
         <fieldset class="form-group col-4">
             <label for="left-signatures">1. Firmantes Columna Izquierda</label>
