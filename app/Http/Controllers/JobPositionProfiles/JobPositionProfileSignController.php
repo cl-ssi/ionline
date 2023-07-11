@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\Parameters\Parameter;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Rrhh\Authority;
+use App\Notifications\JobPositionProfile\EndSigningProcess;
 
 class JobPositionProfileSignController extends Controller
 {
@@ -59,6 +61,12 @@ class JobPositionProfileSignController extends Controller
                     if($i == $jobPositionProfile->organizationalUnit->level){
                         $jpp_sing->organizational_unit_id   = $jobPositionProfile->organizationalUnit->id;
                         $jpp_sing->status = 'pending';
+
+                        /* SE NOTIFICACA A LA UNIDAD ORGANIZACIONAL PARA INICIAR EL PROCESO DE FIRMAS */
+                        $notification_ou_manager = Authority::getAuthorityFromDate($jpp_sing->organizational_unit_id, today(), 'manager');
+                        if($notification_ou_manager){
+                            $notification_ou_manager->user->notify(new Sign($jobPositionProfile));
+                        }
                     }
                     else{
                         $lastSign = JobPositionProfileSign::
@@ -82,6 +90,12 @@ class JobPositionProfileSignController extends Controller
                         $jpp_sing->status                       = 'pending';
                         $jpp_sing->job_position_profile_id      = $jobPositionProfile->id;
                         $jpp_sing->save();
+
+                        /* SE NOTIFICACA A LA UNIDAD ORGANIZACIONAL PARA INICIAR EL PROCESO DE FIRMAS */
+                        $notification_ou_manager = Authority::getAuthorityFromDate($jpp_sing->organizational_unit_id, today(), 'manager');
+                        if($notification_ou_manager){
+                            $notification_ou_manager->user->notify(new Sign($jobPositionProfile));
+                        }
 
                         $position++;
                     }
@@ -180,9 +194,11 @@ class JobPositionProfileSignController extends Controller
                     $jobPositionProfile->save();
                 }
 
-                /* 
-                AQUÍ IMPLEMENTAR NOTIFICACIONES
-                */
+                /* SE NOTIFICACA A LA UNIDAD ORGANIZACIONAL PARA CONTINUAR EL PROCESO DE FIRMAS */
+                $notification_ou_manager = Authority::getAuthorityFromDate($nextSign->organizational_unit_id, today(), 'manager');
+                if($notification_ou_manager){
+                    $notification_ou_manager->user->notify(new Sign($jobPositionProfile));
+                }
 
                 session()->flash('success', 'Estimado Usuario: El Perfil de Cargo ha sido Aprobado con exito.');
                 return redirect()->route('job_position_profile.index_to_sign');
@@ -194,9 +210,15 @@ class JobPositionProfileSignController extends Controller
                 /* 
                 AQUÍ IMPLEMENTAR NOTIFICACIONES
                 */
+
+                /* SE NOTIFICACA AL DEPTO. DESARROLLO Y GESTION DEL TALENTO PARA INFORMANDO EL FIN DE PROCESO DE FIRMAS */
+                $notification_ou_manager = Authority::getAuthorityFromDate(Parameter::where('module', 'ou')->where('parameter', 'GestionDesarrolloDelTalento')->first()->value, today(), 'manager');
+                if($notification_ou_manager){
+                    $notification_ou_manager->user->notify(new EndSigningProcess($jobPositionProfile));
+                }
                 
-                session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
-                return redirect()->route('replacement_staff.request.to_sign');
+                session()->flash('success', 'Estimado Usuario: El Perfil de Cargo ha sido Aprobado con exito.');
+                return redirect()->route('job_position_profile.index_to_sign');
             }
         }
         else{

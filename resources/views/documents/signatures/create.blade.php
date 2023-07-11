@@ -39,8 +39,7 @@
                         <label for="for_request_date">Fecha Documento*</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{ isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date') }}"
-                            max="{{ date('Y-m-d') }}"
-                            required>
+                            max="{{ date('Y-m-d') }}" required>
                     </fieldset>
 
                     <fieldset class="form-group col-6 col-md-2">
@@ -122,8 +121,25 @@
                 <h5 class="card-header">
                     Firmante
                 </h5>
-                <div class="card-body">
+                {{-- <div class="card-body">
                     @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+                </div> --}}
+                <div class="card-body mt-4">
+                    <div class="form-row">
+                        <div class="col-12 col-md-8">
+                            {{-- @livewire('signatures.signer') --}}
+                            <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
+                            @livewire('select-organizational-unit', [
+                                'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                                'selected_id' => 'ou_id_signer',
+                                'emitToListener' => 'getOuId',
+                            ])
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label for="forUsers">Usuarios</label>
+                            @livewire('rrhh.ou-users')
+                        </div>
+                    </div>
                 </div>
             </div>
             {{-- @endif --}}
@@ -178,9 +194,7 @@
 
                     <fieldset class="form-group col-12 col-md-6">
                         <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
-                            placeholder="En caso que en distribución esté el correo del director director.ssi@redsalud.gob.cl 
-                                este entrará automáticamente como parte"> {{ isset($signature) ? str_replace(PHP_EOL, ',', $signature->recipients) : old('recipients') }} </textarea>
+                        <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"placeholder="En caso que en distribución esté el correo del director/a director.ssi@redsalud.gob.cleste entrará automáticamente como parte">{{ isset($signature) ? str_replace(PHP_EOL, ',', $signature->recipients) : old('recipients') }}</textarea>
                     </fieldset>
                 </div>
             </div>

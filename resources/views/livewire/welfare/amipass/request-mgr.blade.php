@@ -31,6 +31,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th nowrap>Fecha Solic.</th>
                 <th>Nombre</th>
                 <th>Run</th>
                 <th>Correo Personal</th>
@@ -46,11 +47,12 @@
             @foreach($requests as $request)
             <tr class="{{ ($request->estado == 'Ok') ? 'table-success': '' }}">
                 <td>{{ $request->id }}</td>
+                <td>{{ $request->created_at }}</td>
                 <td>{{ $request->nombre_completo }}</td>
                 <td>{{ $request->rut_funcionario }}</td>
                 <td>{{ $request->correo_personal }}</td>
                 <td>{{ $request->donde_cumplira_funciones }}</td>
-                <td>{{ $request->fecha_inicio_contrato }}</td>
+                <td>{{ optional($request->fecha_inicio_contrato)->format('Y-m-d') }}</td>
                 <td>{{ $request->fecha_termino_contrato }}</td>
                 <td class="small">
                     {{ optional($request->ami_manager)->shortName }}

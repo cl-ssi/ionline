@@ -111,24 +111,33 @@
     <table class="table table-sm table-bordered small">
         <tbody>
             <tr>
-                <th class="table-active" width="25%">REQUISITO GENERAL ({{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->name }}/{{ $jobPositionProfile->staffDecreeByEstament->StaffDecree->year->format('Y') }})</th>
-                <td>{{ $jobPositionProfile->staffDecreeByEstament->description }}</td>
+                <th class="table-active" width="25%">REQUISITO GENERAL</th>
+                <td>
+                    {{-- $jobPositionProfile->staffDecreeByEstament->description --}}
+                    @if($jobPositionProfile->staff_decree_by_estament_id)
+                        <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+                    @elseif($jobPositionProfile->general_requirement)
+                        <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
+                    @else
+                        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
-                <td>{{ $jobPositionProfile->specific_requirement }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->specific_requirement }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">CAPACITACIÓN PERTINENTE</th>
-                <td>{{ $jobPositionProfile->training }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->training }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">EXPERIENCIA CALIFICADA</th>
-                <td>{{ $jobPositionProfile->experience }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->experience }}</p></td>
             </tr>
             <tr>
                 <th class="table-active" width="25%">COMPETENCIAS TÉCNICAS</th>
-                <td>{{ $jobPositionProfile->technical_competence }}</td>
+                <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->technical_competence }}</p></td>
             </tr>
         </tbody>
     </table>
@@ -271,10 +280,22 @@
                 <th colspan="4">Nivel requerido <br> (según corresponda)</th>
             </tr>
             <tr class="text-center">
-                <th width="5%">1</th>
-                <th width="5%">2</th>
-                <th width="5%">3</th>
-                <th width="5%">4</th>
+                <th width="5%">
+                    4 <br>
+                    Desarrollo Insuficiente
+                </th>
+                <th width="5%">
+                    3 <br>
+                    Desarrollo Regular
+                </th>
+                <th width="5%">
+                    2 <br>
+                    Desarrollo Avanzado
+                </th>
+                <th width="5%">
+                    1 <br>
+                    Desarrollo Óptimo
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -283,12 +304,7 @@
                 <td>{{ $jppExpertise->expertise->name }}</td>
                 <td>{{ $jppExpertise->expertise->description }}</td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 1)
-                        <i class="far fa-check-square fa-2x"></i>
-                    @endif
-                </td>
-                <td class="text-center align-middle">
-                    @if($jppExpertise->value == 2)
+                    @if($jppExpertise->value == 4)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>
@@ -298,7 +314,12 @@
                     @endif
                 </td>
                 <td class="text-center align-middle">
-                    @if($jppExpertise->value == 4)
+                    @if($jppExpertise->value == 2)
+                        <i class="far fa-check-square fa-2x"></i>
+                    @endif
+                </td>
+                <td class="text-center align-middle">
+                    @if($jppExpertise->value == 1)
                         <i class="far fa-check-square fa-2x"></i>
                     @endif
                 </td>
@@ -324,7 +345,7 @@
             <tr>
                 @foreach($jobPositionProfile->jobPositionProfileSigns as $sign)
                 <td align="center">
-                    @if($sign->status == 'pending')
+                    @if(($sign->status == 'pending' || $sign->status == NULL) && in_array($sign->organizational_unit_id, $iam_authorities_in))
                         Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
                         <div class="row">
                             <div class="col-md-6">
@@ -373,6 +394,10 @@
                                 </div>
                             </div>
                         </div>
+                    @else
+                        @if($sign->status == 'pending' || $sign->status == NULL)
+                            Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br> 
+                        @endif
                     @endif
 
                     @if($sign->status == 'accepted')
@@ -381,10 +406,6 @@
                         </span> <br>
                         <i class="fas fa-user"></i> {{ $sign->user->FullName }}<br>
                         <i class="fas fa-calendar-alt"></i> {{ $sign->date_sign->format('d-m-Y H:i:s') }}<br>
-                    @endif
-                    
-                    @if($sign->status == NULL)
-                        Estado: <i class="fas fa-clock"></i> {{ $sign->StatusValue }} <br><br>
                     @endif
                 </td>
                 @endforeach

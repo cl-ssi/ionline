@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Summary\Type;
 use App\Models\Summary\Summary;
-use App\Models\Summary\Event;
 use App\Models\Summary\EventType;
+use App\Models\Summary\Event;
+use App\Http\Controllers\Controller;
 
 class SummaryController extends Controller
 {
@@ -34,6 +35,8 @@ class SummaryController extends Controller
      */
     public function create()
     {
+        $types = Type::pluck('name','id');
+
         $eventType = EventType::where('start',true)->first();
 
         if(is_null($eventType)) {
@@ -41,7 +44,7 @@ class SummaryController extends Controller
             return redirect()->back();
         }
         else {
-            return view('summary.create');
+            return view('summary.create', compact('types'));
         }
 
     }
@@ -56,10 +59,12 @@ class SummaryController extends Controller
     {
 
         /** Obtiene el evento marcado como primer evento de un sumario */
-        $eventType = EventType::where('start',true)->first();
+        $eventType = EventType::where('start',true)
+            ->where('summary_type_id',$request->input('type_id'))
+            ->first();
 
         if(is_null($eventType)) {
-            session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario"');
+            session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario para este tipo de investigación"');
         }
         else {
             $summary = new Summary($request->All());
@@ -102,13 +107,6 @@ class SummaryController extends Controller
      */
     public function edit(Summary $summary)
     {
-        /** Esto ya no se necesita, ya que está implementado lastEvent */
-        // foreach($summary->events as $event) {
-        //     if($event->type->sub_event == false) {
-        //         $lastNonSubEvent = $event;
-        //     }
-        // }
-
         return view('summary.edit', compact('summary'));
     }
 

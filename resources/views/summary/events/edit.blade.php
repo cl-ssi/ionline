@@ -12,6 +12,15 @@
         @csrf
         @method('PUT')
         <div class="form-group row">
+            <label for="for-name" class="col-sm-2 col-form-label">Tipo*</label>
+            <div class="col-sm-5">
+                <select class="form-control" name="summary_type_id" disabled>
+                    <option value="{{ $eventType->summary_type_id }}">{{ $eventType->summaryType->name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="name" value="{{ $eventType->name }}" autocomplete="off"
@@ -152,7 +161,7 @@
                             </ul>
                         </td>
                         <td class="align-middle;">
-                            @foreach ($eventTypes as $type)
+                            @foreach ($eventType->summaryType->eventTypes as $type)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{ $type->id }}"
                                         name="links[{{ $type->id }}]"

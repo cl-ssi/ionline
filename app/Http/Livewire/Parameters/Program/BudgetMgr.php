@@ -6,6 +6,7 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Parameters\ProgramBudget;
 use App\Models\Parameters\Program;
+use App\Models\Parameters\Subtitle;
 
 class BudgetMgr extends Component
 {
@@ -20,30 +21,37 @@ class BudgetMgr extends Component
 
     /** Listado de programas */
     public $programs;
+    /** Listado de subtitulos */
+    public $subtitles;
+
+    public $year;
+    public $selectedSubtitle;
+    public $ammount;
+    public $program;
+
 
     /**
-    * mount
-    */
+     * mount
+     */
     public function mount()
     {
-        $this->programs = Program::pluck('name','id');
+        $this->programs = Program::orderBy('name')->pluck('name', 'id');
+        $this->subtitles = Subtitle::orderBy('name')->pluck('name', 'id');
+        $this->program = null; // Agrega esta línea
     }
 
     protected function rules()
     {
         return [
-            'budget.program_id' => 'required',
-            'budget.ammount' => 'required|integer',
-            'budget.period' => 'required',
-            'budget.observation' => 'nullable',
-            'budget.establishment_id' => 'nullable',
+            'program' => 'required',
+            'ammount' => 'required',
         ];
     }
 
     protected $messages = [
-        'budget.program_id.required' => 'Debe seleccionar un programa.',
-        'budget.ammount.required' => 'El monto es requerido.',
-        'budget.period.required' => 'El periodo desde es requerido.',
+        'program' => 'El programa es requerido',
+        'ammount' => 'El monto es requerido',
+
     ];
 
     public function index()
@@ -54,7 +62,7 @@ class BudgetMgr extends Component
 
     public function form(ProgramBudget $budget)
     {
-        $this->budget = ProgramBudget::firstOrNew([ 'id' => $budget->id]);
+        $this->budget = ProgramBudget::firstOrNew(['id' => $budget->id]);
         $this->form = true;
     }
 
@@ -62,6 +70,8 @@ class BudgetMgr extends Component
     {
         $this->validate();
         $this->budget->establishment_id = auth()->user()->organizationalUnit->establishment_id ?? null;
+        $this->budget->program_id = $this->program ?? null;
+        $this->budget->ammount = $this->ammount ?? null;
         $this->budget->save();
         $this->index();
     }
@@ -69,6 +79,21 @@ class BudgetMgr extends Component
     public function delete(ProgramBudget $budget)
     {
         $budget->delete();
+    }
+
+
+    public function updatePrograms()
+    {
+        $queryPrograms = Program::query();
+        if ($this->year) {
+            $queryPrograms->where('period', $this->year);
+        }
+        if ($this->selectedSubtitle) {
+            $queryPrograms->where('subtitle_id', $this->selectedSubtitle);
+        }
+
+        $filteredPrograms = $queryPrograms->orderBy('name')->pluck('name', 'id');
+        $this->programs = $filteredPrograms;
     }
 
     public function render()

@@ -24,18 +24,28 @@
                 <th>Consulta o Sugerencia</th>
                 <th>Fecha Respuesta</th>
                 <th>Respuesta</th>
+                <th>Ver Solicitud con Respuesta</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($doubts as $doubt)
-            <tr>
-            <td>{{$doubt->id}}</td>
-            <td>{{$doubt->question_at}}</td>
-            <td>{{$doubt->motivo}}</td>
-            <td>{{$doubt->consulta}}</td>
-            <td>{{$doubt->answer_at}}</td>
-            <td>{{$doubt->respuesta}}</td>
-            </tr>
+                <tr>
+                    <td>{{ $doubt->id }}</td>
+                    <td>{{ $doubt->question_at }}</td>
+                    <td>{{ $doubt->motivo }}</td>
+                    <td>{{ $doubt->consulta }}</td>
+                    <td>{{ $doubt->answer_at }}</td>
+                    <td>{{ $doubt->respuesta }}</td>
+                    <td>
+                        @if ($doubt->respuesta)
+                            <a href="{{ route('welfare.amipass.question-show', $doubt->id) }}">
+                                <i class="fas fa-eye"></i> Ver
+                            </a>
+                        @else
+                            N/A
+                        @endif
+                    </td>
+                </tr>
             @endforeach
 
         </tbody>

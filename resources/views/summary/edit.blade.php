@@ -6,7 +6,7 @@
 
     @include('summary.nav')
 
-    <h3 class="mb-3">Sumario: {{ $summary->id }} - {{ $summary->subject ?? '' }}</h3>
+    <h3 class="mb-3">{{ $summary->type->name }}: {{ $summary->id }} - {{ $summary->subject ?? '' }}</h3>
 
     @include('summary.partials.header')
 

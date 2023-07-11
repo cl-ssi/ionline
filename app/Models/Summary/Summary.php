@@ -3,11 +3,12 @@
 namespace App\Models\Summary;
 
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 use App\User;
-use App\Models\Establishment;
+use App\Models\Summary\Type;
 use App\Models\Summary\Event;
+use App\Models\Establishment;
 
 
 class Summary extends Model
@@ -22,7 +23,7 @@ class Summary extends Model
         'status',
         'resolution_number',
         'resolution_date',
-        'type',
+        'type_id',
         'start_at',
         'end_at',
         'start_date',
@@ -46,6 +47,11 @@ class Summary extends Model
         'end_date',
         'end_at',
     ];
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
 
     public function investigator()
     {

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Summary;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Summary\EventType;
+use App\Models\Summary\Type;
 use App\Models\Summary\Link;
+use App\Models\Summary\EventType;
+use App\Http\Controllers\Controller;
 
 class EventTypeController extends Controller
 {
@@ -16,8 +17,9 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        $eventTypes = EventType::all();
-        return view('summary.events.index', compact('eventTypes'));
+        $summaryTypes = Type::with('eventTypes')->get();
+
+        return view('summary.events.index', compact('summaryTypes'));
     }
 
     /**
@@ -27,8 +29,8 @@ class EventTypeController extends Controller
      */
     public function create()
     {
-        //
-        return view('summary.events.create');
+        $summaryTypes = Type::pluck('name','id');
+        return view('summary.events.create', compact('summaryTypes'));
     }
 
     /**
@@ -73,8 +75,7 @@ class EventTypeController extends Controller
      */
     public function edit(EventType $eventType)
     {
-        $eventTypes = EventType::all();
-        return view('summary.events.edit', compact('eventType', 'eventTypes'));
+        return view('summary.events.edit', compact('eventType'));
     }
 
     /**

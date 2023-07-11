@@ -25,8 +25,7 @@ class ProgramBudget extends Model
     */
     protected $fillable = [
         'program_id',
-        'ammount',
-        'period',
+        'ammount',        
         'observation',
     ];
 
@@ -34,14 +33,9 @@ class ProgramBudget extends Model
     * The attributes that should be mutated to dates.
     *
     * @var array
-    */
-    protected $dates = [
-        'period',
-    ];
+    */ 
 
-    protected $casts = [
-        'period' => 'date:Y-m'
-    ];
+    
 
     public function program()
     {

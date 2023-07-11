@@ -206,12 +206,12 @@ class AgreementController extends Controller
         $agreement->establishment_list  = serialize($request->establishment);
         if($request->hasFile('file')){
 
-            Storage::disk('gcs')->delete($agreement->file);
+            if($agreement->file != null) Storage::disk('gcs')->delete($agreement->file);
             $agreement->file = $request->file('file')->store('ionline/agreements/agree', ['disk' => 'gcs']);
         }
  
         if($request->hasFile('fileResEnd')){
-            Storage::disk('gcs')->delete($agreement->fileResEnd);
+            if($agreement->fileResEnd != null) Storage::disk('gcs')->delete($agreement->fileResEnd);
             $agreement->fileResEnd = $request->file('fileResEnd')->store('ionline/agreements/agree_res', ['disk' => 'gcs']);
         }
 
@@ -299,7 +299,7 @@ class AgreementController extends Controller
         $Stage->observation = $request->observation;
         
         if($request->hasFile('file')){
-            Storage::disk('gcs')->delete($Stage->file);
+            if($Stage->file != null) Storage::disk('gcs')->delete($Stage->file);
             $Stage->file = $request->file('file')->store('ionline/agreements/agg_stage', ['disk' => 'gcs']);
         }
            

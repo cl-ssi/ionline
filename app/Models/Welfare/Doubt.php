@@ -24,5 +24,7 @@ class Doubt extends Model
         'answer_at',
     ];
 
+    
+
 
 }
