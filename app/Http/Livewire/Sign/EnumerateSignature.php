@@ -140,7 +140,6 @@ class EnumerateSignature extends Component
         logger()->info($file);
 
         Storage::disk('gcs')
-            ->getDriver()
             ->put($file, base64_decode($json['files'][0]['content']));
 
         /**
