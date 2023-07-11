@@ -14,7 +14,7 @@ class SignatureFlow extends Model
     /**
      * Punto de Partida en Y
      */
-    const START_Y = 30;
+    const START_Y = 40;
 
     /**
      * Espaciado entre una linea y otra
