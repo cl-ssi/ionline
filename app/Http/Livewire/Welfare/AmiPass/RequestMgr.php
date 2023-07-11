@@ -30,7 +30,7 @@ class RequestMgr extends Component
      */
     public function closeElement()
     {
-        app('debugbar')->info('close');
+        //app('debugbar')->info('close');
         $this->element = false;
         unset($this->beneficiaryRequest);
     }
