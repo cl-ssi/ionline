@@ -80,8 +80,6 @@
 </ul>
 
 
-<br>
-
 <h5>Contratos</h5>
 
 <div class="card">
