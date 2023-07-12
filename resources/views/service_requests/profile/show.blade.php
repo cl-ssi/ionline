@@ -125,15 +125,15 @@
 
                         <div class="col-md-3">
                             <label for="validationDefault02">Responsable</label>
-                            @if($serviceRequestId->SignatureFlows->isNotEmpty())
-                            <input type="text" disabled class="form-control" id="validationDefault02"
-                                value="{{ optional(optional($serviceRequestId->SignatureFlows->where('sign_position',1)->first())->user)->getFullNameAttribute() }}">
+                            @if ($serviceRequestId->SignatureFlows->isNotEmpty())
+                                <input type="text" disabled class="form-control" id="validationDefault02"
+                                    value="{{ optional(optional($serviceRequestId->SignatureFlows->where('sign_position', 1)->first())->user)->getFullNameAttribute() }}">
                             @endif
                         </div>
                         <div class="col-md-3">
                             <label for="validationDefault02">Supervisor</label>
                             <input type="text" disabled class="form-control" id="validationDefault02"
-                                value="{{ optional(optional($serviceRequestId->SignatureFlows->where('sign_position',2)->first())->user)->getFullNameAttribute() }}">
+                                value="{{ optional(optional($serviceRequestId->SignatureFlows->where('sign_position', 2)->first())->user)->getFullNameAttribute() }}">
                         </div>
                     </div>
 
@@ -155,7 +155,9 @@
                         <div class="col-md-2">
                             <label for="validationDefault02">Estamento</label>
                             <select name="" id="" class="form-control" disabled>
-                                <option value="">{{ ($serviceRequestId->profession) ? $serviceRequestId->profession->estamento : $serviceRequestId->estate }}</option>
+                                <option value="">
+                                    {{ $serviceRequestId->profession ? $serviceRequestId->profession->estamento : $serviceRequestId->estate }}
+                                </option>
                                 <option value="">F</option>
                                 <option value="">O</option>
                             </select>
@@ -172,6 +174,11 @@
                                 value="{{ $serviceRequestId->working_day_type }}">
                         </div>
                     </div>
+                @endif
+
+
+                 @if ($serviceRequestId)
+                    @livewire('service-requests.approval-workflow', ['serviceRequest' => $serviceRequestId])
                 @endif
             </div>
         </div>
