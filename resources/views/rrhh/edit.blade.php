@@ -20,16 +20,16 @@
 
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="name">Nombres</label>
-            <input type="text" class="form-control" name="name" value="{{$user->name}}">
+            <label for="name">Nombres*</label>
+            <input type="text" class="form-control" name="name" value="{{$user->name}}" required>
         </div>
         <div class="form-group col-md-3">
-            <label for="name">Apellido Paterno</label>
-            <input type="text" class="form-control" name="fathers_family" value="{{ $user->fathers_family }}">
+            <label for="name">Apellido Paterno*</label>
+            <input type="text" class="form-control" name="fathers_family" value="{{ $user->fathers_family }}" required>
         </div>
         <div class="form-group col-md-3">
-            <label for="name">Apellido Materno</label>
-            <input type="text" class="form-control" name="mothers_family" value="{{ $user->mothers_family }}">
+            <label for="name">Apellido Materno*</label>
+            <input type="text" class="form-control" name="mothers_family" value="{{ $user->mothers_family }}" required>
         </div>
 
         <fieldset class="form-group col-md-2">
@@ -48,11 +48,11 @@
         </fieldset>
 
         <div class="form-group col-12 col-md-4">
-            <label for="email">Correo</label>
-            <input type="email" class="form-control" name="email" value="{{$user->email}}">
+            <label for="email">Email*</label>
+            <input type="email" class="form-control" name="email" value="{{$user->email}}" required="required">
         </div>
         <div class="form-group col-11 col-md-4">
-            <label for="email">Correo Personal</label>
+            <label for="email">Email Personal</label>
             <input type="email" class="form-control" name="email_personal" value="{{$user->email_personal}}">
         </div>
     </div>
