@@ -18,7 +18,7 @@ class PerfilController extends Controller
         /** Años en que tiene contratos */
         $yearsWithServiceRequests = ServiceRequest::where('user_id', $user->id)
             ->distinct()
-            ->select(DB::raw('YEAR(start_date) as year'))
+            ->selectRaw('YEAR(start_date) as year')
             ->pluck('year')
             ->toArray();
 
@@ -40,6 +40,7 @@ class PerfilController extends Controller
          * ]
          */
 
+        dd($yearsRange);
 
         $workingDayTypes = ServiceRequest::where('user_id', $run)->whereYear('request_date', $year)
             ->distinct()
