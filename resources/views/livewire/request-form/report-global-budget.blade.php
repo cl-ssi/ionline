@@ -4,14 +4,13 @@
         <div class="form-row">
             <fieldset class="form-group col-sm-4">
                 <label for="year">Año</label>
-                <select class="form-control selectpicker show-tick" id="for_year" name="year"
+                <select class="form-control" id="for_year" name="year"
                     wire:model.debounce.500ms="selectedYear" required>
                     <option value="">Selección...</option>
                     @foreach (range(now()->year, 2022) as $period)
                         <option value="{{ $period }}">{{ $period }}</option>
                     @endforeach
                 </select>
-
                 @error('selectedYear')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -29,7 +28,7 @@
         @endif
 
 
-        @if ($programs && $programs->count() > 0)
+        
             <div class="table-responsive" wire:loading.remove>
                 <table class="table table-sm table-bordered table-striped table-hover small">
                     <thead>
@@ -48,7 +47,7 @@
                     </thead>
                 </table>
             </div>
-        @endif
+        
 
 
 
