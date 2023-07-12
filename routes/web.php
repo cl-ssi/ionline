@@ -92,6 +92,7 @@ use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
 use App\Http\Controllers\ServiceRequests\AttachmentController;
+use App\Http\Controllers\ServiceRequests\PerfilController;
 use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
@@ -829,6 +830,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+        
+        Route::get('/perfil/{run}/{year?}/{type?}/{id?}/{periodo?}', [PerfilController::class, 'show'])->name('show');
+
+        
+
+
+
         // Rutas de service request
         Route::get('/test', [ServiceRequestController::class, 'test'])->name('test');
         Route::get('/home', function () {
