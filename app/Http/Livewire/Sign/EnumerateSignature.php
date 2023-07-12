@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\Sign;
 
+use App\Mail\Signature\NotificationSignedDocument;
 use App\Models\Documents\Correlative;
 use App\Models\Documents\Sign\Signature;
 use App\Services\ImageService;
 use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-
+use Illuminate\Support\Str;
 class EnumerateSignature extends Component
 {
     public $signature;
@@ -136,11 +138,9 @@ class EnumerateSignature extends Component
         $folder = Signature::getFolderEnumerate();
         $filename = $folder . "/" . $signature->number . "-". now()->timestamp;
         $file = $filename.".pdf";
+        $contents = base64_decode($json['files'][0]['content']);
 
-        logger()->info($file);
-
-        Storage::disk('gcs')
-            ->put($file, base64_decode($json['files'][0]['content']));
+        Storage::disk('gcs')->put($file, $contents);
 
         /**
          * Actualiza el link del documento
@@ -149,7 +149,30 @@ class EnumerateSignature extends Component
             'signed_file' => $file,
         ]);
 
-        session()->flash('success', 'El documento fue numerado exitosamente');
+        /**
+         * Envia por email el documento numerado
+         */
+        $this->sendDistribution();
+
+        session()->flash('success', 'El documento fue numerado y distribuido exitosamente.');
         return redirect()->route('v2.documents.signatures.index');
+    }
+
+    public function sendDistribution()
+    {
+        /**
+         * Setea el array de emails
+         */
+        $emails = $this->signature->distribution_array;
+        $emails = $emails->filter(function($email) {
+            return Str::contains($email, '@');
+        });
+
+        /**
+         * Envia la notificacion por email
+         */
+        if($emails->isNotEmpty()) {
+            Mail::to($emails)->queue(new NotificationSignedDocument($this->signature));
+        }
     }
 }

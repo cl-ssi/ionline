@@ -150,30 +150,26 @@ class SignDocument extends Component
         /**
          * Verifica si existe un error
          */
-        if (array_key_exists('error', $json)) {
-
-            session()->flash('danger', 'El proceso de firma produjo un error. Codigo 1');
-            return redirect()->route('v2.documents.signatures.index');
-
-            return [
-                'statusOk' => false,
-                'content' => '',
-                'errorMsg' => $json['error'],
-            ];
+        if (array_key_exists('error', $json))
+        {
+            $message = $json['error'];
         }
-
-        if (!array_key_exists('content', $json['files'][0]))
+        elseif(!array_key_exists('content', $json['files'][0]))
         {
             if (array_key_exists('error', $json))
             {
-                session()->flash('danger', 'El proceso de firma produjo un error. Codigo 2');
-                return redirect()->route('v2.documents.signatures.index');
+                $message = $json['error'];
             }
             else
             {
-                session()->flash('danger', 'El proceso de firma produjo un error. Codigo 3');
-                return redirect()->route('v2.documents.signatures.index');
+                $message = $json['files'][0]['status'];
             }
+        }
+
+        if(isset($message))
+        {
+            session()->flash('danger', "Error: $message");
+            return redirect()->route('v2.documents.signatures.index');
         }
 
         /**
@@ -181,9 +177,9 @@ class SignDocument extends Component
          */
         $filename = $this->folder . $this->filename;
         $file = $filename.".pdf";
+        $contentFile = base64_decode($json['files'][0]['content']);
 
-        Storage::disk('gcs')
-            ->put($file, base64_decode($json['files'][0]['content']), ['CacheControl' => 'no-store']);
+        Storage::disk('gcs')->put($file, $contentFile, ['CacheControl' => 'no-store']);
 
         session()->flash('success', 'El documento fue firmado exitosamente');
         return redirect()->route($this->route, $this->routeParams);

@@ -108,6 +108,11 @@ class Signature extends Model
         return $this->belongsTo(OrganizationalUnit::class, 'uo_id');
     }
 
+    public function getDistributionArrayAttribute()
+    {
+        return Str::of($this->distribution)->explode(',');
+    }
+
     public function getStatusTranslateAttribute()
     {
         switch ($this->status) {
