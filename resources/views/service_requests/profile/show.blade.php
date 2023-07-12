@@ -62,19 +62,19 @@
             </div>
 
         </div>
-
-        <ul class="nav justify-content-end nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <b class="nav-link">Año</b>
-            </li>
-            @foreach (range(2020, now()->format('Y')) as $ano)
-                <li class="nav-item">
-                    <a class="nav-link @if ($year == $ano) active @endif"
-                        href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $ano]) }}">{{ $ano }}</a>
-                </li>
-            @endforeach
-        </ul>
     </div>
+        
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <b class="nav-link">Año</b>
+        </li>
+        @foreach (range(2020, now()->format('Y')) as $ano)
+            <li class="nav-item">
+                <a class="nav-link @if ($year == $ano) active @endif"
+                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $ano]) }}">{{ $ano }}</a>
+            </li>
+        @endforeach
+    </ul>
 
     @if ($year)
         <h5>Contratos</h5>

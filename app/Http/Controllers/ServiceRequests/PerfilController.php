@@ -40,8 +40,6 @@ class PerfilController extends Controller
          * ]
          */
 
-        dd($yearsRange);
-
         $workingDayTypes = ServiceRequest::where('user_id', $run)->whereYear('request_date', $year)
             ->distinct()
             ->pluck('working_day_type');
