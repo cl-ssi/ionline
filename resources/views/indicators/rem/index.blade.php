@@ -89,6 +89,7 @@
                 <strong>Serie P</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2023, 'P']) }}">2023</a> <span class="badge badge-pill badge-warning">En Desarrollo</span></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2022, 'P']) }}">2022</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2021, 'P']) }}">2021</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_p']) }}">2020</a></li>

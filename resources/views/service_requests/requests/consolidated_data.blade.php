@@ -35,25 +35,25 @@
 		</div>
         <div class="form-group col">
 			<label>Semestre</label>
-			<select class="form-control" data-live-search="true" name="semester" data-size="5">
+			<!-- <select class="form-control" data-live-search="true" name="semester" data-size="5">
 				<option value="1" @if($request->semester == "1") selected @endif>Enero-Abril</option>
                 <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
                 <option value="3" @if($request->semester == "3") selected @endif>Septiembre-Diciembre</option>
-			</select>
-            <!-- <select class="form-control" data-live-search="true" name="month" data-size="5">
-				<option value="1" @if($request->month == "1") selected @endif>Enero</option>
-                <option value="2" @if($request->month == "2") selected @endif>Febrero</option>
-                <option value="3" @if($request->month == "3") selected @endif>Marzo</option>
-                <option value="4" @if($request->month == "4") selected @endif>Abril</option>
-                <option value="5" @if($request->month == "5") selected @endif>Mayo</option>
-                <option value="6" @if($request->month == "6") selected @endif>Junio</option>
-                <option value="7" @if($request->month == "7") selected @endif>Julio</option>
-                <option value="8" @if($request->month == "8") selected @endif>Agosto</option>
-                <option value="9" @if($request->month == "9") selected @endif>Septiembre</option>
-                <option value="10" @if($request->month == "10") selected @endif>Octubre</option>
-                <option value="11" @if($request->month == "11") selected @endif>Noviembre</option>
-                <option value="12" @if($request->month == "12") selected @endif>Diciembre</option>
 			</select> -->
+            <select class="form-control" data-live-search="true" name="semester" data-size="5">
+				<option value="1" @if($request->semester == "1") selected @endif>Enero</option>
+                <option value="2" @if($request->semester == "2") selected @endif>Febrero</option>
+                <option value="3" @if($request->semester == "3") selected @endif>Marzo</option>
+                <option value="4" @if($request->semester == "4") selected @endif>Abril</option>
+                <option value="5" @if($request->semester == "5") selected @endif>Mayo</option>
+                <option value="6" @if($request->semester == "6") selected @endif>Junio</option>
+                <option value="7" @if($request->semester == "7") selected @endif>Julio</option>
+                <option value="8" @if($request->semester == "8") selected @endif>Agosto</option>
+                <option value="9" @if($request->semester == "9") selected @endif>Septiembre</option>
+                <option value="10" @if($request->semester == "10") selected @endif>Octubre</option>
+                <option value="11" @if($request->semester == "11") selected @endif>Noviembre</option>
+                <option value="12" @if($request->semester == "12") selected @endif>Diciembre</option>
+			</select>
 		</div>
 		<div class="form-group col-2 col-md-1">
 			<label>&nbsp;</label>

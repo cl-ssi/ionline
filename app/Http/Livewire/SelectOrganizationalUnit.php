@@ -28,6 +28,7 @@ class SelectOrganizationalUnit extends Component
      * 'emitToListener' => 'nombre del listener',
      * 'readonlyEstablishment' => true or false,
      * 'mobile' => true or false, // no agrupa los inputs
+     * 'required' => true or false, // Campos requeridos o no obligatorio de selección del select
      */
 
     public $selected_id = 'organizational_unit_id';

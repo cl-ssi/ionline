@@ -48,7 +48,8 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="{{ route('request_forms.reports.show_form_items') }}"><i class="fas fa-fw fa-list-ol"></i> Formularios - Items</a>
-          @canany(['be god']) <a class="dropdown-item" href="{{ route('request_forms.reports.show_amounts_by_program') }}"><i class="fas fa-fw fa-list-ol"></i> Formularios - Montos por programa</a> @endcan
+          @can(['be god']) <a class="dropdown-item" href="{{ route('request_forms.reports.show_amounts_by_program') }}"><i class="fas fa-fw fa-list-ol"></i> Formularios - Montos por programa</a> @endcan
+          @can(['be god']) <a class="dropdown-item" href="{{ route('request_forms.reports.show_globals_amounts') }}"><i class="fas fa-fw fa-list-ol"></i> Formularios - Montos Globales</a> @endcan
       </div>
   </li>
   @endcan
