@@ -2319,3 +2319,17 @@ Route::prefix('test')->as('test.')->group(function () {
 
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });
+
+
+// Maqueta para nueva vista honorarios y contratos
+Route::get('/maquetas/honorarios', function () {
+    return view('maquetas.honorarios');
+})->name('maquetas.honorarios');
+
+Route::get('/maquetas/menu', function () {
+    return view('maquetas.menu');
+})->name('maquetas.menu');
+
+Route::get('/maquetas/vista', function () {
+    return view('maquetas.vista');
+})->name('maquetas.vista');
