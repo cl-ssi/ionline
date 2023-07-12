@@ -373,17 +373,7 @@ class ServiceRequestController extends Controller
 
   public function transfer_requests(Request $request)
   {
-
-    $users = User::orderBy('name', 'ASC')->get();
-    // dd(User::find(14101085)->serviceRequestsOthersPendingsCount());
-    $responsability_center_ou_id = $request->responsability_center_ou_id;
-    // dd($responsability_center_ou_id);
-    $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-      return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
-    })
-      ->orderBy('id', 'asc')->get();
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
-    return view('service_requests.requests.transfer_requests', compact('serviceRequests', 'responsabilityCenters', 'users'));
+    return view('service_requests.requests.transfer_requests');
   }
 
   public function change_signature_flow_view(Request $request)
