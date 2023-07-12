@@ -98,6 +98,9 @@
             <li class="nav-item">
                 <a class="nav-link disabled">Hora médica</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link disabled">Mensual</a>
+            </li>
         </ul>
     </div>
     <div class="card-body">
@@ -111,30 +114,36 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <h5><i>id: 124</i></h5>
-                    2023-01-10 <br> 
-                    2023-02-28 <br>
+                    <h5><i>id: 340</i></h5>
+                    2023-03-01 <br> 
+                    2023-04-30 <br>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <h5><i>id: 124</i></h5>
-                    2023-01-10 <br> 
-                    2023-02-28 <br>
+                    <h5><i>id: 1240</i></h5>
+                    2023-05-01 <br> 
+                    2023-05-15 <br>
                 </a>
+            </li>
+            <li>
+                |<br>
+                |<br>
+                |<br>
+                |
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">
-                    <h5><i>id: 124</i></h5>
-                    2023-01-10 <br> 
-                    2023-02-28 <br>
+                    <h5><i>id: 2534</i></h5>
+                    2023-06-08 <br> 
+                    2023-07-10 <br>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-success" href="#">
-                    <h5><i>id: 124</i></h5>
-                    2023-01-10 <br> 
-                    2023-02-28 <br>
+                    <h5><i>id: 14355</i></h5>
+                    2023-07-11 <br> 
+                    2023-08-31 <br>
                 </a>
             </li>
         </ul>
@@ -299,7 +308,7 @@
                     <td>Karla Andrea Martínez Donoso</td>
                     <td>visador</td>
                     <td>
-                    <select name="" class="form-control-sm" id="">
+                        <select name="" class="form-control-sm" id="">
                             <option value="">Aceptar</option>
                             <option value="">Rechazar</option>
                         </select>
@@ -316,7 +325,7 @@
       </table>
 
 
-        <h5 class="card-title">Recursos Humanos</h5>
+        <h5 class="card-title">Información adicional Recursos Humanos</h5>
         <div class="form-row mb-3">
             <div class="col-md-2">
                 <label for="validationCustom01">Nº resolución</label>
@@ -415,10 +424,12 @@
 
 
         <div class="progress mb-3">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Responsable</div>
-            <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
-            <div class="progress-bar bg-secondary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Boleta</div>
-            <div class="progress-bar bg-secondary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
+            <div class="progress-bar bg-secondary" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
+            <div class="progress-bar bg-secondary" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
+            <div class="progress-bar bg-secondary" role="progressbar" style="width: 10%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Pagado</div>
         </div>
 
 
@@ -509,10 +520,13 @@
                 <!--fin archivos adjuntos-->
 
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-3">
                         <button class="btn btn-outline-secondary" type="submit" disabled>Guardar</button>
                     </div>
-                    <div class="col text-right">
+                    <div class="col align-text-bottom">
+                        2023-03-06 10:12:25 - Ana María Mujica López
+                    </div>
+                    <div class="col-3 text-right">
                         <button class="btn btn-outline-danger" type="submit" disabled>Rechazar</button>
                         <button class="btn btn-success" type="submit" disabled>Confirmar</button>
                     </div>
@@ -555,10 +569,13 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col">
+                    <div class="col-3">
                         <button class="btn btn-outline-secondary" type="submit">Guardar</button>
                     </div>
-                    <div class="col text-right">
+                    <div class="col align-text-bottom">
+                        2023-03-06 11:21:46 - Carol Lilian Pérez Rocha
+                    </div>
+                    <div class="col-3 text-right">
                         <button class="btn btn-outline-danger" disabled type="submit">Rechazar</button>
                         <button class="btn btn-success" disabled type="submit">Confirmar</button>
                     </div>
