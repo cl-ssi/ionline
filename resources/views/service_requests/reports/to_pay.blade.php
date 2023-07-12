@@ -127,7 +127,81 @@
           <th width="250" >Aprobación de pago </th>
         @endcanany
     </tr>
-    @foreach($topay_fulfillments as $key => $fulfillment)
+    @foreach($topay_fulfillments1 as $key => $fulfillment)
+      <tr>
+          <td>{{$fulfillment->serviceRequest->id}}
+          <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
+      					<span class="fas fa-edit" aria-hidden="true"></span>
+      				</a>
+          </td>
+          <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name ?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->type ?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->programm_name}}</td>
+          <td>
+            @if($fulfillment->year)
+              {{ $fulfillment->year }}-{{ $fulfillment->month }}
+            @else
+              {{ $fulfillment->start_date->format('Y-m') }}
+            @endif
+          </td>
+          <td>
+            {{$fulfillment->serviceRequest->program_contract_type}}
+            <br>
+            {{$fulfillment->serviceRequest->working_day_type}}
+          </td>
+          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
+          <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+
+          <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
+          <td nowrap class="d-print-none">
+            @if($fulfillment->serviceRequest->has_resolution_file)
+              <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
+                 target="_blank" title="Resolución">
+                 <i class="fas fa-file-signature"></i>
+              </a>
+            @endif
+            @if($fulfillment->signatures_file_id)
+              <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                <i class="fas fa-certificate"></i>
+              </a>
+            @else
+              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                <i class="fas fa-paperclip"></i>
+              </a>
+            @endif
+
+            @if($fulfillment->has_invoice_file)
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
+                 target="_blank" title="Boleta" >
+                 <i class="fas fa-file-invoice-dollar"></i>
+              </a>
+            @endif
+
+              <button class="btn btn-link pt-0" title="Editar Pago" data-toggle="modal"
+                      data-target="#editModal"
+                      data-fulfillment_id="{{ $fulfillment->id }}"
+                      data-service_request_id="{{ $fulfillment->serviceRequest->id }}"
+                      data-bill_number = "{{$fulfillment->bill_number}}"
+                      data-total_hours_paid = "{{$fulfillment->total_hours_paid}}"
+                      data-total_paid = "{{$fulfillment->total_paid}}"
+                      data-payment_date = "{{ ($fulfillment->payment_date) ? $fulfillment->payment_date->format('Y-m-d') : ''}}"
+                      data-contable_month = "{{$fulfillment->contable_month}}"
+                      data-formaction="{{ route('rrhh.service-request.fulfillment.update-paid-values')}}">
+                  <i class="fas fa-dollar-sign text-success"></i>
+                </button>
+
+          </td>
+          @canany(['Service Request: fulfillments finance'])
+            <td>
+              @livewire('service-request.payment-ready-toggle', ['fulfillment' => $fulfillment])
+            </td>
+          @endcanany
+      </tr>
+    @endforeach
+
+    @foreach($topay_fulfillments2 as $key => $fulfillment)
       <tr>
           <td>{{$fulfillment->serviceRequest->id}}
           <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
@@ -201,6 +275,8 @@
       </tr>
     @endforeach
 </table>
+
+{{ $topay_fulfillments2->links() }}
 
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
