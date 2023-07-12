@@ -83,58 +83,94 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     @foreach ($workingDayTypes as $workingDayType)
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $ano, 'type' => $workingDayType]) }}">{{ $workingDayType }}</a>
+                            <a class="nav-link @if ($type == $workingDayType) active @endif"
+                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType]) }}">{{ $workingDayType }}</a>
                         </li>
                     @endforeach
                 </ul>
             </div>
             <div class="card-body">
-                <ul class="nav mb-3">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5><i>id: 124</i></h5>
-                            2023-01-10 <br>
-                            2023-02-28 <br>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5><i>id: 340</i></h5>
-                            2023-03-01 <br>
-                            2023-04-30 <br>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5><i>id: 1240</i></h5>
-                            2023-05-01 <br>
-                            2023-05-15 <br>
-                        </a>
-                    </li>
-                    <li>
-                        |<br>
-                        |<br>
-                        |<br>
-                        |
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <h5><i>id: 2534</i></h5>
-                            2023-06-08 <br>
-                            2023-07-10 <br>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-success" href="#">
-                            <h5><i>id: 14355</i></h5>
-                            2023-07-11 <br>
-                            2023-08-31 <br>
-                        </a>
-                    </li>
-                </ul>
+                @if ($type)
+                    <ul class="nav mb-3">
+                        @foreach ($serviceRequests as $serviceRequest)
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType, 'id' => $serviceRequest->id]) }}">
+                                    <h5><i>id: {{ $serviceRequest->id }}</i></h5>
+                                    {{ $serviceRequest->start_date->format('Y-m-d') }} <br>
+                                    {{ $serviceRequest->end_date->format('Y-m-d') }} <br>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                @if ($serviceRequestId)
+                    <h5 class="card-title">Contrato id: {{ $serviceRequestId->id }}</h5>
+
+                    <div class="form-row mb-3">
+                        <div class="col-md-3">
+                            <label for="validationDefault02">Programa</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">{{ $serviceRequestId->programm_name }}</option>
+
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault01">Fuente de financiamiento</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">{{ $serviceRequestId->type }}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="validationDefault02">Responsable</label>
+                            <input type="text" disabled class="form-control" id="validationDefault02"
+                                value="{{ $serviceRequestId->responsable->full_name }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault02">Supervisor</label>
+                            <input type="text" disabled class="form-control" id="validationDefault02"
+                                value="¿de donde saco al supervisor?">
+                        </div>
+                    </div>
 
 
-
+                    <div class="form-row mb-3">
+                        <div class="col-md-2">
+                            <label for="validationDefault02">Establecimiento</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">{{$serviceRequestId->establishment->name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault02">Unidad Organizacional</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">{{$serviceRequestId->responsabilityCenter->name}}</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="validationDefault02">Estamento</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">Profesional</option>
+                                <option value="">F</option>
+                                <option value="">O</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault02">Profesión</label>
+                            <select name="" id="" class="form-control" disabled>
+                                <option value="">{{$serviceRequestId->profession->name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="validationDefault02">Jornada</label>
+                            <input type="text" class="form-control" disabled id="validationDefault02"
+                                value="{{$serviceRequestId->working_day_type}}">
+                        </div>
+                    </div>
+                @endif
 
 
             </div>
