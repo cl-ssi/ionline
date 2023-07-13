@@ -1,4 +1,11 @@
 <div>
+    @if (Session::has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('message') }}
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>            
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             Aprobaciones de Solicitud
@@ -33,9 +40,16 @@
                                         {{ $SignatureFlow->type }}
                                     @endif
                                 </td>
-                                <td @if($SignatureFlow->status === 1) class="table-success" @endif>
+                                <td
+                                    @if ($SignatureFlow->status === 1) class="table-success" @elseif($SignatureFlow->status === 0) class="table-danger" @endif>
                                     @if ($SignatureFlow->status === null)
-                                    Aca deberia estar la logica para el guardado
+                                        <select class="form-control-sm"
+                                            wire:change="updateStatus({{ $SignatureFlow->id }}, $event.target.value)">
+                                            <option value="">Seleccionar Estado</option>
+                                            <option value="1">Aceptar</option>
+                                            <option value="0">Rechazar</option>
+                                            <option value="2">Devolver</option>
+                                        </select>
                                     @elseif($SignatureFlow->status === 1)
                                         Aceptada
                                     @elseif($SignatureFlow->status === 0)
@@ -45,15 +59,12 @@
                                     @endif
                                 </td>
 
-                                <td>{{ $SignatureFlow->observation }}</td>
-
-                                <td>{{ $SignatureFlow->signature_date}}</td>
-
-
-
-
-
-
+                                <td>
+                                    <input type="text" class="form-control-sm"
+                                        wire:blur="updateObservation({{ $SignatureFlow->id }}, $event.target.value)"
+                                        value="{{ $SignatureFlow->observation }}">
+                                </td>
+                                <td>{{ $SignatureFlow->signature_date }}</td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -157,9 +157,7 @@
                             <select name="" id="" class="form-control" disabled>
                                 <option value="">
                                     {{ $serviceRequestId->profession ? $serviceRequestId->profession->estamento : $serviceRequestId->estate }}
-                                </option>
-                                <option value="">F</option>
-                                <option value="">O</option>
+                                </option> 
                             </select>
                         </div>
                         <div class="col-md-3">
