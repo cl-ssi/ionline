@@ -62,29 +62,42 @@
             </div>
 
         </div>
-
-        <ul class="nav justify-content-end nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <b class="nav-link">Año</b>
-            </li>
-            @foreach (range(2020, now()->format('Y')) as $ano)
-                <li class="nav-item">
-                    <a class="nav-link @if ($year == $ano) active @endif"
-                        href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $ano]) }}">{{ $ano }}</a>
-                </li>
-            @endforeach
-        </ul>
     </div>
+        
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <b class="nav-link">Año</b>
+        </li>
+        @foreach ($yearsRange as $yearName => $hasContracts)
+            <li class="nav-item">
+                @if($hasContracts)
+                <a class="nav-link @if ($yearName == $year) active @endif"
+                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $yearName]) }}">
+                    {{ $yearName }}
+                </a>
+                @else
+                <span class="nav-link">{{ $yearName }}</span>
+                @endif
+            </li>
+        @endforeach
+    </ul>
 
     @if ($year)
         <h5>Contratos</h5>
         <div class="card">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    @foreach ($workingDayTypes as $workingDayType)
+                    @foreach ($working_day_types as $wdtype => $hasContracts)
                         <li class="nav-item">
-                            <a class="nav-link @if ($type == $workingDayType) active @endif"
-                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType]) }}">{{ $workingDayType }}</a>
+                            @if($hasContracts)
+                            <a class="nav-link small @if ($wdtype == $type) active @endif"
+                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $wdtype]) }}">
+                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}</a>
+                            @else
+                                <span class="nav-link small">
+                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}
+                                </span>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -95,7 +108,7 @@
                         @foreach ($serviceRequests as $serviceRequest)
                             <li class="nav-item">
                                 <a class="nav-link"
-                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType, 'id' => $serviceRequest->id]) }}">
+                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type, 'id' => $serviceRequest->id]) }}">
                                     <h5><i>id: {{ $serviceRequest->id }}</i></h5>
                                     {{ $serviceRequest->start_date->format('Y-m-d') }} <br>
                                     {{ $serviceRequest->end_date->format('Y-m-d') }} <br>
@@ -157,9 +170,7 @@
                             <select name="" id="" class="form-control" disabled>
                                 <option value="">
                                     {{ $serviceRequestId->profession ? $serviceRequestId->profession->estamento : $serviceRequestId->estate }}
-                                </option>
-                                <option value="">F</option>
-                                <option value="">O</option>
+                                </option> 
                             </select>
                         </div>
                         <div class="col-md-3">
