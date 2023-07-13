@@ -68,10 +68,16 @@
         <li class="nav-item">
             <b class="nav-link">Año</b>
         </li>
-        @foreach (range(2020, now()->format('Y')) as $ano)
+        @foreach ($yearsRange as $yearName => $hasContracts)
             <li class="nav-item">
-                <a class="nav-link @if ($year == $ano) active @endif"
-                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $ano]) }}">{{ $ano }}</a>
+                @if($hasContracts)
+                <a class="nav-link @if ($yearName == $year) active @endif"
+                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $yearName]) }}">
+                    {{ $yearName }}
+                </a>
+                @else
+                <span class="nav-link">{{ $yearName }}</span>
+                @endif
             </li>
         @endforeach
     </ul>
@@ -81,11 +87,17 @@
         <div class="card">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    @foreach ($working_day_types as $type => $status)
+                    @foreach ($working_day_types as $wdtype => $hasContracts)
                         <li class="nav-item">
+                            @if($hasContracts)
                             <a class="nav-link small"
-                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type]) }}">
-                                {{ ucfirst(mb_strtolower($type,'UTF-8')) }}</a>
+                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $wdtype]) }}">
+                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}</a>
+                            @else
+                                <span class="nav-link small">
+                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}
+                                </span>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -96,7 +108,7 @@
                         @foreach ($serviceRequests as $serviceRequest)
                             <li class="nav-item">
                                 <a class="nav-link"
-                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType, 'id' => $serviceRequest->id]) }}">
+                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type, 'id' => $serviceRequest->id]) }}">
                                     <h5><i>id: {{ $serviceRequest->id }}</i></h5>
                                     {{ $serviceRequest->start_date->format('Y-m-d') }} <br>
                                     {{ $serviceRequest->end_date->format('Y-m-d') }} <br>

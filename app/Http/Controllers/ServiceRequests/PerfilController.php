@@ -26,8 +26,8 @@ class PerfilController extends Controller
         $yearsRange = array_fill_keys(range(2020, date('Y')), false);
 
         /** Dejamos en true sólo aquellos que tiene contratos */
-        foreach($yearsRange as $year => $value) {
-            $yearsRange[$year] = in_array($year, $yearsWithServiceRequests) ??  false;
+        foreach($yearsRange as $yearName => $value) {
+            $yearsRange[$yearName] = in_array($yearName, $yearsWithServiceRequests) ??  false;
         }
 
         /**
@@ -64,8 +64,8 @@ class PerfilController extends Controller
                 ->toArray();
     
             /** Dejamos en true sólo aquellos que tiene contratos */
-            foreach($working_day_types as $type => $value) {
-                $working_day_types[$type] = in_array($type, $workingDayTypes) ??  false;
+            foreach($working_day_types as $typeName => $value) {
+                $working_day_types[$typeName] = in_array($typeName, $workingDayTypes) ??  false;
             }
         }
 
@@ -83,6 +83,7 @@ class PerfilController extends Controller
 
 
 
-        return view('service_requests.profile.show', compact('request', 'user', 'year', 'type', 'working_day_types', 'serviceRequests', 'id', 'serviceRequestId'));
+            $yearsRange[$year] = in_array($year, $yearsWithServiceRequests) ??  false;
+        return view('service_requests.profile.show', compact('request', 'yearsRange','user', 'year', 'type', 'working_day_types', 'serviceRequests', 'id', 'serviceRequestId'));
     }
 }
