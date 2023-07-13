@@ -276,7 +276,7 @@
     @endforeach
 </table>
 
-{{ $topay_fulfillments2->links() }}
+{{ $topay_fulfillments2->appends(request()->query())->links() }}
 
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
