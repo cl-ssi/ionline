@@ -188,8 +188,12 @@
                 @endif
 
 
-                 @if ($serviceRequestId)
+                @if ($serviceRequestId)
                     @livewire('service-requests.approval-workflow', ['serviceRequest' => $serviceRequestId])
+                @endif
+
+                @if ($serviceRequestId)
+                    @livewire('service-requests.info-rrhh', ['serviceRequest' => $serviceRequestId])
                 @endif
             </div>
         </div>
