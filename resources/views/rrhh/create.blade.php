@@ -57,7 +57,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label for="formGroupEmailInput">Email Personal</label>
-            <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email Personal" name="email_personal" readonly>
+            <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email Personal" name="email_personal">
         </fieldset>
     </div>
 
