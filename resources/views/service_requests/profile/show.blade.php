@@ -81,10 +81,11 @@
         <div class="card">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
-                    @foreach ($workingDayTypes as $workingDayType)
+                    @foreach ($working_day_types as $type => $status)
                         <li class="nav-item">
-                            <a class="nav-link @if ($type == $workingDayType) active @endif"
-                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $workingDayType]) }}">{{ $workingDayType }}</a>
+                            <a class="nav-link small"
+                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type]) }}">
+                                {{ ucfirst(mb_strtolower($type,'UTF-8')) }}</a>
                         </li>
                     @endforeach
                 </ul>

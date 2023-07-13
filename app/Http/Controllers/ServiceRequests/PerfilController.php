@@ -40,9 +40,36 @@ class PerfilController extends Controller
          * ]
          */
 
-        $workingDayTypes = ServiceRequest::where('user_id', $run)->whereYear('request_date', $year)
-            ->distinct()
-            ->pluck('working_day_type');
+        if($year) {
+            $working_day_types = [
+                "DIURNO" => false,
+                "HORA EXTRA" => false,
+                "HORA MÉDICA" => false,
+                "TERCER TURNO" => false,
+                "TERCER TURNO - MODIFICADO" => false,
+                "CUARTO TURNO" => false,
+                "CUARTO TURNO - MODIFICADO" => false,
+                "TURNO DE REEMPLAZO" => false,
+                "VESPERTINO" => false,
+                // "TURNO EXTRA" => false,
+                // "OTRO" => false,
+                // "DIURNO PASADO A TURNO" => false,
+                // "DIARIO" => false
+            ];
+    
+            $workingDayTypes = ServiceRequest::where('user_id', $run)
+                ->whereYear('request_date', $year)
+                ->distinct()
+                ->pluck('working_day_type')
+                ->toArray();
+    
+            /** Dejamos en true sólo aquellos que tiene contratos */
+            foreach($working_day_types as $type => $value) {
+                $working_day_types[$type] = in_array($type, $workingDayTypes) ??  false;
+            }
+        }
+
+        // dd($working_day_types);
 
         $serviceRequests = ServiceRequest::where('user_id', $run)->whereYear('request_date', $year)->where('working_day_type', $type)->get();
 
@@ -56,6 +83,6 @@ class PerfilController extends Controller
 
 
 
-        return view('service_requests.profile.show', compact('request', 'user', 'year', 'type', 'workingDayTypes', 'serviceRequests', 'id', 'serviceRequestId'));
+        return view('service_requests.profile.show', compact('request', 'user', 'year', 'type', 'working_day_types', 'serviceRequests', 'id', 'serviceRequestId'));
     }
 }
