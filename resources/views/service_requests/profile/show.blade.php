@@ -90,7 +90,7 @@
                     @foreach ($working_day_types as $wdtype => $hasContracts)
                         <li class="nav-item">
                             @if($hasContracts)
-                            <a class="nav-link small"
+                            <a class="nav-link small @if ($wdtype == $type) active @endif"
                                 href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $wdtype]) }}">
                                 {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}</a>
                             @else
