@@ -4,8 +4,8 @@
         <div class="form-row">
             <fieldset class="form-group col-sm-4">
                 <label for="year">Año</label>
-                <select class="form-control" id="for_year" name="year"
-                    wire:model.debounce.500ms="selectedYear" required>
+                <select class="form-control" id="for_year" name="year" wire:model.debounce.500ms="selectedYear"
+                    required>
                     <option value="">Selección...</option>
                     @foreach (range(now()->year, 2022) as $period)
                         <option value="{{ $period }}">{{ $period }}</option>
@@ -28,29 +28,31 @@
         @endif
 
 
-        
-            <div class="table-responsive" wire:loading.remove>
-                <table class="table table-sm table-bordered table-striped table-hover small">
-                    <thead>
-                        <tr class="text-center">
-                            <th>Nombre</th>
-                            <th>Presupuesto</th>
-                            <th>Presupuesto solicitado</th>
+
+        <div class="table-responsive" wire:loading.remove>
+            <table class="table table-sm table-bordered table-striped table-hover small">
+                <thead>
+                    <tr class="text-center">
+                        <th>Nombre</th>
+                        <th>Presupuesto</th>
+                        <th>Presupuesto solicitado</th>
+                        <th>Montos totales por compras registradas</th>
+                        <th>Montos totales por DTE pagadas</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    @foreach ($programs as $program)
+                        <tr>
+                            <th>{{ $program->name }}</th>
+                            <td>${{ number_format($program->totalBudgets,0,",",".") }}</td>
+                            <td>${{ number_format($program->total_expense,0,",",".") }}</td>
+                            <td>${{ number_format($program->totalCompras,0,",",".") }}</td>
+                            <td>${{ number_format($program->totalDtes,0,",",".") }}</td>
                         </tr>
-                        @foreach ($programs as $program)
-                            <tr>
-                                <td>{{ $program->name }}</td>
-                                <td>{{ $program->budget }}</td>
-                                <td></td>
-                            </tr>
-                        @endforeach
-                    </thead>
-                </table>
-            </div>
-        
-
-
-
+                    @endforeach
+                </tfoot>
+            </table>
+        </div>
 
     </form>
 </div>

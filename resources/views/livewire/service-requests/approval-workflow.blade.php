@@ -2,7 +2,7 @@
     @if (Session::has('message'))
         <div class="alert alert-success" role="alert">
             {{ Session::get('message') }}
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>            
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         </div>
     @endif
 
@@ -43,8 +43,7 @@
                                 <td
                                     @if ($SignatureFlow->status === 1) class="table-success" @elseif($SignatureFlow->status === 0) class="table-danger" @endif>
                                     @if ($SignatureFlow->status === null)
-                                        <select class="form-control-sm"
-                                            wire:change="updateStatus({{ $SignatureFlow->id }}, $event.target.value)">
+                                        <select class="form-control-sm" wire:model.defer="status">
                                             <option value="">Seleccionar Estado</option>
                                             <option value="1">Aceptar</option>
                                             <option value="0">Rechazar</option>
@@ -60,11 +59,24 @@
                                 </td>
 
                                 <td>
-                                    <input type="text" class="form-control-sm"
-                                        wire:blur="updateObservation({{ $SignatureFlow->id }}, $event.target.value)"
-                                        value="{{ $SignatureFlow->observation }}">
+
+                                    @if ($SignatureFlow->observation)
+                                        <input type="text" class="form-control-sm"
+                                            value="{{ $SignatureFlow->observation }}" readonly>
+                                    @else
+                                        <input type="text" class="form-control-sm"
+                                            value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
+                                    @endif
                                 </td>
-                                <td>{{ $SignatureFlow->signature_date }}</td>
+                                <td>
+                                    @if ($SignatureFlow->signature_date)
+                                        {{ $SignatureFlow->signature_date }}
+                                    @else
+                                        <button class="btn btn-sm btn-primary"
+                                            wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
+                                    @endif
+
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
