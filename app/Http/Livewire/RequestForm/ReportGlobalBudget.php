@@ -24,14 +24,15 @@ class ReportGlobalBudget extends Component
         $this->programs = Program::where('period', $value)->get();
 
         //trae la suma como un vector de los programas
-        $budgets = ProgramBudget::get()->groupBy('program_id')->map(function ($row) {
-            return $row->sum('ammount');
-        })->toArray();
+        // $budgets = ProgramBudget::get()->groupBy('program_id')->map(function ($row) {
+        //     return $row->sum('ammount');
+        // })->toArray();
 
-        //Filtra los programas para que me muestre no todos sino solamente los que tienen presupuesto
-        $this->programs = $this->programs->filter(function ($program) use ($budgets) {
-            return array_key_exists($program->id, $budgets);
-        });
+        /*Filtra los programas para que me muestre no todos sino solamente los que tienen presupuesto*/
+
+        // $this->programs = $this->programs->filter(function ($program) use ($budgets) {
+        //     return array_key_exists($program->id, $budgets);
+        // });
 
         foreach ($this->programs as $program) {
             $program->totalCompras = 0;
