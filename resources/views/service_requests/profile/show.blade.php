@@ -63,20 +63,20 @@
 
         </div>
     </div>
-        
+
     <ul class="nav justify-content-end">
         <li class="nav-item">
             <b class="nav-link">Año</b>
         </li>
         @foreach ($yearsRange as $yearName => $hasContracts)
             <li class="nav-item">
-                @if($hasContracts)
-                <a class="nav-link @if ($yearName == $year) active @endif"
-                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $yearName]) }}">
-                    {{ $yearName }}
-                </a>
+                @if ($hasContracts)
+                    <a class="nav-link @if ($yearName == $year) active @endif"
+                        href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $yearName]) }}">
+                        {{ $yearName }}
+                    </a>
                 @else
-                <span class="nav-link">{{ $yearName }}</span>
+                    <span class="nav-link">{{ $yearName }}</span>
                 @endif
             </li>
         @endforeach
@@ -89,13 +89,13 @@
                 <ul class="nav nav-tabs card-header-tabs">
                     @foreach ($working_day_types as $wdtype => $hasContracts)
                         <li class="nav-item">
-                            @if($hasContracts)
-                            <a class="nav-link small @if ($wdtype == $type) active @endif"
-                                href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $wdtype]) }}">
-                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}</a>
+                            @if ($hasContracts)
+                                <a class="nav-link small @if ($wdtype == $type) active @endif"
+                                    href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $wdtype]) }}">
+                                    {{ ucfirst(mb_strtolower($wdtype, 'UTF-8')) }}</a>
                             @else
                                 <span class="nav-link small">
-                                {{ ucfirst(mb_strtolower($wdtype,'UTF-8')) }}
+                                    {{ ucfirst(mb_strtolower($wdtype, 'UTF-8')) }}
                                 </span>
                             @endif
                         </li>
@@ -105,9 +105,25 @@
             <div class="card-body">
                 @if ($type)
                     <ul class="nav mb-3">
+                        @php
+                            $previousEndDate = null;
+                        @endphp
                         @foreach ($serviceRequests as $serviceRequest)
+                            @php
+                                $hasNotContinuity = $previousEndDate && $previousEndDate->addDay() != $serviceRequest->start_date;
+                                $previousEndDate = $serviceRequest->end_date;
+                                $isCurrentContract = $serviceRequest->start_date <= now() && now() <= $serviceRequest->end_date;
+                            @endphp
+                            @if ($hasNotContinuity)
+                                <li>
+                                    |<br>
+                                    |<br>
+                                    |<br>
+                                    |
+                                </li>
+                            @endif
                             <li class="nav-item">
-                                <a class="nav-link"
+                                <a class="nav-link @if ($isCurrentContract) text-success @endif"
                                     href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type, 'id' => $serviceRequest->id]) }}">
                                     <h5><i>id: {{ $serviceRequest->id }}</i></h5>
                                     {{ $serviceRequest->start_date->format('Y-m-d') }} <br>
@@ -170,7 +186,7 @@
                             <select name="" id="" class="form-control" disabled>
                                 <option value="">
                                     {{ $serviceRequestId->profession ? $serviceRequestId->profession->estamento : $serviceRequestId->estate }}
-                                </option> 
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3">
