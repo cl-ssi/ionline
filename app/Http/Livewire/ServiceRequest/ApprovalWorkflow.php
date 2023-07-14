@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\ServiceRequests;
+namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
 use App\Models\ServiceRequests\SignatureFlow;
@@ -22,7 +22,7 @@ class ApprovalWorkflow extends Component
 
     public function render()
     {
-        return view('livewire.service-requests.approval-workflow');
+        return view('livewire.service-request.approval-workflow');
     } 
 
 
