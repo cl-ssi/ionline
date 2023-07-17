@@ -833,6 +833,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         
         Route::get('/profile/{user?}/{year?}/{type?}/{serviceRequest?}/{period?}', [ProfileControllerSr::class, 'show'])->name('show');
+        Route::post('/profile', [ProfileControllerSr::class, 'show'])->name('show.post');
 
 
 

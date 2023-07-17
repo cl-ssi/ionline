@@ -1,0 +1,19 @@
+<ul class="nav nav-tabs card-header-tabs mx-auto" id="periods-card">
+    @foreach($meses as $numero => $mes)
+    <li class="nav-item">
+        <a class="nav-link @disabled(!$periods[$numero]) @if($period == $numero) active @endif" 
+            href="{{ route('rrhh.service-request.show', ['user' => $user_id, 'year' => $year, 'type' => $type, 'serviceRequest' => $serviceRequest, 'period' => $numero]) }}#periods-card">
+            {{ $mes }}
+            @if($periods[$numero] == null) 
+            <span class="badge badge-pill badge-secondary">&nbsp;</span>
+            @elseif($numero > date('n') AND $year == date('Y'))
+            <span class="badge badge-pill badge-primary">&nbsp;</span>
+            @elseif($periods[$numero] === true)
+            <span class="badge badge-pill badge-warning">$</span>
+            @else
+            <span class="badge badge-pill badge-success">$</span>
+            @endif
+        </a>
+    </li>
+    @endforeach
+</ul>
