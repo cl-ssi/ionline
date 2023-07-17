@@ -38,19 +38,17 @@
                         <th>Presupuesto solicitado</th>
                         <th>Montos totales por compras registradas</th>
                         <th>Montos totales por DTE pagadas</th>
-                        <th>Montos totales por DTE pagadas</th>
                     </tr>
                 </thead>
                 <tfoot>
                     @foreach ($programs as $program)
                         <tr>
-                            <th>{{ $program->name }}</th>
-                            <td>${{ number_format($program->totalBudgets,0,",",".") }}</td>
-                            <td>${{ number_format($program->total_expense,0,",",".") }}</td>
-                            <td>${{ number_format($program->totalCompras,0,",",".") }}</td>
-                            {{-- <td>${{ number_format($program->totalDtes,0,",",".") }}</td> --}}
+                            <th>{{ $program->name  }} - Folio Sigfe {{ $program->folio  }} - Subtítulo {{$program->Subtitle->name}}</th>
+                            <td>${{ money($program->totalBudgets) }}</td>
+                            <td>${{ money($program->total_expense) }}</td>
+                            <td>${{ money($program->totalCompras)}}</td>
                             <td>${{ money($program->totalDtes) }}</td>
-                            <td>$@numero($program->totalDtes)</td>
+                            
                         </tr>
                     @endforeach
                 </tfoot>
