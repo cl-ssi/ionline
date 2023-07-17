@@ -831,7 +831,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         
-        Route::get('/perfil/{run}/{year?}/{type?}/{id?}/{periodo?}', [PerfilController::class, 'show'])->name('show');
+        Route::get('/perfil/{run}/{year?}/{type?}/{id?}/{period?}', [PerfilController::class, 'show'])->name('show');
 
         
 

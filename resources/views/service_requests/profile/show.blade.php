@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Maqueta Honorario')
+@section('title', 'Perfil de Honorario')
 
 @section('content')
 
@@ -71,7 +71,7 @@
         @foreach ($yearsRange as $yearName => $hasContracts)
             <li class="nav-item">
                 @if ($hasContracts)
-                    <a class="nav-link @if ($yearName == $year) active @endif"
+                    <a class="nav-link @if ($yearName == $year) font-weight-bold @endif"
                         href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $yearName]) }}">
                         {{ $yearName }}
                     </a>
@@ -123,11 +123,11 @@
                                 </li>
                             @endif
                             <li class="nav-item">
-                                <a class="nav-link @if ($isCurrentContract) text-success @endif"
+                                <a class="nav-link @if ($serviceRequest->id == $id) font-weight-bold @endif"
                                     href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type, 'id' => $serviceRequest->id]) }}">
-                                    <h5><i>id: {{ $serviceRequest->id }}</i></h5>
+                                    <span style="font-size: 19px;"><i>id: {{ $serviceRequest->id }}</i></span><br>
                                     {{ $serviceRequest->start_date->format('Y-m-d') }} <br>
-                                    {{ $serviceRequest->end_date->format('Y-m-d') }} <br>
+                                    {{ $serviceRequest->end_date->format('Y-m-d') }}
                                 </a>
                             </li>
                         @endforeach
@@ -246,7 +246,48 @@
             </div>
         </div>
     @endif
-    </div>
 
+    <br>
+    @if(isset($id))
+    <h5>Periodos</h5>
+
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs mx-auto" id="periods-card">
+                @foreach($meses as $numero => $mes)
+                <li class="nav-item">
+                    <a class="nav-link @disabled(!$periods[$numero]) @if($period == $numero) active @endif" 
+                        href="{{ route('rrhh.service-request.show', ['run' => $user->id, 'year' => $year, 'type' => $type, 'id' => $id, 'period' => $numero]) }}#periods-card">
+                        {{ $mes }}
+                        @if($periods[$numero]) 
+                        <span class="badge badge-pill badge-success">$</span>
+                        @else
+                        <span class="badge badge-pill badge-secondary">&nbsp;</span>
+                        @endif
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="card-body">
+
+            @if(isset($period))
+                <div class="progress mb-3">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 18%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 10%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Pagado</div>
+                </div>
+
+                {{ $fulfillment->id }}
+
+                <!-- Incluire los 4 livewires  -->
+            @endif
+        </div>
+    </div>
+    @endif
 
 @endsection

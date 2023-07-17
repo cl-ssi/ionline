@@ -10,8 +10,13 @@ use App\Models\ServiceRequests\ServiceRequest;
 class PerfilController extends Controller
 {
     //
-    public function show(Request $request, $run, $year = null, $type = null, $id = null)
+    public function show(Request $request, $run, $year = null, $type = null, $id = null, $period = null)
     {
+
+        $fulfillment = null;
+        $working_day_types = null;
+        $periods = null;
+        $meses = null;
 
         $user = User::findOrFail($run);
 
@@ -80,10 +85,60 @@ class PerfilController extends Controller
         }
 
 
+        if($id) {
+            $periods = array();
+
+            /* Llenar el arreglo con números del 1 al 12 como índice y false como valor */
+            for ($i = 1; $i <= 12; $i++) {
+                $periods[$i] = false;
+                
+            }
+
+            $meses = array(
+                1 => "Ene",
+                2 => "Feb",
+                3 => "Mar",
+                4 => "Abr",
+                5 => "May",
+                6 => "Jun",
+                7 => "Jul",
+                8 => "Ago",
+                9 => "Sep",
+                10 => "Oct",
+                11 => "Nov",
+                12 => "Dic"
+            );
+
+            $periodsAvailables = $serviceRequestId->fulfillments->pluck('month')->toArray();
+            foreach($periodsAvailables as $periodAvailable) {
+                $periods[$periodAvailable] = true;
+            }
+
+
+            if(isset($period)) {
+                $fulfillment = $serviceRequestId->fulfillments->where('month',$period)->first();
+            }
+
+            // dd($fulfillment);
+        }
 
 
 
             $yearsRange[$year] = in_array($year, $yearsWithServiceRequests) ??  false;
-        return view('service_requests.profile.show', compact('request', 'yearsRange','user', 'year', 'type', 'working_day_types', 'serviceRequests', 'id', 'serviceRequestId'));
+        return view('service_requests.profile.show', compact(
+            'request', 
+            'yearsRange',
+            'user',
+            'year',
+            'type',
+            'working_day_types',
+            'serviceRequests', 
+            'id', 
+            'serviceRequestId',
+            'periods',
+            'period',
+            'meses',
+            'fulfillment',
+        ));
     }
 }
