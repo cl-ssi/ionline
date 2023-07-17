@@ -18,10 +18,12 @@ class ReportGlobalBudget extends Component
     public $requestForms;
 
 
-    public function updatedSelectedYear($value)
+    public function updatedSelectedYear()
     {
+        
+        
         //Trae todos los de un año
-        $this->programs = Program::where('period', $value)->orderBy('name')->get();
+        $this->programs = Program::where('period', $this->selectedYear)->orderBy('name')->get();
 
         //trae la suma como un vector de los programas
         // $budgets = ProgramBudget::get()->groupBy('program_id')->map(function ($row) {
@@ -55,11 +57,13 @@ class ReportGlobalBudget extends Component
                     $program->totalDtes += $requestForm->getTotalDtes();
                 }
             }
-        }        
+        }
+        $this->render();
     }
 
     public function render()
     {
+        
         return view('livewire.request-form.report-global-budget');
     }
 }
