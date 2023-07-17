@@ -38,6 +38,7 @@
                         <th>Presupuesto solicitado</th>
                         <th>Montos totales por compras registradas</th>
                         <th>Montos totales por DTE pagadas</th>
+                        <th>Montos totales por DTE pagadas</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -47,7 +48,9 @@
                             <td>${{ number_format($program->totalBudgets,0,",",".") }}</td>
                             <td>${{ number_format($program->total_expense,0,",",".") }}</td>
                             <td>${{ number_format($program->totalCompras,0,",",".") }}</td>
-                            <td>${{ number_format($program->totalDtes,0,",",".") }}</td>
+                            {{-- <td>${{ number_format($program->totalDtes,0,",",".") }}</td> --}}
+                            <td>${{ money($program->totalDtes) }}</td>
+                            <td>$@numero($program->totalDtes)</td>
                         </tr>
                     @endforeach
                 </tfoot>

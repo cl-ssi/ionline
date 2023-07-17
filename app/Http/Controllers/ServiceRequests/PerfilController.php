@@ -71,7 +71,7 @@ class PerfilController extends Controller
 
         // dd($working_day_types);
 
-        $serviceRequests = ServiceRequest::where('user_id', $run)->whereYear('request_date', $year)->where('working_day_type', $type)->get();
+        $serviceRequests = ServiceRequest::where('user_id', $run)->whereYear('start_date', $year)->where('working_day_type', $type)->orderBy('start_date')->get();
 
         $serviceRequestId = null;
 

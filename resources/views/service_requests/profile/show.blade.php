@@ -211,6 +211,38 @@
                 @if ($serviceRequestId)
                     @livewire('service-request.info-rrhh', ['serviceRequest' => $serviceRequestId])
                 @endif
+
+
+                {{-- @if ($serviceRequestId->program_contract_type == 'Mensual')
+                    @include('service_requests.requests.fulfillments.edit_monthly', [
+                        'serviceRequest' => $serviceRequestId,
+                    ])
+                @else
+                    @if ($serviceRequestId->programm_name == 'Covid 2022')
+                        @if ($serviceRequestId->working_day_type == 'HORA MÉDICA')
+                            @include('service_requests.requests.fulfillments.edit_hours_medics', [
+                                'serviceRequest' => $serviceRequestId,
+                            ])
+                        @else
+                            @include('service_requests.requests.fulfillments.edit_hours_others', [
+                                'serviceRequest' => $serviceRequestId,
+                            ])
+                        @endif
+                    @else
+                        @if ($serviceRequestId->working_day_type == 'HORA MÉDICA' or $serviceRequestId->working_day_type == 'TURNO DE REEMPLAZO')
+                            @include('service_requests.requests.fulfillments.edit_hours_medics', [
+                                'serviceRequest' => $serviceRequestId,
+                            ])
+                        @else
+                            @include('service_requests.requests.fulfillments.edit_hours_others', [
+                                'serviceRequest' => $serviceRequestId,
+                            ])
+                        @endif
+                    @endif
+                @endif --}}
+
+
+
             </div>
         </div>
     @endif
