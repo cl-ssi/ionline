@@ -21,7 +21,7 @@ class ReportGlobalBudget extends Component
     public function updatedSelectedYear($value)
     {
         //Trae todos los de un año
-        $this->programs = Program::where('period', $value)->get();
+        $this->programs = Program::where('period', $value)->orderBy('name')->get();
 
         //trae la suma como un vector de los programas
         // $budgets = ProgramBudget::get()->groupBy('program_id')->map(function ($row) {
