@@ -27,7 +27,7 @@
                     <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ??
                         '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
                     <td>{{ $SignatureFlow->user->position }}</td>
-                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+                    <td>{{ $SignatureFlow->user->shortName }}</td>
                     <td>
                         @if ($SignatureFlow->sign_position == 1)
                             Responsable
@@ -37,8 +37,7 @@
                             {{ $SignatureFlow->type }}
                         @endif
                     </td>
-                    <td
-                        @if ($SignatureFlow->status === 1) class="table-success" @elseif($SignatureFlow->status === 0) class="table-danger" @endif>
+                    <td class="{{ $SignatureFlow->status ? 'table-success':'table-danger' }}">
                         @if ($SignatureFlow->status === null)
                             <select class="form-control-sm" wire:model.defer="status">
                                 <option value="">Seleccionar Estado</option>
@@ -56,10 +55,8 @@
                     </td>
 
                     <td>
-
-                        @if ($SignatureFlow->observation)
-                            <input type="text" class="form-control-sm"
-                                value="{{ $SignatureFlow->observation }}" readonly>
+                        @if ($SignatureFlow->signature_date)
+                            {{ $SignatureFlow->observation }}
                         @else
                             <input type="text" class="form-control-sm"
                                 value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
