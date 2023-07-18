@@ -67,8 +67,8 @@ class RequestFormController extends Controller {
 
     public function all_forms(Request $request)
     {
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
-        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && Auth()->user()->organizational_unit_id != $ouSearch){
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch)){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para ver todos los formularios.');
             return redirect()->route('request_forms.my_forms');
         }
@@ -94,8 +94,14 @@ class RequestFormController extends Controller {
 
           if($result > 0) $events_type[] = 'superior_leader_ship_event';
           $events_type[] = 'leader_ship_event';
-          $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
-          if(in_array($ouSearch, $iam_authorities_in)) $events_type[] = 'finance_event';
+
+          $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+          foreach($ousSearch as $ouSearch)
+            if(in_array($ouSearch, $iam_authorities_in)){
+                $events_type[] = 'finance_event';
+                break;
+            }
+
           $ousSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['AbastecimientoSSI', 'AbastecimientoHAH'])->pluck('value')->toArray();
           foreach($ousSearch as $ouSearch)
             if(in_array($ouSearch, $iam_authorities_in)){
@@ -106,8 +112,8 @@ class RequestFormController extends Controller {
         else {
             /* FIX: @mirandaljorge si no hay manager en Authority, se va a caer*/
           $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-          $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
-          if(Auth::user()->organizationalUnit->id == $ouSearch && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
+          $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+          if(in_array(Auth::user()->organizational_unit_id, $ouSearch) && $manager->user_id != Auth::user()->id) $events_type[] = 'pre_finance_event';
         }
         $ouTechnicalReview = EventRequestForm::where('event_type', 'technical_review_event')
             ->where('ou_signer_user', Auth::user()->organizationalUnit->id)
@@ -243,8 +249,8 @@ class RequestFormController extends Controller {
 
     public function edit(RequestForm $requestForm){
         // $requestForm=null;
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
-        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && Auth()->user()->organizational_unit_id != $ouSearch && $requestForm->request_user_id != auth()->user()->id){
+        $ouSearch = Parameter::where('module', 'ou')->whereIn('parameter', ['FinanzasSSI', 'FinanzasHAH'])->pluck('value')->toArray();
+        if(!Auth()->user()->hasPermissionTo('Request Forms: all') && !in_array(Auth()->user()->organizational_unit_id, $ouSearch) && $requestForm->request_user_id != auth()->user()->id){
             session()->flash('danger', 'Estimado Usuario/a: no tiene los permisos necesarios para editar formulario N° '.$requestForm->folio);
             return redirect()->route('request_forms.my_forms');
         }
