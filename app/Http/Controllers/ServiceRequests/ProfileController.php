@@ -31,6 +31,7 @@ class ProfileController extends Controller
                 ]);
             }
         }
+
         /** Si no se especificó un año, pasamos el actual por defecto */
         if(!$year) {
             return redirect()->route('rrhh.service-request.show', [
@@ -38,6 +39,15 @@ class ProfileController extends Controller
                 'year' => date('Y')
             ]);
         }
+
+        /** 
+         * TODO: Si es de tipo horas, entonces tiene 1 solo periodo,
+         * dejemos seteada la URL con el único periodo para evitar 
+         * que tengan que hacer click en el periodo (fulfillment)
+         * 
+         * Revisar si es de tipo hora, que pasa con las aprobaciones de RRHH y Finansas
+         */
+
 
         $fulfillment = null;
         if($serviceRequest) {
