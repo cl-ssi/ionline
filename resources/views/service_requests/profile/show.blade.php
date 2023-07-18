@@ -6,6 +6,7 @@
 
     <h3 class="mb-3">Perfil del Funcionario</h3>
 
+    <!-- Búsqueda -->
     <div class="form-row mb-3">
         <div class="col">
             <form method="POST" action="{{ route('rrhh.service-request.show.post') }}">
@@ -35,7 +36,7 @@
         <!-- Mostrar los datos de perfil del Usuario -->
         @livewire('service-request.user-data', ['user' => $user])
 
-        <!-- Mostrar el listado de años con contratos del Usuario -->
+        <!-- Mostrar el listado de años en los que tenga contratos -->
         @livewire('service-request.years-with-contracts', [
             'user_id' => $user->id, 
             'year' => $year
@@ -74,6 +75,22 @@
 
                         <!-- Mostrar Información Adicional de RRHH -->
                         @livewire('service-request.info-rrhh', ['serviceRequest' => $serviceRequest])
+
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <!-- Subir la resolución -->
+                                @livewire('service-request.upload-resolution', ['serviceRequest' => $serviceRequest])
+                            </div>
+                            <div class="col-md-4">
+                                <!-- Pasar a livewire -->
+                                <label>Firma funcionario</label>
+                                <button class="btn btn-warning form-control">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Pervisualizar y enviar para firma
+                                    <i class="fas fa-signature"></i>
+                                </button>
+                            </div>
+                        </div>
                     @endif
 
 
@@ -87,7 +104,7 @@
 
     @if($serviceRequest)
 
-    <h5>Periodos</h5>
+    <h5 id="periods-card">Periodos</h5>
 
     <div class="card">
         <div class="card-header">
@@ -114,6 +131,7 @@
 
                 <!-- Información del incio y término del periodo -->
                 <!-- Quién puede modificar esta información? -->
+                <!-- Pasar a livewire -->
                 <div class="form-row">
                     <fieldset class="form-group col-12 col-md-2">
                         <label for="for_type">Período</label>
@@ -164,17 +182,11 @@
                         <h5 class="card-title">Boleta</h5>
                         <div class="form-row mb-3">
                             <div class="col">
-                                <b>Valor de la boleta: </b> $ 843.233
-                            </div>
-                            <div class="col-md-4">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="customFileLangHTML">
-                                    <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar">boleta 213.pdf</label>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <a class=" btn btn-outline-primary" href=""> <i class="fas fa-file-pdf"></i> Boleta</a>
-                                <a class=" btn btn-outline-danger" href=""> <i class="fas fa-trash"></i> </a>
+                                @if($fulfillment->total_to_pay)
+                                    @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment ])
+                                @else
+                                    No se ha ingresado el "Total a pagar" en Recuros Humanos.
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -187,9 +199,16 @@
 
                 <div class="text-right text-muted small">id cumplimiento: {{ $fulfillment->id }}</div>
 
+                @can('Service Request: audit')
+                    @include('partials.audit', ['audits' => $fulfillment->audits()])
+                @endcan
             @endif
         </div>
     </div>
     @endif
+
+@endsection
+
+@section('custom_js')
 
 @endsection

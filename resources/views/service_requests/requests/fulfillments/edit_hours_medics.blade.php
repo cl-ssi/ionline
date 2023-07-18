@@ -295,18 +295,12 @@
 
 				<div class="form-row">
 
-					<div class="col-12 col-md-8">
+					<div class="col-12 col-md-12">
 						@if($fulfillment->total_to_pay)
 						@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 						@else
 						No se ha ingresado el "Total a pagar".
 						@endif
-					</div>
-					<div class="col-12 col-md-4">
-						<strong></strong>
-						<div>
-
-						</div>
 					</div>
 				</div>
 			</div>

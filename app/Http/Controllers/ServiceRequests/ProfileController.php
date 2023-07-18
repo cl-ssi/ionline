@@ -15,7 +15,7 @@ class ProfileController extends Controller
         if($request->method() == 'POST') {
             if($request->input('id')) {
 
-                $serviceRequest = ServiceRequest::find($request->input('id'));
+                $serviceRequest = ServiceRequest::findOrFail($request->input('id'));
                 
                 return redirect()->route('rrhh.service-request.show', [
                     'user' => $serviceRequest->user_id, 

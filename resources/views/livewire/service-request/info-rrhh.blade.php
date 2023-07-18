@@ -41,21 +41,4 @@
             </button>
         </div>
     </div>
-
-    <!-- Ya hay un livewire que hace esto, reemplazar o bien crear uno que lo haga -->
-    <div class="form-row">
-        <div class="col-md-6">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="customFileLangHTML">
-                <label class="custom-file-label" for="customFileLangHTML" data-browse="Examinar">resolución_14355.pdf</label>
-            </div>
-        </div>
-        <div class="col-1">
-            <a class=" btn btn-outline-danger" href=""> <i class="fas fa-file-pdf"></i> </a>
-        </div>
-        <div class="col-3">
-            <a class=" btn btn-warning" href=""> <i class="fas fa-paper-plane"></i> Enviar a Firma del Funcionario</a>
-        </div>
-
-    </div>
 </div>

@@ -53,5 +53,8 @@
                 <button class="btn btn-success" @disabled($fulfillment->finances_approbation) type="submit">Confirmar</button>
             </div>
         </div>
+        @if($fulfillment->payment_rejection_detail)
+        <i>{!! $fulfillment->payment_rejection_detail !!}</i>
+        @endif
     </div>
 </div>

@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs card-header-tabs mx-auto" id="periods-card">
+<ul class="nav nav-tabs card-header-tabs mx-auto">
     @foreach($meses as $numero => $mes)
     <li class="nav-item">
         <a class="nav-link @disabled(!$periods[$numero]) @if($period == $numero) active @endif" 
