@@ -5,8 +5,8 @@
             <h4 class="card-title">Datos Personales</h4>
             <div class="form-row mb-3">
                 <div class="col-md-2">
-                    <label for="validationDefault02">Run.</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->runFormat() }}">
+                    <label for="validationDefault02">RUN</label>
+                    <input type="text" class="form-control" id="validationDefault02" disabled value="{{ $user->runFormat() }}">
                 </div>
                 <div class="col-md-3">
                     <label for="validationDefault01">Nombres</label>
@@ -19,6 +19,12 @@
                 <div class="col-md-3">
                     <label for="validationDefault02">Apellido M.</label>
                     <input type="text" class="form-control" id="validationDefault02" value="{{ $user->mothers_family }}">
+                </div>
+                <div class="col-1">
+                    <label for=""><br></label>
+                    <button type="submit" class="btn btn-primary form-control">
+                        <i class="fas fa-save"></i>
+                    </button>
                 </div>
             </div>
             <div class="form-row mb-3">
@@ -36,15 +42,22 @@
                     <label for="validationDefault02">Telefono</label>
                     <input type="text" class="form-control" id="validationDefault02" value="{{ $user->phone_number }}">
                 </div>
-                <div class="col-md-3">
-                    <label for="validationDefault02">Email</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->email }}">
-                </div>
-                <div class="col-1">
-                    <label for=""><br></label>
-                    <button type="submit" class="btn btn-primary form-control">
-                        <i class="fas fa-save"></i>
-                    </button>
+                <div class="col-md-4">
+                    <label for="validationDefault02">Email Personal</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Email personal" value="{{ $user->email_personal }}">
+                        <div class="input-group-append">
+                            @if($user->email_verified_at)
+                            <button class="btn btn-success" title="Email verificado" disabled type="button" id="button-addon2">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            @else
+                            <button class="btn btn-warning" title="Verificar email" type="button" id="button-addon2">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -98,113 +98,128 @@
             </div>
         @endif
     
-    @endif
 
-    <br>
+        <br>
 
-    @if($serviceRequest)
+        @if($serviceRequest)
 
-    <h5 id="periods-card">Periodos</h5>
+        <h5 id="periods-card">Periodos</h5>
 
-    <div class="card">
-        <div class="card-header">
-            <!-- Muestra la barra de periodos -->
-            @livewire('service-request.periods-bar',[
-                'user_id' => $user->id, 
-                'year' => $year,
-                'type' => $type,
-                'serviceRequest' => $serviceRequest,
-                'period' => $period
-            ])
-        </div>
-
-        <div class="card-body">
-
-            @if($period)
-                <div class="progress mb-3">
-                    <div class="progress-bar {{ $serviceRequest->has_resolution_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
-                    <div class="progress-bar {{ $fulfillment->signatures_file_id ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
-                    <div class="progress-bar {{ $fulfillment->total_to_pay ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
-                    <div class="progress-bar {{ $fulfillment->has_invoice_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
-                    <div class="progress-bar {{ $fulfillment->payment_date ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
-                </div>
-
-                <!-- Información del incio y término del periodo -->
-                <!-- Quién puede modificar esta información? -->
-                <!-- Pasar a livewire -->
-                <div class="form-row">
-                    <fieldset class="form-group col-12 col-md-2">
-                        <label for="for_type">Período</label>
-                        <select name="type" class="form-control" required="">
-                            <option value=""></option>
-                            <option value="Mensual" selected="">Mensual</option>
-                            <option value="Parcial">Parcial</option>
-                        </select>
-                    </fieldset>
-                    <fieldset class="form-group col-6 col-md-2">
-                        <label for="for_start_date">Inicio</label>
-                        <input type="date" class="form-control" name="start_date" value="2021-10-01" required="">
-                    </fieldset>
-                    <fieldset class="form-group col-6 col-md-2">
-                        <label for="for_end_date">Término</label>
-                        <input type="date" class="form-control" name="end_date" value="2021-10-31" required="">
-                    </fieldset>
-                    <fieldset class="form-group col-12 col-md-5">
-                        <label for="for_observation">Observación</label>
-                        <input type="text" class="form-control" name="observation" value="">
-                    </fieldset>
-                    
-                    <fieldset class="form-group col-1">
-                        <label for="for_submit"><br></label>
-                        <button type="submit" class="btn btn-primary form-control">
-                            <i class="fas fa-save"></i>
-                        </button>
-                    </fieldset>
-                </div>
-
-
-                <!-- Livewire de Responsable -->
-                <div class="card border-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Responsable </h5>
-                    </div>
-                </div>
-
-
-                <!-- Livewire de rrhh -->
-                @livewire('service-request.period-rrhh', [
-                    'fulfillment' => $fulfillment
+        <div class="card">
+            <div class="card-header">
+                <!-- Muestra la barra de periodos -->
+                @livewire('service-request.periods-bar',[
+                    'user_id' => $user->id, 
+                    'year' => $year,
+                    'type' => $type,
+                    'serviceRequest' => $serviceRequest,
+                    'period' => $period
                 ])
-                    
-                <!-- Livewire de Boleta -->
-                <div class="card mb-3 border-warning">
-                    <div class="card-body">
-                        <h5 class="card-title">Boleta</h5>
-                        <div class="form-row mb-3">
-                            <div class="col">
-                                @if($fulfillment->total_to_pay)
-                                    @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment ])
+            </div>
+
+            <div class="card-body">
+
+                @if($period)
+                    <div class="progress mb-3">
+                        <div class="progress-bar {{ $serviceRequest->has_resolution_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
+                        <div class="progress-bar {{ $fulfillment->signatures_file_id ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
+                        <div class="progress-bar {{ $fulfillment->total_to_pay ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
+                        <div class="progress-bar {{ $fulfillment->has_invoice_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
+                        <div class="progress-bar {{ $fulfillment->payment_date ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
+                    </div>
+
+                    <!-- Información del incio y término del periodo -->
+                    <!-- Quién puede modificar esta información? -->
+                    <!-- Pasar a livewire -->
+                    <div class="form-row">
+                        <fieldset class="form-group col-12 col-md-2">
+                            <label for="for_type">Período</label>
+                            <select name="type" class="form-control" required="">
+                                <option value=""></option>
+                                <option value="Mensual" selected="">Mensual</option>
+                                <option value="Parcial">Parcial</option>
+                            </select>
+                        </fieldset>
+                        <fieldset class="form-group col-6 col-md-2">
+                            <label for="for_start_date">Inicio</label>
+                            <input type="date" class="form-control" name="start_date" value="2021-10-01" required="">
+                        </fieldset>
+                        <fieldset class="form-group col-6 col-md-2">
+                            <label for="for_end_date">Término</label>
+                            <input type="date" class="form-control" name="end_date" value="2021-10-31" required="">
+                        </fieldset>
+                        <fieldset class="form-group col-12 col-md-5">
+                            <label for="for_observation">Observación</label>
+                            <input type="text" class="form-control" name="observation" value="">
+                        </fieldset>
+                        
+                        <fieldset class="form-group col-1">
+                            <label for="for_submit"><br></label>
+                            <button type="submit" class="btn btn-primary form-control">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </fieldset>
+                    </div>
+
+
+                    <!-- Livewire de Responsable -->
+                    <div class="card border-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Responsable </h5>
+
+                            @if($serviceRequest->program_contract_type == "Mensual")
+                                {{-- 
+                                @include('service_requests.requests.fulfillments.edit_monthly',['serviceRequest' => $serviceRequest])
+                                --}}
+                            @else
+                                {{-- 
+                                @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
+                                    @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
                                 @else
-                                    No se ha ingresado el "Total a pagar" en Recuros Humanos.
+                                    @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
                                 @endif
+                                --}}
+                            @endif
+                        </div>
+                    </div>
+
+
+                    <!-- Livewire de rrhh -->
+                    @livewire('service-request.period-rrhh', [
+                        'fulfillment' => $fulfillment
+                    ])
+                        
+                    <!-- Livewire de Boleta -->
+                    <div class="card mb-3 border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Boleta</h5>
+                            <div class="form-row mb-3">
+                                <div class="col">
+                                    @if($fulfillment->total_to_pay)
+                                        @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment ])
+                                    @else
+                                        No se ha ingresado el "Total a pagar" en Recuros Humanos.
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Livewire de Finanzas -->
-                @livewire('service-request.period-finance', [
-                    'fulfillment' => $fulfillment
-                ])
+                    <!-- Livewire de Finanzas -->
+                    @livewire('service-request.period-finance', [
+                        'fulfillment' => $fulfillment
+                    ])
 
-                <div class="text-right text-muted small">id cumplimiento: {{ $fulfillment->id }}</div>
+                    <div class="text-right text-muted small">id cumplimiento: {{ $fulfillment->id }}</div>
 
-                @can('Service Request: audit')
-                    @include('partials.audit', ['audits' => $fulfillment->audits()])
-                @endcan
-            @endif
+                    @can('Service Request: audit')
+                        @include('partials.audit', ['audits' => $fulfillment->audits()])
+                    @endcan
+                @endif
+            </div>
         </div>
-    </div>
+        @endif
+
     @endif
 
 @endsection
