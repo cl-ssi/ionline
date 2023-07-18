@@ -21,12 +21,13 @@
     </div>
 
     <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
-        </div>
         <div class="custom-file">
             <input type="file" class="custom-file-input" id="dte_file" wire:model="dtes">
-            <label class="custom-file-label" for="dte_file" data-browse="Examinar">Archivo xls máximo 2mb</label>
+            <label class="custom-file-label" for="dte_file" data-browse="Examinar">{{ optional($dtes)->getClientOriginalName() }}</label>
+            <small id="emailHelp" class="form-text text-muted">Archivo xls de reporte de acepta, máximo 2mb.</small>
+        </div>
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit" wire:loading.attr="disabled"> <i class="fas fa-fw fa-upload"></i> Cargar Archivo</button>
         </div>
     </div>
 

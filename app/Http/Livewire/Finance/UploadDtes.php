@@ -22,7 +22,7 @@ class UploadDtes extends Component
             'dtes' => 'required|mimes:xlx,xls|max:2048'
         ]);
 
-        Excel::import(new DtesImport, $this->dtes);
+        Excel::import(new DtesImport, $this->dtes->path());
 
         session()->flash('message', 'Archivo con dtes cargado existosamente.');
     }
