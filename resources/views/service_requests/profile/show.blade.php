@@ -131,14 +131,16 @@
                         <label for="for_end_date">Término</label>
                         <input type="date" class="form-control" name="end_date" value="2021-10-31" required="">
                     </fieldset>
-                    <fieldset class="form-group col-12 col-md-4">
+                    <fieldset class="form-group col-12 col-md-5">
                         <label for="for_observation">Observación</label>
                         <input type="text" class="form-control" name="observation" value="">
                     </fieldset>
                     
                     <fieldset class="form-group col-1">
                         <label for="for_submit"><br></label>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary form-control">
+                            <i class="fas fa-save"></i>
+                        </button>
                     </fieldset>
                 </div>
 

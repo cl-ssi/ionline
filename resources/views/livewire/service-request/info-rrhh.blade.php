@@ -34,8 +34,15 @@
                 <option value="0">No</option>
             </select>
         </div>
+        <div class="col-1 text-right">
+            <label for="validationCustom04">&nbsp;</label>
+            <button class="btn btn-primary form-control" type="submit" wire:click="saveInfoRrhh">
+                <i class="fas fa-save"></i>
+            </button>
+        </div>
     </div>
 
+    <!-- Ya hay un livewire que hace esto, reemplazar o bien crear uno que lo haga -->
     <div class="form-row">
         <div class="col-md-6">
             <div class="custom-file">
@@ -49,8 +56,6 @@
         <div class="col-3">
             <a class=" btn btn-warning" href=""> <i class="fas fa-paper-plane"></i> Enviar a Firma del Funcionario</a>
         </div>
-        <div class="col text-right">
-            <button class="btn btn-primary" type="submit" wire:click="saveInfoRrhh">Guardar</button>
-        </div>
+
     </div>
 </div>

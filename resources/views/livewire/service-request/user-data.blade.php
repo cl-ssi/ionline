@@ -40,6 +40,12 @@
                     <label for="validationDefault02">Email</label>
                     <input type="text" class="form-control" id="validationDefault02" value="{{ $user->email }}">
                 </div>
+                <div class="col-1">
+                    <label for=""><br></label>
+                    <button type="submit" class="btn btn-primary form-control">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
             </div>
 
         </div>
