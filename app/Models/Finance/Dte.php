@@ -11,6 +11,8 @@ class Dte extends Model
 {
     use HasFactory;
 
+    protected $table = 'fin_dtes';
+
     /**
     * The attributes that are mass assignable.
     *
@@ -91,8 +93,7 @@ class Dte extends Model
     * The primary key associated with the table.
     *
     * @var string
-    */
-    protected $table = 'fin_dtes';
+    */    
 
     /** Control(ingresos) de Warehouse */
     public function controls()

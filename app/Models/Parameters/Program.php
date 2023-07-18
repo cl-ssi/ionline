@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Parameters\Subtitle;
+use App\Models\Parameters\ProgramBudget;
 
 class Program extends Model
 {
@@ -36,6 +37,11 @@ class Program extends Model
     public function Subtitle()
     {
         return $this->belongsTo(Subtitle::class);
+    }
+
+    public function Budgets()
+    {
+        return $this->hasMany(ProgramBudget::class);
     }
 
     public function getStartDateFormatAttribute()

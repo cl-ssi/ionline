@@ -107,7 +107,7 @@
                         @if($fullfillment->total_to_pay_at)
                             ({{$fullfillment->total_to_pay_at->format('Y-m-d')}}) - 
                         @endif
-						Monto de boleta: {{ @money($fullfillment->total_to_pay) }}
+						Monto de boleta: {{ money($fullfillment->total_to_pay) }}
 						@else
 						<i class="fas fa-circle text-secondary"></i>
 						No se ha cargado el "total a pagar" por RRHH.

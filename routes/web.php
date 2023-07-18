@@ -13,6 +13,7 @@ use App\Models\Pharmacies\Purchase;
 
 
 use App\Http\Livewire\Welfare\AmiPass\RequestMgr;
+use App\Http\Livewire\RequestForm\ReportGlobalBudget;
 use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\TicResources;
@@ -92,7 +93,7 @@ use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
 use App\Http\Controllers\ServiceRequests\AttachmentController;
-use App\Http\Controllers\ServiceRequests\PerfilController;
+use App\Http\Controllers\ServiceRequests\ProfileController as ProfileControllerSr;
 use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
@@ -834,9 +835,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         
-        Route::get('/perfil/{run}/{year?}/{type?}/{id?}/{periodo?}', [PerfilController::class, 'show'])->name('show');
+        Route::get('/profile/{user?}/{year?}/{type?}/{serviceRequest?}/{period?}', [ProfileControllerSr::class, 'show'])->name('show');
+        Route::post('/profile', [ProfileControllerSr::class, 'show'])->name('show.post');
 
-        
 
 
 
@@ -1957,7 +1958,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/show_form_items', [RequestFormController::class, 'show_form_items'])->name('show_form_items');
         Route::get('/show_form_items_export', [RequestFormController::class, 'show_form_items_export'])->name('show_form_items_export');
         Route::get('/show_amounts_by_program', [RequestFormController::class, 'show_amounts_by_program'])->name('show_amounts_by_program');
-        Route::get('/show_globals_amounts', [RequestFormController::class, 'show_globals_amounts'])->name('show_globals_amounts');
+        Route::get('/show_globals_amounts', ReportGlobalBudget::class)->name('show_globals_amounts');
     });
 
     /* DOCUMENTS */

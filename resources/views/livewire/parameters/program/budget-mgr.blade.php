@@ -35,8 +35,8 @@
             </fieldset>
 
             <fieldset class="col-12 col-md-3">
-                <label for="for-ammount">Monto*</label>
-                <input type="number" wire:model.defer="ammount" class="form-control" min="0">
+                <label for="for-ammount">Monto*</label> <small class="text-muted">Valor aumentar/disminuir (negativo)</small>
+                <input type="number" wire:model.defer="ammount" class="form-control">
                 @error('ammount')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -67,6 +67,7 @@
                     <th>Editar</th>
                     <th>Programa</th>
                     <th>Monto</th>
+                    <th>Periodo</th>
                     <th></th>
                 </tr>
             </thead>
@@ -79,6 +80,7 @@
                         </td>
                         <td>{{ $budget->program->name }}</td>
                         <td>{{ $budget->ammount }}</td>
+                        <td>{{ $budget->program->period }}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-danger"
                                 onclick="confirm('¿Está seguro que desea borrar el feriado {{ $budget->ammount }}?') || event.stopImmediatePropagation()"

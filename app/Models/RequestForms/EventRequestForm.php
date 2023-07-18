@@ -129,7 +129,8 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createPreFinanceEvent(RequestForm $requestForm){
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+        $parameter = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 3 : 2;
@@ -141,7 +142,8 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createFinanceEvent(RequestForm $requestForm){
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+        $parameter = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 4 : 3;
@@ -182,7 +184,8 @@ class EventRequestForm extends Model implements Auditable
 
         self::createFile($event);
 
-        $ouSearch = Parameter::where('module', 'ou')->where('parameter', 'FinanzasSSI')->first()->value;
+        $parameter = $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
+        $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event = new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch; //Finanzas
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 7 : 6;
