@@ -196,8 +196,11 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
+use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HotelBooking\RoomController;
 use App\Http\Controllers\HotelBooking\HotelController;
+use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
+use App\Http\Controllers\HotelBooking\ServiceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
@@ -1718,8 +1721,14 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
 });
 
 Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(function () {
-    Route::view('/index', 'hotel_booking.home')->name('index');
-
+    // Route::view('/index', 'hotel_booking.home')->name('index');
+    Route::get('/', [HotelBookingController::class, 'index'])->name('index');
+    Route::get('/search_booking', [HotelBookingController::class, 'search_booking'])->name('search_booking');
+    Route::get('/my_bookings', [HotelBookingController::class, 'my_bookings'])->name('my_bookings');
+    Route::delete('/{roomBooking}/booking_cancelation', [HotelBookingController::class, 'booking_cancelation'])->name('booking_cancelation');
+    // Route::get('/booking_cancelation/{roomBooking}', [HotelController::class, 'booking_cancelation'])->name('booking_cancelation');
+    // Route::post('/booking_cancelation', [RoomController::class, 'booking_cancelation'])->name('booking_cancelation');
+    
     Route::prefix('hotels')->as('hotels.')->middleware('auth')->group(function () {
         Route::get('/', [HotelController::class, 'index'])->name('index');
         Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit');
@@ -1736,6 +1745,19 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(
         Route::get('/create', [RoomController::class, 'create'])->name('create');
         Route::post('/store', [RoomController::class, 'store'])->name('store');
         Route::delete('/{room}/destroy', [RoomController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('room_booking_configuration')->as('room_booking_configuration.')->middleware('auth')->group(function () {
+        Route::get('/', [RoomBookingConfigurationController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('services')->as('services.')->middleware('auth')->group(function () {
+        Route::get('/', [ServiceController::class, 'index'])->name('index');
+        Route::get('/edit/{service}', [ServiceController::class, 'edit'])->name('edit');
+        Route::put('/update/{service}', [ServiceController::class, 'update'])->name('update');
+        Route::get('/create', [ServiceController::class, 'create'])->name('create');
+        Route::post('/store', [ServiceController::class, 'store'])->name('store');
+        Route::delete('/{service}/destroy', [ServiceController::class, 'destroy'])->name('destroy');
     });
 });
 
