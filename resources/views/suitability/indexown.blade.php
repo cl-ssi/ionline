@@ -33,6 +33,7 @@
         <thead>
             <tr>
                 <th>Solicitud N°</th>
+                <th>Fecha de Solicitud</th>
                 <th>Colegio</th>
                 <th>Run</th>
                 <th>Nombre Completo</th>
@@ -48,6 +49,7 @@
             @foreach($psirequests as $psirequest)
             <tr>
                 <td>{{$psirequest->id}}</td>
+                <td>{{$psirequest->created_at}}</td>
                 <td>{{$psirequest->school->name}}</td>
                 <td>{{$psirequest->user_external_id}}</td>
                 <td>{{$psirequest->user->fullName}}</td>

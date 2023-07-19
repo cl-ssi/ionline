@@ -14,37 +14,16 @@ class IndexDtes extends Component
 
     public $filter;
 
-    
     public $showManualDTE = false;
 
 
-
-
-
-
-    /**
-     * query
-     */
-    public function query()
+    public function refresh()
     {
-        return Dte::search($this->filter)
-            ->with([
-                'immediatePurchase',
-                'immediatePurchase.purchasingProcessDetail',
-                'immediatePurchase.purchasingProcessDetail.itemRequestForm',
-                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
-                'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
-            ])
-            ->orderBy('emision')
-            ->paginate(50);
+        /**
+         * Sólo hace el re redner del componente
+         */
     }
 
-    public function render()
-    {
-        return view('livewire.finance.index-dtes', [
-            'dtes' => $this->query()
-        ]);
-    }
 
     public function loadManualDTE()
     {
@@ -56,5 +35,24 @@ class IndexDtes extends Component
         // Ocultar el formulario
         $this->showManualDTE = false;
     }
-    
+
+    public function render()
+    {
+        $query = Dte::search($this->filter)
+        /** Esto me proboca que no pueda utilizar la relación requestForm */
+            // ->with([
+            //     'immediatePurchase',
+            //     'immediatePurchase.purchasingProcessDetail',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+            // ])
+            ->orderBy('emision')
+            ->paginate(50);
+
+        return view('livewire.finance.index-dtes', [
+            'dtes' => $query
+        ]);
+    }
+
 }

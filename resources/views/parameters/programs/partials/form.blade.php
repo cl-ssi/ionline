@@ -1,15 +1,9 @@
 <div class="form-row mt-3">
     <fieldset class="form-group col-md-5">
         <label for="name">Nombre</label>
-        <input
-            type="text"
-            class="form-control @error('name') is-invalid @enderror"
-            id="name"
-            wire:model.debounce.1000ms="name"
-            placeholder="Ingresa el nombre"
-            value="{{ old('name', optional($program)->name) }}"
-            required
-        >
+        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+            wire:model.debounce.1000ms="name" placeholder="Ingresa el nombre"
+            value="{{ old('name', optional($program)->name) }}" required>
         @error('name')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -19,15 +13,9 @@
 
     <fieldset class="form-group col-md-3">
         <label for="alias">Alias</label>
-        <input
-            type="text"
-            class="form-control @error('alias') is-invalid @enderror"
-            id="alias"
-            wire:model.debounce.1000ms="alias"
-            placeholder="Ingresa el alias o nombre corto"
-            value="{{ old('alias', optional($program)->alias) }}"
-            required
-        >
+        <input type="text" class="form-control @error('alias') is-invalid @enderror" id="alias"
+            wire:model.debounce.1000ms="alias" placeholder="Ingresa el alias o nombre corto"
+            value="{{ old('alias', optional($program)->alias) }}" required>
         @error('alias')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -39,8 +27,8 @@
         <label for="period">Período</label>
         <select wire:model="period" id="period" class="form-control @error('period') is-invalid @enderror">
             <option>{{ date('Y') }}</option>
-            <option>{{ date('Y') +1 }}</option>
-            <option>{{ date('Y') -1 }}</option>
+            <option>{{ date('Y') + 1 }}</option>
+            <option>{{ date('Y') - 1 }}</option>
         </select>
         @error('period')
             <span class="invalid-feedback" role="alert">
@@ -70,10 +58,10 @@
             required
         >
         @error('start_date')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+    <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+@enderror
     </fieldset-->
 
     <!--fieldset class="form-group col-md-2">
@@ -87,23 +75,18 @@
             required
         >
         @error('end_date')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+    <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+@enderror
     </fieldset-->
 </div>
 <div class="form-row">
     <fieldset class="form-group col-md-12">
         <label for="description">Descripción</label>
-        <input
-            type="text"
-            class="form-control @error('description') is-invalid @enderror"
-            id="description"
-            wire:model.debounce.1000ms="description"
-            value="{{ old('description', optional($program)->description) }}"
-            required
-        >
+        <input type="text" class="form-control @error('description') is-invalid @enderror" id="description"
+            wire:model.debounce.1000ms="description" value="{{ old('description', optional($program)->description) }}"
+            required>
         @error('description')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -118,15 +101,9 @@
 <div class="form-row">
     <fieldset class="form-group col-md-4">
         <label for="alias_finance">Nombre en finanzas</label>
-        <input
-            type="text"
-            class="form-control @error('alias_finance') is-invalid @enderror"
-            id="alias_finance"
-            wire:model.debounce.1000ms="alias_finance"
-            placeholder="Nombre de finanzas"
-            value="{{ old('alias_finance', optional($program)->alias_finance) }}"
-            required
-        >
+        <input type="text" class="form-control @error('alias_finance') is-invalid @enderror" id="alias_finance"
+            wire:model.debounce.1000ms="alias_finance" placeholder="Nombre de finanzas"
+            value="{{ old('alias_finance', optional($program)->alias_finance) }}" required>
         @error('alias_finance')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -136,13 +113,11 @@
 
     <fieldset class="form-group col-md-1">
         <label for="subtitle_id">Sub</label>
-        <select class="form-control @error('subtitle_id') is-invalid @enderror"
-            id="subtitle_id"
-            wire:model.debounce.1000ms="subtitle_id"
-            required>
+        <select class="form-control @error('subtitle_id') is-invalid @enderror" id="subtitle_id"
+            wire:model.debounce.1000ms="subtitle_id" required>
             <option></option>
-            @foreach($subtitles as $id => $subtitle)
-            <option value="{{ $id }}">{{ $subtitle }}</option>
+            @foreach ($subtitles as $id => $subtitle)
+                <option value="{{ $id }}">{{ $subtitle }}</option>
             @endforeach
         </select>
         @error('subtitle_id')
@@ -154,15 +129,9 @@
 
     <fieldset class="form-group col-md-3">
         <label for="financial_type">Tipo Financiamiento</label>
-        <input
-            type="text"
-            class="form-control @error('financial_type') is-invalid @enderror"
-            id="financial_type"
-            wire:model.debounce.1000ms="financial_type"
-            placeholder="Ingresa tipo de financiamiento"
-            value="{{ old('financial_type', optional($program)->financial_type) }}"
-            required
-        >
+        <input type="text" class="form-control @error('financial_type') is-invalid @enderror" id="financial_type"
+            wire:model.debounce.1000ms="financial_type" placeholder="Ingresa tipo de financiamiento"
+            value="{{ old('financial_type', optional($program)->financial_type) }}" required>
         @error('financial_type')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -172,15 +141,9 @@
 
     <fieldset class="form-group col-md-1">
         <label for="folio">Folio</label>
-        <input
-            type="text"
-            class="form-control @error('folio') is-invalid @enderror"
-            id="folio"
-            wire:model.debounce.1000ms="folio"
-            placeholder="Nº folio"
-            value="{{ old('folio', optional($program)->folio) }}"
-            required
-        >
+        <input type="text" class="form-control @error('folio') is-invalid @enderror" id="folio"
+            wire:model.debounce.1000ms="folio" placeholder="Nº folio"
+            value="{{ old('folio', optional($program)->folio) }}" required>
         @error('folio')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -190,15 +153,9 @@
 
     <fieldset class="form-group col-md-2">
         <label for="budget">Presupuesto</label>
-        <input
-            type="text"
-            class="form-control @error('budget') is-invalid @enderror"
-            id="budget"
-            wire:model.debounce.1000ms="budget"
-            placeholder=""
-            value="{{ old('budget', optional($program)->budget) }}"
-            required
-        >
+        <input type="text" class="form-control @error('budget') is-invalid @enderror" id="budget"
+            wire:model.debounce.1000ms="budget" placeholder=""
+            value="{{ old('budget', optional($program)->budget) }}" required>
         @error('budget')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -208,3 +165,12 @@
 
 </div>
 
+
+<br><br>
+
+<hr />
+<div style="height: 300px; overflow-y: scroll;">
+    @if ($program->audits())
+        @include('partials.audit', ['audits' => $program->audits()])
+    @endif
+</div>

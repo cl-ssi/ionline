@@ -10,7 +10,7 @@ class WorkingDayTypes extends Component
     public $user_id;
     public $year;
     public $type;
-    
+
     public function render()
     {
         $workingDayTypes = [

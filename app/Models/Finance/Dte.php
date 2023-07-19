@@ -120,7 +120,7 @@ class Dte extends Model
         //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
         // }
         // else {
-            return $this->immediatePurchase->requestForm();;
+            return $this->immediatePurchase->requestForm();
         // }
     }
 

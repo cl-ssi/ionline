@@ -41,9 +41,11 @@
                         @endif
 
                         {{ $type->name }}
-                        
+
+                        @if(isset($type->actor)) <strong>({{ $type->actor->name }})</strong> @endif
+
                         @if($type->end)
-                        <i class="fas fa-caret-left"></i>
+                            <i class="fas fa-caret-left"></i>
                         @endif
                     </td>
                     <td>
@@ -79,6 +81,6 @@
         </tbody>
     </table>
 </div>
-    
+
 @endforeach
 @endsection

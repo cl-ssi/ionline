@@ -33,9 +33,7 @@ class EventType extends Model
         'repeat',
         'summary_type_id',
         'num_repeat',
-        'created_at',
-        'updated_at',
-        'deleted_at',
+        'summary_actor_id',
     ];
 
     public function getUserTextAttribute()
@@ -73,9 +71,6 @@ class EventType extends Model
         return $this->repeat ? 'Sí' : 'No';
     }
 
-
-    
-
     /** Cuál es la utilidad del link before? */
     public function linksEvents()
     {
@@ -88,8 +83,6 @@ class EventType extends Model
         return $this->hasMany(Link::class, 'before_event_id')
             ->where('after_sub_event',true);
     }
-
-
 
     public function linksBefore()
     {
@@ -109,5 +102,10 @@ class EventType extends Model
     public function templates()
     {
         return $this->hasMany(Template::class, 'event_type_id');
+    }
+
+    public function actor()
+    {
+        return $this->belongsTo(Actor::class, 'summary_actor_id');
     }
 }

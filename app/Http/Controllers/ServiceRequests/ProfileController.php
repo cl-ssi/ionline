@@ -10,7 +10,7 @@ use App\Models\ServiceRequests\ServiceRequest;
 class ProfileController extends Controller
 {
     //
-    public function show(Request $request, User $user, $year = null, $type = null, ServiceRequest $serviceRequest = null, $period = null)
+    public function show(Request $request, User $user = null, $year = null, $type = null, ServiceRequest $serviceRequest = null, $period = null)
     {
         if($request->method() == 'POST') {
             if($request->input('id')) {
@@ -32,27 +32,43 @@ class ProfileController extends Controller
             }
         }
 
+        /** Si no se especificó un usuario, mostramos la vista solo con los filtros */
+        if(!$user) {
+            return view('service_requests.profile.show', compact('user'));
+        }
+
         /** Si no se especificó un año, pasamos el actual por defecto */
-        if(!$year) {
+        if($user AND !$year) {
             return redirect()->route('rrhh.service-request.show', [
                 'user' => $user->id, 
                 'year' => date('Y')
             ]);
         }
 
-        /** 
-         * TODO: Si es de tipo horas, entonces tiene 1 solo periodo,
-         * dejemos seteada la URL con el único periodo para evitar 
-         * que tengan que hacer click en el periodo (fulfillment)
-         * 
-         * Revisar si es de tipo hora, que pasa con las aprobaciones de RRHH y Finansas
+        /**
+         * TODO: Revisar si es de tipo hora, que pasa con las aprobaciones de RRHH y Finansas
          */
 
 
         $fulfillment = null;
+
         if($serviceRequest) {
             if($period) {
                 $fulfillment = $serviceRequest->fulfillments->where('month',$period)->first();
+            }
+            /** 
+             * Si es de tipo "Hora", entonces tiene 1 solo periodo,
+             * dejemos seteada la URL con el periodo para que aparezca cargada la pagina
+             * ya con el periodo selecionado (fulfillment)
+             */
+            else if($serviceRequest->program_contract_type == 'Horas'){
+                return redirect()->route('rrhh.service-request.show', [
+                    'user' => $serviceRequest->user_id, 
+                    'year' => $serviceRequest->start_date->year,
+                    'type' => $serviceRequest->program_contract_type,
+                    'serviceRequest' => $serviceRequest,
+                    'period' => $serviceRequest->fulfillments->first()->month ?? null,
+                ]);
             }
         }
 
