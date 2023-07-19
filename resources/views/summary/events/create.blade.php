@@ -14,8 +14,8 @@
             <div class="col-sm-5">
                 <select class="form-control" name="summary_type_id" required>
                     <option value=""></option>
-                    @foreach($summaryTypes as $id => $name)
-                        <option value="{{ $id }}">{{ $name }}</option>
+                    @foreach($summaryTypes as $typeId => $typeName)
+                        <option value="{{ $typeId }}">{{ $typeName }}</option>
                     @endforeach
                 </select>
             </div>
@@ -25,6 +25,18 @@
             <label for="for-name" class="col-sm-2 col-form-label">Nombre*</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="name" autocomplete="off" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="for-name" class="col-sm-2 col-form-label">Tipo Actor*</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="summary_actor_id" required>
+                    <option value=""></option>
+                    @foreach($summaryActors as $actorId => $actorName)
+                        <option value="{{ $actorId }}">{{ $actorName }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
