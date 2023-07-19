@@ -127,7 +127,6 @@ class Dte extends Model
 
     public function scopeSearch($query, $filter)
     {
-        app('debugbar')->info($filter);
         if(!empty($filter)) {
             foreach($filter as $column => $value) {
                 if(!empty($value))
