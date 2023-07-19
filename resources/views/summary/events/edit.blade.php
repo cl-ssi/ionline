@@ -157,34 +157,53 @@
                             <ul>
                                 @foreach ($eventType->linksBefore as $linkBefore)
                                     <li>
+                                        @if($linkBefore->beforeEvent->start)
+                                            <i class="fas fa-caret-right"></i>
+                                        @endif
+
                                         <a href="{{ route('summary.event-types.edit', $linkBefore->beforeEvent) }}">
                                             @if($linkBefore->beforeEvent->sub_event) &nbsp;&nbsp; @endif
+                                            [{{ optional($linkBefore->beforeEvent->actor)->name }}] 
                                             {{ $linkBefore->beforeEvent->name }}
                                         </a>
+
+                                        @if($linkBefore->beforeEvent->end)
+                                            <i class="fas fa-caret-left"></i>
+                                        @endif
                                     </li>
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="bg-light align-middle">
-                            <ul>
-                                <li>
-                                    {{ $eventType->name }}
-                                </li>
-                            </ul>
+                        <td class="bg-light align-middle text-center">
+                            <h4>
+                                {{ $eventType->name }}
+                            </h4>
+                            [{{ $eventType->actor->name }}]
                         </td>
                         <td class="align-middle;">
                             @foreach ($eventType->summaryType->eventTypes as $type)
+                                @if($type->id != $eventType->id)
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{ $type->id }}"
                                         name="links[{{ $type->id }}]"
                                         {{ $eventType->linksAfter->contains('after_event_id', $type->id) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="for-links">
+                                        @if($type->start)
+                                            <i class="fas fa-caret-right"></i>
+                                        @endif
+
                                         <a href="{{ route('summary.event-types.edit', $type) }}">
                                             @if($type->sub_event) &nbsp;&nbsp; @endif
+                                            [{{ optional($type->actor)->name }}] 
                                             {{ $type->name }}
                                         </a>
+
+                                        @if($type->end)
+                                            <i class="fas fa-caret-left"></i>
+                                        @endif
                                     </label>
                                 </div>
+                                @endif
                             @endforeach
                         </td>
                     </tr>

@@ -23,6 +23,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Actor</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Duración</th>
@@ -36,17 +37,19 @@
                 <tr>
                     <td>{{ $type->id }}</td>
                     <td>
+                        {{ $type->actor->name }}
+                    </td>
+                    <td>
                         @if($type->start)
                         <i class="fas fa-caret-right"></i>
                         @endif
 
                         {{ $type->name }}
 
-                        @if(isset($type->actor)) <strong>({{ $type->actor->name }})</strong> @endif
-
                         @if($type->end)
                             <i class="fas fa-caret-left"></i>
                         @endif
+
                     </td>
                     <td>
                         @if($type->require_user)
