@@ -7,6 +7,7 @@ use App\Models\Summary\Type;
 use App\Models\Summary\Link;
 use App\Models\Summary\EventType;
 use App\Http\Controllers\Controller;
+use App\Models\Summary\Actor;
 
 class EventTypeController extends Controller
 {
@@ -30,7 +31,9 @@ class EventTypeController extends Controller
     public function create()
     {
         $summaryTypes = Type::pluck('name','id');
-        return view('summary.events.create', compact('summaryTypes'));
+        $summaryActors = Actor::pluck('name','id');
+
+        return view('summary.events.create', compact('summaryTypes', 'summaryActors'));
     }
 
     /**
@@ -50,6 +53,7 @@ class EventTypeController extends Controller
         $eventType->actuary = isset($request->actuary);
         $eventType->repeat = isset($request->repeat);
         $eventType->sub_event = isset($request->sub_event);
+        $eventType->summary_actor_id = $request->summary_actor_id;
         $eventType->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $eventType->save();
         session()->flash('success', 'Se ha añadido el tipo de evento correctamente.');
@@ -75,7 +79,9 @@ class EventTypeController extends Controller
      */
     public function edit(EventType $eventType)
     {
-        return view('summary.events.edit', compact('eventType'));
+        $summaryActors = Actor::pluck('name','id');
+
+        return view('summary.events.edit', compact('eventType', 'summaryActors'));
     }
 
     /**
@@ -99,6 +105,7 @@ class EventTypeController extends Controller
         $eventType->repeat = isset($request->repeat);
         $eventType->sub_event = isset($request->sub_event);
         $eventType->num_repeat = $request->input('num_repeat');
+        $eventType->summary_actor_id = $request->summary_actor_id;
         $eventType->establishment_id = auth()->user()->organizationalUnit->establishment->id;
         $eventType->save();
 
@@ -116,7 +123,7 @@ class EventTypeController extends Controller
                 "after_event_id" => $type_id,
                 "after_sub_event" => $afterTypeEvent->sub_event
             ]);
-            
+
         }
 
         /* Actualizar los enlaces entre eventos con Link $link = new Link(); */
