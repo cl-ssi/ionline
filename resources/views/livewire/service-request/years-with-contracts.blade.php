@@ -1,5 +1,5 @@
 <div>
-    <ul class="nav justify-content-end">
+    <ul class="nav">
         <li class="nav-item">
             <b class="nav-link">Año</b>
         </li>

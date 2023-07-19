@@ -57,15 +57,15 @@ class ProfileController extends Controller
                 $fulfillment = $serviceRequest->fulfillments->where('month',$period)->first();
             }
             /** 
-             * Si es de tipo "HORA EXTRA" u "HORA MÉDICA", entonces tiene 1 solo periodo,
+             * Si es de tipo "Hora", entonces tiene 1 solo periodo,
              * dejemos seteada la URL con el periodo para que aparezca cargada la pagina
              * ya con el periodo selecionado (fulfillment)
              */
-            else if($serviceRequest->working_day_type == 'HORA EXTRA' OR $serviceRequest->working_day_type == 'HORA MÉDICA'){
+            else if($serviceRequest->program_contract_type == 'Horas'){
                 return redirect()->route('rrhh.service-request.show', [
                     'user' => $serviceRequest->user_id, 
                     'year' => $serviceRequest->start_date->year,
-                    'type' => $serviceRequest->working_day_type,
+                    'type' => $serviceRequest->program_contract_type,
                     'serviceRequest' => $serviceRequest,
                     'period' => $serviceRequest->fulfillments->first()->month ?? null,
                 ]);
