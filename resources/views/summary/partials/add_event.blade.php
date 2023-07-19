@@ -18,7 +18,9 @@
                     <option value=""></option>
                     @foreach ($links as $linkAfter)
                         <option value="{{ $linkAfter->afterEvent->id }}">
-                            {{ $linkAfter->afterEvent->name ?? '' }}
+                            {{ $linkAfter->afterEvent->name ?? '' }} 
+                            {{ $linkAfter->afterEvent->duration ? '('.$linkAfter->afterEvent->duration . ' días)' : '' }} 
+                            Desc: {{ $linkAfter->afterEvent->description }}
                         </option>
                     @endforeach
                 </select>
