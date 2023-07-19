@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Parameters\Subtitle;
 use App\Models\Parameters\ProgramBudget;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Program extends Model
+class Program extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'cfg_programs';
 

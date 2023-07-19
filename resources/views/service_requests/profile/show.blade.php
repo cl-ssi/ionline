@@ -36,6 +36,7 @@
         <!-- Mostrar los datos de perfil del Usuario -->
         @livewire('service-request.user-data', ['user' => $user])
 
+        <h5>Contratos</h5>
         <!-- Mostrar el listado de años en los que tenga contratos -->
         @livewire('service-request.years-with-contracts', [
             'user_id' => $user->id, 
@@ -43,11 +44,10 @@
         ])
 
         @if ($year)
-            <h5>Contratos</h5>
             <div class="card">
                 <div class="card-header">
-                    <!-- Mostrar listado de working_day_types -->
-                    @livewire('service-request.working-day-types', [
+                    <!-- Mostrar listado de program_contract_types -->
+                    @livewire('service-request.program-contract-types', [
                         'user_id' => $user->id, 
                         'year' => $year,
                         'type' => $type
@@ -55,8 +55,8 @@
                 </div>
                 <div class="card-body">
                     @if ($type)
-                        <!-- Mostrar todos los contratos por working_day_type seleccionado -->
-                        @livewire('service-request.contracts-by-working-day-type', [
+                        <!-- Mostrar todos los contratos por program_contract_type seleccionado -->
+                        @livewire('service-request.contracts-by-program-contract-type', [
                             'user_id' => $user->id, 
                             'year' => $year,
                             'type' => $type,
