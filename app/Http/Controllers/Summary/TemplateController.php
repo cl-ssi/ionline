@@ -40,25 +40,30 @@ class TemplateController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $eventType = EventType::findOrFail($request->event_type_id);
+        $template = new Template($request->except('fields'));
+        $fields = [];
+
+        foreach ($request->input('fields') as $field) {
+            $name = $field['nombre'];
+            $type = $field['tipo'];
+            $fields[$name] = $type;
+        }
+
+        $template->fields = $fields;
         if ($request->hasFile('template_file')) {
             $file = $request->file('template_file');
             $filename = $file->getClientOriginalName();
-            Template::create([
-                'event_type_id' => $eventType->id,
-                'name' => $file->getClientOriginalName(),
-                'file' => $file->storeAs('ionline/summary/templates/' .
-                $eventType->name, $filename, ['disk' => 'gcs']),
-            ]);
-            session()->flash('success', 'Se añadio la plantilla correctamente');
-            return redirect()->route('summary.templates.index');
+            $template->file = $file->storeAs('ionline/summary/templates/' .
+                $eventType->name, $filename, ['disk' => 'gcs']);
         }
+        $template->save();
+        session()->flash('success', 'Se creo la plantilla correctamente.');
+        return redirect()->back();
     }
 
     public function download(Template $file)
     {
         return Storage::disk('gcs')->download($file->file);
     }
-    
 }
