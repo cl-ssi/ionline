@@ -120,13 +120,14 @@ class Dte extends Model
         //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
         // }
         // else {
-            return $this->immediatePurchase->requestForm();;
+            return $this->immediatePurchase->requestForm();
         // }
     }
 
 
     public function scopeSearch($query, $filter)
     {
+        app('debugbar')->info($filter);
         if(!empty($filter)) {
             foreach($filter as $column => $value) {
                 if(!empty($value))
