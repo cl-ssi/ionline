@@ -29,6 +29,18 @@
         </div>
 
         <div class="form-group row">
+            <label for="for-name" class="col-sm-2 col-form-label">Tipo Actor*</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="summary_actor_id" required>
+                    <option value=""></option>
+                    @foreach($summaryActors as $actorId => $actorName)
+                        <option {{ ($actorId == $eventType->summary_actor_id) ? 'selected' : ''}} value="{{ $actorId }}">{{ $actorName }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label for="for-description" class="col-sm-2 col-form-label">Descripción</label>
             <div class="col-sm-10">
                 <textarea class="form-control" name="description">{{ $eventType->description }}</textarea>
@@ -179,7 +191,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="form-group row mt-3">
             <div class="col-sm-10">
                 <button type="submit" class="btn btn-success mr-3">Actualizar</button>
