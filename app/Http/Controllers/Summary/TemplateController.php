@@ -45,9 +45,12 @@ class TemplateController extends Controller
         $fields = [];
 
         foreach ($request->input('fields') as $field) {
-            $name = $field['nombre'];
-            $type = $field['tipo'];
-            $fields[$name] = $type;
+            // Verificar si ambos campos tienen valores antes de guardarlos
+            if (!empty($field['nombre']) && !empty($field['tipo'])) {
+                $name = $field['nombre'];
+                $type = $field['tipo'];
+                $fields[$name] = $type;
+            }
         }
 
         $template->fields = $fields;
