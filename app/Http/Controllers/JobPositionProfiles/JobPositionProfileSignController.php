@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use App\Notifications\JobPositionProfile\EndSigningProcess;
+use App\Notifications\JobPositionProfile\Sign;
 
 class JobPositionProfileSignController extends Controller
 {
