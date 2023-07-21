@@ -127,21 +127,29 @@ class JobPositionProfileController extends Controller
                 ->where('estament_id', $jobPositionProfile->estament_id)
                 ->get();
 
+            $generalRequirementsCount = collect(new StaffDecreeByEstament());
+            
             foreach($staffDecreeByEstaments as $staffDecreeByEstament){
                 if($jobPositionProfile->degree >= $staffDecreeByEstament->start_degree
                     && $jobPositionProfile->degree <= $staffDecreeByEstament->end_degree){
-                    $generalRequirements = new StaffDecreeByEstament();
-                    $generalRequirements = $staffDecreeByEstament;
+                    $generalRequirementsCount->add($staffDecreeByEstament);
                 }
+            }
+
+            if($generalRequirementsCount->count() == 0){
+                session()->flash('danger', 'Estimado Usuario, existe un error en el rango de grados correspondiente al estamento: '.$jobPositionProfile->estament->name);
+                return view('job_position_profile.edit', compact('jobPositionProfile'));
+            }
+            else{
+                $generalRequirements = $generalRequirementsCount->first();
             }
         }
         else{
             /* EVALUAR CAMBIAR POR PARAMETRO */
-            $generalRequirements                = collect(new StaffDecreeByEstament());
+            $generalRequirements = collect(new StaffDecreeByEstament());
             $generalRequirements->description   = 
             'Título Profesional otorgado por una Universidad del Estado o instituto profesional del estado o reconocido por éste o aquellos validados en Chile, de acuerdo a la legislación vigente.<br>Acredita dicho título con el certificado de inscripción en el registro nacional de prestadores individuales de salud de la superintendencia de salud, dicho documento será validado para profesionales nacionales y extranjeros provenientes del sector público y privado.';
         }
-
         return view('job_position_profile.edit_formal_requirements', 
             compact('jobPositionProfile', 'generalRequirements'));
     }
