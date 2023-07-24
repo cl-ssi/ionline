@@ -1,5 +1,5 @@
 <div class="card mb-3">
-    <div class="card-header text-white bg-success">
+    <div class="card-header text-white bg-success pb-0">
         <h5 class="card-title">Agregar nuevo paso</h5>
     </div>
     <div class="card-body">
@@ -20,7 +20,7 @@
                         <option value="{{ $linkAfter->afterEvent->id }}">
                             {{ $linkAfter->afterEvent->name ?? '' }} 
                             {{ $linkAfter->afterEvent->duration ? '('.$linkAfter->afterEvent->duration . ' días)' : '' }} 
-                            Desc: {{ $linkAfter->afterEvent->description }}
+                            {{ $linkAfter->afterEvent->description ? '('.$linkAfter->afterEvent->description.')' : '' }}
                         </option>
                     @endforeach
                 </select>
