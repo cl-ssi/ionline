@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Finance\Dte;
 use App\Models\Finance\PaymentFlow;
+use Illuminate\Database\Eloquent\Builder;
 
 
 
@@ -36,19 +37,23 @@ class PaymentController extends Controller
 
     public function indexProvision()
     {
-        
-        
-        $dtes = Dte::where('confirmation_status',1)->get();
+        $dtes = Dte::where('confirmation_status', 1)
+                ->where(function (Builder $query) {
+                    $query->whereNull('fin_status')
+                          ->orWhere('fin_status', 'rechazado');
+                })
+                ->get();
         return view('finance.payments.flows', compact('dtes'));
     }
 
     public function sendToFinance(Dte $dte)
     {
+        $dte->fin_status = 'Enviado a Finanzas';
+        $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,
             'user_id' => Auth::id(),
             'status' => 'Enviado a Finanzas',
-            
         ]);
 
         return redirect()->back()->with('success', 'Se ha enviado a finanzas exitosamente');

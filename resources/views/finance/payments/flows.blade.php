@@ -14,6 +14,7 @@
                 <th>Anexos</th>
                 <th>Acta de ingreso bodega</th>
                 <th>Estado</th>
+                <th>Observaciones</th>
                 <th>Enviar a Finanzas</th>
             </tr>
         </thead>
@@ -25,7 +26,7 @@
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" target="_blank"
                                 class="btn btn-sm mb-1 btn-outline-secondary">
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                ({{ $dte->tipo_documento ?? '' }})
+                                <small>({{ $dte->tipo_documento ?? '' }})</small>
                             </a>
                         @else
                             <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
@@ -149,8 +150,12 @@
                         @endforeach
                     </td>
                     <td>
-
                     </td>
+                    <td>
+                        @foreach ($dte->paymentFlows as $paymentFlow)
+                            <p>{{ $paymentFlow->observation }} @if($paymentFlow->observation)({{ $paymentFlow->user->short_name }}) @endif</p>
+                        @endforeach
+                    </td>                    
                     <td>
                         <a href="{{ route('finance.payments.sendToFinance', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
