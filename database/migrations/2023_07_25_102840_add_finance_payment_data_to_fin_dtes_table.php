@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('fin_dtes', function (Blueprint $table) {
             //
             $table->string('fin_status')->after('confirmation_observation')->nullable();
-            $table->datetime('fin_payed_at')->after('fin_estado')->nullable();
+            $table->datetime('fin_payed_at')->after('fin_status')->nullable();
             $table->string('fin_folio_devengo')->after('fin_payed_at')->nullable();
             $table->string('fin_folio_tesoreria')->after('fin_folio_devengo')->nullable();
         });
