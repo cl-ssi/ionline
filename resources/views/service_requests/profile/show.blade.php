@@ -97,7 +97,6 @@
                 </div>
             </div>
         @endif
-    
 
         <br>
 
@@ -128,58 +127,36 @@
                         <div class="progress-bar {{ $fulfillment->payment_date ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
                     </div>
 
-                    <!-- Información del incio y término del periodo -->
-                    <!-- Quién puede modificar esta información? -->
-                    <!-- Pasar a livewire -->
-                    <div class="form-row">
-                        <fieldset class="form-group col-12 col-md-2">
-                            <label for="for_type">Período</label>
-                            <select name="type" class="form-control" required="">
-                                <option value=""></option>
-                                <option value="Mensual" selected="">Mensual</option>
-                                <option value="Parcial">Parcial</option>
-                            </select>
-                        </fieldset>
-                        <fieldset class="form-group col-6 col-md-2">
-                            <label for="for_start_date">Inicio</label>
-                            <input type="date" class="form-control" name="start_date" value="2021-10-01" required="">
-                        </fieldset>
-                        <fieldset class="form-group col-6 col-md-2">
-                            <label for="for_end_date">Término</label>
-                            <input type="date" class="form-control" name="end_date" value="2021-10-31" required="">
-                        </fieldset>
-                        <fieldset class="form-group col-12 col-md-5">
-                            <label for="for_observation">Observación</label>
-                            <input type="text" class="form-control" name="observation" value="">
-                        </fieldset>
-                        
-                        <fieldset class="form-group col-1">
-                            <label for="for_submit"><br></label>
-                            <button type="submit" class="btn btn-primary form-control">
-                                <i class="fas fa-save"></i>
-                            </button>
-                        </fieldset>
-                    </div>
+                    <!-- Información del periodo, incio, término, obs, tipo -->
+                    @livewire('service-request.period-data')
 
-
-                    <!-- Livewire de Responsable -->
+                    <!-- Livewire de Responsable, el código del card que esté dentro del componente -->
                     <div class="card border-success mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Responsable </h5>
 
-                            @if($serviceRequest->program_contract_type == "Mensual")
-                                {{-- 
-                                @include('service_requests.requests.fulfillments.edit_monthly',['serviceRequest' => $serviceRequest])
-                                --}}
-                            @else
-                                {{-- 
-                                @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
-                                    @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
-                                @else
-                                    @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
-                                @endif
-                                --}}
-                            @endif
+                            <!-- Ejemplo para entender mejor el código -->
+                            @switch($serviceRequest->program_contract_type)
+                                @case("Mensual")
+                                    {{-- livewire(responsable.monthly) --}}
+                                    @break
+
+                                @case("Horas")
+                                    @switch($serviceRequest->working_day_type)
+                                        @case('HORA MÉDICA')
+                                        @case('TURNO DE REEMPLAZO')
+                                            {{-- livewire() --}}
+                                            @break
+                                        @case('TERCER TURNO')
+                                        @case('CUARTO TURNO')
+                                        @case('TERCER TURNO MOD...')
+                                        @case('ETC..')
+                                            {{-- livewire() --}}
+                                            @break
+                                    @endswitch
+                                    @break
+
+                            @endswitch
                         </div>
                     </div>
 
@@ -210,7 +187,13 @@
                         'fulfillment' => $fulfillment
                     ])
 
-                    <div class="text-right text-muted small">id cumplimiento: {{ $fulfillment->id }}</div>
+                    <div class="text-right text-muted small">
+                        id cumplimiento: {{ $fulfillment->id }} - 
+                        <!-- Opcion para borrar un cumplimiento -->
+                        <a class="text-link text-danger" title="borrar el cumplimiento" href="#">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
 
                     @can('Service Request: audit')
                         @include('partials.audit', ['audits' => $fulfillment->audits()])
