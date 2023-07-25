@@ -828,4 +828,12 @@ class User extends Authenticatable implements Auditable
         }
 
     }
+
+    /**
+    * Checkea si estoy en god mode
+    */
+    public function getGodModeAttribute()
+    {
+        return session()->has('god');
+    }
 }

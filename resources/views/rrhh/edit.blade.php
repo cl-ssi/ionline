@@ -124,10 +124,14 @@
         @endcan
 
         @can('be god')
-        <!--TODO: Revisar un código decente para utilizar este método, quizá sólo un link en vez de un formulario, chequear en el controller que tenga el rol god() -->
+        <!--TODO: Revisar un código decente para utilizar este método, -->
+        <!-- quizá sólo un link en vez de un formulario, -->
+        <!-- chequear en el controller que tenga el rol god() -->
         <form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
             {{ csrf_field() }}
-            <button class="btn btn-sm btn-outline-warning"><span class="fas fa-redo" aria-hidden="true"></span> Switch</button>
+            <button class="btn btn-sm btn-outline-warning" @disabled(auth()->user()->godMode)>
+                <i class="fas fa-redo"></i> Switch
+            </button>
         </form>
         @endcan
 
