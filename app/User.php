@@ -730,7 +730,7 @@ class User extends Authenticatable implements Auditable
             return $this->subrogations
                 ->where('subrogant.absent',false)
                 ->first()
-                ->subrogant ?? collect();
+                ->subrogant ?? null;
         }
         else
         {

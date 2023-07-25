@@ -96,9 +96,11 @@
                         <b>{{ $pendingSignaturesFlow->signerName }}</b><br>
                         {{ $pendingSignaturesFlow->type }}
                         @if($pendingSignaturesFlow->userSigner->absent == 1)
-                        <br>
-                        <b>Firma Subrrogada por</b>:<br>
-                        {{ optional(Auth::user()->subrogant)->tinnyName }}
+                            @if($pendingSignaturesFlow->userSigner->subrogant)
+                            <br>
+                                <b>Firma Subrrogada por</b>:<br>
+                                {{ $pendingSignaturesFlow->userSigner->subrogant->tinnyName }}
+                            @endif
                         @endif
                     </td>
                     <td>
