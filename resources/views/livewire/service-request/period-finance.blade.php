@@ -41,7 +41,7 @@
             <div class="col-3">
                 <button class="btn btn-primary" type="submit">Guardar</button>
             </div>
-            <div class="col align-text-bottom">
+            <div class="col align-self-end">
                 @if($fulfillment->finances_approbation_date)
                     {{ $fulfillment->finances_approbation_date }} - {{ $fulfillment->financesUser->shortName }}
                 @else

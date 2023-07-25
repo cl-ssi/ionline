@@ -16,4 +16,10 @@
         </a>
     </li>
     @endforeach
+    <!-- Código para agregar un periodo -->
+    <li class="nav-item">
+        <a class="nav-link text-success " href="#">
+            <i class="fas fa-plus"></i>
+        </a>
+    </li>
 </ul>
