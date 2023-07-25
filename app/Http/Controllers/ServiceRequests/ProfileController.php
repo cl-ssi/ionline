@@ -20,7 +20,7 @@ class ProfileController extends Controller
                 return redirect()->route('rrhh.service-request.show', [
                     'user' => $serviceRequest->user_id, 
                     'year' => $serviceRequest->start_date->year,
-                    'type' => $serviceRequest->working_day_type,
+                    'type' => $serviceRequest->program_contract_type,
                     'serviceRequest' => $serviceRequest,
                 ]);
             }
