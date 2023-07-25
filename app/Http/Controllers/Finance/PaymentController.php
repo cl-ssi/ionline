@@ -24,25 +24,24 @@ class PaymentController extends Controller
     public function indexOwn()
     {
         $userId = Auth::id();
-
-        // $requestforms = RequestForm::whereHas('ImmediatePurchases', function ($query) {
-        //     $query->has('dtes');
-        // })
-        //     ->where(function ($query) use ($userId) {
-        //         $query->where('request_user_id', $userId)
-        //             ->orWhere('contract_manager_id', $userId);
-        //     })
-        //     ->get();
-
-        // $dtes = Dte::has('immediatePurchase')->whereRelation('immediatePurchase.requestForm','request_user_id',$userId)->get();
         $dtes = Dte::whereHas('immediatePurchase.requestForm', function ($query) use ($userId) {
             $query->where('request_user_id', $userId)
                 ->orWhere('contract_manager_id', $userId);
         })
         ->whereNotIn('tipo_documento', ['guias_despacho', 'nota_credito'])
             ->get();
-
-
         return view('finance.payments.indexown', compact('dtes'));
+    }
+
+    public function indexProvision()
+    {
+        dd('abastecimiento');
+        //return view('finance.payments.index');
+    }
+
+    public function indexFinance()
+    {
+        dd('finanzas');
+        //return view('finance.payments.index');
     }
 }
