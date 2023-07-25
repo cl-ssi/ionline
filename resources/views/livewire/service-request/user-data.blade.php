@@ -5,54 +5,57 @@
             <h4 class="card-title">Datos Personales</h4>
             <div class="form-row mb-3">
                 <div class="col-md-2">
-                    <label for="validationDefault02">RUN</label>
-                    <input type="text" class="form-control" id="validationDefault02" disabled value="{{ $user->runFormat() }}">
+                    <label for="for-run">RUN</label>
+                    <input type="text" class="form-control" id="for-run" disabled value="{{ $user->runFormat() }}">
                 </div>
                 <div class="col-md-3">
-                    <label for="validationDefault01">Nombres</label>
-                    <input type="text" class="form-control" id="validationDefault01" value="{{ $user->name }}">
+                    <label for="for-name">Nombres</label>
+                    <input type="text" class="form-control" id="for-name" wire:model.defer="user.name">
                 </div>
                 <div class="col-md-3">
-                    <label for="validationDefault02">Apellido P.</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->fathers_family }}">
+                    <label for="for-fathers_family">Apellido P.</label>
+                    <input type="text" class="form-control" id="for-fathers_family" wire:model.defer="user.fathers_family">
                 </div>
                 <div class="col-md-3">
-                    <label for="validationDefault02">Apellido M.</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->mothers_family }}">
+                    <label for="for-mothers_family">Apellido M.</label>
+                    <input type="text" class="form-control" id="for-mothers_family" wire:model.defer="user.mothers_family">
                 </div>
                 <div class="col-1">
                     <label for=""><br></label>
-                    <button type="submit" class="btn btn-primary form-control">
+                    <button type="button" class="btn btn-primary form-control" wire:click="save">
                         <i class="fas fa-save"></i>
                     </button>
                 </div>
             </div>
             <div class="form-row mb-3">
                 <div class="col-md-4">
-                    <label for="validationDefault02">Dirección</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->address }}">
+                    <label for="for-address">Dirección </label>
+                    <input type="text" class="form-control" id="for-address" wire:model.defer="user.address">
                 </div>
                 <div class="col-md-2">
-                    <label for="validationDefault02">Comuna</label>
-                    <select name="" id="" class="form-control">
-                        <option value="">Iquique</option>
+                    <label for="for-commune_id">Comuna</label>
+                    <select wire:model.defer="user.commune_id" class="form-control">
+                        <option value=""></option>
+                        @foreach($communes->sort() as $key => $name)
+                            <option value="{{ $key }}">{{ $name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="validationDefault02">Telefono</label>
-                    <input type="text" class="form-control" id="validationDefault02" value="{{ $user->phone_number }}">
+                    <label for="for-phone_number">Telefono</label>
+                    <input type="text" class="form-control" id="for-phone_number" wire:model.defer="user.phone_number">
                 </div>
                 <div class="col-md-4">
-                    <label for="validationDefault02">Email Personal</label>
+                    <label for="for-email_personal">Email Personal</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Email personal" value="{{ $user->email_personal }}">
+                        <input type="text" class="form-control" placeholder="Email personal" wire:model.defer="user.email_personal" @disabled($user->email_verified_at)>
                         <div class="input-group-append">
                             @if($user->email_verified_at)
-                            <button class="btn btn-success" title="Email verificado" disabled type="button" id="button-addon2">
+                            <button class="btn btn-success" title="Email verificado" disabled type="button">
                                 <i class="fas fa-envelope"></i>
                             </button>
                             @else
-                            <button class="btn btn-warning" title="Verificar email" type="button" id="button-addon2">
+                            <button class="btn btn-warning" title="Verificar email" type="button" wire:click="sendEmailVerification">
                                 <i class="fas fa-envelope"></i>
                             </button>
                             @endif
@@ -61,6 +64,8 @@
                 </div>
             </div>
 
+            @include('layouts.partials.errors')
+            @include('layouts.partials.flash_message')
         </div>
     </div>
 </div>
