@@ -13,6 +13,7 @@ use App\Rrhh\Authority;
 use App\Models\Rrhh\UserBankAccount;
 use App\Models\Parameters\AccessLog;
 use App\Models\Establishment;
+use App\Models\ClCommune;
 use App\Http\Requests\Rrhh\updatePassword;
 use App\Http\Requests\Rrhh\storeUser;
 use App\Http\Controllers\Controller;
@@ -99,7 +100,9 @@ class UserController extends Controller
     public function store(storeUser $request)
     {
         $user = new User($request->All());
-        $user->password = bcrypt($request->id);
+
+        /** Ya no crearemos el password por defecto */
+        //$user->password = bcrypt($request->id);
 
         if ($request->has('organizationalunit')) {
             if ($request->filled('organizationalunit')) {
@@ -161,8 +164,12 @@ class UserController extends Controller
             'childs.childs.childs.childs',
             'childs.childs.childs.childs.establishment',
         ])->where('level', 1)->get();
+
         $bankaccount = UserBankAccount::where('user_id', $user_id)->get();
+        $communes = ClCommune::pluck('name','id');
+
         return view('rrhh.edit')
+            ->withCommunes($communes)
             ->withUser($user)
             ->withBankaccount($bankaccount)
             ->withouRoots($ouRoots);
