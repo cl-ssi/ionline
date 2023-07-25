@@ -57,11 +57,10 @@ class ProfileController extends Controller
                 $fulfillment = $serviceRequest->fulfillments->where('month',$period)->first();
             }
             /** 
-             * Si es de tipo "Hora", entonces tiene 1 solo periodo,
-             * dejemos seteada la URL con el periodo para que aparezca cargada la pagina
-             * ya con el periodo selecionado (fulfillment)
+             * Si tiene 1 solo periodo, dejemos seteada la URL para que aparezca 
+             * cargada la pagina con el periodo selecionado (fulfillment)
              */
-            else if($serviceRequest->program_contract_type == 'Horas'){
+            else if($serviceRequest->fulfillments->count() == 1){
                 return redirect()->route('rrhh.service-request.show', [
                     'user' => $serviceRequest->user_id, 
                     'year' => $serviceRequest->start_date->year,

@@ -35,36 +35,43 @@
     @if($user)
         <!-- Mostrar los datos de perfil del Usuario -->
         @livewire('service-request.user-data', ['user' => $user])
-
-        <h5>Contratos</h5>
-        <!-- Mostrar el listado de años en los que tenga contratos -->
-        @livewire('service-request.years-with-contracts', [
-            'user_id' => $user->id, 
-            'year' => $year
-        ])
-
-        @if ($year)
-            <div class="card">
-                <div class="card-header">
+        <h5 class="mt-2">Contratos</h5>
+        <div class="row">
+            <div class="col">
+                <!-- Mostrar el listado de años en los que tenga contratos -->
+                @livewire('service-request.years-with-contracts', [
+                    'user_id' => $user->id, 
+                    'year' => $year
+                ])
+            </div>
+            <div class="col">
+                @if ($year)
                     <!-- Mostrar listado de program_contract_types -->
                     @livewire('service-request.program-contract-types', [
                         'user_id' => $user->id, 
                         'year' => $year,
                         'type' => $type
                     ])
-                </div>
-                <div class="card-body">
-                    @if ($type)
-                        <!-- Mostrar todos los contratos por program_contract_type seleccionado -->
-                        @livewire('service-request.contracts-by-program-contract-type', [
-                            'user_id' => $user->id, 
-                            'year' => $year,
-                            'type' => $type,
-                            'service_request_id' => $serviceRequest->id ?? null
-                        ])
-                    @endif
+                @endif
+            </div>
+        </div>
 
-                    @if ($serviceRequest)
+
+        @if ($year)
+
+            @if ($type)
+                <!-- Mostrar todos los contratos por program_contract_type seleccionado -->
+                @livewire('service-request.contracts-by-program-contract-type', [
+                    'user_id' => $user->id, 
+                    'year' => $year,
+                    'type' => $type,
+                    'service_request_id' => $serviceRequest->id ?? null
+                ])
+            @endif
+
+            @if ($serviceRequest)
+                <div class="card">
+                    <div class="card-body">
                         <!-- Mostrar los datos del Service Request -->
                         @livewire('service-request.show-compact', [
                             'serviceRequest' => $serviceRequest
@@ -91,116 +98,116 @@
                                 </button>
                             </div>
                         </div>
-                    @endif
-
-
+                        
+                        
+                    </div>
                 </div>
-            </div>
+            @endif
         @endif
 
         <br>
 
         @if($serviceRequest)
 
-        <h5 id="periods-card">Periodos</h5>
+            <h5 id="periods-card">Periodos</h5>
 
-        <div class="card">
-            <div class="card-header">
-                <!-- Muestra la barra de periodos -->
-                @livewire('service-request.periods-bar',[
-                    'user_id' => $user->id, 
-                    'year' => $year,
-                    'type' => $type,
-                    'serviceRequest' => $serviceRequest,
-                    'period' => $period
-                ])
-            </div>
-
-            <div class="card-body">
-
-                @if($period)
-                    <div class="progress mb-3">
-                        <div class="progress-bar {{ $serviceRequest->has_resolution_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
-                        <div class="progress-bar {{ $fulfillment->signatures_file_id ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
-                        <div class="progress-bar {{ $fulfillment->total_to_pay ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
-                        <div class="progress-bar {{ $fulfillment->has_invoice_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
-                        <div class="progress-bar {{ $fulfillment->payment_date ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
-                    </div>
-
-                    <!-- Información del periodo, incio, término, obs, tipo -->
-                    @livewire('service-request.period-data')
-
-                    <!-- Livewire de Responsable, el código del card que esté dentro del componente -->
-                    <div class="card border-success mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">Responsable </h5>
-
-                            <!-- Ejemplo para entender mejor el código -->
-                            @switch($serviceRequest->program_contract_type)
-                                @case("Mensual")
-                                    {{-- livewire(responsable.monthly) --}}
-                                    @break
-
-                                @case("Horas")
-                                    @switch($serviceRequest->working_day_type)
-                                        @case('HORA MÉDICA')
-                                        @case('TURNO DE REEMPLAZO')
-                                            {{-- livewire() --}}
-                                            @break
-                                        @case('TERCER TURNO')
-                                        @case('CUARTO TURNO')
-                                        @case('TERCER TURNO MOD...')
-                                        @case('ETC..')
-                                            {{-- livewire() --}}
-                                            @break
-                                    @endswitch
-                                    @break
-
-                            @endswitch
-                        </div>
-                    </div>
-
-
-                    <!-- Livewire de rrhh -->
-                    @livewire('service-request.period-rrhh', [
-                        'fulfillment' => $fulfillment
+            <div class="card">
+                <div class="card-header">
+                    <!-- Muestra la barra de periodos -->
+                    @livewire('service-request.periods-bar',[
+                        'user_id' => $user->id, 
+                        'year' => $year,
+                        'type' => $type,
+                        'serviceRequest' => $serviceRequest,
+                        'period' => $period
                     ])
-                        
-                    <!-- Livewire de Boleta -->
-                    <div class="card mb-3 border-warning">
-                        <div class="card-body">
-                            <h5 class="card-title">Boleta</h5>
-                            <div class="form-row mb-3">
-                                <div class="col">
-                                    @if($fulfillment->total_to_pay)
-                                        @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment ])
-                                    @else
-                                        No se ha ingresado el "Total a pagar" en Recuros Humanos.
-                                    @endif
+                </div>
+
+                <div class="card-body">
+
+                    @if($period)
+                        <div class="progress mb-3">
+                            <div class="progress-bar {{ $serviceRequest->has_resolution_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Contrato</div>
+                            <div class="progress-bar {{ $fulfillment->signatures_file_id ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Responsable</div>
+                            <div class="progress-bar {{ $fulfillment->total_to_pay ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Recursos Humanos</div>
+                            <div class="progress-bar {{ $fulfillment->has_invoice_file ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Boleta</div>
+                            <div class="progress-bar {{ $fulfillment->payment_date ? 'bg-success' : 'bg-secondary' }}" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">Finanzas</div>
+                        </div>
+
+                        <!-- Información del periodo, incio, término, obs, tipo -->
+                        @livewire('service-request.period-data')
+
+                        <!-- Livewire de Responsable, el código del card que esté dentro del componente -->
+                        <div class="card border-success mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Responsable </h5>
+
+                                <!-- Ejemplo para entender mejor el código -->
+                                @switch($serviceRequest->program_contract_type)
+                                    @case("Mensual")
+                                        {{-- livewire(responsable.monthly) --}}
+                                        @break
+
+                                    @case("Horas")
+                                        @switch($serviceRequest->working_day_type)
+                                            @case('HORA MÉDICA')
+                                            @case('TURNO DE REEMPLAZO')
+                                                {{-- livewire() --}}
+                                                @break
+                                            @case('TERCER TURNO')
+                                            @case('CUARTO TURNO')
+                                            @case('TERCER TURNO MOD...')
+                                            @case('ETC..')
+                                                {{-- livewire() --}}
+                                                @break
+                                        @endswitch
+                                        @break
+
+                                @endswitch
+                            </div>
+                        </div>
+
+
+                        <!-- Livewire de rrhh -->
+                        @livewire('service-request.period-rrhh', [
+                            'fulfillment' => $fulfillment
+                        ])
+                            
+                        <!-- Livewire de Boleta -->
+                        <div class="card mb-3 border-warning">
+                            <div class="card-body">
+                                <h5 class="card-title">Boleta</h5>
+                                <div class="form-row mb-3">
+                                    <div class="col">
+                                        @if($fulfillment->total_to_pay)
+                                            @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment ])
+                                        @else
+                                            No se ha ingresado el "Total a pagar" en Recuros Humanos.
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Livewire de Finanzas -->
-                    @livewire('service-request.period-finance', [
-                        'fulfillment' => $fulfillment
-                    ])
+                        <!-- Livewire de Finanzas -->
+                        @livewire('service-request.period-finance', [
+                            'fulfillment' => $fulfillment
+                        ])
 
-                    <div class="text-right text-muted small">
-                        id cumplimiento: {{ $fulfillment->id }} - 
-                        <!-- Opcion para borrar un cumplimiento -->
-                        <a class="text-link text-danger" title="borrar el cumplimiento" href="#">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </div>
+                        <div class="text-right text-muted small">
+                            id cumplimiento: {{ $fulfillment->id }} - 
+                            <!-- Opcion para borrar un cumplimiento -->
+                            <a class="text-link text-danger" title="borrar el cumplimiento" href="#">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
 
-                    @can('Service Request: audit')
-                        @include('partials.audit', ['audits' => $fulfillment->audits()])
-                    @endcan
-                @endif
+                        @can('Service Request: audit')
+                            @include('partials.audit', ['audits' => $fulfillment->audits()])
+                        @endcan
+                    @endif
+                </div>
             </div>
-        </div>
         @endif
 
     @endif

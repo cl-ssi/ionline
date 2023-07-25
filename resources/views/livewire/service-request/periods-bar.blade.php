@@ -17,8 +17,8 @@
     </li>
     @endforeach
     <!-- Código para agregar un periodo -->
-    <li class="nav-item">
-        <a class="nav-link text-success " href="#">
+    <li class="nav-item small">
+        <a class="nav-link text-success small" href="#" title="Agregar un nuevo periodo">
             <i class="fas fa-plus"></i>
         </a>
     </li>
