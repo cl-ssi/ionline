@@ -97,7 +97,7 @@
         </div>
         <div class="form-group col-11 col-md-4">
             <label for="for-email">Email Personal</label>
-            <input type="email" class="form-control" name="email_personal" value="{{ $user->email_personal }}">
+            <input type="email" class="form-control" @disabled($user->hasVerifiedEmail()) name="email_personal" value="{{ $user->email_personal }}">
         </div>
     </div>
 
