@@ -174,6 +174,9 @@ class RoleAndPermissionSeeder extends Seeder
         
         Permission::create(['name' => 'Payments', 'description' => 'Acceso al módulo Estados de Pago']);
 
+        Permission::create(['name' => 'Summary: user', 'description' => 'Usuario del módulo de Sumarios']);
+        Permission::create(['name' => 'Summary: admin', 'description' => 'Administrador del módulo de sumarios']);
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'
