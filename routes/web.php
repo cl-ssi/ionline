@@ -1855,7 +1855,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 });
 
 /* Finanzas */
-Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () {    
+Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
@@ -1863,11 +1863,8 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('/', [PaymentController::class, 'index'])->name('index');
     Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
     Route::get('/provision', [PaymentController::class, 'indexProvision'])->name('provision');
+    Route::get('/{dte}/send-to-finance', [PaymentController::class, 'sendToFinance'])->name('sendToFinance');
     Route::get('/finances', [PaymentController::class, 'indexFinance'])->name('finance');
-    
-
-    //Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
-
     });
 });
 

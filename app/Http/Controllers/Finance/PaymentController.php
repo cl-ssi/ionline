@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
-use App\Models\RequestForms\RequestForm;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Finance\Dte;
+use App\Models\Finance\PaymentFlow;
+
 
 
 class PaymentController extends Controller
@@ -35,8 +36,23 @@ class PaymentController extends Controller
 
     public function indexProvision()
     {
-        dd('abastecimiento');
-        //return view('finance.payments.index');
+        
+        
+        $dtes = Dte::where('confirmation_status',1)->get();
+        return view('finance.payments.flows', compact('dtes'));
+    }
+
+    public function sendToFinance(Dte $dte)
+    {
+        PaymentFlow::create([
+            'dte_id' => $dte->id,
+            'user_id' => Auth::id(),
+            'status' => 'Enviado a Finanzas',
+            
+        ]);
+
+        return redirect()->back()->with('success', 'Se ha enviado a finanzas exitosamente');
+        
     }
 
     public function indexFinance()
