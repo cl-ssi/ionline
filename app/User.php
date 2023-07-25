@@ -4,6 +4,7 @@ namespace App;
 
 use Spatie\Permission\Traits\HasRoles;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,7 +22,8 @@ use App\Models\Parameters\AccessLog;
 use App\Models\Lobby\Meeting;
 use App\Models\Inv\EstablishmentUser;
 use App\Models\Establishment;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Country;
+use App\Models\ClCommune;
 
 class User extends Authenticatable implements Auditable
 {
@@ -47,6 +49,7 @@ class User extends Authenticatable implements Auditable
         'mothers_family',
         'gender',
         'address',
+        'commune_id',
         'phone_number',
         'email',
         'password',
@@ -127,9 +130,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne('\App\Models\Resources\Mobile');
     }
 
+    public function commune()
+    {
+        return $this->belongsTo(ClCommune::class);
+    }
+    
     public function country()
     {
-        return $this->belongsTo('\App\Models\Country');
+        return $this->belongsTo(Country::class);
     }
 
     public function pharmacies()
