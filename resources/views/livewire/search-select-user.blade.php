@@ -13,6 +13,7 @@
             wire:model.debounce.1000ms="selectedName"
             disabled readonly
         @endif
+        onkeydown="return event.key != 'Enter';"
         />
 
         <div class="input-group-append">

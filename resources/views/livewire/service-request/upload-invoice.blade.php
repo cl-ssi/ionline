@@ -2,6 +2,7 @@
     <div class="col-3">
         <b>Monto a ingresar:</b> ${{ money($fulfillment->total_to_pay) }}
     </div>
+
     @if($has_invoice_file)
         <div class="col-1"></div>
         <div class="col-1">
@@ -14,9 +15,12 @@
                 target="_blank" class="btn btn-outline-info form-control"> <i class="fas fa-dollar-sign"></i> Boleta </a>
             </a>
         </div>
-        <div class="col-3">
+    </div>
+    <div class="form-row mt-3">
+        <div class="col offset-md-3 align-self-end">
             @if($fulfillment->voiceUploader)
-                {{ $fulfillment->voiceUploader->shortName }} <br> {{ $fulfillment->has_invoice_file_at }}
+                {{ $fulfillment->has_invoice_file_at }} - 
+                {{ $fulfillment->voiceUploader->shortName }}
             @endif
         </div>
     @else

@@ -93,14 +93,15 @@
                     {{--<td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>--}}
                     <td>{{ $pendingSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <b>{{ $pendingSignaturesFlow->signerName }}</b>
-                        @if($pendingSignaturesFlow->userSigner->absent == 1)
-                        <br>
-                        <b>Firma Subrrogada por</b>:
-                        {{ Auth::user()->tinnyName }}
-                        @endif
-                        <br>
+                        <b>{{ $pendingSignaturesFlow->signerName }}</b><br>
                         {{ $pendingSignaturesFlow->type }}
+                        @if($pendingSignaturesFlow->userSigner->absent == 1)
+                            @if($pendingSignaturesFlow->userSigner->subrogant)
+                            <br>
+                                <b>Firma Subrrogada por</b>:<br>
+                                {{ $pendingSignaturesFlow->userSigner->subrogant->tinnyName }}
+                            @endif
+                        @endif
                     </td>
                     <td>
                         @if($pendingSignaturesFlow->signature->reserved)
@@ -112,7 +113,7 @@
                     <td>{{ $pendingSignaturesFlow->signature->responsable->tinnyName }}</td>
                     <td>
                         @can('Documents: signatures and distribution')
-                        <button type="button" class="btn btn-sm btn-outline-primary"
+                        <button type="button" class="btn btn-sm btn-outline-primary" @disabled(auth()->user()->godMode)
                             onclick="getSignModalContent({{$pendingSignaturesFlow->id}})" title="Firmar documento">
                             <i class="fas fa-fw fa-file-signature"></i>
                         </button>
@@ -120,7 +121,7 @@
                     </td>
                     <td>
                         @can('Documents: signatures and distribution')
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" @disabled(auth()->user()->godMode)
                             data-target="#rejectSignature{{$pendingSignaturesFlow->id}}" title="Rechazar documento">
                             <i class="fas fa-fw fa-times-circle"></i>
                         </button>
@@ -274,12 +275,6 @@
                     <td>{{ $signedSignaturesFlow->signature->created_at->format('Y-m-d') }}</td>
                     <td>
                         <b>{{ $signedSignaturesFlow->userSigner->tinnyName }}</b>
-
-                        @if($signedSignaturesFlow->userSigner->absent == 1)
-                        <br>
-                        <b>Firma Subrrogada por</b>:
-                        {{ Auth::user()->tinnyName }}
-                        @endif
                         <br>
                         {{ $signedSignaturesFlow->signature ? $signedSignaturesFlow->type : '' }}
                     </td>

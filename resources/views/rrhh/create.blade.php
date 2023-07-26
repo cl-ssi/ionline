@@ -20,20 +20,18 @@
             <label for="formGroupDVInput">DV*</label>
             <input type="text" class="form-control" id="formGroupDVInput" name="dv" required="required" title="Digito verificador" autocomplete="off">
         </fieldset>
-    </div>
 
-    <div class="form-row">
-        <fieldset class="form-group col-md-4">
+        <fieldset class="form-group col-md-3">
             <label for="formGroupNameInput">Nombre*</label>
             <input type="text" class="form-control" id="formGroupNameInput" placeholder="Nombre" name="name" required="required">
         </fieldset>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="name">Apellido Paterno*</label>
             <input type="text" class="form-control" name="fathers_family" required="required">
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="name">Apellido Materno*</label>
             <input type="text" class="form-control" name="mothers_family" required="required">
         </div>
@@ -45,21 +43,27 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-md-12">
+            <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
+                @livewire('select-organizational-unit', [
+                    'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
+                    'select_id' => 'organizationalunit'
+                ])
+        </fieldset>
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-6">
             <label for="forPosition">Función que desempeña</label>
             <input type="text" class="form-control" id="forPosition" placeholder="Subdirector(S), Enfermera, Referente..., Jefe." name="position">
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-4">
-            <label for="formGroupEmailInput">Email*</label>
-            <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email" name="email" required="required">
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-4">
-            <label for="formGroupEmailInput">Email Personal</label>
-            <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email Personal" name="email_personal">
+            <label for="formGroupEmailInput">Email institucional</label>
+            <input type="email" class="form-control" id="formGroupEmailInput" placeholder="Email" name="email">
         </fieldset>
     </div>
+
 
     <!--
     <fieldset class="form-group">
@@ -71,16 +75,6 @@
     </fieldset>
         
     -->
-
-    <div class="form-row">
-        <fieldset class="form-group col-md-12">
-            <label for="forOrganizationalUnit">Establecimiento / Unidad Organizacional</label>
-                @livewire('select-organizational-unit', [
-                    'establishment_id' => auth()->user()->organizationalUnit->establishment->id,
-                    'select_id' => 'organizationalunit'
-                ])
-        </fieldset>
-    </div>
 
     <h5>Permisos iniciales</h5>
 
