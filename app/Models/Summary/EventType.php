@@ -2,12 +2,14 @@
 
 namespace App\Models\Summary;
 
+use App\Helpers\DateHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Summary\Type;
 use App\Models\Summary\Template;
 use App\Models\Summary\Link;
+use Illuminate\Support\Carbon;
 
 class EventType extends Model
 {
@@ -69,6 +71,71 @@ class EventType extends Model
     public function getRepeatTextAttribute()
     {
         return $this->repeat ? 'Sí' : 'No';
+    }
+
+    public function getBusinessDaysAttribute()
+    {
+        if(isset($this->duration))
+        {
+            $businessDays = DateHelper::getBusinessDaysByDuration($this->created_at, $this->duration);
+        }
+        else
+        {
+            $businessDays = DateHelper::getBusinessDaysByDateRange($this->created_at, now());
+        }
+
+        return $businessDays;
+    }
+
+    public function getDaysPassedAttribute()
+    {
+        $businessDays = $this->businessDays;
+
+        $endDate = now();
+
+        $index = 0;
+
+        $found = 0;
+
+        while($index < $businessDays->count())
+        {
+            $date = Carbon::parse($businessDays[$index]);
+
+            if($endDate->gt($date))
+            {
+                $found++;
+            }
+            $index++;
+        }
+
+        return $found;
+    }
+
+    public function getLeftDaysAttribute()
+    {
+        $leftDays = $this->totalDays - $this->daysPassed;
+
+        return $leftDays;
+    }
+
+    public function getTotalDaysAttribute()
+    {
+        if(isset($this->duration))
+        {
+            return $this->businessDays->count();
+        }
+        return null;
+    }
+
+    public function getProgressPercentageAttribute()
+    {
+        $total = $this->businessDays->count();
+
+        $progress = $this->daysPassed;
+
+        $percentage = ($progress * 100) / $total;
+
+        return intval($percentage);
     }
 
     /** Cuál es la utilidad del link before? */
