@@ -131,7 +131,7 @@ class EventType extends Model
     {
         $total = $this->businessDays->count();
 
-        $percentage = ($$this->daysPassed * 100) / $total;
+        $percentage = ($this->daysPassed * 100) / $total;
 
         return intval($percentage);
     }
