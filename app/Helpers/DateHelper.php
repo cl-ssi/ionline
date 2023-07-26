@@ -32,7 +32,6 @@ class DateHelper
             if($holidays->doesntContain($startDate->format('Y-m-d')) && $weekend->doesntContain($startDate->dayOfWeek))
             {
                 $businessDays->push($startDate->format('Y-m-d'));
-
             }
 
             $startDate = $startDate->copy()->addDay();
