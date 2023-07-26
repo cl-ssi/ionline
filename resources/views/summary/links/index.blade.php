@@ -35,22 +35,56 @@
                             <td>
                                 <ul>
                                     @foreach ($eventType->linksBefore as $linkBefore)
-                                        <li>{{ $linkBefore->beforeEvent->name ?? '' }}</li>
+                                        <li>
+                                            @if($linkBefore->beforeEvent->start)
+                                                <i class="fas fa-caret-right"></i>
+                                            @endif
+
+                                            <a class="text-link" href="{{ route('summary.event-types.edit', $linkBefore->beforeEvent) }}">
+                                            [{{ $linkBefore->beforeEvent->actor->name }}] 
+                                            {{ $linkBefore->beforeEvent->name ?? '' }}
+                                            </a>
+
+                                            @if($linkBefore->beforeEvent->end)
+                                                <i class="fas fa-caret-left"></i>
+                                            @endif
+                                        </li>
                                     @endforeach
                                 </ul>
                             </td>
                             <td class="bg-light">
-                                <a class="btn btn-sm btn-primary" href="{{ route('summary.event-types.edit', $eventType) }}">
-                                    <i class="fas fa-fw fa-edit"></i>
+                                @if($eventType->start)
+                                    <i class="fas fa-caret-right"></i>
+                                @endif
+
+                                <a class="text-link" href="{{ route('summary.event-types.edit', $eventType) }}">
+                                    [{{ $eventType->actor->name }}] 
+                                    {{ $eventType->name ?? '' }}
                                 </a>
-                                {{ $eventType->name ?? '' }}
+
+                                @if($eventType->end)
+                                    <i class="fas fa-caret-left"></i>
+                                @endif
                             </td>
                             <td>
                                 <ul>
                                     @foreach ($eventType->linksAfter as $linkAfter)
-                                        <li>{{ $linkAfter->afterEvent->name ?? '' }}</li>
-                                    @endforeach
+                                        <li>
+                                            @if($linkAfter->afterEvent->start)
+                                                <i class="fas fa-caret-right"></i>
+                                            @endif
 
+                                            @if($linkAfter->afterEvent->sub_event) &nbsp;&nbsp; @endif
+                                            <a class="text-link" href="{{ route('summary.event-types.edit', $linkAfter->afterEvent) }}">
+                                            [{{ $linkAfter->afterEvent->actor->name }}] 
+                                            {{ $linkAfter->afterEvent->name ?? '' }}
+                                            </a>
+
+                                            @if($linkAfter->afterEvent->end)
+                                                <i class="fas fa-caret-left"></i>
+                                            @endif
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </td>
                         </tr>

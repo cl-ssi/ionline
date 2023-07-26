@@ -20,7 +20,7 @@
             <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-outline-secondary" type="button" wire:click="render()"> <i
+            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i
                     class="fas fa-search"></i> Buscar</button>
         </div>
         <div class="col-md-4 text-right">

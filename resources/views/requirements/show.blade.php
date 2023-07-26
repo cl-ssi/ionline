@@ -57,6 +57,7 @@
 
 <div class="row d-print-none">
     <div class="col-6 col-md-2">
+        @if(!auth()->user()->godMode)
         <a class="btn btn-primary" data-toggle="collapse" data-target="#collapseExample"
             href="{{ route('requirements.create') }}">
             <i class="fas fa-plus"></i> Evento
@@ -73,6 +74,7 @@
             </form>
             @endif
         @endcan
+    @endif
     </div>
     <div class="col-6 col-md-5">
         @livewire('requirements.set-label',['req' => $requirement])

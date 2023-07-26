@@ -7,10 +7,10 @@ use App\Models\Parameters\Holiday;
 class DateHelper
 {
     /**
-     * Undocumented function
+     * Gets the business days for a date range
      *
-     * @param  [type] $startDate
-     * @param  [type] $endDate
+     * @param  \Illuminate\Support\Carbon  $startDate
+     * @param  \Illuminate\Support\Carbon  $endDate
      * @return \Illuminate\Support\Collection
      */
     public static function getBusinessDaysByDateRange($startDate, $endDate)
@@ -41,42 +41,11 @@ class DateHelper
         return $businessDays;
     }
 
-    // eliminar
-    public function getLeftBusinessDaysAttribute($startDate, $duration)
-    {
-        $holidays = Holiday::where('date', '>=', now())->get();
-
-        $holidays = $holidays->map(function($holiday) {
-            return $holiday->date->format('Y-m-d');
-        });
-
-        $startDate = $startDate->startOfDay();
-
-        $end = now();
-
-        $i = 0;
-
-        $weekend = collect([0, 6]);
-
-        while($startDate->lt($end))
-        {
-            if($holidays->doesntContain($startDate->format('Y-m-d')) && $weekend->doesntContain($startDate->dayOfWeek))
-            {
-                $i++;
-            }
-
-            $startDate = $startDate->copy()->addDay();
-        }
-
-        return $duration - $i;
-
-    }
-
     /**
-     * Undocumented function
+     * Gets the business days given a start and a duration
      *
-     * @param  mixed  $startDate
-     * @param  mixed  $duration
+     * @param  \Illuminate\Support\Carbon  $startDate
+     * @param  int  $duration
      * @return \Illuminate\Support\Collection
      */
     public static function getBusinessDaysByDuration($startDate, $duration)

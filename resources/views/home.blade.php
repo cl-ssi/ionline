@@ -103,8 +103,8 @@
     <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
-            Solicitar a Yeannett del Departamento Tic (tic.ssi@redsalud.gob.cl) o 
-            Pamela Villagrán la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
+            Solicitar a Gabriela Aliaga del Departamento Tic (dtic.sst@redsalud.gob.cl), Yeannett Valdivia (sda.ssi@redsalud.gob.cl) 
+            o Pamela Villagrán (sdga.ssi@redsalud.gob.cl) la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
         </li>
         <ul>
             <li>Run</li>

@@ -89,7 +89,6 @@
                 <tr>
                     @if ($can['be god'])
                         <th nowrap>
-                            @livewire('set-single-permission', ['user' => $user, 'permission' => 'Nuevo iOnline', 'icon' => 'globe'])
                             {!! $user->can('be god') ? '<i class="text-danger fas fa-chess-king" title="be god"></i>' : '' !!}
                             {!! $user->can('Drugs') ? '<i class="text-danger fas fa-cannabis" title="Drugs"></i>' : '' !!}
                             {!! $user->can('Users: delete') ? '<i class="fas fa-user-slash" title="Users: delete"></i>' : '' !!}
@@ -111,8 +110,8 @@
                                     <span class="fas fa-edit" aria-hidden="true"></span></a>
                             @endcan
 
-                            @if ($can['be god'])
-                                <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning">
+                            @if ($can['be god'] and !auth()->user()->godMode)
+                                <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning" @disabled(auth()->user()->godMode)>
                                     <span class="fas fa-redo" aria-hidden="true"></span></a>
                             @endif
                         @endunless

@@ -126,7 +126,7 @@
                     @elseif($jobPositionProfile->general_requirement)
                         <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
                     @else
-                        <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+                        <p style="white-space: pre-wrap;">{{-- $generalRequirements->description --}}</p>
                     @endif
                 </td>
             </tr>

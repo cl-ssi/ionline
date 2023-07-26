@@ -14,10 +14,10 @@ class Dte extends Model
     protected $table = 'fin_dtes';
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'tipo',
         'tipo_documento',
@@ -69,10 +69,10 @@ class Dte extends Model
     ];
 
     /**
-    * The attributes that should be mutated to dates.
-    *
-    * @var array
-    */
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
     protected $dates = [
         'publicacion',
         'emision',
@@ -90,27 +90,27 @@ class Dte extends Model
 
 
     /**
-    * The primary key associated with the table.
-    *
-    * @var string
-    */    
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
 
     /** Control(ingresos) de Warehouse */
     public function controls()
     {
-        return $this->hasMany(Control::class,'po_code', 'folio_oc');
+        return $this->hasMany(Control::class, 'po_code', 'folio_oc');
     }
 
     /** Compras Inmediatas */
     public function immediatePurchases()
     {
-        return $this->hasMany(ImmediatePurchase::class,'po_id', 'folio_oc');
+        return $this->hasMany(ImmediatePurchase::class, 'po_id', 'folio_oc');
     }
 
     /** Compra Inmediata en singular, es para poder utilizar la relación de request form de abajo */
     public function immediatePurchase()
     {
-        return $this->hasOne(ImmediatePurchase::class,'po_id', 'folio_oc');
+        return $this->hasOne(ImmediatePurchase::class, 'po_id', 'folio_oc');
     }
 
     /** Formulario de Requerimientos  */
@@ -120,28 +120,31 @@ class Dte extends Model
         //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
         // }
         // else {
-            return $this->immediatePurchase->requestForm();;
+        return $this->immediatePurchase->requestForm();
         // }
     }
 
 
     public function scopeSearch($query, $filter)
     {
-        if(!empty($filter)) {
-            foreach($filter as $column => $value) {
-                if(!empty($value))
-                {
-                    switch($column) 
-                    {
-                        case 'folio': 
-                            $query->where($column,$value);
+        if (!empty($filter)) {
+            foreach ($filter as $column => $value) {
+                if (!empty($value)) {
+                    switch ($column) {
+                        case 'folio':
+                            $query->where($column, $value);
                             break;
-                        case 'folio_oc': 
-                            $query->where($column,$value);
+                        case 'folio_oc':
+                            $query->where($column, $value);
                             break;
                     }
                 }
             }
         }
+    }
+
+    public function paymentFlows()
+    {
+        return $this->hasMany(PaymentFlow::class, 'dte_id');
     }
 }

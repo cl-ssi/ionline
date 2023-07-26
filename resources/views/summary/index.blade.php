@@ -26,6 +26,7 @@
                 <th>Nº Res.</th>
                 <th>Fecha Res.</th>
                 <th>Estado/Último Evento</th>
+                <th>Actor</th>
                 <th>Duración</th>
                 <th>Fiscal</th>
                 <th>Actuario</th>
@@ -59,6 +60,13 @@
                             {{ $summary->daysPassed }} día(s) hábil(es)
                         @endif
                     </td>
+                    <td>
+                        {{ $summary->lastEvent->type->name ?? '' }}
+                    </td>
+                    <td>
+                        {{ $summary->lastEvent->type->actor->name ?? '' }}
+                    </td>
+                    <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
                     <td>{{ optional($summary->actuary)->tinnyName }}</td>
                     <td>

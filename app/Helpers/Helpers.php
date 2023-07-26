@@ -2,7 +2,8 @@
 
 /* Set active route */
 
-function active($route) {
+function active($route)
+{
     if (is_array($route)) {
         echo in_array(request()->routeIs(), $route) ? 'active' : '';
     }
@@ -10,37 +11,27 @@ function active($route) {
     //echo request()->routeIs($route_name) ? 'active' : '';
 }
 
-function money($value) {
-    echo number_format($value,0,'','.');
+function money($value)
+{
+    echo number_format($value, 0, '', '.');
 }
 
-function trashed($user) {
-    if($user->trashed())
+function trashed($user)
+{
+    if ($user->trashed())
         echo '<i class="fas fa-user-slash" title="Usuario eliminado"></i>';
 }
 
-function fechasSeSolapan($inicio1, $fin1, $inicio2, $fin2) {
-    // Convertir las fechas a objetos DateTime
-    $inicio1 = new DateTime($inicio1);
-    $fin1 = new DateTime($fin1);
-    $inicio2 = new DateTime($inicio2);
-    $fin2 = new DateTime($fin2);
+function fechasSeSolapan($inicio1, $fin1, $inicio2, $fin2)
+{
+    $inicio1 = $inicio1->format('Y-m-d');
+    $fin1 = $fin1->format('Y-m-d');
+    $inicio2 = $inicio2->format('Y-m-d');
+    $fin2 = $fin2->format('Y-m-d');
 
-    // Verificar si se solapan
     if ($inicio1 <= $fin2 && $fin1 >= $inicio2) {
-        return true; // Los rangos se solapan
+        return true;
     } else {
-        return false; // Los rangos no se solapan
+        return false;
     }
-}
-
-// Función para verificar las superposiciones en un array de fechas
-function isOverlapping($dates, $start_date, $end_date) {
-    foreach ($dates as $date) {
-        $date = new DateTime($date);
-        if ($date >= $start_date && $date <= $end_date) {
-            return true;
-        }
-    }
-    return false;
 }

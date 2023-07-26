@@ -25,7 +25,7 @@ class storeUser extends FormRequest
     {
         return [
             'id'              => 'unique:users|required',
-            'email'           => 'unique:users|email',
+            'email'           => 'nullable|email',
         ];
     }
 
@@ -40,7 +40,6 @@ class storeUser extends FormRequest
             'id.required'       => '"ID" es requerido.',
             'id.unique'         => 'Ya existe otro usuario con este ID.',
             'email.email'       => '"Email" debe tener formato de email.',
-            'email.unique'      => 'Ya existe otro usuario con este Email.',
         ];
     }
 }

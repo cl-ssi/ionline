@@ -28,7 +28,9 @@ class Type extends Model
 
     public function eventTypes()
     {
-        return $this->hasMany(EventType::class,'summary_type_id');
+        return $this->hasMany(EventType::class,'summary_type_id')
+            ->orderBy('summary_actor_id')
+            ->orderBy('name');
     }
 
 }
