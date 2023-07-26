@@ -32,6 +32,7 @@
                 @endswitch
             }
         </style>
+
         @yield('custom_css')
 
         <!-- Place your kit's code here -->
@@ -41,15 +42,8 @@
     </head>
     <body>
         <div id="app">
-            @guest
-                @include('layouts.partials.nav')
-            @else
-                @if(Auth::user()->external )
-                    @include('layouts.partials.nav_external')
-                @else
-                    @include('layouts.partials.nav')
-                @endif
-            @endGuest
+            @include('layouts.partials.nav-bt5')
+
             <main class="container pt-3">
                 <div class="d-none d-print-block">
                     <strong>{{ env('APP_SS') }}</strong><br>
@@ -61,18 +55,32 @@
             </main>
 
             <footer class="footer">
-                <div class="col-8 col-md-6 d-inline-block text-white"
-                    style="background-color: rgb(0,108,183);">{{ config('app.ss', 'Servicio de Salud') }}</div>
-                <div class="col-4 col-md-6 float-right text-white"
-                    style="background-color: rgb(239,65,68);"> © {{ date('Y') }}</div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6 col-md-6 text-white"style="background-color: rgb(0,108,183);">
+                            {{ config('app.ss', 'Servicio de Salud') }}
+                        </div>
+                        <div class="col-6 col-md-6 float-right text-white" style="background-color: rgb(239,65,68);">
+                            © {{ date('Y') }}
+                        </div>
+                    </div>
+                </div>
             </footer>
         </div>
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-            crossorigin="anonymous"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            crossorigin="anonymous"
+        >
+        </script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        >
+        </script>
         @yield('custom_js')
         @livewireScripts
     </body>

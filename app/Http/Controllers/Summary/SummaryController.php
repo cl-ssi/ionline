@@ -57,7 +57,6 @@ class SummaryController extends Controller
      */
     public function store(Request $request)
     {
-
         /** Obtiene el evento marcado como primer evento de un sumario */
         $eventType = EventType::where('start',true)
             ->where('summary_type_id',$request->input('type_id'))
@@ -74,7 +73,7 @@ class SummaryController extends Controller
             $summary->start_at = now();
             $summary->establishment_id = auth()->user()->organizationalUnit->establishment->id;
             $summary->save();
-            
+
             $event = new Event();
             $event->event_type_id = $eventType->id;
             $event->start_date = now();
@@ -122,7 +121,7 @@ class SummaryController extends Controller
         //
     }
 
-    
+
 
     /**
      * Remove the specified resource from storage.
