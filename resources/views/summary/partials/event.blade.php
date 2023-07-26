@@ -84,7 +84,7 @@
                             <button type="submit" name="save" class="btn btn-outline-primary"
                                 value="save">Guardar</button>
                         @endif
-                        <button type="submit" name="save" class="btn btn-primary " 
+                        <button type="submit" name="save" class="btn btn-primary "
                             value="save&close">Guardar y Finalizar</button>
                     </div>
                 </form>
@@ -111,8 +111,23 @@
                     @if ($event->end_date)
                         {{ $event->end_date }} - {{ $event->end_date->diffInDays($event->start_date) }} dias
                     @else
-                        12 días hasta ahora
+                        Transcurridos {{ $event->type->daysPassed }} día(s) hábil(es)
+                        @if(isset($event->type->totalDays))
+                            de {{ $event->type->totalDays }} día(s) hábil(es)
+                        @endif
                     @endif
+
+                    <div class="progress mt-2">
+                        <div
+                            class="progress-bar @if($event->type->totalDays == $event->type->daysPassed) bg-danger @endif"
+                            role="progressbar"
+                            style="width: {{ $summary->lastEvent->type->progressPercentage }}%"
+                            aria-valuenow="{{ $summary->lastEvent->type->progressPercentage }} %"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        >
+                        </div>
+                    </div>
                 </footer>
             </blockquote>
 
