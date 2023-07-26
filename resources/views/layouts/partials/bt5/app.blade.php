@@ -42,7 +42,7 @@
     </head>
     <body>
         <div id="app">
-            @include('layouts.partials.nav-5')
+            @include('layouts.partials.nav-bt5')
 
             <main class="container pt-3">
                 <div class="d-none d-print-block">
