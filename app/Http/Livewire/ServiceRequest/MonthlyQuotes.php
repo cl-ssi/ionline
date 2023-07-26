@@ -193,7 +193,7 @@ class MonthlyQuotes extends Component
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         // $fecha = Carbon::parse($inputs['Fecha']);
         // $mes = $meses[($fecha->format('n')) - 1];
-
+        
         if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
             $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
             $valor_mensual = $serviceRequest->net_amount;
@@ -244,7 +244,6 @@ class MonthlyQuotes extends Component
                         }
                     }
                 } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
-
                     //La Persona no parte a trabajar en un mes cerrado
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                     $valor_mensual = $serviceRequest->net_amount;
@@ -253,7 +252,9 @@ class MonthlyQuotes extends Component
                     $periods   = new DatePeriod($serviceRequest->start_date->firstOfMonth(), $interval, $serviceRequest->end_date->endOfMonth());
                     $periods = iterator_to_array($periods);
                     //erg: comenté la linea siguiente porque desconozco el +1 que se hace al final, estaba afectando cálculo de nataly 16/02/2022
-                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    //erg: quité el +1, porque no tiene sentido sumarle uno. Se le informa esto a Samantha.
+                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
                     $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
 
                     foreach ($periods as $key => $period) {
