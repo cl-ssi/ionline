@@ -1864,7 +1864,8 @@ Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () 
     Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
     Route::get('/provision', [PaymentController::class, 'indexProvision'])->name('provision');
     Route::get('/{dte}/send-to-finance', [PaymentController::class, 'sendToFinance'])->name('sendToFinance');
-    Route::get('/finances', [PaymentController::class, 'indexFinance'])->name('finance');
+    Route::get('/finance', [PaymentController::class, 'indexFinance'])->name('finance');
+    Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
     });
 });
 
