@@ -13,11 +13,18 @@
     <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
 
     <div class="row mb-3">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" wire:model.defer="filter.folio_sigfe">
+                <option value="sin_folio">Sin Folio SIGFE</option>
+                <option value="con_folio">Con Folio SIGFE</option>                
+                <option value="todos">Todos</option>
+            </select>
         </div>
         <div class="col-md-2">
             <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i class="fas fa-search"></i>
