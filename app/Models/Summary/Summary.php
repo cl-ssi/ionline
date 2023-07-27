@@ -2,14 +2,14 @@
 
 namespace App\Models\Summary;
 
-
+use App\Helpers\DateHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Models\Summary\Type;
 use App\Models\Summary\Event;
 use App\Models\Establishment;
-
+use Illuminate\Support\Carbon;
 
 class Summary extends Model
 {
@@ -92,5 +92,43 @@ class Summary extends Model
                 });
             })
             ->latest();
+    }
+
+    public function getBusinessDaysAttribute()
+    {
+        $businessDays = DateHelper::getBusinessDaysByDateRange($this->start_at, $this->end_at ?? now());
+
+        return $businessDays;
+    }
+
+    public function getDaysPassedAttribute()
+    {
+        $businessDays = $this->businessDays;
+
+        $endDate = now();
+
+        $index = 0;
+
+        $found = 0;
+
+        while($index < $businessDays->count())
+        {
+            $date = Carbon::parse($businessDays[$index]);
+
+            if($endDate->gt($date))
+            {
+                $found++;
+            }
+            $index++;
+        }
+
+        return $found;
+    }
+
+    public function getTotalDaysAttribute()
+    {
+        $businessDays = DateHelper::getBusinessDaysByDateRange($this->start_at, $this->end_at ?? now());
+
+        return $businessDays->count();
     }
 }

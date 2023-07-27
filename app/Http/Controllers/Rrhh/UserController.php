@@ -266,6 +266,7 @@ class UserController extends Controller
     {
         if (Hash::check($request->password, Auth()->user()->password)) {
             Auth()->user()->password = bcrypt($request->newpassword);
+            auth()->user()->password_changed_at = now();
             Auth()->user()->save();
 
             session()->flash('success', 'Su clave ha sido cambiada con éxito.');

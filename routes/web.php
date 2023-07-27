@@ -13,7 +13,6 @@ use App\Models\Pharmacies\Purchase;
 
 
 use App\Http\Livewire\Welfare\AmiPass\RequestMgr;
-use App\Http\Livewire\RequestForm\ReportGlobalBudget;
 use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
 use App\Http\Livewire\TicResources;
@@ -27,6 +26,8 @@ use App\Http\Livewire\Rrhh\Attendance\ReasonMgr;
 use App\Http\Livewire\Resources\ComputerFusion;
 use App\Http\Livewire\Resources\ComputerCreate;
 use App\Http\Livewire\Requirements\Categories;
+use App\Http\Livewire\RequestForm\ReportGlobalBudget;
+use App\Http\Livewire\Profile\Subrogations;
 use App\Http\Livewire\Profile\MailSignature;
 use App\Http\Livewire\Parameters\Program\BudgetMgr;
 use App\Http\Livewire\Parameters\Parameter\ParameterIndex;
@@ -87,13 +88,13 @@ use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\ReportController;
+use App\Http\Controllers\ServiceRequests\ProfileController as ProfileControllerSr;
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
 use App\Http\Controllers\ServiceRequests\AttachmentController;
-use App\Http\Controllers\ServiceRequests\ProfileController as ProfileControllerSr;
 use App\Http\Controllers\Rrhh\UserController;
 use App\Http\Controllers\Rrhh\SubrogationController;
 use App\Http\Controllers\Rrhh\RoleController;
@@ -162,8 +163,8 @@ use App\Http\Controllers\Programmings\ProfessionalController;
 use App\Http\Controllers\Programmings\ParticipationController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
 use App\Http\Controllers\Programmings\EmergenciesController;
-use App\Http\Controllers\Programmings\CommuneFileController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
 use App\Http\Controllers\Programmings\ActionTypeController;
@@ -197,11 +198,11 @@ use App\Http\Controllers\Indicators\IaapsController;
 use App\Http\Controllers\Indicators\HealthGoalController;
 use App\Http\Controllers\Indicators\ComgesController;
 use App\Http\Controllers\Indicators\ApsController;
-use App\Http\Controllers\HotelBooking\HotelBookingController;
-use App\Http\Controllers\HotelBooking\RoomController;
-use App\Http\Controllers\HotelBooking\HotelController;
-use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
 use App\Http\Controllers\HotelBooking\ServiceController;
+use App\Http\Controllers\HotelBooking\RoomController;
+use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
+use App\Http\Controllers\HotelBooking\HotelController;
+use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
@@ -229,10 +230,8 @@ use App\Http\Controllers\Agreements\WordMandatePFCAgreeController;
 use App\Http\Controllers\Agreements\WordMandateAgreeController;
 use App\Http\Controllers\Agreements\WordCollaborationAgreeController;
 use App\Http\Controllers\Agreements\StageController;
-
 use App\Http\Controllers\Agreements\SignerController;
 use App\Http\Controllers\Agreements\ProgramResolutionController;
-
 use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
@@ -264,31 +263,38 @@ Route::get('/claveunica/{route?}', [ClaveUnicaController::class, 'autenticar'])-
 
 // Route::get('/siremx/logincu/{access_token}', [ClaveUnicaController::class,'siremx'])->name('claveunica.siremx');
 
-
 Route::get('logout', [LoginController::class, 'logout'])->name('logout-local');
-/* Para testing, no he probado pero me la pedian en clave única */
-Route::get('logout-testing', [LoginController::class, 'logout'])->name('logout-testing');
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
-
-Route::get('corrige_firmas', [ServiceRequestController::class, 'corrige_firmas'])->middleware('auth');
-Route::get('last_contracts', [ServiceRequestController::class, 'last_contracts'])->name('last_contracts');
-Route::get('existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts'])->name('existing_active_contracts');
-
-Route::get('/open-notification/{notification}', [UserController::class, 'openNotification'])->middleware('auth')->name('openNotification');
-Route::get('/all-notifications', [UserController::class, 'allNotifications'])->middleware('auth')->name('allNotifications');
-Route::get('/clear-notifications', [UserController::class, 'clearNotifications'])->middleware('auth')->name('clearNotifications');
-
-Route::prefix('webservices')->name('webservices.')->group(function () {
-    Route::get('fonasa', [WebserviceController::class, 'fonasa'])->middleware('auth')->name('fonasa');
-});
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('/login/external', [LoginController::class, 'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class, 'externalLogin']);
+
+/* Para testing, no he probado pero me la pedian en clave única */
+Route::get('logout-testing', [LoginController::class, 'logout'])->name('logout-testing');
+
+
+/* TODO: @sickiqq Chekear si necesitan o no middleware auth y mover al grupo que le corresponde */
+Route::get('corrige_firmas', [ServiceRequestController::class, 'corrige_firmas'])->middleware('auth');
+Route::get('last_contracts', [ServiceRequestController::class, 'last_contracts'])->name('last_contracts');
+Route::get('existing_active_contracts/{start_date}/{end_date}', [ServiceRequestController::class, 'existing_active_contracts'])->name('existing_active_contracts');
+
+
+
+/** Middleware Auth y Must Change Password */
+Route::middleware(['auth','must.change.password'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/open-notification/{notification}', [UserController::class, 'openNotification'])->name('openNotification');
+    Route::get('/all-notifications', [UserController::class, 'allNotifications'])->name('allNotifications');
+    Route::get('/clear-notifications', [UserController::class, 'clearNotifications'])->name('clearNotifications');
+
+    Route::prefix('webservices')->name('webservices.')->group(function () {
+        Route::get('fonasa', [WebserviceController::class, 'fonasa'])->name('fonasa');
+    });
+
+});
+
 
 // acceso a usuarios verificación entrega de farmacias
 Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function () {
@@ -298,43 +304,6 @@ Route::prefix('external_pharmacy')->name('external_pharmacy.')->group(function (
     Route::post('/store', [App\Http\Controllers\Pharmacies\DispatchController::class, 'storeVerification'])->name('store');
 });
 
-
-Route::group(['middleware' => 'auth:external'], function () {
-    Route::view('/external', 'external')->name('external');
-    //Route::view('/external', 'external')->name('external');
-    Route::prefix('idoneidad')->as('idoneidad.')->group(function () {
-        Route::get('/manual-usuario', [SuitabilityController::class, 'downloadManualUser'])->name('downloadManualUser');
-        Route::get('/manual-administrador', [SuitabilityController::class, 'downloadManualAdministrator'])->name('downloadManualAdministrator');
-        Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
-        Route::post('/', [SuitabilityController::class, 'storeSuitabilityExternal'])->name('storeSuitabilityExternal');
-        Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
-        Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
-        Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
-        Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
-        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
-    });
-
-    Route::prefix('replacement_staff')->as('replacement_staff.')->group(function () {
-        Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
-        Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
-        Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
-        Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
-        Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
-        Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
-        Route::prefix('profile')->name('profile.')->group(function () {
-            Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
-            Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
-            Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
-            Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
-        });
-        Route::prefix('training')->name('training.')->group(function () {
-            Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
-            Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
-            Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
-            Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
-        });
-    });
-});
 
 
 /* TODO: pasarlo al controller del usuario */
@@ -362,14 +331,15 @@ Route::get('/test-firma/{otp}', [DigitalSignatureController::class, 'test']);
 /** Link para VCs */
 Route::get('vc/{alias}', [UserController::class, 'getVcLink'])->name('vc');
 
-
-Route::prefix('profile')->as('profile.')->middleware('auth')->group(function () {
-    Route::get('/subrogations', App\Http\Livewire\Profile\Subrogations::class)->name('subrogations');
-    Route::get('/signature', MailSignature::class)->name('signature');
+Route::middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('profile')->as('profile.')->group(function () {
+        Route::get('/subrogations', Subrogations::class)->name('subrogations');
+        Route::get('/signature', MailSignature::class)->name('signature');
+    });
 });
 
 /* Replacepent Staff */
-Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function () {
+Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
@@ -525,8 +495,9 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 });
 /** Fin Replacement Staff */
 
+
 /** Inicio Perfil de Cargos */
-Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('auth')->group(function () {
+Route::prefix('job_position_profile')->as('job_position_profile.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
@@ -567,8 +538,9 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware('
 });
 /** Fin Perfil de Cargos */
 
+
 /** Inicio Recursos */
-Route::prefix('resources')->name('resources.')->middleware('auth')->group(function () {
+Route::prefix('resources')->name('resources.')->middleware(['auth','must.change.password'])->group(function () {
 
     Route::get('report', [App\Http\Controllers\Resources\ReportController::class, 'report'])->name('report');
     Route::get('tic', TicResources::class)->name('tic');
@@ -619,8 +591,9 @@ Route::prefix('resources')->name('resources.')->middleware('auth')->group(functi
 });
 /** Fin Recursos */
 
+
 /** Inicio Agreements */
-Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function () {
+Route::prefix('agreements')->as('agreements.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/{agreement}/accountability/create', [AccountabilityController::class, 'create'])->name('accountability.create');
     Route::post('/{agreement}/accountability', [AccountabilityController::class, 'store'])->name('accountability.store');
     Route::get('/{agreement}/accountability', [AccountabilityController::class, 'index'])->name('accountability.index');
@@ -676,70 +649,73 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 });
 /** Fin Agreements */
 
+
+
 /* TODO #51 agrupar con middleware auth y revisar rutas que no se ocupen */
 /** Programación Númerica APS */
-Route::resource('programmings', ProgrammingController::class)->middleware('auth');
-Route::put('programmingStatus/{id}', [ProgrammingController::class, 'updateStatus'])->middleware('auth')->name('programmingStatus.update');
-Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
+Route::middleware(['auth','must.change.password'])->group(function () {
+    Route::resource('programmings', ProgrammingController::class)->middleware('auth');
+    Route::put('programmingStatus/{id}', [ProgrammingController::class, 'updateStatus'])->middleware('auth')->name('programmingStatus.update');
+    Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
 
-Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
-Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class, 'clone'])->name('programmingitems.clone');
-Route::delete('/programmingitems/{programmingitem}/pivot/{id}', [ProgrammingItemController::class, 'destroyProfessionalHour'])->name('programmingitems.destroyProfessionalHour');
+    Route::resource('programmingitems', ProgrammingItemController::class)->middleware('auth');
+    Route::post('/programmingitemsclone/{id}', [ProgrammingItemController::class, 'clone'])->name('programmingitems.clone');
+    Route::delete('/programmingitems/{programmingitem}/pivot/{id}', [ProgrammingItemController::class, 'destroyProfessionalHour'])->name('programmingitems.destroyProfessionalHour');
 
-Route::resource('communefiles', CommuneFileController::class)->middleware('auth');
-Route::get('/downloadFileA/{file}', [CommuneFileController::class, 'download'])->name('programmingFile.download');
-Route::get('/downloadFileB/{file}', [CommuneFileController::class, 'downloadFileB'])->name('programmingFile.downloadFileB');
-Route::get('/downloadFileC/{file}', [CommuneFileController::class, 'downloadFileC'])->name('programmingFile.downloadFileC');
+    Route::resource('communefiles', CommuneFileController::class)->middleware('auth');
+    Route::get('/downloadFileA/{file}', [CommuneFileController::class, 'download'])->name('programmingFile.download');
+    Route::get('/downloadFileB/{file}', [CommuneFileController::class, 'downloadFileB'])->name('programmingFile.downloadFileB');
+    Route::get('/downloadFileC/{file}', [CommuneFileController::class, 'downloadFileC'])->name('programmingFile.downloadFileC');
 
-Route::resource('reviews', ProgrammingReviewController::class)->middleware('auth');
-Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
-Route::put('reviewItemsRect/{id}', [ReviewItemController::class, 'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
-Route::post('/reviewItems/acceptItems', [ReviewItemController::class, 'acceptItems'])->name('reviewItems.acceptItems');
+    Route::resource('reviews', ProgrammingReviewController::class)->middleware('auth');
+    Route::resource('reviewItems', ReviewItemController::class)->middleware('auth');
+    Route::put('reviewItemsRect/{id}', [ReviewItemController::class, 'updateRect'])->middleware('auth')->name('reviewItemsRect.update');
+    Route::post('/reviewItems/acceptItems', [ReviewItemController::class, 'acceptItems'])->name('reviewItems.acceptItems');
 
-Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
+    Route::resource('programmingdays', ProgrammingDayController::class)->middleware('auth');
 
-Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
-    Route::resource('tasks', TaskController::class)->except(['index']);
-    Route::prefix('tasks')->name('tasks.')->group(function () {
-        Route::resource('rescheduling', TaskReschedulingController::class);
+    Route::prefix('participation')->as('participation.')->middleware('auth')->group(function () {
+        Route::resource('tasks', TaskController::class)->except(['index']);
+        Route::prefix('tasks')->name('tasks.')->group(function () {
+            Route::resource('rescheduling', TaskReschedulingController::class);
+        });
+        Route::get('/{programming}', [ParticipationController::class, 'show'])->name('show');
+        Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class, 'create'])->name('create');
+        Route::post('/{programming}', [ParticipationController::class, 'store'])->name('store');
+        Route::get('/{value}/{programming}/edit', [ParticipationController::class, 'edit'])->name('edit');
+        Route::put('/{value}', [ParticipationController::class, 'update'])->name('update');
+        Route::delete('/{value}', [ParticipationController::class, 'destroy'])->name('destroy');
     });
-    Route::get('/{programming}', [ParticipationController::class, 'show'])->name('show');
-    Route::get('/create/{programming}/{indicatorId}', [ParticipationController::class, 'create'])->name('create');
-    Route::post('/{programming}', [ParticipationController::class, 'store'])->name('store');
-    Route::get('/{value}/{programming}/edit', [ParticipationController::class, 'edit'])->name('edit');
-    Route::put('/{value}', [ParticipationController::class, 'update'])->name('update');
-    Route::delete('/{value}', [ParticipationController::class, 'destroy'])->name('destroy');
+
+    Route::prefix('emergencies')->as('emergencies.')->middleware('auth')->group(function () {
+        Route::get('/{programming}', [EmergenciesController::class, 'show'])->name('show');
+        Route::get('/create/{programming}', [EmergenciesController::class, 'create'])->name('create');
+        Route::post('/{programming}', [EmergenciesController::class, 'store'])->name('store');
+        Route::get('/{emergency}/edit', [EmergenciesController::class, 'edit'])->name('edit');
+        Route::put('/{emergency}', [EmergenciesController::class, 'update'])->name('update');
+        Route::delete('/{emergency}', [EmergenciesController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::resource('professionals', ProfessionalController::class)->middleware('auth');
+    Route::resource('actiontypes', ActionTypeController::class)->middleware('auth');
+    Route::resource('ministerialprograms', MinisterialProgramController::class)->middleware('auth');
+
+    Route::resource('activityprograms', ActivitiesProgramController::class)->middleware('auth');
+    Route::resource('activityitems', ActivitiesItemController::class)->middleware('auth');
+
+    Route::resource('professionalhours', ProfessionalHourController::class)->middleware('auth');
+
+    Route::resource('trainingitems', TrainingsItemController::class)->middleware('auth');
+
+    Route::resource('pendingitems', ProgrammingActivityItemController::class)->middleware('auth');
+
+    //Reportes de Programación Númerica APS
+    Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
+    Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
+
+    //Reportes Observaciones de Programación Númerica APS
+    Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
 });
-
-Route::prefix('emergencies')->as('emergencies.')->middleware('auth')->group(function () {
-    Route::get('/{programming}', [EmergenciesController::class, 'show'])->name('show');
-    Route::get('/create/{programming}', [EmergenciesController::class, 'create'])->name('create');
-    Route::post('/{programming}', [EmergenciesController::class, 'store'])->name('store');
-    Route::get('/{emergency}/edit', [EmergenciesController::class, 'edit'])->name('edit');
-    Route::put('/{emergency}', [EmergenciesController::class, 'update'])->name('update');
-    Route::delete('/{emergency}', [EmergenciesController::class, 'destroy'])->name('destroy');
-});
-
-Route::resource('professionals', ProfessionalController::class)->middleware('auth');
-Route::resource('actiontypes', ActionTypeController::class)->middleware('auth');
-Route::resource('ministerialprograms', MinisterialProgramController::class)->middleware('auth');
-
-Route::resource('activityprograms', ActivitiesProgramController::class)->middleware('auth');
-Route::resource('activityitems', ActivitiesItemController::class)->middleware('auth');
-
-Route::resource('professionalhours', ProfessionalHourController::class)->middleware('auth');
-
-Route::resource('trainingitems', TrainingsItemController::class)->middleware('auth');
-
-Route::resource('pendingitems', ProgrammingActivityItemController::class)->middleware('auth');
-
-//Reportes de Programación Númerica APS
-Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
-Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
-
-//Reportes Observaciones de Programación Númerica APS
-Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
-
 //End Programación Númerica APS
 
 
@@ -823,7 +799,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
     /** Fin Shift Managment */
 
-    Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function () {
+    Route::prefix('attendance')->name('attendance.')->middleware(['auth','must.change.password'])->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
@@ -833,12 +809,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('reasons', ReasonMgr::class)->name('reason.mgr');
     });
 
-    Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+
+    /** Rutas modulo honorarios */
+    Route::prefix('service-request')->name('service-request.')->middleware(['auth','must.change.password'])->group(function () {
         
         Route::get('/profile/{user?}/{year?}/{type?}/{serviceRequest?}/{period?}', [ProfileControllerSr::class, 'show'])->name('show');
         Route::post('/profile', [ProfileControllerSr::class, 'show'])->name('show.post');
-
-
 
 
         // Rutas de service request
@@ -984,12 +960,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         });
     });
 
+    /** Fin Rutas Honorarios */
+
+
     /**
      * Reemplazar después por el nuevo
      */
     //Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
 
-    Route::prefix('authorities')->name('new-authorities.')->middleware('auth')->group(function () {
+    Route::prefix('authorities')->name('new-authorities.')->middleware(['auth','must.change.password'])->group(function () {
         Route::get('/test', [AuthorityController::class, 'test'])->name('test');
         Route::get('/', [AuthorityController::class, 'index'])->name('index');
         Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
@@ -999,12 +978,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('/{organizationalUnit}/update', [AuthorityController::class, 'update'])->name('update');
         Route::get('/{organizationalUnit}/create-subrogant', [AuthorityController::class, 'create_subrogant'])->name('create_subrogant');
     });
-    Route::prefix('subrogations')->name('subrogations.')->middleware('auth')->group(function () {
+
+    Route::prefix('subrogations')->name('subrogations.')->middleware(['auth','must.change.password'])->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class, 'create'])->name('create');
         Route::post('/store', [SubrogationController::class, 'store'])->name('store');
     });
 
-    Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
+    Route::prefix('organizational-units')->name('organizational-units.')->middleware(['auth','must.change.password'])->group(function () {
         Route::get('/', [OrganizationalUnitController::class, 'index'])->name('index')->middleware('auth');
         Route::get('/create', [OrganizationalUnitController::class, 'create'])->name('create')->middleware('auth');
         Route::post('/store', [OrganizationalUnitController::class, 'store'])->name('store')->middleware('auth');
@@ -1016,7 +996,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     // Se saca el directorio ya que no debería tener acceso los usuarios logeado solamente
     Route::get('/directory/{establishment?}/{organizationalUnit?}', [UserController::class, 'directory'])->name('users.directory');
 
-    Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
+    Route::prefix('users')->name('users.')->middleware(['auth'])->group(function () {
         Route::get('ou/{ou_id?}', [UserController::class, 'getFromOu'])->name('get.from.ou');
         Route::get('autority/{ou_id?}', [UserController::class, 'getAutorityFromOu'])->name('get.autority.from.ou');
 
@@ -1048,14 +1028,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::put('/{user}', [UserController::class, 'update_sr'])->name('update')->middleware('auth');
             Route::delete('/{user}', [UserController::class, 'destroy_sr'])->name('destroy')->middleware('auth');
 
-            /* TODO que hace esto? */
-            Route::prefix('rrhh')->as('rrhh.')->group(function () {
-            });
         });
     });
 });
 
-Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function () {
+Route::prefix('parameters')->as('parameters.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [ParameterController::class, 'welcome'])->name('welcome');
     Route::get('/all', ParameterIndex::class)->name('index');
     Route::get('/create', ParameterCreate::class)->name('create');
@@ -1211,8 +1188,9 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/{inventoryLabel}/label', [InventoryLabelController::class, 'update'])->name('update');
     });
 });
+/** Fin de rutas de parametros */
 
-Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
+Route::prefix('documents')->as('documents.')->middleware(['auth','must.change.password'])->group(function () {
 
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}', MeetingShow::class)->name('lobby.show');
@@ -1260,9 +1238,10 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class, 'massSignModal'])->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 });
-Route::resource('documents', DocumentController::class)->middleware('auth');
 
-Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
+Route::resource('documents', DocumentController::class)->middleware(['auth','must.change.password']);
+
+Route::prefix('requirements')->as('requirements.')->middleware(['auth','must.change.password'])->group(function () {
     /** Custom routes */
     Route::get('download/{file}',  [EventController::class, 'download'])->name('download');
     Route::get('deleteFile/{file}',  [EventController::class, 'deleteFile'])->name('deleteFile');
@@ -1314,7 +1293,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::delete('/{file}', [RNIdbController::class, 'revoke_user'])->middleware('auth')->name('revoke_user');
     });
 
-    Route::prefix('comges')->as('comges.')->middleware('auth')->group(function () {
+    Route::prefix('comges')->as('comges.')->middleware(['auth','must.change.password'])->group(function () {
         Route::get('/', [ComgesController::class, 'index'])->name('index');
         Route::get('/{year}', [ComgesController::class, 'list'])->name('list');
         Route::post('/{year}', [ComgesController::class, 'store'])->name('store');
@@ -1666,7 +1645,7 @@ Route::get('quality_aps', [QualityApsController::class, 'index'])->middleware('a
 Route::get('quality_aps/{file}', [QualityApsController::class, 'download'])->middleware('auth')->name('quality_aps.download');
 
 // UNSPSC
-Route::prefix('unspsc')->middleware('auth')->group(function () {
+Route::prefix('unspsc')->middleware(['auth','must.change.password'])->group(function () {
 
     Route::get('/products/all', [ProductController::class, 'all'])->name('products.all');
 
@@ -1691,7 +1670,7 @@ Route::prefix('unspsc')->middleware('auth')->group(function () {
 });
 
 // Warehouse
-Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function () {
+Route::prefix('warehouse')->as('warehouse.')->middleware(['auth','must.change.password'])->group(function () {
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])
         ->middleware(['can:Store: warehouse manager']);
     Route::get('download-invoice/{invoice}', [ControlController::class, 'downloadInvoice'])->name('download-invoice');
@@ -1721,7 +1700,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware('auth')->group(function
     });
 });
 
-Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(function () {
+Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth','must.change.password'])->group(function () {
     // Route::view('/index', 'hotel_booking.home')->name('index');
     Route::get('/', [HotelBookingController::class, 'index'])->name('index');
     Route::get('/search_booking', [HotelBookingController::class, 'search_booking'])->name('search_booking');
@@ -1765,7 +1744,7 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware('auth')->group(
 });
 
 // Inventories
-Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(function () {
+Route::prefix('inventories')->as('inventories.')->middleware(['auth','must.change.password'])->group(function () {
     /** Ruta para poder ver la hoja de inventario sin edición  */
     Route::get('number/{number}', InventoryShow::class)->name('show');
 
@@ -1797,7 +1776,7 @@ Route::prefix('inventories')->as('inventories.')->middleware('auth')->group(func
     Route::get('/manager', InventoryManager::class)->name('manager')->middleware(['can:Inventory: manager']);
 });
 /* Bodega de Farmacia */
-Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function () {
+Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'index'])->name('index');
     Route::get('admin_view', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'admin_view'])->name('admin_view');
     Route::get('pharmacy_users', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'pharmacy_users'])->name('pharmacy_users');
@@ -1857,7 +1836,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 });
 
 /* Finanzas */
-Route::prefix('finance')->as('finance.')->middleware('auth')->group(function () {
+Route::prefix('finance')->as('finance.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
@@ -1898,7 +1877,7 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 });
 */
 
-Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
+Route::prefix('request_forms')->as('request_forms.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/info/info_circular_n2_2022', function () {
         return Storage::disk('gcs')->response('ionline/request_forms/info/circular_n2_2022.pdf');
     })->name('info_circular_n2_2022');
@@ -2009,7 +1988,9 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/event_show_file/{eventRequestFormFile}', [EventRequestFormFileController::class, 'showFile'])->name('event.show_file');
 });
 
-Route::prefix('allowances')->as('allowances.')->middleware('auth')->group(function () {
+/** Fin rutas Request Form */
+
+Route::prefix('allowances')->as('allowances.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');
@@ -2088,7 +2069,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 });
 
 
-Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
+Route::prefix('suitability')->as('suitability.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
@@ -2181,7 +2162,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 });
 
 /* Rutas de cargador de REM */
-Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
+Route::prefix('rem')->as('rem.')->middleware(['auth','must.change.password'])->group(function () {
     Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
         Route::get('/create', [UserRemController::class, 'create'])->name('create');
@@ -2218,7 +2199,7 @@ Route::prefix('rem')->as('rem.')->middleware('auth')->group(function () {
 });
 
 /* Rutas de Módulo de Bienestar */
-Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () {
+Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [WelfareController::class, 'index'])->name('index');
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
@@ -2254,7 +2235,7 @@ Route::prefix('welfare')->as('welfare.')->middleware('auth')->group(function () 
 
 
 /* Rutas de Módulo de Sumario*/
-Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () {
+Route::prefix('summary')->as('summary.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
@@ -2301,7 +2282,7 @@ Route::prefix('summary')->as('summary.')->middleware('auth')->group(function () 
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
-Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
+Route::prefix('lobby')->as('lobby.')->middleware(['auth','must.change.password'])->group(function () {
     Route::prefix('meeting')->as('meeting.')->group(function () {
         Route::get('/', [MeetingController::class, 'index'])->name('index');
         Route::get('/create', [MeetingController::class, 'create'])->name('create');
@@ -2314,7 +2295,7 @@ Route::prefix('lobby')->as('lobby.')->middleware('auth')->group(function () {
 /**
  * Rutas de Modulo Sign
  */
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','must.change.password'])->group(function () {
     Route::get('/position-document-number', [SignSignatureController::class, 'positionDocumentNumber']);
 });
 
@@ -2330,6 +2311,46 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
         Route::get('/signature/{signature}/user/{user}/filename/{filename}/update', [SignSignatureController::class, 'update'])->name('update');
     });
 });
+
+
+/** RUTAS PARA EXTERNAL  */
+Route::group(['middleware' => 'auth:external'], function () {
+    Route::view('/external', 'external')->name('external');
+    //Route::view('/external', 'external')->name('external');
+    Route::prefix('idoneidad')->as('idoneidad.')->group(function () {
+        Route::get('/manual-usuario', [SuitabilityController::class, 'downloadManualUser'])->name('downloadManualUser');
+        Route::get('/manual-administrador', [SuitabilityController::class, 'downloadManualAdministrator'])->name('downloadManualAdministrator');
+        Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
+        Route::post('/', [SuitabilityController::class, 'storeSuitabilityExternal'])->name('storeSuitabilityExternal');
+        Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
+        Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
+        Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
+        Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
+    });
+
+    Route::prefix('replacement_staff')->as('replacement_staff.')->group(function () {
+        Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+        Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
+        Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+        Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+        Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+        Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
+            Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+            Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+            Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('training')->name('training.')->group(function () {
+            Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
+            Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+            Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+            Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
+        });
+    });
+});
+
 
 
 

@@ -6,7 +6,7 @@
 
     @include('summary.nav')
 
-    <div class="form-row">
+    <div class="row pb-2">
         <div class="col">
             <h3 class="mb-3">Listado de Mis Sumarios</h3>
         </div>
@@ -50,6 +50,16 @@
                     </td>
                     <td>{{ $summary->resolution_number }}</td>
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
+                    <td>{{ $summary->lastEvent->type->name ?? '' }}</td>
+                    <td>
+                        @if(isset($summary->end_at))
+                        <p class="text-danger">
+                            {{ $summary->totalDays }} día(s) hábil(es)
+                        </p>
+                        @else
+                            {{ $summary->daysPassed }} día(s) hábil(es)
+                        @endif
+                    </td>
                     <td>
                         {{ $summary->lastEvent->type->name ?? '' }}
                     </td>

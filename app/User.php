@@ -53,6 +53,7 @@ class User extends Authenticatable implements Auditable
         'phone_number',
         'email',
         'password',
+        'password_changed_at',
         'birthday',
         'vc_link',
         'vc_alias',

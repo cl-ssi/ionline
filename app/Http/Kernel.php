@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'drugs' => \App\Http\Middleware\Drugs::class,
+        'must.change.password' => \App\Http\Middleware\MustChangePassword::class,
         'client' => CheckClientCredentials::class,
         'ensure.store' => \App\Http\Middleware\Warehouse\EnsureStore::class,
         'ensure.product' => \App\Http\Middleware\Warehouse\EnsureProduct::class,
