@@ -32,20 +32,21 @@ class RemoveDefaultPasswords extends Command
         $users = User::all();
         foreach($users as $user) {
             if(Auth::guard('web')->attempt(['id'=> $user->id, 'password' => $user->id])){
-                echo $user->shortName." Def \n";
+                echo '[default] '.$user->shortName."\n";
                 $user->password = null;
+                $user->password_changed_at = null;
                 $user->save();
             }
-            // if(Auth::guard('web')->attempt(['id' => $user->id, 'password' => 'Salud123'])){
-            //     echo $user->shortName." salud123 \n";
-            //     $user->password = null;
+            // if(Auth::guard('web')->attempt(['id' => $user->id, 'password' => 'salud123'])){
+            //     echo '[salud123] '.$user->shortName."\n";
+            //     $user->password_changed_at = null;
             //     $user->save();
             // }
-            if(Auth::guard('web')->attempt(['id' => $user->id, 'password' => 'Salud123'])){
-                echo $user->shortName." Salud123 \n";
-                $user->password = null;
-                $user->save();
-            }
+            // if(Auth::guard('web')->attempt(['id' => $user->id, 'password' => 'Salud123'])){
+            //     echo '[Salud123] '.$user->shortName."\n";
+            //     $user->password_changed_at = null;
+            //     $user->save();
+            // }
         }
         return Command::SUCCESS;
     }
