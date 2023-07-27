@@ -36,7 +36,7 @@ class PaymentController extends Controller
         return view('finance.payments.indexown', compact('dtes'));
     }
 
-    public function indexProvision()
+    public function review()
     {
         $dtes = Dte::where('confirmation_status', 1)
                 ->where(function (Builder $query) {
@@ -44,27 +44,30 @@ class PaymentController extends Controller
                           ->orWhere('fin_status', 'rechazado');
                 })
                 ->get();
-        return view('finance.payments.provision', compact('dtes'));
+        return view('finance.payments.review', compact('dtes'));
     }
 
-    public function sendToFinance(Dte $dte)
+    public function sendToReadyInbox(Dte $dte)
     {
-        $dte->fin_status = 'Enviado a Finanzas';
+        $dte->fin_status = 'Enviado a Pendiente Para Pago';
+        $dte->sender_id = Auth::id();
+        $dte->sender_ou = Auth::user()->organizational_unit_id;
+        $dte->sender_at = now();
         $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,
             'user_id' => Auth::id(),
-            'status' => 'Enviado a Finanzas',
+            'status' => 'Enviado a Pendiente Para Pago',
         ]);
 
-        return redirect()->back()->with('success', 'Se ha enviado a finanzas exitosamente');
+        return redirect()->back()->with('success', 'Se ha enviado a bandeja Pendiente para Pagos exitosamente');
         
     }
 
-    public function indexFinance()
+    public function ready()
     {
-        $dtes = Dte::where('confirmation_status', 1)->where('fin_status', 'Enviado a Finanzas')->get();
-        return view('finance.payments.finance', compact('dtes'));
+        $dtes = Dte::where('confirmation_status', 1)->where('fin_status', 'Enviado a Pendiente Para Pago')->get();
+        return view('finance.payments.ready', compact('dtes'));
 
     }
 
@@ -72,6 +75,11 @@ class PaymentController extends Controller
     public function update(Dte $dte, Request $request)
     {
         $dte->fin_status = $request->status;
+        $dte->folio_sigfe = $request->folio_sigfe;
+        $dte->payer_id = Auth::id();
+        $dte->payer_ou = Auth::user()->organizational_unit_id;
+        $dte->payer_at = now();
+        
         $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,

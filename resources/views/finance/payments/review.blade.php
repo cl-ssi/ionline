@@ -1,8 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Flujos de Pago')
 @section('content')
-    <h3 class="mb-3">
-        Flujos de pago de Finanzas</h3>
+    <h3 class="mb-3">Bandeja de Revisión de Pago</h3>
 
     <table class="table table-bordered">
         <thead>
@@ -16,7 +15,8 @@
                 <th>Acta de ingreso bodega</th>
                 <th>Estado</th>
                 <th>Observaciones</th>
-                <th>Guardar</th>
+                <th>Adjuntos</th>
+                <th>Revisar</th>
             </tr>
         </thead>
         <tbody>
@@ -151,32 +151,19 @@
                         @endforeach
                     </td>
                     <td>
-                        <form action="{{ route('finance.payments.update', ['dte' => $dte->id]) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <select name="status" required>
-                                <option value="">Seleccionar Estado
-                                </option>
-                                <option value="Enviado a Pago" @if ($dte->estado == 'Enviado a Pago') selected @endif>Enviado a
-                                    Pago
-                                </option>
-                                <option value="Rechazado" @if ($dte->estado == 'Rechazado') selected @endif>Rechazado
-                                </option>
-                                <option value="Pagado" @if ($dte->estado == 'Pagado') selected @endif>Pagado</option>
-                            </select>                        
                     </td>
                     <td>
                         @foreach ($dte->paymentFlows as $paymentFlow)
-                            <p>{{ $paymentFlow->observation }} @if ($paymentFlow->observation)
-                                    ({{ $paymentFlow->user->short_name }})
-                                @endif
-                            </p>
+                            <p>{{ $paymentFlow->observation }} @if($paymentFlow->observation)({{ $paymentFlow->user->short_name }}) @endif</p>
                         @endforeach
-                        <textarea name="observation"></textarea>
                     </td>
                     <td>
-                        <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
-                        </form>
+                    </td>
+                    <td>
+                        <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
+                            class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-hand-holding-usd"></i> Enviar a Bandeja Pendiente para Pago
+                        </a>
                     </td>
 
                 </tr>

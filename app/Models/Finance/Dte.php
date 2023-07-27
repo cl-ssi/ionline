@@ -66,6 +66,17 @@ class Dte extends Model
         'fecha_ingreso',
         'fecha_aceptacion',
         'fecha',
+
+        //Datos envia a pago
+        'sender_id',
+        'sender_ou',
+        'sender_at',
+
+
+        //Datos pagador
+        'payer_id',
+        'payer_ou',
+        'payer_at',
     ];
 
     /**
@@ -86,6 +97,7 @@ class Dte extends Model
         'fecha_ingreso',
         'fecha_aceptacion',
         'fecha',
+        'payer_at'
     ];
 
 
