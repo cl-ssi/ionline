@@ -22,15 +22,24 @@
         <div class="col-md-2">
             <select class="form-control" wire:model.defer="filter.folio_sigfe">
                 <option value="sin_folio">Sin Folio SIGFE</option>
-                <option value="con_folio">Con Folio SIGFE</option>                
+                <option value="con_folio">Con Folio SIGFE</option>
                 <option value="todos">Todos</option>
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
+            <select class="form-control" wire:model.defer="filter.sender_status">
+                <option value="no confirmadas y enviadas a confirmación">no confirmadas y enviadas a confirmación</option>
+                <option value="Enviado a confirmación">Enviado a confirmación</option>
+                <option value="Confirmada">Confirmada</option>
+                <option value="No Confirmada">No Confirmada</option>
+                <option value="Todas">Todas</option>
+            </select>
+        </div>
+        <div class="col-md-1">
             <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i class="fas fa-search"></i>
                 Buscar</button>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-2 text-right">
             <button class="btn btn-success" type="button" wire:click="loadManualDTE">
                 <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
         </div>

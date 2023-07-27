@@ -148,6 +148,22 @@ class Dte extends Model
                                     // Con todos no debería hacer nada asi que no lo considero
                             }
                             break;
+                        case 'sender_status':
+                            switch ($value) {
+                                case 'no confirmadas y enviadas a confirmación':
+                                    $query->whereNull('confirmation_status')->whereNotNull('confirmation_send_at');
+                                    break;
+                                case 'Enviado a confirmación':
+                                    $query->whereNotNull('confirmation_send_at');
+                                    break;
+                                case 'Confirmada':
+                                    $query->where('confirmation_status', 1);
+                                    break;
+                                case 'No Confirmada':
+                                    $query->whereNull('confirmation_status');
+                                    break;
+                            }
+                            break;
                     }
                 }
             }
