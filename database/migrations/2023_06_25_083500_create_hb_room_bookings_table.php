@@ -15,7 +15,14 @@ class CreateHbRoomBookingsTable extends Migration
     {
         Schema::create('hb_room_bookings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('room_id')->constrained('hb_rooms');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('status');  //Reservado - Cancelado - Día bloqueado
+            $table->string('observation')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

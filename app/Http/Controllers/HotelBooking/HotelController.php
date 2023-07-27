@@ -38,11 +38,29 @@ class HotelController extends Controller
      */
     public function store(Request $request)
     {
-      $hotel = new Hotel($request->All());
-      $hotel->save();
+        // $hotel = Hotel::find(1);
 
-      session()->flash('info', 'El hotel ha sido registrado.');
-      return redirect()->route('hotel_booking.hotels.index');
+        // // tiene imagenes adjuntas
+        // if(count($request->imgFiles)>0){
+        //     dd($request->imgFiles);
+        //     foreach($request->imgFiles as $file) {
+                
+        //         $filename = $file->getClientOriginalName();
+        //         $hotelImage = New HotelImage;
+        //         $hotelImage->file = $file->store('ionline/hotel_booking/hotel_images',['disk' => 'gcs']);
+        //         $hotelImage->name = $filename;
+        //         $hotelImage->hotel_id = $hotel->id;
+        //         $hotelImage->save();
+        //     }
+        // }
+        // dd("");
+
+
+        $hotel = new Hotel($request->All());
+        $hotel->save();
+
+        session()->flash('info', 'El hotel ha sido registrado.');
+        return redirect()->route('hotel_booking.hotels.index');
     }
 
     /**

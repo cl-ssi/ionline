@@ -25,4 +25,14 @@ class Hotel extends Model implements Auditable
     {
         return $this->belongsTo('App\Models\ClCommune', 'commune_id');
     }
+
+    public function rooms()
+    {
+        return $this->hasMany('App\Models\HotelBooking\Room');
+    }
+
+    public function images()
+    {
+        return $this->hasMany('App\Models\HotelBooking\HotelImage');
+    }
 }

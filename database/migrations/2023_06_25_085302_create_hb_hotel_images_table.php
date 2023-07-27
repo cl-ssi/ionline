@@ -16,8 +16,10 @@ class CreateHbHotelImagesTable extends Migration
         Schema::create('hb_hotel_images', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hotel_id')->nullable()->constrained('hb_hotels');
-            $table->string('img_url');
+            $table->string('file');
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

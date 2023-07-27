@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHbRoomBookingValorationsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateHbRoomBookingValorationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('hb_room_booking_valorations', function (Blueprint $table) {
+        Schema::create('hb_room_images', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('room_id')->nullable()->constrained('hb_rooms');
+            $table->string('file');
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +30,6 @@ class CreateHbRoomBookingValorationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hb_room_booking_valorations');
+        Schema::dropIfExists('hb_room_images');
     }
-}
+};

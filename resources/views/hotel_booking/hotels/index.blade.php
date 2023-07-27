@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de de Establecimientos con Farmacia')
+@section('title', 'Lista de Hoteles')
 
 @section('content')
 
@@ -17,7 +17,7 @@
 	<thead>
 		<tr>
             <th>Id</th>
-			<th>Nombre</th>
+			<th nowrap>Nombre</th>
             <th>Comuna</th>
 			<th>Descripción</th>
 			<th></th>
@@ -28,7 +28,7 @@
 	@foreach($hotels as $hotel)
 		<tr>
             <td>{{ $hotel->id}}</td>
-			<td>{{ $hotel->name }}</td>
+			<td nowrap>{{ $hotel->name }}</td>
             <td>@if($hotel->commune){{ $hotel->commune->name }}@endif</td>
 			<td>{{ $hotel->description }}</td>
 			<td>
@@ -42,7 +42,7 @@
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar el Perfil Estamento?')">
+                            onclick="return confirm('¿Está seguro que desea eliminar el hotel?')">
                             <i class="fas fa-trash"></i>
                         </button>
                 </form>

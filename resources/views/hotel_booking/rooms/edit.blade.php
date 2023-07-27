@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Establecimiento')
+@section('title', 'Editar Hospedaje')
 
 @section('content')
 
@@ -48,7 +48,28 @@
 
     </div>
 
+    <div class="form-row">
+
+		<fieldset class="form-group col">
+		    <label for="for_name">Cantidad - Cama Simple</label>
+		    <input type="numeric" class="form-control" id="for_single_bed" name="single_bed" value="{{$room->single_bed}}" required>
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_name">Cantidad - Cama Doble</label>
+		    <input type="numeric" class="form-control" id="for_description" name="double_bed" value="{{$room->double_bed}}" required>
+		</fieldset>
+
+    </div>
+
+    @livewire('hotel-booking.add-services',['room' => $room])
+
+    <hr>
+
 	<button type="submit" class="btn btn-primary">Guardar</button>
+
+    @livewire('hotel-booking.upload-imagen',['room' => $room])
+
 </form>
 @endsection
 

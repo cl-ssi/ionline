@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Establecimiento')
+@section('title', 'Editar Hotel')
 
 @section('content')
 
@@ -53,6 +53,9 @@
 	</div>
 
 	<button type="submit" class="btn btn-primary">Guardar</button>
+
+    @livewire('hotel-booking.upload-imagen',['hotel' => $hotel])
+    
 </form>
 @endsection
 

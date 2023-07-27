@@ -153,11 +153,11 @@
                             </a>
                             @endif
 
-                            @can('HotelBooking: Administrador')
+                            @canany(['HotelBooking: Administrador', 'HotelBooking: User'])
                                 <a class="dropdown-item {{ active('hotel_booking.index') }}" href="{{ route('hotel_booking.index') }}">
                                     <i class="fas fa-fw fa-user"></i> Reserva Cabañas
                                 </a>
-                            @endcan
+                            @endcanany
 
                             @can('Payments')
                             <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">

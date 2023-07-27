@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de de Establecimientos con Farmacia')
+@section('title', 'Listado de Hospedajes')
 
 @section('content')
 
 @include('hotel_booking.partials.nav')
 
-<h3 class="inline">Habitaciones
+<h3 class="inline">Hospedajes
 	<a href="{{ route('hotel_booking.rooms.create') }}" class="btn btn-primary">Crear</a>
 </h3>
 
@@ -20,6 +20,7 @@
             <th scope="col">Hotel</th>
             <th scope="col">Tipo</th>
 			<th scope="col">Identificador</th>
+            <th scope="col">Max.Días</th>
 			<th scope="col">Descripción</th>
 			<th scope="col"></th>
             <th scope="col"></th>
@@ -29,9 +30,10 @@
 	@foreach($rooms as $room)
 		<tr>
             <td>{{ $room->id}}</td>
-            <td>{{ $room->hotel->name }}</td>
-            <td>{{ $room->type->name }}</td>
-			<td>{{ $room->identifier }}</td>
+            <td nowrap>{{ $room->hotel->name }}</td>
+            <td nowrap>{{ $room->type->name }}</td>
+			<td nowrap>{{ $room->identifier }}</td>
+            <td nowrap>{{ $room->max_days_avaliable }}</td>
             <td>{{ $room->description }}</td>
 			<td>
 				<a href="{{ route('hotel_booking.rooms.edit', $room) }}"
@@ -44,7 +46,7 @@
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"
-                            onclick="return confirm('¿Está seguro que desea eliminar la habitación?')">
+                            onclick="return confirm('¿Está seguro que desea eliminar el hospedaje?')">
                             <i class="fas fa-trash"></i>
                         </button>
                 </form>

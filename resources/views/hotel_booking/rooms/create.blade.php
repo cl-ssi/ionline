@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Establecimiento Farmacia')
+@section('title', 'Crear Hospedaje')
 
 @section('content')
 
 @include('hotel_booking.partials.nav')
 
-<h3>Nueva Habitación</h3>
+<h3>Nuevo Hospedaje</h3>
 
 <form method="POST" action="{{ route('hotel_booking.rooms.store') }}" enctype="multipart/form-data">
 	@csrf
@@ -43,6 +43,20 @@
         <fieldset class="form-group col">
 		    <label for="for_name">Descripción</label>
 		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del hotel" name="description" required="required">
+		</fieldset>
+
+    </div>
+
+    <div class="form-row">
+
+		<fieldset class="form-group col">
+		    <label for="for_name">Cantidad - Cama Simple</label>
+		    <input type="numeric" class="form-control" id="for_single_bed" name="single_bed">
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_name">Cantidad - Cama Doble</label>
+		    <input type="numeric" class="form-control" id="for_description" name="double_bed">
 		</fieldset>
 
     </div>
