@@ -264,22 +264,34 @@ class UserController extends Controller
      */
     public function updatePassword(updatePassword $request)
     {
-        if (Hash::check($request->password, Auth()->user()->password)) {
-            Auth()->user()->password = bcrypt($request->newpassword);
-            auth()->user()->password_changed_at = now();
-            Auth()->user()->save();
+        $weakPaswords = [
+            auth()->id(),
+            auth()->id().auth()->user()->dv,
+            'salud123',
+            'Salud123',
+            '123salud',
+        ];
 
-            session()->flash('success', 'Su clave ha sido cambiada con éxito.');
-
-            if (Auth()->user()->hasPermissionTo('Users: must change password')) {
-                Auth()->user()->revokePermissionTo('Users: must change password');
-                Auth::login(Auth()->user());
-            }
+        if(in_array($request->newpassword, $weakPaswords)) {
+            session()->flash('danger', 'La nueva clave no puede ser su run o una clave simple.');
         } else {
-            session()->flash('danger', 'La clave actual es erronea.');
+            if (Hash::check($request->password, Auth()->user()->password)) {
+                Auth()->user()->password = bcrypt($request->newpassword);
+                auth()->user()->password_changed_at = now();
+                Auth()->user()->save();
+    
+                session()->flash('success', 'Su clave ha sido cambiada con éxito.');
+    
+                if (Auth()->user()->hasPermissionTo('Users: must change password')) {
+                    Auth()->user()->revokePermissionTo('Users: must change password');
+                    Auth::login(Auth()->user());
+                }
+            } else {
+                session()->flash('danger', 'La clave actual es erronea.');
+            }
         }
 
-        return redirect()->route('home');
+        return redirect()->back();
     }
 
     /**
@@ -291,6 +303,7 @@ class UserController extends Controller
     public function resetPassword(User $user)
     {
         $user->password = bcrypt($user->id);
+        $user->password_changed_at = null;
         $user->save();
 
         session()->flash('success', 'La clave ha sido reseteada a: ' . $user->id);
