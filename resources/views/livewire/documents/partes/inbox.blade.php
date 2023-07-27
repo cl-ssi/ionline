@@ -156,12 +156,27 @@
                 <td class="text-center" nowrap>
 
                     @foreach( $parte->requirements as $req)
+
                         @if( Auth::user()->can('Partes: director'))
-                        <a href="{{ route('requirements.show', $req) }}"
-                            data-toggle="tooltip" data-placement="top"
-                            data-original-title="N°: {{ $req->id }}">
-                            <i class="fas fa-rocket"></i>
-                        </a>
+
+                            @if($req->unreadedEvents)
+                                <a href="{{ route('requirements.show',$req->id) }}" 
+                                    class="btn btn-sm {{ $req->unreadedEvents ? 'btn-success':'btn-outline-primary' }}"
+                                    data-toggle="tooltip" data-placement="top"
+                                    data-original-title="N°: {{ $req->id }}">
+                                    @if($req->unreadedEvents)
+                                    <i class="fas fa-fw fa-envelope"></i> <span class='badge badge-secondary'>{{ $req->unreadedEvents }}</span>
+                                    @else
+                                    <i class="fas fa-fw fa-edit"></i>
+                                    @endif
+                                </a>
+                            @else
+                                <a href="{{ route('requirements.show', $req) }}"
+                                    data-toggle="tooltip" data-placement="top"
+                                    data-original-title="N°: {{ $req->id }}">
+                                    <i class="fas fa-rocket"></i>
+                                </a>
+                            @endif
 
                         @elseif( Auth::user()->can('Partes: oficina'))
                             @if($req->events->count() > 0)
@@ -176,6 +191,7 @@
                                 </span>
                             @endif
                         @endif
+
                     @endforeach
 
                     @if($parte->files->count()>0)
