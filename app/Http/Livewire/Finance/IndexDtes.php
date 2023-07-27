@@ -47,6 +47,8 @@ class IndexDtes extends Component
             //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
             //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
             // ])
+            ->whereNull('folio_sigfe')
+            ->whereNot('tipo_documento', 'guias_despacho')
             ->orderBy('emision')
             ->paginate(50);
 
