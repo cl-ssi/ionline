@@ -15,6 +15,7 @@ class CreateNewPassword extends Component
     {
         $this->newPassword = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
         auth()->user()->password = bcrypt($this->newPassword);
+        auth()->user()->password_changed_at = now();
         auth()->user()->save();
     }
     public function render()
