@@ -20,8 +20,8 @@
             <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i
-                    class="fas fa-search"></i> Buscar</button>
+            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i class="fas fa-search"></i>
+                Buscar</button>
         </div>
         <div class="col-md-4 text-right">
             <button class="btn btn-success" type="button" wire:click="loadManualDTE">
@@ -30,7 +30,7 @@
 
     </div>
 
-    @if($showManualDTE)
+    @if ($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
         </div>
@@ -47,76 +47,82 @@
                 <th>Bod</th>
                 <th>Admin C.</th>
                 <th>Detalle</th>
+                <th>Fecha Aceptación SII (días)</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($dtes as $dte)
-            <tr>
-                <td>{{ $dte->tipo_documento }}</td>
-                <td>
-                @if($dte->tipo_documento !='boleta_honorarios')
-                    <a 
-                        href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" 
-                        target="_blank" 
-                        class="btn btn-sm mb-1 btn-outline-secondary"
-                    > 
-                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                    </a>
-                    @else
-                    <a 
-                        href="{{ $dte->uri }}" 
-                        target="_blank" 
-                        class="btn btn-sm mb-1 btn-outline-secondary"
-                    > 
-                        <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                    </a>
-                @endif
-                </td>
-                <td>{{ $dte->emisor }}</td>
-                <td>{{ $dte->folio_oc }}</td>
-                <td>
-                    @if($dte->immediatePurchase)
-                        @if($dte->requestForm)
-                            <a
-                                class="btn btn-primary btn-block"
-                                href="{{ route('request_forms.show', $dte->requestForm->id) }}"
-                                target="_blank"
-                            >
-                                <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+            @foreach ($dtes as $dte)
+                @php
+                    $daysDifference = $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : null;
+                    $rowClass = '';
+                    if ($daysDifference !== null) {
+                        if ($daysDifference < 5) {
+                            $rowClass = 'table-success';
+                        } elseif ($daysDifference < 8) {
+                            $rowClass = 'table-warning';
+                        } else {
+                            $rowClass = 'table-danger';
+                        }
+                    }
+                @endphp
+                <tr class="{{ $rowClass }}">
+                    <td>{{ $dte->tipo_documento }}</td>
+                    <td>
+                        @if ($dte->tipo_documento != 'boleta_honorarios')
+                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
+                                target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
+                            </a>
+                        @else
+                            <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                             </a>
                         @endif
-                    @endif
-                </td>
-                <td>
-                    @foreach ($dte->controls as $control)
-                        {{ $control->id }}
-                    @endforeach
-                </td>
-                <td>
-                    @if($dte->immediatePurchase)
-                        @if($dte->requestForm)
-                            @if($dte->requestForm->contractManager)
-                                {{ $dte->requestForm->contractManager->shortName }}
-                                @livewire(
-                                    'finance.dte-send-confirmation', 
-                                    ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id],
-                                    key($dte->id)
-                                )
+                    </td>
+                    <td>{{ $dte->emisor }}</td>
+                    <td>{{ $dte->folio_oc }}</td>
+                    <td>
+                        @if ($dte->immediatePurchase)
+                            @if ($dte->requestForm)
+                                <a class="btn btn-primary btn-block"
+                                    href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
+                                    <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+                                </a>
                             @endif
                         @endif
-                    @endif
-                </td>
-                <td>
-                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapse{{$dte->id}}" aria-expanded="false" aria-controls="collapse{{$dte->id}}">
-                        Ver detalle
-                    </button>
-                    <div class="collapse width" id="collapse{{$dte->id}}">
-                        <pre>
+                    </td>
+                    <td>
+                        @foreach ($dte->controls as $control)
+                            {{ $control->id }}
+                        @endforeach
+                    </td>
+                    <td>
+                        @if ($dte->immediatePurchase)
+                            @if ($dte->requestForm)
+                                @if ($dte->requestForm->contractManager)
+                                    {{ $dte->requestForm->contractManager->shortName }}
+                                    @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id], key($dte->id))
+                                @endif
+                            @endif
+                        @endif
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#collapse{{ $dte->id }}" aria-expanded="false"
+                            aria-controls="collapse{{ $dte->id }}">
+                            Ver detalle
+                        </button>
+                        <div class="collapse width" id="collapse{{ $dte->id }}">
+                            <pre>
                             {{ print_r($dte->toArray()) }}
                         </pre>
-                    </div>
-                </td>
-            </tr>
+                        </div>
+                    </td>
+                    <td>
+                        {{ $dte->fecha_recepcion_sii ?? '' }}
+                        ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
+                    </td>
+                </tr>
 
             @endforeach
         </tbody>
