@@ -44,6 +44,7 @@
                 <th>Emisor</th>
                 <th>Folio OC</th>
                 <th>FR</th>
+                <th>Bod</th>
                 <th>Admin C.</th>
                 <th>Detalle</th>
             </tr>
@@ -85,6 +86,11 @@
                             </a>
                         @endif
                     @endif
+                </td>
+                <td>
+                    @foreach ($dte->controls as $control)
+                        {{ $control->id }}
+                    @endforeach
                 </td>
                 <td>
                     @if($dte->immediatePurchase)

@@ -82,7 +82,7 @@
             <i class="fas fa-fw fa-thumbs-up"></i> Aceptar
         </button>
         <button type="button" class="btn btn-danger" wire:click="saveConfirmation(false)">
-            <i class="fas fa-fw fa-hand-middle-finger"></i> Reclamar
+            <i class="fas fa-fw fa-thumbs-down"></i> Reclamar
         </button>
     </div>
 
@@ -94,6 +94,6 @@
     @endif
 
     <b>
-        Atentamente Tu Papá Abastecimiento.
+        Atentamente Abastecimiento.
     </b>
 </div>
