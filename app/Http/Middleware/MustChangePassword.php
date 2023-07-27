@@ -16,8 +16,9 @@ class MustChangePassword
      */
     public function handle(Request $request, Closure $next)
     {
-        /** Si no está seteado el campo password_changed_at y el login es de tipo local */
-        if (!isset($request->user()->password_changed_at) AND session('loginType') == 'local') {
+        /** Si tiene un password seteado y no está seteado el campo password_changed_at y el login es de tipo local */
+        if (isset($request->user()->password) AND !isset($request->user()->password_changed_at) AND session('loginType') == 'local')
+        {
             return redirect()->route('rrhh.users.password.edit');
         }
 
