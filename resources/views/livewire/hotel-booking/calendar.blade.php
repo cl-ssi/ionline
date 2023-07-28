@@ -29,9 +29,10 @@
         <div class="dia_calendario small p-2 text-center border-white"></div>
     @endfor
 
+    <!-- @php
+        var_dump($data);
+    @endphp -->
     <!-- Muestra el calendario -->
-
-    
     @foreach($data as $date => $item)
     <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }} {{$item['style']}}">
 

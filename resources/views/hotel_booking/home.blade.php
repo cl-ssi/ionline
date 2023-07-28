@@ -82,11 +82,49 @@
                 @foreach($hotel->rooms as $key => $room) 
                     <li class="list-group-item">
                         {{$room->type->name}} - {{$room->max_days_avaliable}} días como máximo.
-                        <a href="#" data-toggle="modal" data-target="#exampleModal">
+                        <a href="#" data-toggle="modal" data-target="#exampleModal{{$room->id}}">
                             <span class='badge badge-warning' >
                                 Ver disponibilidad
                             </span>
-                            @livewire('hotel-booking.book-room',['room' => $room])
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <!-- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5> -->
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button> -->
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade bd-example-modal-lg" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @livewire('hotel-booking.calendar',['configurations' => $room->bookingConfigurations])
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
                         </a>
                     </li>
                 @endforeach
@@ -152,27 +190,6 @@
 
     @endforeach
 @endif
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <!-- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5> -->
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
-    </div>
-  </div>
-</div>
 
 @endsection
 

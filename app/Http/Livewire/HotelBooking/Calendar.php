@@ -90,6 +90,7 @@ class Calendar extends Component
         }
 
         foreach($this->configurations as $configuration){
+
             foreach (CarbonPeriod::create($configuration->start_date, '1 day', $configuration->end_date) as $day) {
                 // marca los disponibles para hospedar
                 if(( $configuration->sunday && $day->dayOfWeek==0) || ($configuration->monday && $day->dayOfWeek==1) || 
@@ -114,38 +115,72 @@ class Calendar extends Component
             }
 
             // marca los días ya ocupados
-            $roomBookings = RoomBooking::where('start_date','>=',$configuration->start_date)->where('room_id',$configuration->room_id)->get();
-            foreach($roomBookings as $roomBooking){
+            $roomBookings = RoomBooking::where('start_date','>=',$configuration->start_date)
+                                        ->where('room_id',$configuration->room_id)
+                                        ->get()
+                                        ->sortBy('start_date');
+            foreach($roomBookings as $key => $roomBooking){
                 foreach (CarbonPeriod::create($roomBooking->start_date, '1 day', $roomBooking->end_date) as $day) {
-                    $this->style='red_middle_style';
-                    if($day->format('Y-m-d')==$start_date->format('Y-m-d')){$this->style='red_start_style';}
-                    if($day->format('Y-m-d')==$end_date->format('Y-m-d')){$this->style='red_end_style';}
-                    if(array_key_exists($day->format('Y-m-d'), $this->data)){
+
+                    // verifica primero si el tiene style, es decir si está configurado para ser reservado en las configuraciones
+                    if($this->data[$day->format('Y-m-d')]['style']!=null){
+                        // default
+                        $this->style='red_middle_style';
                         $this->data[$day->format('Y-m-d')] = array(
                             'holiday' => false,
                             'date' => $day,
                             'active' => false,
                             'style' => $this->style,
                         );
+                        // revisa inicio de la reserva de la primera iteración
+                        if($key==0){
+                            if($day->format('Y-m-d')==$roomBooking->start_date->format('Y-m-d')){
+                                $this->style='red_start_style';
+                                $this->data[$day->format('Y-m-d')] = array(
+                                    'holiday' => false,
+                                    'date' => $day,
+                                    'active' => false,
+                                    'style' => $this->style,
+                                );
+                            }
+                        }
+                        // revisa inicio de la reserva de las iteraciones siguientes (hace la comparativa con terminos de reservas anteriores)
+                        if($key>0 && $roomBookings[$key-1]->end_date != $day){
+                            if($day->format('Y-m-d')==$roomBooking->start_date->format('Y-m-d')){
+                                $this->style='red_start_style';
+                                $this->data[$day->format('Y-m-d')] = array(
+                                    'holiday' => false,
+                                    'date' => $day,
+                                    'active' => false,
+                                    'style' => $this->style,
+                                );
+                            }
+                        }
+                        // revisa terminos de reservas
+                        if($day->format('Y-m-d')==$roomBooking->end_date->format('Y-m-d')){
+                            $this->style='red_end_style';
+                            $this->data[$day->format('Y-m-d')] = array(
+                                'holiday' => false,
+                                'date' => $day,
+                                'active' => false,
+                                'style' => $this->style,
+                            );
+                        }
                     }
                 }
             }
 
-            //se marcan dias propuestos para reservar
-            $this->style='middle_style';
-            if($this->start_date){
-                foreach (CarbonPeriod::create($this->start_date, '1 day', $this->end_date) as $day) {
-                    if(array_key_exists($day->format('Y-m-d'), $this->data)){
-                        $this->data[$day->format('Y-m-d')] = array(
-                            'holiday' => false,
-                            'date' => $day,
-                            'active' => false,
-                            'style' => $this->style,
-                        );
-                    }
-                }
-            }
-            
+            // // pinta para la reserva que se está solicitando
+            // foreach (CarbonPeriod::create($start_date, '1 day', $end_date) as $day) {
+            //     // default
+            //     $this->style='middle_style';
+            //     $this->data[$day->format('Y-m-d')] = array(
+            //         'holiday' => false,
+            //         'date' => $day,
+            //         'active' => false,
+            //         'style' => $this->style,
+            //     );
+            // }
         }
 
         foreach ($holidays as $holiday) {

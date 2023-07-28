@@ -40,8 +40,8 @@ class HotelBookingController extends Controller
             return view('hotel_booking.home',compact('communes','hotels','found_rooms', 'request'));
         }
 
-        if($start_date > $end_date){
-            session()->flash('warning', 'La fecha de ingreso no puede ser superior a la fecha de salida.');
+        if($start_date >= $end_date){
+            session()->flash('warning', 'La fecha de ingreso no puede ser igual o superior a la fecha de salida.');
             return view('hotel_booking.home',compact('communes','hotels','found_rooms', 'request'));
         }
         
@@ -49,13 +49,28 @@ class HotelBookingController extends Controller
         $bookingConfigurations = RoomBookingConfiguration::where('end_date','>=',now())->get();
 
         foreach($bookingConfigurations as $bookingConfiguration){
+
+            // Si lo que se intenta reservar está en un día no configurado, no permitirá la reserva
+            $flag_not_configurated = 0;
+            foreach (CarbonPeriod::create($start_date, '1 day', $end_date) as $day) {
+                if(( $bookingConfiguration->sunday && $day->dayOfWeek==0) || ($bookingConfiguration->monday && $day->dayOfWeek==1) || 
+                    ($bookingConfiguration->tuesday && $day->dayOfWeek==2) || ($bookingConfiguration->wednesday && $day->dayOfWeek==3) || 
+                    ($bookingConfiguration->thursday && $day->dayOfWeek==4) || ($bookingConfiguration->friday && $day->dayOfWeek==5) ||
+                    ($bookingConfiguration->saturday && $day->dayOfWeek==6)){
+                        
+                }else{
+                    $flag_not_configurated = 1;
+                }
+            }
+
             $room_capacity = $bookingConfiguration->room->single_bed + ($bookingConfiguration->room->double_bed*2);
             $max_days_alowed = $bookingConfiguration->room->max_days_avaliable;
             
             if($start_date >= $bookingConfiguration->start_date && $start_date <= $bookingConfiguration->end_date 
             && $end_date >= $bookingConfiguration->start_date && $end_date <= $bookingConfiguration->end_date
             && $guest_number <= $room_capacity
-            && $diff <= $max_days_alowed){
+            && $diff <= $max_days_alowed
+            && $flag_not_configurated == 0){
 
                 $roomBookings = RoomBooking::where('room_id',$bookingConfiguration->room_id)->whereIn('status',['Reservado','Bloqueado'])->get();
 
