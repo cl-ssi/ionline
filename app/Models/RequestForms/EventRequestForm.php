@@ -129,7 +129,7 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public static function createPreFinanceEvent(RequestForm $requestForm){
-        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'FinanzasHAH' : 'FinanzasSSI';
+        $parameter = $requestForm->associateProgram->Subtitle->name != 31 && $requestForm->contractOrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value ? 'RefrendacionHAH' : 'FinanzasSSI';
         $ouSearch = Parameter::where('module', 'ou')->where('parameter', $parameter)->first()->value;
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $ouSearch;
