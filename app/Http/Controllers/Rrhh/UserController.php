@@ -276,9 +276,9 @@ class UserController extends Controller
             session()->flash('danger', 'La nueva clave no puede ser su run o una clave simple.');
         } else {
             if (Hash::check($request->password, Auth()->user()->password)) {
-                Auth()->user()->password = bcrypt($request->newpassword);
+                auth()->user()->password = bcrypt($request->newpassword);
                 auth()->user()->password_changed_at = now();
-                Auth()->user()->save();
+                auth()->user()->save();
     
                 session()->flash('success', 'Su clave ha sido cambiada con éxito.');
     
@@ -288,6 +288,7 @@ class UserController extends Controller
                 }
             } else {
                 session()->flash('danger', 'La clave actual es erronea.');
+                return redirect()->route('home');
             }
         }
 
