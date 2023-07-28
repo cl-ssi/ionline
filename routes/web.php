@@ -1843,9 +1843,9 @@ Route::prefix('finance')->as('finance.')->middleware(['auth','must.change.passwo
     Route::prefix('payments')->as('payments.')->group(function () {
     Route::get('/', [PaymentController::class, 'index'])->name('index');
     Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
-    Route::get('/provision', [PaymentController::class, 'indexProvision'])->name('provision');
-    Route::get('/{dte}/send-to-finance', [PaymentController::class, 'sendToFinance'])->name('sendToFinance');
-    Route::get('/finance', [PaymentController::class, 'indexFinance'])->name('finance');
+    Route::get('/review', [PaymentController::class, 'review'])->name('review');
+    Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
+    Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
     Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
     });
 });
