@@ -46,16 +46,18 @@
             <table class="table table-sm table-bordered table-striped table-hover small">
                 <thead>
                     <tr class="text-center">
-                        <th>ID <br> <span class="badge badge-secondary">Folio sirh</span></th>
-                        <th style="width: 8%">Fecha Creación</th>
-                        <th>Funcionario</th>
-                        <th>Calidad</th>
-                        <th>Lugar</th>
-                        <th>Motivo</th>
-                        <th>Detalle</th>
-                        <th colspan="2">Periodo</th>
-                        {{-- <th>Gestión</th> --}}
-                        <th colspan="2"></th>
+                        <th rowspan="2" style="width: 3%">ID <br> <span class="badge badge-secondary">Folio sirh</span></th>
+                        <th rowspan="2" style="width: 6%">Fecha Creación</th>
+                        <th rowspan="2">Funcionario</th>
+                        <th rowspan="2">Calidad</th>
+                        <th colspan="2">Lugar</th>
+                        <th rowspan="2" style="width: 15%">Motivo</th>
+                        <th rowspan="2" colspan="2">Periodo</th>
+                        <th rowspan="2" colspan="2"></th>
+                    </tr>
+                    <tr class="text-center">
+                        <th>Origen</th>
+                        <th>Destino</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,18 +95,17 @@
                             {{ $allowance->organizationalUnitAllowance->name }} <br><br>
                             <b>Creado por</b>: {{ $allowance->userCreator->TinnyName }}
                         </td>
-                        <td>{{ $allowance->ContractualConditionValue }}</td>
-                        <td>{{ $allowance->place }}</td>
-                        <td>{{ $allowance->reason }}</td>
-                        <td>
-                            @if($allowance->round_trip == 'round trip')
-                                {{ $allowance->originCommune->name }} - {{ $allowance->destinationCommune->name }} - {{ $allowance->originCommune->name }} <br>
-                            @endif
-                            {{ $allowance->RoundTripValue }}
+                        <td class="text-center">{{ $allowance->ContractualCondition->name }}</td>
+                        <td class="text-center">{{ $allowance->originCommune->name }}</td>
+                        <td class="text-center">
+                            @foreach($allowance->destinations as $destination)
+                                <b>Comuna</b>: {{ $destination->commune->name }} - <b>Localidad</b>: {{ $destination->locality->name }}
+                            @endforeach
                         </td>
-                        <td>
-                            {{ $allowance->from->format('d-m-Y') }}<br>
-                            {{ $allowance->to->format('d-m-Y') }}
+                        <td>{{ $allowance->reason }}</td>
+                        <td class="text-center">
+                            {{ Carbon\Carbon::parse($allowance->from)->format('d-m-Y') }}<br>
+                            {{ Carbon\Carbon::parse($allowance->to)->format('d-m-Y') }}
                         </td>
                         <td class="text-center">
                             {{ number_format($allowance->total_days, 1, ",", ".") }}
@@ -114,25 +115,6 @@
                                 día
                             @endif
                         </td>
-                        {{--
-                        <td class="text-center">
-                            @foreach($allowance->allowanceSigns as $allowanceSign)
-                                @if($allowanceSign->status == 'pending' || $allowanceSign->status == NULL)
-                                    <i class="fas fa-clock fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
-                                @endif
-                                @if($allowanceSign->status == 'accepted')
-                                    <span style="color: green;">
-                                        <i class="fas fa-check-circle fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
-                                    </span>
-                                @endif
-                                @if($allowanceSign->status == 'rejected')
-                                    <span style="color: Tomato;">
-                                        <i class="fas fa-times-circle fa-2x" title="{{ $allowanceSign->organizationalUnit->name }}"></i>
-                                    </span>
-                                @endif
-                            @endforeach
-                        </td> 
-                        --}}
                         <td class="text-center">
                             @if($index == 'sign')
                                 <a href="{{ route('allowances.show', $allowance) }}"

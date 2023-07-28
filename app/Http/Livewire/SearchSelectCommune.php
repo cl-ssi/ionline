@@ -31,6 +31,7 @@ class SearchSelectCommune extends Component
     public $required = '';
     public $small_option = false;
 
+    protected $listeners = ['onClearUserSearch'];
     
     public function updatedQuery()
     {
@@ -65,6 +66,14 @@ class SearchSelectCommune extends Component
         
         $this->commune = $commune;
         $this->selectedCommuneName = $commune->name;
+        
+        /* OJO: SE EMITE EL ID DEL CAMPO PARA EL CONTROL DE ESTE, EN CASO DE QUE EXISTAN DOS O MÁS COMPONENTES IGUALES (USAR ID DIFERENTES) 
+            VIATICO: origin_commune_id
+            VIATICO: destination_commune_id
+        */
+
+        $this->emit('searchedCommune', $this->commune->id);
+        $this->emit('selectedInputId', $this->selected_id);
     }
 
     public function addSearchedCommune($communeId){
@@ -78,6 +87,12 @@ class SearchSelectCommune extends Component
         $this->communes = [];
         $this->commune = null;
         $this->selectedCommuneName = null;
+    }
+
+    public function onClearUserSearch(){
+        if($this->selected_id == 'destination_commune_id'){
+            $this->resetx();
+        }
     }
 
     public function render()

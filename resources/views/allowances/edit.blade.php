@@ -10,6 +10,11 @@
 
 <br>
 
+@livewire('allowances.allowances-create',
+    ['allowanceToEdit' => $allowance]
+)
+
+{{--
 <form method="POST" class="form-horizontal" action="{{ route('allowances.update', $allowance) }}" enctype="multipart/form-data"/>
     @csrf
     @method('PUT')
@@ -209,6 +214,8 @@
 </form>
 
 <br><br>
+
+--}}
 
 <hr/>
 <div style="height: 300px; overflow-y: scroll;">

@@ -19,12 +19,16 @@ class Allowance extends Model implements Auditable
     use softDeletes;
     use \OwenIt\Auditing\Auditable;
 
+    // protected $casts = [
+    //     'from' => 'date:dd/mm/YY',
+    // ];
+
     protected $fillable = [
-        'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'contractual_condition', 'position',
-        'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
+        'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'law', 'contractual_condition_id', 
+        'position', 'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
         'overnight', 'passage', 'means_of_transport', 'origin_commune_id', 'destination_commune_id', 'round_trip', 
-        'from', 'to', 'total_days', 'day_value', 'half_day_value', 'total_value', 'creator_user_id', 'creator_ou_id', 
-        'document_date', 'signatures_file_id'
+        'from', 'to', 'total_days', 'half_days_only', 'day_value', 'half_day_value', 'total_value', 'creator_user_id', 
+        'creator_ou_id', 'document_date', 'signatures_file_id'
     ];
 
      /**
@@ -54,7 +58,7 @@ class Allowance extends Model implements Auditable
     }
 
     public function destinationCommune() {
-        return $this->belongsTo('App\Models\ClCommune', 'destination_commune_id');
+        return $this->hasMany('App\Models\Allowances\Destination', 'allowance_id');
     }
 
     public function files() {
@@ -77,6 +81,14 @@ class Allowance extends Model implements Auditable
         return $this->belongsTo(Signature::class, 'signature_id');
     }
 
+    public function contractualCondition(){
+        return $this->belongsTo('App\Models\Parameters\ContractualCondition', 'contractual_condition_id');
+    }
+
+    public function destinations() {
+        return $this->hasMany('App\Models\Allowances\Destination', 'allowance_id');
+    }
+
     public function getStatusValueAttribute() {
         switch($this->request) {
           case 'pending':
@@ -91,16 +103,13 @@ class Allowance extends Model implements Auditable
         }
     }
 
-    public function getContractualConditionValueAttribute(){
-        switch ($this->contractual_condition) {
-            case 'to hire':
-                return 'Contrata';
+    public function getLawValueAttribute(){
+        switch ($this->law) {
+            case '18834':
+                return 'N° 18.834';
                 break;
-            case 'fee':
-                return 'Honorarios';
-                break;
-            case 'holder':
-                return 'Titular';
+            case '19664':
+                return 'N° 19.664';
                 break;
             case '':
                 return '';
@@ -161,6 +170,20 @@ class Allowance extends Model implements Auditable
         }
     }
 
+    public function getHalfDaysOnlyValueAttribute(){
+        switch ($this->half_days_only) {
+            case '1':
+                return 'Sí';
+                break;
+            case '0':
+                return 'No';
+                break;
+            case '':
+                return 'No';
+                break;
+        }
+    }
+
     public function scopeSearch($query, $status_search, $search_id, $user_allowance_search){
         if ($status_search OR $search_id OR $user_allowance_search) {
             if($status_search != '' &&  ($status_search == 'pending' || $status_search == 'rejected')){
@@ -197,9 +220,11 @@ class Allowance extends Model implements Auditable
         'created_at', 'updated_at'
     ];
 
-    protected $dates = [
-        'from', 'to', 'document_date'
-    ];
+    // protected $dates = [
+    //     'from', 'to', 'document_date'
+    // ];
+
+    
 
     protected $table = 'alw_allowances';
 }

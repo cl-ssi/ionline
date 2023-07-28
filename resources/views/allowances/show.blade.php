@@ -15,23 +15,25 @@
 
 <div class="row">
     <div class="col-md-9">
-        <h6><i class="fas fa-info-circle"></i> Descripción de Viático</h6>
+        <h6><i class="fas fa-info-circle"></i> Funcionario</h6>
         <div class="table-responsive">
             <table class="table table-sm table-bordered text-center small">
                 <tbody>
                     <tr class="table-active">
-                        <th colspan="2" width="50%">Nombre completo</th>
+                        <th width="50%">Nombre funcionario</th>
                         <th>RUT</th>
                         <th>Calidad</th>
+                        <th>Ley</th>
                     </tr>
                     <tr>
-                        <td colspan="2">{{ $allowance->userAllowance->FullName }}</td>
+                        <td>{{ $allowance->userAllowance->FullName }}</td>
                         <td>{{ $allowance->userAllowance->id }}-{{ $allowance->userAllowance->dv }}</td>
-                        <td>{{ $allowance->ContractualConditionValue }}</td>
+                        <td>{{ $allowance->contractualCondition->name }}</td>
+                        <td>{{ $allowance->LawValue }}</td>
                     </tr>
                     <tr class="table-active">
                         <th colspan="2">Cargo / Función</th>
-                        <th colspan="2">Gr. Cat. horas</th>
+                        <th colspan="2">Grado E.U.S.</th>
                     </tr>
                     <tr class="text-center">
                         <td colspan="2">{{ $allowance->position }}</td>
@@ -47,17 +49,58 @@
                         <td colspan="2">{{ $allowance->organizationalUnitAllowance->name }}</td>
                     </tr>
                     <tr class="table-active">
-                        <th width="25%">Origen</th>
-                        <th width="25%">Destino</th>
-                        <th width="25%">Lugar</th>
-                        <th width="25%">Motivo</th>
+                        <th colspan="4">Motivo</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4">{{ $allowance->reason }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <h6><i class="fas fa-info-circle"></i> Origen / Destino(s)</h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered text-center small">
+                <tbody>
+                    <tr class="table-active">
+                        <th>Origen</th>
                     </tr>
                     <tr>
                         <td>{{ $allowance->originCommune->name }}</td>
-                        <td>{{ $allowance->destinationCommune->name }}</td>
-                        <td>{{ $allowance->place }}</td>
-                        <td>{{ $allowance->reason }}</td>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered text-center small">
+                <tbody>
+                    <tr class="table-active">
+                        <th colspan="3">Destino</th>
+                    </tr>
+                    <tr class="table-active">
+                        <th width="33%">Comuna</th>
+                        <th width="33%">Localidad</th>
+                        <th width="33%">Descripción</th>
+                    </tr>
+                    @foreach($allowance->destinations as $destination)
+                    <tr>
+                        <td>{{ $destination->commune->name }}</td>
+                        <td>{{ $destination->locality->name }}</td>
+                        <td>{{ $destination->description }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+
+        <h6><i class="fas fa-info-circle"></i> Información de Itinerario</h6>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered text-center small">
+                <tbody>
                     <tr class="table-active">
                         <th>Medio de transporte</th>
                         <th>Itinerario</th>
@@ -73,10 +116,12 @@
                     <tr class="table-active">
                         <th>Desde</th>
                         <th>Hasta</th>
+                        <th>Sólo medios días</th>
                     </tr>
                     <tr>
                         <td>{{ $allowance->from->format('d-m-Y') }}</td>
                         <td>{{ $allowance->to->format('d-m-Y') }}</td>
+                        <td>{{ $allowance->HalfDaysOnlyValue }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -90,6 +135,7 @@
             </a>
         @endif
     </div>
+    
     <div class="col-md-3">
         <h6><i class="fas fa-paperclip"></i> Archivos Adjuntos</h6>
         <div class="list-group">
@@ -321,7 +367,6 @@
             </tbody>
         </table>
     </div>
-
 @else
     <i class="fas fa-check-circle"></i> Gestión / Firma Electrónica de Documento.
     <div class="table-responsive">
@@ -382,7 +427,7 @@
                                 <i class="fas fa-check-circle"></i> Rechazada
                             </span> <br>
                             <i class="fas fa-user"></i> {{ $flow->userSigner->FullName }}<br>
-                            {{-- <i class="fas fa-calendar-alt"></i> {{ $flow->signature_date->format('d-m-Y H:i') }}<br> --}}
+                            
                             <hr>
                             <b>Motivo: </b>{{ $flow->observation }}<br>
                         @endif
