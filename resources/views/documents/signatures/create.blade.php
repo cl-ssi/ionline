@@ -39,7 +39,7 @@
                         <label for="for_request_date">Fecha Documento*</label>
                         <input type="date" class="form-control" id="for_request_date" name="request_date"
                             value="{{ isset($signature) ? $signature->request_date->format('Y-m-d') : old('request_date') }}"
-                            max="{{ date('Y-m-d') }}" required>
+                            max="{{ date('Y-m-d', strtotime('+1 month', strtotime(date('Y-m-d')))) }}" required>
                     </fieldset>
 
                     <fieldset class="form-group col-6 col-md-2">
