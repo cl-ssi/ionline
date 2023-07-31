@@ -19,10 +19,6 @@ class Allowance extends Model implements Auditable
     use softDeletes;
     use \OwenIt\Auditing\Auditable;
 
-    // protected $casts = [
-    //     'from' => 'date:dd/mm/YY',
-    // ];
-
     protected $fillable = [
         'folio_sirh', 'status', 'user_allowance_id', 'allowance_value_id', 'grade', 'law', 'contractual_condition_id', 
         'position', 'establishment_id', 'organizational_unit_allowance_id', 'place', 'reason',
@@ -216,15 +212,18 @@ class Allowance extends Model implements Auditable
         }
     }
 
+    protected $dates = [
+        'from', 'to', 'document_date'
+    ];
+
+    protected $casts = [
+        'from'  => 'date:Y-m-d',
+        'to'    => 'date:Y-m-d'
+    ];
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];
-
-    // protected $dates = [
-    //     'from', 'to', 'document_date'
-    // ];
-
-    
 
     protected $table = 'alw_allowances';
 }

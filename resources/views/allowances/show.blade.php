@@ -87,7 +87,7 @@
                     @foreach($allowance->destinations as $destination)
                     <tr>
                         <td>{{ $destination->commune->name }}</td>
-                        <td>{{ $destination->locality->name }}</td>
+                        <td>{{ ($destination->locality) ? $destination->locality->name : '' }}</td>
                         <td>{{ $destination->description }}</td>
                     </tr>
                     @endforeach
@@ -165,7 +165,13 @@
                 <td class="text-right">
                     ${{ $allowance->day_value ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
                 </td>
-                <td class="text-center">{{ intval($allowance->total_days) }}</td>
+                <td class="text-center"> 
+                    @if($allowance->half_days_only == 0)
+                        {{ intval($allowance->total_days) }}
+                    @else
+                        0
+                    @endif
+                </td>
                 <td class="text-right">
                     ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
                 </td>
@@ -175,13 +181,23 @@
                 <td class="text-right">
                     ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
                 </td>
-                <td class="text-center">0,5</td>
-                <td class="text-right">${{ number_format($allowance->half_day_value, 0, ",", ".") }}</td>
+                <td class="text-center">
+                    @if($allowance->half_days_only == 0)
+                        0,5
+                    @else
+                        {{ number_format($allowance->total_days, 0, ",", ".") }} medios días
+                    @endif
+                </td>
+                <td class="text-right">
+                    ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                </td>
             </tr>
             <tr>
                 <td colspan="2"></td>                    
                 <td class="text-center"><b>Total</b></td>
-                <td class="text-right">${{ number_format($allowance->total_value, 0, ",", ".") }}</td>
+                <td class="text-right">
+                    ${{ number_format($allowance->total_value, 0, ",", ".") }}
+                </td>
             </tr>
         </tbody>
     </table>

@@ -99,13 +99,16 @@
                         <td class="text-center">{{ $allowance->originCommune->name }}</td>
                         <td class="text-center">
                             @foreach($allowance->destinations as $destination)
-                                <b>Comuna</b>: {{ $destination->commune->name }} - <b>Localidad</b>: {{ $destination->locality->name }} <br>
+                                <b>Comuna</b>: {{ $destination->commune->name }} - <b>Localidad</b>:  {{ ($destination->locality) ? $destination->locality->name : '' }} <br>
                             @endforeach
                         </td>
                         <td>{{ $allowance->reason }}</td>
                         <td class="text-center" style="width: 7%">
-                            {{ Carbon\Carbon::parse($allowance->from)->format('d-m-Y') }}<br>
-                            {{ Carbon\Carbon::parse($allowance->to)->format('d-m-Y') }}
+                            {{-- Carbon\Carbon::parse($allowance->from)->format('d-m-Y')<br>
+                            Carbon\Carbon::parse($allowance->to)->format('d-m-Y') --}}
+
+                            {{ $allowance->from->format('d-m-Y') }}<br>
+                            {{ $allowance->to->format('d-m-Y') }}
                         </td>
                         <td class="text-center">
                             {{ number_format($allowance->total_days, 1, ",", ".") }} <br>

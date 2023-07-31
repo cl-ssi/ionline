@@ -260,7 +260,7 @@ class AllowancesCreate extends Component
     }
 
     public function allowanceDayValue(){
-        if($this->allowanceTotalDays() >= 1){
+        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 0){
             $this->dayValue = $this->cfgAllowanceValue->value;
             return $this->cfgAllowanceValue->value;
         }
@@ -272,8 +272,11 @@ class AllowancesCreate extends Component
     }
 
     public function allowanceTotalValue(){
-        if($this->allowanceTotalDays() >= 1){
+        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly != 1){
             return ($this->allowanceDayValue() * intval($this->allowanceTotalDays())) + $this->allowanceHalfDayValue();
+        }
+        elseif($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 1){
+            return ($this->allowanceHalfDayValue() * $this->allowanceTotalDays());
         }
         else{
             return $this->allowanceHalfDayValue();
