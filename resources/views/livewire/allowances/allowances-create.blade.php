@@ -295,6 +295,17 @@
         </div> 
     </div>
 
+    @if(count($errors) > 0 && $validateMessage == "file")
+        <div class="alert alert-danger">
+            <p>Corrige los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if($files)
     <br>
 

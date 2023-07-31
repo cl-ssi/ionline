@@ -42,8 +42,9 @@ class AllowancesCreate extends Component
 
     /* Archivo */
     public $idFile;
-    public $fileName;
     public $file;
+    public $fileName;
+    public $fileAttached;
     public $files, $key;
 
     /* Destinos */
@@ -96,8 +97,11 @@ class AllowancesCreate extends Component
             /* Mensajes para Allowance */
 
             'originCommune.required'            => 'Debe ingresar una Comuna de destino.',
-            'selectedLocality.required'         => 'Debe ingresar una Localidad de destino.'
+            'selectedLocality.required'         => 'Debe ingresar una Localidad de destino.',
 
+            /* Mensajes para Allowance */
+            'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
+            'fileAttached.required'             => 'Debe ingresar un archivo adjunto.',
         ];
     }
 
@@ -503,13 +507,20 @@ class AllowancesCreate extends Component
     /* Metodos para Archivos */
     public function addFile()
     {
+        // dd($this->file);
+        $this->validateMessage = 'file';
+        $validatedData = $this->validate([
+            'fileName'                                      => 'required',
+            ($this->file) ? 'fileAttached' : 'fileAttached' => ($this->file) ? '' : 'required' 
+        ]);
+
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $filename = $this->file ? $this->file->storeAs('/ionline/allowances/allowance_docs', $now.'_alw_file.'.$this->file->extension(), 'gcs') : null;
-        
+        $this->fileAttached = $this->file ? $this->file->storeAs('/ionline/allowances/allowance_docs', $now.'_alw_file.'.$this->file->extension(), 'gcs') : null;
+
         $this->files[] = [
             'id'        => '',
             'fileName'  => $this->fileName,
-            'file'      => $filename
+            'file'      => $this->fileAttached
         ];
 
         $this->cleanFile();
