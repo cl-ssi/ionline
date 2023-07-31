@@ -94,12 +94,12 @@ class AllowancesCreate extends Component
 
             'files.required'                    => 'Debe ingresar al menos un Archivo Adjunto.',
 
-            /* Mensajes para Allowance */
+            /* Mensajes para destinos */
 
-            'originCommune.required'            => 'Debe ingresar una Comuna de destino.',
+            'destinationCommune.required'       => 'Debe ingresar una Comuna de destino.',
             'selectedLocality.required'         => 'Debe ingresar una Localidad de destino.',
 
-            /* Mensajes para Allowance */
+            /* Mensajes para archivos */
             'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
             'fileAttached.required'             => 'Debe ingresar un archivo adjunto.',
         ];
@@ -240,17 +240,18 @@ class AllowancesCreate extends Component
 
     /* Cálculo de días */
     public function allowanceTotalDays(){
-        if($this->from == $this->to){
-            return 0.5;
-        }
-        else{
-            if($this->halfDaysOnly == 1){
-                return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 1;
+
+            if($this->from == $this->to){
+                return 0.5;
             }
             else{
-                return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 0.5;
+                if($this->halfDaysOnly == 1){
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 1;
+                }
+                else{
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 0.5;
+                }
             }
-        }
     }
 
     public function allowanceValueId(){
