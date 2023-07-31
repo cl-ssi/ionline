@@ -107,4 +107,9 @@ class AmipassController extends Controller
         $doubt = Doubt::findOrFail($id);
         return view('welfare.amipass.questionshow', compact('doubt'));
     }
+
+    public function maintainerAbsence()
+    {
+        dd('realizar mantenedor de ausentismo');
+    }
 }

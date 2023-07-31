@@ -2230,6 +2230,9 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::view('/upload', 'welfare.amipass.index')->name('upload');
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
+
+        
+        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
     });
 });
 

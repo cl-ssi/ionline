@@ -50,6 +50,12 @@
                 <a class="dropdown-item" href="{{ route('welfare.amipass.dashboard') }}">
                     <i class="fas fa-file-upload"></i> Dashboard
                 </a>
+
+                <a class="dropdown-item" href="{{ route('welfare.amipass.maintainerAbsence') }}">
+                    <i class="far fa-calendar-times"></i> Mantenedor Ausentismo
+                </a>
+
+
             </div>
         </li>
     @endcanany
