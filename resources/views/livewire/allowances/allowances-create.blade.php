@@ -348,6 +348,12 @@
         </div>
     @endif
 
+    @if(session()->has('message'))
+        <div class="alert alert-danger">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <button wire:click="saveAllowance"  class="btn btn-primary float-right" type="button" wire:loading.attr="disabled">
         <i class="fas fa-save"></i> Guardar
     </button>

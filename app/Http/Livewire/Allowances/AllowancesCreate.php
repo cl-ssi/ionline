@@ -136,8 +136,8 @@ class AllowancesCreate extends Component
                 ->get();
         
         if($currentAllowances->count() > 0){
-            // return back()->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada, favor consulta historial de funcionario');;
-            dd('Aquí');
+            // return back()->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada');
+            session()->flash('message', 'El funcionario ya dispone de viático(s) para la fecha solicitada.');
         }
         else{
             /* SE GUARDA EL NUEVO VIÁTICO */

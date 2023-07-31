@@ -20,8 +20,8 @@
             <table class="table table-sm table-bordered text-center small">
                 <tbody>
                     <tr class="table-active">
-                        <th width="50%">Nombre funcionario</th>
-                        <th>RUT</th>
+                        <th width="37%">Nombre funcionario</th>
+                        <th width="13%">RUT</th>
                         <th>Calidad</th>
                         <th>Ley</th>
                     </tr>
