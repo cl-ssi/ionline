@@ -17,14 +17,42 @@ class IndexDtes extends Component
 
     public $showManualDTE = false;
 
-    public $selectedEstablishment;
+    public $selectedEstablishments;
+
+    public $establishments;
+
+    public $dtes;
 
 
     public function refresh()
     {
-        /**
-         * Sólo hace el re redner del componente
-         */
+        
+        $this->dtes = Dte::
+        //search($this->filter)
+            /** Esto me proboca que no pueda utilizar la relación requestForm */
+            // ->with([
+            //     'immediatePurchase',
+            //     'immediatePurchase.purchasingProcessDetail',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+            // ])            
+            whereNot('tipo_documento', 'guias_despacho')
+            ->orderBy('emision')
+            ->get();
+            //dd($this->dtes);
+    }
+
+    public function mount()
+    {
+        $this->establishments = Establishment::orderBy('name')->get();
+        
+        //$this->dtes = Dte::whereNot('tipo_documento', 'guias_despacho')->orderBy('emision')->get();
+
+        $this->dtes = Dte::whereNot('tipo_documento', 'guias_despacho')->orderBy('emision')->latest()->take(5)->get();
+
+        //dd($this->dtes);
+
     }
 
     public function saveEstablishment($dteId)
@@ -51,24 +79,21 @@ class IndexDtes extends Component
 
     public function render()
     {
-        $query = Dte::search($this->filter)
-            /** Esto me proboca que no pueda utilizar la relación requestForm */
-            // ->with([
-            //     'immediatePurchase',
-            //     'immediatePurchase.purchasingProcessDetail',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
-            // ])            
-            ->whereNot('tipo_documento', 'guias_despacho')
-            ->orderBy('emision')
-            ->paginate(50);
+        // $query = Dte::search($this->filter)
+        //     /** Esto me proboca que no pueda utilizar la relación requestForm */
+        //     // ->with([
+        //     //     'immediatePurchase',
+        //     //     'immediatePurchase.purchasingProcessDetail',
+        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+        //     // ])            
+        //     ->whereNot('tipo_documento', 'guias_despacho')
+        //     ->orderBy('emision')
+        //     ->paginate(50);
 
-        $establishments = Establishment::orderBy('name')->get();
+        
 
-        return view('livewire.finance.index-dtes', [
-            'dtes' => $query,
-            'establishments' => $establishments,
-        ]);
+        return view('livewire.finance.index-dtes');
     }
 }
