@@ -12,6 +12,7 @@ use App\Models\WebService\MercadoPublico;
 use App\Models\Pharmacies\Purchase;
 
 
+use App\Http\Livewire\Welfare\Amipass\ReportByDates;
 use App\Http\Livewire\Welfare\AmiPass\RequestMgr;
 use App\Http\Livewire\Welfare\AmiPass\NewBeneficiaryRequest;
 use App\Http\Livewire\Warehouse\Invoices\InvoiceManagement;
@@ -162,8 +163,8 @@ use App\Http\Controllers\Programmings\ProfessionalHourController;
 use App\Http\Controllers\Programmings\ProfessionalController;
 use App\Http\Controllers\Programmings\ParticipationController;
 use App\Http\Controllers\Programmings\MinisterialProgramController;
-use App\Http\Controllers\Programmings\EmergenciesController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
+use App\Http\Controllers\Programmings\EmergenciesController;
 use App\Http\Controllers\Programmings\CommuneFileController;
 use App\Http\Controllers\Programmings\ActivitiesProgramController;
 use App\Http\Controllers\Programmings\ActivitiesItemController;
@@ -2231,7 +2232,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::get('/new-beneficiary-request', NewBeneficiaryRequest::class)->name('new-beneficiary-request');
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
-        
+        Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
         Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
     });
 });

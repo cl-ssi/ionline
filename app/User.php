@@ -16,6 +16,8 @@ use App\Models\Warehouse\Store;
 use App\Models\Suitability\Result;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\Rrhh\NoAttendanceRecord;
+use App\Models\Rrhh\Contract;
+use App\Models\Rrhh\Absenteeism;
 use App\Models\RequestForms\RequestForm;
 use App\Models\Profile\Subrogation;
 use App\Models\Parameters\AccessLog;
@@ -182,6 +184,20 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(AccessLog::class,'switch_id');
     }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class,'rut');
+    }
+
+    public function absenteeisms()
+    {
+        return $this->hasMany(Absenteeism::class,'rut');
+    }
+
+
+
+
 
     /* Authority relation: Is Manager from ou */
     public function manager()
