@@ -58,6 +58,8 @@
 
     </div>
 
+
+
     @if ($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
@@ -154,13 +156,22 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }}
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>{{ $dte->establishment_id }}
+                    <td>
+                        <div>                        
+                            @if (session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session('message') }}
+                                </div>
+                            @endif
+                        </div>
 
-                        <select class="form-control" wire:model="selectedEstablishments.{{ $dte->id }}">
+
+
+                        <select class="form-control" wire:change="updateSelectedEstablishment({{ $dte->id }}, $event.target.value)">
                             <option value="">Seleccionar Establecimiento</option>
                             @foreach ($establishments as $establishment)
                                 <option value="{{ $establishment->id }}"
-                                    @if($dte->establishment_id == $establishment->id) selected @endif>
+                                    @if ($dte->establishment_id == $establishment->id) selected @endif>
                                     {{ $establishment->name }}
                                 </option>
                             @endforeach
@@ -168,7 +179,7 @@
                     </td>
                     <td>
                         <button class="btn btn-primary"
-                            wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
+                            wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>                        
                     </td>
                 </tr>
 
@@ -176,6 +187,6 @@
         </tbody>
     </table>
 
+    {{ $dtes->links() }}
 
-    
 </div>
