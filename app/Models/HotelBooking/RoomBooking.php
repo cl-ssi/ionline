@@ -17,7 +17,7 @@ class RoomBooking extends Model implements Auditable
 
     //
     protected $fillable = [
-        'id','user_id','room_id','start_date','end_date','observation'
+        'id','user_id','room_id','start_date','end_date','observation','payment_type'
     ];
 
     protected $table = 'hb_room_bookings';
@@ -51,18 +51,8 @@ class RoomBooking extends Model implements Auditable
         return $array;
     }
 
-    // public function type()
-    // {
-    //     return $this->belongsTo('App\Models\HotelBooking\RoomType','room_type_id');
-    // }
-
-    // public function services()
-    // {
-    //     return $this->belongsToMany('App\Models\HotelBooking\Service','hb_room_services');
-    // }
-
-    // public function bookingConfigurations()
-    // {
-    //     return $this->hasMany('App\Models\HotelBooking\RoomBookingConfiguration');
-    // }
+    public function files()
+    {
+        return $this->hasMany('App\Models\HotelBooking\RoomBookingFile');
+    }
 }

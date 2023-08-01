@@ -12,6 +12,8 @@ use App\Models\ClCommune;
 use App\Models\HotelBooking\Hotel;
 use App\Models\HotelBooking\RoomBookingConfiguration;
 use App\Models\HotelBooking\RoomBooking;
+use App\Models\HotelBooking\RoomBookingFile;
+use Illuminate\Support\Facades\Storage;
 
 class HotelBookingController extends Controller
 {
@@ -46,7 +48,13 @@ class HotelBookingController extends Controller
         }
         
         // encuentra todas las configuraciones que tengan disponibilidad 
-        $bookingConfigurations = RoomBookingConfiguration::where('end_date','>=',now())->get();
+        $bookingConfigurations = RoomBookingConfiguration::where('end_date','>=',now())
+                                        ->whereHas("room", function($q) use($commune_id){
+                                            $q->whereHas("hotel", function($q) use($commune_id){
+                                                $q->where('commune_id',$commune_id);
+                                            });
+                                        })
+                                        ->get();
 
         foreach($bookingConfigurations as $bookingConfiguration){
 
@@ -78,7 +86,7 @@ class HotelBookingController extends Controller
                 $flag = 0;
                 foreach($roomBookings as $key => $roomBooking){
                     
-                    if($start_date < $roomBooking->start_date && $end_date >= $roomBooking->end_date){
+                    if($start_date <= $roomBooking->start_date && $end_date >= $roomBooking->end_date){
                         $flag = 1;
                         continue; //se rompe la busqueda en esta configuración
                     }
@@ -122,5 +130,14 @@ class HotelBookingController extends Controller
         $roomBooking->save();
         session()->flash('success', 'Se modificó el estado de la reserva.');
         return redirect()->back();
+    }
+
+    public function download(RoomBookingFile $file)
+    {
+        if(Storage::disk('gcs')->exists($file->file)){
+            return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        }else{
+            return redirect()->back()->with('warning', 'El archivo no se ha encontrado.');
+        }  
     }
 }
