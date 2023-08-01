@@ -119,8 +119,8 @@
                         <th>Sólo medios días</th>
                     </tr>
                     <tr>
-                        <td>{{ $allowance->from->format('d-m-Y') }}</td>
-                        <td>{{ $allowance->to->format('d-m-Y') }}</td>
+                        <td>{{ $allowance->FromFormat }}</td>
+                        <td>{{ $allowance->ToFormat }}</td>
                         <td>{{ $allowance->HalfDaysOnlyValue }}</td>
                     </tr>
                 </tbody>

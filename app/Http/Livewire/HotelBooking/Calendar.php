@@ -40,6 +40,7 @@ class Calendar extends Component
     /** Cantidad de cuadros en blanco antes del primer día del mes */
     public $blankDays;
 
+    public $room;
     public $configurations;
 
     /**
@@ -53,8 +54,12 @@ class Calendar extends Component
             $this->monthSelection = $start_date->format('Y-m');
         }
         $this->today = now()->format('Y-m-d');
-        // $this->today = $this->configurations->first()->start_date->format('Y-m-d');
-        
+        $this->configurations = Room::find($this->room->id)->bookingConfigurations;
+
+        $string = $this->monthSelection;
+        $monthSelection = Carbon::createFromFormat('Y-m-d', $this->monthSelection."-15");
+        $this->startOfMonth = $monthSelection->startOfMonth();
+        $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
     }
 
     public function ExecRender($room){
@@ -66,15 +71,20 @@ class Calendar extends Component
         $this->render();
     }
 
+    public function MonthUpdate(){
+        $string = $this->monthSelection;
+        $monthSelection = Carbon::createFromFormat('Y-m-d', $this->monthSelection."-15");
+        $this->startOfMonth = $monthSelection->startOfMonth();
+        $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
+        
+    }
+
     public function render()
     {
         $start_date = Carbon::parse($this->start_date);
         $end_date = Carbon::parse($this->end_date);
 
         $this->data = [];
-        $this->startOfMonth = Carbon::createFromFormat('Y-m', $this->monthSelection)->startOfMonth();
-        $this->endOfMonth = $this->startOfMonth->copy()->endOfMonth();
-
         $this->blankDays = ($this->startOfMonth->dayOfWeek == 0) ? 7 : $this->startOfMonth->dayOfWeek;
 
         $holidays = Holiday::whereBetween('date', [$this->startOfMonth, $this->endOfMonth])
@@ -86,11 +96,11 @@ class Calendar extends Component
                 'date' => $day,
                 'active' => false,
                 'style' => null,
+                'user' => null,
             );
         }
 
         foreach($this->configurations as $configuration){
-
             foreach (CarbonPeriod::create($configuration->start_date, '1 day', $configuration->end_date) as $day) {
                 // marca los disponibles para hospedar
                 if(( $configuration->sunday && $day->dayOfWeek==0) || ($configuration->monday && $day->dayOfWeek==1) || 
@@ -109,20 +119,42 @@ class Calendar extends Component
                             'date' => $day,
                             'active' => true,
                             'style' => $this->style,
+                            'user' => null,
                         );
                     }
                 }
             }
+        }
 
-            // marca los días ya ocupados
-            $roomBookings = RoomBooking::where('start_date','>=',$configuration->start_date)
-                                        ->where('room_id',$configuration->room_id)
-                                        ->get()
-                                        ->sortBy('start_date');
-            foreach($roomBookings as $key => $roomBooking){
-                foreach (CarbonPeriod::create($roomBooking->start_date, '1 day', $roomBooking->end_date) as $day) {
+        // dd($this->data);
+        
+        // marca los días ya ocupados
+        $rooms_array = $this->configurations->pluck('room_id')->toArray();
+        $roomBookings = RoomBooking::whereBetween('start_date', [$this->startOfMonth, $this->endOfMonth])
+                                    ->orwhereBetween('end_date', [$this->startOfMonth, $this->endOfMonth])
+                                    ->whereIn('room_id',$rooms_array)
+                                    ->get()
+                                    ->sortBy('start_date');
 
-                    // verifica primero si el tiene style, es decir si está configurado para ser reservado en las configuraciones
+                                    // dd($roomBookings);
+        foreach($roomBookings as $key => $roomBooking){
+            foreach (CarbonPeriod::create($roomBooking->start_date, '1 day', $roomBooking->end_date) as $day) {
+
+                // verifica primero si el tiene style, es decir si está configurado para ser reservado en las configuraciones
+                if(array_key_exists($day->format('Y-m-d'), $this->data)){
+
+                    //verifica el usuario configurado para ese día
+                    if($this->data[$day->format('Y-m-d')]['user']!=null){
+                        $user = $this->data[$day->format('Y-m-d')]['user'] . "\n Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                    }else{
+                        if($day->format('Y-m-d') == $roomBooking->start_date->format('Y-m-d')){
+                            $user = "Ingresa: " . $roomBooking->user->getTinnyNameAttribute();
+                        }  
+                        else{
+                            $user = "Sale: " . $roomBooking->user->getTinnyNameAttribute();
+                        }  
+                    }
+
                     if($this->data[$day->format('Y-m-d')]['style']!=null){
                         // default
                         $this->style='red_middle_style';
@@ -131,6 +163,7 @@ class Calendar extends Component
                             'date' => $day,
                             'active' => false,
                             'style' => $this->style,
+                            'user' => $user,
                         );
                         // revisa inicio de la reserva de la primera iteración
                         if($key==0){
@@ -141,6 +174,7 @@ class Calendar extends Component
                                     'date' => $day,
                                     'active' => false,
                                     'style' => $this->style,
+                                    'user' => $user,
                                 );
                             }
                         }
@@ -153,6 +187,7 @@ class Calendar extends Component
                                     'date' => $day,
                                     'active' => false,
                                     'style' => $this->style,
+                                    'user' => $user,
                                 );
                             }
                         }
@@ -164,6 +199,7 @@ class Calendar extends Component
                                 'date' => $day,
                                 'active' => false,
                                 'style' => $this->style,
+                                'user' => $user,
                             );
                         }
                     }

@@ -97,6 +97,14 @@
                                         @if($roomBooking) <b>{{$roomBooking->room->identifier}}</b> @endif
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td width="30%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
+                                        Tipo de pago:
+                                    </td>
+                                    <td width="70%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
+                                        @if($roomBooking) <b>{{$roomBooking->payment_type}}</b> @endif
+                                    </td>
+                                </tr>
                                
                             </table>
                         </td>

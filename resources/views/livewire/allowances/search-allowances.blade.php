@@ -107,8 +107,8 @@
                             {{-- Carbon\Carbon::parse($allowance->from)->format('d-m-Y')<br>
                             Carbon\Carbon::parse($allowance->to)->format('d-m-Y') --}}
 
-                            {{ $allowance->from->format('d-m-Y') }}<br>
-                            {{ $allowance->to->format('d-m-Y') }}
+                            {{ $allowance->FromFormat }}<br>
+                            {{ $allowance->ToFormat }}
                         </td>
                         <td class="text-center">
                             {{ number_format($allowance->total_days, 1, ",", ".") }} <br>

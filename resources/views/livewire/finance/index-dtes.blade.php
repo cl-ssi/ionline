@@ -50,7 +50,7 @@
         </div>
 
 
-        
+
         <div class="col-md-2 text-right">
             <button class="btn btn-success" type="button" wire:click="loadManualDTE">
                 <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
@@ -154,12 +154,14 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }}
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>
-                        <select class="form-control" wire:model.defer="selectedEstablishments.{{ $dte->id }}">
+                    <td>{{ $dte->establishment_id }}
+
+                        <select class="form-control" wire:model="selectedEstablishments.{{ $dte->id }}">
                             <option value="">Seleccionar Establecimiento</option>
                             @foreach ($establishments as $establishment)
                                 <option value="{{ $establishment->id }}"
-                                    @if ($dte->establishment_id == $establishment->id) selected @endif>{{ $establishment->name }}
+                                    @if($dte->establishment_id == $establishment->id) selected @endif>
+                                    {{ $establishment->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -175,5 +177,5 @@
     </table>
 
 
-    {{ $dtes->links() }}
+    
 </div>

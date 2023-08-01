@@ -130,14 +130,34 @@ class AllowancesCreate extends Component
             'files'                                                 => 'required'
         ]);
 
+        /* Buscar si existen viáticos en fecha indicada */
         $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
-                ->whereDate('from', '>=', $this->from)
-                ->WhereDate('to', '<=', $this->to)
-                ->get();
+            ->whereDate('from', '>=', $this->from)
+            ->WhereDate('to', '<=', $this->to)
+            ->get();
         
+        /* Buscar si los viáticos del usuario no exceden 90 días en el presente año */
+        $allowancesCount = Allowance::select('total_days')
+            ->where('user_allowance_id', $this->userAllowance->id)
+            ->whereDate('from', '>=', now()->startOfYear())
+            ->WhereDate('to', '<=', now()->endOfYear())
+            ->where('half_days_only', null)
+            ->where('total_days', '>=', 1.0)
+            ->get();
+
+        //$totalAllowancesDaysByUser = 80;
+
+        foreach($allowancesCount as $allowanceDays){
+            $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($allowanceDays->total_days);
+        }
+
+        $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($this->allowanceTotalDays());
+
         if($currentAllowances->count() > 0){
-            // return back()->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada');
-            session()->flash('message', 'El funcionario ya dispone de viático(s) para la fecha solicitada.');
+            session()->flash('current', 'Estimado Usuario: El funcionario ya dispone de viático(s) para la fecha solicitada.');
+        }
+        elseif($totalAllowancesDaysByUser > 90 && $this->halfDaysOnly != 1){
+            session()->flash('exceedTotalDays', 'Estimado Usuario: El funcionario seleccionado no puede exceder 90 días de viáticos.');
         }
         else{
             /* SE GUARDA EL NUEVO VIÁTICO */

@@ -212,14 +212,24 @@ class Allowance extends Model implements Auditable
         }
     }
 
-    protected $dates = [
-        'from', 'to', 'document_date'
-    ];
+    public function getFromFormatAttribute(){
+        return Carbon::parse($this->from)->format('d-m-Y');
+    }
 
+    public function getToFormatAttribute(){
+        return Carbon::parse($this->to)->format('d-m-Y');
+    }
+
+    // protected $dates = [
+    //     'from', 'to', 'document_date'
+    // ];
+
+    /*
     protected $casts = [
-        'from'  => 'date:Y-m-d',
+        'from'  => 'date:d-m-Y',
         'to'    => 'date:Y-m-d'
     ];
+    */
 
     protected $hidden = [
         'created_at', 'updated_at'

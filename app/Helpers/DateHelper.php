@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Cache;
 use App\Models\Parameters\Holiday;
 
 class DateHelper
@@ -15,7 +16,9 @@ class DateHelper
      */
     public static function getBusinessDaysByDateRange($startDate, $endDate)
     {
-        $holidays = Holiday::all(); // TODO: mejorar query
+        $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
+            return Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        });
 
         $holidays = $holidays->map(function($holiday) {
             return $holiday->date->format('Y-m-d');
@@ -49,7 +52,9 @@ class DateHelper
      */
     public static function getBusinessDaysByDuration($startDate, $duration)
     {
-        $holidays = Holiday::all(); // TODO: mejorar query
+        $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
+            return Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        });
 
         $holidays = $holidays->map(function($holiday) {
             return $holiday->date->format('Y-m-d');
