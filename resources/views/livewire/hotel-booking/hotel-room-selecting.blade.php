@@ -36,7 +36,7 @@
 
         <hr>
 
-        @livewire('hotel-booking.calendar',['configurations' => $room->bookingConfigurations])
+        @livewire('hotel-booking.calendar',['room' => $room])
 
         <hr>
 

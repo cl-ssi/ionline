@@ -14,6 +14,7 @@ class BookRoom extends Component
     public $room;
     public $start_date;
     public $end_date;
+    public $payment_type;
 
     public function show(){
         if($this->show){
@@ -24,13 +25,19 @@ class BookRoom extends Component
     }
 
     public function confirm_reservation(){
+
+        // Validar el campo de código de barra antes de redirigir a la URL
+        $this->validate([
+            'payment_type' => 'required'
+        ]);
+
         $roomBooking = new RoomBooking();
         $roomBooking->user_id = auth()->user()->id;
         $roomBooking->room_id = $this->room->id;
         $roomBooking->start_date = $this->start_date;
         $roomBooking->end_date = $this->end_date;
         $roomBooking->status = "Reservado";
-        // dd($roomBooking);
+        $roomBooking->payment_type = $this->payment_type;
         $roomBooking->save();
 
         // $roomBooking = RoomBooking::find(3);

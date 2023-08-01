@@ -1708,6 +1708,7 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth','must.c
     Route::get('/my_bookings', [HotelBookingController::class, 'my_bookings'])->name('my_bookings');
     Route::delete('/{roomBooking}/booking_cancelation', [HotelBookingController::class, 'booking_cancelation'])->name('booking_cancelation');
     Route::view('/confirmation_page', 'hotel_booking.confirmation_page')->name('confirmation_page');
+    Route::get('download/{file}',  [HotelBookingController::class, 'download'])->name('download');
     // Route::get('/confirmation_page/{roomBooking}', [HotelBookingController::class, 'confirmation_page'])->name('confirmation_page');
     // Route::get('/booking_cancelation/{roomBooking}', [HotelController::class, 'booking_cancelation'])->name('booking_cancelation');
     // Route::post('/booking_cancelation', [RoomController::class, 'booking_cancelation'])->name('booking_cancelation');

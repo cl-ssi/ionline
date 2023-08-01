@@ -136,7 +136,7 @@ class AllowancesCreate extends Component
             ->WhereDate('to', '<=', $this->to)
             ->get();
         
-        /* Buscar si los viáticos no exceden 90 días en el presente año */
+        /* Buscar si los viáticos del usuario no exceden 90 días en el presente año */
         $allowancesCount = Allowance::select('total_days')
             ->where('user_allowance_id', $this->userAllowance->id)
             ->whereDate('from', '>=', now()->startOfYear())
@@ -146,7 +146,7 @@ class AllowancesCreate extends Component
             ->get();
 
         //$totalAllowancesDaysByUser = 80;
-        
+
         foreach($allowancesCount as $allowanceDays){
             $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($allowanceDays->total_days);
         }

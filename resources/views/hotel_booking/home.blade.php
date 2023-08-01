@@ -81,51 +81,32 @@
                 <li class="list-group-item"><h5>Tipos de habitación disponibles.</h5></li>
                 @foreach($hotel->rooms as $key => $room) 
                     <li class="list-group-item">
-                        {{$room->type->name}} - {{$room->max_days_avaliable}} días como máximo.
+                        {{$room->identifier}} - <b>{{$room->max_days_avaliable}}</b> días como máximo - Capacidad <b>{{$room->single_bed + ($room->double_bed * 2)}}</b> huespedes.
                         <a href="#" data-toggle="modal" data-target="#exampleModal{{$room->id}}">
                             <span class='badge badge-warning' >
                                 Ver disponibilidad
                             </span>
-                            
-                            <!-- Modal -->
-                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <!-- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5> -->
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        
-                                    </div>
-                                    <div class="modal-footer">
-                                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button> -->
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade bd-example-modal-lg" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        @livewire('hotel-booking.calendar',['configurations' => $room->bookingConfigurations])
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
                         </a>
+                            
+                        <!-- Modal -->
+                        <div class="modal fade bd-example-modal-lg" data-backdrop="true" id="exampleModal{{$room->id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    @livewire('hotel-booking.calendar',['room' => $room])
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        
                     </li>
                 @endforeach
             </ul>
@@ -191,6 +172,10 @@
     @endforeach
 @endif
 
+<div class="tooltip">Hover over me
+        <span class="tooltiptext">Tooltip text</span>
+    </div>
+
 @endsection
 
 <!-- CSS Custom para el calendario -->
@@ -234,8 +219,8 @@
     .red_start_style {
         background: linear-gradient(
             to right,
-            white 0%,
-            white 50%,
+            #A3E4D7 0%,
+            #A3E4D7 50%,
             #F1948A 50%,
             #F1948A 100%
         );
@@ -251,8 +236,8 @@
             to right,
             #F1948A 0%,
             #F1948A 50%,
-            white 50%,
-            white 100%
+            #A3E4D7 50%,
+            #A3E4D7 100%
         );
     }
 
@@ -321,8 +306,6 @@
     padding: 10px;
     }
 
-    
-
 </style>
 @endsection
 
@@ -348,6 +331,19 @@ $(document).ready(function() {
         $('#myInput').trigger('focus')
     })
 });    
+
+// permite el funcionamiento de los tooltip cuando se cambie el mes de busqueda
+document.addEventListener("DOMContentLoaded", () => {
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    Livewire.hook('message.processed', (message, component) => {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    })
+});
 
 </script>
 

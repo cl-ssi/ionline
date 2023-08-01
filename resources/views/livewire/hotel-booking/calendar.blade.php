@@ -17,24 +17,19 @@
             </h5>
         </div>
         <div class="col-6 col-md-3">
-            <input class="form-control" type="month" wire:model="monthSelection">
+            <input type="month" wire:model="monthSelection" wire:change="MonthUpdate()">
         </div>
     </div>
-
-    <!-- Mensaje de éxito
-    @include('layouts.partials.flash_message') -->
 
     <!-- Rellena con cuadros en blanco para cuando el mes no comienza en el primer cuadro -->
     @for($i = 1; $i < $blankDays; $i++) 
         <div class="dia_calendario small p-2 text-center border-white"></div>
     @endfor
 
-    <!-- @php
-        var_dump($data);
-    @endphp -->
     <!-- Muestra el calendario -->
     @foreach($data as $date => $item)
-    <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }} {{$item['style']}}">
+    <div class="dia_calendario small p-2 text-center {{ ($today == $date) ? 'border-primary' : '' }} {{$item['style']}}" 
+        @if($item['user']) data-toggle="tooltip" data-placement="top" title="{{$item['user']}}" @endif>
 
         <span class="{{ ($item['holiday'] OR $item['date']->dayOfWeek == 0) ? 'text-danger': '' }}">
                 {{ $date }}
