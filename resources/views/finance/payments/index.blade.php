@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('finance.nav')
+
 <h3 class="mb-3">Estados de pago</h3>
 
 <h5 class="mb-3">Pendientes</h5>
