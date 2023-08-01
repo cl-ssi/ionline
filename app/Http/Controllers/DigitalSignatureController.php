@@ -609,12 +609,14 @@ class DigitalSignatureController extends Controller
                 $response = Http::post($url, $data);
             }
         } catch (ConnectException | RequestException | Exception $e) {
-            var_dump($e);
-            exit();
+            return [
+                'statusOk' => false,
+                'content' => '',
+                'errorMsg' => 'Se produjo un error con firma electrónica, intente nuevamente.',
+            ];
         }
-        $json = $response->json();
 
-        //        dd($json);
+        $json = isset($response) ? $response->json() : [];
 
         if (array_key_exists('error', $json)) {
             return [
