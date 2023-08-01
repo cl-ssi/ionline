@@ -50,9 +50,9 @@ class AllowanceController extends Controller
      */
     public function create()
     {
-        $allowanceValues = AllowanceValue::where('year', Carbon::now()->year)->get();
+        // $allowanceValues = AllowanceValue::where('year', Carbon::now()->year)->get();
 
-        return view('allowances.create', compact('allowanceValues'));
+        return view('allowances.create');
     }
 
     /**
@@ -282,8 +282,11 @@ class AllowanceController extends Controller
      */
     public function edit(Allowance $allowance)
     {
+        /*
         $allowanceValues = AllowanceValue::where('year', Carbon::now()->year)->get();
         return view('allowances.edit', compact('allowance', 'allowanceValues'));
+        */
+        return view('allowances.edit', compact('allowance'));
     }
 
     /**

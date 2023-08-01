@@ -41,4 +41,8 @@ class Commune extends Model
         return $this->hasMany('\App\Models\Programmings\CommuneFile');//Modificado por ozc
     }
 
+    public function localities() {
+        return $this->hasMany('\App\Models\Parameters\Locality');
+    }
+
 }

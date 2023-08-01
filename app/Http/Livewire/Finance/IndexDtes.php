@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Finance;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Finance\Dte;
+use App\Models\Establishment;
 
 class IndexDtes extends Component
 {
@@ -16,12 +17,24 @@ class IndexDtes extends Component
 
     public $showManualDTE = false;
 
+    public $selectedEstablishment;
+
 
     public function refresh()
     {
         /**
          * Sólo hace el re redner del componente
          */
+    }
+
+    public function saveEstablishment($dteId)
+    {
+        $dte = Dte::find($dteId);
+
+        if ($dte) {
+            $dte->establishment_id = $this->selectedEstablishment;
+            $dte->save();
+        }
     }
 
 
@@ -39,7 +52,7 @@ class IndexDtes extends Component
     public function render()
     {
         $query = Dte::search($this->filter)
-        /** Esto me proboca que no pueda utilizar la relación requestForm */
+            /** Esto me proboca que no pueda utilizar la relación requestForm */
             // ->with([
             //     'immediatePurchase',
             //     'immediatePurchase.purchasingProcessDetail',
@@ -51,9 +64,11 @@ class IndexDtes extends Component
             ->orderBy('emision')
             ->paginate(50);
 
+        $establishments = Establishment::orderBy('name')->get();
+
         return view('livewire.finance.index-dtes', [
-            'dtes' => $query
+            'dtes' => $query,
+            'establishments' => $establishments,
         ]);
     }
-
 }

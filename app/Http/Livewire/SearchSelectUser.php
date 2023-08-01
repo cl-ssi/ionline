@@ -34,6 +34,23 @@ class SearchSelectUser extends Component
 
     public $selectedUsers = [];
 
+    protected function rules(){
+        return [
+            'query'  => 'required',
+        ];
+    }
+    
+    protected function messages(){ 
+        return [
+            'query.required' => 'Favor completar este campo.',
+        ];
+    }
+
+    // public function updatedSelectedName($selectedName)
+    // {
+    //     $this->validateOnly($selectedName);
+    // }
+
     public function resetx()
     {
         $this->query = '';

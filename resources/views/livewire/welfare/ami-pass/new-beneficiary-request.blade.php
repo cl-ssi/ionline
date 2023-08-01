@@ -50,7 +50,7 @@
             <div class="form-row">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="exampleRadios2" id="exampleRadios2"
-                        value="otro" wire:model="selectedOption">
+                        value="otro" wire:model.defer="selectedOption">
                     <label class="form-check-label" for="exampleRadios2">
                         Otro:
                     </label>
@@ -58,13 +58,13 @@
                 <div class="form-group col">
                     <label for="text">Nombre de la Jefatura *</label>
                     <input id="text" name="text" type="text" class="form-control"
-                        value="{{ auth()->user()->name }}" required="required" wire:model="jefatura">
+                        value="{{ auth()->user()->name }}" required="required" wire:model.defer.defer="jefatura">
                 </div>
 
                 <div class="form-group col">
                     <label for="text2">Correo electrónico solicitante *</label>
                     <input id="text2" name="text2" type="text" class="form-control" required="required"
-                        wire:model="correoElectronico">
+                        wire:model.defer.defer="correoElectronico">
                 </div>
             </div>
 
@@ -73,13 +73,13 @@
                 <div class="form-group col">
                     <label for="text1">Cargo y Unidad ó Departamento al que pertenece. *</label>
                     <input id="text1" name="text1" type="text" class="form-control" required="required"
-                        wire:model="cargoUnidad">
+                        wire:model.defer="cargoUnidad">
                 </div>
 
                 <div class="form-group col">
                     <label for="select1">Establecimiento</label>
                     <div>
-                        <select id="select1" name="select1" class="custom-select" wire:model="selectedEstablishmentId"
+                        <select id="select1" name="select1" class="custom-select" wire:model.defer="selectedEstablishmentId"
                             required>
                             <option value="">Seleccionar Establecimiento</option>
                             @foreach ($establecimientos as $establecimiento)
@@ -102,14 +102,14 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                                value="Suplencia o Reemplazo por Renuncia" wire:model="motivoRequerimiento">
+                                value="Suplencia o Reemplazo por Renuncia" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios1">
                                 Suplencia o Reemplazo por Renuncia
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
-                                value="Suplencia o Reemplazo por Licencia Medica" wire:model="motivoRequerimiento">
+                                value="Suplencia o Reemplazo por Licencia Medica" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios2">
                                 Suplencia o Reemplazo por Licencia Medica
                             </label>
@@ -117,35 +117,35 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
                                 value="Suplencia o Reemplazo por Permiso sin Goce de Sueldo"
-                                wire:model="motivoRequerimiento">
+                                wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Suplencia o Reemplazo por Permiso sin Goce de Sueldo
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Suplencia o reemplazo por Feriado Legal" wire:model="motivoRequerimiento">
+                                value="Suplencia o reemplazo por Feriado Legal" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Suplencia o reemplazo por Feriado Legal
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Creacion de Cargo" wire:model="motivoRequerimiento">
+                                value="Creacion de Cargo" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Creacion de Cargo
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Continuidad" wire:model="motivoRequerimiento">
+                                value="Continuidad" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Continuidad
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Contrato transitorio" wire:model="motivoRequerimiento">
+                                value="Contrato transitorio" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Contrato transitorio
                             </label>
@@ -153,14 +153,14 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
                                 value="Ingreso de Funcionario en Comisión de Servicios en la DSST"
-                                wire:model="motivoRequerimiento">
+                                wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Ingreso de Funcionario en Comisión de Servicios en la DSST
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                                value="Otro" wire:model="motivoRequerimiento">
+                                value="Otro" wire:model.defer="motivoRequerimiento">
                             <label class="form-check-label" for="exampleRadios3">
                                 Otro
                             </label>
@@ -172,7 +172,7 @@
                 <div class="form-group col-6">
                     <label for="text3">Nombre del funcionario/a A REEMPLAZAR, según motivo del requerimiento</label>
                     <input id="text3" name="text3" type="text" class="form-control"
-                        wire:model="nombreFuncionarioReemplazar">
+                        wire:model.defer="nombreFuncionarioReemplazar">
                     <small id="emailHelp" class="form-text text-muted">Si no es una suplencia o reemplazo, indique NO
                         CORRESPONDE</small>
                 </div>
@@ -197,18 +197,18 @@
                 <div class="form-group col-3">
                     <label for="text5">RUT de Funcionario/a*</label>
                     <input id="text5" name="text5" type="text" class="form-control"
-                        placeholder="Ejemplo: 12345678-9" wire:model="rutFuncionario">
+                        placeholder="Ejemplo: 12345678-9" wire:model.defer="rutFuncionario">
                     <small id="emailHelp" class="form-text text-muted">SIN PUNTOS Y CON GUION</small>
                 </div>
                 <div class="form-group col-6">
                     <label for="text6">Nombre Completo (nombres y apellidos) *</label>
                     <input id="text6" name="text6" type="text" class="form-control"
-                        wire:model="nombreCompleto">
+                        wire:model.defer="nombreCompleto">
                 </div>
                 <div class="form-group col-3">
                     <label for="text9">Fecha de Nacimiento *</label>
                     <input id="text9" name="text9" type="date" required="required" class="form-control"
-                        wire:model="fechaNacimiento">
+                        wire:model.defer="fechaNacimiento">
                 </div>
             </div>
 
@@ -216,12 +216,12 @@
                 <div class="form-group col">
                     <label for="text7">Correo electrónico "PERSONAL" *</label>
                     <input id="text7" name="text7" type="text" class="form-control"
-                        wire:model="correoPersonal">
+                        wire:model.defer="correoPersonal">
                 </div>
                 <div class="form-group col">
                     <label for="text8">Número de celular (9-12345678) *</label>
                     <input id="text8" name="text8" type="text" required="required" class="form-control"
-                        wire:model="celular">
+                        wire:model.defer="celular">
                 </div>
             </div>
 
@@ -229,13 +229,13 @@
                 <div class="form-group col-3">
                     <label for="text11">Fecha de inicio de contrato</label>
                     <input id="text11" name="text11" type="date" class="form-control"
-                        wire:model="fechaInicioContrato">
+                        wire:model.defer="fechaInicioContrato">
                     <small id="emailHelp" class="form-text text-muted">Contrata, suplencia y/o reemplazo</small>
                 </div>
                 <div class="form-group col-3">
                     <label for="text12">Fecha de termino de contrato</label>
                     <input id="text12" name="text12" type="date" class="form-control"
-                        wire:model="fechaTerminoContrato">
+                        wire:model.defer="fechaTerminoContrato">
                     <small id="emailHelp" class="form-text text-muted">De acuerdo a los respaldos existentes Ej.
                         duración de Licencia Médica, suplencia, etc.</small>
                 </div>
@@ -243,7 +243,7 @@
                 <div class="form-group col-6">
                     <label for="text10">Donde cumplirá funciones (especificar)</label>
                     <input id="text10" name="text10" type="text" class="form-control"
-                        wire:model="dondeCumpliraFunciones">
+                        wire:model.defer="dondeCumpliraFunciones">
                     <small id="emailHelp" class="form-text text-muted">Unidad organizacional, Establecimiento o
                         Residencia</small>
                 </div>
@@ -255,56 +255,56 @@
                 <div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_0" type="radio" class="custom-control-input"
-                            value="Diurna (44 hrs.)" wire:model="jornadaLaboral">
+                            value="Diurna (44 hrs.)" wire:model.defer="jornadaLaboral">
                         <label for="radio1_0" class="custom-control-label">Diurna (44 hrs.)</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_1" type="radio" class="custom-control-input"
-                            value="Diurna (33 hrs.)" wire:model="jornadaLaboral">
+                            value="Diurna (33 hrs.)" wire:model.defer="jornadaLaboral">
                         <label for="radio1_1" class="custom-control-label">Diurna (33 hrs.)</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_2" type="radio" class="custom-control-input"
-                            value="3° Turno" wire:model="jornadaLaboral">
+                            value="3° Turno" wire:model.defer="jornadaLaboral">
                         <label for="radio1_2" class="custom-control-label">3° Turno</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_3" type="radio" class="custom-control-input"
-                            value="4° Turno" wire:model="jornadaLaboral">
+                            value="4° Turno" wire:model.defer="jornadaLaboral">
                         <label for="radio1_3" class="custom-control-label">4° Turno</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_4" type="radio" class="custom-control-input"
-                            value="SAMU Periférico" wire:model="jornadaLaboral">
+                            value="SAMU Periférico" wire:model.defer="jornadaLaboral">
                         <label for="radio1_4" class="custom-control-label">SAMU Periférico</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_5" type="radio" class="custom-control-input"
-                            value="SAMU Diurno" wire:model="jornadaLaboral">
+                            value="SAMU Diurno" wire:model.defer="jornadaLaboral">
                         <label for="radio1_5" class="custom-control-label">SAMU Diurno</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio1" id="radio1_6" type="radio" class="custom-control-input"
-                            value="SAMU Turno" wire:model="jornadaLaboral">
+                            value="SAMU Turno" wire:model.defer="jornadaLaboral">
                         <label for="radio1_6" class="custom-control-label">SAMU Turno</label>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="text14">Sólo Jornada en Turno: Especificar Dependencias.</label>
-                <input id="text14" name="text14" type="text" class="form-control" wire:model="residencia">
+                <input id="text14" name="text14" type="text" class="form-control" wire:model.defer="residencia">
             </div>
             <div class="form-group">
                 <label>Ha utilizado antes el beneficio en SSI</label>
                 <div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio2" id="radio2_0" type="radio" class="custom-control-input"
-                            value="Sí" wire:model="haUtilizadoAmipass">
+                            value="Sí" wire:model.defer="haUtilizadoAmipass">
                         <label for="radio2_0" class="custom-control-label">Sí</label>
                     </div>
                     <div class="custom-control custom-radio custom-control-inline">
                         <input name="radio2" id="radio2_1" type="radio" class="custom-control-input"
-                            value="No" wire:model="haUtilizadoAmipass">
+                            value="No" wire:model.defer="haUtilizadoAmipass">
                         <label for="radio2_1" class="custom-control-label">No</label>
                     </div>
                 </div>

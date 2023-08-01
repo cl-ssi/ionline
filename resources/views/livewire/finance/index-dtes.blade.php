@@ -28,17 +28,29 @@
         </div>
         <div class="col-md-3">
             <select class="form-control" wire:model.defer="filter.sender_status">
-                <option value="no confirmadas y enviadas a confirmación">no confirmadas y enviadas a confirmación</option>
+                <option value="no confirmadas y enviadas a confirmación">no confirmadas y enviadas a confirmación
+                </option>
                 <option value="Enviado a confirmación">Enviado a confirmación</option>
                 <option value="Confirmada">Confirmada</option>
                 <option value="No Confirmada">No Confirmada</option>
                 <option value="Todas">Todas</option>
             </select>
         </div>
+        <div class="col-md-2">
+            <select class="form-control" wire:model.defer="filter.selected_establishment">
+                <option value="">Todos los Establecimientos</option>
+                @foreach ($establishments as $establishment)
+                    <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="col-md-1">
             <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i class="fas fa-search"></i>
                 Buscar</button>
         </div>
+
+
+        
         <div class="col-md-2 text-right">
             <button class="btn btn-success" type="button" wire:click="loadManualDTE">
                 <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
@@ -55,6 +67,7 @@
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
+                <th>ID Interno</th>
                 <th>Tipo documento</th>
                 <th>Folio</th>
                 <th>Emisor</th>
@@ -64,6 +77,8 @@
                 <th>Admin C.</th>
                 <th>Detalle</th>
                 <th>Fecha Aceptación SII (días)</th>
+                <th>Establecimiento</th>
+                <th>Guardar</th>
             </tr>
         </thead>
         <tbody>
@@ -82,6 +97,7 @@
                     }
                 @endphp
                 <tr class="{{ $rowClass }}">
+                    <td>{{ $dte->id }}</td>
                     <td>{{ $dte->tipo_documento }}</td>
                     <td>
                         @if ($dte->tipo_documento != 'boleta_honorarios')
@@ -137,6 +153,20 @@
                     <td>
                         {{ $dte->fecha_recepcion_sii ?? '' }}
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
+                    </td>
+                    <td>
+                        <select class="form-control" wire:model.defer="selectedEstablishments.{{ $dte->id }}">
+                            <option value="">Seleccionar Establecimiento</option>
+                            @foreach ($establishments as $establishment)
+                                <option value="{{ $establishment->id }}"
+                                    @if ($dte->establishment_id == $establishment->id) selected @endif>{{ $establishment->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary"
+                            wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
                     </td>
                 </tr>
 

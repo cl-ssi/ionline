@@ -77,6 +77,9 @@ class Dte extends Model
         'payer_id',
         'payer_ou',
         'payer_at',
+
+        //Estblecimiento que le corresponde el DTE
+        'establishment_id',
     ];
 
     /**
@@ -175,6 +178,10 @@ class Dte extends Model
                                     $query->whereNull('confirmation_status');
                                     break;
                             }
+                            break;
+
+                        case 'selected_establishment':
+                            $query->where('establishment_id', $value);
                             break;
                     }
                 }
