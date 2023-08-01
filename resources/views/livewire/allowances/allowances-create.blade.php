@@ -348,9 +348,15 @@
         </div>
     @endif
 
-    @if(session()->has('message'))
+    @if(session()->has('current'))
         <div class="alert alert-danger">
-            {{ session('message') }}
+            {{ session('current') }}
+        </div>
+    @endif
+
+    @if(session()->has('exceedTotalDays'))
+        <div class="alert alert-danger">
+            {{ session('exceedTotalDays') }}
         </div>
     @endif
 
