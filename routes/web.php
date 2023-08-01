@@ -2233,6 +2233,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
+        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
     });
 });
 

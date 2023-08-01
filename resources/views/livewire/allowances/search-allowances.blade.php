@@ -50,7 +50,7 @@
                         <th rowspan="2" style="width: 6%">Fecha Creación</th>
                         <th rowspan="2">Funcionario</th>
                         <th rowspan="2">Calidad</th>
-                        <th colspan="2">Lugar</th>
+                        <th colspan="2" style="width: 27%">Lugar</th>
                         <th rowspan="2" style="width: 15%">Motivo</th>
                         <th rowspan="2" colspan="2">Periodo</th>
                         <th rowspan="2" colspan="2"></th>
@@ -99,18 +99,23 @@
                         <td class="text-center">{{ $allowance->originCommune->name }}</td>
                         <td class="text-center">
                             @foreach($allowance->destinations as $destination)
-                                <b>Comuna</b>: {{ $destination->commune->name }} - <b>Localidad</b>: {{ $destination->locality->name }}
+                                <b>Comuna</b>: {{ $destination->commune->name }} - <b>Localidad</b>:  {{ ($destination->locality) ? $destination->locality->name : '' }} <br>
                             @endforeach
                         </td>
                         <td>{{ $allowance->reason }}</td>
-                        <td class="text-center">
-                            {{ Carbon\Carbon::parse($allowance->from)->format('d-m-Y') }}<br>
-                            {{ Carbon\Carbon::parse($allowance->to)->format('d-m-Y') }}
+                        <td class="text-center" style="width: 7%">
+                            {{-- Carbon\Carbon::parse($allowance->from)->format('d-m-Y')<br>
+                            Carbon\Carbon::parse($allowance->to)->format('d-m-Y') --}}
+
+                            {{ $allowance->from->format('d-m-Y') }}<br>
+                            {{ $allowance->to->format('d-m-Y') }}
                         </td>
                         <td class="text-center">
-                            {{ number_format($allowance->total_days, 1, ",", ".") }}
-                            @if($allowance->total_days > 1)
+                            {{ number_format($allowance->total_days, 1, ",", ".") }} <br>
+                            @if($allowance->total_days > 1 && $allowance->half_days_only == 0)
                                 días
+                            @elseif($allowance->total_days > 1 && $allowance->half_days_only == 1)
+                                medios días
                             @else
                                 día
                             @endif

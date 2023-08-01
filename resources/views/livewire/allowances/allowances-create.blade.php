@@ -105,14 +105,6 @@
         </fieldset>
     </div>
     
-    {{--
-    <div class="form-row">
-        <fieldset class="form-group col-12 col-md-12">
-            @livewire('allowances.select-destination-localities')
-        </fieldset>
-    </div>
-    --}}
-    
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
             <label for="for_requester_id">Comuna Destino:</label>
@@ -144,6 +136,17 @@
             <a class="btn btn-info btn-block" wire:click="addDestination"> Agregar</a>
         </div>  
     </div>
+
+    @if(count($errors) > 0 && $validateMessage == "destination")
+        <div class="alert alert-danger">
+            <p>Corrige los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if($destinations)
     <br>
@@ -292,6 +295,17 @@
         </div> 
     </div>
 
+    @if(count($errors) > 0 && $validateMessage == "file")
+        <div class="alert alert-danger">
+            <p>Corrige los siguientes errores:</p>
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if($files)
     <br>
 
@@ -323,7 +337,7 @@
     </div>
     @endif
 
-    @if(count($errors) > 0)
+    @if(count($errors) > 0 && $validateMessage == "allowance")
         <div class="alert alert-danger">
             <p>Corrige los siguientes errores:</p>
             <ul>
@@ -331,6 +345,18 @@
                     <li>{{ $message }}</li>
                 @endforeach
             </ul>
+        </div>
+    @endif
+
+    @if(session()->has('current'))
+        <div class="alert alert-danger">
+            {{ session('current') }}
+        </div>
+    @endif
+
+    @if(session()->has('exceedTotalDays'))
+        <div class="alert alert-danger">
+            {{ session('exceedTotalDays') }}
         </div>
     @endif
 

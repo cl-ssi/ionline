@@ -42,8 +42,9 @@ class AllowancesCreate extends Component
 
     /* Archivo */
     public $idFile;
-    public $fileName;
     public $file;
+    public $fileName;
+    public $fileAttached;
     public $files, $key;
 
     /* Destinos */
@@ -56,6 +57,8 @@ class AllowancesCreate extends Component
     public $localities;
     public $selectedLocality;
     public $description;
+    public $validateMessages;
+    public $destinationCommune;
 
     /* Aprobaciones */
     public $positionFinance;
@@ -67,8 +70,44 @@ class AllowancesCreate extends Component
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
     
-    protected function rules(){
+    protected function messages(){
         return [
+            /* Mensajes para Allowance */
+            'userAllowance.required'            => 'Debe ingresar Usuario al cual se extiende Viático.',
+            'contractualConditionId.required'   => 'Debe ingresar Calidad Contractual.',
+            'position.required'                 => 'Debe ingresar Función o Cargo',
+            'allowanceValueId.required'         => 'Debe ingresar Rengo Grado E.U.S.',
+            'grade.required'                    => 'Debe ingresar Grado.',
+            'law.required'                      => 'Debe ingresar Ley.',
+            'reason.required'                   => 'Debe ingresar Motivo.',
+
+            'originCommune.required'            => 'Debe ingresar Comuna de origen.',
+            'destinations.required'             => 'Debe ingresar al menos una Comuna de destino.',
+            
+            'meansOfTransport.required'         => 'Debe ingresar Medio de Transporte.',
+            'roundTrip.required'                => 'Debe ingresar Itinerario.',
+            'passage.required'                  => 'Debe ingresar Derecho de Pasaje.',
+            'overnight.required'                => 'Debe ingresar Pernocta Fuera de Residencia.',
+            
+            'from.required'                     => 'Debe ingresar Fecha Desde.',
+            'to.required'                       => 'Debe ingresar Fecha Hasta.',
+
+            'files.required'                    => 'Debe ingresar al menos un Archivo Adjunto.',
+
+            /* Mensajes para destinos */
+
+            'destinationCommune.required'       => 'Debe ingresar una Comuna de destino.',
+            'selectedLocality.required'         => 'Debe ingresar una Localidad de destino.',
+
+            /* Mensajes para archivos */
+            'fileName.required'                 => 'Debe ingresar un nombre para el archivo.',
+            'fileAttached.required'             => 'Debe ingresar un archivo adjunto.',
+        ];
+    }
+
+    public function saveAllowance(){
+        $this->validateMessage = 'allowance';
+        $validatedData = $this->validate([
             'userAllowance'                                         => 'required',
             'contractualConditionId'                                => 'required',
             'position'                                              => 'required',
@@ -89,45 +128,36 @@ class AllowancesCreate extends Component
             'to'                                                    => 'required',
 
             'files'                                                 => 'required'
-        ];
-    }
-    
-    protected function messages(){
-        return [
-            'userAllowance.required'            => 'Debe ingresar Usuario al cual se extiende Viático.',
-            'contractualConditionId.required'   => 'Debe ingresar Calidad Contractual.',
-            'position.required'                 => 'Debe ingresar Función o Cargo',
-            'allowanceValueId.required'         => 'Debe ingresar Rengo Grado E.U.S.',
-            'grade.required'                    => 'Debe ingresar Grado.',
-            'law.required'                      => 'Debe ingresar Ley.',
-            'reason.required'                   => 'Debe ingresar Motivo.',
+        ]);
 
-            'originCommune.required'            => 'Debe ingresar Comuna de origen.',
-            'destinations.required'             => 'Debe ingresar al menos una Comuna de destino.',
-            
-            'meansOfTransport.required'         => 'Debe ingresar Medio de Transporte.',
-            'roundTrip.required'                => 'Debe ingresar Itinerario.',
-            'passage.required'                  => 'Debe ingresar Derecho de Pasaje.',
-            'overnight.required'                => 'Debe ingresar Pernocta Fuera de Residencia.',
-            
-            'from.required'                     => 'Debe ingresar Fecha Desde.',
-            'to.required'                       => 'Debe ingresar Fecha Hasta.',
-
-            'files.required'                    => 'Debe ingresar al menos un Archivo Adjunto.'
-        ];
-    }
-
-    public function saveAllowance(){
-        $this->validate();
-
+        /* Buscar si existen viáticos en fecha indicada */
         $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
-                ->whereDate('from', '>=', $this->from)
-                ->WhereDate('to', '<=', $this->to)
-                ->get();
+            ->whereDate('from', '>=', $this->from)
+            ->WhereDate('to', '<=', $this->to)
+            ->get();
         
+        /* Buscar si los viáticos no exceden 90 días en el presente año */
+        $allowancesCount = Allowance::select('total_days')
+            ->where('user_allowance_id', $this->userAllowance->id)
+            ->whereDate('from', '>=', now()->startOfYear())
+            ->WhereDate('to', '<=', now()->endOfYear())
+            ->where('half_days_only', null)
+            ->where('total_days', '>=', 1.0)
+            ->get();
+
+        //$totalAllowancesDaysByUser = 80;
+        
+        foreach($allowancesCount as $allowanceDays){
+            $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($allowanceDays->total_days);
+        }
+
+        $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($this->allowanceTotalDays());
+
         if($currentAllowances->count() > 0){
-            // return back()->with('error', 'El funcionario ya dispone de viático(s) para la fecha solicitada, favor consulta historial de funcionario');;
-            dd('Aquí');
+            session()->flash('current', 'Estimado Usuario: El funcionario ya dispone de viático(s) para la fecha solicitada.');
+        }
+        elseif($totalAllowancesDaysByUser > 90 && $this->halfDaysOnly != 1){
+            session()->flash('exceedTotalDays', 'Estimado Usuario: El funcionario seleccionado no puede exceder 90 días de viáticos.');
         }
         else{
             /* SE GUARDA EL NUEVO VIÁTICO */
@@ -230,17 +260,18 @@ class AllowancesCreate extends Component
 
     /* Cálculo de días */
     public function allowanceTotalDays(){
-        if($this->from == $this->to){
-            return 0.5;
-        }
-        else{
-            if($this->halfDaysOnly == 1){
-                return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 1;
+
+            if($this->from == $this->to){
+                return 0.5;
             }
             else{
-                return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 0.5;
+                if($this->halfDaysOnly == 1){
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 1;
+                }
+                else{
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 0.5;
+                }
             }
-        }
     }
 
     public function allowanceValueId(){
@@ -249,7 +280,7 @@ class AllowancesCreate extends Component
     }
 
     public function allowanceDayValue(){
-        if($this->allowanceTotalDays() >= 1){
+        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 0){
             $this->dayValue = $this->cfgAllowanceValue->value;
             return $this->cfgAllowanceValue->value;
         }
@@ -261,8 +292,11 @@ class AllowancesCreate extends Component
     }
 
     public function allowanceTotalValue(){
-        if($this->allowanceTotalDays() >= 1){
+        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly != 1){
             return ($this->allowanceDayValue() * intval($this->allowanceTotalDays())) + $this->allowanceHalfDayValue();
+        }
+        elseif($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 1){
+            return ($this->allowanceHalfDayValue() * $this->allowanceTotalDays());
         }
         else{
             return $this->allowanceHalfDayValue();
@@ -440,14 +474,29 @@ class AllowancesCreate extends Component
 
     public function addDestination()
     {
-        $selectedLocalityName = ClLocality::find($this->selectedLocality)->name;
+        $this->validateMessage = 'destination';
+        if($this->communeInputId == 'destination_commune_id'){
+            $validatedData = $this->validate([
+                'destinationCommune'    => 'required',
+                (in_array($this->searchedCommune->id, [5,6,8,9,19,11])) ? 'selectedLocality' : 'selectedLocality'  => (in_array($this->searchedCommune->id, [5,6,8,9,19,11])) ? 'required' : ''
+            ]);
+        }
+        else{
+            $validatedData = $this->validate([
+                'destinationCommune'    => 'required',
+            ]);
+        }
+
+        if($this->selectedLocality){
+            $selectedLocalityName = ClLocality::find($this->selectedLocality)->name;
+        }
 
         $this->destinations[] = [
             'id'            => '',
             'commune_id'    => $this->searchedCommune->id,
             'commune_name'  => $this->searchedCommune->name,
-            'locality_id'   => $this->selectedLocality,
-            'locality_name' => $selectedLocalityName,
+            'locality_id'   => $this->selectedLocality ? $this->selectedLocality : null,
+            'locality_name' => $this->selectedLocality ? $selectedLocalityName : null,
             'description'   => $this->description
         ];
 
@@ -482,13 +531,20 @@ class AllowancesCreate extends Component
     /* Metodos para Archivos */
     public function addFile()
     {
+        // dd($this->file);
+        $this->validateMessage = 'file';
+        $validatedData = $this->validate([
+            'fileName'                                      => 'required',
+            ($this->file) ? 'fileAttached' : 'fileAttached' => ($this->file) ? '' : 'required' 
+        ]);
+
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $filename = $this->file ? $this->file->storeAs('/ionline/allowances/allowance_docs', $now.'_alw_file.'.$this->file->extension(), 'gcs') : null;
-        
+        $this->fileAttached = $this->file ? $this->file->storeAs('/ionline/allowances/allowance_docs', $now.'_alw_file.'.$this->file->extension(), 'gcs') : null;
+
         $this->files[] = [
             'id'        => '',
             'fileName'  => $this->fileName,
-            'file'      => $filename
+            'file'      => $this->fileAttached
         ];
 
         $this->cleanFile();
