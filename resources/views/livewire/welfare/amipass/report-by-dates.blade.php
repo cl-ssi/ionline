@@ -6,11 +6,11 @@
             <ul>
                 @foreach($user->absenteeisms as $absenteeism)
                     <li>
-                        {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} - {{ $absenteeism->tipo_de_ausentismo }} - Total dias {{ $absenteeism->total_dias_ausentismo }}
+                        {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} - {{ $absenteeism->tipo_de_ausentismo }} - Total dias {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
                     </li>
                 @endforeach
                 <li>
-                    Total ausentismos {{ $user->totalAbsenteeisms }}
+                    Total ausentismos {{ $user->totalAbsenteeismsEnBd }} =>  {{ $user->totalAbsenteeisms }}
                 </li>
             </ul>
             <ul>

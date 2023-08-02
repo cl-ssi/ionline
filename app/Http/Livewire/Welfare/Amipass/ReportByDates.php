@@ -41,7 +41,17 @@ class ReportByDates extends Component
              * por lo tanto hay que solo conciderar los días que están dentro del rango de fechas
              * y sumarlos
              */
-            $user->totalAbsenteeisms = $user->absenteeisms->sum('total_dias_ausentismo');
+            $user->totalAbsenteeisms = 0;
+
+            foreach($user->absenteeisms as $absenteeism) {
+                $absenteeismStartDate = $absenteeism->finicio->isBefore($startDate) ? $startDate : $absenteeism->finicio;
+                $absenteeismEndDate = $absenteeism->ftermino->isAfter($endDate) ? $endDate : $absenteeism->ftermino;
+
+                $absenteeism->totalDays = DateHelper::getBusinessDaysByDateRange($absenteeismStartDate, $absenteeismEndDate)->count();
+                $user->totalAbsenteeisms += $absenteeism->totalDays;
+            }
+
+            $user->totalAbsenteeismsEnBd = $user->absenteeisms->sum('total_dias_ausentismo');
 
 
             foreach($user->contracts as $contract) {
