@@ -6,10 +6,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('finance.dtes.upload') }}">Cargar archivo</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="{{ route('finance.payments.index') }}">Estados de Pago</a>
-        </li>
+        </li>        
         <li class="nav-item">
         <a class="nav-link" href="{{ route('finance.payments.review') }}">Bandeja de Revisión de Pago</a>
         </li>
