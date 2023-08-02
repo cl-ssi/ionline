@@ -735,6 +735,15 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+
+    Route::prefix('absence-types')->name('absence-types.')->group(function () {
+        Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
+        Route::get('/create', [AbsenteeismTypeController::class, 'create'])->name('create');
+        Route::post('/store', [AbsenteeismTypeController::class, 'store'])->name('store');
+    });
+
+    
+
     Route::get('{user}/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', [RoleController::class, 'attach'])->name('roles.attach')->middleware('auth');
 
@@ -2235,7 +2244,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
-        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');        
+        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
     });
 });
 

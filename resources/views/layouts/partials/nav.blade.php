@@ -605,6 +605,12 @@
                         </a>
                         @endcanany
 
+                        @canany(['be god'])
+                        <a class="dropdown-item {{active('rrhh.absence-types.*')}}" href="{{ route('rrhh.absence-types.index') }}">
+                            <i class="fas fa-fw fa-calendar-alt"></i> Tipos de Ausencias
+                        </a>
+                        @endcanany
+
                         @canany(['be god','Parameters: UNSPSC'])
                         <li>
                             <hr class="dropdown-divider">

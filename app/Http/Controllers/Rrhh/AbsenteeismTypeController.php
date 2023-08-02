@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Rrhh;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Rrhh\Absenteeism;
+use App\Models\Rrhh\AbsenteeismType;
 
 class AbsenteeismTypeController extends Controller
 {
@@ -15,6 +17,8 @@ class AbsenteeismTypeController extends Controller
     public function index()
     {
         //
+        $absenteeismTypes = AbsenteeismType::all();
+        return view('rrhh.abseentism_types.index', compact('absenteeismTypes'));
     }
 
     /**
@@ -25,6 +29,12 @@ class AbsenteeismTypeController extends Controller
     public function create()
     {
         //
+        $distinctTypes = Absenteeism::distinct('tipo_de_ausentismo')->pluck('tipo_de_ausentismo')->toArray();
+
+        // Obtener los tipos de ausentismo que no están en el modelo AbsenteeismType
+        $typesnotstore = array_diff($distinctTypes, AbsenteeismType::pluck('name')->toArray());
+
+        return view('rrhh.abseentism_types.create', compact('typesnotstore'));
     }
 
     /**
@@ -35,7 +45,14 @@ class AbsenteeismTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validar el formulario si es necesario
+        $request->validate([
+            'tipo_de_ausentismo' => 'required|string|max:255',
+        ]);
+
+        $tipoDeAusentismo = $request->input('tipo_de_ausentismo');
+        AbsenteeismType::create(['name' => $tipoDeAusentismo]);
+        return redirect()->route('rrhh.absence-types.index')->with('success', 'Tipo de ausentismo agregado exitosamente.');
     }
 
     /**

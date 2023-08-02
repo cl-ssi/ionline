@@ -9,7 +9,7 @@ class AbsenteeismType extends Model
 {
     use HasFactory;
 
-    protected $table = 'rrhh_absenteeism_type';
+    protected $table = 'rrhh_absenteeism_types';
 
     protected $fillable = [
         'name',
