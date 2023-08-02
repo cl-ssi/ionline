@@ -102,6 +102,7 @@ use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
+use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\TelephoneController;
 use App\Http\Controllers\Resources\PrinterController;
@@ -2234,7 +2235,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
-        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
+        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');        
     });
 });
 
