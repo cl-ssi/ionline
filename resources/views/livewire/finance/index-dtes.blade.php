@@ -97,6 +97,8 @@
                     if ($daysDifference !== null) {
                         if ($daysDifference < 5) {
                             $rowClass = 'table-success';
+                        } elseif ($daysDifference === 5) {                            
+                            $rowClass = 'table-secondary';
                         } elseif ($daysDifference < 8) {
                             $rowClass = 'table-warning';
                         } else {
@@ -104,6 +106,7 @@
                         }
                     }
                 @endphp
+
                 <tr class="{{ $rowClass }}">
                     <td>{{ $dte->id }}</td>
                     <td>{{ $dte->tipo_documento }}</td>
