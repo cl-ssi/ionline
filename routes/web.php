@@ -740,6 +740,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
         Route::get('/create', [AbsenteeismTypeController::class, 'create'])->name('create');
         Route::post('/store', [AbsenteeismTypeController::class, 'store'])->name('store');
+        Route::put('/{absenteeismType}', [AbsenteeismTypeController::class, 'update'])->name('update');
+
     });
 
     
