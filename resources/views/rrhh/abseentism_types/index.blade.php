@@ -12,14 +12,25 @@
                 <td>Nombre</td>
                 <td>Descuento</td>
                 <td>Medio Día</td>
+                <td>Cuenta Día Trabajados</td>
             </tr>
         </thead>
 
         @foreach ($absenteeismTypes as $absenteeismtype)
             <tr>
                 <td>{{ $absenteeismtype->name }}</td>
-                <td></td>
-                <td></td>
+                <td>
+                    <input type="checkbox" name="discount" value="1"
+                        {{ $absenteeismtype->discount == 1 ? 'checked' : '' }}>
+                </td>
+                <td>
+                    <input type="checkbox" name="half_day" value="1"
+                        {{ $absenteeismtype->half_day == 1 ? 'checked' : '' }}>
+                </td>
+                <td>
+                    <input type="checkbox" name="count_business_days" value="1"
+                        {{ $absenteeismtype->count_business_days == 1 ? 'checked' : '' }}>
+                </td>
             </tr>
         @endforeach
     </table>
