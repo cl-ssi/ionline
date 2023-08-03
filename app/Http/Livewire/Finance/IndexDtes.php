@@ -23,6 +23,8 @@ class IndexDtes extends Component
 
     public $establishment;
 
+    public $successMessages = [];
+
     protected $rules = [
         'selectedEstablishments' => 'required'
     ];
@@ -50,9 +52,8 @@ class IndexDtes extends Component
 
         if ($dte) {
             $dte->establishment_id = $this->selectedEstablishments[$dteId];
-            $dte->save();
-            session()->flash('success', 'El establecimiento fue asignado exitosamente al DTE');
-            return redirect()->route('finance.dtes.index');
+            $dte->save();            
+            $this->successMessages[$dteId] = 'El establecimiento fue asignado exitosamente al DTE';
             
         }
     }
