@@ -35,17 +35,20 @@
                 </fieldset>
 
                 
-                <fieldset class="form-group col-sm-{{$program_id == 'other' ? 1 : 4}}">
-                    <label>Programa @if($program_id != 'other')Asociado:@endif</label><br>
+                {{-- <fieldset class="form-group col-sm-{{$program_id == 'other' ? 1 : 4}}"> --}}
+                <fieldset class="form-group col-sm">
+                    {{-- <label>Programa @if($program_id != 'other')Asociado:@endif</label><br> --}}
+                    <label>Programa Asociado</label><br>
                     <select wire:model="program_id" name="program_id" class="form-control form-control-sm " required>
                         <option value="">Seleccione...</option>
                         @foreach($lstProgram as $val)
                         <option value="{{$val->id}}">{{$val->alias_finance}} {{$val->period}} - Subtítulo {{$val->Subtitle->name}}</option>
                         @endforeach
-                        <option value="other">Otro</option>
+                        {{-- <option value="other">Otro</option> --}}
                     </select>
                     @error('program_id') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
+                {{--
                 @if($program_id == 'other')
                 <fieldset class="form-group col-sm-3">
                     <label for="forRut">&nbsp;</label>
@@ -53,6 +56,7 @@
                     @error('program') <span class="text-danger small">{{ $message }}</span> @enderror
                 </fieldset>
                 @endif
+                --}}
             </div>
 
             <div class="form-row">
