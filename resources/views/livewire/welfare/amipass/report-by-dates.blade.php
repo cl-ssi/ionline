@@ -1,5 +1,5 @@
 <div>
-    <h4>{{ $startDate }} - {{ $endDate }}</h4>
+    <h4>{{ $startDate->format('Y-m-d') }} - {{ $endDate->format('Y-m-d') }}</h4>
 
 
     - Input selector de fecha inicio y fin <br>

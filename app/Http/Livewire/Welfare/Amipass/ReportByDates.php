@@ -50,11 +50,23 @@ class ReportByDates extends Component
              * Cosas que analizar:
              * - Cargar personas con turno (Estefania tiene un listado de las personas con truno)
              * - Hay permisos adminsitrativos los sabados o domingos (para los que tienen turno si afecta)
-             * - Hay LM que se solapan los días (no duplicar descuento)
+             * - Hay LM que se solapan los días (no duplicar descuento), que hacer si un ausentismo se solapa con otro
              * - Incorporar calculo con valores 4.800 y 5.800 para los con turno
-             * - Almacenar el archivo de carga de amipass, para mostrar columna "Cargado en AMIPASS"
-             * - Que hacer con la fecha de alejamiento
-             * - Contratos que se suman, por ejemplo. dos contrtos de 22 hroas, suman 44, solo dar beneficio, cuando en el mismo instante del tiempo, tegna 44
+             * - Almacenar el archivo de carga de amipass, para mostrar columna "Cargado en AMIPASS" wel_ami_recargas (ingles)
+             * - Que hacer con la fecha de alejamiento?  01-01-2023 -> 31-12-2023 fecha alejamiento (05-06-023)
+             * - Contratos que se suman, por ejemplo. dos contrtos de 22 horas, suman 44, cuando en el mismo instante del tiempo, tenga 44
+             *   ej: 14105981
+             *   11 horas           1....................30
+             *   22 horas                     15.........30
+             *   contrato_calculo             15.........30
+             *   ausentismo              x          x 
+             *                                   AMIPASS
+             *  Tiene mas de un contrato? funcion calcular inico y termino de contrato
+             * 
+             *  Archivo de salida
+             *  run       |   monto
+             *  14105981  |   108.000
+             * 
              */
             $user->totalAbsenteeisms = 0;
 
