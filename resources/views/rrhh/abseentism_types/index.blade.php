@@ -12,17 +12,39 @@
                 <td>Nombre</td>
                 <td>Descuento</td>
                 <td>Medio Día</td>
+                <td>Cuenta Día Trabajados</td>
             </tr>
         </thead>
 
-        @foreach ($absenteeismTypes as $absenteeismtype)
+        @foreach ($absenteeismTypes as $absenteeismType)
             <tr>
-                <td>{{ $absenteeismtype->name }}</td>
-                <td></td>
-                <td></td>
+                <td>{{ $absenteeismType->name }}</td>
+                <form action="{{ route('rrhh.absence-types.update', $absenteeismType->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="absenteeismType" value="{{ $absenteeismType->id }}">
+                    <td>
+                        <input type="checkbox" name="discount" value="1"
+                            {{ $absenteeismType->discount == 1 ? 'checked' : '' }}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="half_day" value="1"
+                            {{ $absenteeismType->half_day == 1 ? 'checked' : '' }}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="count_business_days" value="1"
+                            {{ $absenteeismType->count_business_days == 1 ? 'checked' : '' }}>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </td>
+                </form>
             </tr>
         @endforeach
     </table>
 
+
+
+    </form>
 
 @endsection

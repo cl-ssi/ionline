@@ -86,8 +86,23 @@ class AbsenteeismTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validar el formulario si es necesario
+        $request->validate([
+            'discount' => 'nullable|boolean',
+            'half_day' => 'nullable|boolean',
+            'count_business_days' => 'nullable|boolean',
+        ]);
+
+        $absenteeismType = AbsenteeismType::findOrFail($id);
+        $absenteeismType->update([
+            'discount' => $request->has('discount'),
+            'half_day' => $request->has('half_day'),
+            'count_business_days' => $request->has('count_business_days'),
+        ]);
+
+        return redirect()->route('rrhh.absence-types.index')->with('success', 'Tipo de ausentismo actualizado exitosamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.

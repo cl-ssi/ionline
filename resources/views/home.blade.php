@@ -92,7 +92,7 @@
         dónde se incorporó los Estebanes (Rojas + Miranda) y Álvaro Lupa.
         <br>
         El equipo de combate en terreno está formado por
-        Yeannett, Cristian, Álvaro y Erick (si, hay tres Álvaros en el departamento).
+        Gabriela, Cristian, Álvaro, Victor y Miguel.
         <br>
         Nuestro jefe de departamento es el glorioso Don José Don Oso. <br>
         <hr>

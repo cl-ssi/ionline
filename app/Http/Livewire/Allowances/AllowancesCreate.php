@@ -145,19 +145,20 @@ class AllowancesCreate extends Component
             ->where('total_days', '>=', 1.0)
             ->get();
 
-        //$totalAllowancesDaysByUser = 80;
+        // $totalCurrentAllowancesDaysByUser = 75;
 
         foreach($allowancesCount as $allowanceDays){
-            $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($allowanceDays->total_days);
+            $totalCurrentAllowancesDaysByUser = $totalCurrentAllowancesDaysByUser + intval($allowanceDays->total_days);
         }
 
-        $totalAllowancesDaysByUser = $totalAllowancesDaysByUser + intval($this->allowanceTotalDays());
+        $totalNewAllowancesDaysByUser = $totalCurrentAllowancesDaysByUser + intval($this->allowanceTotalDays());
 
         if($currentAllowances->count() > 0){
             session()->flash('current', 'Estimado Usuario: El funcionario ya dispone de viático(s) para la fecha solicitada.');
         }
-        elseif($totalAllowancesDaysByUser > 90 && $this->halfDaysOnly != 1){
-            session()->flash('exceedTotalDays', 'Estimado Usuario: El funcionario seleccionado no puede exceder 90 días de viáticos.');
+        elseif($totalNewAllowancesDaysByUser > 90 && $this->halfDaysOnly != 1){
+            $totalAvailableAllowanceDays = 90 - $totalCurrentAllowancesDaysByUser;
+            session()->flash('exceedTotalDays', 'Estimado Usuario: El funcionario seleccionado no puede exceder 90 días de viáticos. Viaticos Diarios disponibles: '.$totalAvailableAllowanceDays);
         }
         else{
             /* SE GUARDA EL NUEVO VIÁTICO */
