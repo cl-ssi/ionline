@@ -20,12 +20,20 @@ class ReportByDates extends Component
 
 
         /* Obtener los usuarios que tienen contratos en un rango de fecha con sus ausentismos */
-        $userWithContracts = User::with(['contracts','absenteeisms' => function ($query) use ($startDate, $endDate) {
-            $query->where(function ($query) use ($startDate, $endDate) {
-                $query->whereDate('finicio', '<=', $endDate)
-                    ->whereDate('ftermino', '>=', $startDate);
-                });
-            }])
+        $userWithContracts = User::with([
+                'contracts' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
+                            ->whereDate('fecha_termino_contrato', '>=', $startDate);
+                    });
+                },
+                'absenteeisms' => function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($query) use ($startDate, $endDate) {
+                        $query->whereDate('finicio', '<=', $endDate)
+                            ->whereDate('ftermino', '>=', $startDate);
+                    });
+                }
+            ])
             ->whereHas('contracts', function ($query) use ($startDate, $endDate) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->whereDate('fecha_inicio_contrato', '<=', $endDate)
@@ -37,9 +45,16 @@ class ReportByDates extends Component
         foreach($userWithContracts as $user) {
             /** 
              * TODO: ausentismos
-             * El ausentismo puede ser de más días que el rango de búsqueda
-             * por lo tanto hay que solo conciderar los días que están dentro del rango de fechas
-             * y sumarlos
+             * Que hacer con los medios días, 0.5, 1.5, etc en total_dias_ausentismo
+             * 
+             * Cosas que analizar:
+             * - Cargar personas con turno (Estefania tiene un listado de las personas con truno)
+             * - Hay permisos adminsitrativos los sabados o domingos (para los que tienen turno si afecta)
+             * - Hay LM que se solapan los días (no duplicar descuento)
+             * - Incorporar calculo con valores 4.800 y 5.800 para los con turno
+             * - Almacenar el archivo de carga de amipass, para mostrar columna "Cargado en AMIPASS"
+             * - Que hacer con la fecha de alejamiento
+             * - Contratos que se suman, por ejemplo. dos contrtos de 22 hroas, suman 44, solo dar beneficio, cuando en el mismo instante del tiempo, tegna 44
              */
             $user->totalAbsenteeisms = 0;
 
@@ -53,7 +68,6 @@ class ReportByDates extends Component
 
             $user->totalAbsenteeismsEnBd = $user->absenteeisms->sum('total_dias_ausentismo');
 
-
             foreach($user->contracts as $contract) {
                 /** Días laborales */
                 $contract->businessDays = 
@@ -64,6 +78,10 @@ class ReportByDates extends Component
 
                 /** Calcular monto de amipass a transferir */
                 $contract->ammount = $dailyAmmount * ($contract->businessDays - $user->totalAbsenteeisms);
+
+                /**
+                 * Todo: Pendiente resolver los contratos de 11, 22, 33 horas, ya que esas personas salen repetidas en el reporte
+                 */
             }
         }
 
