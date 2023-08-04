@@ -88,7 +88,7 @@ class Contract extends Model
         'motivo_del_reemplazo',
         'fecha_inicio_ausentismo',
         'fecha_termino_ausentismo',
-        'fecha_primer_contrato',
+        'fecha_primer_contrato'
     ];
 
     /**
