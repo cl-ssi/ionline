@@ -9,6 +9,7 @@ use App\Services\ImageService;
 use App\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Throwable;
 
 class SignatureIndex extends Component
 {
@@ -84,12 +85,22 @@ class SignatureIndex extends Component
             dispatch(function () use ($signature, $signatureFlow, $user, $base64Image) {
 
                 /**
+                 * Parsing link signed_file a base64
+                 */
+                $documentBase64Pdf = base64_encode(file_get_contents($signature->link_signed_file));
+
+                /**
+                 * Set the filename
+                 */
+                $filename = $signature->id.'-'.$signatureFlow->id;
+
+                /**
                  * Firma el documento con el servicio
                  */
                 $documentSignService = new DocumentSignService;
-                $documentSignService->setDocument($signature->link_signed_file);
+                $documentSignService->setDocument($documentBase64Pdf);
                 $documentSignService->setFolder(Signature::getFolderSigned());
-                $documentSignService->setFilename($signature->id.'-'.$signatureFlow->id);
+                $documentSignService->setFilename($filename);
                 $documentSignService->setUser($user);
                 $documentSignService->setXCoordinate($signatureFlow->x);
                 $documentSignService->setYCoordinate($signatureFlow->y);
@@ -101,21 +112,24 @@ class SignatureIndex extends Component
                 $documentSignService->sign();
 
                 /**
-                 * Desbloquea la firma
-                 */
-                $signature->update([
-                    'is_blocked' => false,
-                ]);
-
-                /**
                  * Actualiza el signature flow
                  */
                 $signatureFlow->update([
                     'status' => 'signed',
                 ]);
 
-            })->catch(function() {
+                /**
+                 * Desbloquea la firma
+                 */
+                $signature->update([
+                    'is_blocked' => false,
+                    'signed_file' => 'ionline/sign/signed/'.$filename.'.pdf',
+                    'status' => ($signature->signedByAll == true) ? 'completed' : $signature->status,
+                ]);
+
+            })->catch(function(Throwable $th) {
                 $this->delete();
+
                 /**
                  * Desbloquear signature
                  */

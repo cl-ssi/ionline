@@ -208,6 +208,7 @@ use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
+use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
@@ -1849,6 +1850,9 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
+    Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
+    Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {

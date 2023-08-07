@@ -772,11 +772,11 @@ class Signature extends Model
         return $coordinate;
     }
 
-    public function calculateRow($position, $isVisator = false)
+    public function calculateRow($position, $startY = null, $isVisator = false)
     {
         $padding = ($isVisator == true) ? 15 : SignatureFlow::PADDING;
 
-        return SignatureFlow::START_Y + (($position - 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
+        return ($startY ?? SignatureFlow::START_Y) + (($position - 1) * $padding) ; // punto de inicio + (ancho de linea * posicion)
     }
 
     public function calculateColumn($position)
@@ -935,11 +935,9 @@ class Signature extends Model
         return $payload;
     }
 
-    public function getData($document, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, $isEnumerate, $page = 'LAST')
+    public function getData($documentBase64, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, $isEnumerate, $page = 'LAST')
     {
-        $base64Pdf = base64_encode(file_get_contents($document));
-
-        $checkSumPdf = md5_file($document);
+        $checkSumPdf = md5($documentBase64);
 
         $width = $isEnumerate ? 260 : 175;
         $height = $isEnumerate ? 100 : 35;
@@ -950,7 +948,7 @@ class Signature extends Model
             'files' => [
                 [
                     'content-type' => 'application/pdf',
-                    'content' => $base64Pdf,
+                    'content' => $documentBase64,
                     'description' => 'str',
                     'checksum' => $checkSumPdf,
                     'layout' => "

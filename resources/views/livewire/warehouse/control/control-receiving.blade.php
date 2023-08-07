@@ -4,8 +4,7 @@
     <div class="row">
         <div class="col my-2">
             <h5>
-                Listado de
-                Ingresos:
+                Listado de Ingresos:
                 {{ $store->name }}
             </h5>
         </div>
