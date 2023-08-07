@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Welfare;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\models\Welfare\Abscence;
+use App\models\Rrhh\Absenteeism;
 use App\Imports\AbscencesImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -24,10 +24,8 @@ class AmipassAbscencesImport extends Component
     {
         $this->message2 = "";
         $this->validate([
-            'file' => 'required|file|mimes:xls,xlsx|max:10240', // 10MB Max
+            'file' => 'required|file|mimes:csv|max:10240', // 10MB Max
         ]);
-
-        
 
         $file = $this->file;
         $collection = Excel::toCollection(new AbscencesImport, $file);
@@ -58,17 +56,17 @@ class AmipassAbscencesImport extends Component
                         $val = explode("/",$val)[2]."-".explode("/",$val)[1]."-".explode("/",$val)[0];
                         $ftermino = new Carbon($val);
 
-                        Abscence::updateOrCreate([
+                        Absenteeism::updateOrCreate([
                             'rut' => $column['rut'],
-                            'fecha_inicio' => $finicio,
-                            'fecha_termino' => $ftermino
+                            'finicio' => $finicio,
+                            'ftermino' => $ftermino
                         ],[
                             'rut' => $column['rut'],
                             'dv' => $column['dv'],
                             'nombre' => $column['nombre'],
                             'ley' => $column['ley'],
-                            'edad_años' => $column['edadanos'],
-                            'edad_meses' => $column['edadmeses'],
+                            'edadanos' => $column['edadaos'],
+                            'edadmeses' => $column['edadmeses'],
                             'afp' => $column['afp'],
                             'salud' => $column['salud'],
                             'codigo_unidad' => $column['codigo_unidad'],
@@ -77,14 +75,14 @@ class AmipassAbscencesImport extends Component
                             'cargo' => $column['cargo'],
                             'calidad_juridica' => $column['calidad_juridica'],
                             'planta' => $column['planta'],
-                            'nro_resolucion' => $column['n_resolucion'],
-                            'fecha_resolucion' => $fresolucion,
-                            'fecha_inicio' => $finicio,
-                            'fecha_termino' => $ftermino,
-                            'total_dias_auscentismo' => $column['total_dias_ausentismo'],
-                            'auscentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
+                            'n_resolucion' => $column['n_resolucion'],
+                            'fresolucion' => $fresolucion,
+                            'finicio' => $finicio,
+                            'ftermino' => $ftermino,
+                            'total_dias_ausentismo' => $column['total_dias_ausentismo'],
+                            'ausentismo_en_el_periodo' => $column['ausentismo_en_el_periodo'],
                             'costo_de_licencia' => $column['costo_de_licencia'],
-                            'tipo_de_auscentismo' => $column['tipo_de_ausentismo'],
+                            'tipo_de_ausentismo' => $column['tipo_de_ausentismo'],
                             'codigo_de_establecimiento' => $column['codigo_de_establecimiento'],
                             'nombre_de_establecimiento' => $column['nombre_de_establecimiento'],
                             'saldo_dias_no_reemplazados' => $column['saldo_dias_no_reemplazados'],
@@ -99,8 +97,7 @@ class AmipassAbscencesImport extends Component
             
         }
 
-        $this->message2 = 'Se ha cargado correctamente el archivo (De un total de ' . $total_count . ' registros, se registraron ' . 
-        $count_inserts . ' registros con auscentismos).';
+        $this->message2 = 'Se ha cargado correctamente el archivo (' . $count_inserts . ' registros).';
     }
 
     public function render()

@@ -160,7 +160,7 @@
                             @endcanany
 
                             @can('Payments')
-                            <a class="dropdown-item {{ active('finance.payments.index') }}" href="{{ route('finance.payments.index') }}">
+                            <a class="dropdown-item {{ active('finance.dtes.index') }}" href="{{ route('finance.dtes.index') }}">
                                 <i class="fas fa-fw fa-money-bill"></i> Estados de pago
                             </a>
                             @endcan
@@ -602,6 +602,12 @@
                         @canany(['be god','Parameters: holidays'])
                         <a class="dropdown-item {{active('parameters.holidays.*')}}" href="{{ route('parameters.holidays') }}">
                             <i class="fas fa-fw fa-suitcase"></i> Feriados
+                        </a>
+                        @endcanany
+
+                        @canany(['be god'])
+                        <a class="dropdown-item {{active('rrhh.absence-types.*')}}" href="{{ route('rrhh.absence-types.index') }}">
+                            <i class="fas fa-fw fa-calendar-alt"></i> Tipos de Ausencias
                         </a>
                         @endcanany
 

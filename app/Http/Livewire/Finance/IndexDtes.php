@@ -17,41 +17,32 @@ class IndexDtes extends Component
 
     public $showManualDTE = false;
 
-    public $selectedEstablishments;
+    public $selectedEstablishments = [];
 
     public $establishments;
 
-    public $dtes;
+    public $establishment;
+
+    public $successMessages = [];
+
+    protected $rules = [
+        'selectedEstablishments' => 'required'
+    ];
 
 
     public function refresh()
     {
-        
-        $this->dtes = Dte::
-        //search($this->filter)
-            /** Esto me proboca que no pueda utilizar la relación requestForm */
-            // ->with([
-            //     'immediatePurchase',
-            //     'immediatePurchase.purchasingProcessDetail',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
-            // ])            
-            whereNot('tipo_documento', 'guias_despacho')
-            ->orderBy('emision')
-            ->get();
-            //dd($this->dtes);
+        /**
+         * Sólo hace el re redner del componente
+         */
     }
+
+
 
     public function mount()
     {
         $this->establishments = Establishment::orderBy('name')->get();
-        
-        //$this->dtes = Dte::whereNot('tipo_documento', 'guias_despacho')->orderBy('emision')->get();
-
-        $this->dtes = Dte::whereNot('tipo_documento', 'guias_despacho')->orderBy('emision')->latest()->take(5)->get();
-
-        //dd($this->dtes);
+        $this->selectedEstablishments = []; // Inicializar el array vacío
 
     }
 
@@ -60,8 +51,10 @@ class IndexDtes extends Component
         $dte = Dte::find($dteId);
 
         if ($dte) {
-            $dte->establishment_id = $this->selectedEstablishment;
-            $dte->save();
+            $dte->establishment_id = $this->selectedEstablishments[$dteId];
+            $dte->save();            
+            $this->successMessages[$dteId] = 'El establecimiento fue asignado exitosamente al DTE';
+            
         }
     }
 
@@ -77,23 +70,32 @@ class IndexDtes extends Component
         $this->showManualDTE = false;
     }
 
+    public function updateSelectedEstablishment($dteId, $establishmentId)
+    {
+        $this->selectedEstablishments[$dteId] = $establishmentId;
+    }
+
     public function render()
     {
-        // $query = Dte::search($this->filter)
-        //     /** Esto me proboca que no pueda utilizar la relación requestForm */
-        //     // ->with([
-        //     //     'immediatePurchase',
-        //     //     'immediatePurchase.purchasingProcessDetail',
-        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
-        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
-        //     //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
-        //     // ])            
-        //     ->whereNot('tipo_documento', 'guias_despacho')
-        //     ->orderBy('emision')
-        //     ->paginate(50);
+        $query = Dte::search($this->filter)
+            /** Esto me proboca que no pueda utilizar la relación requestForm */
+            // ->with([
+            //     'immediatePurchase',
+            //     'immediatePurchase.purchasingProcessDetail',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
+            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
+            // ])            
+            ->whereNot('tipo_documento', 'guias_despacho')
+            ->orderBy('emision')
+            ->paginate(50);
 
-        
+        $establishments = Establishment::orderBy('name')->get();
 
-        return view('livewire.finance.index-dtes');
+
+        return view('livewire.finance.index-dtes', [
+            'dtes' => $query,
+            'establishments' => $establishments,
+        ]);
     }
 }

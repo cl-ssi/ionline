@@ -20,6 +20,8 @@ class DateHelper
             return Holiday::whereBetween('date', [$startDate, $endDate])->get();
         });
 
+        // $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+
         $holidays = $holidays->map(function($holiday) {
             return $holiday->date->format('Y-m-d');
         });
@@ -30,7 +32,7 @@ class DateHelper
 
         $businessDays = collect();
 
-        while($startDate->lt($endDate))
+        while($startDate->lessThanOrEqualTo($endDate))
         {
             if($holidays->doesntContain($startDate->format('Y-m-d')) && $weekend->doesntContain($startDate->dayOfWeek))
             {

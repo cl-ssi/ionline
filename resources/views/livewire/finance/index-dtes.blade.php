@@ -7,6 +7,12 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('finance.dtes.upload') }}">Cargar archivo</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('finance.payments.review') }}">Bandeja de Revisión de Pago</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('finance.payments.ready') }}">Bandeja de Pendientes para Pago</a>
+        </li>
     </ul>
 
 
@@ -58,6 +64,8 @@
 
     </div>
 
+
+
     @if ($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
@@ -89,6 +97,8 @@
                     if ($daysDifference !== null) {
                         if ($daysDifference < 5) {
                             $rowClass = 'table-success';
+                        } elseif ($daysDifference === 5) {                            
+                            $rowClass = 'table-secondary';
                         } elseif ($daysDifference < 8) {
                             $rowClass = 'table-warning';
                         } else {
@@ -96,6 +106,7 @@
                         }
                     }
                 @endphp
+
                 <tr class="{{ $rowClass }}">
                     <td>{{ $dte->id }}</td>
                     <td>{{ $dte->tipo_documento }}</td>
@@ -106,7 +117,8 @@
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                             </a>
                         @else
-                            <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                            <a href="{{ $dte->uri }}" target="_blank"
+                                class="btn btn-sm mb-1 btn-outline-secondary">
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                             </a>
                         @endif
@@ -154,13 +166,13 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }}
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-                    <td>{{ $dte->establishment_id }}
-
-                        <select class="form-control" wire:model="selectedEstablishments.{{ $dte->id }}">
+                    <td>
+                        <select class="form-control"
+                            wire:change="updateSelectedEstablishment({{ $dte->id }}, $event.target.value)">
                             <option value="">Seleccionar Establecimiento</option>
                             @foreach ($establishments as $establishment)
                                 <option value="{{ $establishment->id }}"
-                                    @if($dte->establishment_id == $establishment->id) selected @endif>
+                                    @if ($dte->establishment_id == $establishment->id) selected @endif>
                                     {{ $establishment->name }}
                                 </option>
                             @endforeach
@@ -169,13 +181,17 @@
                     <td>
                         <button class="btn btn-primary"
                             wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
+                        @if (isset($successMessages[$dte->id]))
+                            <div class="alert alert-success">
+                                {{ $successMessages[$dte->id] }}
+                            </div>
+                        @endif
                     </td>
                 </tr>
-
             @endforeach
         </tbody>
     </table>
 
+    {{ $dtes->links() }}
 
-    
 </div>

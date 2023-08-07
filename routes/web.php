@@ -102,6 +102,7 @@ use App\Http\Controllers\Rrhh\RoleController;
 use App\Http\Controllers\Rrhh\OrganizationalUnitController;
 use App\Http\Controllers\Rrhh\AuthorityController;
 use App\Http\Controllers\Rrhh\AttendanceController;
+use App\Http\Controllers\Rrhh\AbsenteeismTypeController;
 use App\Http\Controllers\Resources\WingleController;
 use App\Http\Controllers\Resources\TelephoneController;
 use App\Http\Controllers\Resources\PrinterController;
@@ -284,7 +285,7 @@ Route::get('existing_active_contracts/{start_date}/{end_date}', [ServiceRequestC
 
 
 /** Middleware Auth y Must Change Password */
-Route::middleware(['auth','must.change.password'])->group(function () {
+Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('/open-notification/{notification}', [UserController::class, 'openNotification'])->name('openNotification');
@@ -294,7 +295,6 @@ Route::middleware(['auth','must.change.password'])->group(function () {
     Route::prefix('webservices')->name('webservices.')->group(function () {
         Route::get('fonasa', [WebserviceController::class, 'fonasa'])->name('fonasa');
     });
-
 });
 
 
@@ -333,7 +333,7 @@ Route::get('/test-firma/{otp}', [DigitalSignatureController::class, 'test']);
 /** Link para VCs */
 Route::get('vc/{alias}', [UserController::class, 'getVcLink'])->name('vc');
 
-Route::middleware(['auth','must.change.password'])->group(function () {
+Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::prefix('profile')->as('profile.')->group(function () {
         Route::get('/subrogations', Subrogations::class)->name('subrogations');
         Route::get('/signature', MailSignature::class)->name('signature');
@@ -341,7 +341,7 @@ Route::middleware(['auth','must.change.password'])->group(function () {
 });
 
 /* Replacepent Staff */
-Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
@@ -499,7 +499,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
 
 
 /** Inicio Perfil de Cargos */
-Route::prefix('job_position_profile')->as('job_position_profile.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('job_position_profile')->as('job_position_profile.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [JobPositionProfileController::class, 'index'])->name('index');
     Route::get('/own_index', [JobPositionProfileController::class, 'own_index'])->name('own_index');
     Route::get('/index_review', [JobPositionProfileController::class, 'index_review'])->name('index_review');
@@ -542,7 +542,7 @@ Route::prefix('job_position_profile')->as('job_position_profile.')->middleware([
 
 
 /** Inicio Recursos */
-Route::prefix('resources')->name('resources.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('resources')->name('resources.')->middleware(['auth', 'must.change.password'])->group(function () {
 
     Route::get('report', [App\Http\Controllers\Resources\ReportController::class, 'report'])->name('report');
     Route::get('tic', TicResources::class)->name('tic');
@@ -595,7 +595,7 @@ Route::prefix('resources')->name('resources.')->middleware(['auth','must.change.
 
 
 /** Inicio Agreements */
-Route::prefix('agreements')->as('agreements.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('agreements')->as('agreements.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/{agreement}/accountability/create', [AccountabilityController::class, 'create'])->name('accountability.create');
     Route::post('/{agreement}/accountability', [AccountabilityController::class, 'store'])->name('accountability.store');
     Route::get('/{agreement}/accountability', [AccountabilityController::class, 'index'])->name('accountability.index');
@@ -655,7 +655,7 @@ Route::prefix('agreements')->as('agreements.')->middleware(['auth','must.change.
 
 /* TODO #51 agrupar con middleware auth y revisar rutas que no se ocupen */
 /** Programación Númerica APS */
-Route::middleware(['auth','must.change.password'])->group(function () {
+Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::resource('programmings', ProgrammingController::class)->middleware('auth');
     Route::put('programmingStatus/{id}', [ProgrammingController::class, 'updateStatus'])->middleware('auth')->name('programmingStatus.update');
     Route::get('programming/{programming}/show_total_rrhh', [ProgrammingController::class, 'show_total_rrhh'])->middleware('auth')->name('programming.show_total_rrhh');
@@ -735,6 +735,16 @@ Route::prefix('integrity')->as('integrity.')->group(function () {
 });
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+
+    Route::prefix('absence-types')->name('absence-types.')->group(function () {
+        Route::get('/', [AbsenteeismTypeController::class, 'index'])->name('index');
+        Route::get('/create', [AbsenteeismTypeController::class, 'create'])->name('create');
+        Route::post('/store', [AbsenteeismTypeController::class, 'store'])->name('store');
+        Route::put('/{absenteeismType}', [AbsenteeismTypeController::class, 'update'])->name('update');
+    });
+
+
+
     Route::get('{user}/roles', [RoleController::class, 'index'])->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', [RoleController::class, 'attach'])->name('roles.attach')->middleware('auth');
 
@@ -801,7 +811,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
     /** Fin Shift Managment */
 
-    Route::prefix('attendance')->name('attendance.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('attendance')->name('attendance.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::get('/import', [AttendanceController::class, 'import'])->name('import');
         Route::post('/store', [AttendanceController::class, 'store'])->name('store');
@@ -813,7 +823,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
 
     /** Rutas modulo honorarios */
-    Route::prefix('service-request')->name('service-request.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('service-request')->name('service-request.')->middleware(['auth', 'must.change.password'])->group(function () {
 
         Route::get('/profile/{user?}/{year?}/{type?}/{serviceRequest?}/{period?}', [ProfileControllerSr::class, 'show'])->name('show');
         Route::post('/profile', [ProfileControllerSr::class, 'show'])->name('show.post');
@@ -970,7 +980,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
      */
     //Route::resource('authorities', AuthorityController::class)->middleware(['auth']);
 
-    Route::prefix('authorities')->name('new-authorities.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('authorities')->name('new-authorities.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/test', [AuthorityController::class, 'test'])->name('test');
         Route::get('/', [AuthorityController::class, 'index'])->name('index');
         Route::get('/calendar/{organizationalUnit}', App\Http\Livewire\Authorities\Calendar::class);
@@ -981,12 +991,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/{organizationalUnit}/create-subrogant', [AuthorityController::class, 'create_subrogant'])->name('create_subrogant');
     });
 
-    Route::prefix('subrogations')->name('subrogations.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('subrogations')->name('subrogations.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/{organizationalUnit}/create', [SubrogationController::class, 'create'])->name('create');
         Route::post('/store', [SubrogationController::class, 'store'])->name('store');
     });
 
-    Route::prefix('organizational-units')->name('organizational-units.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('organizational-units')->name('organizational-units.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/', [OrganizationalUnitController::class, 'index'])->name('index')->middleware('auth');
         Route::get('/create', [OrganizationalUnitController::class, 'create'])->name('create')->middleware('auth');
         Route::post('/store', [OrganizationalUnitController::class, 'store'])->name('store')->middleware('auth');
@@ -1029,12 +1039,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/{user}/edit', [UserController::class, 'edit_sr'])->name('edit')->middleware('auth');
             Route::put('/{user}', [UserController::class, 'update_sr'])->name('update')->middleware('auth');
             Route::delete('/{user}', [UserController::class, 'destroy_sr'])->name('destroy')->middleware('auth');
-
         });
     });
 });
 
-Route::prefix('parameters')->as('parameters.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('parameters')->as('parameters.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [ParameterController::class, 'welcome'])->name('welcome');
     Route::get('/all', ParameterIndex::class)->name('index');
     Route::get('/create', ParameterCreate::class)->name('create');
@@ -1192,7 +1201,7 @@ Route::prefix('parameters')->as('parameters.')->middleware(['auth','must.change.
 });
 /** Fin de rutas de parametros */
 
-Route::prefix('documents')->as('documents.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.password'])->group(function () {
 
     Route::get('lobby', MeetingMgr::class)->name('lobby.manager');
     Route::get('lobby/{meeting}', MeetingShow::class)->name('lobby.show');
@@ -1241,9 +1250,9 @@ Route::prefix('documents')->as('documents.')->middleware(['auth','must.change.pa
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 });
 
-Route::resource('documents', DocumentController::class)->middleware(['auth','must.change.password']);
+Route::resource('documents', DocumentController::class)->middleware(['auth', 'must.change.password']);
 
-Route::prefix('requirements')->as('requirements.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('requirements')->as('requirements.')->middleware(['auth', 'must.change.password'])->group(function () {
     /** Custom routes */
     Route::get('download/{file}',  [EventController::class, 'download'])->name('download');
     Route::get('deleteFile/{file}',  [EventController::class, 'deleteFile'])->name('deleteFile');
@@ -1295,7 +1304,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::delete('/{file}', [RNIdbController::class, 'revoke_user'])->middleware('auth')->name('revoke_user');
     });
 
-    Route::prefix('comges')->as('comges.')->middleware(['auth','must.change.password'])->group(function () {
+    Route::prefix('comges')->as('comges.')->middleware(['auth', 'must.change.password'])->group(function () {
         Route::get('/', [ComgesController::class, 'index'])->name('index');
         Route::get('/{year}', [ComgesController::class, 'list'])->name('list');
         Route::post('/{year}', [ComgesController::class, 'store'])->name('store');
@@ -1647,7 +1656,7 @@ Route::get('quality_aps', [QualityApsController::class, 'index'])->middleware('a
 Route::get('quality_aps/{file}', [QualityApsController::class, 'download'])->middleware('auth')->name('quality_aps.download');
 
 // UNSPSC
-Route::prefix('unspsc')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('unspsc')->middleware(['auth', 'must.change.password'])->group(function () {
 
     Route::get('/products/all', [ProductController::class, 'all'])->name('products.all');
 
@@ -1672,7 +1681,7 @@ Route::prefix('unspsc')->middleware(['auth','must.change.password'])->group(func
 });
 
 // Warehouse
-Route::prefix('warehouse')->as('warehouse.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::resource('stores', StoreController::class)->only(['index', 'create', 'edit'])
         ->middleware(['can:Store: warehouse manager']);
     Route::get('download-invoice/{invoice}', [ControlController::class, 'downloadInvoice'])->name('download-invoice');
@@ -1702,7 +1711,7 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth','must.change.pa
     });
 });
 
-Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.change.password'])->group(function () {
     // Route::view('/index', 'hotel_booking.home')->name('index');
     Route::get('/', [HotelBookingController::class, 'index'])->name('index');
     Route::get('/search_booking', [HotelBookingController::class, 'search_booking'])->name('search_booking');
@@ -1747,7 +1756,7 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth','must.c
 });
 
 // Inventories
-Route::prefix('inventories')->as('inventories.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('inventories')->as('inventories.')->middleware(['auth', 'must.change.password'])->group(function () {
     /** Ruta para poder ver la hoja de inventario sin edición  */
     Route::get('number/{number}', InventoryShow::class)->name('show');
 
@@ -1779,7 +1788,7 @@ Route::prefix('inventories')->as('inventories.')->middleware(['auth','must.chang
     Route::get('/manager', InventoryManager::class)->name('manager')->middleware(['can:Inventory: manager']);
 });
 /* Bodega de Farmacia */
-Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'index'])->name('index');
     Route::get('admin_view', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'admin_view'])->name('admin_view');
     Route::get('pharmacy_users', [App\Http\Controllers\Pharmacies\PharmacyController::class, 'pharmacy_users'])->name('pharmacy_users');
@@ -1839,7 +1848,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth','must.change.
 });
 
 /* Finanzas */
-Route::prefix('finance')->as('finance.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
     Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
     Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
@@ -1847,12 +1856,12 @@ Route::prefix('finance')->as('finance.')->middleware(['auth','must.change.passwo
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
-    Route::get('/', [PaymentController::class, 'index'])->name('index');
-    Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
-    Route::get('/review', [PaymentController::class, 'review'])->name('review');
-    Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
-    Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
-    Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
+        Route::get('/', [PaymentController::class, 'index'])->name('index');
+        Route::get('/own', [PaymentController::class, 'indexOwn'])->name('own');
+        Route::get('/review', [PaymentController::class, 'review'])->name('review');
+        Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
+        Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
+        Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
     });
 });
 
@@ -1883,7 +1892,7 @@ Route::prefix('request_forms'])->name('request_forms.')->group(function () {
 });
 */
 
-Route::prefix('request_forms')->as('request_forms.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('request_forms')->as('request_forms.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/info/info_circular_n2_2022', function () {
         return Storage::disk('gcs')->response('ionline/request_forms/info/circular_n2_2022.pdf');
     })->name('info_circular_n2_2022');
@@ -1996,7 +2005,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware(['auth','must.c
 
 /** Fin rutas Request Form */
 
-Route::prefix('allowances')->as('allowances.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [AllowanceController::class, 'index'])->name('index');
     Route::get('all_index', [AllowanceController::class, 'all_index'])->name('all_index')->middleware('permission:Allowances: all');
     Route::get('sign_index', [AllowanceController::class, 'sign_index'])->name('sign_index');
@@ -2075,7 +2084,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 });
 
 
-Route::prefix('suitability')->as('suitability.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('suitability')->as('suitability.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::post('/emergency/{psirequest}', [SuitabilityController::class, 'emergency'])->name('emergency');
     Route::get('/report/all/request', [SuitabilityController::class, 'reportAllRequest'])->name('reportAllRequest');
@@ -2168,7 +2177,7 @@ Route::prefix('suitability')->as('suitability.')->middleware(['auth','must.chang
 });
 
 /* Rutas de cargador de REM */
-Route::prefix('rem')->as('rem.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('rem')->as('rem.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [UserRemController::class, 'index'])->name('index');
         Route::get('/create', [UserRemController::class, 'create'])->name('create');
@@ -2205,7 +2214,7 @@ Route::prefix('rem')->as('rem.')->middleware(['auth','must.change.password'])->g
 });
 
 /* Rutas de Módulo de Bienestar */
-Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [WelfareController::class, 'index'])->name('index');
     Route::get('/balances', [WelfareController::class, 'balances'])->name('balances');
     Route::get('/report', [WelfareController::class, 'report'])->name('report');
@@ -2238,13 +2247,17 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth','must.change.passwo
         Route::get('/requests-manager', RequestMgr::class)->name('requests-manager');
 
         Route::get('/report-by-dates', ReportByDates::class)->name('report-by-dates');
-        Route::get('/maintainer-absence', [AmipassController::class, 'maintainerAbsence'])->name('maintainerAbsence');
+        Route::prefix('value')->as('value.')->group(function () {
+            Route::get('/', [AmipassController::class, 'indexValue'])->name('indexValue');
+            Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
+            Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
+        });
     });
 });
 
 
 /* Rutas de Módulo de Sumario*/
-Route::prefix('summary')->as('summary.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('summary')->as('summary.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/', [SummaryController::class, 'index'])->name('index');
     Route::get('/create', [SummaryController::class, 'create'])->name('create');
     Route::post('/store', [SummaryController::class, 'store'])->name('store');
@@ -2291,7 +2304,7 @@ Route::prefix('summary')->as('summary.')->middleware(['auth','must.change.passwo
 
 /* Rutas de Módulo de Lobby*/
 // Inicio Módulo Lobby
-Route::prefix('lobby')->as('lobby.')->middleware(['auth','must.change.password'])->group(function () {
+Route::prefix('lobby')->as('lobby.')->middleware(['auth', 'must.change.password'])->group(function () {
     Route::prefix('meeting')->as('meeting.')->group(function () {
         Route::get('/', [MeetingController::class, 'index'])->name('index');
         Route::get('/create', [MeetingController::class, 'create'])->name('create');
@@ -2304,7 +2317,7 @@ Route::prefix('lobby')->as('lobby.')->middleware(['auth','must.change.password']
 /**
  * Rutas de Modulo Sign
  */
-Route::middleware(['auth','must.change.password'])->group(function () {
+Route::middleware(['auth', 'must.change.password'])->group(function () {
     Route::get('/position-document-number', [SignSignatureController::class, 'positionDocumentNumber']);
 });
 
