@@ -31,7 +31,7 @@ class TelephoneController extends Controller
     public function create()
     {
         $users = User::doesnthave('Telephones')->get();
-        $places = Place::All();
+        $places = Place::with('location')->get();
         return view('resources.telephone.create', compact('users', 'places'));
     }
 
@@ -70,7 +70,7 @@ class TelephoneController extends Controller
     public function edit(Telephone $telephone)
     {
         $users = User::OrderBy('name')->get();
-        $places = Place::All();
+        $places = Place::with('location')->get();
         return view('resources.telephone.edit', compact('telephone', 'users', 'places'));
     }
 

@@ -2,8 +2,9 @@
 
 namespace App\Models\Resources;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class Mobile extends Model
 {
@@ -21,8 +22,17 @@ class Mobile extends Model
      *
      * @var array
      */
-    protected $dates = [
-        'deleted_at'
+    // protected $dates = [
+    //     'deleted_at'
+    // ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'owner' => 'boolean',
     ];
 
     /**
@@ -33,12 +43,14 @@ class Mobile extends Model
     protected $fillable = [
         'brand', 
         'model', 
-        'number'
+        'number',
+        'user_id',
+        'owner'
     ];
 
     public function user()
     {
-        return $this->belongsTo('\App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function scopeSearch($query, $search)
