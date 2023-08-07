@@ -207,6 +207,7 @@ use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PaymentController;
+use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
 use App\Http\Controllers\Drugs\RosterAnalisisToAdminController;
 use App\Http\Controllers\Drugs\ReceptionController;
@@ -813,7 +814,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     /** Rutas modulo honorarios */
     Route::prefix('service-request')->name('service-request.')->middleware(['auth','must.change.password'])->group(function () {
-        
+
         Route::get('/profile/{user?}/{year?}/{type?}/{serviceRequest?}/{period?}', [ProfileControllerSr::class, 'show'])->name('show');
         Route::post('/profile', [ProfileControllerSr::class, 'show'])->name('show.post');
 
@@ -1712,7 +1713,7 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth','must.c
     // Route::get('/confirmation_page/{roomBooking}', [HotelBookingController::class, 'confirmation_page'])->name('confirmation_page');
     // Route::get('/booking_cancelation/{roomBooking}', [HotelController::class, 'booking_cancelation'])->name('booking_cancelation');
     // Route::post('/booking_cancelation', [RoomController::class, 'booking_cancelation'])->name('booking_cancelation');
-    
+
     Route::prefix('hotels')->as('hotels.')->middleware('auth')->group(function () {
         Route::get('/', [HotelController::class, 'index'])->name('index');
         Route::get('/edit/{hotel}', [HotelController::class, 'edit'])->name('edit');
@@ -1840,6 +1841,9 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware(['auth','must.change.
 /* Finanzas */
 Route::prefix('finance')->as('finance.')->middleware(['auth','must.change.password'])->group(function () {
     Route::get('dtes', IndexDtes::class)->name('dtes.index');
+    Route::get('dte/{dte}/store', [DteController::class, 'store'])->name('dtes.confirmation.store');
+    Route::get('dte/{dte}/confirmation-signature-file', [DteController::class, 'pdf'])->name('dtes.confirmation.pdf');
+
     Route::get('dtes/upload', UploadDtes::class)->name('dtes.upload');
     Route::get('dtes/{dte}/confirmation', DteConfirmation::class)->name('dtes.confirmation');
     Route::prefix('payments')->as('payments.')->group(function () {
