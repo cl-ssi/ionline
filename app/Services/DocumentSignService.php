@@ -248,7 +248,7 @@ class DocumentSignService
         /**
          * Set the file data
          */
-        $data = app(Signature::class)->getData($this->document, $jwt, $this->base64Image, $apiToken, $this->xCoordinate, $this->yCoordinate);
+        $data = app(Signature::class)->getData($this->document, $jwt, $this->base64Image, $apiToken, $this->xCoordinate, $this->yCoordinate, false);
 
         /**
          * Peticion a la api para firmar
