@@ -10,25 +10,31 @@
     @method('PUT')
     @csrf
 
-    <fieldset class="form-group">
-        <label for="forNumero">Número</label>
-        <input type="integer" class="form-control" id="forNumero" name="number" value="{{ $mobile->number }}">
-    </fieldset>
+    <div class="form-row">
 
-    <fieldset class="form-group">
-        <label for="forBrand">Marca</label>
-        <input type="text" class="form-control" id="forBrand" name="brand" value="{{ $mobile->brand }}">
-    </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="forNumero">Número</label>
+            <input type="integer" class="form-control" id="forNumero" name="number" value="{{ $mobile->number }}">
+        </fieldset>
+        
+        <fieldset class="form-group col-3">
+            <label for="forBrand">Marca</label>
+            <input type="text" class="form-control" id="forBrand" name="brand" value="{{ $mobile->brand }}">
+        </fieldset>
 
-    <fieldset class="form-group">
-        <label for="forModel">Modelo</label>
-        <input type="text" class="form-control" id="forModel" name="model" value="{{ $mobile->model }}">
-    </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="forModel">Modelo</label>
+            <input type="text" class="form-control" id="forModel" name="model" value="{{ $mobile->model }}">
+        </fieldset>
+    </div>
+        
+    <div class="form-row">
 
-    <fieldset class="form-group">
-        <label for="forUsers">Asignar a:</label>
-        @livewire('search-select-user', ['user' => $mobile->user ?? null])
-    </fieldset>
+        <fieldset class="form-group col-9">
+            <label for="forUsers">Asignar a:</label>
+            @livewire('search-select-user', ['user' => $mobile->user ?? null])
+        </fieldset>
+    </div>
 
     <fieldset class="form-group form-check">
         <input type="checkbox" class="form-check-input" @checked($mobile->owner) name="owner">
