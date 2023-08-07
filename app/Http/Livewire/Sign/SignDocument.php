@@ -138,7 +138,8 @@ class SignDocument extends Component
         /**
          * Set the file data
          */
-        $data = app(Signature::class)->getData($this->link, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, false);
+        $documentBase64Pdf = base64_encode(file_get_contents($this->link));
+        $data = app(Signature::class)->getData($documentBase64Pdf, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, false);
 
         /**
          * Peticion a la api para firmar
