@@ -30,33 +30,35 @@
 </form>
 
 <div class="table-responsive">
-	<table class="table table-striped table-sm" id="TableFilter">
-		<thead>
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Número</th>
-				<th scope="col">Marca</th>
-                <th scope="col">Modelo</th>
-				<th scope="col">Asociado a.</th>
-				<th scope="col">Accion</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($mobiles as $key => $mobile)
-			<tr>
-				<td>{{ $key }} </td>
-				<td>{{ $mobile->number }}</td>
-				<td>{{ $mobile->brand }}</td>
-                <td>{{ $mobile->model }}</td>
-				<td>{{ @$mobile->user->FullName ? : '' }}</td>
-				<td>
-					<a href="{{ route('resources.mobile.edit', $mobile->id) }}" class="btn btn-outline-secondary btn-sm">
-					<span class="fas fa-edit" aria-hidden="true"></span></a>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
+    <table class="table table-striped table-sm" id="TableFilter">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Número</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Asociado a.</th>
+                <th scope="col">Personal</th>
+                <th scope="col">Directorio</th>
+                <th scope="col">Accion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($mobiles as $key => $mobile)
+            <tr>
+                <td>{{ $key }} </td>
+                <td>{{ $mobile->number }}</td>
+                <td>{{ $mobile->brand }}</td>
+                <td>{{ @$mobile->user->shortName ? : '' }}</td>
+                <td>{{ $mobile->owner ? 'Si': 'No' }}</td>
+                <td>{{ $mobile->directory ? 'Si': 'No' }}</td>
+                <td>
+                    <a href="{{ route('resources.mobile.edit', $mobile->id) }}" class="btn btn-outline-secondary btn-sm">
+                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
 {{ $mobiles->links() }}
