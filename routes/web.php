@@ -2404,7 +2404,7 @@ Route::prefix('test')->as('test.')->group(function () {
         echo "<pre>";
         $users = User::with('organizationalUnit')->whereRelation('organizationalUnit','establishment_id', 38)->get();
         foreach($users as $user) {
-            echo $user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name."\n";
+            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name."\n";
         }
         echo "</pre>";
     })->middleware('auth');
