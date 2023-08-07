@@ -2399,6 +2399,16 @@ Route::prefix('test')->as('test.')->group(function () {
         return view('test.urgency');
     });
 
+    /** Usuarios del servicio */
+    Route::get('/usuarios', function () {
+        echo "<pre>";
+        $users = User::with('organizationalUnit')->whereRelation('organizationalUnit','establishment_id', 38)->get();
+        foreach($users as $user) {
+            echo $user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name."\n";
+        }
+        echo "</pre>";
+    })->middleware('auth');
+
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });
 
