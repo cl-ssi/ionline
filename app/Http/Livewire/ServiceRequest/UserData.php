@@ -5,11 +5,13 @@ namespace App\Http\Livewire\ServiceRequest;
 use Livewire\Component;
 use App\User;
 use App\Models\ClCommune;
+use App\Models\Country;
 
 class UserData extends Component
 {
     public User $user;
     public $communes;
+    public $countries;
 
     protected $rules = [
         'user.name' => 'required|string|min:2',
@@ -17,6 +19,7 @@ class UserData extends Component
         'user.mothers_family' => 'required|string|min:2',
         'user.address' => 'required|string|max:255',
         'user.commune_id' => 'required',
+        'user.country_id' => 'required',
         'user.phone_number' => 'required|string|max:255',
         'user.email_personal' => 'required|string|max:255',
     ];
@@ -27,6 +30,7 @@ class UserData extends Component
     public function mount()
     {
         $this->communes = ClCommune::pluck('name','id');
+        $this->countries = Country::pluck('name','id');
     }
 
     public function save() {

@@ -12,13 +12,22 @@
                     <label for="for-name">Nombres</label>
                     <input type="text" class="form-control" id="for-name" wire:model.defer="user.name">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="for-fathers_family">Apellido P.</label>
                     <input type="text" class="form-control" id="for-fathers_family" wire:model.defer="user.fathers_family">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="for-mothers_family">Apellido M.</label>
                     <input type="text" class="form-control" id="for-mothers_family" wire:model.defer="user.mothers_family">
+                </div>
+                <div class="col-md-2">
+                    <label for="for-commune_id">Nacionalidad</label>
+                    <select wire:model.defer="user.country_id" class="form-control">
+                        <option value=""></option>
+                        @foreach($countries->sort() as $key => $name)
+                            <option value="{{ $key }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-1">
                     <label for=""><br></label>
