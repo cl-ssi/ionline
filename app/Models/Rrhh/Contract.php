@@ -88,18 +88,32 @@ class Contract extends Model
         'motivo_del_reemplazo',
         'fecha_inicio_ausentismo',
         'fecha_termino_ausentismo',
-        'fecha_primer_contrato'
+        'fecha_primer_contrato',
+        'shift',
     ];
 
     /**
+    * Reemplazado por $casts 
     * The attributes that should be mutated to dates.
     *
     * @var array
     */
-    protected $dates = [
-        'fecha_inicio_contrato',
-        'fecha_termino_contrato',
-        'fecha_alejamiento',
+    // protected $dates = [
+    //     'fecha_inicio_contrato',
+    //     'fecha_termino_contrato',
+    //     'fecha_alejamiento',
+    // ];
+
+    /**
+    * The attributes that should be cast.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'fecha_inicio_contrato' => 'datetime:Y-m-d',
+        'fecha_termino_contrato' => 'datetime:Y-m-d',
+        'fecha_alejamiento' => 'datetime:Y-m-d',
+        'shift' => 'boolean'
     ];
 
     /**
