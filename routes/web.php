@@ -392,6 +392,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         Route::get('/download_verification/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download_verification'])->name('download_verification');
         Route::prefix('sign')->name('sign.')->group(function () {
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('massive_update', [RequestSignController::class, 'massive_update'])->name('massive_update');
         });
         Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
         Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
