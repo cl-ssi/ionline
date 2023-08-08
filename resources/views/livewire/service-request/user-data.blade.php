@@ -54,23 +54,7 @@
                     <label for="for-phone_number">Telefono</label>
                     <input type="text" class="form-control" id="for-phone_number" wire:model.defer="user.phone_number">
                 </div>
-                <div class="col-md-4">
-                    <label for="for-email_personal">Email Personal</label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Email personal" wire:model.defer="user.email_personal" @disabled($user->email_verified_at)>
-                        <div class="input-group-append">
-                            @if($user->email_verified_at)
-                            <button class="btn btn-success" title="Email verificado" disabled type="button">
-                                <i class="fas fa-envelope"></i>
-                            </button>
-                            @else
-                            <button class="btn btn-warning" title="Verificar email" type="button" wire:click="sendEmailVerification">
-                                <i class="fas fa-envelope"></i>
-                            </button>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                @livewire('rrhh.personal-email-input',['user' => $user])
             </div>
 
             @include('layouts.partials.errors')
