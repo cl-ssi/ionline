@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Livewire\Welfare;
+namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 use App\models\Rrhh\Absenteeism;
-use App\Imports\AbscencesImport;
+use App\Imports\AbscencesImport as AbscencesImportFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use App\User;
 
 use App\Models\Rrhh\SirhActiveUser;
 
-class AmipassAbscencesImport extends Component
+class AbscencesImport extends Component
 {
     use WithFileUploads;
 
@@ -28,7 +28,7 @@ class AmipassAbscencesImport extends Component
         ]);
 
         $file = $this->file;
-        $collection = Excel::toCollection(new AbscencesImport, $file);
+        $collection = Excel::toCollection(new AbscencesImportFile, $file);
 
         $total_count = $collection->first()->count()+1;
         $count_inserts = 0;
@@ -102,6 +102,6 @@ class AmipassAbscencesImport extends Component
 
     public function render()
     {
-        return view('livewire.welfare.amipass-abscences-import');
+        return view('livewire.rrhh.abscences-import');
     }
 }

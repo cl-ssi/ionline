@@ -6,10 +6,10 @@
 
 @include('welfare.nav')
 
-@livewire('welfare.amipass-contract-import')
+@livewire('rrhh.contract-import')
 
 <hr>
 
-@livewire('welfare.amipass-abscences-import')
+@livewire('rrhh.abscences-import')
 
 @endsection
