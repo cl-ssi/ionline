@@ -80,6 +80,13 @@ class Dte extends Model
 
         //Estblecimiento que le corresponde el DTE
         'establishment_id',
+
+        'confirmation_status',
+        'confirmation_user_id',
+        'confirmation_ou_id',
+        'confirmation_observation',
+        'confirmation_at',
+        'confirmation_signature_file',
     ];
 
     /**
@@ -100,9 +107,9 @@ class Dte extends Model
         'fecha_ingreso',
         'fecha_aceptacion',
         'fecha',
-        'payer_at'
+        'payer_at',
+        'confirmation_at',
     ];
-
 
     /**
      * The primary key associated with the table.
@@ -139,6 +146,10 @@ class Dte extends Model
         // }
     }
 
+    public function paymentFlows()
+    {
+        return $this->hasMany(PaymentFlow::class, 'dte_id');
+    }
 
     public function scopeSearch($query, $filter)
     {
@@ -187,10 +198,5 @@ class Dte extends Model
                 }
             }
         }
-    }
-
-    public function paymentFlows()
-    {
-        return $this->hasMany(PaymentFlow::class, 'dte_id');
     }
 }

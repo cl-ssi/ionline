@@ -92,7 +92,9 @@ class EnumerateSignature extends Component
         /**
          * Obtengo la data del signature
          */
-        $data = app(Signature::class)->getData($signature->link_signed_file, $jwt, $documentNumberBase64, $apiToken, $xCoordinate, $yCoordinate, true, 1);
+        $documentBase64Pdf = base64_encode(file_get_contents($signature->link_signed_file));
+
+        $data = app(Signature::class)->getData($documentBase64Pdf, $jwt, $documentNumberBase64, $apiToken, $xCoordinate, $yCoordinate, true, 1);
 
         /**
          * Peticion la api para firmar

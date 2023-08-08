@@ -612,7 +612,7 @@ class DigitalSignatureController extends Controller
             return [
                 'statusOk' => false,
                 'content' => '',
-                'errorMsg' => 'Se produjo un error con firma electrónica, intente nuevamente.',
+                'errorMsg' => 'Disculpe, se produjo un error con firma electrónica, intente nuevamente.',
             ];
         }
 

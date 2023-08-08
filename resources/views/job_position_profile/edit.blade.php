@@ -21,7 +21,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. MAPA DE COMPETENCIAS DEL S.S.I</th>
+                <th>VI. MAPA DE COMPETENCIAS DEL S.S.T</th>
             </tr>
         </thead>
         <tbody>

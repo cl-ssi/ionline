@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Welfare\Abscence;
 use App\Models\Welfare\EmployeeInformation;
 use App\Models\Welfare\Doubt;
+use App\Models\Welfare\AmiPass\Value;
 use App\User;
 
 class AmipassController extends Controller
@@ -108,8 +109,23 @@ class AmipassController extends Controller
         return view('welfare.amipass.questionshow', compact('doubt'));
     }
 
-    public function maintainerAbsence()
+    public function indexValue()
     {
-        dd('realizar mantenedor de ausentismo');
+        $values = Value::all();
+        return view('welfare.amipass.values.index', compact('values'));
+    }
+
+    public function createValue()
+    {
+
+        return view('welfare.amipass.values.create');
+    }
+
+    public function storeValue(Request $request)
+    {
+        $value = new Value($request->All());
+        $value->save();
+        session()->flash('info', 'El Valor de amipass ha sido creado');
+        return redirect()->route('welfare.amipass.value.indexValue');
     }
 }

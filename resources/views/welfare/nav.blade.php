@@ -51,11 +51,9 @@
                     <i class="fas fa-file-upload"></i> Dashboard
                 </a>
 
-                <a class="dropdown-item" href="{{ route('welfare.amipass.maintainerAbsence') }}">
-                    <i class="far fa-calendar-times"></i> Mantenedor Ausentismo
+                <a class="dropdown-item" href="{{ route('welfare.amipass.value.indexValue') }}">
+                    <i class="fas fa-calendar-alt"></i> Valor de Carga Amipass Anual
                 </a>
-
-
             </div>
         </li>
     @endcanany
