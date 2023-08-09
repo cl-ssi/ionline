@@ -22,9 +22,10 @@
 </div>
 
 <div class="col">
+    {{--
     <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.massive_update') }}" enctype="multipart/form-data"/>
         @csrf
-        @method('PUT')
+        @method('PUT') --}}
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
@@ -167,8 +168,9 @@
                 </tbody>
             </table>
         </div>
-    
+    {{--
     </form>
+    
 
     @if($flagButton == 1)
         <button type="submit" 
@@ -179,6 +181,7 @@
         </button>
         <br><br>
     @endif
+    --}}
 </div>
 
 <div class="col">
