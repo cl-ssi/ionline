@@ -16,9 +16,24 @@
     </ul>
 
 
-    <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
-
     <div class="row mb-3">
+        <div class="col-8">
+            <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
+        </div>
+        <div class="col">
+        <button class="btn btn-success" type="button" wire:click="loadManualDTE">
+                <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
+        </div>
+    </div>
+
+
+    @if ($showManualDTE)
+        <div>
+            @livewire('finance.manual-dtes')
+        </div>
+    @endif
+
+    <div class="form-row mb-3">
         <div class="col-md-2">
             <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
         </div>
@@ -51,42 +66,24 @@
             </select>
         </div>
         <div class="col-md-1">
-            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> <i class="fas fa-search"></i>
-                Buscar</button>
+            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> 
+                <i class="fas fa-search"></i>
+            </button>
         </div>
-
-
-
-        <div class="col-md-2 text-right">
-            <button class="btn btn-success" type="button" wire:click="loadManualDTE">
-                <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
-        </div>
-
     </div>
-
-
-
-    @if ($showManualDTE)
-        <div>
-            @livewire('finance.manual-dtes')
-        </div>
-    @endif
 
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
-                <th>ID Interno</th>
-                <th>Tipo documento</th>
-                <th>Folio</th>
-                <th>Emisor</th>
+                <th>ID</th>
+                <th>Documento</th>
                 <th>Folio OC</th>
                 <th>FR</th>
                 <th>Bod</th>
-                <th>Admin C.</th>
-                <th>Detalle</th>
+                <th width="190">Admin C.</th>
                 <th>Fecha Aceptación SII (días)</th>
                 <th>Establecimiento</th>
-                <th>Guardar</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -108,9 +105,12 @@
                 @endphp
 
                 <tr class="{{ $rowClass }}">
-                    <td>{{ $dte->id }}</td>
-                    <td>{{ $dte->tipo_documento }}</td>
+                    <td class="small">{{ $dte->id }}</td>
                     <td>
+                        {{ $dte->tipo_documento }}
+                        <br>
+                        {{ $dte->emisor }}
+                        <br>
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
                                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
@@ -123,12 +123,11 @@
                             </a>
                         @endif
                     </td>
-                    <td>{{ $dte->emisor }}</td>
                     <td>{{ $dte->folio_oc }}</td>
                     <td>
                         @if ($dte->immediatePurchase)
                             @if ($dte->requestForm)
-                                <a class="btn btn-primary btn-block"
+                                <a class="btn btn-outline-primary btn-block"
                                     href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
                                     <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
                                 </a>
@@ -137,37 +136,31 @@
                     </td>
                     <td>
                         @foreach ($dte->controls as $control)
-                            {{ $control->id }}
+                            <a
+                                class="btn btn-sm btn-outline-primary"
+                                href="{{ route('warehouse.control.show', $control) }}"
+                                target="_blank"
+                                >
+                                #{{ $control->id }}
+                            </a> 
                         @endforeach
                     </td>
                     <td>
                         @if ($dte->immediatePurchase)
                             @if ($dte->requestForm)
                                 @if ($dte->requestForm->contractManager)
-                                    {{ $dte->requestForm->contractManager->shortName }}
+                                    {{ $dte->requestForm->contractManager->shortName }} <br>
                                     @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id], key($dte->id))
                                 @endif
                             @endif
                         @endif
                     </td>
-                    <td>
-                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
-                            data-target="#collapse{{ $dte->id }}" aria-expanded="false"
-                            aria-controls="collapse{{ $dte->id }}">
-                            Ver detalle
-                        </button>
-                        <div class="collapse width" id="collapse{{ $dte->id }}">
-                            <pre>
-                            {{ print_r($dte->toArray()) }}
-                        </pre>
-                        </div>
-                    </td>
-                    <td>
-                        {{ $dte->fecha_recepcion_sii ?? '' }}
+                    <td class="small">
+                        {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td>
-                        <select class="form-control"
+                        <select class="form-control form-control-sm"
                             wire:change="updateSelectedEstablishment({{ $dte->id }}, $event.target.value)">
                             <option value="">Seleccionar Establecimiento</option>
                             @foreach ($establishments as $establishment)
@@ -177,15 +170,26 @@
                                 </option>
                             @endforeach
                         </select>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary"
+                        <button class="btn btn-primary btn-sm"
                             wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
                         @if (isset($successMessages[$dte->id]))
                             <div class="alert alert-success">
                                 {{ $successMessages[$dte->id] }}
                             </div>
                         @endif
+                    </td>
+
+                    <td>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
+                            data-target="#collapse{{ $dte->id }}" aria-expanded="false"
+                            aria-controls="collapse{{ $dte->id }}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <div class="collapse width" id="collapse{{ $dte->id }}">
+                            <pre>
+                            {{ print_r($dte->toArray()) }}
+                        </pre>
+                        </div>
                     </td>
                 </tr>
             @endforeach
