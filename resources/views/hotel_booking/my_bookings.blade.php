@@ -132,6 +132,7 @@ $(".uploadfilebutton").click(function(){
   }
 });
 
+@foreach($roomBookings as $roomBooking)
 @if($roomBooking->payment_type == "Depósito")
     @if($roomBooking->files)
         $("#buttonfile{{$roomBooking->id}}").click(function(){
@@ -139,6 +140,7 @@ $(".uploadfilebutton").click(function(){
         });
     @endif
 @endif
+@endforeach
 
 
 </script>

@@ -17,7 +17,7 @@ class RoomBooking extends Model implements Auditable
 
     //
     protected $fillable = [
-        'id','user_id','room_id','start_date','end_date','observation','payment_type'
+        'id','user_id','room_id','start_date','end_date','payment_type', 'status', 'observation'
     ];
 
     protected $table = 'hb_room_bookings';
