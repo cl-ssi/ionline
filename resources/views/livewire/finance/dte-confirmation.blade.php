@@ -94,13 +94,37 @@
             <input type="text" class="form-control" wire:model="confirmation_observation">
         </div>
 
+        @if (count($existingFiles) > 0)
+            <div class="form-group">
+                <label for="existing_files">Archivos Adjuntos Cargados</label>
+                <hr>
+                <div>
+                    @foreach ($existingFiles as $file)
+                        <div>
+                            <p>
+                                <strong>{{ $file->name }}</strong>
+                            </p>
+                            <a href="#" class="btn btn-sm btn-primary"
+                                wire:click="downloadFile({{ $file->id }})">
+                                Descargar
+                            </a>
+                            <!-- Assuming you have a deleteFile method to delete existing files -->
+                            <button class="btn btn-sm btn-danger"
+                                wire:click="deleteFile({{ $file->id }})">Borrar</button>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
-        @if ($dte->requestForm->paymentDocs && $dte->requestForm)
+
+
+        @if ($paymentDocs)
             <div class="form-group">
                 <label for="confirmation_observation">Archivos Adjuntos*</label>
                 <hr>
                 <div>
-                    @foreach ($dte->requestForm->paymentDocs as $paymentDoc)
+                    @foreach ($paymentDocs as $paymentDoc)
                         <div>
                             <p>
                                 <strong>{{ $paymentDoc->name }}</strong>
@@ -113,6 +137,11 @@
                                 <input type="file" wire:model="files.{{ $paymentDoc->id }}">
                                 <button type="submit">Cargar</button>
                             </form>
+                            @if ($uploadSuccess)
+                                <div class="alert alert-success" role="alert">
+                                    Archivos cargados exitosamente
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>

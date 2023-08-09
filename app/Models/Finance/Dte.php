@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\Finance\File;
 
 class Dte extends Model
 {
@@ -150,6 +151,12 @@ class Dte extends Model
     {
         return $this->hasMany(PaymentFlow::class, 'dte_id');
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'dte_id');
+    }
+
 
     public function scopeSearch($query, $filter)
     {
