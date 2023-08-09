@@ -17,18 +17,18 @@
                             <div class="row">
                                 <div class="col-8 text-left">
                                     <h5 class="modal-title">
-                                        Firmar
+                                        Firmará como {{ $signer->shortName }} 
                                     </h5>
                                 </div>
                                 <div class="col-4">
-                                    <div class="row">
+                                    <div class="row text-right">
                                         <div class="col-9 text-right">
                                             <div class="input-group ">
                                                 <input
                                                     type="text"
                                                     class="form-control form-control-sm"
-                                                    placeholder="Ingrese el OTP"
-                                                    aria-label="Ingrese el OTP"
+                                                    placeholder="OTP"
+                                                    aria-label="OTP"
                                                     aria-describedby="button-addon2"
                                                     wire:model.defer="otp"
                                                     wire:keydown.enter="signDocument"

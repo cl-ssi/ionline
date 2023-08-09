@@ -17,6 +17,10 @@
                 <i class="fas fa-fw fa-hourglass-start"></i>
                 @break
         @endswitch
-        {{ $dte->confirmation_at }}
+        @if($dte->confirmation_at)
+            {{ $dte->confirmation_at }}
+        @else
+            <a href="{{ route('finance.dtes.confirmation',$dte) }}">Link confirmación</a>
+        @endif
     @endif
 </div>
