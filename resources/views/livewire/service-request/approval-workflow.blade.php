@@ -19,11 +19,24 @@
                 <th scope="col">Estado</th>
                 <th scope="col">Observación</th>
                 <th scope="col">Fecha</th>
+                @canany(['Service Request: additional data rrhh'])
+                    <th scope="col"></th>
+                @endcanany
+                
             </tr>
         </thead>
         <tbody>
             @foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-                <tr>
+                @if($SignatureFlow->status === null)
+                  <tr class="table-light">
+                @elseif($SignatureFlow->status === 0)
+                  <tr class="table-danger">
+                @elseif($SignatureFlow->status === 1)
+                  <tr>
+                @elseif($SignatureFlow->status === 2)
+                  <tr class="table-warning">
+                @endif
+
                     <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ??
                         '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
                     <td>{{ $SignatureFlow->user->position }}</td>
@@ -37,43 +50,100 @@
                             {{ $SignatureFlow->type }}
                         @endif
                     </td>
-                    <td class="{{ $SignatureFlow->status ? 'table-success':'table-danger' }}">
-                        @if ($SignatureFlow->status === null)
-                            <select class="form-control-sm" wire:model.defer="status">
+
+                    <!-- mientras el usuario logeado sea el "proximo" firmante y mientras la solicitud no este cancelada: se puede visar -->
+                    @if($SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->count() > 0
+                        && $SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id == Auth::user()->id
+                        && $SignatureFlow->serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0 
+                        && $SignatureFlow->responsable_id == Auth::user()->id)
+
+                        <td>
+                            <select class="form-control-sm" wire:model.defer="status" >
                                 <option value="">Seleccionar Estado</option>
                                 <option value="1">Aceptar</option>
                                 <option value="0">Rechazar</option>
                                 <option value="2">Devolver</option>
                             </select>
-                        @elseif($SignatureFlow->status === 1)
-                            Aceptada
-                        @elseif($SignatureFlow->status === 0)
-                            Rechazada
-                        @elseif($SignatureFlow->status === 2)
-                            Devuelta
-                        @endif
-                    </td>
-
-                    <td>
-                        @if ($SignatureFlow->signature_date)
-                            {{ $SignatureFlow->observation }}
-                        @else
+                        </td>
+                        <td>
                             <input type="text" class="form-control-sm"
-                                value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
-                        @endif
-                    </td>
-                    <td>
-                        @if ($SignatureFlow->signature_date)
-                            {{ $SignatureFlow->signature_date }}
-                        @else
+                            value="{{ $SignatureFlow->observation }}" wire:model.defer="observation">
+                        </td>
+                        <td>
                             <button class="btn btn-sm btn-primary"
-                                wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
-                        @endif
+                            wire:click="saveSignatureFlow({{ $SignatureFlow->id }})">Guardar</button>
+                        </td>
+                    @else
+                        <td>
+                            @if ($SignatureFlow->status === null)
+                                Pendiente
+                            @elseif($SignatureFlow->status === 1)
+                                Aceptada
+                            @elseif($SignatureFlow->status === 0)
+                                Rechazada
+                            @elseif($SignatureFlow->status === 2)
+                                Devuelta
+                            @endif
+                        </td>
+                        <td>
+                            @if ($SignatureFlow->signature_date)
+                                {{ $SignatureFlow->observation }}
+                            @endif
+                        </td>
+                        <td>
+                            @if ($SignatureFlow->signature_date)
+                                {{ $SignatureFlow->signature_date }}
+                            @endif
+                        </td>
+                    @endif
 
-                    </td>
+                    @canany(['Service Request: additional data rrhh'])
+                        <td>
+                            @if($SignatureFlow->serviceRequest->SignatureFlows->whereNull('status')->count() > 0)
+                            <button class="btn btn-sm btn-outline-primary" wire:click="edit({{$SignatureFlow}})">
+                                <span class="fas fa-edit" aria-hidden="true"></span>
+                            </button>
+                            @endif
+                        </td>
+                    @endcanany
+                    
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    @include('layouts.partials.errors')
+    @include('layouts.partials.flash_message')
+
+    @if($showDiv)
+        <table class="table table-sm table-bordered small">
+            <tbody>
+            <tr>
+                <td>
+                    @livewire('search-select-user',['user' => $edit_user])
+                </td>
+                <td>
+                    <select class="form-control" wire:model.defer="edit_status" >
+                        <option value="">Seleccionar Estado</option>
+                        <option value="1" @selected($edit_status == 1)>Aceptar</option>
+                        <option value="0" @selected($edit_status == 0)>Rechazar</option>
+                        <option value="2" @selected($edit_status == 2)>Devolver</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="form-control"
+                    value="{{ $SignatureFlow->observation }}" wire:model.defer="edit_observation">
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" wire:click="save()">
+                        Guardar
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr>
+    @endif
 
 </div>

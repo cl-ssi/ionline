@@ -38,7 +38,7 @@ class SignatureFlow extends Model implements Auditable
 
     public function serviceRequest()
     {
-        return $this->belongsTo('App\ServiceRequests\ServiceRequest');
+        return $this->belongsTo('\App\Models\ServiceRequests\ServiceRequest');
     }
 
     public function resolution()
