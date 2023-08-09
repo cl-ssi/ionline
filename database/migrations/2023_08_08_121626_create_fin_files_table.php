@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSumTemplatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateSumTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sum_templates', function (Blueprint $table) {
+        Schema::create('fin_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
             $table->string('file')->nullable();
-            $table->foreignId('event_type_id')->nullable()->constrained('sum_event_types');
+            $table->string('name')->nullable();
+            $table->foreignId('payment_doc_id')->nullable()->constrained('arq_payment_docs');
+            $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
+            $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +31,6 @@ class CreateSumTemplatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sum_templates');
+        Schema::dropIfExists('fin_files');
     }
-}
+};
