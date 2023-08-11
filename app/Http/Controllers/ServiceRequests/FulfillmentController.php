@@ -15,6 +15,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\User;
+use Redirect;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -462,9 +463,25 @@ class FulfillmentController extends Controller
      */
     public function destroy(Fulfillment $fulfillment)
     {
-      $fulfillment->delete();
-      session()->flash('success', 'Se ha eliminado el período.');
-      return redirect()->back();
+        $fulfillment->delete();
+        // session()->flash('success', 'Se ha eliminado el período.');
+
+        // verificar de donde viene la llamada
+        $url = url()->previous();
+        if(str_contains($url,'profile')){
+
+            // cuando el periodo es menor a 10
+            if(str_contains(substr($url, -2),"/")){
+                $url = substr($url, 0, -1);
+            }
+            // cuando periodo es mayor a 10
+            else{
+                $url = substr($url, 0, -2);
+            }
+            return Redirect::to($url);
+        }
+
+        return redirect()->back();
     }
 
     public function certificatePDF(Fulfillment $fulfillment, User $user = null)

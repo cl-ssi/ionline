@@ -135,7 +135,7 @@
                         </div>
 
                         <!-- Información del periodo, incio, término, obs, tipo -->
-                        @livewire('service-request.period-data')
+                        @livewire('service-request.period-data',['fulfillment' => $fulfillment])
 
                         <!-- Livewire de Responsable, el código del card que esté dentro del componente -->
                         <div class="card border-success mb-3">
@@ -195,11 +195,13 @@
                         ])
 
                         <div class="text-right text-muted small">
-                            id cumplimiento: {{ $fulfillment->id }} - 
-                            <!-- Opcion para borrar un cumplimiento -->
-                            <a class="text-link text-danger" title="borrar el cumplimiento" href="#">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            id cumplimiento: {{ $fulfillment->id }} -
+                            <!-- Opcion para borrar un cumplimiento --> 
+                            @can('Service Request: delete fulfillments')
+                                <a class="text-link text-danger" title="borrar el cumplimiento" href="{{ route('rrhh.service-request.fulfillment.destroy',$fulfillment) }}" onclick="return confirm('¿Está seguro que desea eliminar el período?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            @endcan
                         </div>
 
                         @can('Service Request: audit')
