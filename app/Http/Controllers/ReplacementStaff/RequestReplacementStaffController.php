@@ -67,7 +67,7 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.ou_index');
     }
 
-    public function to_sign(RequestReplacementStaff $requestReplacementStaff)
+    public function to_sign_index(RequestReplacementStaff $requestReplacementStaff)
     {
         $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
         $iam_authorities_in = array();
@@ -75,6 +75,7 @@ class RequestReplacementStaffController extends Controller
         foreach ($authorities as $authority){
             $iam_authorities_in[] = $authority->organizational_unit_id;
         }
+
 
         /* Listado de items presupuestarios */
         $budgetItems= BudgetItem::whereIn('code', ['210300500102', '210300500101','210100100102',
@@ -101,8 +102,8 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
-                'requests_to_sign', 'budgetItems'));
+            return view('replacement_staff.request.to_sign_index', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign'));
         }
         else{
             if(Auth::user()->organizationalUnit->id == 46)
@@ -128,14 +129,29 @@ class RequestReplacementStaffController extends Controller
                     });
                 })
                 ->paginate(10);
-            return view('replacement_staff.request.to_sign', compact('iam_authorities_in', 'pending_requests_to_sign', 
-                'requests_to_sign', 'budgetItems'));
+            return view('replacement_staff.request.to_sign_index', compact('iam_authorities_in', 'pending_requests_to_sign', 
+                'requests_to_sign'));
         }
 
 
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
         return redirect()->route('replacement_staff.request.own_index');
+    }
+
+    public function to_sign(RequestReplacementStaff $requestReplacementStaff){
+        $authorities = Authority::getAmIAuthorityFromOu(today(), 'manager', Auth::user()->id);
+        $iam_authorities_in = array();
+
+        foreach ($authorities as $authority){
+            $iam_authorities_in[] = $authority->organizational_unit_id;
+        }
+
+        /* Listado de items presupuestarios */
+        $budgetItems= BudgetItem::whereIn('code', ['210300500102', '210300500101','210100100102',
+            '210100100103', '210200100102', '210200100103'])->get();
+
+        return view('replacement_staff.request.to_sign', compact('requestReplacementStaff', 'iam_authorities_in', 'budgetItems'));
     }
 
     /**
@@ -629,7 +645,7 @@ class RequestReplacementStaffController extends Controller
                 $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
             }
             session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
-            return redirect()->route('replacement_staff.request.to_sign');
+            return redirect()->route('replacement_staff.request.to_sign_index');
         }
 
     }
