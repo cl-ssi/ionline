@@ -205,8 +205,17 @@ class Dte extends Model
                                 case 'Confirmada':
                                     $query->where('confirmation_status', 1);
                                     break;
-                                case 'No Confirmada':
-                                    $query->whereNull('confirmation_status');
+                                case 'No Confirmadas':
+                                    $query->whereNotNull('confirmation_send_at')->whereNull('confirmation_status');
+                                    break;
+                                case 'Confirmadas':
+                                    $query->where('confirmation_status', 1);
+                                    break;
+                                case 'Rechazadas':
+                                    $query->where('confirmation_status', 0);
+                                    break;
+                                case 'Sin Envío':
+                                    $query->whereNull('confirmation_send_at')->whereNull('confirmation_status');
                                     break;
                             }
                             break;
