@@ -26,7 +26,7 @@ class DteConfirmation extends Component
     public function mount(Dte $dte)
     {
         $this->dte = $dte;
-        $this->paymentDocs = $dte->immediatePurchase->requestForm->paymentDocs;
+        $this->paymentDocs = $dte->requestForm->paymentDocs;
         $this->existingFiles = $dte->files;
     }
 
@@ -35,8 +35,6 @@ class DteConfirmation extends Component
         $file = File::findOrFail($fileId);
         return Storage::disk('gcs')->download($file->file);
     }
-
-    
 
     public function setUploadSuccess()
     {
