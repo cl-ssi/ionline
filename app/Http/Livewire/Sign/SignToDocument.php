@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Sign;
 
 use App\Models\Documents\Sign\Signature;
 use App\Services\ImageService;
@@ -35,7 +35,7 @@ class SignToDocument extends Component
 
     public function render()
     {
-        return view('livewire.sign-to-document');
+        return view('livewire.sign.sign-to-document');
     }
 
     public function show()
