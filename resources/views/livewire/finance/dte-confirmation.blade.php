@@ -102,7 +102,7 @@
     </div>
 
     <div class="btn-group mb-3" role="group" aria-label="Confirmation">
-        @livewire('sign-to-document', [
+        @livewire('sign.sign-to-document', [
             'btn_title' => 'Aceptar',
             'btn_class' => 'btn btn-success',
             'btn_icon'  => 'fas fa-fw fa-thumbs-up',
@@ -110,7 +110,8 @@
             'view' => 'dte.reception-certificate',
             'viewData' => [
                 'dte' => $dte,
-                'type' => ''
+                'controls' => $dte->controls,
+                'type' => '',
             ],
 
             'signer' => auth()->user(),
@@ -129,7 +130,7 @@
             ]
         ])
 
-        <button type="button" class="btn btn-danger" wire:click="saveConfirmation(false)">
+        <button type="button" class="btn btn-danger" wire:click="rejectedDte()">
             <i class="fas fa-fw fa-thumbs-down"></i> Reclamar
         </button>
     </div>
