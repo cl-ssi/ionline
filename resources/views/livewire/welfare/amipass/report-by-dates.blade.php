@@ -89,12 +89,12 @@
                     @endforeach
                     </ul>
                 </td>
-                <td>
+                <td class="small">
                     <ul>
                         @foreach($user->absenteeisms as $absenteeism)
                         <li>
-                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} <br>
-                            <small>{{ $absenteeism->tipo_de_ausentismo }}</small> 
+                            {{ $absenteeism->finicio->format('Y-m-d') }} - {{ $absenteeism->ftermino->format('Y-m-d') }} 
+                            <small>({{ $absenteeism->tipo_de_ausentismo }})</small> 
                             Dias: {{ $absenteeism->total_dias_ausentismo }} => {{ $absenteeism->totalDays}}
                         </li>
                         @endforeach

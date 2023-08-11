@@ -123,15 +123,15 @@
                             </a>
                         @endif
                     </td>
-                    <td>{{ $dte->folio_oc }}</td>
+                    <td class="small">
+                        {{ $dte->folio_oc }}
+                    </td>
                     <td>
-                        @if ($dte->immediatePurchase)
-                            @if ($dte->requestForm)
-                                <a class="btn btn-outline-primary btn-block"
-                                    href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
-                                    <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
-                                </a>
-                            @endif
+                        @if ($dte->requestForm)
+                            <a class="btn btn-outline-primary btn-block"
+                                href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
+                                <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+                            </a>
                         @endif
                     </td>
                     <td>
@@ -146,12 +146,10 @@
                         @endforeach
                     </td>
                     <td>
-                        @if ($dte->immediatePurchase)
-                            @if ($dte->requestForm)
-                                @if ($dte->requestForm->contractManager)
-                                    {{ $dte->requestForm->contractManager->shortName }} <br>
-                                    @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id], key($dte->id))
-                                @endif
+                        @if ($dte->requestForm)
+                            @if ($dte->requestForm->contractManager)
+                                {{ $dte->requestForm->contractManager->shortName }} <br>
+                                @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id], key($dte->id))
                             @endif
                         @endif
                     </td>
