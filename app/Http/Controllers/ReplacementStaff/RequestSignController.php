@@ -121,7 +121,7 @@ class RequestSignController extends Controller
                 }
 
                 session()->flash('success', 'Su solicitud ha sido Aceptada con exito.');
-                return redirect()->route('replacement_staff.request.to_sign');
+                return redirect()->route('replacement_staff.request.to_sign_index');
             }
             else{
                 // NOTIFICACION PARA RECLUTAMIENTO
@@ -130,7 +130,7 @@ class RequestSignController extends Controller
                     $notification_reclutamiento_manager->user->notify(new NotificationEndSigningProcess($requestReplacementStaff));
                 }
                 session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
-                return redirect()->route('replacement_staff.request.to_sign');
+                return redirect()->route('replacement_staff.request.to_sign_index');
             }
 
         }
@@ -150,9 +150,10 @@ class RequestSignController extends Controller
                 $notification_reclutamiento_manager->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'reclutamiento'));
             }
             $requestReplacementStaff->requesterUser->notify(new NotificationRejectedRequest($requestReplacementStaff, 'requester'));
+            $requestReplacementStaff->user->notify(new NotificationRejectedRequest($requestReplacementStaff, 'user'));
 
             session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');
-            return redirect()->route('replacement_staff.request.to_sign');
+            return redirect()->route('replacement_staff.request.to_sign_index');
         }
 
         // session()->flash('success', 'Su solicitud ha sido.');
@@ -184,7 +185,7 @@ class RequestSignController extends Controller
         }
 
         session()->flash('success', 'Estimado Usuario: Sus solicitud(es) ha(n) sido Aceptada(s) en su totalidad.');
-        return redirect()->route('replacement_staff.request.to_sign');
+        return redirect()->route('replacement_staff.request.to_sign_index');
     }
 
     /**

@@ -384,7 +384,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
 
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
-        Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::get('/to_sign_index', [RequestReplacementStaffController::class, 'to_sign_index'])->name('to_sign_index');
+        Route::get('/to_sign/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
         Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
         Route::get('/show_file_position/{position}', [RequestReplacementStaffController::class, 'show_file_position'])->name('show_file_position');

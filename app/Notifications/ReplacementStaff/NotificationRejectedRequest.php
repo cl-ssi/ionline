@@ -58,17 +58,17 @@ class NotificationRejectedRequest extends Notification
     public function toArray($notifiable)
     {
         if($this->to == 'reclutamiento'){
-            $action = 'replacement_staff.request.index';
+            $action = 'replacement_staff.request.technical_evaluation.show';
         }
         else{
-            $action = 'replacement_staff.request.own_index';
+            $action = 'replacement_staff.request.technical_evaluation.show';
         }
 
         return [
             'module'  => 'Solicitudes de Contratación',
             'icon'    => '<i class="far fa-id-card"></i>',
             'subject' => 'Se ha rechazado la solicitud ID: '.$this->requestReplacementStaff->id.' click más información',
-            'action'  => route($action, [], false)
+            'action'  => route($action, $this->requestReplacementStaff->id, false)
         ];
     }
 }
