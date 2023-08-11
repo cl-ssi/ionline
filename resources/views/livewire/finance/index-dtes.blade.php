@@ -48,7 +48,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <select class="form-control" wire:model.defer="filter.sender_status">                
+            <select class="form-control" wire:model.defer="filter.sender_status">
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
@@ -93,7 +93,7 @@
                     if ($daysDifference !== null) {
                         if ($daysDifference < 5) {
                             $rowClass = 'table-success';
-                        } elseif ($daysDifference === 5) {                            
+                        } elseif ($daysDifference === 5) {
                             $rowClass = 'table-secondary';
                         } elseif ($daysDifference < 8) {
                             $rowClass = 'table-warning';

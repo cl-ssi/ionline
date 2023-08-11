@@ -2,48 +2,55 @@
 @section('title', 'Flujos de Pago')
 @section('content')
     @include('finance.nav')
-    <h3 class="mb-3">Bandeja de Revisión de Pago</h3>
+    <h3 class="mb-3">
+        Bandeja de Revisión de Pago</h3>
 
-    <table class="table table-bordered">
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
-                <th>DTEs</th>
-                <th>OC</th>
-                <th>Folio FR</th>
-                <th>Documentos de Pago</th>
+                <th>ID</th>
+                <th>Documento</th>
+                <th>Folio OC</th>
+                <th>FR</th>
+                <th>Doc. de Pago</th>
                 <th>Adjuntos</th>
                 <th>Anexos</th>
-                <th>Acta de ingreso bodega</th>
+                <th>Bod</th>
                 <th>Estado</th>
                 <th>Observaciones</th>
-                <th>Adjuntos</th>
                 <th>Revisar</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($dtes as $dte)
                 <tr>
+                    <td class="small">{{ $dte->id }}</td>
                     <td>
+                        {{ $dte->tipo_documento }}
+                        <br>
+                        {{ $dte->emisor }}
+                        <br>
                         @if ($dte->tipo_documento != 'boleta_honorarios')
-                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" target="_blank"
-                                class="btn btn-sm mb-1 btn-outline-secondary">
+                            <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
+                                target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                <small>({{ $dte->tipo_documento ?? '' }})</small>
                             </a>
                         @else
-                            <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                            <a href="{{ $dte->uri }}" target="_blank"
+                                class="btn btn-sm mb-1 btn-outline-secondary">
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                ({{ $dte->tipo_documento ?? '' }})
                             </a>
                         @endif
                     </td>
-                    <td>{{ $dte->folio_oc ?? '' }}
+                    <td class="small">
+                        {{ $dte->folio_oc }}
+                    </td>
                     <td>
-                        <a
-                            href="{{ route('request_forms.show', $dte->requestform->id) }}" target="_blank">{{ $dte->requestform->folio }}</a>
-                        @if ($dte->requestform->father)
-                            <br>(<a
-                                href="{{ route('request_forms.show', $dte->requestform->father->id) }}" target="_blank">{{ $dte->requestform->father->folio }}</a>)
+                        @if ($dte->requestForm)
+                            <a class="btn btn-outline-primary btn-block"
+                                href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
+                                <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+                            </a>
                         @endif
                     </td>
                     <td>
@@ -155,10 +162,11 @@
                     </td>
                     <td>
                         @foreach ($dte->paymentFlows as $paymentFlow)
-                            <p>{{ $paymentFlow->observation }} @if($paymentFlow->observation)({{ $paymentFlow->user->short_name }}) @endif</p>
+                            <p>{{ $paymentFlow->observation }} @if ($paymentFlow->observation)
+                                    ({{ $paymentFlow->user->short_name }})
+                                @endif
+                            </p>
                         @endforeach
-                    </td>
-                    <td>
                     </td>
                     <td>
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
@@ -166,7 +174,6 @@
                             <i class="fas fa-hand-holding-usd"></i> Enviar a Bandeja Pendiente para Pago
                         </a>
                     </td>
-
                 </tr>
             @endforeach
 
