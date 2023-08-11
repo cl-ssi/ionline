@@ -463,6 +463,12 @@ class FulfillmentController extends Controller
      */
     public function destroy(Fulfillment $fulfillment)
     {
+        // no se puede dejar un service request con cero periodos
+        if($fulfillment->serviceRequest->fulfillments->count()==1){
+            session()->flash("warning", "No se puede eliminar el período. Como mínimo debe existir un período de la solicitud.");
+            return redirect()->back();
+        }
+
         $fulfillment->delete();
         // session()->flash('success', 'Se ha eliminado el período.');
 

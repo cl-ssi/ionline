@@ -4,6 +4,7 @@ namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\Fulfillment;
 
 class PeriodsBar extends Component
 {
@@ -12,6 +13,23 @@ class PeriodsBar extends Component
     public $user_id;
     public $year;
     public $type;
+
+    public function add_period(){
+        $last_fulfillment = $this->serviceRequest->fulfillments->last();
+
+        $fulfillment = new Fulfillment();
+        $fulfillment->service_request_id = $last_fulfillment->service_request_id;
+        $fulfillment->user_id = $last_fulfillment->user_id;
+        $fulfillment->year = $last_fulfillment->start_date->addMonth()->format('Y');
+        $fulfillment->month = $last_fulfillment->start_date->addMonth()->format('m');
+        $fulfillment->type = $last_fulfillment->type;
+        $fulfillment->start_date = $last_fulfillment->start_date->addMonth()->format('Y-m-d');
+        $fulfillment->end_date = $last_fulfillment->start_date->addMonth()->endOfMonth()->format('Y-m-d');
+        $fulfillment->save();
+
+        $this->serviceRequest->refresh();
+        $this->render();
+    }
 
     public function render()
     {
