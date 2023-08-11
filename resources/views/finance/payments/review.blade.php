@@ -40,10 +40,10 @@
                     <td>{{ $dte->folio_oc ?? '' }}
                     <td>
                         <a
-                            href="{{ route('request_forms.show', $dte->requestform->id) }}">{{ $dte->requestform->folio }}</a>
+                            href="{{ route('request_forms.show', $dte->requestform->id) }}" target="_blank">{{ $dte->requestform->folio }}</a>
                         @if ($dte->requestform->father)
                             <br>(<a
-                                href="{{ route('request_forms.show', $dte->requestform->father->id) }}">{{ $dte->requestform->father->folio }}</a>)
+                                href="{{ route('request_forms.show', $dte->requestform->father->id) }}" target="_blank">{{ $dte->requestform->father->folio }}</a>)
                         @endif
                     </td>
                     <td>
