@@ -31,21 +31,28 @@ class PaymentController extends Controller
             $query->where('request_user_id', $userId)
                 ->orWhere('contract_manager_id', $userId);
         })
-        ->whereNotIn('tipo_documento', ['guias_despacho', 'nota_credito'])
+            ->whereNotIn('tipo_documento', ['guias_despacho', 'nota_credito'])
             ->get();
         return view('finance.payments.indexown', compact('dtes'));
     }
 
     public function review()
     {
-        $dtes = Dte::where('confirmation_status', 1)
-                ->where(function (Builder $query) {
-                    $query->whereNull('fin_status')
-                          ->orWhere('fin_status', 'rechazado');
-                })
-                ->get();
+        $dtes = Dte::with([
+            'controls',
+            'requestForm',
+            'requestForm.contractManager',
+        ])
+            ->where('confirmation_status', 1)
+            ->where(function (Builder $query) {
+                $query->whereNull('fin_status')
+                    ->orWhere('fin_status', 'rechazado');
+            })
+            ->paginate(50);
+
         return view('finance.payments.review', compact('dtes'));
     }
+
 
     public function sendToReadyInbox(Dte $dte)
     {
@@ -61,14 +68,12 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Se ha enviado a bandeja Pendiente para Pagos exitosamente');
-        
     }
 
     public function ready()
     {
         $dtes = Dte::where('confirmation_status', 1)->where('fin_status', 'Enviado a Pendiente Para Pago')->get();
         return view('finance.payments.ready', compact('dtes'));
-
     }
 
 
@@ -79,7 +84,7 @@ class PaymentController extends Controller
         $dte->payer_id = Auth::id();
         $dte->payer_ou = Auth::user()->organizational_unit_id;
         $dte->payer_at = now();
-        
+
         $dte->save();
         PaymentFlow::create([
             'dte_id' => $dte->id,
@@ -89,9 +94,5 @@ class PaymentController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Flujo de pago actualizado exitosamente');
-        
     }
-
-
-
 }
