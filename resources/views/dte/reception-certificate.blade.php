@@ -107,7 +107,7 @@
     <thead>
         <tr>
             <th class="text-left">
-                ACTA DE RECEPCIÓN TÉCNICA
+                ACTAS DE RECEPCIÓN TÉCNICA
             </th>
         </tr>
     </thead>
@@ -115,7 +115,7 @@
         @foreach($controls as $control)
         <tr class="">
             <td style="width: 1rem; vertical-align: top;">
-                ACTAS DE RECEPCIÓN DE ARTÍCULOS EN BODEGA
+                ACTA DE RECEPCIÓN DE ARTÍCULOS EN BODEGA
                 #{{ $control['id'] }}
                 -
                 ORDEN DE COMPRA {{ $control['po_code'] }}
