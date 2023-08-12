@@ -60,7 +60,7 @@ class NotificationSign extends Notification
             'module'  => 'Solicitudes de Contratación', // Opcional
             'icon'    => '<i class="far fa-id-card"></i>',
             'subject' => 'Nueva Solicitud para Aprobación ID: '.$this->requestReplacementStaff->id,
-            'action'  => route('replacement_staff.request.to_sign', [], false),
+            'action'  => route('replacement_staff.request.to_sign', $this->requestReplacementStaff->id, false),
         ];
     }
 }

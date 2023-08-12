@@ -37,13 +37,18 @@
     <div class="form-row">
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Identificador</label>
+		    <label for="for_identifier">Identificador</label>
 		    <input type="text" class="form-control" id="for_identifier" name="identifier" required="required" value="{{$room->identifier}}">
 		</fieldset>
 
         <fieldset class="form-group col">
-		    <label for="for_name">Descripción</label>
+		    <label for="for_description">Descripción</label>
 		    <input type="text" class="form-control" id="for_description" name="description" required="required" value="{{$room->description}}">
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_max_days_avaliable">Días max. reserva</label>
+		    <input type="number" class="form-control" id="for_max_days_avaliable" name="max_days_avaliable" required="required" value="{{$room->max_days_avaliable}}">
 		</fieldset>
 
     </div>
@@ -52,12 +57,12 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_name">Cantidad - Cama Simple</label>
-		    <input type="numeric" class="form-control" id="for_single_bed" name="single_bed" value="{{$room->single_bed}}" required>
+		    <input type="number" class="form-control" id="for_single_bed" name="single_bed" value="{{$room->single_bed}}" required>
 		</fieldset>
 
         <fieldset class="form-group col">
 		    <label for="for_name">Cantidad - Cama Doble</label>
-		    <input type="numeric" class="form-control" id="for_description" name="double_bed" value="{{$room->double_bed}}" required>
+		    <input type="number" class="form-control" id="for_description" name="double_bed" value="{{$room->double_bed}}" required>
 		</fieldset>
 
     </div>

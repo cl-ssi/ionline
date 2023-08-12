@@ -5,7 +5,10 @@ namespace App\Models\Finance;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Warehouse\Control;
+use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\Finance\PurchaseOrder;
+use App\Models\Finance\File;
 
 class Dte extends Model
 {
@@ -111,11 +114,10 @@ class Dte extends Model
         'confirmation_at',
     ];
 
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
+    }
 
     /** Control(ingresos) de Warehouse */
     public function controls()
@@ -123,33 +125,56 @@ class Dte extends Model
         return $this->hasMany(Control::class, 'po_code', 'folio_oc');
     }
 
-    /** Compras Inmediatas */
-    public function immediatePurchases()
-    {
-        return $this->hasMany(ImmediatePurchase::class, 'po_id', 'folio_oc');
-    }
-
-    /** Compra Inmediata en singular, es para poder utilizar la relación de request form de abajo */
-    public function immediatePurchase()
-    {
-        return $this->hasOne(ImmediatePurchase::class, 'po_id', 'folio_oc');
-    }
-
-    /** Formulario de Requerimientos  */
+    /**
+     * Relación con RequestForm a través de ImmediatePurchase
+     */
     public function requestForm()
     {
-        // if($this->immediatePurchase AND $this->immediatePurchase->purchasingProcessDetail) {
-        //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
-        // }
-        // else {
-        return $this->immediatePurchase->requestForm();
-        // }
+        return $this->hasOneThrough(
+            RequestForm::class,
+            ImmediatePurchase::class,
+            'po_id', // Foreign key on the ImmediatePurchase table...
+            'id', // Foreign key on the RequestForm table...
+            'folio_oc', // Local key on the Dte table...
+            'request_form_id', // Local key on the ImmediatePurchase table...
+        );
     }
+
+    /** Compras Inmediatas */
+    // public function immediatePurchases()
+    // {
+    //     return $this->hasMany(ImmediatePurchase::class, 'po_id', 'folio_oc');
+    // }
+
+    // /** Compra Inmediata en singular, es para poder utilizar la relación de request form de abajo */
+    // public function immediatePurchase()
+    // {
+    //     return $this->hasOne(ImmediatePurchase::class, 'po_id', 'folio_oc');
+    // }
+
+    // /** Formulario de Requerimientos  */
+    // public function requestForm()
+    // {
+    //     // if($this->immediatePurchase AND $this->immediatePurchase->purchasingProcessDetail) {
+    //     //     return $this->immediatePurchase->purchasingProcessDetail->itemRequestForm->requestForm();
+    //     // }
+    //     // else {
+    //     return $this->immediatePurchase->requestForm();
+    //     // }
+    // }
+
+
 
     public function paymentFlows()
     {
         return $this->hasMany(PaymentFlow::class, 'dte_id');
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'dte_id');
+    }
+
 
     public function scopeSearch($query, $filter)
     {
@@ -185,8 +210,17 @@ class Dte extends Model
                                 case 'Confirmada':
                                     $query->where('confirmation_status', 1);
                                     break;
-                                case 'No Confirmada':
-                                    $query->whereNull('confirmation_status');
+                                case 'No Confirmadas':
+                                    $query->whereNotNull('confirmation_send_at')->whereNull('confirmation_status');
+                                    break;
+                                case 'Confirmadas':
+                                    $query->where('confirmation_status', 1);
+                                    break;
+                                case 'Rechazadas':
+                                    $query->where('confirmation_status', 0);
+                                    break;
+                                case 'Sin Envío':
+                                    $query->whereNull('confirmation_send_at')->whereNull('confirmation_status');
                                     break;
                             }
                             break;

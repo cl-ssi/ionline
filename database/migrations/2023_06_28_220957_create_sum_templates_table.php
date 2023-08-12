@@ -17,7 +17,7 @@ class CreateSumTemplatesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('file')->nullable();
-            $table->foreignId('event_type_id')->nullable()->constrained('sum_event_types');            
+            $table->foreignId('event_type_id')->nullable()->constrained('sum_event_types');
             $table->timestamps();
             $table->softDeletes();
         });

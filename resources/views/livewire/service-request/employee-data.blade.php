@@ -34,24 +34,34 @@
             <input type="text" class="form-control" id="for_mothers_family" name="mothers_family" required="required" @if($user) value="{{$user->mothers_family}}" @endif>
         </fieldset>
 
+        <fieldset class="form-group col-12 col-md">
+            <label for="for_name">Nacionalidad</label>
+            <select name="country_id" class="form-control" required>
+                <option value=""></option>
+                @foreach($countries as $key => $country)
+                <option value="{{$country->id}}" @selected($user && $user->country_id == $country->id)>{{$country->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
       </div>
 
       <div class="form-row">
-
-        <fieldset class="form-group col-12 col-md-2">
-          <label for="for_country_id">Nacionalidad</label>
-          <select name="country_id" class="form-control" required>
-            <option value=""></option>
-            @foreach($countries as $key => $country)
-              <option value="{{$country->id}}" @if($user && $user->country_id == $country->id) selected @endif >{{$country->name}}</option>
-            @endforeach
-          </select>
-        </fieldset>
 
         <fieldset class="form-group col-12 col-md-5">
             <label for="for_address">Dirección*</label>
             <input type="text" class="form-control" id="foraddress" placeholder="Dirección, comuna" required
               name="address" @if($user) value="{{$user->address}}" @endif>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-2">
+          <label for="for_commune_id">Comuna</label>
+          <select name="commune_id" class="form-control" required>
+            <option value=""></option>
+            @foreach($communes as $key => $commune)
+              <option value="{{$commune->id}}" @selected($user && $user->commune_id == $commune->id)>{{$commune->name}}</option>
+            @endforeach
+          </select>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">

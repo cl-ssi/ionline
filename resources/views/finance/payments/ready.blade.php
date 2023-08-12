@@ -5,16 +5,17 @@
     <h3 class="mb-3">Bandeja de Pendientes de Pago</h3>
 
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-sm table-bordered">
             <thead>
                 <tr>
-                    <th>DTEs</th>
-                    <th>OC</th>
-                    <th>Folio FR</th>
-                    <th>Documentos de Pago</th>
+                    <th>ID</th>
+                    <th>Documento</th>
+                    <th>Folio OC</th>
+                    <th>FR</th>
+                    <th>Doc. de Pago</th>
                     <th>Adjuntos</th>
                     <th>Anexos</th>
-                    <th>Acta de ingreso bodega</th>
+                    <th>Bod</th>
                     <th>Estado</th>
                     <th>Folio Sigfe</th>
                     <th>Observaciones</th>
@@ -24,21 +25,26 @@
             <tbody>
                 @foreach ($dtes as $dte)
                     <tr>
+                        <td class="small">{{ $dte->id }}</td>
                         <td>
+                            {{ $dte->tipo_documento }}
+                            <br>
+                            {{ $dte->emisor }}
+                            <br>
                             @if ($dte->tipo_documento != 'boleta_honorarios')
                                 <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
                                     target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
                                     <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                    <small>({{ $dte->tipo_documento ?? '' }})</small>
                                 </a>
                             @else
                                 <a href="{{ $dte->uri }}" target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
                                     <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
-                                    ({{ $dte->tipo_documento ?? '' }})
                                 </a>
                             @endif
                         </td>
-                        <td>{{ $dte->folio_oc ?? '' }}
+                        <td class="small">
+                            {{ $dte->folio_oc }}
+                        </td>
                         <td>
                             <a
                                 href="{{ route('request_forms.show', $dte->requestform->id) }}">{{ $dte->requestform->folio }}</a>
@@ -170,16 +176,17 @@
                                 </select>
                         </td>
                         <td>
-                            <input type="number" name="folio_sigfe" class="form-input" value={{$dte->folio_sigfe}}required>
+                            <input type="number" name="folio_sigfe" class="form-input"
+                                value={{ $dte->folio_sigfe }}required>
                         </td>
                         <td>
                             <textarea name="observation" class="form-control">
                                                 @foreach ($dte->paymentFlows as $paymentFlow)
-                                                    {{ $paymentFlow->observation }}
+{{ $paymentFlow->observation }}
                                                         @if ($paymentFlow->observation)
-                                                        ({{ $paymentFlow->user->short_name }})
-                                                        @endif
-                                                @endforeach
+({{ $paymentFlow->user->short_name }})
+@endif
+@endforeach
                             </textarea>
                         </td>
                         <td>

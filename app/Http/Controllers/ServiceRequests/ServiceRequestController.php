@@ -14,6 +14,7 @@ use App\Models\Parameters\Bank;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use App\Models\Country;
+use App\Models\ClCommune;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\UserBankAccount;
 use Illuminate\Support\Facades\Storage;
@@ -520,6 +521,7 @@ class ServiceRequestController extends Controller
         'fathers_family' =>  $request->fathers_family,
         'mothers_family' =>  $request->mothers_family,
         'country_id' =>  $request->country_id,
+        'commune_id' => $request->commune_id,
         'address' =>  $request->address,
         'phone_number' =>  $request->phone_number,
         'email' =>  $request->email,
@@ -761,6 +763,7 @@ class ServiceRequestController extends Controller
     $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', $establishment_id)->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $countries = Country::orderBy('name', 'ASC')->get();
+    $communes = ClCommune::orderBy('name', 'ASC')->get();
 
     $SignatureFlow = $serviceRequest->SignatureFlows->where('employee', 'Supervisor de servicio')->first();
 
@@ -784,6 +787,7 @@ class ServiceRequestController extends Controller
       'employee',
       'banks',
       'countries',
+      'communes',
       'professions'
     ));
   }

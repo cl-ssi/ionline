@@ -46,7 +46,7 @@
                 @if(App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::today(), 'manager', auth()->user()->id)->count() > 0 ||
                     Auth::user()->hasRole('Replacement Staff: personal sign'))
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign') }}">
+                <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign_index') }}">
                     <i class="fas fa-check-circle"></i> Gestión de solicitudes
                 </a>
                 @endif

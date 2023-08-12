@@ -207,6 +207,7 @@ use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
@@ -384,7 +385,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
 
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
-        Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::get('/to_sign_index', [RequestReplacementStaffController::class, 'to_sign_index'])->name('to_sign_index');
+        Route::get('/to_sign/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
         Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
         Route::get('/show_file_position/{position}', [RequestReplacementStaffController::class, 'show_file_position'])->name('show_file_position');
@@ -392,6 +394,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware(['auth'
         Route::get('/download_verification/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download_verification'])->name('download_verification');
         Route::prefix('sign')->name('sign.')->group(function () {
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('massive_update', [RequestSignController::class, 'massive_update'])->name('massive_update');
         });
         Route::get('/{requestReplacementStaff}/create_budget_availability_certificate_view', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_view'])->name('create_budget_availability_certificate_view');
         Route::get('create_budget_availability_certificate_document/{requestReplacementStaff}/', [RequestReplacementStaffController::class, 'create_budget_availability_certificate_document'])->name('create_budget_availability_certificate_document');
@@ -1863,6 +1866,10 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
     });
+
+    Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
+        Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
+    });
 });
 
 /*formulario de requerimiento compra o servicio */
@@ -2398,6 +2405,16 @@ Route::prefix('test')->as('test.')->group(function () {
     Route::get('/urgency', function () {
         return view('test.urgency');
     });
+
+    /** Usuarios del servicio */
+    Route::get('/usuarios', function () {
+        echo "<pre>";
+        $users = User::with('organizationalUnit')->whereRelation('organizationalUnit','establishment_id', 38)->get();
+        foreach($users as $user) {
+            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name."\n";
+        }
+        echo "</pre>";
+    })->middleware('auth');
 
     Route::get('/teams', [TestController::class, 'SendCardToTeams'])->middleware('auth');
 });

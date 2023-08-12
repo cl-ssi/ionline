@@ -36,7 +36,9 @@
         </div>
         <div class="form-row">
             <div class="col-3">
-                <button class="btn btn-outline-secondary" @disabled($fulfillment->rrhh_approbation) type="submit">Guardar</button>
+                @can('Service Request: fulfillments rrhh')
+                    <button class="btn btn-outline-secondary" @disabled($fulfillment->rrhh_approbation) type="submit">Guardar</button>
+                @endcan
             </div>
             <div class="col align-text-bottom">
                 @if($fulfillment->rrhh_approbation_date)
@@ -46,8 +48,10 @@
                 @endif
             </div>
             <div class="col-3 text-right">
-                <button class="btn btn-outline-danger" @disabled($fulfillment->rrhh_approbation) type="submit">Rechazar</button>
-                <button class="btn btn-success" @disabled($fulfillment->rrhh_approbation) type="submit">Confirmar</button>
+                @can('Service Request: fulfillments rrhh')
+                    <button class="btn btn-outline-danger" @disabled($fulfillment->rrhh_approbation) type="submit">Rechazar</button>
+                    <button class="btn btn-success" @disabled($fulfillment->rrhh_approbation) type="submit">Confirmar</button>
+                @endcan
             </div>
         </div>
     </div>

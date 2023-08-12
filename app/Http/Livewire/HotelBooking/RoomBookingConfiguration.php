@@ -24,6 +24,8 @@ class RoomBookingConfiguration extends Component
     public $saturday;
     public $sunday;
 
+    protected $listeners = ['getRoom' => 'getRoom'];
+
     public function mount(){
         // solo si viene el parametro 'configuration' se realiza esa carga
         if($this->configuration){
@@ -100,6 +102,15 @@ class RoomBookingConfiguration extends Component
         session()->flash('info', 'Se ha modificado la configuración.');
     }
 
+    public function getRoom($room_id){
+        // si se guarda uno nuevo, se busca y se guarda en variable local
+        if($room_id){
+            $this->room = Room::find($room_id);
+        }
+        
+        $this->render();
+    }
+
     public function save(){
         // verificar fechas
         // foreach($this->room->bookingConfigurations as $bookingConfiguration){
@@ -130,6 +141,8 @@ class RoomBookingConfiguration extends Component
         $roomBookingConfigurationModel->save();
 
         $this->emit('ExecRender', $this->room);
+
+        $this->reset();
 
         /** Agrega un mensaje de éxito */
         session()->flash('info', 'Se ha guardado la configuración.');

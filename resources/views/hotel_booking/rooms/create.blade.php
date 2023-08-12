@@ -36,13 +36,18 @@
     <div class="form-row">
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Identificador</label>
+		    <label for="for_identifier">Identificador</label>
 		    <input type="text" class="form-control" id="for_identifier" name="identifier" required="required" placeholder="Identificador interno, por ejemplo Cabaña 1, Habitación 202, etc.">
 		</fieldset>
 
         <fieldset class="form-group col">
-		    <label for="for_name">Descripción</label>
+		    <label for="for_description">Descripción</label>
 		    <input type="text" class="form-control" id="for_description" placeholder="Agregue una breve descripción del hotel" name="description" required="required">
+		</fieldset>
+
+        <fieldset class="form-group col">
+		    <label for="for_max_days_avaliable">Días max. reserva</label>
+		    <input type="number" class="form-control" id="for_max_days_avaliable" name="max_days_avaliable" required="required">
 		</fieldset>
 
     </div>
@@ -50,13 +55,13 @@
     <div class="form-row">
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Cantidad - Cama Simple</label>
-		    <input type="numeric" class="form-control" id="for_single_bed" name="single_bed">
+		    <label for="for_single_bed">Cantidad - Cama Simple</label>
+		    <input type="number" class="form-control" id="for_single_bed" name="single_bed">
 		</fieldset>
 
         <fieldset class="form-group col">
-		    <label for="for_name">Cantidad - Cama Doble</label>
-		    <input type="numeric" class="form-control" id="for_description" name="double_bed">
+		    <label for="for_double_bed">Cantidad - Cama Doble</label>
+		    <input type="number" class="form-control" id="for_double_bed" name="double_bed">
 		</fieldset>
 
     </div>

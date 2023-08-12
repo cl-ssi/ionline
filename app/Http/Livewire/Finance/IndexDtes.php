@@ -77,15 +77,12 @@ class IndexDtes extends Component
 
     public function render()
     {
-        $query = Dte::search($this->filter)
-            /** Esto me proboca que no pueda utilizar la relación requestForm */
-            // ->with([
-            //     'immediatePurchase',
-            //     'immediatePurchase.purchasingProcessDetail',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm',
-            //     'immediatePurchase.purchasingProcessDetail.itemRequestForm.requestForm.contractManager',
-            // ])            
+        $query = Dte::search($this->filter)->with([
+                'purchaseOrder',
+                'controls',
+                'requestForm',
+                'requestForm.contractManager',
+            ])        
             ->whereNot('tipo_documento', 'guias_despacho')
             ->orderBy('emision')
             ->paginate(50);

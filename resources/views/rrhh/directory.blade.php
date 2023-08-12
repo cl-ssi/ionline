@@ -88,6 +88,13 @@
                     Anexo: {{ $telephone->minsal }}</span>
                 @endforeach
 
+                @if($user->mobile)
+                    @if($user->mobile->directory)
+                    <br>
+                    <span class="small">Móvil: <a href="tel:+56{{ $user->mobile->number }}">+56 {{ $user->mobile->number }}</a></span>
+                    @endif
+                @endif
+
                 @if($user->email)
                     <br>
                     <span class="small"><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></span>

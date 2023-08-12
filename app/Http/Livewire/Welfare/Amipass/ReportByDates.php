@@ -67,6 +67,27 @@ class ReportByDates extends Component
              *  run       |   monto
              *  14105981  |   108.000
              * 
+             * tipo_de_ausentismo
+             * L.M. ENFERMEDAD  si se descuenta
+             * COMISION DE SERVICIO sobre 1
+             * FERIADOS LEGALES si se descuenta
+             * PERMISOS ADMINISTRATIVOS desde 0,5
+             * DIAS COMPENSATORIOS sobre 1
+             * SUSP. EMP. MED. DISCIPLINARIA descuento
+             * TELETRABAJO FUNCIONES NO HABITUALES no se descuenta
+             * PERMISO DESCANSO REPARATORIO si se descuenta
+             * TELETRABAJO FUNCIONES HABITUALES no se descuenta
+             * L.M. ACCIDENTE EN LUGAR DE TRABAJO si se descuenta
+             * L.M. ACCIDENTE EN TRAYECTORIA AL TRABAJO si se descuenta
+             * PERMISOS S/SUELDOS si se descuenta
+             * L.M. ENFERMEDAD PROFESIONAL  si se descuenta
+             * L.M. MATERNAL  si se descuenta
+             * L.M. PATOLOGIA DEL EMBARAZO  si se descuenta
+             * POSTNATAL PARENTAL si se descuenta
+             * L.M. PRORROGA DE MEDICINA PREVENTIVA  si se descuenta
+             * PERMISO GREMIAL no se descuenta
+             * L.M. ENFERMEDAD GRAVE HIJO MENOR DE UN AÑO  si se descuenta
+             * FALLECIMIENTO HERMANO/A si se descuenta
              */
             $user->totalAbsenteeisms = 0;
 

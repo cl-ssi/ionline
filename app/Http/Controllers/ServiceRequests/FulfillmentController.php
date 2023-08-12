@@ -15,6 +15,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\User;
+use Redirect;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -422,18 +423,18 @@ class FulfillmentController extends Controller
      */
     public function update(Request $request, Fulfillment $fulfillment)
     {
-
-        // se agrega esta validación ya que existía un problema con la "coma" al reconocer un valor de miles o con separación de coma.
-        $total_to_pay = str_replace(",", "", $request->total_to_pay);
-        $total_to_pay = str_replace(".", ",", $total_to_pay);
-        $request->merge([
-            'total_to_pay' => $total_to_pay,
-        ]);
-
         $fulfillment->fill($request->all());
         
-        // 16/03/2023: Cuando se ingresa el total a pagar, se registra la fecha del movimiento.
         if($request->total_to_pay){
+
+            // se agrega esta validación ya que existía un problema con la "coma" al reconocer un valor de miles o con separación de coma.
+            $total_to_pay = str_replace(",", "", $request->total_to_pay);
+            $total_to_pay = str_replace(".", ",", $total_to_pay);
+            $request->merge([
+                'total_to_pay' => $total_to_pay,
+            ]);
+
+            // 16/03/2023: Cuando se ingresa el total a pagar, se registra la fecha del movimiento.
             $fulfillment->total_to_pay_at = now();
         }
 
@@ -462,9 +463,31 @@ class FulfillmentController extends Controller
      */
     public function destroy(Fulfillment $fulfillment)
     {
-      $fulfillment->delete();
-      session()->flash('success', 'Se ha eliminado el período.');
-      return redirect()->back();
+        // no se puede dejar un service request con cero periodos
+        if($fulfillment->serviceRequest->fulfillments->count()==1){
+            session()->flash("warning", "No se puede eliminar el período. Como mínimo debe existir un período de la solicitud.");
+            return redirect()->back();
+        }
+
+        $fulfillment->delete();
+        // session()->flash('success', 'Se ha eliminado el período.');
+
+        // verificar de donde viene la llamada
+        $url = url()->previous();
+        if(str_contains($url,'profile')){
+
+            // cuando el periodo es menor a 10
+            if(str_contains(substr($url, -2),"/")){
+                $url = substr($url, 0, -1);
+            }
+            // cuando periodo es mayor a 10
+            else{
+                $url = substr($url, 0, -2);
+            }
+            return Redirect::to($url);
+        }
+
+        return redirect()->back();
     }
 
     public function certificatePDF(Fulfillment $fulfillment, User $user = null)

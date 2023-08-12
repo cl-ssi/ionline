@@ -22,7 +22,7 @@
                 <th>III. PROPÓSITOS DEL CARGO</th>
                 <th>IV. ORGANIZACIÓN Y CONTEXTO DEL CARGO</th>
                 <th>V. RESPONSABILIDAD DEL CARGO</th>
-                <th>VI. MAPA DE COMPETENCIAS DEL S.S.I</th>
+                <th>VI. MAPA DE COMPETENCIAS DEL S.S.T</th>
             </tr>
         </thead>
         <tbody>
@@ -120,7 +120,7 @@
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-12">  
-            <label for="for_specific_requirement">Requisito Específico</label>
+            <label for="for_specific_requirement">Pertinencia de Formación</label>
             <textarea class="form-control" id="for_specific_requirement" name="specific_requirement" rows="3" required>{{ $jobPositionProfile->specific_requirement }}</textarea>
         </filedset>
     </div>

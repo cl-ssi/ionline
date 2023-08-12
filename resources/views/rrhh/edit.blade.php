@@ -95,10 +95,7 @@
             <label for="for-phone_number">Número de teléfono</label>
             <input type="text" class="form-control" name="phone_number" value="{{ $user->phone_number }}">
         </div>
-        <div class="form-group col-11 col-md-4">
-            <label for="for-email">Email Personal</label>
-            <input type="email" class="form-control" @disabled($user->hasVerifiedEmail()) name="email_personal" value="{{ $user->email_personal }}">
-        </div>
+        @livewire('rrhh.personal-email-input',['user' => $user])
     </div>
 
 
@@ -133,27 +130,6 @@
                 <i class="fas fa-redo"></i> Switch
             </button>
         </form>
-        @endcan
-
-        @can('Users: send mail verification')
-            @if(!$user->hasVerifiedEmail())
-                @if($user->email_personal)
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
-                        @csrf
-                        <button class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-envelope" title="Verificar correo electrónico personal"></i>
-                        </button>
-                    </form>
-                @else
-                    <button class="btn btn-sm btn-secondary" disabled>
-                        <i class="fas fa-envelope" title="No tiene agregado correo electrónico personal"></i>
-                    </button>
-                @endif
-            @else
-                <button class="btn btn-sm btn-outline-success" disabled>
-                    <i class="fas fa-envelope" title="Correo electrónico personal verificada"></i>
-                </button>
-            @endif
         @endcan
 
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
 use App\Models\Country;
+use App\Models\ClCommune;
 use App\User;
 use App\Models\Parameters\Bank;
 
@@ -16,6 +17,7 @@ class EmployeeData extends Component
     {
         $banks = Bank::all();
         $countries = Country::orderBy('name', 'ASC')->get();
+        $communes = ClCommune::orderBy('name', 'ASC')->get();
         $user = new User();
 
         if ($this->user_id > 3000000) {
@@ -33,6 +35,6 @@ class EmployeeData extends Component
           }
         }
 
-        return view('livewire.service-request.employee-data',compact('banks','user','countries'));
+        return view('livewire.service-request.employee-data',compact('banks','user','countries','communes'));
     }
 }

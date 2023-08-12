@@ -124,7 +124,7 @@
                 </td>
             </tr>
             <tr>
-                <th class="table-active" width="25%">REQUISITO ESPECÍFICO</th>
+                <th class="table-active" width="25%">PERTINENCIA DE FORMACIÓN</th>
                 <td><p style="white-space: pre-wrap;">{{ $jobPositionProfile->specific_requirement }}</p></td>
             </tr>
             <tr>

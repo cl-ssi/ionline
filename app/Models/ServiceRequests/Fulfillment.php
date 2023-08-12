@@ -671,10 +671,15 @@ class Fulfillment extends Model implements Auditable
 
   protected $table = 'doc_fulfillments';
 
-  /**
-   * The attributes that should be mutated to dates.
-   *
-   * @var array
-   */
-  protected $dates = ['start_date', 'end_date', 'payment_date', 'total_to_pay_at', 'has_invoice_file_at'];
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['start_date', 'end_date', 'payment_date', 'total_to_pay_at', 'has_invoice_file_at'];
+
+    protected $casts = [
+        'start_date' => 'date:Y-m-d',
+        'end_date' => 'date:Y-m-d'
+    ];
 }

@@ -33,7 +33,8 @@ class HotelRoomSelecting extends Component
 
     public function room_change(){
         $this->room = Room::find($this->room_id);
-        $this->emit('ExecRender', null);
+        $this->emit('ExecRender', $this->room);
+        $this->emit('getRoom', $this->room->id);
     }
 
     public function render()
