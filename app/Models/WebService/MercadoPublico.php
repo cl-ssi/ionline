@@ -32,7 +32,7 @@ class MercadoPublico extends Model
             $purchaseOrder = $purchaseOrder->first();
         else
         {
-            $response = Http::get("https://wsssi.saludtarapaca.gob.cl/purchase-order/$code");
+            $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order/$code");
 
             $oc = json_decode($response);
 
@@ -59,10 +59,7 @@ class MercadoPublico extends Model
         $purchaseOrder = FinancePurchaseOrder::whereCode($code);
 
         if(!$purchaseOrder->exists()) {
-            $response = Http::get('https://api.mercadopublico.cl/servicios/v2/publico/ordenesdecompra.json', [
-                'codigo' => $code,
-                'ticket' => env('TICKET_MERCADO_PUBLICO')
-            ]);
+            $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
 
             $oc = json_decode($response);
 
@@ -79,7 +76,8 @@ class MercadoPublico extends Model
             }
             else
             {
-                return json_decode($response->body());
+                $response = json_decode($response->body());
+                return $response->message;
             }
         }
     }

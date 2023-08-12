@@ -17,11 +17,12 @@ class GetPurchaseOrder extends Component
     public function getPurchaseOrder()
     {
         $status = MercadoPublico::getPurchaseOrderV2($this->dte->folio_oc);
-        if($status === true) {
+        // app('debugbar')->log($status);
+        if(is_null($status)) {
             $this->dte->refresh();
         }
         else {
-            $this->message = $status->Mensaje;
+            $this->message = $status;
         }
     }
 
