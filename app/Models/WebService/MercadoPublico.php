@@ -2,6 +2,7 @@
 
 namespace App\Models\WebService;
 
+use App\Models\Finance\PurchaseOrder as FinancePurchaseOrder;
 use App\Models\RequestForms\PurchaseOrder;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,5 +52,35 @@ class MercadoPublico extends Model
         }
 
         return $purchaseOrder;
+    }
+
+    public static function getPurchaseOrderV2($code)
+    {
+        $purchaseOrder = FinancePurchaseOrder::whereCode($code);
+
+        if(!$purchaseOrder->exists()) {
+            $response = Http::get('https://api.mercadopublico.cl/servicios/v2/publico/ordenesdecompra.json', [
+                'codigo' => $code,
+                'ticket' => env('TICKET_MERCADO_PUBLICO')
+            ]);
+
+            $oc = json_decode($response);
+
+            if($response->successful())
+            {
+                if($oc->Listado[0]) {
+                    $purchaseOrder = FinancePurchaseOrder::create([
+                        'code' => $oc->Listado[0]->Codigo,
+                        'date' => Carbon::parse($oc->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s'),
+                        'data' => $response,
+                    ]);
+                }
+                return true;
+            }
+            else
+            {
+                return json_decode($response->body());
+            }
+        }
     }
 }

@@ -207,6 +207,7 @@ use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HotelBooking\HotelBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
+use App\Http\Controllers\Finance\PurchaseOrderController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Finance\DteController;
 use App\Http\Controllers\Drugs\SubstanceController;
@@ -1864,6 +1865,10 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
         Route::get('/{dte}/send-to-ready-inbox', [PaymentController::class, 'sendToReadyInbox'])->name('sendToReadyInbox');
         Route::get('/ready', [PaymentController::class, 'ready'])->name('ready');
         Route::put('/{dte}/update', [PaymentController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
+        Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
     });
 });
 
