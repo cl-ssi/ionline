@@ -16,12 +16,12 @@
 </div>
 
 <div class="titulo">
-    ACTA DE RECEPCIÓN CONFORME DE FACTURA
+    ACTA DE RECEPCIÓN CONFORME
 </div>
 
 <p>
-    El siguiente DTE (documento tributario electrónico) fué recepcionado en portal DIPRES Acepta, lo cual confirme la
-    recepción conforme del siguiente DTE con los siguiente detalles:
+    El siguiente DTE (documento tributario electrónico) fué recepcionado en portal DIPRES Acepta, lo cual confirma la
+    recepción conforme del siguiente DTE con los siguientes detalles:
 </p>
 
 <table class="ocho">
@@ -52,7 +52,7 @@
         </tr>
         <tr class="">
             <td style="font-weight:bold; width: 1rem; vertical-align: top;">
-                Razon Social Emisor
+                Razón Social Emisor
             </td>
             <td style="width: 1rem; vertical-align: top;">
                 {{ $dte['razon_social_emisor'] }}
@@ -60,7 +60,7 @@
         </tr>
         <tr class="">
             <td style="font-weight:bold; width: 1rem; vertical-align: top;">
-                Publicacion
+                Publicación
             </td>
             <td style="width: 1rem; vertical-align: top;">
                 {{ \Carbon\Carbon::parse($dte['publicacion']) }}
@@ -68,7 +68,7 @@
         </tr>
         <tr class="">
             <td style="font-weight:bold; width: 1rem; vertical-align: top;">
-                Emision
+                Emisión
             </td>
             <td style="width: 1rem; vertical-align: top;">
                 {{ \Carbon\Carbon::parse($dte['emision']) }}
@@ -84,7 +84,7 @@
         </tr>
         <tr class="">
             <td style="font-weight:bold; width: 1rem; vertical-align: top;">
-                Fecha Maxima para Reclamar
+                Fecha Máxima para Reclamar
             </td>
             <td style="width: 1rem; vertical-align: top;">
                 {{ \Carbon\Carbon::parse($dte['publicacion'])->add('+3 days')->format('Y-m-d') }}
@@ -98,6 +98,30 @@
                 {{ $dte['folio_oc'] }}
             </td>
         </tr>
+    </tbody>
+</table>
+
+<br>
+
+<table class="ocho">
+    <thead>
+        <tr>
+            <th class="text-left">
+                ACTAS DE RECEPCIÓN TÉCNICA
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($controls as $control)
+        <tr class="">
+            <td style="width: 1rem; vertical-align: top;">
+                ACTA DE RECEPCIÓN DE ARTÍCULOS EN BODEGA
+                #{{ $control['id'] }}
+                -
+                ORDEN DE COMPRA {{ $control['po_code'] }}
+            </td>
+        </tr>
+        @endforeach
     </tbody>
 </table>
 

@@ -78,8 +78,19 @@ class DteConfirmation extends Component
 
     public function render()
     {
-        // $this->dte->fresh();
-        // $this->dte->requestForm->contractManager;
         return view('livewire.finance.dte-confirmation');
+    }
+
+    public function rejectedDte()
+    {
+        $this->dte->update([
+            'confirmation_status' => 0,
+            'confirmation_user_id' => auth()->id(),
+            'confirmation_ou_id' => auth()->user()->organizational_unit_id,
+            'confirmation_observation' => $this->confirmation_observation,
+            'confirmation_at' => now(),
+        ]);
+
+        session()->flash('success', 'El DTE fue rechazado.');
     }
 }

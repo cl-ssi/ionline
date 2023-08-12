@@ -67,17 +67,25 @@
         </tbody>
     </table>
 
+    <br>
+
+    <h6>
+        Actas de Recepción Técnica
+    </h6>
+
     @foreach($dte->controls as $control)
     <li>
         <a
             class="btn btn-sm btn-primary"
             href="{{ route('warehouse.control.show', $control) }}"
             target="_blank"
-            >
+        >
             #{{ $control->id }}
         </a>
     </li>
     @endforeach
+
+    <hr>
 
     @if (is_null($dte->confirmation_status))
         <div class="form-group">
@@ -90,7 +98,7 @@
                 <label for="existing_files">Archivos Adjuntos Cargados</label>
                 <hr>
                 <div>
-                    @foreach ($existingFiles as $file)
+                    @foreach($existingFiles as $file)
                         <div>
                             <p>
                                 <strong>{{ $file->name }}</strong>
@@ -141,43 +149,44 @@
 
 
         <div class="btn-group mb-3" role="group" aria-label="Confirmation">
-            @livewire('sign-to-document', [
+            @livewire('sign.sign-to-document', [
                 'btn_title' => 'Aceptar',
                 'btn_class' => 'btn btn-success',
                 'btn_icon' => 'fas fa-fw fa-thumbs-up',
-            
+
                 'view' => 'dte.reception-certificate',
                 'viewData' => [
                     'dte' => $dte,
+                    'controls' => $dte->controls,
                     'type' => '',
                 ],
-            
+
                 'signer' => auth()->user(),
                 'position' => 'center',
                 'startY' => 80,
-            
+
                 'folder' => '/ionline/dte/confirmation/',
                 'filename' => 'confirmation-' . $dte->id,
-            
+
                 'callback' => 'finance.dtes.confirmation.store',
                 'callbackParams' => [
                     'dte' => $dte->id,
                     'folder' => '/ionline/dte/confirmation/',
                     'filename' => 'confirmation-' . $dte->id,
-                    'confirmation_observation' => $confirmation_observation, // Probar
+                    'confirmation_observation' => $confirmation_observation,
                 ],
             ])
 
-            <button type="button" class="btn btn-danger" wire:click="saveConfirmation(false)">
+            <button type="button" class="btn btn-danger" wire:click="rejectedDte()">
                 <i class="fas fa-fw fa-thumbs-down"></i> Reclamar
             </button>
         </div>
 
         <br>
 
-    <p>
-        En el evento de aceptar el documento tributario electrónico se solicita remitir Acta de Recepcion conforme al Depto. de Abastecimiento y Logística.
-    </p>
+        <p>
+            En el evento de aceptar el documento tributario electrónico se solicita remitir Acta de Recepción Conforme al Depto. de Abastecimiento y Logística.
+        </p>
     @else
         @if(isset($dte->confirmation_signature_file))
             <a

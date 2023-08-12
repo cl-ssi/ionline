@@ -9,7 +9,7 @@
         background-image: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%), url("../images/new-year-2023.jpg");
         background-size: cover;
     }
-</style> --> 
+</style> -->
 
 <div class="jumbotron mt-4">
     <div class="row">
@@ -46,18 +46,18 @@
                 <p class="font-italic font-weight-bold">
                     <i class="fas fa-gift text-danger"></i>
                     Feliz navidad te desea el glorioso Departamento Tic
-                    <i class="fas fa-sleigh text-danger"></i> 
+                    <i class="fas fa-sleigh text-danger"></i>
                 </p>
             </div> -->
 
             <div class="alert alert-primary" role="alert">
-                A contar del 1 de Junio del 2023, somos el <strong>Servicio de Salud Tarapacá</strong>,<br> 
+                A contar del 1 de Junio del 2023, somos el <strong>Servicio de Salud Tarapacá</strong>,<br>
                 puede descargar el nuevo logo en <strong>alta resolución</strong> desde acá:<br>
-                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a> - 
-                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}">SST Pluma</a> - 
-                <a href="{{ asset('images/Logo Hospital Ernesto Torres - RGB.png') }}">HETG Color</a> - 
-                <a href="{{ asset('images/Logo Hospital Ernesto Torres - Pluma.png') }}">HETG Pluma</a> - 
-                <!-- <a href="{{ asset('images/Logo Hospital de Alto Hospicio - RGB.png') }}">HAH Color</a> - 
+                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a> -
+                <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}">SST Pluma</a> -
+                <a href="{{ asset('images/Logo Hospital Ernesto Torres - RGB.png') }}">HETG Color</a> -
+                <a href="{{ asset('images/Logo Hospital Ernesto Torres - Pluma.png') }}">HETG Pluma</a> -
+                <!-- <a href="{{ asset('images/Logo Hospital de Alto Hospicio - RGB.png') }}">HAH Color</a> -
                 <a href="{{ asset('images/Logo Hospital de Alto Hospicio - Pluma.png') }}">HAH Pluma</a>  -->
             </div>
 
@@ -74,11 +74,11 @@
             @foreach(auth()->user()->unreadNotifications as $notification)
             <li>
                 <a href="{{ route('openNotification',$notification) }}">
-                    {{ $notification->created_at }} - 
-                    {!! $notification->data['icon'] ?? null !!} 
+                    {{ $notification->created_at }} -
+                    {!! $notification->data['icon'] ?? null !!}
                     <b>{{ $notification->data['module'] ?? '' }}</b>
                     {{ $notification->data['subject'] }}
-                </a> 
+                </a>
             </li>
             @endforeach
         </ul>
@@ -103,7 +103,7 @@
     <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP) para Funcionarios Visadores y Firmantes</h6>
     <ol>
         <li>
-            Solicitar a Gabriela Aliaga del Departamento Tic (dtic.sst@redsalud.gob.cl), Yeannett Valdivia (sda.ssi@redsalud.gob.cl) 
+            Solicitar a Gabriela Aliaga del Departamento Tic (dtic.sst@redsalud.gob.cl), Yeannett Valdivia (sda.ssi@redsalud.gob.cl)
             o Pamela Villagrán (sdga.ssi@redsalud.gob.cl) la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
         </li>
         <ul>
@@ -113,21 +113,25 @@
             <li>Cargo</li>
         </ul>
         <li>
-            Ingresar al link <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> 
+            Ingresar al link <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a>
             usando su clave única y obtener un certificado de "propósito general".
         </li>
         <li>
-        Contactar al ministro de fe Paula Tapia (paula.tapia@redsalud.gob.cl) o 
-        Pamela Villagrán (sdga.ssi@redsalud.gob.cl) o 
+        Contactar al ministro de fe Paula Tapia (paula.tapia@redsalud.gob.cl) o
+        Pamela Villagrán (sdga.ssi@redsalud.gob.cl) o
         José Donoso (jose.donosoc@redsalud.gob.cl) para solicitar la aprobación por parte del ministro de fe.
         </li>
         <li>
-        Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> 
-        y escanear el código QR de certificado generado, para escanear utilizar alguna aplicación de segundo factor, como Google Authenticator: 
-        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a> - 
+        Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a>
+        y escanear el código QR de certificado generado, para escanear utilizar alguna aplicación de segundo factor, como Google Authenticator:
+        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a> -
         <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">iPhone</a>
         </li>
     </ol>
+
+    {{-- @include('sign.clave-unica-signature', [
+        'user' => auth()->user(),
+    ]) --}}
 </div>
 
 @endsection

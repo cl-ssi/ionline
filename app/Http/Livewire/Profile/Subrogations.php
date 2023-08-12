@@ -51,13 +51,17 @@ class Subrogations extends Component
     public function mount()
     {
         $this->user_id = auth()->id();
-        if ($this->organizationalUnit and $this->type) {
+
+        if (isset($this->organizationalUnit) and isset($this->type))
+        {
             $this->subrogations = Subrogation::with('user')
                 ->where('organizational_unit_id', $this->organizationalUnit->id)
                 ->where('type', $this->type)
                 ->orderBy('level')
                 ->get();
-        } else {
+        }
+        else
+        {
             $this->subrogations = Subrogation::with('user')
                 ->where('user_id', $this->user_id)
                 ->where('organizational_unit_id', null)
@@ -98,17 +102,16 @@ class Subrogations extends Component
                 ]
             );
         } else {
-            // dd('entre aca');
-            // $dataValidated = $this->validate();
-            // $dataValidated['level'] = Subrogation::whereUserId($this->user_id)->count() + 1;
-            // Subrogation::create($dataValidated);
             Subrogation::firstOrCreate(
                 [
                     'user_id' => $this->user_id,
                     'subrogant_id' => $this->subrogant_id,
+                    'organizational_unit_id' => null,
                 ],
                 [
-                    
+                    'user_id' => $this->user_id,
+                    'subrogant_id' => $this->subrogant_id,
+                    'organizational_unit_id' => null,
                     'level' => Subrogation::whereUserId($this->user_id)->where('organizational_unit_id', null)->where('type', null)->count() + 1
                 ]
             );
@@ -123,7 +126,7 @@ class Subrogations extends Component
         $this->view = 'edit';
         $this->subrogation = $subrogation;
 
-        /** cambair por subrogant_id */
+        /** cambiar por subrogant_id */
         $this->subrogant_id = $subrogation->subrogant->id;
         $this->organizational_unit_id = $subrogation->organizational_unit_id;
     }
@@ -138,11 +141,25 @@ class Subrogations extends Component
 
     public function delete(Subrogation $subrogation)
     {
-        $subrogations = Subrogation::query()
-            ->where('level', '>', $subrogation->level)
-            ->get();
+        if(isset($this->organizationalUnit) && isset($this->type))
+        {
+            $subrogations = Subrogation::query()
+                ->where('level', '>', $subrogation->level)
+                ->whereOrganizationalUnitId($this->organizationalUnit->id)
+                ->whereType($this->type)
+                ->get();
+        }
+        else
+        {
+            $subrogations = Subrogation::query()
+                ->where('level', '>', $subrogation->level)
+                ->whereUserId(auth()->id())
+                ->whereNull('organizational_unit_id')
+                ->get();
+        }
 
-        foreach ($subrogations as $itemSubrogation) {
+        foreach ($subrogations as $itemSubrogation)
+        {
             $itemSubrogation->update([
                 'level' => $itemSubrogation->level - 1
             ]);
