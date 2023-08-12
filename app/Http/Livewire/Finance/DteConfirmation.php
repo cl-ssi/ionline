@@ -30,6 +30,19 @@ class DteConfirmation extends Component
         $this->existingFiles = $dte->files;
     }
 
+    /**
+    * Confirmation
+    */
+    public function saveConfirmation($status)
+    {
+        $this->dte->confirmation_status = $status;
+        $this->dte->confirmation_user_id = auth()->id();
+        $this->dte->confirmation_ou_id = auth()->user()->organizational_unit_id;
+        $this->dte->confirmation_observation = $this->confirmation_observation;
+        $this->dte->confirmation_at = now();
+        $this->dte->save();
+    }
+
     public function downloadFile($fileId)
     {
         $file = File::findOrFail($fileId);
