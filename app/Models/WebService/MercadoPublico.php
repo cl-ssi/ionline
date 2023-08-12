@@ -59,7 +59,7 @@ class MercadoPublico extends Model
         $purchaseOrder = FinancePurchaseOrder::whereCode($code)->first();
 
         if(!$purchaseOrder OR $purchaseOrder->json->Listado[0]->Estado != "Recepción Conforme"){
-            app('debugbar')->log('entro');
+            // app('debugbar')->log('entro');
 
             $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
 
