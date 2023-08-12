@@ -18,7 +18,7 @@ class GetPurchaseOrder extends Component
     {
         $status = MercadoPublico::getPurchaseOrderV2($this->dte->folio_oc);
         // app('debugbar')->log($status);
-        if(is_null($status)) {
+        if($status === true) {
             $this->dte->refresh();
         }
         else {
