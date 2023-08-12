@@ -56,9 +56,11 @@ class MercadoPublico extends Model
 
     public static function getPurchaseOrderV2($code)
     {
-        $purchaseOrder = FinancePurchaseOrder::whereCode($code);
+        $purchaseOrder = FinancePurchaseOrder::whereCode($code)->first();
 
-        if(!$purchaseOrder->exists()) {
+        if(!$purchaseOrder OR $purchaseOrder->json->Listado[0]->Estado != "Recepción Conforme"){
+            // app('debugbar')->log('entro');
+
             $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
 
             $oc = json_decode($response);
@@ -66,8 +68,11 @@ class MercadoPublico extends Model
             if($response->successful())
             {
                 if($oc->Listado[0]) {
-                    $purchaseOrder = FinancePurchaseOrder::create([
-                        'code' => $oc->Listado[0]->Codigo,
+                    $purchaseOrder = FinancePurchaseOrder::updateOrCreate(
+                    [
+                        'code' =>  $oc->Listado[0]->Codigo
+                    ],
+                    [
                         'date' => Carbon::parse($oc->Listado[0]->Fechas->FechaCreacion)->format('Y-m-d H:i:s'),
                         'data' => $response,
                     ]);
