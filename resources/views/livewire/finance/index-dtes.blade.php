@@ -127,11 +127,10 @@
                     </td>
                     <td class="small">
                         @if ($dte->requestForm)
-                            <!-- <a class="btn btn-sm btn-outline-primary btn-block"
-                                href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
-                                <i class="fas fa-file-alt"></i> 
-                            </a> -->
-                            {{ $dte->requestForm->folio }}<br>
+                            <a href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
+                                {{ $dte->requestForm->folio }}
+                            </a>
+                            <br>
                             @if($dte->requestForm->signatures_file_id)
                                 <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado" 
                                     href="{{ $dte->requestForm->signatures_file_id == 11 ? 
