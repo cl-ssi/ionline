@@ -78,6 +78,7 @@ class IndexDtes extends Component
     public function render()
     {
         $query = Dte::search($this->filter)->with([
+                'purchaseOrder',
                 'controls',
                 'requestForm',
                 'requestForm.contractManager',

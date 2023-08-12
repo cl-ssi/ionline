@@ -76,12 +76,12 @@
             <tr>
                 <th>ID</th>
                 <th>Documento</th>
-                <th>Folio OC</th>
+                <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Bod</th>
                 <th width="190">Admin C.</th>
                 <th>Fecha Aceptación SII (días)</th>
-                <th>Establecimiento</th>
+                <th width="100px">Estab</th>
                 <th></th>
             </tr>
         </thead>
@@ -105,11 +105,7 @@
 
                 <tr class="{{ $rowClass }}">
                     <td class="small">{{ $dte->id }}</td>
-                    <td>
-                        {{ $dte->tipo_documento }}
-                        <br>
-                        {{ $dte->emisor }}
-                        <br>
+                    <td class="small">
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
                                 target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
@@ -121,19 +117,23 @@
                                 <i class="fas fa-file-pdf text-danger"></i> {{ $dte->folio }}
                             </a>
                         @endif
+                        <br>
+                        {{ $dte->tipo_documento }}
+                        <br>
+                        {{ $dte->emisor }}
                     </td>
                     <td class="small">
-                        {{ $dte->folio_oc }}
+                        @livewire('finance.get-purchase-order',['dte' => $dte], key($dte->id))
                     </td>
-                    <td>
+                    <td class="small">
                         @if ($dte->requestForm)
-                            <a class="btn btn-outline-primary btn-block"
+                            <a class="btn btn-sm btn-outline-primary btn-block"
                                 href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
                                 <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
                             </a>
                         @endif
                     </td>
-                    <td>
+                    <td class="small">
                         @foreach ($dte->controls as $control)
                             <a
                                 class="btn btn-sm btn-outline-primary"
@@ -144,7 +144,7 @@
                             </a> 
                         @endforeach
                     </td>
-                    <td>
+                    <td class="small">
                         @if ($dte->requestForm)
                             @if ($dte->requestForm->contractManager)
                                 {{ $dte->requestForm->contractManager->shortName }} <br>

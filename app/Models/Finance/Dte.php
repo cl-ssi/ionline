@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Warehouse\Control;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
+use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 
 class Dte extends Model
@@ -113,6 +114,10 @@ class Dte extends Model
         'confirmation_at',
     ];
 
+    public function purchaseOrder()
+    {
+        return $this->belongsTo(PurchaseOrder::class, 'folio_oc', 'code');
+    }
 
     /** Control(ingresos) de Warehouse */
     public function controls()
