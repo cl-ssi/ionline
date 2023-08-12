@@ -156,7 +156,6 @@
                                         route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}" target="_blank" data-toggle="modal" data-target="#history-fr-{{$dte->requestForm->id}}">
                                 <i class="fas fa-file-contract"></i>
                                 </a>
-                                @include('request_form.partials.modals.old_signed_request_forms')
                             @endif
                         @endif
                     </td>
