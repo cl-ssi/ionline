@@ -78,7 +78,7 @@ class Dte extends Model
         'payer_ou',
         'payer_at',
 
-        //Estblecimiento que le corresponde el DTE
+        //Establecimiento que le corresponde el DTE
         'establishment_id',
 
         'confirmation_status',
