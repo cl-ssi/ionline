@@ -192,12 +192,17 @@ class RequestReplacementStaff extends Model implements Auditable
         }
     }
 
-    public function scopeSearch($query, $status_search, $id_search, $start_date_search, 
+    public function scopeSearch($query, $form_type_search, $status_search, $id_search, $start_date_search, 
         $end_date_search, $name_search, $fundament_search, $fundament_detail_search, $name_to_replace_search,
         $sub_search)
     {
-        if ($status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
+        if ($form_type_search OR $status_search OR $id_search OR $start_date_search OR $end_date_search OR $name_search OR 
             $fundament_search OR $fundament_detail_search OR $name_to_replace_search OR $sub_search) {
+            if($form_type_search != ''){
+                $query->where(function($q) use($form_type_search){
+                    $q->where('form_type', $form_type_search);
+                });
+            }
             if($status_search != ''){
                 $query->where(function($q) use($status_search){
                     $q->where('request_status', $status_search);

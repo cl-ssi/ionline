@@ -17,6 +17,7 @@ class SearchRequests extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $selectedFormType        = null;
     public $selectedStatus          = null;
     public $selectedId              = null;  
     public $selectedStartDate       = null;
@@ -27,6 +28,9 @@ class SearchRequests extends Component
     public $selectedNameToReplace   = null;
     public $selectedSub             = null;
     public $ou_dependents_array     = [];
+
+    public $selectedFundamentInputStatus = '';
+    public $selectedFundamentDetailInputStatus = '';
 
     public $fundamentsDetail;
 
@@ -41,7 +45,8 @@ class SearchRequests extends Component
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
-                ->search($this->selectedStatus,
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
@@ -182,6 +187,18 @@ class SearchRequests extends Component
         
         foreach($ou_dependents as $ou_dependent){
             $this->ou_dependents_array[] = $ou_dependent->id;
+        }
+    }
+
+    public function updatedselectedFormType($form_type_id)
+    {
+        if($form_type_id == 'announcement'){
+            $this->selectedFundamentInputStatus = 'disabled';
+            $this->selectedFundamentDetailInputStatus = 'disabled';
+        }
+        else{
+            $this->selectedFundamentInputStatus = '';
+            $this->selectedFundamentDetailInputStatus = '';
         }
     }
 }
