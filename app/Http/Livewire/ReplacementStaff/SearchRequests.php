@@ -67,7 +67,8 @@ class SearchRequests extends Component
                 ->latest()
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
-                ->search($this->selectedStatus,
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
@@ -89,7 +90,8 @@ class SearchRequests extends Component
                 ->where('user_id', Auth::user()->id)
                 ->orWhere('requester_id', Auth::user()->id)
                 ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id)
-                ->search($this->selectedStatus,
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
@@ -108,7 +110,8 @@ class SearchRequests extends Component
                     'legalQualityManage', 'fundamentManage', 'fundamentDetailManage', 'technicalEvaluation',
                     'assignEvaluations'])
                 ->latest()
-                ->search($this->selectedStatus,
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
                     $this->selectedEndDate,
@@ -131,7 +134,8 @@ class SearchRequests extends Component
                     ->where('status', 'assigned');
                 })
                 ->latest()
-                ->search($this->selectedStatus,
+                ->search($this->selectedFormType,
+                    $this->selectedStatus,
                     $this->selectedId,
                     $this->selectedStartDate,
                     $this->selectedEndDate,

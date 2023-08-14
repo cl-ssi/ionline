@@ -4,7 +4,7 @@
 
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-3">
-                <label for="for_profile_search">Estado</label>
+                <label for="for_profile_search">Tipo de Solicitud</label>
                 <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedFormType">
                     <option value="">Seleccione...</option>
                     <option value="replacement">Reemplazo</option>
