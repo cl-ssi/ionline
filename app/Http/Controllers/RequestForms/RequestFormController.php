@@ -213,7 +213,8 @@ class RequestFormController extends Controller {
 
         $my_forms_signed = RequestForm::with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'eventRequestForms.signerOrganizationalUnit')
             ->whereHas('eventRequestForms', $filter = function($q){
-                return $q->where('signer_user_id', Auth::user()->id);
+                return $q->where('signer_user_id', Auth::user()->id)
+                    ->orWhere('ou_signer_user', Auth::user()->organizationalUnit->id);
             })->latest('id')->paginate(15, ['*'], 'p2');
 //            })->orderBy('approved_at', 'desc')->paginate(15, ['*'], 'p2');
 
