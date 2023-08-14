@@ -90,6 +90,10 @@ class Dte extends Model
         'confirmation_observation',
         'confirmation_at',
         'confirmation_signature_file',
+
+
+        'dte_id',
+        'cenabast',
     ];
 
     /**
@@ -112,6 +116,9 @@ class Dte extends Model
         'fecha',
         'payer_at',
         'confirmation_at',
+        
+        
+        
     ];
 
     public function purchaseOrder()
