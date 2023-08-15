@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Warehouse;
 use App\Http\Controllers\Controller;
 use App\Models\Warehouse\Store;
 use App\Models\Warehouse\StoreUser;
+use App\Models\Finance\Dte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,15 +64,13 @@ class StoreController extends Controller
     {
         $storeActive = Auth::user()->active_store;
 
-        if($storeActive)
-        {
+        if ($storeActive) {
             $storeActive->pivot->status = 0;
             $storeActive->pivot->save();
         }
 
         $selectedActive = StoreUser::whereStoreId($store->id)->whereUserId(Auth::id())->first();
-        if($selectedActive)
-        {
+        if ($selectedActive) {
             $selectedActive->update(['status' => 1]);
         }
 
@@ -89,5 +88,13 @@ class StoreController extends Controller
     {
         $nav = $request->nav;
         return view('warehouse.stores.report', compact('store', 'nav'));
+    }
+
+
+    public function indexCenabast($tray = null)
+    {
+
+        $dtes = Dte::where('cenabast', 1)->get();
+        return view('warehouse.stores.cenabast.index', compact('dtes'));
     }
 }

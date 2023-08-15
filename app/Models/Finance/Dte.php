@@ -9,6 +9,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
+use App\Models\Establishment;
 
 class Dte extends Model
 {
@@ -180,6 +181,11 @@ class Dte extends Model
     public function files()
     {
         return $this->hasMany(File::class, 'dte_id');
+    }
+
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
     }
 
 

@@ -1712,6 +1712,11 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
             });
         });
     });
+
+    Route::prefix('cenabast')->as('cenabast.')->group(function () {
+        Route::get('index/{tray?}', [StoreController::class, 'indexCenabast'])->name('index');
+    });
+
 });
 
 Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.change.password'])->group(function () {

@@ -60,7 +60,7 @@ class IndexDtes extends Component
             if ($dte->cenabast == 0) {
                 $dte->cenabast = 1;
                 $this->selectedCenabasts[$dteId] = true;
-            } else {                
+            } else {
                 $dte->cenabast = 0;
                 unset($this->selectedCenabasts[$dteId]);
             }

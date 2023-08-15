@@ -168,7 +168,8 @@
                             @can('Store')
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Bodegas</h6>
-                            @endcan
+                            @endcan                            
+
 
                             @canany([
                             'Store', 'Store: admin', 'Store: index', 'Store: list receptions',
@@ -206,6 +207,15 @@
                                 <i class="fas fa-fw fa-cog"></i> Administrar Bodegas
                             </a>
                             @endcanany
+
+
+                            
+                            @canany(['Store: Cenabast'])
+                            <a class="dropdown-item {{ active('warehouse.cenabast.index') }}" href="{{ route('warehouse.cenabast.index') }}">
+                                <i class="fas fa-pills"></i> Cenabast
+                            </a>
+                            @endcanany
+                            
 
 
                             @can('Inventory')
