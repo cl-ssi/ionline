@@ -3,6 +3,15 @@
         <h5 class="mb-3"><i class="fas fa-search"></i> Buscar:</h5>
 
         <div class="form-row">
+            <fieldset class="form-group col-12 col-md-3">
+                <label for="for_profile_search">Tipo de Solicitud</label>
+                <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedFormType">
+                    <option value="">Seleccione...</option>
+                    <option value="replacement">Reemplazo</option>
+                    <option value="announcement">Convocatoria</option>
+                </select>
+            </fieldset>
+
             <fieldset class="form-group col-12 col-md-2">
                 <label for="for_profile_search">Estado</label>
                 <select name="status_search" class="form-control" wire:model.debounce.500ms="selectedStatus">
@@ -32,11 +41,13 @@
                 <input class="form-control" type="text" autocomplete="off"
                     name="name_search" wire:model.debounce.500ms="selectedName">
             </fieldset>
-
-            <fieldset class="form-group col-sm">
+        </div>
+        
+        <div class="form-row">
+            <fieldset class="form-group col-12 col-md-3">
                 <label for="for_legal_quality_manage_id" >Fundamento / Detalle Fundamento</label>
                 <div class="input-group">
-                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundament" required>
+                    <select name="fundament_search" id="for_fundament_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundament" {{ $selectedFundamentInputStatus }}  required>
                         <option value="">Seleccione...</option>
                         @foreach($fundaments as $fundament)
                             <option value="{{ $fundament->id }}"
@@ -46,7 +57,7 @@
                         @endforeach
                     </select>
 
-                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundamentDetail" onchange="remoteWorking()">
+                    <select name="fundament_detail_search" id="for_fundament_detail_manage_id" class="form-control" wire:model.debounce.500ms="selectedFundamentDetail" onchange="remoteWorking()" {{ $selectedFundamentDetailInputStatus }}>
                         <option value="">Seleccione...</option>
                         @if(!is_null($fundamentsDetail))
                         @foreach($fundamentsDetail as $fundamentDetail)
@@ -59,9 +70,7 @@
                     </select>
                 </div>
             </fieldset>
-        </div>
         
-        <div class="form-row">
             <fieldset class="form-group col-12 col-md-3">
                 <label for="for_name">Funcionario a Reemplazar</label>
                 <input class="form-control" type="text" autocomplete="off" placeholder="RUN o NOMBRE"

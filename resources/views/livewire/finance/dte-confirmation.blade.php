@@ -70,7 +70,7 @@
     <br>
 
     <h6>
-        Actas de Recepción Técnica
+        Actas de Recepción de Bodega
     </h6>
 
     @foreach($dte->controls as $control)

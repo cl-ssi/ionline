@@ -19,11 +19,17 @@ class IndexDtes extends Component
 
     public $selectedEstablishments = [];
 
+    public $selectedCenabasts = [];
+
     public $establishments;
 
     public $establishment;
 
     public $successMessages = [];
+
+    public $successCenabasts = [];
+
+
 
     protected $rules = [
         'selectedEstablishments' => 'required'
@@ -43,18 +49,36 @@ class IndexDtes extends Component
     {
         $this->establishments = Establishment::orderBy('name')->get();
         $this->selectedEstablishments = []; // Inicializar el array vacío
-
     }
 
-    public function saveEstablishment($dteId)
+
+    public function toggleCenabast($dteId)
     {
         $dte = Dte::find($dteId);
 
         if ($dte) {
+            if ($dte->cenabast == 0) {
+                $dte->cenabast = 1;
+                $this->selectedCenabasts[$dteId] = true;
+            } else {
+                $dte->cenabast = 0;
+                unset($this->selectedCenabasts[$dteId]);
+            }
+
+            $dte->save();
+        }
+    }
+
+
+
+
+    public function saveEstablishment($dteId)
+    {
+        $dte = Dte::find($dteId);
+        if ($dte) {
             $dte->establishment_id = $this->selectedEstablishments[$dteId];
-            $dte->save();            
+            $dte->save();
             $this->successMessages[$dteId] = 'El establecimiento fue asignado exitosamente al DTE';
-            
         }
     }
 
@@ -75,19 +99,29 @@ class IndexDtes extends Component
         $this->selectedEstablishments[$dteId] = $establishmentId;
     }
 
+
+
     public function render()
     {
         $query = Dte::search($this->filter)->with([
-                'purchaseOrder',
-                'controls',
-                'requestForm',
-                'requestForm.contractManager',
-            ])        
+            'purchaseOrder',
+            'controls',
+            'requestForm',
+            'requestForm.contractManager',
+        ])
             ->whereNot('tipo_documento', 'guias_despacho')
             ->orderBy('emision')
             ->paginate(50);
 
         $establishments = Establishment::orderBy('name')->get();
+
+        // Actualizar la propiedad selectedCenabasts para marcar los checkboxes
+        $this->selectedCenabasts = [];
+        foreach ($query as $dte) {
+            if ($dte->cenabast == 1) {
+                $this->selectedCenabasts[$dte->id] = true;
+            }
+        }
 
 
         return view('livewire.finance.index-dtes', [

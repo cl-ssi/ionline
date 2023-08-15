@@ -21,7 +21,7 @@
             <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
         </div>
         <div class="col">
-        <button class="btn btn-success" type="button" wire:click="loadManualDTE">
+            <button class="btn btn-success" type="button" wire:click="loadManualDTE">
                 <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
         </div>
     </div>
@@ -65,7 +65,7 @@
             </select>
         </div>
         <div class="col-md-1">
-            <button class="btn btn-outline-secondary" type="button" wire:click="refresh"> 
+            <button class="btn btn-outline-secondary" type="button" wire:click="refresh">
                 <i class="fas fa-search"></i>
             </button>
         </div>
@@ -83,6 +83,7 @@
                 <th>Fecha Aceptación SII (días)</th>
                 <th width="100px">Estab</th>
                 <th></th>
+                <th>Cenabast</th>
             </tr>
         </thead>
         <tbody>
@@ -123,25 +124,54 @@
                         {{ $dte->emisor }}
                     </td>
                     <td class="small">
-                        @livewire('finance.get-purchase-order',['dte' => $dte], key($dte->id))
+                        @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
                         @if ($dte->requestForm)
-                            <a class="btn btn-sm btn-outline-primary btn-block"
-                                href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
-                                <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
+                            <a href="{{ route('request_forms.show', $dte->requestForm->id) }}" target="_blank">
+                                {{ $dte->requestForm->folio }}
                             </a>
+                            <br>
+                            @if ($dte->requestForm->signatures_file_id)
+                                <a class="btn btn-info btn-sm" title="Ver Formulario de Requerimiento firmado"
+                                    href="{{ $dte->requestForm->signatures_file_id == 11
+                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
+                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 1]) }}"
+                                    target="_blank" title="Certificado">
+                                    <i class="fas fa-file-contract"></i>
+                                </a>
+                            @endif
+
+                            @if ($dte->requestForm->old_signatures_file_id)
+                                <a class="btn btn-secondary btn-sm"
+                                    title="Ver Formulario de Requerimiento Anterior firmado"
+                                    href="{{ $dte->requestForm->old_signatures_file_id == 11
+                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
+                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
+                                    target="_blank" title="Certificado">
+                                    <i class="fas fa-file-contract"></i>
+                                </a>
+                            @endif
+
+                            @if ($dte->requestForm->signedOldRequestForms->isNotEmpty())
+                                <a class="btn btn-secondary btn-sm"
+                                    title="Ver Formulario de Requerimiento Anteriores firmados"
+                                    href="{{ $dte->requestForm->old_signatures_file_id == 11
+                                        ? route('request_forms.show_file', $dte->requestForm->requestFormFiles->first() ?? 0)
+                                        : route('request_forms.signedRequestFormPDF', [$dte->requestForm, 0]) }}"
+                                    target="_blank" data-toggle="modal"
+                                    data-target="#history-fr-{{ $dte->requestForm->id }}">
+                                    <i class="fas fa-file-contract"></i>
+                                </a>
+                            @endif
                         @endif
                     </td>
                     <td class="small">
                         @foreach ($dte->controls as $control)
-                            <a
-                                class="btn btn-sm btn-outline-primary"
-                                href="{{ route('warehouse.control.show', $control) }}"
-                                target="_blank"
-                                >
+                            <a class="btn btn-sm btn-outline-primary"
+                                href="{{ route('warehouse.control.show', $control) }}" target="_blank">
                                 #{{ $control->id }}
-                            </a> 
+                            </a>
                         @endforeach
                     </td>
                     <td class="small">
@@ -188,6 +218,12 @@
                         </pre>
                         </div>
                     </td>
+
+                    <td class="center text-center">
+                        <input type="checkbox" wire:click="toggleCenabast({{ $dte->id }})"
+                            wire:model="selectedCenabasts.{{ $dte->id }}">                        
+                    </td>
+
                 </tr>
             @endforeach
         </tbody>

@@ -9,6 +9,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
+use App\Models\Establishment;
 
 class Dte extends Model
 {
@@ -90,6 +91,10 @@ class Dte extends Model
         'confirmation_observation',
         'confirmation_at',
         'confirmation_signature_file',
+
+
+        'dte_id',
+        'cenabast',
     ];
 
     /**
@@ -112,6 +117,9 @@ class Dte extends Model
         'fecha',
         'payer_at',
         'confirmation_at',
+        
+        
+        
     ];
 
     public function purchaseOrder()
@@ -175,6 +183,11 @@ class Dte extends Model
         return $this->hasMany(File::class, 'dte_id');
     }
 
+    public function establishment()
+    {
+        return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+
 
     public function scopeSearch($query, $filter)
     {
@@ -208,16 +221,16 @@ class Dte extends Model
                                     $query->whereNotNull('confirmation_send_at');
                                     break;
                                 case 'Confirmada':
-                                    $query->where('confirmation_status', 1);
+                                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
                                     break;
                                 case 'No Confirmadas':
                                     $query->whereNotNull('confirmation_send_at')->whereNull('confirmation_status');
                                     break;
                                 case 'Confirmadas':
-                                    $query->where('confirmation_status', 1);
+                                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
                                     break;
                                 case 'Rechazadas':
-                                    $query->where('confirmation_status', 0);
+                                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 0);
                                     break;
                                 case 'Sin Envío':
                                     $query->whereNull('confirmation_send_at')->whereNull('confirmation_status');
