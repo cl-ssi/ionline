@@ -129,9 +129,6 @@
         </li>
     </ol>
 
-    {{-- @include('sign.clave-unica-signature', [
-        'user' => auth()->user(),
-    ]) --}}
 </div>
 
 @endsection
