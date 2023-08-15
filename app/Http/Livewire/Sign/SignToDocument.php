@@ -26,6 +26,8 @@ class SignToDocument extends Component
      *           'dte' => $dte,
      *           'type' => ''
      *       ],
+     * 
+     *       'fileLink' => 'https://www.scdigestologia.org/docs/patologies/es/anatomia_fisio_es.pdf',
      *
      *       'signer' => auth()->user(),
      *       'position' => 'center',
@@ -56,6 +58,9 @@ class SignToDocument extends Component
 
     public $view;
     public $viewData;
+
+    public $fileLink;
+
     public $pdfBase64;
 
     public $position;
@@ -76,10 +81,17 @@ class SignToDocument extends Component
     public function show()
     {
         /**
-         * Obtiene el base del pdf
+         * Obtiene el base64 del pdf
          */
-        $documentFile = \PDF::loadView($this->view, $this->viewData);
-        $this->pdfBase64 = base64_encode($documentFile->output());
+        if(isset($this->fileLink))
+        {
+            $this->pdfBase64 = base64_encode(file_get_contents($this->fileLink));
+        }
+        elseif(isset($this->view))
+        {
+            $documentFile = \PDF::loadView($this->view, $this->viewData);
+            $this->pdfBase64 = base64_encode($documentFile->output());
+        }
 
         /**
          * Setea el otp y showModal
@@ -142,7 +154,7 @@ class SignToDocument extends Component
         $data = app(Signature::class)->getData($this->pdfBase64, $jwt, $signatureBase64, $apiToken, $xCoordinate, $yCoordinate, false);
 
         /**
-         * Peticion a la api para firmar
+         * Solicitud http a la api para firmar
          */
         try {
             $response = Http::withHeaders(['otp' => $this->otp])->post($url, $data);
