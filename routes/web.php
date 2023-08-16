@@ -1715,6 +1715,9 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
 
     Route::prefix('cenabast')->as('cenabast.')->group(function () {
         Route::get('index/{tray?}', [StoreController::class, 'indexCenabast'])->name('index');
+        Route::post('/save-file/{dte}', [StoreController::class, 'saveFile'])->name('saveFile');
+        Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
+        Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
     });
 
 });
