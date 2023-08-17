@@ -186,23 +186,12 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
+
                     <td>
-                        <select class="form-control form-control-sm"
-                            wire:change="updateSelectedEstablishment({{ $dte->id }}, $event.target.value)">
-                            <option value="">Seleccionar Establecimiento</option>
-                            @foreach ($establishments as $establishment)
-                                <option value="{{ $establishment->id }}"
-                                    @if ($dte->establishment_id == $establishment->id) selected @endif>
-                                    {{ $establishment->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button class="btn btn-primary btn-sm"
-                            wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
-                        @if (isset($successMessages[$dte->id]))
-                            <div class="alert alert-success">
-                                {{ $successMessages[$dte->id] }}
-                            </div>
+                        @if ($dte->establishment)
+                            {{ $dte->establishment->name }}
+                        @else
+                            @livewire('finance.assign-establishment', ['dteId' => $dte->id], key($dte->id))
                         @endif
                     </td>
 
@@ -221,7 +210,7 @@
 
                     <td class="center text-center">
                         <input type="checkbox" wire:click="toggleCenabast({{ $dte->id }})"
-                            wire:model="selectedCenabasts.{{ $dte->id }}">                        
+                            wire:model="selectedCenabasts.{{ $dte->id }}">
                     </td>
 
                 </tr>
