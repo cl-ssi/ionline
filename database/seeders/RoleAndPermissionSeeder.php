@@ -179,7 +179,7 @@ class RoleAndPermissionSeeder extends Seeder
 
 
 
-        Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a poner el acta de de bodega de CENABAST']);
+        Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a bodega de CENABAST donde se sube el Acta firmada de acuerdo a un DTE']);
 
         // @role(
         //   'Replacement Staff: admin |
