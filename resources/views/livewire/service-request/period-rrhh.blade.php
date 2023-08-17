@@ -42,6 +42,11 @@
             </div>
             <div class="col align-text-bottom">
                 @if($fulfillment->rrhh_approbation_date)
+                    @if($fulfillment->rrhh_approbation) 
+                        <span class="badge badge-pill badge-success">Confirmado</span>
+                    @else 
+                        <span class="badge badge-pill badge-danger">Rechazado</span>
+                    @endif - 
                     {{ $fulfillment->rrhh_approbation_date }} - {{ $fulfillment->rrhhUser->shortName }}
                 @else
                     <span class="text-danger">Pendiente de aprobación</span>

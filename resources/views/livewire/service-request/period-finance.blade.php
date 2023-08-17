@@ -43,6 +43,11 @@
             </div>
             <div class="col align-self-end">
                 @if($fulfillment->finances_approbation_date)
+                    @if($fulfillment->finances_approbation) 
+                        <span class="badge badge-pill badge-success">Confirmado</span>
+                    @else 
+                        <span class="badge badge-pill badge-danger">Rechazado</span>
+                    @endif - 
                     {{ $fulfillment->finances_approbation_date }} - {{ $fulfillment->financesUser->shortName }}
                 @else
                     <span class="text-danger">Pendiente de aprobación</span>
