@@ -209,9 +209,9 @@
                     </td>
 
                     <td class="center text-center">
-                        <input type="checkbox" wire:click="toggleCenabast({{ $dte->id }})"
-                            wire:model="selectedCenabasts.{{ $dte->id }}">
+                        @livewire('finance.assign-cenabast', ['dteId' => $dte->id], key($dte->id))
                     </td>
+
 
                 </tr>
             @endforeach

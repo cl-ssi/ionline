@@ -50,6 +50,8 @@ class PaymentController extends Controller
             })
             ->paginate(50);
 
+            
+
         return view('finance.payments.review', compact('dtes'));
     }
 
