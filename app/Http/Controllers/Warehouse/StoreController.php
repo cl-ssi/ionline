@@ -96,7 +96,7 @@ class StoreController extends Controller
 
     public function indexCenabast($tray = null)
     {
-        $query = Dte::where('cenabast', 1);
+        $query = Dte::where('cenabast', 1)->where('establishment_id',auth()->user()->organizationalUnit->establishment->id);
 
         if ($tray === 'sin_adjuntar') {
             $query->whereNull('confirmation_signature_file');
