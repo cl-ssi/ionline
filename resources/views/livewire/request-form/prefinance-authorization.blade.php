@@ -24,15 +24,15 @@
                   <td class="text-center">{{$key+1}}</td>
                   <td class="text-center">{{$item->id}}</td>
                   <td>
-                    <div wire:ignore id="for-bootstrap-select">
-                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select"
+                    <div wire:ignore id="for-bootstrap-select-{{$item->id}}" wire:key="{{ $item->id }}">
+                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId" wire:click="resetError" data-container="#for-bootstrap-select-{{$item->id}}"
                         class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
-                          <!-- <option value="">Seleccione...</option> -->
                           @foreach($lstBudgetItem as $val)
                             <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                           @endforeach
                       </select>
                     </div>
+                    @error('arrayItemRequest.'.$item->id.'.budgetId') <span class="error text-danger">{{ $message }}</span> @enderror
                   </td>
                   <td>
                     @if($item->product_id)
@@ -64,7 +64,7 @@
               </tr>
           </tfoot>
       </table>
-      @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
+      
       @else
       <!-- Pasajeros -->
         <h6><i class="fas fa-info-circle"></i> Lista de Pasajeros</h6>
@@ -99,15 +99,15 @@
                         <td>{{ $passenger->phone_number }}</td>
                         <td>{{ $passenger->email }}</td>
                         <td>
-                          <div wire:ignore id="for-bootstrap-select">
-                            <select  wire:model.defer="arrayItemRequest.{{ $passenger->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select"
+                          <div wire:ignore id="for-bootstrap-select-{{$passenger->id}}" wire:key="{{ $passenger->id }}">
+                            <select  wire:model.defer="arrayItemRequest.{{ $passenger->id }}.budgetId"  wire:click="resetError" data-container="#for-bootstrap-select-{{$passenger->id}}"
                               class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
-                                <!-- <option value="">Seleccione...</option> -->
                                 @foreach($lstBudgetItem as $val)
                                   <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                                 @endforeach
                             </select>
                           </div>
+                          @error('arrayItemRequest.'.$passenger->id.'.budgetId') <span class="error text-danger">{{ $message }}</span> @enderror
                         </td>
                         <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
                         <td>{{ $passenger->origin }}</td>
@@ -126,7 +126,6 @@
             </tr>
         </tfoot>
         </table>
-    @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
     @endif
 
         <div class="card">
