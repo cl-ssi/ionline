@@ -99,13 +99,13 @@
     
     Requisito General
     <br><br>
-    <div class="alert alert-secondary text-justify" role="alert" >
+    <div class="alert alert-secondary text-justify" role="alert">
         @if($jobPositionProfile->staff_decree_by_estament_id)
-        <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
+            <p style="white-space: pre-wrap;">{{ $jobPositionProfile->staffDecreeByEstament->description }}</p>
         @elseif($jobPositionProfile->general_requirement)
             <p style="white-space: pre-wrap;">{!! $jobPositionProfile->general_requirement !!}</p>
         @else
-            <p style="white-space: pre-wrap;">{{ $generalRequirements->description }}</p>
+            <p style="white-space: pre-wrap;">{!! $generalRequirements->description !!}</p>
         @endif
     </div>
 

@@ -20,7 +20,7 @@
 <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
 <div class="center"><b>{{ $jobPositionProfile->name }}</b></div>
-<div class="center"><b>{{ $jobPositionProfile->organizationalUnit->name }}</b></div>
+<div class="center"><b>{{ ($jobPositionProfile->organizationalUnit) ? $jobPositionProfile->organizationalUnit->name : '' }}</b></div>
 <div class="center"><b>{{ $jobPositionProfile->jobPositionProfileSigns->where('event_type', 'subdir o depto')->first()->organizationalUnit->name }}</b></div>
 <br>
 
