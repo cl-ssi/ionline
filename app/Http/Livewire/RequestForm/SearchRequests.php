@@ -13,10 +13,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\RequestForms\ItemRequestForm;
-use App\Jobs\ProcessReportFormItems;
+// use App\Models\RequestForms\ItemRequestForm;
+// use App\Jobs\ProcessReportFormItems;
 use App\Exports\RequestForms\FormItemsExport;
-
+// use Illuminate\Support\Facades\Bus;
+// use Illuminate\Support\Facades\Storage;
 
 class SearchRequests extends Component
 {
@@ -41,6 +42,10 @@ class SearchRequests extends Component
     public $selectedSupplier = null;
     public $result = null;
     public $inbox;
+
+    // public $batchId;
+    // public $exporting = false;
+    // public $exportFinished = false;
 
     public $organizationalUnit;
 
@@ -100,20 +105,22 @@ class SearchRequests extends Component
         $this->selectedPo,
         $this->selectedTender,
         $this->selectedSupplier
-        )
-        ->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerUser',
-        'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
-        ->latest();
+        );
 
         if($this->inbox == 'report: form-items'){
-            $query->with('eventRequestForms', 'associateProgram', 'purchasingProcess.details', 
-                'itemRequestForms')
+            $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType','associateProgram', 'purchasingProcess.details', 
+                'itemRequestForms.product', 'itemRequestForms.budgetItem','father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess')
                 ->doesntHave('passengers');
                 /*
                 ->select(['id', 'status', 'folio', 'created_at', 'subtype', 'name', 'type_of_currency', 'estimated_expense',
                 'approved_at']);
                 */
+        }else{
+            $query->with('user', 'userOrganizationalUnit', 'purchaseMechanism', 'purchaseType', 'eventRequestForms.signerUser',
+            'eventRequestForms.signerOrganizationalUnit', 'father:id,folio,has_increased_expense', 'purchasers', 'purchasingProcess');
         }
+
+        $query->latest();
 
         return ($isPaginated) ? $query->paginate(50) : $query->cursor();
     }
@@ -131,6 +138,14 @@ class SearchRequests extends Component
 
     public function export()
     {
+        // $this->exporting = true;
+        // $this->exportFinished = false;
+
+        // $batch = Bus::batch([
+        //     new ProcessReportFormItems($this->querySearch(false)),
+        // ])->dispatch();
+
+        // $this->batchId = $batch->id; 
         return Excel::download(new RequestFormsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
     }
 
@@ -148,9 +163,40 @@ class SearchRequests extends Component
         //ProcessReportFormItems::dispatch($this->detailsToExport);
             // ->onConnection('cloudtasks')
             //->delay(15);
-
+        // dd($this->querySearch(false));
         return Excel::download(new FormItemsExport($this->querySearch(false)), 'requestFormsExport_'.Carbon::now().'.xlsx');
+        // $this->exporting = true;
+        // $this->exportFinished = false;
+
+        // $batch = Bus::batch([
+        //     new ProcessReportFormItems($this->querySearch(false)),
+        // ])->dispatch();
+
+        // $this->batchId = $batch->id;   
     }
+
+    // public function getExportBatchProperty()
+    // {
+    //     if (!$this->batchId) {
+    //         return null;
+    //     }
+
+    //     return Bus::findBatch($this->batchId);
+    // }
+
+    // public function downloadExport()
+    // {
+    //     return Storage::download('public/requestFormsExport.xlsx');
+    // }
+
+    // public function updateExportProgress()
+    // {
+    //     $this->exportFinished = $this->exportBatch->finished();
+
+    //     if ($this->exportFinished) {
+    //         $this->exporting = false;
+    //     }
+    // }
 
     public function searchedRequesterOu(OrganizationalUnit $organizationalUnit){
         $this->selectedRequesterOuName = $organizationalUnit->id;
