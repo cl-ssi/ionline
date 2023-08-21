@@ -16,7 +16,7 @@
                 <th>Adjuntos</th>
                 <th>Anexos</th>
                 <th>Bod</th>
-                <th>Estado</th>
+                <th>Documento Firmado</th>
                 <th>Observaciones</th>
                 <th>Revisar</th>
             </tr>
@@ -163,6 +163,12 @@
                         @endforeach
                     </td>
                     <td>
+                        @if ($dte->confirmation_signature_file)
+                            <a href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
+                                class="btn btn-sm btn-success">
+                                <i class="fas fa-download"></i> Descargar
+                            </a>
+                        @endif
                     </td>
                     <td>
                         @foreach ($dte->paymentFlows as $paymentFlow)
