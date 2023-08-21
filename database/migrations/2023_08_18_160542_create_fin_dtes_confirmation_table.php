@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('fin_dtes_confirmation', function (Blueprint $table) {
             $table->id();
-            $table->string('folio_oc')->nullable();
             $table->foreignId('dte_id')->nullable()->constrained('fin_dtes');
+            $table->string('folio_oc')->nullable();
+            $table->foreignId('request_form_id')->nullable()->constrained('arq_request_forms');
             $table->boolean('cenabast')->nullable();
-            $table->string('certificado_cumplimiento')->nullable();
+            $table->string('certificado_cumplimiento')->nullable(); //averiguar si es cumplimiento o conformidad
             $table->string('acta_ingreso')->nullable();
             $table->timestamps();
             $table->softDeletes();
