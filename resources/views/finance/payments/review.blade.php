@@ -4,20 +4,21 @@
     @include('finance.nav')
     <h3 class="mb-3">
         Bandeja de Revisión de Pago</h3>
-
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Documento</th>
-                <th>OC</th>
+                <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Doc. de Pago</th>
                 <th>Adjuntos</th>
-                <th>Anexos</th>
                 <th>Bod</th>
                 <th>Documento Firmado</th>
-                <th>Observaciones</th>
+                <th>Folio Compromiso SIGFE</th>
+                <th>Archivo Compromiso SIGFE</th>
+                <th>Folio Devengo SIGFE</th>
+                <th>Archivo Devengo SIGFE</th>
                 <th>Revisar</th>
             </tr>
         </thead>
@@ -52,7 +53,7 @@
                             </a>
                         @endif
                     </td>
-                    <td>
+                    <td class="small">
                         <ul>
                             @if ($dte->requestform)
                                 @if ($dte->requestform->father)
@@ -67,7 +68,7 @@
                             @endif
                         </ul>
                     </td>
-                    <td>
+                    <td class="small">
                         @if ($dte->requestform)
                             @if ($dte->requestform->father)
                                 @foreach ($dte->requestform->father->requestFormFiles as $requestFormFile)
@@ -88,69 +89,7 @@
                             @endif
                         @endif
                     </td>
-                    <td>
-                        @if ($dte->requestform && $dte->requestform->purchasingProcess)
-                            @foreach ($dte->requestform->purchasingProcess->details->count() > 0 ? $dte->requestform->purchasingProcess->details : $dte->requestform->purchasingProcess->detailsPassenger as $key => $detail)
-                                @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
-                                    @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
-                                        <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                            class="list-group-item list-group-item-action py-2" target="_blank">
-                                            <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
-                                        </a>
-                                    @endforeach
-                                @endif
-
-                                @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
-                                    @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
-                                        <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                            class="list-group-item list-group-item-action py-2" target="_blank">
-                                            <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                    @endforeach
-                                @endif
-
-
-                                @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
-                                    @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
-                                        <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                            class="list-group-item list-group-item-action py-2" target="_blank">
-                                            <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                    @endforeach
-                                @endif
-                            @endforeach
-                        @endif
-                        @if ($dte->requestform)
-                            @if ($dte->requestform->father && $dte->requestform->father->purchasingProcess)
-                                @foreach ($dte->requestform->father->purchasingProcess->details->count() > 0 ? $dte->requestform->father->purchasingProcess->details : $dte->requestform->father->purchasingProcess->detailsPassenger as $key => $detail)
-                                    @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
-                                        @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
-                                            </a>
-                                        @endforeach
-                                    @endif
-
-                                    @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
-                                        @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
-
-
-                                    @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
-                                        @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            @endif
-                        @endif
-                    </td>
-                    <td>
+                    <td class="small">
                         @foreach ($dte->controls as $control)
                             <a href="{{ route('warehouse.control.show', [
                                 'store' => $control->store->id,
@@ -162,7 +101,7 @@
                             </a>
                         @endforeach
                     </td>
-                    <td>
+                    <td class="small">
                         @if ($dte->confirmation_signature_file)
                             <a href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
                                 class="btn btn-sm btn-success">
@@ -170,15 +109,16 @@
                             </a>
                         @endif
                     </td>
-                    <td>
-                        @foreach ($dte->paymentFlows as $paymentFlow)
-                            <p>{{ $paymentFlow->observation }} @if ($paymentFlow->observation)
-                                    ({{ $paymentFlow->user->short_name }})
-                                @endif
-                            </p>
-                        @endforeach
+                    <td class="small">
+                        @livewire('finance.sigfe-folio-compromiso', ['dteId' => $dte->id], key($dte->id))
                     </td>
-                    <td>
+                    <td class="small">Archivo Compromiso</td>
+                    <td class="small">
+                        @livewire('finance.sigfe-folio-devengo', ['dteId' => $dte->id], key($dte->id))
+                    </td>
+
+                    <td class="small">Archivo Devengo</td>
+                    <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
                             <i class="fas fa-hand-holding-usd"></i> Enviar a Bandeja Pendiente para Pago
@@ -186,7 +126,6 @@
                     </td>
                 </tr>
             @endforeach
-
         </tbody>
     </table>
 @endsection

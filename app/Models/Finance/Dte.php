@@ -95,6 +95,15 @@ class Dte extends Model
 
         'dte_id',
         'cenabast',
+
+
+        'folio_compromiso_sigfe',
+        'archivo_compromiso_sigfe',
+
+        'folio_devengo_sigfe',
+        'archivo_devengo_sigfe',
+
+        'devuelto',
     ];
 
     /**
