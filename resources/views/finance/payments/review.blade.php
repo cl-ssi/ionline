@@ -10,8 +10,7 @@
                 <th>ID</th>
                 <th>Documento</th>
                 <th width="140px">OC</th>
-                <th>FR</th>
-                <th>Doc. de Pago</th>
+                <th>FR</th>                
                 <th>Adjuntos</th>
                 <th>Bod</th>
                 <th>Documento Firmado</th>
@@ -52,22 +51,7 @@
                                 <i class="fas fa-file-alt"></i> {{ $dte->requestForm->folio }}
                             </a>
                         @endif
-                    </td>
-                    <td class="small">
-                        <ul>
-                            @if ($dte->requestform)
-                                @if ($dte->requestform->father)
-                                    @foreach ($dte->requestform->father->paymentDocs as $paymentDoc)
-                                        <li>{{ $paymentDoc->name ?? '' }}</li>
-                                    @endforeach
-                                @else
-                                    @foreach ($dte->requestform->paymentDocs as $paymentDoc)
-                                        <li>{{ $paymentDoc->name ?? '' }}</li>
-                                    @endforeach
-                                @endif
-                            @endif
-                        </ul>
-                    </td>
+                    </td>                    
                     <td class="small">
                         @if ($dte->requestform)
                             @if ($dte->requestform->father)
@@ -101,23 +85,26 @@
                             </a>
                         @endforeach
                     </td>
-                    <td class="small">
+                    <td class="small" nowrap>
                         @if ($dte->confirmation_signature_file)
                             <a href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
-                                class="btn btn-sm btn-success">
-                                <i class="fas fa-download"></i> Descargar
+                                class="btn btn-sm btn-success"><i class="fas fa-download"></i> Descargar
                             </a>
                         @endif
                     </td>
                     <td class="small">
                         @livewire('finance.sigfe-folio-compromiso', ['dteId' => $dte->id], key($dte->id))
                     </td>
-                    <td class="small">Archivo Compromiso</td>
+                    <td class="small">
+                        @livewire('finance.sigfe-archivo-compromiso', ['dteId' => $dte->id], key($dte->id))
+                    </td>
                     <td class="small">
                         @livewire('finance.sigfe-folio-devengo', ['dteId' => $dte->id], key($dte->id))
                     </td>
 
-                    <td class="small">Archivo Devengo</td>
+                    <td class="small">
+                    @livewire('finance.sigfe-archivo-devengo', ['dteId' => $dte->id], key($dte->id))
+                    </td>
                     <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
                             class="btn btn-sm btn-outline-success">
