@@ -48,8 +48,7 @@
 <h4>Solicitudes Activas <b>({{$serviceRequests->count()}})</b></h4><br>
 <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel</a>
 
-<iframe id="txtArea1" style="display:none"></iframe>
-<table class="table table-sm table-bordered table-responsive small" id="table_id">
+<table class="table table-sm table-bordered table-responsive small" id="tabla">
 	<thead>
 		<tr class="text-center">
 			<th>ID</th>
@@ -163,14 +162,21 @@
 
 @section('custom_js_head')
 <script type="text/javascript">
-	function exportF(elem) {
-		var table = document.getElementById("table_id");
-		var html = table.outerHTML;
-		var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
-		var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
-		elem.setAttribute("href", url);
-		elem.setAttribute("download", "reporte_consolidado.xls"); // Choose the file name
-		return false;
-	}
+  let date = new Date()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+
+  function exportF(elem) {
+    var table = document.getElementById("tabla");
+    var html = table.outerHTML;
+    var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+    var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "tabla.xls"); // Choose the file name
+    return false;
+  }
 </script>
 @endsection
