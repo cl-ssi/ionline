@@ -27,6 +27,9 @@
     </div>
 
 
+
+
+
     @if ($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
@@ -70,6 +73,31 @@
             </button>
         </div>
     </div>
+
+
+    <div class="mb-3">
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #28a745;"></div>
+            <i class="fas fa-circle text-success"></i>
+            <span class="ml-2">Menos de 5 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #6c757d;"></div>
+            <i class="fas fa-circle text-secondary"></i>
+            <span class="ml-2">5 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #ffc107;"></div>
+            <i class="fas fa-circle text-warning"></i>
+            <span class="ml-2">Menos de 8 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #dc3545;"></div>
+            <i class="fas fa-circle text-danger"></i>
+            <span class="ml-2">8 días o más</span>
+        </div>
+    </div>
+
 
     <table class="table table-sm table-bordered">
         <thead>

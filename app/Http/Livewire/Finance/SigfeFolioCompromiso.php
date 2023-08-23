@@ -11,6 +11,7 @@ class SigfeFolioCompromiso extends Component
     public $nuevoFolioCompromiso = null; 
     public $dteId;
     public $successMessage = '';
+    public $editing = false;
 
     // Recibe el ID del DTE cuando se carga el componente
     public function mount($dteId)
@@ -38,4 +39,11 @@ class SigfeFolioCompromiso extends Component
             
         }
     }
+
+    public function toggleEditing()
+    {
+        $this->editing = !$this->editing;
+    }
+
+
 }

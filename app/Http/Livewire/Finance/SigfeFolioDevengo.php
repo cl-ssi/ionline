@@ -10,6 +10,7 @@ class SigfeFolioDevengo extends Component
     public $nuevoFolioDevengo = null;
     public $dteId;
     public $successMessage = '';
+    public $editing = false;
 
     public function mount($dteId)
     {
@@ -34,5 +35,10 @@ class SigfeFolioDevengo extends Component
             $dte->save();
             $this->successMessage = 'Folio devengo sigfe guardado exitosamente.';
         }
+    }
+
+    public function toggleEditing()
+    {
+        $this->editing = !$this->editing;
     }
 }
