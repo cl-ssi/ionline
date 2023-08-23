@@ -71,7 +71,7 @@
                         <td>{{ $jobPositionProfile->created_at->format('d-m-Y H:i:s') }}</td>
                         <td>
                             <b>{{ $jobPositionProfile->user->FullName }}</b> <br>
-                            {{ $jobPositionProfile->organizationalUnit->name }} <br><br>
+                            {{ ($jobPositionProfile->organizationalUnit) ? $jobPositionProfile->organizationalUnit->name : '' }} <br><br>
                         </td>
                         <td>{{ $jobPositionProfile->name }}</td>
                         <td>
@@ -119,7 +119,8 @@
                                 @if($jobPositionProfile->status == 'saved' || $jobPositionProfile->status == "review" ||
                                     $jobPositionProfile->status == 'sent')
                                     <a href="{{ route('job_position_profile.edit', $jobPositionProfile) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit fa-fw"></i>
+                                        class="btn btn-outline-secondary btn-sm" title="Editar">
+                                        <i class="fas fa-edit fa-fw"></i>
                                     </a>
                                 @else
                                     <a href="{{ route('job_position_profile.show', $jobPositionProfile) }}"
