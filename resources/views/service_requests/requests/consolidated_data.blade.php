@@ -20,7 +20,7 @@
 			</select>
 		</div>
         <div class="form-group col">
-			<label>Año Inicio</label>
+			<label>Año Inicio de Contrato</label>
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
                 <option value="2024" @if($request->year == "2024") selected @endif>2024</option>
 				<option value="2023" @if($request->year == "2023") selected @endif>2023</option>
@@ -31,7 +31,7 @@
 			</select>
 		</div>
         <div class="form-group col">
-			<label>Mes Inicio</label>
+			<label>Mes Inicio de Contrato</label>
             <select class="form-control" data-live-search="true" name="semester" data-size="5">
 				<option value="1" @if($request->semester == "1") selected @endif>Enero</option>
                 <option value="2" @if($request->semester == "2") selected @endif>Febrero</option>

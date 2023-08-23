@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte COVID-19')
+@section('title', 'Reporte consolidado por especialidad')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte consolidado</h3>
+<h3 class="mb-3">Reporte consolidado por especialidad</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.program_consolidated_report') }}">
 	<div class="form-row mb-3">
         <div class="form-group col">
-			<label>Año Inicio</label>
+			<label>Año Inicio de Contrato</label>
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
 				<option value="2023" @if($request->year == "2023") selected @endif>2023</option>
                 <option value="2022" @if($request->year == "2022") selected @endif>2022</option>
@@ -21,7 +21,7 @@
 			</select>
 		</div>
         <div class="form-group col">
-			<label>Semestre Inicio</label>
+			<label>Semestre Inicio de Contrato</label>
 			<select class="form-control" data-live-search="true" name="semester" data-size="5">
 				<option value="1" @if($request->semester == "1") selected @endif>Enero-Abril</option>
                 <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
