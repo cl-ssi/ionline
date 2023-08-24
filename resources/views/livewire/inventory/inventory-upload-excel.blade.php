@@ -15,13 +15,10 @@
 
                 <div class="form-group">
                     <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input @error('excelFile') is-invalid @enderror" 
-                            id="excelFile" 
-                            wire:model="excelFile" 
-                            accept=".xlsx,.xls" 
-                            required
-                            >
-                        <label class="custom-file-label" for="excelFile" data-browse="Examinar">Seleccionar archivo Excel</label>
+                        <input type="file" class="custom-file-input @error('excelFile') is-invalid @enderror"
+                            id="excelFile" wire:model="excelFile" accept=".xlsx,.xls" required>
+                        <label class="custom-file-label" for="excelFile" data-browse="Examinar">Seleccionar archivo
+                            Excel</label>
                         @error('excelFile')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -36,5 +33,12 @@
             </div>
         </div>
     </form>
+
+
+    <div class="mt-4">
+        <p>El formato para cargar el excel es el siguiente:</p>
+        <a href="#" class="btn btn-outline-secondary"
+            target="_blank">Formato Excel</a>
+    </div>
 
 </div>
