@@ -37,7 +37,7 @@
 
     <div class="mt-4">
         <p>El formato para cargar el excel es el siguiente:</p>
-        <a href="#" class="btn btn-outline-secondary"
+        <a href="{{ asset('upload-template/carga_inventario.xlsx') }}" class="btn btn-outline-secondary"
             target="_blank">Formato Excel</a>
     </div>
 
