@@ -9,17 +9,19 @@
         </div>
     </div>
 
-
-    <div class="row mb-3">
-        <div class="col-lg-6">
-            <input type="text" wire:model.defer="filter" class="form-control" placeholder="Buscar por Nombre o Apellido">
+    <form wire:submit.prevent="searchFuncionary">
+        <div class="row mb-3">
+            <div class="col-lg-6">
+                <input type="text" wire:model.defer="filter" class="form-control"
+                    placeholder="Buscar por Nombre o Apellido">
+            </div>
+            <div class="col-lg-1">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </div>
-        <div class="col-lg-1">
-            <button class="btn btn-primary" wire:click="searchFuncionary">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-    </div>
+    </form>
 
     <table class="table table-sm table-bordered">
         <thead>
