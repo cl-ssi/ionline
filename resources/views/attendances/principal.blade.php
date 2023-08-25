@@ -485,12 +485,12 @@
             <div class="card card-2">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Confirmacion Asistencia</h2>
+                    <h2 class="title">Confirmación Asistencia</h2>
                     <form method="POST" action="{{ route('attendances.login') }}">
                         @csrf
 
                         <div class="input-group">
-                            <input class="input--style-2" type="text" placeholder="RUT (con puntos y con guion)" maxlength="12" name="rut" id="rut" required>
+                            <input class="input--style-2" type="text" placeholder="Digite su RUN" maxlength="12" name="rut" id="rut" required autocomplete="off">
                         </div>
                         <div class="p-t-30">
                             <button class="btn btn--radius btn--green" type="submit">Enviar</button>

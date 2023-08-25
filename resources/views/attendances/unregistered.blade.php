@@ -479,7 +479,7 @@
             <div class="card card-2">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">Usted no esta registrado, contactese con los encargados de este evento.</h2>
+                    <h2 class="title">Usted no está registrado, contáctese con los encargados de este evento.</h2>
                 </div>
             </div>
         </div>

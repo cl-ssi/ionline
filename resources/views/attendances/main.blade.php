@@ -484,7 +484,7 @@
                 <div class="card card-2">
                     <div class="card-heading"></div>
                     <div class="card-body">
-                        <h2 class="title">Gracias por su Confirmacion, {{ $nombre }}</h2>
+                        <h2 class="title">Gracias por su Confirmación, {{ $nombre }}</h2>
                     </div>
                 </div>
             </div>
