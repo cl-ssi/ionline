@@ -20,6 +20,7 @@ class Places extends Component
     public $description;
     public $location_id;
     public $locations;
+    public $filter;
 
     public function render()
     {
@@ -35,6 +36,7 @@ class Places extends Component
             'name'          => 'required|string|min:2|max:255',
             'description'   => 'nullable|string|min:0|max:255',
             'location_id'   => 'required|exists:cfg_locations,id',
+            'architectural_design_code'   => 'nullable|string|min:0|max:255',
         ];
     }
 
@@ -75,6 +77,11 @@ class Places extends Component
         $this->view = 'create';
     }
 
+    public function searchPlace()
+    {
+        $this->resetPage(); // Reinicia la paginación a la primera página
+    }
+
     public function edit(Place $place)
     {
         $this->view = 'edit';
@@ -91,7 +98,7 @@ class Places extends Component
         $place->update($this->validate());
         $this->mount($this->establishment);
 
-        session()->flash( 'info', 'La oficina fue actualizada exitosamente.');
+        session()->flash('info', 'La oficina fue actualizada exitosamente.');
 
         $this->view = 'index';
     }
@@ -104,13 +111,25 @@ class Places extends Component
 
     public function getPlaces()
     {
-        return Place::query()
+        $query = Place::query()
             ->orderBy('name', 'asc')
             ->with('establishment')
-            ->orderBy('name')
-            ->when($this->establishment, function($query) {
+            ->when($this->establishment, function ($query) {
                 $query->whereEstablishmentId($this->establishment->id);
-            })
-            ->paginate(100);
+            });
+
+        if ($this->filter) {
+            $searchTerm = '%' . $this->filter . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', $searchTerm)
+                    ->orWhere('description', 'LIKE', $searchTerm)
+                    ->orWhereHas('location', function ($q) use ($searchTerm) {
+                        $q->where('name', 'LIKE', $searchTerm);
+                    })
+                    ->orWhere('architectural_design_code', 'LIKE', $searchTerm);
+            });
+        }
+
+        return $query->paginate(100);
     }
 }
