@@ -2269,6 +2269,8 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
             Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
+
+        //Route::get('/', App\Http\Livewire\Welfare\AmiPass\ChargeIndex::class)->name('index');
     });
 });
 
@@ -2442,3 +2444,21 @@ Route::get('/maquetas/menu', function () {
 Route::get('/maquetas/vista', function () {
     return view('maquetas.vista');
 })->name('maquetas.vista');
+
+
+
+/* Registro asistencia cena SST 2023 */
+use App\Http\Controllers\Attendances\PeopleController;
+
+Route::get('/attendances/', function () {
+    return view('attendances.principal');
+});
+Route::post('/attendances/login', [PeopleController::class, 'customLogin'])->name('attendances.login');
+
+Route::get('/attendances/unregistered', function () {
+    return view('attendances.unregistered');
+})->name('attendances.unregistered');
+
+Route::get('/attendances/main', function() {
+    return view('attendances.main');
+})->name('attendances.main');
