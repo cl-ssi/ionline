@@ -1,5 +1,14 @@
 <div>
     <h6 class="small"><b>1. Funcionario</b></h6> <br>
+    
+    @if($totalCurrentAllowancesDaysByUser < 90 && $userAllowance && $form == 'create')
+        <div class="alert alert-info alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+            El usuario <b>{{ $userAllowance->FullName }}</b> registra los siguiente días de viáticos: <br>
+            - <b>Utilizados</b>: {{ $totalCurrentAllowancesDaysByUser }} <br>
+            - <b>Disponibles</b>:  {{ 90 - $totalCurrentAllowancesDaysByUser }}
+        </div>
+    @endif
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-6">
@@ -267,6 +276,12 @@
         </div>
     </div>
 
+    @if(session('current'))
+        <div class="alert alert-danger">
+            {{ session('current') }}
+        </div>
+    @endif
+
     <hr>
     <br>
 
@@ -347,12 +362,14 @@
             </ul>
         </div>
     @endif
-
+    
+    {{--
     @if(session()->has('current'))
         <div class="alert alert-danger">
             {{ session('current') }}
         </div>
     @endif
+    --}}
 
     @if(session()->has('exceedTotalDays'))
         <div class="alert alert-danger">

@@ -71,7 +71,7 @@
         </tr>
         <tr align="center">
             <td>{{ $allowance->originCommune->name }}</td>
-            <td>{{ $allowance->destinationCommune->name }}</td>
+            <td>{{-- $allowance->destinationCommune->name --}}</td>
             <td>{{ $allowance->place }}</td>
             <td>{{ $allowance->reason }}</td>
         </tr>
@@ -96,8 +96,8 @@
             <th colspan="2">Hasta</th>
         </tr>
         <tr align="center">
-            <td colspan="2">{{ $allowance->from->format('d-m-Y') }}</td>
-            <td colspan="2">{{ $allowance->to->format('d-m-Y') }}</td>
+            <td colspan="2">{{-- $allowance->from->format('d-m-Y') --}}</td>
+            <td colspan="2">{{-- $allowance->to->format('d-m-Y') --}}</td>
         </tr>
     </tbody>
 </table>
