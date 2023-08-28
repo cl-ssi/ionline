@@ -188,8 +188,7 @@ class RequestReplacementStaffController extends Controller
      */
     public function store(Request $request, $formType)
     {
-        /*
-        if(Auth::user()->organizationalUnit->level == 3){
+        if(Auth::user()->organizationalUnit->level != 1){
             /* SE OBTIENEN LA INFORMACIÓN DEL FORMULARIO */
             if($formType == 'announcement'){
                 $request_replacement = new RequestReplacementStaff();
@@ -340,13 +339,11 @@ class RequestReplacementStaffController extends Controller
 
             session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
             return redirect()->route('replacement_staff.request.own_index');
-        /*
         }
         else{
             session()->flash('danger', 'Estimado Usuario, su unidad organizacional no está autorizada para generar solicitudes, favor contactar a la Unidad de Reclutamiento');
             return redirect()->route('replacement_staff.request.own_index');
         }
-        */
     }
 
     public function store_extension(Request $request, RequestReplacementStaff $requestReplacementStaff, $formType)
