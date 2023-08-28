@@ -20,6 +20,7 @@ class Places extends Component
     public $description;
     public $location_id;
     public $locations;
+    public $architectural_design_code;
     public $filter;
 
     public function render()
@@ -57,6 +58,7 @@ class Places extends Component
         $this->name = null;
         $this->description = null;
         $this->location_id = null;
+        $this->architectural_design_code = null;
         $this->locations = Location::whereEstablishmentId($this->establishment->id)->get();
     }
 
@@ -72,7 +74,8 @@ class Places extends Component
         $this->reset([
             'name',
             'description',
-            'location_id'
+            'location_id',
+            'architectural_design_code',
         ]);
         $this->view = 'create';
     }
@@ -91,6 +94,7 @@ class Places extends Component
         $this->name = $place->name;
         $this->description = $place->description;
         $this->location_id = $place->location_id;
+        $this->architectural_design_code = $place->architectural_design_code;
     }
 
     public function update(Place $place)
