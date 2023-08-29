@@ -219,7 +219,7 @@
                         @if ($dte->establishment)
                             {{ $dte->establishment->name }}
                         @else
-                            @livewire('finance.assign-establishment', ['dteId' => $dte->id], key($dte->id))
+                            @livewire('finance.assign-establishment', ['dteId' => $dte->id, 'establishments'=>$establishments], key($dte->id))
                         @endif
                     </td>
 

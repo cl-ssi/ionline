@@ -11,11 +11,12 @@ class AssignEstablishment extends Component
 
     public $dteId;
     public $selectedEstablishment;
+    public $establishments;
 
     public function mount($dteId)
     {
         $this->dteId = $dteId;
-        $this->selectedEstablishment = null; // Inicializar el valor seleccionado
+        $this->selectedEstablishment = null; // Inicializar el valor seleccionado        
     }
 
     public function saveEstablishment()
@@ -31,8 +32,6 @@ class AssignEstablishment extends Component
 
     public function render()
     {
-        return view('livewire.finance.assign-establishment', [
-            'establishments' => Establishment::orderBy('name')->get(),
-        ]);
+        return view('livewire.finance.assign-establishment');
     }
 }
