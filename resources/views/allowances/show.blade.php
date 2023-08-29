@@ -156,21 +156,19 @@
         <tbody>
             <tr class="text-center">
                 <th>Viático</th>
+                <th>%</th>
                 <th>Valor</th>
                 <th>N° Días</th>
                 <th>Valor Total</th>
             </tr>
             <tr>
                 <td><b>1. DIARIO</b></td>
+                <td class="text-center">100%</td>
                 <td class="text-right">
-                    ${{ $allowance->day_value ? number_format($allowance->day_value, 0, ",", ".") : number_format($allowance->allowanceValue->value, 0, ",", ".") }}
+                    ${{ number_format($allowance->allowanceValue->value, 0, ",", ".") }}
                 </td>
                 <td class="text-center"> 
-                    @if($allowance->half_days_only == 0)
-                        {{ intval($allowance->total_days) }}
-                    @else
-                        0
-                    @endif
+                    {{ ($allowance->total_days) ? intval($allowance->total_days) : 0 }}
                 </td>
                 <td class="text-right">
                     ${{ ($allowance->total_days >= 1) ? number_format(($allowance->day_value * intval($allowance->total_days)), 0, ",", ".") : '0' }}
@@ -178,22 +176,40 @@
             </tr>
             <tr>
                 <td><b>2. PARCIAL</b></td>
+                <td class="text-center">40%</td>
                 <td class="text-right">
-                    ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                    ${{ ($allowance->half_day_value) ? number_format($allowance->half_day_value, 0, ",", ".") : '0' }}
                 </td>
                 <td class="text-center">
-                    @if($allowance->half_days_only == 0)
-                        0,5
+                    {{ ($allowance->total_half_days) ? intval($allowance->total_half_days) : 0 }}
+
+                    @if($allowance->total_half_days && $allowance->total_half_days > 1)
+                        medios días
+                    @elseif($allowance->total_half_days && $allowance->total_half_days == 1)
+                        medio día
                     @else
-                        {{ number_format($allowance->total_days, 0, ",", ".") }} medios días
+
                     @endif
                 </td>
                 <td class="text-right">
-                    ${{ number_format($allowance->half_day_value, 0, ",", ".") }}
+                    ${{ ($allowance->half_day_value) ? number_format($allowance->half_day_value * $allowance->total_half_days, 0, ",", ".") : '' }}
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>                    
+                <td><b>3. PARCIAL</b></td>
+                <td class="text-center">50%</td>
+                <td class="text-right">
+                    
+                </td>
+                <td class="text-center">
+                    
+                </td>
+                <td class="text-right">
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>                    
                 <td class="text-center"><b>Total</b></td>
                 <td class="text-right">
                     ${{ number_format($allowance->total_value, 0, ",", ".") }}

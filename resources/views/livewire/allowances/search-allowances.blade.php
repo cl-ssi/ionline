@@ -47,12 +47,12 @@
                 <thead>
                     <tr class="text-center">
                         <th rowspan="2" style="width: 3%">ID <br> <span class="badge badge-secondary">Folio sirh</span></th>
-                        <th rowspan="2" style="width: 6%">Fecha Creación</th>
+                        <th rowspan="2" style="width: 7%">Fecha Creación</th>
                         <th rowspan="2">Funcionario</th>
                         <th rowspan="2">Calidad</th>
                         <th colspan="2" style="width: 27%">Lugar</th>
                         <th rowspan="2" style="width: 15%">Motivo</th>
-                        <th rowspan="2" colspan="2">Periodo</th>
+                        <th rowspan="2" style="width: 9%">Periodo</th>
                         <th rowspan="2" colspan="2"></th>
                     </tr>
                     <tr class="text-center">
@@ -95,7 +95,7 @@
                             {{ $allowance->organizationalUnitAllowance->name }} <br><br>
                             <b>Creado por</b>: {{ $allowance->userCreator->TinnyName }}
                         </td>
-                        <td class="text-center">{{ $allowance->ContractualCondition->name }}</td>
+                        <td class="text-center">{{ ($allowance->ContractualCondition) ? $allowance->ContractualCondition->name : '' }}</td>
                         <td class="text-center">{{ $allowance->originCommune->name }}</td>
                         <td class="text-center">
                             @foreach($allowance->destinations as $destination)
@@ -103,13 +103,21 @@
                             @endforeach
                         </td>
                         <td>{{ $allowance->reason }}</td>
-                        <td class="text-center" style="width: 7%">
-                            {{-- Carbon\Carbon::parse($allowance->from)->format('d-m-Y')<br>
-                            Carbon\Carbon::parse($allowance->to)->format('d-m-Y') --}}
-
+                        <td class="text-left">
                             {{ $allowance->FromFormat }}<br>
                             {{ $allowance->ToFormat }}
+                            <br>
+                            @if($allowance->total_days)
+                                <br>
+                                <b>Diario</b>: {{ intval($allowance->total_days) }} @if($allowance->total_days > 1) días @else día @endif
+                            @endif
+                            @if($allowance->total_half_days)
+                                <br>
+                                <b>Parcial</b>: @if($allowance->total_half_days == 1) Medio día @else {{ intval($allowance->total_half_days) }} medios días @endif 
+                            @endif
+                            
                         </td>
+                        {{--
                         <td class="text-center">
                             {{ number_format($allowance->total_days, 1, ",", ".") }} <br>
                             @if($allowance->total_days > 1 && $allowance->half_days_only == 0)
@@ -120,6 +128,7 @@
                                 día
                             @endif
                         </td>
+                        --}}
                         <td class="text-center">
                             @if($index == 'sign')
                                 <a href="{{ route('allowances.show', $allowance) }}"

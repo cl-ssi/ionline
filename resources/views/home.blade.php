@@ -4,6 +4,24 @@
 
 @section('content')
 
+
+<!-- Modal -->
+<div class="modal fade" id="modal-news" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Atención Telemedicina</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <img src="{{ asset('images/telemedicina.png') }}" alt="Logo {{ env('APP_SS') }}" class="img-thumbnail">
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- <style>
     .jumbotron {
         background-image: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%), url("../images/new-year-2023.jpg");
@@ -144,6 +162,11 @@
             /* 65=a, 74=j*/
             if (event.which == 65 || event.which == 74) $("#developers").toggle("slow");
         });
+    });
+
+    // Cargar Modal
+    $(window).on('load', function() {
+        $('#modal-news').modal('show');
     });
 </script>
 

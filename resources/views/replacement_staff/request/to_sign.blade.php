@@ -281,12 +281,12 @@
                                         @endif
 
                                         @if((in_array($requestSign->organizational_unit_id, $iam_authorities_in) || 
-                                                Auth::user()->hasRole('Replacement Staff: personal sign')) &&
-                                                $requestSign->ou_alias != 'finance'
+                                                Auth::user()->hasRole('Replacement Staff: personal sign'))
                                             )
                                             <button type="submit" class="btn btn-success btn-sm"
                                                 onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                                title="Aceptar">
+                                                title="Aceptar"
+                                                @if($requestReplacementStaff->form_type == "replacement" && $requestSign->ou_alias == 'finance') disabled @endif>
                                                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aceptar">
                                                     <i class="fas fa-check-circle"></i></a>
                                                 </span>
@@ -350,6 +350,7 @@
 @endif
 
 @if($requestReplacementStaff->requestSign->where('ou_alias', 'sub_rrhh')->first()->request_status == 'accepted' &&
+$requestReplacementStaff->requestSign->where('ou_alias', 'finance')->first()->request_status == 'pending' &&
     $requestReplacementStaff->budget_item_id)
     @php 
         $idModelModal = $requestReplacementStaff->id;

@@ -2249,6 +2249,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     });
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
+        Route::get('/mi-amipass', [AmipassController::class, 'miAmipass'])->name('mi-amipass');
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
         Route::get('/question-all-index', [AmipassController::class, 'questionAllIndex'])->name('question-all-index');
@@ -2269,6 +2270,9 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
             Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
+
+        Route::get('/', App\Http\Livewire\Welfare\AmiPass\ChargeIndex::class)->name('index');
+        Route::get('/absences', App\Http\Livewire\Welfare\AmiPass\AbsencesIndex::class)->name('index');
     });
 });
 
@@ -2442,3 +2446,21 @@ Route::get('/maquetas/menu', function () {
 Route::get('/maquetas/vista', function () {
     return view('maquetas.vista');
 })->name('maquetas.vista');
+
+
+
+/* Registro asistencia cena SST 2023 */
+use App\Http\Controllers\Attendances\PeopleController;
+
+Route::get('/attendances/', function () {
+    return view('attendances.principal');
+});
+Route::post('/attendances/login', [PeopleController::class, 'customLogin'])->name('attendances.login');
+
+Route::get('/attendances/unregistered', function () {
+    return view('attendances.unregistered');
+})->name('attendances.unregistered');
+
+Route::get('/attendances/main', function() {
+    return view('attendances.main');
+})->name('attendances.main');

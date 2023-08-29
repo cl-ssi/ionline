@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class AllowancesCreate extends Component
 {
@@ -35,8 +36,9 @@ class AllowancesCreate extends Component
 
         $originCommune, $destinations,
         
-        $meansOfTransport, $roundTrip, $passage, $overnight, $from, $to, $halfDaysOnly,
-        $dayValue, $halfDayValue;
+        $meansOfTransport, $roundTrip, $passage, $overnight, $from, $to, 
+        $total_days = 0, $total_half_days = 0, $fifty_percent_total_days = 0, $halfDaysOnly,
+        $dayValue, $halfDayValue, $fifty_percent_day_value;
     
     public $disabledLaw = '';
 
@@ -65,7 +67,16 @@ class AllowancesCreate extends Component
 
     /* Allowance to edit */
     public $allowanceToEdit;
-    // public $userAllowance
+
+    /* Total dias completos en el año */
+    public $totalCurrentAllowancesDaysByUser = 0;
+    /* Total días disponibles */
+    public $allowancesAvailableDays = 0;
+    /* Total días disponibles */
+    public $allowancesExceededDays = 0;
+
+    /* Variable de pantalla */
+    public $form;
 
     protected $listeners = ['emitPosition', 'emitPositionValue', 'userSelected', 'savedDestinations', 'selectedInputId',
         'searchedCommune'];
@@ -132,121 +143,125 @@ class AllowancesCreate extends Component
 
         /* Buscar si existen viáticos en fecha indicada */
         $currentAllowances = Allowance::where('user_allowance_id', $this->userAllowance->id)
-            ->whereDate('from', '>=', $this->from)
-            ->WhereDate('to', '<=', $this->to)
+            ->whereYear('from', Carbon::parse($this->from)->year)
+            ->WhereYear('to', Carbon::parse($this->to)->year)
             ->get();
+
+        $periodo = CarbonPeriod::create($this->from, $this->to);
+        // Se itera por PERIODO
+        foreach ($periodo as $fecha) {
+            // Se itera por VIATICOS AÑO EN CURSO
+            foreach($currentAllowances as $currentAllowance){
+                if($currentAllowance->from == $fecha->format('Y-m-d') || $currentAllowance->to == $fecha->format('Y-m-d')){
+                    return back()->with('current', 'Estimado Usuario: El funcionario ya dispone de viático(s) para la fecha solicitada.');
+                }
+            }
+        }
+
+        /* SET NUMERO DE VIATICOS PARA PRUEBAS */
+        $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + 87;
         
-        /* Buscar si los viáticos del usuario no exceden 90 días en el presente año */
-        $allowancesCount = Allowance::select('total_days')
-            ->where('user_allowance_id', $this->userAllowance->id)
-            ->whereDate('from', '>=', now()->startOfYear())
-            ->WhereDate('to', '<=', now()->endOfYear())
-            ->where('half_days_only', null)
-            ->where('total_days', '>=', 1.0)
-            ->get();
+        $alw = DB::transaction(function () {
+            $alw = Allowance::updateOrCreate(
+                [
+                    'id'  =>  $this->idAllowance,
+                ],
+                [
+                    'status'                            => 'pending',
+                    'user_allowance_id'                 => $this->userAllowance->id,
+                    'contractual_condition_id'          => $this->contractualConditionId,
+                    'position'                          => $this->position,
+                    'allowance_value_id'                => $this->allowanceValueId(),
+                    'grade'                             => $this->grade,
+                    'law'                               => $this->law,
+                    'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
+                    'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
+                    'reason'                            => $this->reason,
+                    'overnight'                         => $this->overnight, 
+                    'passage'                           => $this->passage, 
+                    'means_of_transport'                => $this->meansOfTransport, 
+                    'origin_commune_id'                 => $this->originCommune->id,
+                    'round_trip'                        => $this->roundTrip,
+                    'from'                              => $this->from, 
+                    'to'                                => $this->to,
+                    'total_days'                        => $this->totalDays(),
+                    'total_half_days'                   => $this->totalHalfDays(),
+                    'fifty_percent_total_days'          => $this->totalFiftyPercentDays(),
+                    'half_days_only'                    => $this->halfDaysOnly,
+                    'day_value'                         => $this->allowanceDayValue(),
+                    'half_day_value'                    => $this->allowanceHalfDayValue(),
+                    'fifty_percent_day_value'           => $this->allowanceFiftyPercentDayValue(),
+                    'total_value'                       => $this->allowanceTotalValue(),
+                    'creator_user_id'                   => Auth::user()->id, 
+                    'creator_ou_id'                     => Auth::user()->organizationalUnit->id
+                ]
+            );
 
-        // $totalCurrentAllowancesDaysByUser = 75;
+            return $alw;
+        });
 
-        foreach($allowancesCount as $allowanceDays){
-            $totalCurrentAllowancesDaysByUser = $totalCurrentAllowancesDaysByUser + intval($allowanceDays->total_days);
+        /* SE GUARDAN LOS DESTINOS DEL VIÁTICO */
+        foreach($this->destinations as $destination){
+            Destination::updateOrCreate(
+                [
+                    'id' => $destination['id'],
+                ],
+                [
+                    'commune_id'    => $destination['commune_id'], 
+                    'locality_id'   => $destination['locality_id'], 
+                    'description'   => $destination['description'],
+                    'allowance_id'  => $alw->id
+                ]
+            );
         }
 
-        $totalNewAllowancesDaysByUser = $totalCurrentAllowancesDaysByUser + intval($this->allowanceTotalDays());
-
-        if($currentAllowances->count() > 0){
-            session()->flash('current', 'Estimado Usuario: El funcionario ya dispone de viático(s) para la fecha solicitada.');
+        /* SE GUARDAN LOS ARCHIVOS DEL VIÁTICO */
+        foreach($this->files as $keyFiles => $allowanceFile){
+            AllowanceFile::updateOrCreate(
+                [
+                    'id' => $this->idFile,
+                ],
+                [
+                    'name'          => $allowanceFile['fileName'],
+                    'file'          => $allowanceFile['file'], 
+                    'allowance_id'  => $alw->id, 
+                    'user_id'       => Auth::user()->id, 
+                ]
+            );
         }
-        elseif($totalNewAllowancesDaysByUser > 90 && $this->halfDaysOnly != 1){
-            $totalAvailableAllowanceDays = 90 - $totalCurrentAllowancesDaysByUser;
-            session()->flash('exceedTotalDays', 'Estimado Usuario: El funcionario seleccionado no puede exceder 90 días de viáticos. Viaticos Diarios disponibles: '.$totalAvailableAllowanceDays);
-        }
-        else{
-            /* SE GUARDA EL NUEVO VIÁTICO */
-            $alw = DB::transaction(function () {
-                $alw = Allowance::updateOrCreate(
-                    [
-                        'id'  =>  $this->idAllowance,
-                    ],
-                    [
-                        'status'                            => 'pending',
-                        'user_allowance_id'                 => $this->userAllowance->id,
-                        'contractual_condition_id'          => $this->contractualConditionId,
-                        'position'                          => $this->position,
-                        'allowance_value_id'                => $this->allowanceValueId(),
-                        'grade'                             => $this->grade,
-                        'law'                               => $this->law,
-                        'establishment_id'                  => $this->userAllowance->organizationalUnit->establishment->id,
-                        'organizational_unit_allowance_id'  => $this->userAllowance->organizationalUnit->id, 
-                        'reason'                            => $this->reason,
-                        'overnight'                         => $this->overnight, 
-                        'passage'                           => $this->passage, 
-                        'means_of_transport'                => $this->meansOfTransport, 
-                        'origin_commune_id'                 => $this->originCommune->id,
-                        'round_trip'                        => $this->roundTrip,
-                        'from'                              => $this->from, 
-                        'to'                                => $this->to,
-                        'total_days'                        => $this->allowanceTotalDays(),
-                        'half_days_only'                    => $this->halfDaysOnly,
-                        'day_value'                         => $this->allowanceDayValue(),
-                        'half_day_value'                    => $this->allowanceHalfDayValue(),
-                        'total_value'                       => $this->allowanceTotalValue(),
-                        'creator_user_id'                   => Auth::user()->id, 
-                        'creator_ou_id'                     => Auth::user()->organizationalUnit->id
-                    ]
-                );
 
-                return $alw;
-            });
+        /* APROBACION SIRH */
+        $this->sirhSign($alw);
 
-            /* SE GUARDAN LOS DESTINOS DEL VIÁTICO */
-            foreach($this->destinations as $destination){
-                Destination::updateOrCreate(
-                    [
-                        'id' => $destination['id'],
-                    ],
-                    [
-                        'commune_id'    => $destination['commune_id'], 
-                        'locality_id'   => $destination['locality_id'], 
-                        'description'   => $destination['description'],
-                        'allowance_id'  => $alw->id
-                    ]
-                );
-            }
+        /* APROBACION U.O. DE ACUERDO SOLICITANTE */
+        $this->ouSign($alw);
 
-            /* SE GUARDAN LOS ARCHIVOS DEL VIÁTICO */
-            foreach($this->files as $keyFiles => $allowanceFile){
-                AllowanceFile::updateOrCreate(
-                    [
-                        'id' => $this->idFile,
-                    ],
-                    [
-                        'name'          => $allowanceFile['fileName'],
-                        'file'          => $allowanceFile['file'], 
-                        'allowance_id'  => $alw->id, 
-                        'user_id'       => Auth::user()->id, 
-                    ]
-                );
-            }
+        /* APROBACION U.O. DE FINANZAS */
+        $this->financeSign($alw);
 
-            /* APROBACION SIRH */
-            $this->sirhSign($alw);
-
-            /* APROBACION U.O. DE ACUERDO SOLICITANTE */
-            $this->ouSign($alw);
-
-            /* APROBACION U.O. DE FINANZAS */
-            $this->financeSign($alw);
-
-            session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$alw->id);
-            return redirect()->route('allowances.index');
-        }
+        session()->flash('success', 'Estimados Usuario, se ha creado exitosamente la solicitud de viatico N°'.$alw->id);
+        return redirect()->route('allowances.index');
     }
 
     /* Listeners */
     public function userSelected($userAllowance)
     {
         $this->userAllowance = User::find($userAllowance);
-        $this->prueba        = $this->userAllowance->id;
+
+        if($this->userAllowance){
+            /* Buscar si los viáticos del usuario no exceden 90 días en el presente año */
+            $this->totalCurrentAllowancesDaysByUser = 0;            
+            $allowancesCount = Allowance::select('total_days')
+                ->where('user_allowance_id', $this->userAllowance->id)
+                ->whereDate('from', '>=', now()->startOfYear())
+                ->WhereDate('to', '<=', now()->endOfYear())
+                ->where('half_days_only', null)
+                ->where('total_days', '>=', 1.0)
+                ->get();
+            foreach($allowancesCount as $allowanceDays){
+                $this->totalCurrentAllowancesDaysByUser = $this->totalCurrentAllowancesDaysByUser + $allowanceDays->total_days;
+            }
+        }
     }
 
     public function emitPosition($emitPosition)
@@ -259,21 +274,53 @@ class AllowancesCreate extends Component
         $this->position = $emitPositionValue;
     }
 
-    /* Cálculo de días */
-    public function allowanceTotalDays(){
-
+    /* Cálculo de días completos */
+    public function totalDays(){
+        if($this->halfDaysOnly != 1){
             if($this->from == $this->to){
-                return 0.5;
+                return null;
             }
             else{
-                if($this->halfDaysOnly == 1){
-                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 1;
+                /* LÍMITE MÁXIMO DE VIATICOS AL AÑO */
+                $allowanceMaxValue = Parameter::where('module', 'allowance')
+                    ->where('parameter', 'AllowanceMaxValue')
+                    ->first()
+                    ->value;
+
+                $this->allowancesAvailableDays = $allowanceMaxValue - $this->totalCurrentAllowancesDaysByUser;
+
+                if(Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) > $this->allowancesAvailableDays){
+                    if($this->allowancesAvailableDays > 0){
+                        $this->allowancesExceededDays = Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) - $this->allowancesAvailableDays;
+                        return $this->allowancesAvailableDays;
+                    }
+                    else{
+                        return null;
+                    }
                 }
                 else{
-                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to)) + 0.5;
+                    return Carbon::parse($this->from)->diffInDays(Carbon::parse($this->to));
                 }
             }
+        }
     }
+
+    /* Cálculo de medios días */
+    public function totalHalfDays(){
+        if($this->halfDaysOnly != 1 || ($this->from == $this->to)){
+            return 1;
+        }
+        else{
+            return Carbon::parse($this->from." 00:00:00")
+                ->diffInDays(Carbon::parse($this->to." 23:59:59")->addDay()->startOfDay());
+        }
+    }
+
+    /* Cálculo de días 50 porciento */
+    public function totalFiftyPercentDays(){
+        return $this->allowancesExceededDays;
+    }
+
 
     public function allowanceValueId(){
         $this->cfgAllowanceValue = AllowanceValue::find($this->allowanceValueId);
@@ -281,7 +328,7 @@ class AllowancesCreate extends Component
     }
 
     public function allowanceDayValue(){
-        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 0){
+        if($this->totalDays() >= 1 && $this->halfDaysOnly == 0){
             $this->dayValue = $this->cfgAllowanceValue->value;
             return $this->cfgAllowanceValue->value;
         }
@@ -292,15 +339,25 @@ class AllowancesCreate extends Component
         return $this->cfgAllowanceValue->value * 0.4;
     }
 
+    public function allowanceFiftyPercentDayValue(){
+        return $this->cfgAllowanceValue->value * 0.5;
+    }
+
     public function allowanceTotalValue(){
-        if($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly != 1){
-            return ($this->allowanceDayValue() * intval($this->allowanceTotalDays())) + $this->allowanceHalfDayValue();
-        }
-        elseif($this->allowanceTotalDays() >= 1 && $this->halfDaysOnly == 1){
-            return ($this->allowanceHalfDayValue() * $this->allowanceTotalDays());
+        if($this->halfDaysOnly == 1 || ($this->from == $this->to)){
+            return ($this->allowanceHalfDayValue() * $this->totalHalfDays());
         }
         else{
-            return $this->allowanceHalfDayValue();
+            if($this->totalDays()){
+                $allowanceTotalValue =  $this->allowanceDayValue() * $this->totalDays();
+            }
+            if($this->totalHalfDays()){
+                $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceHalfDayValue() * $this->totalHalfDays());
+            }
+            if($this->totalFiftyPercentDays()){
+                $allowanceTotalValue =  $allowanceTotalValue + ($this->allowanceFiftyPercentDayValue() * $this->totalFiftyPercentDays());
+            }
+            return $allowanceTotalValue;
         }
     }
 
