@@ -10,7 +10,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Carga de archivos TXT') }}</div>
+                <div class="card-header">{{ __('Carga de archivos Balance en TXT') }}</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('welfare.dosfile.import') }}" enctype="multipart/form-data">
                         @csrf
