@@ -731,6 +731,10 @@
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
                         </a>
 
+                        <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
+                            <i class="fas fa-question-circle"></i> Mi AmiPass
+                        </a>
+
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">
                             <i class="fas fa-question-circle"></i> {{ __('Consultas/Sugerencia AmiPass') }}
                         </a>

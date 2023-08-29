@@ -2249,6 +2249,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     });
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
+        Route::get('/mi-amipass', [AmipassController::class, 'miAmipass'])->name('mi-amipass');
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
         Route::get('/question-all-index', [AmipassController::class, 'questionAllIndex'])->name('question-all-index');
@@ -2270,7 +2271,8 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
 
-        //Route::get('/', App\Http\Livewire\Welfare\AmiPass\ChargeIndex::class)->name('index');
+        Route::get('/', App\Http\Livewire\Welfare\AmiPass\ChargeIndex::class)->name('index');
+        Route::get('/absences', App\Http\Livewire\Welfare\AmiPass\AbsencesIndex::class)->name('index');
     });
 });
 
