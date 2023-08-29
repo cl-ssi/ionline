@@ -28,9 +28,9 @@ class InventoryUploadExcel extends Component
             'excelFile' => 'required|mimes:xlsx,xls',
         ]);
 
-        //$path = $this->excelFile->path();
+        //$path = $this->excelFile->path();        
 
-        $data = collect(Excel::toArray([], $this->excelFile)[0])
+        $data = collect(Excel::toArray([], $this->excelFile->path(),'gcs')[0])
             ->skip(2) // Omitir las primeras dos filas (encabezados)
             ->filter(function ($row) {
                 // Filtrar las filas que contienen datos
