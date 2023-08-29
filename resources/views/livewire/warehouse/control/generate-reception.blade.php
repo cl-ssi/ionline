@@ -540,7 +540,7 @@
                 wire:click="finish"
                 
                 wire:target="finish"
-                @if($po_code == null || !$request_form)
+                @if($po_code == null)
                     disabled
                 @endif
             >
