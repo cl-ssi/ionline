@@ -104,7 +104,7 @@ class StoreController extends Controller
             $query->whereNotNull('confirmation_signature_file');
         }
 
-        $dtes = $query->get();
+        $dtes = $query->paginate(100);
 
         return view('warehouse.stores.cenabast.index', compact('dtes', 'tray'));
     }

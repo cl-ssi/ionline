@@ -77,5 +77,6 @@
 
         </tbody>
     </table>
+    {{ $dtes->links() }}
 
 @endsection
