@@ -47,8 +47,14 @@ class IndexDtes extends Component
 
     public function mount()
     {
-        $this->establishments = Establishment::orderBy('name')->get();
-        $this->selectedEstablishments = []; // Inicializar el array vacío
+
+        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
+        
+        $this->establishments = Establishment::whereIn('id', $establishments_ids)
+        ->select('id','name')
+        ->orderBy('name')
+        ->get();
+        
     }
 
 
