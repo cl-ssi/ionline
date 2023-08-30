@@ -38,20 +38,20 @@
 
     <div class="form-row mb-3">
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
+            <input type="text" class="form-control" wire:model.defer="filter_folio" placeholder="folio">
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
+            <input type="text" class="form-control" wire:model.defer="filter_folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.folio_sigfe">
-                <option value="sin_folio">Sin Folio SIGFE</option>
-                <option value="con_folio">Con Folio SIGFE</option>
-                <option value="todos">Todos</option>
+            <select class="form-control" wire:model.defer="filter_folio_sigfe">
+                <option value="Sin Folio SIGFE">Sin Folio SIGFE</option>
+                <option value="Con Folio SIGFE">Con Folio SIGFE</option>
+                <option value="Todos">Todos</option>
             </select>
         </div>
         <div class="col-md-3">
-            <select class="form-control" wire:model.defer="filter.sender_status">
+            <select class="form-control" wire:model.defer="filter_sender_status">
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
@@ -60,7 +60,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.selected_establishment">
+            <select class="form-control" wire:model.defer="filter_selected_establishment">
                 <option value="">Todos los Establecimientos</option>
                 @foreach ($establishments as $establishment)
                     <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>

@@ -212,7 +212,7 @@ class Dte extends Model
                             break;
                         case 'folio_sigfe':
                             switch ($value) {
-                                case 'con_folio':
+                                case 'con_folio':                                    
                                     $query->whereNotNull('folio_sigfe');
                                     break;
                                 case 'sin_folio':

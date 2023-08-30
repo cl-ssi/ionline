@@ -17,23 +17,93 @@ class IndexDtes extends Component
 
     public $showManualDTE = false;
 
-    public $selectedEstablishments = [];
-
-    public $selectedCenabasts = [];
-
     public $establishments;
 
     public $establishment;
 
     public $successMessages = [];
 
-    public $successCenabasts = [];
+    public $filter_folio;
+    public $filter_folio_oc;
+    public $filter_folio_sigfe;
+    public $filter_sender_status;
+    public $filter_selected_establishment;
 
 
 
-    protected $rules = [
-        'selectedEstablishments' => 'required'
-    ];
+    public function searchDtes()
+    {
+        $query = Dte::query();
+
+        if (!empty($this->filter_folio)) {
+            $query->where('folio', $this->filter_folio);
+        }
+
+        if (!empty($this->filter_folio_oc)) {
+            $query->where('folio_oc', $this->filter_folio_oc);
+        }
+
+        if (!empty($this->filter_folio_sigfe)) {
+            switch ($this->filter_folio_sigfe) {
+                case 'Con Folio SIGFE':
+                    $query->whereNotNull('folio_sigfe');
+                    break;
+                case 'Sin Folio SIGFE':
+                    $query->whereNull('folio_sigfe');
+                    break;
+            }
+        }
+
+        if (!empty($this->filter_sender_status)) {
+            switch ($this->filter_sender_status) {
+                case 'no confirmadas y enviadas a confirmación':
+                    $query->whereNull('confirmation_status')->whereNotNull('confirmation_send_at');
+                    break;
+                case 'Enviado a confirmación':
+                    $query->whereNotNull('confirmation_send_at');
+                    break;
+                case 'Confirmada':
+                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
+                    break;
+                case 'No Confirmadas':
+                    $query->whereNotNull('confirmation_send_at')->whereNull('confirmation_status');
+                    break;
+                case 'Confirmadas':
+                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 1);
+                    break;
+                case 'Rechazadas':
+                    $query->whereNotNull('confirmation_send_at')->where('confirmation_status', 0);
+                    break;
+                case 'Sin Envío':
+                    $query->whereNull('confirmation_send_at')->whereNull('confirmation_status');
+                    break;
+            }
+        }
+
+        if (!empty($this->filter_selected_establishment)) {
+            $query->where('establishment_id', $this->filter_selected_establishment);
+        }
+
+        // Rest of your searchDtes logic...
+
+        // Aplicar relaciones y ordenamiento
+        $query->with([
+            'purchaseOrder',
+            'controls',
+            'requestForm',
+            'requestForm.contractManager',
+        ])
+            ->whereNot('tipo_documento', 'guias_despacho')
+            ->orderBy('emision');
+
+        return $query->paginate(50);
+    }
+
+
+
+
+
+
 
 
     public function refresh()
@@ -48,46 +118,13 @@ class IndexDtes extends Component
     public function mount()
     {
 
-        $establishments_ids = explode(',',env('APP_SS_ESTABLISHMENTS'));
-        
+        $establishments_ids = explode(',', env('APP_SS_ESTABLISHMENTS'));
+
         $this->establishments = Establishment::whereIn('id', $establishments_ids)
-        ->select('id','name')
-        ->orderBy('name')
-        ->get();
-        
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
     }
-
-
-    public function toggleCenabast($dteId)
-    {
-        $dte = Dte::find($dteId);
-
-        if ($dte) {
-            if ($dte->cenabast == 0) {
-                $dte->cenabast = 1;
-                $this->selectedCenabasts[$dteId] = true;
-            } else {
-                $dte->cenabast = 0;
-                unset($this->selectedCenabasts[$dteId]);
-            }
-
-            $dte->save();
-        }
-    }
-
-
-
-
-    public function saveEstablishment($dteId)
-    {
-        $dte = Dte::find($dteId);
-        if ($dte) {
-            $dte->establishment_id = $this->selectedEstablishments[$dteId];
-            $dte->save();
-            $this->successMessages[$dteId] = 'El establecimiento fue asignado exitosamente al DTE';
-        }
-    }
-
 
     public function loadManualDTE()
     {
@@ -100,39 +137,28 @@ class IndexDtes extends Component
         $this->showManualDTE = false;
     }
 
-    public function updateSelectedEstablishment($dteId, $establishmentId)
-    {
-        $this->selectedEstablishments[$dteId] = $establishmentId;
-    }
-
-
-
     public function render()
     {
-        $query = Dte::search($this->filter)->with([
-            'purchaseOrder',
-            'controls',
-            'requestForm',
-            'requestForm.contractManager',
-        ])
-            ->whereNot('tipo_documento', 'guias_despacho')
-            ->orderBy('emision')
-            ->paginate(50);
+        // $query = Dte::search($this->filter)->with([
+        //     'purchaseOrder',
+        //     'controls',
+        //     'requestForm',
+        //     'requestForm.contractManager',
+        // ])
+        //     ->whereNot('tipo_documento', 'guias_despacho')
+        //     ->orderBy('emision')
+        //     ->paginate(50);
 
-        $establishments = Establishment::orderBy('name')->get();
+        //$establishments = Establishment::orderBy('name')->get();
 
-        // Actualizar la propiedad selectedCenabasts para marcar los checkboxes
-        $this->selectedCenabasts = [];
-        foreach ($query as $dte) {
-            if ($dte->cenabast == 1) {
-                $this->selectedCenabasts[$dte->id] = true;
-            }
-        }
+
+        $dtes = $this->searchDtes();
+
 
 
         return view('livewire.finance.index-dtes', [
-            'dtes' => $query,
-            'establishments' => $establishments,
+            'dtes' => $dtes,
+            //'establishments' => $establishments,
         ]);
     }
 }
