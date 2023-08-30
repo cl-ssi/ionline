@@ -1,15 +1,6 @@
 <div>
-<div class="row">
-        <div class="col">
-            <h3 class="mb-3">Cargas Amipass</h3>
-        </div>
-        <!-- <div class="col-3 text-right">
-            <a href="{{ route('rrhh.attendance.reason.mgr') }}" class="btn btn-info"> <i class="fas fa-cog"></i> Mantenedor de Motivos </a>
-        </div> -->
-    </div>
     @if($records->count() > 0)
-</div>
-    <table class="table table-sm table-bordered table-hover">
+    <table class="table table-sm table-bordered table-hover" style="font-size: 12px;">
         <thead>
             <tr>
                 <th width="95px" scope="col">Rut</th>
@@ -32,13 +23,13 @@
                 <td>{{ $record->nombre }}</td>
                 <td>{{ $record->lugar_desempeño }}</td>
                 <td>{{ Str::after($record->fecha, '-') }}</td>
-                <td>{{ number_format($record->total_real_cargado, 0, ",", ".") ?? '-' }}</td>
-                <td>{{ $record->dias_ausentismo ?? '-' }}</td>
-                <td>{{ $record->dias_habiles_mes ?? '-' }}</td>
-                <td>{{ $record->dias_a_cargar ?? '-' }}</td>
-                <td>{{ number_format($record->valor_dia, 0, ",", ".") ?? '-' }}</td>
-                <td>{{ number_format($record->valor_debia_cargarse, 0, ",", ".") ?? '-' }}</td>
-                <td class="{{$record->diferencia_color}}">{{ number_format($record->diferencia, 0, ",", ".") ?? '-' }}</td>
+                <td class="text-right">{{ number_format($record->total_real_cargado, 0, ",", ".") ?? '-' }}</td>
+                <td class="text-right">{{ $record->dias_ausentismo ?? '-' }}</td>
+                <td class="text-right">{{ $record->dias_habiles_mes ?? '-' }}</td>
+                <td class="text-right">{{ $record->dias_a_cargar ?? '-' }}</td>
+                <td class="text-right">{{ number_format($record->valor_dia, 0, ",", ".") ?? '-' }}</td>
+                <td class="text-right">{{ number_format($record->valor_debia_cargarse, 0, ",", ".") ?? '-' }}</td>
+                <td class="{{$record->diferencia_color}} text-right">{{ number_format($record->diferencia, 0, ",", ".") ?? '-' }}</td>
             </tr>
             @empty
             <tr>
@@ -47,7 +38,7 @@
             @endforelse
         </tbody>
         <tfoot>
-            <tr class="font-weight-bold">
+            <tr class="font-weight-bold text-right">
                 <td colspan="4" class="text-right">Totales $</td>
                 <td>{{number_format($records->sum('total_real_cargado'), 0, ",", ".")}}</td>
                 <td>{{$records->sum('dias_ausentismo')}}</td>

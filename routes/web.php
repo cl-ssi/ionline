@@ -2270,9 +2270,6 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
             Route::get('/create', [AmipassController::class, 'createValue'])->name('createValue');
             Route::post('/store', [AmipassController::class, 'storeValue'])->name('storeValue');
         });
-
-        Route::get('/', App\Http\Livewire\Welfare\AmiPass\ChargeIndex::class)->name('index');
-        Route::get('/absences', App\Http\Livewire\Welfare\AmiPass\AbsencesIndex::class)->name('index');
     });
 });
 
