@@ -17,6 +17,7 @@
             <tr>
                 <th>ID</th>
                 <th>Fecha Consulta/Sugerencia</th>
+                <th>Funcionario</th>
                 <th>Motivo</th>
                 <th>Consulta o Sugerencia</th>
                 <th>Fecha Respuesta</th>
@@ -29,6 +30,7 @@
                 <tr>
                     <td>{{ $doubt->id }}</td>
                     <td>{{ $doubt->question_at }}</td>
+                    <td>{{ $doubt->nombre_completo }}</td>
                     <td>{{ $doubt->motivo }}</td>
                     <td>{{ $doubt->consulta }}</td>
                     <td>{{ $doubt->answer_at }}</td>
