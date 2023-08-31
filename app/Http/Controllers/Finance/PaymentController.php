@@ -42,8 +42,7 @@ class PaymentController extends Controller
             'controls',
             'requestForm',
             'requestForm.contractManager',
-        ])
-            ->where('confirmation_status', 1)
+        ])            
             ->where('establishment_id',auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
                 $query->whereNull('fin_status')
