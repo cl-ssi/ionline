@@ -7,14 +7,30 @@
     @include('summary.nav')
 
     <div class="row pb-2">
+        
+
+
+        @can(['Summary: user'])
         <div class="col">
             <h3 class="mb-3">Listado de Mis Sumarios</h3>
         </div>
+        @endcan
+
+
+        @canany(['be god', 'Summary: admin','Summary: admin viewer'])
+        <div class="col">
+            <h3 class="mb-3">Listado de Sumarios del Establecimiento: {{auth()->user()->organizationalUnit->establishment->name}}</h3>
+        </div>
+        @endcanany
+
+
+        @canany(['be god', 'Summary: admin'])
         <div class="col text-end">
             <a class="btn btn-success float-right" href="{{ route('summary.create') }}">
                 <i class="fas fa-plus"></i> Nuevo Sumario
             </a>
         </div>
+        @endcanany
     </div>
 
 

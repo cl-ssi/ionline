@@ -8,6 +8,7 @@ use App\Models\Summary\Summary;
 use App\Models\Summary\EventType;
 use App\Models\Summary\Event;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
@@ -18,12 +19,23 @@ class SummaryController extends Controller
      */
     public function index()
     {
-        $user_id = auth()->id();
-        $summaries = Summary::where('investigator_id', $user_id)
-            ->orWhere('actuary_id', $user_id)
-            ->orWhere('creator_id', $user_id)
-            ->latest()
-            ->get();
+        if (Auth::user()->can('Summary: user')) {
+            $user_id = auth()->id();
+            $summaries = Summary::where('investigator_id', $user_id)
+                ->orWhere('actuary_id', $user_id)
+                ->orWhere('creator_id', $user_id)
+                ->latest()
+                ->get();
+        }
+
+        if (Auth::user()->can('Summary: admin') or Auth::user()->can('Summary: admin viewer') or Auth::user()->can('be god')) {
+            $summaries = Summary::where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+                ->latest()
+                ->get();
+        }
+
+
+
 
         return view('summary.index', compact('summaries'));
     }
@@ -35,18 +47,16 @@ class SummaryController extends Controller
      */
     public function create()
     {
-        $types = Type::pluck('name','id');
+        $types = Type::pluck('name', 'id');
 
-        $eventType = EventType::where('start',true)->first();
+        $eventType = EventType::where('start', true)->first();
 
-        if(is_null($eventType)) {
+        if (is_null($eventType)) {
             session()->flash('danger', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario"');
             return redirect()->back();
-        }
-        else {
+        } else {
             return view('summary.create', compact('types'));
         }
-
     }
 
     /**
@@ -58,14 +68,13 @@ class SummaryController extends Controller
     public function store(Request $request)
     {
         /** Obtiene el evento marcado como primer evento de un sumario */
-        $eventType = EventType::where('start',true)
-            ->where('summary_type_id',$request->input('type_id'))
+        $eventType = EventType::where('start', true)
+            ->where('summary_type_id', $request->input('type_id'))
             ->first();
 
-        if(is_null($eventType)) {
+        if (is_null($eventType)) {
             session()->flash('warning', 'No existe ningún tipo de evento marcado como: "Es el primer evento de un sumario para este tipo de investigación"');
-        }
-        else {
+        } else {
             $summary = new Summary($request->All());
             $summary->creator_id = auth()->user()->id;
             /** El estado lo sacaremos de lastEvent */
