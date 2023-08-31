@@ -1064,6 +1064,41 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.program_consolidated_report', compact('serviceRequests', 'request','programm_name_array'));
   }
 
+  public function active_contracts_report(Request $request)
+  {
+    $programm_name = $request->programm_name;
+    $profession_id = $request->profession_id;
+
+    //solicitudes activas
+    $serviceRequests = ServiceRequest::where('id',0)->get();
+    if($programm_name!=null || $profession_id != null){
+        $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
+            $subQuery->where('status', 0);
+          })
+          ->where('establishment_id', 1)
+          ->when($programm_name != NULL, function ($q) use ($programm_name) {
+              return $q->where('programm_name','LIKE','%'.$programm_name.'%');
+          })
+          ->when($profession_id != NULL, function ($q) use ($profession_id) {
+              return $q->where('profession_id',$profession_id);
+          })
+          ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
+          ->whereDate('end_date','>=',now())
+          ->orderBy('request_date', 'asc')
+          ->get();
+    }
+    
+    // dd($serviceRequests);
+
+    $programm_name_array = ServiceRequest::where('establishment_id', 1)
+                                        ->select('programm_name')
+                                        ->distinct()->get();
+
+    $professions_array = Profession::all();
+
+    return view('service_requests.requests.active_contracts_report', compact('serviceRequests', 'request','programm_name_array','professions_array'));
+  }
+
   public function consolidated_data_excel_download($establishment_id, $year, $semester){
         return Excel::download(new ConsolidatedReport($establishment_id, $year, $semester), 'consolidated.xlsx');
   }

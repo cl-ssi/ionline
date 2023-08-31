@@ -146,6 +146,13 @@
             </a>
             @endcan
 
+            @can('Service Request: active contracts report')
+            <a class="dropdown-item {{ active('rrhh.service-request.report.active_contracts_report') }}"
+                href="{{ route('rrhh.service-request.report.active_contracts_report') }}">
+                <i class="far fa-file-excel"></i> Contratos activos
+            </a>
+            @endcan
+
             @can('Service Request: export sirh')
             <a class="dropdown-item  {{ active('rrhh.service-request.report.export_sirh') }}"
                 href="{{ route('rrhh.service-request.report.export_sirh') }}">
