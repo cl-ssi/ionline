@@ -58,7 +58,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-6 col-md-6 text-white"style="background-color: rgb(0,108,183);">
-                            {{ config('app.ss', 'Servicio de Salud') }}
+                            {{ env('APP_SS', 'Servicio de Salud') }}
                         </div>
                         <div class="col-6 col-md-6 float-right text-white" style="background-color: rgb(239,65,68);">
                             © {{ date('Y') }}
