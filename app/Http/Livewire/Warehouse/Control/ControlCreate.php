@@ -29,6 +29,7 @@ class ControlCreate extends Component
     public $typeDispatches;
     public $typeReceptions;
     public $nav;
+    public $require_contract_manager_visation = false;
 
     protected $listeners = [
         'organizationalId',
@@ -42,6 +43,7 @@ class ControlCreate extends Component
         'origin_id'         => 'required|integer|exists:wre_origins,id',
         'type_reception_id' => 'required|integer|exists:wre_type_receptions,id',
         'technical_signer_id' => 'required|integer|exists:users,id',
+        'require_contract_manager_visation' =>'nullable|boolean',
     ];
 
     public $rulesDispatch = [
@@ -52,6 +54,7 @@ class ControlCreate extends Component
         'destination_id'        => 'nullable|required_if:type_dispatch_id,4|exists:wre_destinations,id',
         'store_destination_id'  => 'nullable|required_if:type_dispatch_id,3|exists:wre_type_receptions,id',
         'organizational_unit_id' => 'nullable|required_if:type_dispatch_id,1|exists:organizational_units,id',
+        'require_contract_manager_visation' =>'nullable|boolean',
     ];
 
     public function mount()
@@ -83,6 +86,9 @@ class ControlCreate extends Component
         $dataValidated['type_reception_id'] = ($this->type == 'receiving') ? $dataValidated['type_reception_id'] : null;
         $dataValidated['reception_visator_id'] = auth()->id();
         $dataValidated['completed_invoices'] = false;
+        //$dataValidated['require_contract_manager_visation'] = $this->require_contract_manager_visation?$dataValidated['require_contract_manager_visation'] : null;
+        $dataValidated['require_contract_manager_visation'] = $this->require_contract_manager_visation ? 1 : 0;
+        
 
         $control = Control::create($dataValidated);
 
