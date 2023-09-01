@@ -96,3 +96,9 @@ barryvdh/laravel-ide-helper
 composer remove fruitcake/laravel-cors
 composer remove fideloper/proxy
 Update archivo Kernel.php, TrustProxies y AuthServiceProvider
+
+## Contribuir
+-Seleccionar issue
+-Hacer modificaciones y commits
+-Crear el pull request
+-Detener issue en el que se estaba trabajando
