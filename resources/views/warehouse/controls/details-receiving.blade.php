@@ -129,7 +129,7 @@
         <fieldset class="form-group col-md-4">
             <div class="form-group">
                 <div class="form-row">
-                    <label for="require-contract-manager-visation">Requieve Visación del Administrador de
+                    <label for="require-contract-manager-visation">Requiere Visación del Administrador de
                         Contrato</label>
                 </div>
                 <div class="form-check text-center">
