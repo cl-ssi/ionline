@@ -88,11 +88,18 @@ class RequestFormCreate extends Component
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      $this->lstProgram             = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      if(auth()->user()->OrganizationalUnit->establishment_id != Parameter::where('parameter', 'SSTarapaca')->first()->value){
+        $filter = function($q){ $q->where('name', '!=', 31); };
+        $this->lstProgram = Program::with(['Subtitle' => $filter])->whereHas('Subtitle', $filter)->orderBy('alias_finance')->get();
+      }else{
+        $this->lstProgram = Program::with('Subtitle')->orderBy('alias_finance')->get();
+      }
+
       if(auth()->user()->OrganizationalUnit->establishment_id == Parameter::where('parameter', 'HospitalAltoHospicio')->first()->value){
         $this->superiorChief = 1;
         $this->isHAH = true;
       }
+
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
