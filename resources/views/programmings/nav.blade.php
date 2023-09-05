@@ -38,6 +38,7 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{{ route('programming.reportConsolidated') }}">Reporte Consolidado</a>
             <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte Consolidado Sep</a>
+            <a class="dropdown-item" href="{{ route('programming.reportUsers') }}">Reporte Usuarios</a>
         </div>
     </div>
     @endcan

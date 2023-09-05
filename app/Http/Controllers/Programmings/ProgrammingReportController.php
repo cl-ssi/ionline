@@ -13,6 +13,7 @@ use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 use App\Models\Programmings\ReviewItem;
 use App\Models\Programmings\ProgrammingActivityItem;
@@ -102,5 +103,51 @@ class ProgrammingReportController extends Controller
         $pendingItems = ProgrammingActivityItem::with('programming', 'activityItem', 'requestedBy')->where('programming_id', $request->programming_id)->get();
 
         return view('programmings/reports/reportObservation', compact('reviewItems', 'pendingItems'));
+    }
+
+    public function reportUsers(request $request)
+    {
+        $commune = $request->commune;
+        $role = $request->role ?? 'Review';
+        if($role == 'Training'){ //Perfil de capacitación
+            $users = User::doesntHave('roles')->permission('Programming: view')->permission('TrainingItem: view')->permission('TrainingItem: delete')->orderBy('name')->get();
+        }else{ // otros perfiles
+            $users = User::role('Programming: '. $role)->orderBy('name')->get();
+        }
+
+        // buscar programaciones numericas por utimo año y segun comuna de ser necesario
+        $last_year = Programming::latest()->first()->year;
+        $last_programmings = Programming::with($commune != null ? ['establishment' => function($q) use ($commune) {
+            return $q->where('commune_id', $commune);
+        }] : 'establishment')->where('year', $last_year)
+        ->when($commune != null, function($query) use($commune) {
+            return $query->whereHas('establishment', function ($query) use($commune) {
+                return $query->where('commune_id', $commune);
+            });
+        })->get();
+
+        // recorrer usuarios encontrados con cada programacion numerica de comuna para determinar que establecimientos tiene acceso
+        foreach($users as $user){
+            // $user->accessByCommune = collect();
+            $user->accessByEstablishments = collect();
+            //El usuario tiene acceso por comunas y/o establecimientos?
+            foreach($last_programmings as $programming){
+                if(Str::contains($programming->access, $user->id)){
+                    // $user->accessByCommune->push($programming->establishment->commune_id);
+                    $user->accessByEstablishments->push($programming->establishment->official_name);
+                }
+            }
+        }
+
+        // filtrar usuarios que solo tengan acceso a algun establecimiento segun comuna seleccionada
+        if($commune != null){
+            foreach ($users as $key => $user)
+                if($user->accessByEstablishments->isEmpty())
+                    unset($users[$key]);
+        }
+
+        // return $users;
+
+        return view('programmings/reports/reportUsers', compact('users', 'role', 'commune'));
     }
 }

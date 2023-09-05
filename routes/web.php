@@ -717,6 +717,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     //Reportes de Programación Númerica APS
     Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
     Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
+    Route::get('reportUsers', [ProgrammingReportController::class, 'reportUsers'])->middleware('auth')->name('programming.reportUsers');
 
     //Reportes Observaciones de Programación Númerica APS
     Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
