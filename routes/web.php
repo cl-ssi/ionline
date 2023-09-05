@@ -205,6 +205,10 @@ use App\Http\Controllers\HotelBooking\RoomController;
 use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
 use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HotelBooking\HotelBookingController;
+use App\Http\Controllers\ProfAgenda\ProposalController;
+use App\Http\Controllers\ProfAgenda\AgendaController;
+use App\Http\Controllers\ProfAgenda\OpenHourController;
+use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
@@ -1767,6 +1771,58 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.
         Route::post('/store', [ServiceController::class, 'store'])->name('store');
         Route::delete('/{service}/destroy', [ServiceController::class, 'destroy'])->name('destroy');
     });
+});
+
+Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(function () {
+    Route::get('home', function () {
+        return view('prof_agenda.home');
+    })->name('home');
+
+    Route::prefix('proposals')->as('proposals.')->middleware(['auth'])->group(function () {
+        Route::get('/', [ProposalController::class, 'index'])->name('index');
+        Route::get('/edit/{proposal}', [ProposalController::class, 'edit'])->name('edit');
+        Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
+        Route::get('/create', [ProposalController::class, 'create'])->name('create');
+        Route::post('/store', [ProposalController::class, 'store'])->name('store');
+        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+
+        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');  
+    });
+
+    Route::prefix('agenda')->as('agenda.')->middleware(['auth'])->group(function () {
+        Route::get('/', [AgendaController::class, 'index'])->name('index');
+        // Route::get('/edit/{proposal}', [ProposalController::class, 'edit'])->name('edit');
+        // Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
+        // Route::get('/create', [ProposalController::class, 'create'])->name('create');
+        // Route::post('/store', [ProposalController::class, 'store'])->name('store');
+        // Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+    });
+
+    Route::prefix('open_hour')->as('open_hour.')->middleware(['auth'])->group(function () {
+        // Route::get('/', [OpenHourController::class, 'index'])->name('index');
+        // Route::get('/edit/{proposal}', [OpenHourController::class, 'edit'])->name('edit');
+        // Route::put('/update/{proposal}', [OpenHourController::class, 'update'])->name('update');
+        // Route::get('/create', [OpenHourController::class, 'create'])->name('create');
+        Route::post('/store', [OpenHourController::class, 'store'])->name('store');
+        Route::post('/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
+        Route::post('/destroy', [OpenHourController::class, 'destroy'])->name('destroy');
+        Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
+        Route::post('/block', [OpenHourController::class, 'block'])->name('block');
+        Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
+        
+        // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');  
+    });
+
+    Route::prefix('activity_types')->as('activity_types.')->middleware(['auth'])->group(function () {
+        Route::get('/', [ActivityTypeController::class, 'index'])->name('index');
+        Route::get('/edit/{activityType}', [ActivityTypeController::class, 'edit'])->name('edit');
+        Route::put('/update/{activityType}', [ActivityTypeController::class, 'update'])->name('update');
+        Route::get('/create', [ActivityTypeController::class, 'create'])->name('create');
+        Route::post('/store', [ActivityTypeController::class, 'store'])->name('store');
+        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');    
+    });
+    
+    
 });
 
 // Inventories

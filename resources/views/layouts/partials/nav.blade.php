@@ -159,6 +159,12 @@
                                 </a>
                             @endcanany
 
+                            @canany(['Agenda UST: Administrador'])
+                                <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                    <i class="fas fa-fw fa-user"></i> Agenda UST
+                                </a>
+                            @endcanany
+
                             @can('Payments')
                             <a class="dropdown-item {{ active('finance.dtes.index') }}" href="{{ route('finance.dtes.index') }}">
                                 <i class="fas fa-fw fa-money-bill"></i> Estados de pago

@@ -26,6 +26,7 @@ use App\Models\Inv\EstablishmentUser;
 use App\Models\Establishment;
 use App\Models\Country;
 use App\Models\ClCommune;
+use App\Models\ProfAgenda\Proposal;
 
 class User extends Authenticatable implements Auditable
 {
@@ -278,6 +279,11 @@ class User extends Authenticatable implements Auditable
     public function documentEvents()
     {
         return $this->hasMany('\App\Models\Documents\DocumentEvent');
+    }
+
+    public function agendaProposals()
+    {
+        return $this->hasMany(Proposal::class);
     }
 
     public function documents()
