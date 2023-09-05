@@ -44,6 +44,7 @@
                 <th>Estado/Último Evento</th>
                 <th>Actor</th>
                 <th>Duración</th>
+                <th>Dias pasados desde inicio del sumario</th>
                 <th>Fiscal</th>
                 <th>Actuario</th>
                 <th width="60"></th>
@@ -68,6 +69,9 @@
                     <td>{{ optional($summary->resolution_date)->format('Y-m-d') }}</td>
                     <td>{{ $summary->lastEvent->type->name ?? '' }}</td>
                     <td>
+                        {{ $summary->lastEvent->type->actor->name ?? '' }}
+                    </td>
+                    <td>
                         @if(isset($summary->end_at))
                         <p class="text-danger">
                             {{ $summary->totalDays }} día(s) hábil(es)
@@ -75,12 +79,6 @@
                         @else
                             {{ $summary->daysPassed }} día(s) hábil(es)
                         @endif
-                    </td>
-                    <td>
-                        {{ $summary->lastEvent->type->name ?? '' }}
-                    </td>
-                    <td>
-                        {{ $summary->lastEvent->type->actor->name ?? '' }}
                     </td>
                     <td>{{ $summary->start_at->diffInDays(now()) }}</td>
                     <td>{{ optional($summary->investigator)->tinnyName }}</td>
