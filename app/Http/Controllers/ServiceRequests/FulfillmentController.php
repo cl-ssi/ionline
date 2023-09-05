@@ -423,8 +423,6 @@ class FulfillmentController extends Controller
      */
     public function update(Request $request, Fulfillment $fulfillment)
     {
-        $fulfillment->fill($request->all());
-        
         if($request->total_to_pay){
 
             // se agrega esta validación ya que existía un problema con la "coma" al reconocer un valor de miles o con separación de coma.
@@ -433,10 +431,11 @@ class FulfillmentController extends Controller
             $request->merge([
                 'total_to_pay' => $total_to_pay,
             ]);
-
             // 16/03/2023: Cuando se ingresa el total a pagar, se registra la fecha del movimiento.
             $fulfillment->total_to_pay_at = now();
         }
+
+        $fulfillment->fill($request->all());
 
         if($request->hasFile('backup_assistance'))
         {
