@@ -101,7 +101,8 @@
                     <th scope="row" nowrap>{{ $user->runFormat() }}</td>
                     <td nowrap>{{ $user->shortName }} {{ trashed($user) }}</td>
                     <td class="small">{{ @$user->organizationalUnit->name ?: '' }}
-                        ({{ $user->organizationalUnit->establishment->alias ?? '' }})</td>
+                        ({{ $user->organizationalUnit->establishment->alias ?? '' }})
+                    </td>
                     <td class="small">{{ $user->position }}</td>
                     <td nowrap>
                         @unless ($user->trashed())
@@ -111,10 +112,15 @@
                             @endcan
 
                             @if ($can['be god'] and !auth()->user()->godMode)
-                                <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning" @disabled(auth()->user()->godMode)>
+                                <a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning"
+                                    @disabled(auth()->user()->godMode)>
                                     <span class="fas fa-redo" aria-hidden="true"></span></a>
                             @endif
                         @endunless
+
+                        @if ($user->trashed())
+                            <livewire:undo-user-deletion :user=$user wire:key='$user->id'>
+                        @endif
                 </td>
             </tr>
         @endforeach
