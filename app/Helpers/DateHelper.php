@@ -52,11 +52,44 @@ class DateHelper
      * @param  int  $duration
      * @return \Illuminate\Support\Collection
      */
+    // Asi lo tenía el Torres lo voy a dejar como lo venia Rafael
+    // public static function getBusinessDaysByDuration($startDate, $duration)
+    // {
+    //     $holidays = Cache::remember('holidays', 600, function () use($startDate, $duration) {
+    //         return Holiday::whereBetween('date', [$startDate, $duration])->get();
+    //     });
+
+    //     $holidays = $holidays->map(function($holiday) {
+    //         return $holiday->date->format('Y-m-d');
+    //     });
+
+    //     $start = $startDate->copy()->startOfDay();
+
+    //     $i = 0;
+
+    //     $weekend = collect([0, 6]);
+
+    //     $businessDays = collect();
+
+    //     while($i < $duration)
+    //     {
+    //         if($holidays->doesntContain($start->format('Y-m-d')) && $weekend->doesntContain($start->dayOfWeek))
+    //         {
+    //             $businessDays->push($start->format('Y-m-d'));
+
+    //             $i++;
+    //         }
+
+    //         $start = $start->copy()->addDay();
+    //     }
+
+    //     return $businessDays;
+    // }
+
+
     public static function getBusinessDaysByDuration($startDate, $duration)
     {
-        $holidays = Cache::remember('holidays', 600, function () use($startDate, $duration) {
-            return Holiday::whereBetween('date', [$startDate, $duration])->get();
-        });
+        $holidays = Holiday::all(); // TODO: mejorar query
 
         $holidays = $holidays->map(function($holiday) {
             return $holiday->date->format('Y-m-d');
@@ -84,4 +117,7 @@ class DateHelper
 
         return $businessDays;
     }
+
+
+
 }
