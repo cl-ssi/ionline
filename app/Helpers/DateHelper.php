@@ -54,8 +54,8 @@ class DateHelper
      */
     public static function getBusinessDaysByDuration($startDate, $duration)
     {
-        $holidays = Cache::remember('holidays', 600, function () use($startDate, $endDate) {
-            return Holiday::whereBetween('date', [$startDate, $endDate])->get();
+        $holidays = Cache::remember('holidays', 600, function () use($startDate, $duration) {
+            return Holiday::whereBetween('date', [$startDate, $duration])->get();
         });
 
         $holidays = $holidays->map(function($holiday) {
