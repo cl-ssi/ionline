@@ -28,7 +28,7 @@
         </a>
     </li>
 
-    <li class="nav-item dropdown">
+    <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{active('prof_agenda.activity_types.*')}}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-clipboard-check"></i> Reportes
@@ -41,7 +41,7 @@
             </a>
 
         </div>
-    </li>
+    </li> -->
 
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{active('prof_agenda.activity_types.*')}}"

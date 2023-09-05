@@ -4,7 +4,7 @@
 
 @include('prof_agenda.partials.nav')
 
-<h3 class="mb-3">Editar ficha de programación #{{$activityType->id}}</h3>
+<h3 class="mb-3">Editar tipo de actividad</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('prof_agenda.activity_types.update',$activityType) }}">
 @csrf
