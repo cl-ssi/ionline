@@ -15,7 +15,7 @@
     <div>
         <div id='calendar-container'>
             <div id='calendar'></div>
-        </div>as
+        </div>
     </div>
 
     <!-- {{$proposal->details->count()}} -->
