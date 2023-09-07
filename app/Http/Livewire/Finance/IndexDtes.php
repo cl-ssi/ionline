@@ -96,7 +96,7 @@ class IndexDtes extends Component
             ->whereNot('tipo_documento', 'guias_despacho')
             ->orderBy('emision');
 
-        return $query->paginate(50);
+        return $query->paginate(100);
     }
 
 

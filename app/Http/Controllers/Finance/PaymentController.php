@@ -37,7 +37,7 @@ class PaymentController extends Controller
     }
 
     public function review()
-    {
+    {        
         $dtes = Dte::with([
             'controls',
             'requestForm',
@@ -50,7 +50,7 @@ class PaymentController extends Controller
                 $query->whereNull('fin_status')
                     ->orWhere('fin_status', 'rechazado');
             })
-            ->paginate(50);
+            ->paginate(100);
 
 
 
@@ -81,6 +81,15 @@ class PaymentController extends Controller
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->get();
         return view('finance.payments.ready', compact('dtes'));
+    }
+
+
+    public function rejected()
+    {
+        $dtes = Dte::where('fin_status', 'Rechazado')
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            ->get();
+        return view('finance.payments.rejected', compact('dtes'));
     }
 
 
