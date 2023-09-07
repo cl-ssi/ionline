@@ -10,9 +10,11 @@ use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 use App\Models\Establishment;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Dte extends Model
+class Dte extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
 
     protected $table = 'fin_dtes';
