@@ -266,11 +266,11 @@
 
 					<div class="form-row">
 						<div class="col-12 col-md-2">
-                            <!-- @if($fulfillment->rrhh_approver_id == NULL) -->
+                            {{--@if($fulfillment->rrhh_approver_id == NULL)--}}
 							    <button type="submit" class="btn btn-primary">Guardar</button>
-                            <!-- @else
+                            {{--@else
                                 <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-                            @endif -->
+                            @endif--}}
 						</div>
 						<div class="col-12 col-md-7">
 
