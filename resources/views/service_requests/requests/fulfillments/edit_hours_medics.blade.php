@@ -260,22 +260,26 @@
 					</div>
 					<div class="form-row">
 						<div class="col-3">
-							<button type="submit" class="btn btn-primary">Guardar</button>
+                            @if($fulfillment->rrhh_approver_id == NULL)
+							    <button type="submit" class="btn btn-primary">Guardar</button>
+                            @else
+                                <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+                            @endif
 						</div>
 						<div class="col-6">
 
 						</div>
 						<div class="col-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
-							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez rechazado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 								Rechazar
 							</a>
 							<a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
 								Confirmar
 							</a>
 							@else
-							<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-							<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+                                <button type="submit" class="btn btn-danger" disabled>Rechazar</button>
+                                <button type="submit" class="btn btn-success" disabled>Confirmar</button>
 							@endif
 						</div>
 					</div>

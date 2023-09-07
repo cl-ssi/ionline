@@ -550,6 +550,14 @@ class FulfillmentController extends Controller
             session()->flash('danger', 'No es posible aprobar, puesto que falta aprobación de Responsable.');
             return redirect()->back();
           }
+          if ($fulfillment->total_hours_to_pay == NULL) {
+            session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total de horas a pagar.');
+            return redirect()->back();
+          }
+          if ($fulfillment->total_to_pay == NULL) {
+            session()->flash('danger', 'No es posible aprobar, puesto que falta ingresar total a pagar.');
+            return redirect()->back();
+          }
           if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
             $fulfillment->rrhh_approbation = 1;
             $fulfillment->rrhh_approbation_date = Carbon::now();

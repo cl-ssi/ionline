@@ -204,40 +204,48 @@
 						</fieldset>
 						<fieldset class="form-group col-4 col-md-2">
 							<label for="for_total_hours_paid">Total hrs. a pagar</label>
-                            <div class="input-group" data-toggle="tooltip" data-placement="right" title="Valor sugerido por el sistema.">
-                                <input type="text" class="form-control" name="total_hours_to_pay" 
+                            
                                 @if($serviceRequest->program_contract_type == "Mensual")
-                                    @if($fulfillment->total_hours_to_pay) value="{{$fulfillment->total_hours_to_pay}}"
-                                    @else value="{{$fulfillment->serviceRequest->weekly_hours}}" @endif
+                                    @if($fulfillment->total_hours_to_pay) 
+                                        <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
+                                    @else 
+                                        <div class="input-group" data-toggle="tooltip" data-placement="right" title="Valor sugerido por el sistema.">
+                                            <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->serviceRequest->weekly_hours}}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2">
+                                                    <small><i class="fas fa-hand-holding"></i></small>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @else
-                                    value="{{$fulfillment->total_hours_to_pay}}"
+                                    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
                                 @endif
-                                >
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">
-                                        <small><i class="fas fa-hand-holding"></i></small>
-                                    </span>
-                                </div>
-                            </div>
+                                
 						</fieldset>
                         <i class="fa-regular fa-clipboard"></i>
 						<fieldset class="form-group col-6 col-md-2" data-toggle="tooltip" data-placement="right" title="Valor sugerido por el sistema.">
 							<label for="for_total_paid">Total a pagar</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="total_to_pay" 
+                            
+                                 
                                 @if($serviceRequest->program_contract_type == "Mensual")
-                                    @if($fulfillment->total_to_pay) value="{{$fulfillment->total_to_pay}}"
-                                    @else value="{{$fulfillment->getValueMonthlyQuoteValue()}}" @endif
+                                    @if($fulfillment->total_to_pay) 
+                                        <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
+                                    @else 
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->getValueMonthlyQuoteValue()}}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2">
+                                                    <small><i class="fas fa-hand-holding"></i></small>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @else
-                                    value="{{$fulfillment->total_to_pay}}"
+                                    <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}"><input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
                                 @endif
-                                >
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">
-                                        <small><i class="fas fa-hand-holding"></i></small>
-                                    </span>
-                                </div>
-                            </div>
+                                
+                                
 						</fieldset>
 						<div class="form-check form-check-inline">
 							<input type="hidden" name="illness_leave" value="0">
@@ -258,14 +266,18 @@
 
 					<div class="form-row">
 						<div class="col-12 col-md-2">
-							<button type="submit" class="btn btn-primary">Guardar</button>
+                            @if($fulfillment->rrhh_approver_id == NULL)
+							    <button type="submit" class="btn btn-primary">Guardar</button>
+                            @else
+                                <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+                            @endif
 						</div>
 						<div class="col-12 col-md-7">
 
 						</div>
 						<div class="col-12 col-md-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
-							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez rechazado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
 								Rechazar
 							</a>
 							<a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
