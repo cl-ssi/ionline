@@ -11,6 +11,7 @@
                 <th>Bod</th>
                 <th>Fecha Aceptación SII (días)</th>
                 <th>Establecimiento</th>
+                <th>Acta Adjunta/Carga de Archivo</th>
             </tr>
         </thead>
         <tbody>
@@ -46,10 +47,36 @@
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td>{{ $dte->establishment->name ?? '' }}</td>
+                    <td>
+                        @if ($dte->confirmation_signature_file)
+                            <a href="{{ route('warehouse.cenabast.downloadFile', ['dte' => $dte->id]) }}"
+                                class="btn btn-sm btn-success">
+                                <i class="fas fa-download"></i> Descargar Acta
+                            </a>
+                            <br>
+                            <br>
+                            <form action="{{ route('warehouse.cenabast.deleteFile', ['dte' => $dte->id]) }}"
+                                method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro que desea eliminar el acta firmara para el DTE {{ $dte->id }} ?' )">
+                                    <i class="fas fa-trash"></i> Borrar Acta
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('warehouse.cenabast.saveFile', ['dte' => $dte->id]) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="acta_{{ $dte->id }}">
+                                <button class="btn btn-primary btn-sm">Guardar</button>
+                            </form>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
 
         </tbody>
     </table>
+    {{ $dtes->links() }}
 
 @endsection

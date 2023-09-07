@@ -4,7 +4,7 @@
             width: 340px;
             height: 340px;
             border: 2px solid #ccc;
-            background-image: url('{{ asset('images/inventario_HAH.png') }}');
+            background-image: url('{{ asset('images/inventario_HAH_nuevo.png') }}');
             background-size: 340px;
         }
         .qr {
@@ -14,7 +14,11 @@
         .code {
             padding-top: 16px;
             padding-left: 6px;
-            font-size: 9px;
+            text-align: center;
+            font-size: 14px; 
+            font-weight: bold; 
+            
+            
         }
     </style>
 
@@ -22,7 +26,7 @@
         <div class="qr text-center">
             {!! $inventory->qr !!}
         </div>
-        <div class="code text-center">
+        <div class="code">
             {{ $inventory->number }}
         </div>
     </div>

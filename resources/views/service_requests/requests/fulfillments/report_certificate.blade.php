@@ -127,7 +127,7 @@
     @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 1)
       HOSPITAL DR. ERNESTO TORRES GALDAMES<br>
     @else
-      SERVICIO SALUD IQUIQUE<br>
+      SERVICIO SALUD TARAPACÁ<br>
     @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
@@ -158,7 +158,7 @@
               durante el periodo de contingencia COVID
               @endif
             @else
-              Servicio Salud Iquique,
+              Servicio Salud Tarapacá,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
               durante el periodo de contingencia COVID
@@ -208,7 +208,7 @@
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
                 Consultorio General Urbano Dr. Hector Reyno
               @else
-                Servicio Salud Iquique
+                Servicio Salud Tarapacá
               @endif
             @else
               Hospital Dr.Ernesto Torres Galdames
@@ -291,7 +291,7 @@
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
                 Consultorio General Urbano Dr. Hector Reyno
               @else
-                Servicio Salud Iquique
+                Servicio Salud Tarapacá
               @endif
             @else
               Hospital Dr.Ernesto Torres Galdames
@@ -380,7 +380,7 @@
               durante el periodo de contingencia COVID
               @endif
             @else
-              Servicio Salud Iquique,
+              Servicio Salud Tarapacá,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
               durante el periodo de contingencia COVID
@@ -437,7 +437,7 @@
           @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
             CONSULTORIO GENERAL URBANO DR. HECTOR REYNO<br>
           @else
-            SERVICIO SALUD IQUIQUE<br>
+            SERVICIO SALUD TARAPACÁ<br>
           @endif
         @else
           HOSPITAL DR ERNESTO TORRES GALDAMES<br>

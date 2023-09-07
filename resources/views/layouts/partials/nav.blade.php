@@ -159,6 +159,12 @@
                                 </a>
                             @endcanany
 
+                            @canany(['Agenda UST: Administrador'])
+                                <a class="dropdown-item {{ active('prof_agenda.home') }}" href="{{ route('prof_agenda.home') }}">
+                                    <i class="fas fa-fw fa-user"></i> Agenda UST
+                                </a>
+                            @endcanany
+
                             @can('Payments')
                             <a class="dropdown-item {{ active('finance.dtes.index') }}" href="{{ route('finance.dtes.index') }}">
                                 <i class="fas fa-fw fa-money-bill"></i> Estados de pago
@@ -376,7 +382,7 @@
                         </a>
                         @endcanany
 
-                        @canany(['be god', 'Summary: user', 'Summary: admin'])
+                        @canany(['be god', 'Summary: user', 'Summary: admin', 'Summary: admin viewer'])
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('summary.index') }}">
                             <i class="fas fa-balance-scale"></i> Sumario
@@ -729,6 +735,10 @@
 
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('welfare.amipass.mi-amipass') }}">
+                            <i class="fas fa-question-circle"></i> Mi AmiPass
                         </a>
 
                         <a class="dropdown-item" href="{{ route('welfare.amipass.question-my-index') }}">

@@ -10,10 +10,6 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.consolidated_data') }}">
 	<div class="form-row mb-3">
-		<!-- <div class="input-group-prepend">
-				<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>
-			</div>
-			<input type="text" value="Todos los datos" disabled> -->
 		<div class="form-group col">
 			<label>Establecimiento</label>
 			<select class="form-control" data-live-search="true" name="establishment_id" data-size="5" required>
@@ -24,8 +20,9 @@
 			</select>
 		</div>
         <div class="form-group col">
-			<label>Año</label>
+			<label>Año Inicio de Contrato</label>
 			<select class="form-control" data-live-search="true" name="year" data-size="5">
+                <option value="2024" @if($request->year == "2024") selected @endif>2024</option>
 				<option value="2023" @if($request->year == "2023") selected @endif>2023</option>
                 <option value="2022" @if($request->year == "2022") selected @endif>2022</option>
                 <option value="2021" @if($request->year == "2021") selected @endif>2021</option>
@@ -34,12 +31,7 @@
 			</select>
 		</div>
         <div class="form-group col">
-			<label>Semestre</label>
-			<!-- <select class="form-control" data-live-search="true" name="semester" data-size="5">
-				<option value="1" @if($request->semester == "1") selected @endif>Enero-Abril</option>
-                <option value="2" @if($request->semester == "2") selected @endif>Mayo-Agosto</option>
-                <option value="3" @if($request->semester == "3") selected @endif>Septiembre-Diciembre</option>
-			</select> -->
+			<label>Mes Inicio de Contrato</label>
             <select class="form-control" data-live-search="true" name="semester" data-size="5">
 				<option value="1" @if($request->semester == "1") selected @endif>Enero</option>
                 <option value="2" @if($request->semester == "2") selected @endif>Febrero</option>

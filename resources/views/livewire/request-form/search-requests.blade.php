@@ -122,6 +122,14 @@
             </div>
             <div class="col">
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="export"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+                {{--@if($exporting && !$exportFinished)
+                    <div class="d-inline" wire:poll="updateExportProgress">Exporting...please wait.</div>
+                @endif
+
+                @if($exportFinished)
+                    Done. Download file <a class="stretched-link" wire:click="downloadExport">here</a>
+                @endif--}}
+                {{--@livewire('export', ['requests' => request()->all()])--}}
             </div>
         </div>
 
@@ -365,6 +373,13 @@
             </div>
             <div class="col">
                 <a class="btn btn-success btn-sm mb-1 float-right" wire:click="exportFormItems"><i class="fas fa-file-excel"></i> Exportar formularios</a></h6>
+                {{--@if($exporting && !$exportFinished)
+                    <div class="d-inline" wire:poll="updateExportProgress">Exporting...please wait.</div>
+                @endif
+
+                @if($exportFinished)
+                    Done. Download file <a class="stretched-link" wire:click="downloadExport">here</a>
+                @endif--}}
             </div>
         </div>
         

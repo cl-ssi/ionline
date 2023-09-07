@@ -27,7 +27,9 @@
                 </select>
             </div>
             <div class="col-2">
+                @cannot('Summary: admin viewer')
                 <button type="submit" class="btn btn-success form-control">Agregar</button>
+                @endcannot
             </div>
         </div>
         </form>

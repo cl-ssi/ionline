@@ -20,6 +20,8 @@ class Places extends Component
     public $description;
     public $location_id;
     public $locations;
+    public $architectural_design_code;
+    public $filter;
 
     public function render()
     {
@@ -35,6 +37,7 @@ class Places extends Component
             'name'          => 'required|string|min:2|max:255',
             'description'   => 'nullable|string|min:0|max:255',
             'location_id'   => 'required|exists:cfg_locations,id',
+            'architectural_design_code'   => 'nullable|string|min:0|max:255',
         ];
     }
 
@@ -55,6 +58,7 @@ class Places extends Component
         $this->name = null;
         $this->description = null;
         $this->location_id = null;
+        $this->architectural_design_code = null;
         $this->locations = Location::whereEstablishmentId($this->establishment->id)->get();
     }
 
@@ -70,9 +74,15 @@ class Places extends Component
         $this->reset([
             'name',
             'description',
-            'location_id'
+            'location_id',
+            'architectural_design_code',
         ]);
         $this->view = 'create';
+    }
+
+    public function searchPlace()
+    {
+        $this->resetPage(); // Reinicia la paginación a la primera página
     }
 
     public function edit(Place $place)
@@ -84,6 +94,7 @@ class Places extends Component
         $this->name = $place->name;
         $this->description = $place->description;
         $this->location_id = $place->location_id;
+        $this->architectural_design_code = $place->architectural_design_code;
     }
 
     public function update(Place $place)
@@ -91,7 +102,7 @@ class Places extends Component
         $place->update($this->validate());
         $this->mount($this->establishment);
 
-        session()->flash( 'info', 'La oficina fue actualizada exitosamente.');
+        session()->flash('info', 'La oficina fue actualizada exitosamente.');
 
         $this->view = 'index';
     }
@@ -104,13 +115,25 @@ class Places extends Component
 
     public function getPlaces()
     {
-        return Place::query()
+        $query = Place::query()
             ->orderBy('name', 'asc')
             ->with('establishment')
-            ->orderBy('name')
-            ->when($this->establishment, function($query) {
+            ->when($this->establishment, function ($query) {
                 $query->whereEstablishmentId($this->establishment->id);
-            })
-            ->paginate(100);
+            });
+
+        if ($this->filter) {
+            $searchTerm = '%' . $this->filter . '%';
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', $searchTerm)
+                    ->orWhere('description', 'LIKE', $searchTerm)
+                    ->orWhereHas('location', function ($q) use ($searchTerm) {
+                        $q->where('name', 'LIKE', $searchTerm);
+                    })
+                    ->orWhere('architectural_design_code', 'LIKE', $searchTerm);
+            });
+        }
+
+        return $query->paginate(100);
     }
 }

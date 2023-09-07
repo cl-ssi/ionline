@@ -22,7 +22,7 @@ class SearchJobPositionProfiles extends Component
                         'user', 'estament', 'area', 'contractualCondition')
                     ->latest()
                     ->Where('user_creator_id', Auth::user()->id)
-                    ->orWhere('ou_creator_id', Auth::user()->organizationalUnit->id)
+                    ->orWhere('jpp_ou_id', Auth::user()->organizationalUnit->id)
                     ->paginate(50)
             ]);
         }

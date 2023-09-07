@@ -18,7 +18,7 @@
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('welfare.dosfile.index') }}">
-                <i class="fas fa-file-upload"></i> Carga archivo
+                <i class="fas fa-file-upload"></i> Carga archivo DOS
             </a>
         </li>
 

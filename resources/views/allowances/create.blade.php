@@ -10,9 +10,10 @@
 
 <br>
 
-@livewire('allowances.allowances-create',
-    ['allowanceToEdit' => '']
-)
+@livewire('allowances.allowances-create', [
+    'allowanceToEdit'   => '',
+    'form'              => 'create'
+])
 
 @endsection
 

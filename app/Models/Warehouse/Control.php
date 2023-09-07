@@ -49,6 +49,15 @@ class Control extends Model
         'technical_signature_id',
         'technical_signer_id',
         'reception_visator_id',
+
+
+        //Datos del Administrador de contrato
+        'require_contract_manager_visation',
+        'visation_contract_manager_user_id',
+        'visation_contract_manager_ou',
+        'visation_contract_manager_at',
+        'visation_contract_manager_status',
+        'visation_contract_manager_rejection_observation',
     ];
 
     protected $dates = [

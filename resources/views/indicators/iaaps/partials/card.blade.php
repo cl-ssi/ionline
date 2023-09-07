@@ -4,7 +4,7 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <a href="{{ route('indicators.iiaaps.list', 2023) }}">2023 <span class="badge badge-pill badge-warning">En Desarrollo</span></a>
+            <a href="{{ route('indicators.iiaaps.list', 2023) }}">2023 <span class="badge badge-pill badge-warning">En Validación</span></a>
         </li>
         <li class="list-group-item text-muted">
             2022

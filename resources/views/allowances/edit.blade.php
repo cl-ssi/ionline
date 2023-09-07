@@ -10,9 +10,10 @@
 
 <br>
 
-@livewire('allowances.allowances-create',
-    ['allowanceToEdit' => $allowance]
-)
+@livewire('allowances.allowances-create', [
+    'allowanceToEdit'   => $allowance,
+    'form'              => 'edit'
+])
 
 {{--
 <form method="POST" class="form-horizontal" action="{{ route('allowances.update', $allowance) }}" enctype="multipart/form-data"/>

@@ -556,15 +556,23 @@ class ShowTotalHours extends Component
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
                   }
-    
+                  
+                // 17/08/2023: samantha olivares solicita que si la unidad es Unidad de Movilización, y el valor diurno es mayor a 40, se debe dejar en 40.
+                if($this->fulfillment->serviceRequest->responsabilityCenter->id == 122){
+                    if($this->totalHoursDay > 40){
+                        $this->totalHoursDay = 40;
+                    }
+                }
+
                 $totalAmountDayRefund = floor($this->totalHoursDay) * $value;
                 $totalAmountNight = floor($this->totalHoursNight) * $value;
                 $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
-    
+                
                 $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
                 $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
                 // $this->totalHoursDay = $this->totalHoursDay;
                 // $this->totalHoursNight = $this->totalHoursNight;
+                
                 break;
 
             case 'DIURNO PASADO A TURNO':

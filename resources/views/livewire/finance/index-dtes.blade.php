@@ -27,6 +27,9 @@
     </div>
 
 
+
+
+
     @if ($showManualDTE)
         <div>
             @livewire('finance.manual-dtes')
@@ -35,20 +38,20 @@
 
     <div class="form-row mb-3">
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
+            <input type="text" class="form-control" wire:model.defer="filter_folio" placeholder="folio">
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
+            <input type="text" class="form-control" wire:model.defer="filter_folio_oc" placeholder="oc">
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.folio_sigfe">
-                <option value="sin_folio">Sin Folio SIGFE</option>
-                <option value="con_folio">Con Folio SIGFE</option>
-                <option value="todos">Todos</option>
+            <select class="form-control" wire:model.defer="filter_folio_sigfe">
+                <option value="Sin Folio SIGFE">Sin Folio SIGFE</option>
+                <option value="Con Folio SIGFE">Con Folio SIGFE</option>
+                <option value="Todos">Todos</option>
             </select>
         </div>
         <div class="col-md-3">
-            <select class="form-control" wire:model.defer="filter.sender_status">
+            <select class="form-control" wire:model.defer="filter_sender_status">
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
@@ -57,7 +60,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter.selected_establishment">
+            <select class="form-control" wire:model.defer="filter_selected_establishment">
                 <option value="">Todos los Establecimientos</option>
                 @foreach ($establishments as $establishment)
                     <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>
@@ -70,6 +73,31 @@
             </button>
         </div>
     </div>
+
+
+    <div class="mb-3">
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #28a745;"></div>
+            <i class="fas fa-circle text-success"></i>
+            <span class="ml-2">Menos de 5 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #6c757d;"></div>
+            <i class="fas fa-circle text-secondary"></i>
+            <span class="ml-2">5 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #ffc107;"></div>
+            <i class="fas fa-circle text-warning"></i>
+            <span class="ml-2">Menos de 8 días</span>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="color-box rounded-circle mr-2" style="background-color: #dc3545;"></div>
+            <i class="fas fa-circle text-danger"></i>
+            <span class="ml-2">8 días o más</span>
+        </div>
+    </div>
+
 
     <table class="table table-sm table-bordered">
         <thead>
@@ -186,23 +214,12 @@
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
+
                     <td>
-                        <select class="form-control form-control-sm"
-                            wire:change="updateSelectedEstablishment({{ $dte->id }}, $event.target.value)">
-                            <option value="">Seleccionar Establecimiento</option>
-                            @foreach ($establishments as $establishment)
-                                <option value="{{ $establishment->id }}"
-                                    @if ($dte->establishment_id == $establishment->id) selected @endif>
-                                    {{ $establishment->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button class="btn btn-primary btn-sm"
-                            wire:click="saveEstablishment({{ $dte->id }})">Guardar</button>
-                        @if (isset($successMessages[$dte->id]))
-                            <div class="alert alert-success">
-                                {{ $successMessages[$dte->id] }}
-                            </div>
+                        @if ($dte->establishment)
+                            {{ $dte->establishment->name }}
+                        @else
+                            @livewire('finance.assign-establishment', ['dteId' => $dte->id, 'establishments'=>$establishments], key($dte->id))
                         @endif
                     </td>
 
@@ -220,9 +237,9 @@
                     </td>
 
                     <td class="center text-center">
-                        <input type="checkbox" wire:click="toggleCenabast({{ $dte->id }})"
-                            wire:model="selectedCenabasts.{{ $dte->id }}">                        
+                        @livewire('finance.assign-cenabast', ['dteId' => $dte->id], key($dte->id))
                     </td>
+
 
                 </tr>
             @endforeach

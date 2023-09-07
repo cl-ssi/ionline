@@ -205,6 +205,10 @@ use App\Http\Controllers\HotelBooking\RoomController;
 use App\Http\Controllers\HotelBooking\RoomBookingConfigurationController;
 use App\Http\Controllers\HotelBooking\HotelController;
 use App\Http\Controllers\HotelBooking\HotelBookingController;
+use App\Http\Controllers\ProfAgenda\ProposalController;
+use App\Http\Controllers\ProfAgenda\AgendaController;
+use App\Http\Controllers\ProfAgenda\OpenHourController;
+use App\Http\Controllers\ProfAgenda\ActivityTypeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HealthPlan\HealthPlanController;
 use App\Http\Controllers\Finance\PurchaseOrderController;
@@ -717,6 +721,7 @@ Route::middleware(['auth', 'must.change.password'])->group(function () {
     //Reportes de Programación Númerica APS
     Route::get('reportConsolidated', [ProgrammingReportController::class, 'reportConsolidated'])->middleware('auth')->name('programming.reportConsolidated');
     Route::get('reportConsolidatedSep', [ProgrammingReportController::class, 'reportConsolidatedSep'])->middleware('auth')->name('programming.reportConsolidatedSep');
+    Route::get('reportUsers', [ProgrammingReportController::class, 'reportUsers'])->middleware('auth')->name('programming.reportUsers');
 
     //Reportes Observaciones de Programación Númerica APS
     Route::get('reportObservation', [ProgrammingReportController::class, 'reportObservation'])->middleware('auth')->name('programming.reportObservation');
@@ -962,6 +967,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            Route::get('/program_consolidated_report', [ServiceRequestController::class, 'program_consolidated_report'])->name('program_consolidated_report');
+            Route::get('/active_contracts_report', [ServiceRequestController::class, 'active_contracts_report'])->name('active_contracts_report');
+
             Route::get('/consolidated-data-excel-download/{establishment_id}/{year}/{semester}', [ServiceRequestController::class, 'consolidated_data_excel_download'])->name('consolidated_data_excel_download');
             // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
             Route::get('/export-sirh', [ReportController::class, 'export_sirh'])->name('export_sirh');
@@ -1715,6 +1723,9 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
 
     Route::prefix('cenabast')->as('cenabast.')->group(function () {
         Route::get('index/{tray?}', [StoreController::class, 'indexCenabast'])->name('index');
+        Route::post('/save-file/{dte}', [StoreController::class, 'saveFile'])->name('saveFile');
+        Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
+        Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
     });
 
 });
@@ -1761,6 +1772,58 @@ Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.
         Route::post('/store', [ServiceController::class, 'store'])->name('store');
         Route::delete('/{service}/destroy', [ServiceController::class, 'destroy'])->name('destroy');
     });
+});
+
+Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(function () {
+    Route::get('home', function () {
+        return view('prof_agenda.home');
+    })->name('home');
+
+    Route::prefix('proposals')->as('proposals.')->middleware(['auth'])->group(function () {
+        Route::get('/', [ProposalController::class, 'index'])->name('index');
+        Route::get('/edit/{proposal}', [ProposalController::class, 'edit'])->name('edit');
+        Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
+        Route::get('/create', [ProposalController::class, 'create'])->name('create');
+        Route::post('/store', [ProposalController::class, 'store'])->name('store');
+        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+
+        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');  
+    });
+
+    Route::prefix('agenda')->as('agenda.')->middleware(['auth'])->group(function () {
+        Route::get('/', [AgendaController::class, 'index'])->name('index');
+        // Route::get('/edit/{proposal}', [ProposalController::class, 'edit'])->name('edit');
+        // Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
+        // Route::get('/create', [ProposalController::class, 'create'])->name('create');
+        // Route::post('/store', [ProposalController::class, 'store'])->name('store');
+        // Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+    });
+
+    Route::prefix('open_hour')->as('open_hour.')->middleware(['auth'])->group(function () {
+        // Route::get('/', [OpenHourController::class, 'index'])->name('index');
+        // Route::get('/edit/{proposal}', [OpenHourController::class, 'edit'])->name('edit');
+        // Route::put('/update/{proposal}', [OpenHourController::class, 'update'])->name('update');
+        // Route::get('/create', [OpenHourController::class, 'create'])->name('create');
+        Route::post('/store', [OpenHourController::class, 'store'])->name('store');
+        Route::post('/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');
+        Route::post('/destroy', [OpenHourController::class, 'destroy'])->name('destroy');
+        Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
+        Route::post('/block', [OpenHourController::class, 'block'])->name('block');
+        Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
+        
+        // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');  
+    });
+
+    Route::prefix('activity_types')->as('activity_types.')->middleware(['auth'])->group(function () {
+        Route::get('/', [ActivityTypeController::class, 'index'])->name('index');
+        Route::get('/edit/{activityType}', [ActivityTypeController::class, 'edit'])->name('edit');
+        Route::put('/update/{activityType}', [ActivityTypeController::class, 'update'])->name('update');
+        Route::get('/create', [ActivityTypeController::class, 'create'])->name('create');
+        Route::post('/store', [ActivityTypeController::class, 'store'])->name('store');
+        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');    
+    });
+    
+    
 });
 
 // Inventories
@@ -2244,6 +2307,7 @@ Route::prefix('welfare')->as('welfare.')->middleware(['auth', 'must.change.passw
     });
 
     Route::prefix('amipass')->as('amipass.')->group(function () {
+        Route::get('/mi-amipass', [AmipassController::class, 'miAmipass'])->name('mi-amipass');
         Route::get('/dashboard', [AmipassController::class, 'index'])->name('dashboard');
         Route::get('/question-my-index', [AmipassController::class, 'questionMyIndex'])->name('question-my-index');
         Route::get('/question-all-index', [AmipassController::class, 'questionAllIndex'])->name('question-all-index');
@@ -2437,3 +2501,21 @@ Route::get('/maquetas/menu', function () {
 Route::get('/maquetas/vista', function () {
     return view('maquetas.vista');
 })->name('maquetas.vista');
+
+
+
+/* Registro asistencia cena SST 2023 */
+use App\Http\Controllers\Attendances\PeopleController;
+
+Route::get('/attendances/', function () {
+    return view('attendances.principal');
+});
+Route::post('/attendances/login', [PeopleController::class, 'customLogin'])->name('attendances.login');
+
+Route::get('/attendances/unregistered', function () {
+    return view('attendances.unregistered');
+})->name('attendances.unregistered');
+
+Route::get('/attendances/main', function() {
+    return view('attendances.main');
+})->name('attendances.main');

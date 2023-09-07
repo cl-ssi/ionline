@@ -16,7 +16,7 @@ class PrefinanceAuthorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment,
            $lstBudgetItem, $program, $program_id, $lstProgram, $sigfe, $codigo, $financial_type;
-    public $arrayItemRequest = [['budgetId' => '']];
+    public $arrayItemRequest = [];
     public $round_trips, $baggages;
 
     protected $rules = [
@@ -69,14 +69,14 @@ class PrefinanceAuthorization extends Component
         [
             // 'sigfe'                        =>  'required',
             // 'program'                      =>  'required',
-            'program_id'                   =>  'required',
-            'arrayItemRequest'             =>  'required|min:'.(($this->requestForm->itemRequestForms->count() > 0 ? count($this->requestForm->itemRequestForms) : count($this->requestForm->passengers)) + 1)
+            'program_id'                   => 'required',
+            'arrayItemRequest.*.budgetId'  => 'required'
         ],
         [
             // 'sigfe.required'               =>  'Ingrese valor para  SIGFE.',
             // 'program.required'             =>  'Ingrese un Programa Asociado.',
             'program_id.required'          =>  'Ingrese un Programa Asociado.',
-            'arrayItemRequest.min'         =>  'Debe seleccionar todos los items presupuestario.',
+            'arrayItemRequest.*.budgetId.required' =>  'Seleccione item presupuestario.',
         ],
       );
 

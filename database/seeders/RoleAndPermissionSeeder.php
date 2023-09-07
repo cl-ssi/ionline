@@ -177,6 +177,12 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Summary: user', 'description' => 'Usuario del módulo de Sumarios']);
         Permission::create(['name' => 'Summary: admin', 'description' => 'Administrador del módulo de sumarios']);
 
+        Permission::create(['name' => 'Summary: admin viewer', 'description' => 'Administrador del módulo de sumarios pero con permisos solamente para ver los sumarios y no modificar nada del contenido']);
+
+
+
+        Permission::create(['name' => 'Store: Cenabast', 'description' => 'Permiso para acceso a bodega de CENABAST donde se sube el Acta firmada de acuerdo a un DTE']);
+
         // @role(
         //   'Replacement Staff: admin |
         //   Replacement Staff: user'

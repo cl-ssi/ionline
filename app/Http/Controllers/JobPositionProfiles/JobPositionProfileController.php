@@ -72,7 +72,11 @@ class JobPositionProfileController extends Controller
         $jobPositionProfile = new JobPositionProfile($request->All());
         $jobPositionProfile->status = 'saved';
         $jobPositionProfile->user()->associate(Auth::user());
-        $jobPositionProfile->organizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        $jobPositionProfile->creatorOrganizationalUnit()->associate(Auth::user()->organizationalUnit->id);
+        
+        /* O.U. DONDE SE DIRIGE EL PERFIL DE CARGO */
+        $jobPositionProfile->organizationalUnit()->associate($request->jpp_ou_id);
+
         $jobPositionProfile->estament()->associate($request->estament_id);
         $jobPositionProfile->area()->associate($request->area_id);
         $jobPositionProfile->contractualCondition()->associate($request->contractual_condition_id);

@@ -20,8 +20,12 @@
 <div style="clear: both; padding-bottom: 5px">&nbsp;</div>
 
 <div class="center"><b>{{ $jobPositionProfile->name }}</b></div>
-<div class="center"><b>{{ $jobPositionProfile->organizationalUnit->name }}</b></div>
-<div class="center"><b>{{ $jobPositionProfile->jobPositionProfileSigns->where('event_type', 'subdir o depto')->first()->organizationalUnit->name }}</b></div>
+<div class="center"><b>{{ ($jobPositionProfile->organizationalUnit) ? $jobPositionProfile->organizationalUnit->name : '' }}</b></div>
+<div class="center"><b>
+    {{  ($jobPositionProfile->jobPositionProfileSigns->where('event_type', 'subdir o depto')->first()) ?
+        $jobPositionProfile->jobPositionProfileSigns->where('event_type', 'subdir o depto')->first()->organizationalUnit->name :
+        ''
+    }}</b></div>
 <br>
 
 <table class="siete">
@@ -384,65 +388,66 @@
 </table>
 
 <br>
-
-<table class="siete">
-    <tbody>
-        <tr>
-            <th align="left" style="background-color: #2f5496; color: white" colspan="6">
-                Competencias Distintivas del Estamento
-            </th>
-        </tr>
-        <tr style="background-color: #b4c6e7">
-            <th rowspan="2" width="30%">Nombre</th>
-            <th rowspan="2" width="50%">Descripción</th>
-            <th colspan="4">Nivel requerido <br> (según corresponda)</th>
-        </tr>
-        <tr style="background-color: #b4c6e7">
-            <th width="5%">
-                4
-                Desarrollo Insuficiente
-            </th>
-            <th width="5%">
-                3
-                Desarrollo Regular
-            </th>
-            <th width="5%">
-                2
-                Desarrollo Avanzado
-            </th>
-            <th width="5%">
-                1
-                Desarrollo Óptimo
-            </th>
-        </tr>
-        @foreach($jobPositionProfile->jppExpertises as $jppExpertise)
+<div style="page-break-before:always;">
+    <table class="siete">
+        <tbody>
             <tr>
-                <td style="background-color: #b4c6e7">{{ $jppExpertise->expertise->name }}</td>
-                <td align="justify">{{ $jppExpertise->expertise->description }}</td>
-                <td align="center">
-                    @if($jppExpertise->value == 4)
-                        X
-                    @endif
-                </td>
-                <td align="center">
-                    @if($jppExpertise->value == 3)
-                        X
-                    @endif
-                </td>
-                <td align="center">
-                    @if($jppExpertise->value == 2)
-                        X
-                    @endif
-                </td>
-                <td align="center">
-                    @if($jppExpertise->value == 1)
-                        X
-                    @endif
-                </td>
+                <th align="left" style="background-color: #2f5496; color: white" colspan="6">
+                    Competencias Distintivas del Estamento
+                </th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+            <tr style="background-color: #b4c6e7">
+                <th rowspan="2" width="30%">Nombre</th>
+                <th rowspan="2" width="50%">Descripción</th>
+                <th colspan="4">Nivel requerido <br> (según corresponda)</th>
+            </tr>
+            <tr style="background-color: #b4c6e7">
+                <th width="5%">
+                    4
+                    Desarrollo Insuficiente
+                </th>
+                <th width="5%">
+                    3
+                    Desarrollo Regular
+                </th>
+                <th width="5%">
+                    2
+                    Desarrollo Avanzado
+                </th>
+                <th width="5%">
+                    1
+                    Desarrollo Óptimo
+                </th>
+            </tr>
+            @foreach($jobPositionProfile->jppExpertises as $jppExpertise)
+                <tr>
+                    <td style="background-color: #b4c6e7">{{ $jppExpertise->expertise->name }}</td>
+                    <td align="justify">{{ $jppExpertise->expertise->description }}</td>
+                    <td align="center">
+                        @if($jppExpertise->value == 4)
+                            X
+                        @endif
+                    </td>
+                    <td align="center">
+                        @if($jppExpertise->value == 3)
+                            X
+                        @endif
+                    </td>
+                    <td align="center">
+                        @if($jppExpertise->value == 2)
+                            X
+                        @endif
+                    </td>
+                    <td align="center">
+                        @if($jppExpertise->value == 1)
+                            X
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
 @endsection
 

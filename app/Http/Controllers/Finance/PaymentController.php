@@ -43,12 +43,16 @@ class PaymentController extends Controller
             'requestForm',
             'requestForm.contractManager',
         ])
+            //Se deja como antes mientras no se implementa un filtro en el review
             ->where('confirmation_status', 1)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
                 $query->whereNull('fin_status')
                     ->orWhere('fin_status', 'rechazado');
             })
             ->paginate(50);
+
+
 
         return view('finance.payments.review', compact('dtes'));
     }
@@ -72,7 +76,10 @@ class PaymentController extends Controller
 
     public function ready()
     {
-        $dtes = Dte::where('confirmation_status', 1)->where('fin_status', 'Enviado a Pendiente Para Pago')->get();
+        $dtes = Dte::where('confirmation_status', 1)
+            ->where('fin_status', 'Enviado a Pendiente Para Pago')
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            ->get();
         return view('finance.payments.ready', compact('dtes'));
     }
 

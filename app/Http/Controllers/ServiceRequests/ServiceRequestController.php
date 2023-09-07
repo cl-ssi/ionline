@@ -1009,6 +1009,96 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
   }
 
+  public function program_consolidated_report(Request $request)
+  {
+
+    // set_time_limit(7200);
+    // ini_set('memory_limit', '2048M');
+
+    $year = $request->year;
+    $semester = $request->semester;
+    $programm_name = $request->programm_name;
+
+    // dd($year, $semester, $programm_name);
+
+    //solicitudes activas
+    $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
+      $subQuery->where('status', 0);
+    })
+    ->where('establishment_id', 1)
+    ->whereYear('start_date',$year)
+    ->when($semester == 1, function ($q) use ($semester) {
+        return $q->where(function($query) {
+                    $query->whereMonth('start_date',1)
+                            ->orWhereMonth('start_date',2)
+                            ->orWhereMonth('start_date',3)
+                            ->orWhereMonth('start_date',4);
+                });
+      })
+      ->when($semester == 2, function ($q) use ($semester) {
+        return $q->where(function($query) {
+                    $query->whereMonth('start_date',5)
+                            ->orWhereMonth('start_date',6)
+                            ->orWhereMonth('start_date',7)
+                            ->orWhereMonth('start_date',8);
+                });
+      })
+    ->when($semester == 3, function ($q) use ($semester) {
+        return $q->where(function($query) {
+                    $query->whereMonth('start_date',7)
+                            ->orWhereMonth('start_date',9)
+                            ->orWhereMonth('start_date',10)
+                            ->orWhereMonth('start_date',11)
+                            ->orWhereMonth('start_date',12);
+                });
+    })
+    ->where('programm_name','LIKE','%'.$programm_name.'%')
+    ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
+    ->orderBy('request_date', 'asc')
+    ->get();
+
+    $programm_name_array = ServiceRequest::where('establishment_id', 1)
+                                        ->select('programm_name')
+                                        ->distinct()->get();
+    
+    return view('service_requests.requests.program_consolidated_report', compact('serviceRequests', 'request','programm_name_array'));
+  }
+
+  public function active_contracts_report(Request $request)
+  {
+    $programm_name = $request->programm_name;
+    $profession_id = $request->profession_id;
+
+    //solicitudes activas
+    $serviceRequests = ServiceRequest::where('id',0)->get();
+    if($programm_name!=null || $profession_id != null){
+        $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
+            $subQuery->where('status', 0);
+          })
+          ->where('establishment_id', 1)
+          ->when($programm_name != NULL, function ($q) use ($programm_name) {
+              return $q->where('programm_name','LIKE','%'.$programm_name.'%');
+          })
+          ->when($profession_id != NULL, function ($q) use ($profession_id) {
+              return $q->where('profession_id',$profession_id);
+          })
+          ->with('SignatureFlows','shiftControls','fulfillments','establishment','employee','profession','responsabilityCenter')
+          ->whereDate('end_date','>=',now())
+          ->orderBy('request_date', 'asc')
+          ->get();
+    }
+    
+    // dd($serviceRequests);
+
+    $programm_name_array = ServiceRequest::where('establishment_id', 1)
+                                        ->select('programm_name')
+                                        ->distinct()->get();
+
+    $professions_array = Profession::all();
+
+    return view('service_requests.requests.active_contracts_report', compact('serviceRequests', 'request','programm_name_array','professions_array'));
+  }
+
   public function consolidated_data_excel_download($establishment_id, $year, $semester){
         return Excel::download(new ConsolidatedReport($establishment_id, $year, $semester), 'consolidated.xlsx');
   }

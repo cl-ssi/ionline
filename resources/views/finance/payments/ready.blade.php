@@ -46,43 +46,49 @@
                             {{ $dte->folio_oc }}
                         </td>
                         <td>
-                            <a
-                                href="{{ route('request_forms.show', $dte->requestform->id) }}">{{ $dte->requestform->folio }}</a>
-                            @if ($dte->requestform->father)
-                                <br>(<a
-                                    href="{{ route('request_forms.show', $dte->requestform->father->id) }}">{{ $dte->requestform->father->folio }}</a>)
+                            @if ($dte->requestform)
+                                <a
+                                    href="{{ route('request_forms.show', $dte->requestform->id) }}">{{ $dte->requestform->folio }}</a>
+                                @if ($dte->requestform->father)
+                                    <br>(<a
+                                        href="{{ route('request_forms.show', $dte->requestform->father->id) }}">{{ $dte->requestform->father->folio }}</a>)
+                                @endif
                             @endif
                         </td>
                         <td>
                             <ul>
-                                @if ($dte->requestform->father)
-                                    @foreach ($dte->requestform->father->paymentDocs as $paymentDoc)
-                                        <li>{{ $paymentDoc->name ?? '' }}</li>
-                                    @endforeach
-                                @else
-                                    @foreach ($dte->requestform->paymentDocs as $paymentDoc)
-                                        <li>{{ $paymentDoc->name ?? '' }}</li>
-                                    @endforeach
+                                @if ($dte->requestform)
+                                    @if ($dte->requestform->father)
+                                        @foreach ($dte->requestform->father->paymentDocs as $paymentDoc)
+                                            <li>{{ $paymentDoc->name ?? '' }}</li>
+                                        @endforeach
+                                    @else
+                                        @foreach ($dte->requestform->paymentDocs as $paymentDoc)
+                                            <li>{{ $paymentDoc->name ?? '' }}</li>
+                                        @endforeach
+                                    @endif
                                 @endif
                             </ul>
                         </td>
                         <td>
-                            @if ($dte->requestform->father)
-                                @foreach ($dte->requestform->father->requestFormFiles as $requestFormFile)
-                                    <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
-                                        class="list-group-item list-group-item-action py-2 small" target="_blank">
-                                        <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                                        <i class="fas fa-calendar-day"></i>
-                                        {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                                @endforeach
-                            @else
-                                @foreach ($dte->requestform->requestFormFiles as $requestFormFile)
-                                    <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
-                                        class="list-group-item list-group-item-action py-2 small" target="_blank">
-                                        <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
-                                        <i class="fas fa-calendar-day"></i>
-                                        {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
-                                @endforeach
+                            @if ($dte->requestform)
+                                @if ($dte->requestform->father)
+                                    @foreach ($dte->requestform->father->requestFormFiles as $requestFormFile)
+                                        <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
+                                            class="list-group-item list-group-item-action py-2 small" target="_blank">
+                                            <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                                            <i class="fas fa-calendar-day"></i>
+                                            {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+                                    @endforeach
+                                @else
+                                    @foreach ($dte->requestform->requestFormFiles as $requestFormFile)
+                                        <a href="{{ route('request_forms.show_file', $requestFormFile) }}"
+                                            class="list-group-item list-group-item-action py-2 small" target="_blank">
+                                            <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                                            <i class="fas fa-calendar-day"></i>
+                                            {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+                                    @endforeach
+                                @endif
                             @endif
                         </td>
                         <td>
@@ -116,34 +122,36 @@
                                 @endforeach
                             @endif
 
-                            @if ($dte->requestform->father && $dte->requestform->father->purchasingProcess)
-                                @foreach ($dte->requestform->father->purchasingProcess->details->count() > 0 ? $dte->requestform->father->purchasingProcess->details : $dte->requestform->father->purchasingProcess->detailsPassenger as $key => $detail)
-                                    @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
-                                        @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
-                                            </a>
-                                        @endforeach
-                                    @endif
+                            @if ($dte->requestform)
+                                @if ($dte->requestform->father && $dte->requestform->father->purchasingProcess)
+                                    @foreach ($dte->requestform->father->purchasingProcess->details->count() > 0 ? $dte->requestform->father->purchasingProcess->details : $dte->requestform->father->purchasingProcess->detailsPassenger as $key => $detail)
+                                        @if (isset($detail->pivot->tender) && isset($detail->pivot->tender->attachedFiles))
+                                            @foreach ($detail->pivot->tender->attachedFiles as $attachedFile)
+                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
+                                                    class="list-group-item list-group-item-action py-2" target="_blank">
+                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }}
+                                                </a>
+                                            @endforeach
+                                        @endif
 
-                                    @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
-                                        @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
+                                        @if (isset($detail->pivot->directDeal) && isset($detail->pivot->directDeal->attachedFiles))
+                                            @foreach ($detail->pivot->directDeal->attachedFiles as $attachedFile)
+                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
+                                                    class="list-group-item list-group-item-action py-2" target="_blank">
+                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
+                                            @endforeach
+                                        @endif
 
 
-                                    @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
-                                        @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
-                                            <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
-                                                class="list-group-item list-group-item-action py-2" target="_blank">
-                                                <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
-                                        @endforeach
-                                    @endif
-                                @endforeach
+                                        @if (isset($detail->pivot->immediatePurchase) && isset($detail->pivot->immediatePurchase->attachedFiles))
+                                            @foreach ($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
+                                                <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}"
+                                                    class="list-group-item list-group-item-action py-2" target="_blank">
+                                                    <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         </td>
                         <td>

@@ -19,7 +19,7 @@
             <fieldset class="form-group col-12 col-md-6">
                 <label for="for_requester_ou_id">Unidad Organizacional</label>
                 @livewire('search-select-organizational-unit', [
-                    'selected_id'         => 'ou_creator_id',
+                    'selected_id'         => 'jpp_ou_id',
                     'required'            => 'required',
                     'organizationalUnit'  => ($jobPositionProfile) ? $jobPositionProfile->organizationalUnit : ''
                 ])

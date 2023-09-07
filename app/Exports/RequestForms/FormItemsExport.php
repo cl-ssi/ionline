@@ -12,7 +12,7 @@ namespace App\Exports\RequestForms;
 
 // use Maatwebsite\Excel\Concerns\WithHeadings;
 // use Maatwebsite\Excel\Concerns\WithMapping;
-// use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 // use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 // use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 // use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -20,12 +20,16 @@ namespace App\Exports\RequestForms;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-use Illuminate\Http\Request;
-use Livewire\Component;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\LazyCollection;
+// use Livewire\Component;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-class FormItemsExport implements FromView /*FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithColumnFormatting*/
+class FormItemsExport implements FromView, ShouldAutoSize /*FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithColumnFormatting*/
 {
-    //use Exportable;
+    use Exportable;
+    
+    public $resultSearch;
 
     public function __construct($resultSearch)
     {
