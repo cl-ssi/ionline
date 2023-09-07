@@ -294,16 +294,43 @@
                     <th class="text-center" width="150px">Cant. Recibida</th>
                     <th>Producto</th>
                     <th class="text-center">Código Barra</th>
-                    <th></th>
+                    <th nowrap></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($po_items as $index => $po_item)
                 <tr>
-                    <td class="text-center">
-                        @if($index_selected === $index && $po_item['can_edit'] && $request_form)
+                    <td width="250px">
+                        @if($index_selected === $index && $po_item['can_edit'])
+                            <div class="form-check">
+                                <input
+                                    type="radio"
+                                    id="select-product-unspsc"
+                                    value="select-product-unspsc"
+                                    wire:model="type_product_unspsc"
+                                    class="form-check-input"
+                                >
+                                <label class="form-check-label" for="select-product-unspsc">
+                                    Seleccione Producto ONU
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    type="radio"
+                                    id="search-product-unspsc"
+                                    value="search-product-unspsc"
+                                    wire:model="type_product_unspsc"
+                                    class="form-check-input"
+                                >
+                                <label class="form-check-label" for="search-product-unspsc">
+                                    Buscar Producto ONU
+                                </label>
+                            </div>
+                        @endif
+
+                        @if($index_selected === $index && $po_item['can_edit'] && $request_form && $type_product_unspsc == 'select-product-unspsc')
                             <label class="col-form-label-sm text-left my-0" for="rf-product-id">
-                                Productos ONU
+                                Seleccione Productos ONU
                             </label>
                             <select
                                 wire:model="unspsc_product_code"
@@ -318,24 +345,86 @@
                                     </option>
                                 @endforeach
                             </select>
-                        @else
-                            @if($po_item['unspsc_product_code'])
+                        @elseif($index_selected === $index && $type_product_unspsc == 'search-product-unspsc')
+                            <label class="col-form-label-sm text-left my-0" for="rf-product-id">
+                                Código Producto ONU
+                            </label>
+
+                            <div class="input-group mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm @error('search_unspsc_code') is-invalid @enderror"
+                                    id="unspsc-code"
+                                    wire:model.debounce.1500ms="search_unspsc_code"
+                                    type="number"
+                                >
+                                <div class="input-group-append">
+                                    <button
+                                        class="btn btn-sm btn-outline-primary"
+                                        type="button"
+                                        id="button-addon2"
+                                        title="Buscar un codigo de UNSPSC"
+                                        wire:click="searchUnspscCode"
+                                    >
+                                        <span
+                                            class="spinner-border spinner-border-sm"
+                                            role="status"
+                                            wire:loading
+                                            wire:target="searchUnspscCode"
+                                            aria-hidden="true"
+                                        >
+                                        </span>
+
+                                        <span
+                                            wire:loading.remove
+                                            wire:target="searchUnspscCode"
+                                        >
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </button>
+                                    <button
+                                        class="btn btn-sm btn-outline-danger"
+                                        type="button"
+                                        id="button-addon2"
+                                        title="Eliminar búsqueda"
+                                        wire:click="deleteUnspscCode"
+                                    >
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <small>
+                                Nombre Producto ONU
+                                <br>
+                                @if(isset($unspsc_product_id))
+                                    <i class="fas fa-check"></i>
+                                @else
+                                    <i class="fas fa-times"></i>
+                                @endif
+
+                                {{ $unspsc_product_name }}
+                            </small>
+                        @elseif(isset($po_item['unspsc_product_code']))
+                            <div class="text-center">
                                 <small class="text-monospace">
                                     {{ $po_item['unspsc_product_code'] }}
                                 </small>
-                            @else
+                            </div>
+                        @elseif(! isset($po_item['unspsc_product_code']))
+                            <div class="text-center">
                                 <small class="text-monospace">
-                                    Sin Código ONU
+                                    Sin Código Producto ONU
                                 </small>
-                            @endif
-
-                            @if ($errors->has('po_items.' . $index . '.unspsc_product_code'))
-                                <br>
-                                <small class="text-danger">
-                                    <strong>{{ $errors->first('po_items.' . $index . '.unspsc_product_code') }}</strong>
-                                </small>
-                            @endif
+                            </div>
                         @endif
+
+                        @if ($errors->has('po_items.' . $index . '.unspsc_product_code'))
+                            <br>
+                            <small class="text-danger">
+                                <strong>{{ $errors->first('po_items.' . $index . '.unspsc_product_code') }}</strong>
+                            </small>
+                        @endif
+
                     </td>
                     <td>
                         @if($index_selected === $index)
@@ -494,7 +583,7 @@
                             </div>
                         @endif
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" nowrap>
                         @if($index_selected === $index)
                             <button
                                 class="btn btn-sm btn-primary"
@@ -538,9 +627,9 @@
             <button
                 class="btn btn-success"
                 wire:click="finish"
-                
+                wire:loading.attr="disabled"
                 wire:target="finish"
-                @if($po_code == null)
+                @if(!isset($po_code) || !isset($request_form))
                     disabled
                 @endif
             >

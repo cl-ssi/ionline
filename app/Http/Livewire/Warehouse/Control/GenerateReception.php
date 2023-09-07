@@ -19,6 +19,7 @@ use App\Models\Warehouse\TypeReception;
 use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class GenerateReception extends Component
@@ -53,11 +54,14 @@ class GenerateReception extends Component
 
     public $search_product;
     public $index_selected;
-    public $unspsc_product_name;
+    public $search_unspsc_code;
     public $unspsc_product_id;
     public $unspsc_product_code;
+    public $unspsc_product_name;
+    public $product_name;
     public $wre_product_id;
     public $wre_product_name;
+    public $type_product_unspsc;
 
     public $description;
     public $barcode;
@@ -139,6 +143,7 @@ class GenerateReception extends Component
                     $infoItem['po_quantity'] = $item->Cantidad;
                     $infoItem['description'] = $item->EspecificacionComprador;
                     $infoItem['barcode'] = $wre_product ? $wre_product->barcode : null;
+                    $infoItem['product_name'] = $item->Producto;
                     $infoItem['unspsc_product_code'] = $this->getUnspscProductCode($wre_product, $item->CodigoProducto);
                     $infoItem['unspsc_product_name'] = $this->getUnspscProductName($infoItem['unspsc_product_code'], $item->Producto);
                     $infoItem['has_code_unspsc'] = ($infoItem['unspsc_product_code']) ? true : false;
@@ -163,11 +168,22 @@ class GenerateReception extends Component
             $this->disabled_program = $this->program_id ? true : false;
             $this->technical_signer_id = $this->getTechnicalSignatureId();
 
+            /**
+             * No permite generar ingreso donde los productos ya fueron recepcionados
+             */
             if(count($this->po_items) == 0)
             {
                 $this->error = true;
                 $this->msg = 'Todos los productos de la orden de compra fueron ingresados en bodega.';
                 $this->resetInputReception();
+            }
+
+            /**
+             * Muestra aviso si la orden de compra contiene productos sin código de producto ONU
+             */
+            if($this->containsProductsWithoutUnspscCode($purchaseOrder->items))
+            {
+                session()->flash('danger', 'La Orden de Compra contiene productos sin Código de Producto ONU.');
             }
 
             /**
@@ -336,11 +352,14 @@ class GenerateReception extends Component
 
     public function editProduct($index)
     {
+        $this->type_product_unspsc = 'select-product-unspsc';
+
         $this->index_selected = $index;
         $this->max_quantity = $this->po_items[$index]['max_quantity'];
         $this->quantity = $this->po_items[$index]['quantity'];
         $this->description = $this->po_items[$index]['description'];
         $this->barcode = $this->po_items[$index]['barcode'];
+        $this->product_name = $this->po_items[$index]['product_name'];
         $this->unspsc_product_name = $this->po_items[$index]['unspsc_product_name'];
         $this->unspsc_product_code = $this->po_items[$index]['unspsc_product_code'];
         $this->unspsc_product_id = $this->po_items[$index]['unspsc_product_id'];
@@ -366,7 +385,7 @@ class GenerateReception extends Component
         $this->po_items[$this->index_selected]['barcode'] = $dataValidated['barcode'];
         $this->po_items[$this->index_selected]['unspsc_product_id'] = $this->unspsc_product_id;
         $this->po_items[$this->index_selected]['unspsc_product_code'] = $this->unspsc_product_code;
-        $this->po_items[$this->index_selected]['unspsc_product_name'] = $this->getUnspscProductName($this->unspsc_product_code, $this->po_items[$this->index_selected]['unspsc_product_name']);
+        $this->po_items[$this->index_selected]['unspsc_product_name'] = $this->getUnspscProductName($this->unspsc_product_code, $this->po_items[$this->index_selected]['product_name']);
         $this->po_items[$this->index_selected]['has_code_unspsc'] = ($this->unspsc_product_code == null) ? false : true ;
         $this->po_items[$this->index_selected]['wre_product_id'] = $this->wre_product_id;
         $this->po_items[$this->index_selected]['wre_product_name'] = $this->wre_product_name;
@@ -400,6 +419,31 @@ class GenerateReception extends Component
         }
 
         $this->wre_products = $wre_products;
+    }
+
+    public function searchUnspscCode()
+    {
+        if(Str::length($this->search_unspsc_code) == 8)
+        {
+            $unspscProduct = UnspscProduct::whereCode($this->search_unspsc_code)->first();
+
+            $this->unspsc_product_id = $unspscProduct->id;
+            $this->unspsc_product_code = $unspscProduct->code;
+            $this->unspsc_product_name = $unspscProduct->name;
+        }
+        else
+        {
+            $this->unspsc_product_id = null;
+            $this->unspsc_product_code = null;
+            $this->unspsc_product_name = $this->product_name;
+        }
+    }
+
+    public function deleteUnspscCode()
+    {
+        $this->unspsc_product_id = null;
+        $this->unspsc_product_code = null;
+        $this->unspsc_product_name = $this->product_name;
     }
 
     public function updatedWreProductId($value)
@@ -530,6 +574,7 @@ class GenerateReception extends Component
         $this->description = null;
         $this->barcode = null;
         $this->has_code_unspsc = null;
+        $this->search_unspsc_code = null;
         $this->unspsc_product_name = null;
         $this->unspsc_product_id = null;
         $this->unspsc_product_code = null;
@@ -556,5 +601,16 @@ class GenerateReception extends Component
         $this->technical_signature = null;
         $this->technical_signer_id = null;
         $this->disabled_program = false;
+    }
+
+    public function containsProductsWithoutUnspscCode($items)
+    {
+        $items = collect($items);
+
+        $items = $items->contains(function ($value, int $key) {
+            return $value->CodigoProducto == 0;
+        });
+
+        return $items;
     }
 }

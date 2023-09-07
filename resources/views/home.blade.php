@@ -18,8 +18,8 @@
 
 <div class="jumbotron mt-4 pt-2">
     <h1 class="display-4">Intranet Online</h1>
-            
-           
+
+
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -31,7 +31,7 @@
             <div class="carousel-item active">
                 <img src="{{ asset('images/news/new1.png') }}" alt="">
             </div>
-            
+
             <!-- <div class="carousel-item">
                 <img src="{{ asset('images/news/new2.png') }}" alt="">
             </div> -->
@@ -55,13 +55,13 @@
     <div class="row mt-4">
         <div class="col-md-3 col-12">
             <!-- <img src="{{ asset('images/tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
-            <img src="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}" 
-                alt="Logo {{ env('APP_SS') }}" 
+            <img src="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}"
+                alt="Logo {{ env('APP_SS') }}"
                 class="img-thumbnail mb-3">
             <strong>Logos:</strong>
             <ul>
                 <li>
-                    <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a> 
+                    <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - RGB.png') }}">SST Color</a>
                 </li>
                 <li>
                     <a href="{{ asset('images/Logo Servicio de Salud Tarapacá - Pluma.png') }}">SST Pluma</a>
@@ -76,7 +76,7 @@
                     <a href="{{ asset('images/Logo Hospital de Alto Hospicio - RGB.png') }}">HAH Color</a>
                 </li>
                 <li>
-                    <a href="{{ asset('images/Logo Hospital de Alto Hospicio - Pluma.png') }}">HAH Pluma</a> 
+                    <a href="{{ asset('images/Logo Hospital de Alto Hospicio - Pluma.png') }}">HAH Pluma</a>
                 </li>
             </ul>
         </div>
@@ -114,7 +114,7 @@
             <p class="text-right">Contacto:
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
-            
+
         </div>
 
     </div>
@@ -151,7 +151,7 @@
     </div>
 
 
-    
+
 
 </div>
 
