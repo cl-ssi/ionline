@@ -21,13 +21,19 @@ class IndexDtes extends Component
 
     public $establishment;
 
-    public $successMessages = [];
+    public $successMessages = [];    
 
     public $filter_folio;
     public $filter_folio_oc;
     public $filter_folio_sigfe;
     public $filter_sender_status;
     public $filter_selected_establishment;
+
+
+    
+
+
+
 
 
 
@@ -94,26 +100,18 @@ class IndexDtes extends Component
             'requestForm.contractManager',
         ])
             ->whereNot('tipo_documento', 'guias_despacho')
+            ->whereNull('rejected')
             ->orderBy('emision');
 
-        return $query->paginate(50);
+        return $query->paginate(100);
     }
-
-
-
-
-
-
 
 
     public function refresh()
     {
-        /**
-         * Sólo hace el re redner del componente
-         */
-    }
 
-
+        //$this->dtes = $this->searchDtes();
+    }  
 
     public function mount()
     {

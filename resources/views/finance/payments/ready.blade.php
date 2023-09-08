@@ -207,5 +207,8 @@
 
             </tbody>
         </table>
+
+        {{ $dtes->links() }}
+
     </div>
 @endsection

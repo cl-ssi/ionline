@@ -15,7 +15,7 @@
         <tr>
             <th>FR</th>
             <th>OC</th>
-            <th>Bolatas/Facturas</th>
+            <th>Boletas/Facturas</th>
             <th>Recepción</th>
             <th>Otros</th>
             <th>Estado</th>

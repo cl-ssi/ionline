@@ -5,8 +5,11 @@
             <a class="nav-link {{ active('finance.dtes.index') }}" href="{{ route('finance.dtes.index') }}">Ver dtes</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link {{ active('finance.payments.rejected') }}" href="{{ route('finance.payments.rejected') }}">Rechazadas</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ active('finance.dtes.upload') }}" href="{{ route('finance.dtes.upload') }}">Cargar archivo</a>
-        </li>        
+        </li>
         <li class="nav-item">
         <a class="nav-link {{ active('finance.payments.review') }}" href="{{ route('finance.payments.review') }}">Bandeja de Revisión de Pago</a>
         </li>

@@ -123,5 +123,6 @@
         @endforeach
     </tbody>
 </table>
+{{ $dtes->links() }}
 
 @endsection
