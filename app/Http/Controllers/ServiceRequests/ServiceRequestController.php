@@ -463,6 +463,7 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
+    
     //validation existence
     if ($request->type != "Suma alzada") {
       $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
@@ -476,6 +477,30 @@ class ServiceRequestController extends Controller
         session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
         return redirect()->back();
       }
+    }
+
+    // 07/09/2023: solo para usuarios que no pertenezcan a RRHH del hospital
+    // 07/09/2023: validación solicitada por samantha: en HETGH no se pueden crear más de 412 contratos (se obtienen en la consulta) suma alzada que 
+    // sean del programa COVID 2022
+    if(!Auth::user()->can('Service Request: fulfillments rrhh')){
+        if ($request->type == "Suma alzada" && $request->programm_name == "Covid 2022" && $request->program_contract_type == "Mensual" && $request->establishment_id == 1) {
+            // si usuario ya tiene creado un contrato en agosto, se permite la creación, de lo contrario no.
+            $serviceRequestCount = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
+                                                    $subQuery->where('status', 0);
+                                                })
+                                                ->where('program_contract_type', $request->program_contract_type)
+                                                ->where('type', $request->type)
+                                                ->where('programm_name', $request->programm_name)
+                                                ->where('establishment_id', $request->establishment_id)
+                                                ->where('end_date', '>=', '2023-08-01')
+                                                ->where('end_date', '<=', '2023-08-31')
+                                                ->where('user_id', $request->user_id)
+                                                ->count();
+            if($serviceRequestCount==0){
+                session()->flash('danger', 'No es posible crear contrato nuevo, solicitar autorización a la subdirección de gestión de RRHH.');
+                return redirect()->back();
+            }
+        } 
     }
 
     if (count($request->users) <= 1) {
