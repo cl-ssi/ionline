@@ -86,7 +86,7 @@ class PaymentController extends Controller
 
     public function rejected()
     {
-        $dtes = Dte::where('fin_status', 'Rechazado')
+        $dtes = Dte::where('rejected', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->get();
         return view('finance.payments.rejected', compact('dtes'));

@@ -13,6 +13,10 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('finance.payments.ready') }}">Bandeja de Pendientes para Pago</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ active('finance.payments.rejected') }}"
+                href="{{ route('finance.payments.rejected') }}">Rechazadas</a>
+        </li>
     </ul>
 
 
@@ -112,6 +116,7 @@
                 <th width="100px">Estab</th>
                 <th></th>
                 <th>Cenabast</th>
+                <th>Rechazar <small>(Motivo de rechazo)</small></th>
             </tr>
         </thead>
         <tbody>
@@ -219,7 +224,7 @@
                         @if ($dte->establishment)
                             {{ $dte->establishment->name }}
                         @else
-                            @livewire('finance.assign-establishment', ['dteId' => $dte->id, 'establishments'=>$establishments], key($dte->id))
+                            @livewire('finance.assign-establishment', ['dteId' => $dte->id, 'establishments' => $establishments], key($dte->id))
                         @endif
                     </td>
 
@@ -240,7 +245,11 @@
                         @livewire('finance.assign-cenabast', ['dteId' => $dte->id], key($dte->id))
                     </td>
 
-
+                    <td class="small">
+                        @if (!$dte->rejected)
+                            @livewire('finance.rejected-dte', ['dteId' => $dte->id, 'rejected' => $dte->rejected], key($dte->id))
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

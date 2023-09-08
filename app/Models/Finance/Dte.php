@@ -10,6 +10,7 @@ use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\Finance\PurchaseOrder;
 use App\Models\Finance\File;
 use App\Models\Establishment;
+use App\User;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Dte extends Model implements Auditable
@@ -106,6 +107,12 @@ class Dte extends Model implements Auditable
         'archivo_devengo_sigfe',
 
         'devuelto',
+
+        //campos de rechazo
+        'rejected',
+        'reason_rejection',
+        'rejected_user_id',
+        'rejected_at'
     ];
 
     /**
@@ -197,6 +204,12 @@ class Dte extends Model implements Auditable
     public function establishment()
     {
         return $this->belongsTo(Establishment::class, 'establishment_id');
+    }
+
+
+    public function rejectedUser()
+    {
+        return $this->belongsTo(User::class, 'rejected_user_id');
     }
 
 
