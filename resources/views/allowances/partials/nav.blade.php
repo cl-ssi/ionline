@@ -33,6 +33,12 @@
                 <a class="dropdown-item {{ active(['allowances.reports.create_by_dates']) }}" href="{{ route('allowances.reports.create_by_dates') }}">
                     <i class="fas fa-calendar"></i> Viáticos por fecha
                 </a>
+
+                {{-- @can('Allowances: reports') --}}
+                <a class="dropdown-item {{ active(['allowances.import']) }}" href="{{ route('allowances.import') }}">
+                    <i class="fas fa-calendar"></i> Importar
+                </a>
+                {{-- @endcan --}}
             </div>
         </li>
         @endcan

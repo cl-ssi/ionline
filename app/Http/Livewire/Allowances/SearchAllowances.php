@@ -101,7 +101,7 @@ class SearchAllowances extends Component
                         'destinationCommune',
                         'allowanceSignature'
                     ])
-                    ->latest()
+                    ->orderBy('id', 'DESC')
                     ->search($this->selectedStatus,
                         $this->selectedId,
                         $this->selectedUserAllowance)

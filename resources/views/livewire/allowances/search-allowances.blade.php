@@ -87,6 +87,10 @@
                                 @if($allowance->status == 'rejected')
                                     <span class="badge badge-danger">Rechazado</span>
                                 @endif
+
+                                @if($allowance->status == 'manual')
+                                    <span class="badge badge-info">Carga Manual</span>
+                                @endif
                             @endif
                         </th>
                         <td>{{ $allowance->created_at->format('d-m-Y H:i:s') }}</td>
@@ -136,7 +140,8 @@
                                     <i class="fas fa-keyboard"></i>
                                 </a>
                             @endif
-                            @if($index == 'own')
+
+                            @if($index == 'own' && $allowance->status != 'manual')
                                 @if($allowance->allowanceSigns->first()->status == 'pending' && Auth::user()->hasPermissionTo('Allowances: create'))
                                     <a href="{{ route('allowances.edit', $allowance) }}"
                                         class="btn btn-outline-secondary btn-sm" title="Editar"><i class="fas fa-edit"></i>
@@ -147,8 +152,11 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 @endif
+                            @else
+                                Aprobaciones No Disponibles
                             @endif
-                            @if($index == 'all')
+
+                            @if($index == 'all' && $allowance->status != 'manual')
                                 <a href="{{ route('allowances.show', $allowance) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Ver Viático">
                                     <i class="fas fa-eye"></i>
@@ -174,6 +182,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $allowances->links() }}
         </div>
     @else
         <div class="row">

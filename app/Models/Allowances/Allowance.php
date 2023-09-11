@@ -86,20 +86,25 @@ class Allowance extends Model implements Auditable
         return $this->hasMany('App\Models\Allowances\Destination', 'allowance_id');
     }
 
+    /*
     public function getStatusValueAttribute() {
-        switch($this->request) {
-          case 'pending':
-            return 'Pendiente';
-            break;
-          case 'complete':
-            return 'Finalizado';
-            break;
-          case 'rejected':
-            return 'Rechazado';
-            break;
+        switch($this->status) {
+            case 'pending':
+                return 'Pendiente';
+                break;
+            case 'complete':
+                return 'Finalizado';
+                break;
+            case 'rejected':
+                return 'Rechazado';
+                break;
+            case 'manual':
+                return 'Carga Manual';
+                break;
         }
     }
-
+    */
+    
     public function getLawValueAttribute(){
         switch ($this->law) {
             case '18834':
