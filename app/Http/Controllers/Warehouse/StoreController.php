@@ -19,6 +19,40 @@ class StoreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function search(Request $request)
+    {
+        $id = $request->input('id');
+        $folio = $request->input('folio');
+        $oc = $request->input('oc');
+        $folio_compromiso = $request->input('folio_compromiso');
+        $folio_devengo = $request->input('folio_devengo');
+
+        $query = Dte::query();
+
+        if ($id) {
+            $query->where('id', $id);
+        }
+
+        if ($folio) {
+            $query->where('folio', $folio);
+        }
+
+        if ($oc) {
+            $query->where('folio_oc', $oc);
+        }
+
+        if ($folio_compromiso) {
+            $query->where('folio_compromiso_sigfe', $folio_compromiso);
+        }
+
+        if ($folio_devengo) {
+            $query->where('folio_devengo_sigfe', $folio_devengo);
+        }
+
+        return $query;
+    }
+
     public function index()
     {
         return view('warehouse.stores.index');
@@ -94,9 +128,9 @@ class StoreController extends Controller
     }
 
 
-    public function indexCenabast($tray = null)
+    public function indexCenabast(Request $request, $tray = null)
     {
-        $query = Dte::where('cenabast', 1)->where('establishment_id',auth()->user()->organizationalUnit->establishment->id);
+        $query = Dte::where('cenabast', 1)->where('establishment_id', auth()->user()->organizationalUnit->establishment->id);
 
         if ($tray === 'sin_adjuntar') {
             $query->whereNull('confirmation_signature_file');
@@ -104,9 +138,14 @@ class StoreController extends Controller
             $query->whereNotNull('confirmation_signature_file');
         }
 
-        $dtes = $query->paginate(100);
+        if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
+            $query = $this->search($request);
+        }
 
-        return view('warehouse.stores.cenabast.index', compact('dtes', 'tray'));
+        $dtes = $query->paginate(100);
+        $request->flash();
+
+        return view('warehouse.stores.cenabast.index', compact('dtes', 'tray', 'request'));
     }
 
 

@@ -3,6 +3,22 @@
 @section('content')
     @include('warehouse.stores.cenabast.nav')
 
+    <form action="{{ route('warehouse.cenabast.index', ['tray' => $tray]) }}" method="GET">
+        <div class="form-row mb-3">
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="id" placeholder="id" value="{{ old('id') }}" autocomplete="off">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="folio" placeholder="folio" value="{{ old('folio') }}" autocomplete="off">
+            </div>            
+            <div class="col-md-1">
+                <input class="btn btn-outline-secondary" type="submit" value="Buscar">
+            </div>
+        </div>
+    </form>
+
+
+
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
