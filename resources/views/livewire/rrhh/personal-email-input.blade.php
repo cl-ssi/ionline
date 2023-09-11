@@ -1,13 +1,15 @@
 <div class="form-group col col-md">
     <label for="for-email">Email Personal</label>
-    
+
     <div class="input-group mb-3">
-        <input type="text" class="form-control" name="email_personal" placeholder="Email personal" wire:model.defer="user.email_personal" @disabled($user->hasVerifiedEmail())>
+        <input type="text" class="form-control" name="email_personal" placeholder="Email personal"
+            wire:model.defer="user.email_personal" @disabled($user->hasVerifiedEmail())>
         @can('Users: send mail verification')
             <div class="input-group-append">
-                @if(!$user->hasVerifiedEmail())
-                    @if($user->email_personal)
-                        <button class="btn btn-warning" title="Verificar email" type="button" wire:click="sendEmailVerification">
+                @if (!$user->hasVerifiedEmail())
+                    @if ($user->email_personal)
+                        <button class="btn btn-warning" title="Verificar email" type="button"
+                            wire:click="sendEmailVerification">
                             <i class="fas fa-envelope"></i>
                         </button>
                     @else
@@ -16,9 +18,10 @@
                         </button>
                     @endif
                 @else
-                    <button class="btn btn-sm btn-outline-success" disabled>
+                    <button class="btn btn-sm btn-outline-warning" disabled>
                         <i class="fas fa-envelope" title="Correo electrónico personal verificado"></i>
                     </button>
+                    <livewire:unverify-personal-email :user=$user>
                 @endif
             </div>
         @endcan
