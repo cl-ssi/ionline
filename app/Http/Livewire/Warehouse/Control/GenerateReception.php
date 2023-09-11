@@ -51,6 +51,7 @@ class GenerateReception extends Component
     public $contact_phone;
     public $contact_email;
     public $contact_charge;
+    public $require_contract_manager_visation = false;
 
     public $search_product;
     public $index_selected;
@@ -513,6 +514,8 @@ class GenerateReception extends Component
             'reception_visator_id' => auth()->id(),
             'technical_signer_id' => $this->technical_signer_id,
             'completed_invoices' => false,
+            'require_contract_manager_visation' => $dataValidated['require_contract_manager_visation'],
+             
         ]);
 
         foreach($this->po_items as $item)
@@ -601,6 +604,7 @@ class GenerateReception extends Component
         $this->technical_signature = null;
         $this->technical_signer_id = null;
         $this->disabled_program = false;
+        $this->require_contract_manager_visation = false;
     }
 
     public function containsProductsWithoutUnspscCode($items)
