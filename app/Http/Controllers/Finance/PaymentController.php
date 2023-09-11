@@ -21,6 +21,39 @@ class PaymentController extends Controller
         return view('finance.payments.index');
     }
 
+    public function search(Request $request)
+    {        
+        $id = $request->input('id');
+        $folio = $request->input('folio');
+        $oc = $request->input('oc');
+        $folio_compromiso = $request->input('folio_compromiso');
+        $folio_devengo = $request->input('folio_devengo');
+
+        $query = Dte::query();
+
+        if ($id) {
+            $query->where('id', $id);
+        }
+
+        if ($folio) {
+            $query->where('folio', $folio);
+        }
+
+        if ($oc) {
+            $query->where('folio_oc', $oc);
+        }
+
+        if ($folio_compromiso) {
+            $query->where('folio_compromiso_sigfe', $folio_compromiso);
+        }
+
+        if ($folio_devengo) {
+            $query->where('folio_devengo_sigfe', $folio_devengo);
+        }
+
+        return $query;
+    }
+
     /**
      * Index Own
      */
@@ -36,25 +69,31 @@ class PaymentController extends Controller
         return view('finance.payments.indexown', compact('dtes'));
     }
 
-    public function review()
-    {        
-        $dtes = Dte::with([
+    public function review(Request $request)
+    {
+
+        $query = Dte::with([
             'controls',
             'requestForm',
             'requestForm.contractManager',
         ])
-            //Se deja como antes mientras no se implementa un filtro en el review
             ->where('confirmation_status', 1)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
             ->where(function (Builder $query) {
                 $query->whereNull('fin_status')
                     ->orWhere('fin_status', 'rechazado');
-            })
-            ->paginate(100);
+            });
 
 
+        if ($request->filled('id') || $request->filled('folio') || $request->filled('oc') || $request->filled('folio_compromiso') || $request->filled('folio_devengo')) {
+            $query = $this->search($request);
+        }
 
-        return view('finance.payments.review', compact('dtes'));
+
+        $dtes = $query->paginate(100);
+        $request->flash();
+
+        return view('finance.payments.review', compact('dtes', 'request'));
     }
 
 
