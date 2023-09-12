@@ -34,15 +34,14 @@
                 </div>
             </div>
         </div>
+        <!-- solo se pueden confirmar periodos mensuales, y horas médicas/turnos de reemplazo -->
         @if($fulfillment->serviceRequest->program_contract_type == "Mensual" || 
             ($fulfillment->serviceRequest->program_contract_type == "Horas" && 
             ($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" || $fulfillment->serviceRequest->working_day_type == "TURNO DE REEMPLAZO"))
             )
             <div class="form-row">
                 <div class="col-3">
-                    @can('Service Request: fulfillments rrhh')
-                        <button class="btn btn-outline-secondary" @disabled($fulfillment->rrhh_approbation) type="submit">Guardar</button>
-                    @endcan
+                    <button class="btn btn-primary" @disabled(!Auth::user()->can('Service Request: fulfillments rrhh') || $fulfillment->rrhh_approbation) type="submit">Guardar</button>
                 </div>
                 <div class="col align-text-bottom">
                     @if($fulfillment->rrhh_approbation_date)
@@ -57,10 +56,8 @@
                     @endif
                 </div>
                 <div class="col-3 text-right">
-                    @can('Service Request: fulfillments rrhh')
-                        <button class="btn btn-outline-danger" @disabled($fulfillment->rrhh_approbation) type="submit">Rechazar</button>
-                        <button class="btn btn-success" @disabled($fulfillment->rrhh_approbation) type="submit">Confirmar</button>
-                    @endcan
+                    <button class="btn btn-danger" wire:click="refuseFulfillment({{$fulfillment}})" @disabled(!Auth::user()->can('Service Request: fulfillments rrhh') || $fulfillment->rrhh_approbation) type="submit">Rechazar</button>
+                    <button class="btn btn-success" wire:click="confirmFulfillment({{$fulfillment}})" @disabled(!Auth::user()->can('Service Request: fulfillments rrhh') || $fulfillment->rrhh_approbation) type="submit">Confirmar</button>
                 </div>
             </div>
         @endif
