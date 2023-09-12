@@ -145,20 +145,27 @@
                                 <!-- Ejemplo para entender mejor el código -->
                                 @switch($serviceRequest->program_contract_type)
                                     @case("Mensual")
-                                        {{-- livewire(responsable.monthly) --}}
+                                        @livewire('service-request.responsable.monthly',['fulfillment' => $fulfillment])
                                         @break
 
                                     @case("Horas")
                                         @switch($serviceRequest->working_day_type)
                                             @case('HORA MÉDICA')
                                             @case('TURNO DE REEMPLAZO')
-                                                {{-- livewire() --}}
+                                                @livewire('service-request.responsable.medic-hours',['fulfillment' => $fulfillment])
                                                 @break
                                             @case('TERCER TURNO')
                                             @case('CUARTO TURNO')
-                                            @case('TERCER TURNO MOD...')
-                                            @case('ETC..')
-                                                {{-- livewire() --}}
+                                            @case('HORA EXTRA')
+                                            @case('DIURNO')
+                                            @case('TURNO EXTRA')
+                                            @case('CUARTO TURNO - MODIFICADO')
+                                            @case('DIURNO PASADO A TURNO')
+                                            @case('OTRO')
+                                            @case('TERCER TURNO - MODIFICADO')
+                                            @case('VESPERTINO')
+                                            @case('DIARIO')
+                                                @livewire('service-request.responsable.other-hours',['serviceRequest' => $serviceRequest])
                                                 @break
                                         @endswitch
                                         @break

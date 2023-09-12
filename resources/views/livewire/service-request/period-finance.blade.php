@@ -37,27 +37,32 @@
                 </select>
             </fieldset>
         </div>
-        <div class="form-row">
-            <div class="col-3">
-                <button class="btn btn-primary" type="submit">Guardar</button>
+        @if($fulfillment->serviceRequest->program_contract_type == "Mensual" || 
+            ($fulfillment->serviceRequest->program_contract_type == "Horas" && 
+            ($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" || $fulfillment->serviceRequest->working_day_type == "TURNO DE REEMPLAZO"))
+            )
+            <div class="form-row">
+                <div class="col-3">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                </div>
+                <div class="col align-self-end">
+                    @if($fulfillment->finances_approbation_date)
+                        @if($fulfillment->finances_approbation) 
+                            <span class="badge badge-pill badge-success">Confirmado</span>
+                        @else 
+                            <span class="badge badge-pill badge-danger">Rechazado</span>
+                        @endif - 
+                        {{ $fulfillment->finances_approbation_date }} - {{ $fulfillment->financesUser->shortName }}
+                    @else
+                        <span class="text-danger">Pendiente de aprobación</span>
+                    @endif
+                </div>
+                <div class="col-3 text-right">
+                    <button class="btn btn-danger" @disabled($fulfillment->finances_approbation) type="submit">Rechazar</button>
+                    <button class="btn btn-success" @disabled($fulfillment->finances_approbation) type="submit">Confirmar</button>
+                </div>
             </div>
-            <div class="col align-self-end">
-                @if($fulfillment->finances_approbation_date)
-                    @if($fulfillment->finances_approbation) 
-                        <span class="badge badge-pill badge-success">Confirmado</span>
-                    @else 
-                        <span class="badge badge-pill badge-danger">Rechazado</span>
-                    @endif - 
-                    {{ $fulfillment->finances_approbation_date }} - {{ $fulfillment->financesUser->shortName }}
-                @else
-                    <span class="text-danger">Pendiente de aprobación</span>
-                @endif
-            </div>
-            <div class="col-3 text-right">
-                <button class="btn btn-danger" @disabled($fulfillment->finances_approbation) type="submit">Rechazar</button>
-                <button class="btn btn-success" @disabled($fulfillment->finances_approbation) type="submit">Confirmar</button>
-            </div>
-        </div>
+        @endif
         @if($fulfillment->payment_rejection_detail)
         <i>{!! $fulfillment->payment_rejection_detail !!}</i>
         @endif

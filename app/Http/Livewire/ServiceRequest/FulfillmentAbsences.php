@@ -149,6 +149,7 @@ class FulfillmentAbsences extends Component
         $fulfillmentItem->finances_approbation_date = Carbon::now();
         $fulfillmentItem->finances_approver_id = Auth::user()->id;
       }
+      $fulfillmentItem->observation = $this->observation;
       $fulfillmentItem->user_id = Auth::user()->id;
       $fulfillmentItem->save();
 

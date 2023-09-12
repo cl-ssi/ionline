@@ -57,7 +57,8 @@
         @else
         <fieldset class="form-group col">
           <label for="for_label"><br/></label>
-          Ya está aprobada por el responsable
+          <!-- Ya está aprobada por el responsable -->
+          <button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
         </fieldset>
         @endif
       @endcan
