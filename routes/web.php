@@ -1948,6 +1948,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
+        Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
     });
 });
 

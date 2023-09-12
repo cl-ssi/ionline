@@ -59,9 +59,18 @@ class MercadoPublico extends Model
         $purchaseOrder = FinancePurchaseOrder::whereCode($code)->first();
 
         if(!$purchaseOrder OR $purchaseOrder->json->Listado[0]->Estado != "Recepción Conforme"){
-            // app('debugbar')->log('entro');
 
-            $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
+            try {
+                $response = Http::get(env('WSSSI_CHILE_URL')."/purchase-order-v2/$code");
+            } catch(\Illuminate\Http\Client\ConnectionException $e) {
+                if($purchaseOrder) {
+                    return true;
+                }
+                else {
+                    // dd($e->getMessage());
+                    return "No existe en nuestros registros y no nos pudimos conectar con la integración de MercadoPublico";
+                }
+            }
 
             $oc = json_decode($response);
 
@@ -84,6 +93,9 @@ class MercadoPublico extends Model
                 $response = json_decode($response->body());
                 return $response->message;
             }
+        }
+        else {
+            return true;
         }
     }
 }
