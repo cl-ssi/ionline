@@ -33,8 +33,8 @@ class EventRequestForm extends Model implements Auditable
     }
 
     public function signerOrganizationalUnit(){
-        return $this->belongsTo(OrganizationalUnit::class, 'ou_signer_user');
-      }
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_signer_user')->withTrashed();
+    }
 
     public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');

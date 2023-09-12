@@ -169,7 +169,7 @@ class RequestFormItems extends Component
     {
         $this->iteration = 0;
         $this->totalDocument          = 0;
-        $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
+        $this->lstUnitOfMeasurement   = UnitOfMeasurement::orderBy('name')->get();
         $this->items                  = array();
         $this->title                  = "Agregar Item";
         $this->edit                   = false;

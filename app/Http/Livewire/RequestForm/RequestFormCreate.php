@@ -52,8 +52,9 @@ class RequestFormCreate extends Component
         'contractManagerId'            =>  'required',
         'subtype'                      =>  'required',
         'purchaseMechanism'            =>  'required',
-        'program'                      =>  'exclude_unless:program_id,other|required',
-        'program_id'                   =>  'exclude_if:program_id,other|required',
+        // 'program'                      =>  'exclude_unless:program_id,other|required',
+        // 'program_id'                   =>  'exclude_if:program_id,other|required',
+        'program_id'                   =>  'required',
         'justify'                      =>  'required',
         'typeOfCurrency'               =>  'required',
         'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
@@ -134,7 +135,8 @@ class RequestFormCreate extends Component
       $this->contractManager    =   $this->requestForm->contractManager;
       $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
-      $this->program_id         =   $this->requestForm->program_id ?? 'other';
+      // $this->program_id         =   $this->requestForm->program_id ?? 'other';
+      $this->program_id         =   $this->requestForm->program_id;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
       $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
