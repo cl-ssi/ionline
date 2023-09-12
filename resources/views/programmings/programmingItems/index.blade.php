@@ -7,7 +7,8 @@
 .modal {
   padding: 0 !important;
 }
-.modal .modal-dialog {
+
+.modal .full-width {
   width: 100%;
   max-width: 100%;
   height: 100%;
@@ -63,8 +64,50 @@
 </h4>
 
 <!-- Modal -->
+@if($programming->year >= 2024)
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actividades pendientes por programar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                <form method="post" action="{{ route('pendingitems.store') }}">
+                    @csrf
+                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <select style="font-size:70%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
+                                    <option style="font-size:70%;" value="">OTRA ACTIVIDAD INDIRECTA PENDIENTE</option>
+                                @foreach($pendingActivities as $activity)
+                                    <option style="font-size:70%;" value="{{ $activity->id }}">
+                                        {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 300, '(...)') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group mb-3">
+                            <textarea name="observation" class="form-control custom-control" rows="2" style="resize:none" placeholder="Ingrese observaciones (opcional)"></textarea>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary float-right">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br><br><br>
+      </div>
+    </div>
+  </div>
+</div>
+
+@else
 <div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-dialog full-width modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Actividades pendientes por programar</h5>
@@ -205,6 +248,7 @@
             </div>
         </div>
     </div>
+@endif
 <!-- form filter -->
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
     <input type="hidden" name="activity_type" value="{{Request::get('activity_type')}}">
@@ -308,15 +352,17 @@
 <table id="HorasDirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <form id="check-multi-items-form" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
             {{ method_field('POST') }} {{ csrf_field() }}
             
             <th class="text-center align-middle" >
-            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form">
+            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form" title="Aceptar actividades seleccionadas">
             <i class="fas fa-clipboard-check text-primary"></i>
             </button></th>
             </form>
+            @endhasanyrole
+            @if($canEvaluate)
             <th class="text-center align-middle" > Evaluación</th>
             @endif
             @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
@@ -358,14 +404,16 @@
         @php($directProgrammingItems = $programming->itemsBy('Direct', Request::has('activity') || Request::has('tracer_number')))
         @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
-        @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
-            @if($programmingitem->reviewItems->count() == 0)
-            <div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" id="check_accept_item" name="check_accept_item[]" value="{{$programmingitem->id}}" aria-label="Aceptar actividad" form="check-multi-items-form">
-            </div>
-            @endif
+                @if($programmingitem->reviewItems->count() == 0)
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" id="check_accept_item" name="check_accept_item[]" value="{{$programmingitem->id}}" aria-label="Aceptar actividad" form="check-multi-items-form">
+                </div>
+                @endif
             </td>
+            @endhasanyrole
+            @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->reviewItems->count() != 0)
@@ -388,10 +436,10 @@
                     @endif
                 </a>
             </td>
-        @endif
-        @if($canEdit && $programming->status == 'active')
+            @endif
+            @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endif
+            @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : ($programmingitem->activityItem->vital_cycle ?? $programmingitem->cycle) }}</td>
@@ -407,19 +455,19 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->concentration }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activity_total }}</td>
             @if($programmingitem->professionalHours->count() > 0)
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitem->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitem->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
-                <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitem->direct_work_hour ? number_format($programmingitem->direct_work_hour, 5, '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->direct_work_hour ? number_format($programmingitem->direct_work_hour, 5, '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitem->rowspan() }}">{{ $programmingitem->prap_financed }}</td>
@@ -478,15 +526,17 @@
 <table id="HorasIndirectas{{$activity_subtype}}" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-        @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <form id="check-multi-items-form-{{$key}}" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
-            {{ method_field('POST') }} {{ csrf_field() }}
-            
-            <th class="text-center align-middle" >
-            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-{{$key}}">
-            <i class="fas fa-clipboard-check text-primary"></i>
-            </button></th>
+                {{ method_field('POST') }} {{ csrf_field() }}
+                
+                <th class="text-center align-middle" >
+                    <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-{{$key}}" title="Aceptar actividades seleccionadas">
+                        <i class="fas fa-clipboard-check text-primary"></i>
+                    </button></th>
             </form>
+            @endhasanyrole
+            @if($canEvaluate)
             <th class="text-center align-middle" > Evaluación</th>
             @endif
             @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
@@ -521,14 +571,16 @@
     @php($indirectProgrammingItems = $programming->itemsIndirectBy($activity_subtype))
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
-        @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
-            @if($programmingitemsIndirect->reviewItems->count() == 0)
-            <div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-{{$key}}">
-            </div>
-            @endif
+                @if($programmingitemsIndirect->reviewItems->count() == 0)
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-{{$key}}">
+                </div>
+                @endif
             </td>
+            @endhasanyrole
+            @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitemsIndirect->reviewItems->count() != 0)
@@ -551,10 +603,10 @@
                     @endif
                 </a>
             </td>
-        @endif
-        @if($canEdit && $programming->status == 'active')
+            @endif
+            @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endif
+            @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_category }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_name }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->times_month }}</td>
@@ -628,15 +680,17 @@
 <table id="HorasIndirectas" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <form id="check-multi-items-form-indirect" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
-            {{ method_field('POST') }} {{ csrf_field() }}
-            
-            <th class="text-center align-middle" >
-            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-indirect">
-            <i class="fas fa-clipboard-check text-primary"></i>
-            </button></th>
+                {{ method_field('POST') }} {{ csrf_field() }}
+                
+                <th class="text-center align-middle" >
+                    <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-indirect" title="Aceptar actividades seleccionadas">
+                        <i class="fas fa-clipboard-check text-primary"></i>
+                    </button></th>
             </form>
+            @endhasanyrole
+            @if($canEvaluate)
             <th class="text-left align-middle" > Evaluación</th>
             @endif
             @if($canEdit && $programming->status == 'active')<th class="text-left align-middle" >Editar</th>@endif
@@ -677,14 +731,16 @@
     @php($indirectProgrammingItems = $programming->itemsBy('Indirect', Request::has('activity') || Request::has('tracer_number')))
         @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
-        @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
-            @if($programmingitemsIndirect->reviewItems->count() == 0)
-            <div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-indirect">
-            </div>
-            @endif
+                @if($programmingitemsIndirect->reviewItems->count() == 0)
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingitemsIndirect->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-indirect">
+                </div>
+                @endif
             </td>
+            @endhasanyrole
+            @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
@@ -714,10 +770,10 @@
                     @endif
                 </a>
             </td>
-        @endif
-        @if($canEdit && $programming->status == 'active')
+            @endif
+            @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endif
+            @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : ($programmingitemsIndirect->activityItem->vital_cycle ?? $programmingitemsIndirect->cycle) }}</td>
@@ -733,19 +789,19 @@
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->concentration }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activity_total }}</td>
             @if($programmingitemsIndirect->professionalHours->count() > 0)
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingitemsIndirect->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour ? number_format($programmingitemsIndirect->direct_work_hour, 5 , '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour ? number_format($programmingitemsIndirect->direct_work_hour, 5 , '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingitemsIndirect->rowspan() }}">{{ $programmingitemsIndirect->prap_financed }}</td>
@@ -803,16 +859,17 @@
 <table id="HorasDirectasTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:55%;">
-
-            @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <form id="check-multi-items-form-talleres" method="POST" action="{{ route('reviewItems.acceptItems') }}" class="small d-inline">
             {{ method_field('POST') }} {{ csrf_field() }}
             
             <th class="text-center align-middle" >
-            <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-talleres">
-            <i class="fas fa-clipboard-check text-primary"></i>
-            </button></th>
+                <button class="btn btn-sm btn-link small p-1" onclick="return confirm('¿Desea aceptar actividades seleccionadas?')" form="check-multi-items-form-talleres" title="Aceptar actividades seleccionadas">
+                    <i class="fas fa-clipboard-check text-primary"></i>
+                </button></th>
             </form>
+            @endhasanyrole
+            @if($canEvaluate)
             <th class="text-left align-middle" > Evaluación</th>
             @endif
             @if($canEdit && $programming->status == 'active')<th class="text-center align-middle" >Editar</th>@endif
@@ -856,14 +913,16 @@
     @php($workshopProgrammingItems = $programming->itemsBy('Workshop', Request::has('activity') || Request::has('tracer_number')))
         @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
-        @if($canEvaluate)
+            @hasanyrole('Programming: Review|Programming: Admin')
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
-            @if($programmingItemworkshop->reviewItems->count() == 0)
-            <div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingItemworkshop->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-talleres">
-            </div>
-            @endif
+                @if($programmingItemworkshop->reviewItems->count() == 0)
+                <div class="form-check">
+                    <input class="form-check-input position-static" type="checkbox" name="check_accept_item[]" value="{{$programmingItemworkshop->id}}" aria-label="Aceptar actividad" form="check-multi-items-form-talleres">
+                </div>
+                @endif
             </td>
+            @endhasanyrole
+            @if($canEvaluate)
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
                     {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
@@ -893,10 +952,10 @@
                     @endif
                 </a>
             </td>
-        @endif
-        @if($canEdit && $programming->status == 'active')
+            @endif
+            @if($canEdit && $programming->status == 'active')
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}"><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-        @endif
+            @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">TALLER</td>
@@ -913,19 +972,19 @@
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->workshop_session_number }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activity_total }}</td>
             @if($programmingItemworkshop->professionalHours->count() > 0)
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour ? number_format($programmingItemworkshop->professionalHours->first()->pivot->direct_work_hour, 5, '.', '') : '' }}</td>
             @else
-                <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
-                <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour ? number_format($programmingItemworkshop->direct_work_hour, 5, '.', '') : '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour ? number_format($programmingItemworkshop->direct_work_hour, 5, '.', '') : '' }}</td>
             @endif
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle" rowspan="{{ $programmingItemworkshop->rowspan() }}">{{ $programmingItemworkshop->prap_financed }}</td>

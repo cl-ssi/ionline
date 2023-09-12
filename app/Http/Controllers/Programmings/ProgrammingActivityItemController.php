@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
+use App\Models\Programmings\Programming;
 // use App\Models\Programmings\Programming;
 use App\Models\Programmings\ProgrammingActivityItem;
+use App\Models\Programmings\ProgrammingItem;
+use App\Models\Programmings\ReviewItem;
 use Illuminate\Http\Request;
 
 class ProgrammingActivityItemController extends Controller
@@ -12,15 +15,33 @@ class ProgrammingActivityItemController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        ProgrammingActivityItem::create([
-            'programming_id' => $request->programming_id,
-            'activity_item_id' => $request->pendingItemSelectedId,
-            'requested_by' => auth()->id(),
-            'observation' => $request->observation
-        ]);
-        // $programming = Programming::find($request->programming_id);
-        // $programming->pendingItems()->attach($request->pendingItemSelectedId, ['requested_by' => auth()->id(), 'observation' => $request->observation]);
-        session()->flash('info', 'Se agrega actividad pendiente satisfactoriamente.');
+        $year = Programming::find($request->programming_id)->year;
+        if($year >= 2024){
+            $programmingItem = new ProgrammingItem();
+            $programmingItem->activity_type = $request->pendingItemSelectedId != null ? 'Directa' : 'Indirecta';
+            $programmingItem->user_id = auth()->id();
+            $programmingItem->activity_id = $request->pendingItemSelectedId;
+            $programmingItem->programming_id = $request->programming_id;
+            $programmingItem->save();
+
+            $reviewItem = new ReviewItem();
+            $reviewItem->review_id = 1;
+            $reviewItem->review = 'Actividad pendiente por programar';
+            $reviewItem->observation = $request->observation;
+            $reviewItem->answer = $reviewItem->rectified = "NO";
+            $reviewItem->active = "SI";
+            $reviewItem->user_id = auth()->id();
+            $reviewItem->programming_item_id = $programmingItem->id;
+            $reviewItem->save();
+        }else{
+            ProgrammingActivityItem::create([
+                'programming_id' => $request->programming_id,
+                'activity_item_id' => $request->pendingItemSelectedId,
+                'requested_by' => auth()->id(),
+                'observation' => $request->observation
+            ]);
+        }
+        session()->flash('info', 'Se agrega actividad pendiente por programar satisfactoriamente.');
         return redirect()->back();
     }
 
@@ -34,7 +55,7 @@ class ProgrammingActivityItemController extends Controller
     public function destroy(ProgrammingActivityItem $pendingitem)
     {
         $pendingitem->delete();
-        session()->flash('info', 'Se elimina actividad pendiente satisfactoriamente.');
+        session()->flash('info', 'Se elimina actividad pendiente por eliminar satisfactoriamente.');
         return redirect()->back();
     }
 }
