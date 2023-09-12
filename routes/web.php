@@ -2108,6 +2108,8 @@ Route::prefix('allowances')->as('allowances.')->middleware(['auth', 'must.change
         Route::get('/create_by_dates', [AllowanceController::class, 'create_by_dates'])->name('create_by_dates');
         Route::get('/create_by_dates_excel/{from}/{to}', [AllowanceController::class, 'create_by_dates_excel'])->name('create_by_dates_excel');
     });
+
+    Route::get('import', [AllowanceController::class, 'import'])->name('import');
 });
 
 /** Módulo de horas para vacunas. ya no se usa */
