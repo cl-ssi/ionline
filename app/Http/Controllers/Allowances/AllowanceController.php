@@ -369,4 +369,8 @@ class AllowanceController extends Controller
     {
         return Excel::download(new AllowancesExport($from, $to), 'listado-viaticos.xlsx');
     }
+
+    public function import(){
+        return view('allowances.import.import');
+    }
 }

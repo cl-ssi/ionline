@@ -34,6 +34,7 @@ class GenerationReceptionRequest extends FormRequest
             'note'                              => 'nullable|string|min:1|max:255',
             'program_id'                        => 'nullable|exists:cfg_programs,id',
             'po_items.*.unspsc_product_code'    => 'required',
+            'require_contract_manager_visation' => 'nullable|boolean',
         ];
     }
 }
