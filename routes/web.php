@@ -65,6 +65,9 @@ use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
+//todas las visaciones para confirma y visto bueno de proceso de inventario-finanza-fr
+use App\Http\Controllers\Warehouse\VisationContractManager;
+
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -244,6 +247,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1726,6 +1730,11 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         Route::post('/save-file/{dte}', [StoreController::class, 'saveFile'])->name('saveFile');
         Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
+    });
+
+    Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
+        Route::get('/{tray?}', [VisationContractManager::class, 'index'])->name('index');
+
     });
 
 });
