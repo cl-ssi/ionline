@@ -10,8 +10,10 @@
                 <th>Documento</th>
                 <th>Orden de Compra</th>
                 <th>Formulario de Requerimiento</th>
+                @if(!$tray)
                 <th>Aceptar</th>
                 <th>Rechazar</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -60,10 +62,14 @@
                             @endif
                         @endif
                     </td>
+                    @if(!$tray)
                     <td>
-                        <a href="#" class="btn btn-success btn-sm" title="Aceptar">
-                            <i class="fas fa-check"></i>
-                        </a>
+                        <form action="{{ route('warehouse.visation_contract_manager.accept', $control) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm" title="Aceptar">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
                     </td>
                     <td>
                         <!-- Icono de Rechazar -->
@@ -71,7 +77,7 @@
                             <i class="fas fa-times"></i>
                         </a>
                     </td>
-
+                    @endif
                 </tr>
             @endforeach
 

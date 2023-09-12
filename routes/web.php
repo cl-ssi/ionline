@@ -1734,7 +1734,8 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
 
     Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
         Route::get('/{tray?}', [VisationContractManager::class, 'index'])->name('index');
-
+        Route::post('/accept/{control}', [VisationContractManager::class, 'accept'])->name('accept');
+        Route::post('/reject/{control}', [VisationContractManager::class, 'reject'])->name('reject');
     });
 
 });
