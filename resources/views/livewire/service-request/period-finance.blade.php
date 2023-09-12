@@ -7,11 +7,11 @@
                 <input type="text" class="form-control" name="bill_number" value="{{ $fulfillment->bill_number }}">
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
-                <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+                <label for="for_total_hours_paid">Tot. hrs a pagar</label>
                 <input type="text" class="form-control" name="total_hours_paid" value="{{ $fulfillment->total_hours_paid }}">
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
-                <label for="for_total_paid">Total pagado</label>
+                <label for="for_total_paid">Total a pagar</label>
                 <input type="text" class="form-control" name="total_paid" value="{{ $fulfillment->total_paid }}">
             </fieldset>
             <fieldset class="form-group col-6 col-md-2">
@@ -37,13 +37,14 @@
                 </select>
             </fieldset>
         </div>
+        <!-- solo se pueden confirmar periodos mensuales, y horas médicas/turnos de reemplazo -->
         @if($fulfillment->serviceRequest->program_contract_type == "Mensual" || 
             ($fulfillment->serviceRequest->program_contract_type == "Horas" && 
             ($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" || $fulfillment->serviceRequest->working_day_type == "TURNO DE REEMPLAZO"))
             )
             <div class="form-row">
                 <div class="col-3">
-                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <button class="btn btn-primary" type="submit" @disabled(!Auth::user()->can('Service Request: fulfillments finance') || $fulfillment->finances_approbation)>Guardar</button>
                 </div>
                 <div class="col align-self-end">
                     @if($fulfillment->finances_approbation_date)
@@ -58,8 +59,8 @@
                     @endif
                 </div>
                 <div class="col-3 text-right">
-                    <button class="btn btn-danger" @disabled($fulfillment->finances_approbation) type="submit">Rechazar</button>
-                    <button class="btn btn-success" @disabled($fulfillment->finances_approbation) type="submit">Confirmar</button>
+                    <button class="btn btn-danger" wire:click="refuseFulfillment({{$fulfillment}})" @disabled(!Auth::user()->can('Service Request: fulfillments finance') || $fulfillment->finances_approbation) type="submit">Rechazar</button>
+                    <button class="btn btn-success" wire:click="confirmFulfillment({{$fulfillment}})" @disabled(!Auth::user()->can('Service Request: fulfillments finance') || $fulfillment->finances_approbation) type="submit">Confirmar</button>
                 </div>
             </div>
         @endif

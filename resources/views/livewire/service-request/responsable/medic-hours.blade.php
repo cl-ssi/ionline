@@ -50,21 +50,7 @@
             @endif
         </fieldset>
         <fieldset class="form-group col-md-6 text-right">
-            @can('Service Request: fulfillments responsable')
-            @if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
-            @if($fulfillment->responsable_approver_id == NULL)
-            <a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
-                Rechazar
-            </a>
-            <a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
-                Confirmar
-            </a>
-            @else
-            <button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-            <button type="submit" class="btn btn-success" disabled>Confirmar</button>
-            @endif
-            @endif
-            @endcan
+            
         </fieldset>
     </div>
 
@@ -146,7 +132,8 @@
                 {{ $fulfillment->responsable_approbation_date }} - {{ $fulfillment->responsableUser->shortName }}
 
                 @can('Service Request: delete signed certificate')
-                    <a class="btn btn-outline-danger btn-sm" wire:click="deleteResponsableVb({{ $fulfillment }})" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar las aprobaciones del cumplimiento?, deberá contactar a responsable para que vuelva a dar VB') || event.stopImmediatePropagation()">
+                    <a class="btn btn-outline-danger btn-sm" wire:click="deleteResponsableVb({{ $fulfillment }})" title="Borrar Aprobación Responsable" 
+                    onclick="return confirm('¿Está seguro que desea eliminar las aprobaciones del cumplimiento?, deberá contactar a responsable para que vuelva a dar VB') || event.stopImmediatePropagation()">
                         <i class="fas fa-trash"></i>
                     </a>
                 @endcan
@@ -155,7 +142,21 @@
             @endif
         </div>
         <div class="col-3 text-right">
-
+            @can('Service Request: fulfillments responsable')
+                @if(Auth::user()->id == $fulfillment->serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
+                    @if($fulfillment->responsable_approver_id == NULL)
+                    <a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
+                        Rechazar
+                    </a>
+                    <a type="button" class="btn btn-success" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');" href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}">
+                        Confirmar
+                    </a>
+                    @else
+                        <button type="submit" class="btn btn-danger" disabled>Rechazar</button>
+                        <button type="submit" class="btn btn-success" disabled>Confirmar</button>
+                    @endif
+                @endif
+            @endcan
         </div>
     </div>
     <br>

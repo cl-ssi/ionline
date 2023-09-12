@@ -369,8 +369,8 @@
 
     <!-- 04/04/2022: solicitado por nataly (agregar grado) -->
     <fieldset class="form-group col-6 col-md">
-			<label for="for_profession_id">Grado*</label>
-			<select name="grade" class="form-control" id="grade" disabled>
+			<label for="for_profession_id">Grado</label>
+			<select name="grade" class="form-control" id="grade">
 				<option value=""></option>
 				<option value="GRADO 5" @if($serviceRequest->grade == 'GRADO 5') selected @endif>GRADO 5</option>
 				<option value="GRADO 6" @if($serviceRequest->grade == 'GRADO 6') selected @endif>GRADO 6</option>
@@ -1340,14 +1340,14 @@
   			$('#additional_benefits').removeAttr('disabled');
   		}
 
-      // 04/04/2022: solicitado por nataly (agregar grado)
-      if (value == "OTROS PROGRAMAS HETG" || value == "LEQ Fonasa") {
-  			$('#grade').removeAttr('disabled');
-  			$("#grade").prop('required',true);
-  		} else {
-  			$('#grade').attr('required', 'disabled');
-  			$("#grade").prop('required',false);
-  		}
+    //   // 04/04/2022: solicitado por nataly (agregar grado)
+    //   if (value == "OTROS PROGRAMAS HETG" || value == "LEQ Fonasa") {
+  	// 		$('#grade').removeAttr('disabled');
+  	// 		$("#grade").prop('required',true);
+  	// 	} else {
+  	// 		$('#grade').attr('required', 'disabled');
+  	// 		$("#grade").prop('required',false);
+  	// 	}
   	});
 
     $("#alias_dias_descanzo").click(function(){

@@ -265,8 +265,8 @@
 
 		<!-- 04/04/2022: solicitado por nataly (agregar grado) -->
 		<fieldset class="form-group col-6 col-md">
-			<label for="for_profession_id">Grado*</label>
-			<select name="grade" class="form-control" id="grade" disabled>
+			<label for="for_profession_id">Grado</label>
+			<select name="grade" class="form-control" id="grade">
 				<option value=""></option>
 				<option value="GRADO 5">GRADO 5</option>
 				<option value="GRADO 6">GRADO 6</option>
@@ -871,14 +871,14 @@
 			$('#additional_benefits').removeAttr('disabled');
 		}
 
-		// 04/04/2022: solicitado por nataly (agregar grado)
-		if (value == "OTROS PROGRAMAS HETG" || value == "LEQ Fonasa") {
-			$('#grade').removeAttr('disabled');
-			$("#grade").prop('required',true);
-		} else {
-			$('#grade').attr('required', 'disabled');
-			$("#grade").prop('required',false);
-		}
+		// // 04/04/2022: solicitado por nataly (agregar grado)
+		// if (value == "OTROS PROGRAMAS HETG" || value == "LEQ Fonasa") {
+		// 	$('#grade').removeAttr('disabled');
+		// 	$("#grade").prop('required',true);
+		// } else {
+		// 	$('#grade').attr('required', 'disabled');
+		// 	$("#grade").prop('required',false);
+		// }
 	});
 
 
