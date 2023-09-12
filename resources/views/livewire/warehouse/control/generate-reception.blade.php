@@ -190,21 +190,21 @@
                 value="{{ $technical_signature->full_name ?? 'No posee Visador Recepción Técnica' }}" readonly>
         </fieldset>
 
-
-        <fieldset class="form-group col-md-4">
-            <div class="form-group">
-                <div class="form-row">
-                    <label for="require-contract-manager-visation">Requiere Visación del Administrador de
-                        Contrato</label>
-                </div>
-                <div class="form-check text-center">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox"
-                            wire:model="require_contract_manager_visation" id="require-contract-manager-visation">
+        @if ($request_form)
+            <fieldset class="form-group col-md-4">
+                <div class="form-group">
+                    <div class="form-row">
+                        <label for="require-contract-manager-visation">Requiere Visación del Administrador de Contrato</label>
+                    </div>
+                    <div class="form-check text-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                wire:model="require_contract_manager_visation" id="require-contract-manager-visation">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </fieldset>
+            </fieldset>
+        @endif
 
 
     </div>
