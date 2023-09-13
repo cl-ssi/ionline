@@ -15,10 +15,10 @@ class DteSendConfirmation extends Component
     /**
      * mount
      */
-    public function mount(Dte $dte, User $user)
+    public function mount(Dte $dte, $user_id)
     {
         $this->dte = $dte;
-        $this->user = $user;
+        $this->user = User::withTrashed()->find($user_id);
     }
 
     /**

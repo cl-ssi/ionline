@@ -117,7 +117,7 @@ class PaymentController extends Controller
     {
         $dtes = Dte::where('confirmation_status', 1)
             ->where('fin_status', 'Enviado a Pendiente Para Pago')
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->get();
         return view('finance.payments.ready', compact('dtes'));
     }
@@ -125,9 +125,10 @@ class PaymentController extends Controller
 
     public function rejected()
     {
-        $dtes = Dte::where('rejected', 1)
-            ->where('establishment_id', auth()->user()->organizationalUnit->establishment->id)
-            ->get();
+        $dtes = Dte::where('confirmation_status',0)
+            ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
+            ->orderByDesc('fecha_recepcion_sii')
+            ->paginate(100);
         return view('finance.payments.rejected', compact('dtes'));
     }
 
