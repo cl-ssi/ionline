@@ -36,4 +36,14 @@ class VisationContractManager extends Controller
         $control->save();
         return redirect()->back()->with('success', 'Aceptado correctamente.');
     }
+
+
+    public function reject(Control $control, Request $request)
+    {
+        $control->visation_contract_manager_status = 0;
+        $control->visation_contract_manager_at = now();
+        $control->visation_contract_manager_rejection_observation = $request->input('observacion');
+        $control->save();
+        return redirect()->back()->with('success', 'Rechazado correctamente.');
+    }
 }
