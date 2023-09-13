@@ -31,7 +31,9 @@
             <select name="duration" wire:model="duration" class="form-control" id="" required>
                 <option value=""></option>
                 <option value="60">60</option>
+                <option value="40">40</option>
                 <option value="30">30</option>
+                <option value="20">20</option>
             </select>
         </fieldset>
 
