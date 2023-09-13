@@ -33,4 +33,9 @@ class DteController extends Controller
     {
         return Storage::disk('gcs')->download($dte->confirmation_signature_file);
     }
+
+    /** Testing, para probar el modulo de aprobaciones */
+    public function process($approval,$user_id) {
+        logger()->info('Prueba de cola dte user:' . $user_id);
+    }
 }
