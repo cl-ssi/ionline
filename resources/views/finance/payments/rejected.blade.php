@@ -8,13 +8,11 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Establecimiento</th>
+                <th>Estab.</th>
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
-                <th>Usuario que Rechazo</th>
-                <th>Motivo de Rechazo</th>
-                <th>Fecha y Hora de Rechazo</th>
+                <th>Rechazo</th>
             </tr>
         </thead>
 
@@ -22,7 +20,7 @@
             @foreach ($dtes as $dte)
                 <tr>
                     <td class="small">{{ $dte->id }}</td>
-                    <td class="small">{{ $dte->establishment->name }}</td>
+                    <td class="small">{{ $dte->establishment->alias }}</td>
                     <td class="small">
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}" target="_blank"
@@ -50,18 +48,17 @@
                             </a>
                         @endif
                     </td>
-                    <td class="small">{{ $dte->rejectedUser->short_name }}</td>
-                    <td>
-                        <textarea class="form-control" readonly>
-                            {{ $dte->reason_rejection }}
-                            </textarea>
+                    <td class="small">
+                        {{ $dte->confirmation_at }} <br>
+                        {{ $dte->confirmationUser->shortName }}:<br>
+                        <i class="text-danger">
+                            {{ $dte->confirmation_observation }}
+                        </i>
                     </td>
-                    </textarea>
-                    <td class="small">{{ $dte->rejected_at }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-
+    {{ $dtes->links() }}
 
 @endsection

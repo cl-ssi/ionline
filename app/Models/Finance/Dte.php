@@ -189,7 +189,37 @@ class Dte extends Model implements Auditable
     //     // }
     // }
 
-
+    /** 
+    * El semaforo
+    * Obtener el color de la fila, en base a la fecha de aceptación
+    */
+    public function getRowClassAttribute()
+    {
+        $rowClass = '';
+        $daysDifference = $this->fecha_recepcion_sii ? $this->fecha_recepcion_sii->diffInDays(now()) : null;
+        if ( !is_null($daysDifference )) {
+            switch($daysDifference) {
+                case 1:
+                case 2:
+                case 3:
+                case 4: 
+                    $rowClass = 'table-success'; 
+                    break;
+                case 5: 
+                    $rowClass = 'table-info'; 
+                    break;
+                case 6:
+                case 7:
+                case 8: 
+                    $rowClass = 'table-warning';
+                    break;
+                default: 
+                    $rowClass = 'table-danger'; 
+                    break;
+            }
+        }
+        return $rowClass;
+    }
 
     public function paymentFlows()
     {
@@ -207,14 +237,15 @@ class Dte extends Model implements Auditable
     }
 
 
-    public function rejectedUser()
+    public function confirmationUser()
     {
-        return $this->belongsTo(User::class, 'rejected_user_id');
+        return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
 
     public function scopeSearch($query, $filter)
     {
+  
         if (!empty($filter)) {
             foreach ($filter as $column => $value) {
                 if (!empty($value)) {

@@ -1,37 +1,21 @@
 <div>
 
-    <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ route('finance.dtes.index') }}">Ver dtes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('finance.dtes.upload') }}">Cargar archivo</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('finance.payments.review') }}">Bandeja de Revisión de Pago</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('finance.payments.ready') }}">Bandeja de Pendientes para Pago</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ active('finance.payments.rejected') }}"
-                href="{{ route('finance.payments.rejected') }}">Rechazadas</a>
-        </li>
-    </ul>
+    @include('finance.nav')
 
 
     <div class="row mb-3">
-        <div class="col-8">
+        <div class="col-6">
             <h3 class="mb-3">Listado de dtes cargadas en sistema</h3>
         </div>
         <div class="col">
-            <button class="btn btn-success" type="button" wire:click="loadManualDTE">
-                <i class="fas fa-plus"></i> Agregar una DTE Manualmente</button>
+            <button class="btn btn-sm btn-success" type="button" wire:click="loadManualDTE">
+                <i class="fas fa-plus"></i> Cargar DTE individual</button>
+        </div>
+        <div class="col">
+            <a class="btn btn-sm btn-success" href="{{ route('finance.dtes.upload') }}">
+                <i class="fas fa-plus"></i> Cargar DTEs desde archivo</a>
         </div>
     </div>
-
-
-
 
 
     @if ($showManualDTE)
@@ -40,22 +24,32 @@
         </div>
     @endif
 
+
     <div class="form-row mb-3">
         <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter_folio" placeholder="folio">
-        </div>
-        <div class="col-md-2">
-            <input type="text" class="form-control" wire:model.defer="filter_folio_oc" placeholder="oc">
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter_folio_sigfe">
-                <option value="Sin Folio SIGFE">Sin Folio SIGFE</option>
-                <option value="Con Folio SIGFE">Con Folio SIGFE</option>
-                <option value="Todos">Todos</option>
+            <select class="form-control" wire:model.defer="filter.establishment">
+                <option value="">Todos los Establecimientos</option>
+                @foreach ($establishments as $name => $id)
+                <option value="{{ $name }}">{{ $id }}</option>
+                @endforeach
+                <option value="?">Sin establecimiento</option>
             </select>
         </div>
-        <div class="col-md-3">
-            <select class="form-control" wire:model.defer="filter_sender_status">
+        <div class="col-md-2">
+            <input type="text" class="form-control" wire:model.defer="filter.folio" placeholder="folio">
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" wire:model.defer="filter.folio_oc" placeholder="oc">
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" wire:model.defer="filter.folio_sigfe">
+                <option value="Todos">Todos</option>
+                <option value="Sin Folio SIGFE">Sin Folio SIGFE</option>
+                <option value="Con Folio SIGFE">Con Folio SIGFE</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" wire:model.defer="filter.sender_status" disabled>
                 <option value="Todas">Todas</option>
                 <option value="No Confirmadas">No Confirmadas</option>
                 <option value="Confirmadas">Confirmadas</option>
@@ -63,82 +57,70 @@
                 <option value="Sin Envío">Sin Envío</option>
             </select>
         </div>
-        <div class="col-md-2">
-            <select class="form-control" wire:model.defer="filter_selected_establishment">
-                <option value="">Todos los Establecimientos</option>
-                @foreach ($establishments as $establishment)
-                    <option value="{{ $establishment->id }}">{{ $establishment->name }}</option>
-                @endforeach
-            </select>
-        </div>
         <div class="col-md-1">
             <button class="btn btn-outline-secondary" type="button" wire:click="refresh">
                 <i class="fas fa-search"></i>
             </button>
         </div>
-    </div>
-
-
-    <div class="mb-3">
-        <div class="d-flex align-items-center">
-            <div class="color-box rounded-circle mr-2" style="background-color: #28a745;"></div>
-            <i class="fas fa-circle text-success"></i>
-            <span class="ml-2">Menos de 5 días</span>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="color-box rounded-circle mr-2" style="background-color: #6c757d;"></div>
-            <i class="fas fa-circle text-secondary"></i>
-            <span class="ml-2">5 días</span>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="color-box rounded-circle mr-2" style="background-color: #ffc107;"></div>
-            <i class="fas fa-circle text-warning"></i>
-            <span class="ml-2">Menos de 8 días</span>
-        </div>
-        <div class="d-flex align-items-center">
-            <div class="color-box rounded-circle mr-2" style="background-color: #dc3545;"></div>
-            <i class="fas fa-circle text-danger"></i>
-            <span class="ml-2">8 días o más</span>
+        <div class="col-md-1">
+            <div wire:loading>
+                <div class="spinner-border"></div>
+            </div>
         </div>
     </div>
 
+    <div class="row">
+        <div class="col text-center">
 
-    <table class="table table-sm table-bordered">
+        </div>
+    </div>
+
+    <table class="table table-sm table-bordered" wire:loading.class="text-muted">
         <thead>
             <tr>
                 <th>ID</th>
+                <th width="55px">Estb.</th>
+                <th>CNB.</th>
                 <th>Documento</th>
                 <th width="140px">OC</th>
                 <th>FR</th>
                 <th>Bod</th>
                 <th width="190">Admin C.</th>
-                <th>Fecha Aceptación SII (días)</th>
-                <th width="100px">Estab</th>
-                <th></th>
-                <th>Cenabast</th>
-                <th>Rechazar <small>(Motivo de rechazo)</small></th>
+                <th width="90">Fecha Aceptación SII (días)</th>
+                <th>Devengo</th>
+                <th>Editar</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($dtes as $dte)
-                @php
-                    $daysDifference = $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : null;
-                    $rowClass = '';
-                    if ($daysDifference !== null) {
-                        if ($daysDifference < 5) {
-                            $rowClass = 'table-success';
-                        } elseif ($daysDifference === 5) {
-                            $rowClass = 'table-secondary';
-                        } elseif ($daysDifference < 8) {
-                            $rowClass = 'table-warning';
-                        } else {
-                            $rowClass = 'table-danger';
-                        }
-                    }
-                @endphp
-
-                <tr class="{{ $rowClass }}">
-                    <td class="small">{{ $dte->id }}</td>
+                <tr class="{{ $dte->rowClass }}">
+                    <td class="text-center">
+                        {{ $dte->id }}
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input position-static" 
+                                style="scale: 1.5;"
+                                type="checkbox" 
+                                id="ids.{{$dte->id}}" 
+                                wire:model.defer="ids.{{$dte->id}}">
+                        </div>
+                    </td>
+                    <td>
+                        {{ $dte->establishment?->alias }}
+                    </td>
+                    <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" 
+                                class="custom-control-input" 
+                                id="customSwitch{{$dte->id}}"
+                                wire:click="toggleCenabast({{$dte->id}})"
+                                wire:loading.attr="disabled"
+                                wire:loading.class="spinner-border"
+                                wire:target="toggleCenabast({{$dte->id}})"
+                                {{ $dte->cenabast ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="customSwitch{{$dte->id}}"></label>
+                        </div>
+                    </td>
                     <td class="small">
                         @if ($dte->tipo_documento != 'boleta_honorarios')
                             <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dte->uri }}"
@@ -157,6 +139,7 @@
                         {{ $dte->emisor }}
                     </td>
                     <td class="small">
+                        {{-- $dte->folio_oc --}}
                         @livewire('finance.get-purchase-order', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
@@ -208,53 +191,105 @@
                         @endforeach
                     </td>
                     <td class="small">
-                        @if ($dte->requestForm)
-                            @if ($dte->requestForm->contractManager)
-                                {{ $dte->requestForm->contractManager->shortName }} <br>
-                                @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user' => $dte->requestForm->contractManager->id], key($dte->id))
+                        {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
+                        {{ strtr($dte->estado_reclamo, "_", " ") }}
+                        {{-- 
+                            @if ($dte->requestForm)
+                                @if ($dte->requestForm->contractManager)
+                                    {{ $dte->requestForm->contractManager->shortName }} <br>
+                                    @livewire('finance.dte-send-confirmation', ['dte' => $dte->id, 'user_id' => $dte->requestForm->contract_manager_id], key($dte->id))
+                                @endif
                             @endif
-                        @endif
+                        --}}
                     </td>
                     <td class="small">
                         {{ $dte->fecha_recepcion_sii ?? '' }} <br>
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
-
-                    <td>
-                        @if ($dte->establishment)
-                            {{ $dte->establishment->name }}
-                        @else
-                            @livewire('finance.assign-establishment', ['dteId' => $dte->id, 'establishments' => $establishments], key($dte->id))
-                        @endif
-                    </td>
-
-                    <td>
-                        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse"
-                            data-target="#collapse{{ $dte->id }}" aria-expanded="false"
-                            aria-controls="collapse{{ $dte->id }}">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <div class="collapse width" id="collapse{{ $dte->id }}">
-                            <pre>
-                            {{ print_r($dte->toArray()) }}
-                        </pre>
-                        </div>
-                    </td>
-
-                    <td class="center text-center">
-                        @livewire('finance.assign-cenabast', ['dteId' => $dte->id], key($dte->id))
+                    <td class="small">
+                        {{ strtr($dte->estado_devengo, "_", " ") }}
+                        {{ $dte->folio_sigfe }}
                     </td>
 
                     <td class="small">
-                        @if (!$dte->rejected)
-                            @livewire('finance.rejected-dte', ['dteId' => $dte->id, 'rejected' => $dte->rejected], key($dte->id))
-                        @endif
+                        <button class="btn btn-sm btn-{{ $dte->confirmation_status === 0 ? 'danger':'primary' }}" wire:click="show({{$dte->id}})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+
+                </tr>
+
+                @if($showEdit == $dte->id)
+                <tr>
+                    <td colspan="11">
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Estado de confirmación</label>
+                            <select class="form-control" id="exampleFormControlSelect1" 
+                                wire:model.defer="confirmation_status">
+                                <option value=""></option>
+                                <option value="0">Rechazar</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Observación</label>
+                            <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                        </div>
+                        <button type="submit" 
+                            class="btn btn-outline-secondary"
+                            wire:click="dismiss">Cancelar</button>
+                        <button type="submit" class="btn btn-primary"
+                            wire:click="save({{$dte->id}})">Guardar</button>
+
                     </td>
                 </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
 
-    {{ $dtes->links() }}
+    <div wire:loading.remove>
+        {{ $dtes->links() }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-row">
+                <div class="col-3">
+                    <select class="form-control" wire:model.defer="establishment_id">
+                        <option value=""></option>
+                        @foreach ($establishments as $name => $id)
+                        <option value="{{ $name }}">{{ $id }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button class="btn btn-primary" wire:click="setEstablishment">
+                    Asignar establecimiento
+                </button>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="mb-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-circle text-success"></i>
+                    <span class="ml-2">Menos de 5 días</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-circle text-info"></i>
+                    <span class="ml-2">5 días</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-circle text-warning"></i>
+                    <span class="ml-2">Menos de 8 días</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-circle text-danger"></i>
+                    <span class="ml-2">8 días o más</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 </div>
