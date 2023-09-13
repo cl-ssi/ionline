@@ -21,10 +21,6 @@ return new class extends Migration
             $table->datetime('visation_contract_manager_at')->after('visation_contract_manager_ou')->nullable();
             $table->boolean('visation_contract_manager_status')->after('visation_contract_manager_at')->nullable();
             $table->text('visation_contract_manager_rejection_observation')->after('visation_contract_manager_status')->nullable();
-            
-
-            
-
         });
     }
 
