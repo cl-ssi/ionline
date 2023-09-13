@@ -192,7 +192,7 @@
                     </td>
                     <td class="small">
                         {{ $dte->requestForm?->contractManager?->tinnyName }} <br>
-                        {{ strtr($dte->estado_reclamo, "_", " ") }}
+                        {{ $dte->estado_reclamo }}
                         {{-- 
                             @if ($dte->requestForm)
                                 @if ($dte->requestForm->contractManager)
@@ -207,7 +207,7 @@
                         ({{ $dte->fecha_recepcion_sii ? $dte->fecha_recepcion_sii->diffInDays(now()) : '' }} días)
                     </td>
                     <td class="small">
-                        {{ strtr($dte->estado_devengo, "_", " ") }}
+                        {{ $dte->estado_devengo }}<br>
                         {{ $dte->folio_sigfe }}
                     </td>
 

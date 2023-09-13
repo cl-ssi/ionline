@@ -125,7 +125,11 @@ class PaymentController extends Controller
 
     public function rejected()
     {
-        $dtes = Dte::where('confirmation_status',0)
+        $dtes = Dte::with([
+                'establishment',
+                'confirmationUser'
+            ])
+            ->where('confirmation_status',0)
             ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
             ->orderByDesc('fecha_recepcion_sii')
             ->paginate(100);

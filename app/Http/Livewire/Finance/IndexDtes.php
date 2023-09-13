@@ -111,7 +111,12 @@ class IndexDtes extends Component
             'requestForm.contractManager',
         ])
             ->whereNot('tipo_documento', 'guias_despacho')
-            ->where('confirmation_status','<>',0)
+            // ->whereNull('confirmation_status')
+            // ->orWhere('confirmation_status',true)
+            ->where(function ($query) {
+                $query->where('confirmation_status',true)
+                    ->orWhereNull('confirmation_status');
+            })
             ->orderByDesc('fecha_recepcion_sii');
 
         return $query->paginate(100);
