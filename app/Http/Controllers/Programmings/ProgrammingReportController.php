@@ -100,9 +100,10 @@ class ProgrammingReportController extends Controller
                                     return $q->where('programming_id', $request->programming_id); 
                                  })->orderBy('id')->get();
 
-        $pendingItems = ProgrammingActivityItem::with('programming', 'activityItem', 'requestedBy')->where('programming_id', $request->programming_id)->get();
+        $pendingItems = ProgrammingActivityItem::with('activityItem', 'requestedBy')->where('programming_id', $request->programming_id)->get();
+        $programming = Programming::find($request->programming_id);
 
-        return view('programmings/reports/reportObservation', compact('reviewItems', 'pendingItems'));
+        return view('programmings/reports/reportObservation', compact('reviewItems', 'pendingItems', 'programming'));
     }
 
     public function reportUsers(request $request)

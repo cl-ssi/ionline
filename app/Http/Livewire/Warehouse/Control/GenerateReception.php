@@ -119,21 +119,17 @@ class GenerateReception extends Component
             $this->msg = $th->getMessage();
         }
 
-        if( isset($purchaseOrder) && $purchaseOrder->charges != 0)
-        {
+        if (isset($purchaseOrder) && $purchaseOrder->charges != 0) {
             $this->error = true;
             $this->msg = 'La OC posee cargos asociados.';
             $this->resetInputReception();
         }
 
-        if(!$this->error)
-        {
-            foreach($purchaseOrder->items as $item)
-            {
+        if (!$this->error) {
+            foreach ($purchaseOrder->items as $item) {
                 $quantity = $this->getMaxQuantity($this->po_search, $item->Correlativo, $item->Cantidad);
 
-                if($quantity > 0)
-                {
+                if ($quantity > 0) {
                     $wre_product_id = $this->getWreProductId($this->po_search, $item->Correlativo);
                     $wre_product = $wre_product_id ? Product::find($wre_product_id) : null;
 
@@ -172,8 +168,7 @@ class GenerateReception extends Component
             /**
              * No permite generar ingreso donde los productos ya fueron recepcionados
              */
-            if(count($this->po_items) == 0)
-            {
+            if (count($this->po_items) == 0) {
                 $this->error = true;
                 $this->msg = 'Todos los productos de la orden de compra fueron ingresados en bodega.';
                 $this->resetInputReception();
@@ -182,8 +177,7 @@ class GenerateReception extends Component
             /**
              * Muestra aviso si la orden de compra contiene productos sin código de producto ONU
              */
-            if($this->containsProductsWithoutUnspscCode($purchaseOrder->items))
-            {
+            if ($this->containsProductsWithoutUnspscCode($purchaseOrder->items)) {
                 session()->flash('danger', 'La Orden de Compra contiene productos sin Código de Producto ONU.');
             }
 
@@ -192,8 +186,7 @@ class GenerateReception extends Component
              * No se admite OC sin FR.
              * Se debe relacionar el FR a la OC en caso de no tener FR.
              */
-            if(! isset($this->request_form) && !$this->error)
-            {
+            if (!isset($this->request_form) && !$this->error) {
                 session()->flash('danger', 'La Orden de Compra no tiene un FR relacionado.');
             }
         }
@@ -201,15 +194,12 @@ class GenerateReception extends Component
 
     public function getProgramId()
     {
-        if($this->request_form && $this->request_form->associateProgram)
-        {
+        if ($this->request_form && $this->request_form->associateProgram) {
             $program_id = $this->request_form->associateProgram->id;
-        }
-        else
-        {
+        } else {
             $control = Control::wherePoCode($this->po_search)->first();
             $program_id = null;
-            if($control)
+            if ($control)
                 $program_id = $control->program_id;
         }
         return $program_id;
@@ -220,14 +210,14 @@ class GenerateReception extends Component
         $quantity_enable = $quantity;
 
         $controlItem = ControlItem::query()
-            ->whereHas('control', function($query) use($po_code) {
+            ->whereHas('control', function ($query) use ($po_code) {
                 $query->wherePoCode($po_code)->whereType(1);
             })
             ->whereCorrelativePo($correlative_po)
             ->latest()
             ->first();
 
-        if($controlItem)
+        if ($controlItem)
             $quantity_enable = $quantity - $controlItem->balance;
 
         return $quantity_enable;
@@ -237,14 +227,14 @@ class GenerateReception extends Component
     {
         $wre_product_id = null;
         $controlItem = ControlItem::query()
-            ->whereHas('control', function($query) use($po_code) {
+            ->whereHas('control', function ($query) use ($po_code) {
                 $query->whereStoreId($this->store->id)->wherePoCode($po_code)->whereType(1);
             })
             ->whereCorrelativePo($correlative_po)
             ->latest()
             ->first();
 
-        if($controlItem)
+        if ($controlItem)
             $wre_product_id = $controlItem->product_id;
 
         return $wre_product_id;
@@ -252,7 +242,7 @@ class GenerateReception extends Component
 
     public function getUnspscProductCode($wre_product, $product_code)
     {
-        if($wre_product)
+        if ($wre_product)
             $unspsc_product_code = $wre_product->product->code;
         else
             $unspsc_product_code = ($product_code == 0) ? null : $product_code;
@@ -262,7 +252,7 @@ class GenerateReception extends Component
     public function getUnspscProductName($unspsc_product_code, $product_name)
     {
         $unspsc_product = UnspscProduct::whereCode($unspsc_product_code)->first();
-        if($unspsc_product)
+        if ($unspsc_product)
             $unspsc_product_name = $unspsc_product->name;
         else
             $unspsc_product_name = $product_name;
@@ -274,8 +264,7 @@ class GenerateReception extends Component
         $supplier = Supplier::whereRun($run);
         $commune = ClCommune::whereName($this->purchaseOrder->supplier_commune)->first();
 
-        if($supplier->exists())
-        {
+        if ($supplier->exists()) {
             $supplier = $supplier->first();
             $supplier->update([
                 'code' => ($supplier->code == null) ? $this->purchaseOrder->supplier_code : $supplier->code,
@@ -290,9 +279,7 @@ class GenerateReception extends Component
                 'commune_id' => ($supplier->commune_id == null && $commune) ? $commune->id : $supplier->commune_id,
                 'region_id' => ($supplier->region_id == null && $commune) ? $commune->region->id : $supplier->region_id,
             ]);
-        }
-        else
-        {
+        } else {
             $supplier = Supplier::create([
                 'run' => $this->purchaseOrder->supplier_rut,
                 'dv' => $this->purchaseOrder->supplier_dv,
@@ -317,8 +304,7 @@ class GenerateReception extends Component
     {
         $this->request_form = null;
 
-        if(isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm))
-        {
+        if (isset(ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm)) {
             $requestForm = ImmediatePurchase::wherePoId($this->po_search)->first()->requestForm;
             $this->request_form = $requestForm;
         }
@@ -331,8 +317,7 @@ class GenerateReception extends Component
         $this->technical_signature = null;
         $technical_signer_id = null;
 
-        if($this->request_form && $this->request_form->contractManager)
-        {
+        if ($this->request_form && $this->request_form->contractManager) {
             $technical_signer_id = $this->request_form->contractManager->id;
             $this->technical_signature = $this->request_form->contractManager;
         }
@@ -368,7 +353,7 @@ class GenerateReception extends Component
         $this->wre_product_id = $this->po_items[$index]['wre_product_id'];
         $this->wre_product_name = $this->po_items[$index]['wre_product_name'];
 
-        if($this->po_items[$index]['disabled_wre_product'] == false)
+        if ($this->po_items[$index]['disabled_wre_product'] == false)
             $this->type_product = $this->po_items[$index]['type_product'];
         else
             $this->type_product = 0;
@@ -378,7 +363,7 @@ class GenerateReception extends Component
     {
         $dataValidated = $this->validate();
 
-        if($this->barcodeExists($this->po_items, $dataValidated['barcode'], $this->index_selected))
+        if ($this->barcodeExists($this->po_items, $dataValidated['barcode'], $this->index_selected))
             throw ValidationException::withMessages(['barcode' => '.El campo código de barra ya ha sido registrado.']);
 
         $this->po_items[$this->index_selected]['quantity'] = $dataValidated['quantity'];
@@ -387,11 +372,11 @@ class GenerateReception extends Component
         $this->po_items[$this->index_selected]['unspsc_product_id'] = $this->unspsc_product_id;
         $this->po_items[$this->index_selected]['unspsc_product_code'] = $this->unspsc_product_code;
         $this->po_items[$this->index_selected]['unspsc_product_name'] = $this->getUnspscProductName($this->unspsc_product_code, $this->po_items[$this->index_selected]['product_name']);
-        $this->po_items[$this->index_selected]['has_code_unspsc'] = ($this->unspsc_product_code == null) ? false : true ;
+        $this->po_items[$this->index_selected]['has_code_unspsc'] = ($this->unspsc_product_code == null) ? false : true;
         $this->po_items[$this->index_selected]['wre_product_id'] = $this->wre_product_id;
         $this->po_items[$this->index_selected]['wre_product_name'] = $this->wre_product_name;
 
-        if($this->po_items[$this->index_selected]['disabled_wre_product'] == false)
+        if ($this->po_items[$this->index_selected]['disabled_wre_product'] == false)
             $this->po_items[$this->index_selected]['type_product'] = $this->type_product;
 
         $this->resetInputProduct();
@@ -403,17 +388,16 @@ class GenerateReception extends Component
         $this->wre_product_id = null;
         $this->wre_product_name = null;
 
-        if($this->search_product)
-        {
+        if ($this->search_product) {
             $search = "%$this->search_product%";
             $wre_products = Product::query()
                 ->whereStoreId($this->store->id)
-                ->where(function($query) use($search) {
+                ->where(function ($query) use ($search) {
                     $query->where('name', 'like', $search)
-                    ->orWhere('barcode', 'like', $search)
-                    ->orWhereHas('product', function ($query) use($search) {
-                        $query->where('name', 'like', $search);
-                    });
+                        ->orWhere('barcode', 'like', $search)
+                        ->orWhereHas('product', function ($query) use ($search) {
+                            $query->where('name', 'like', $search);
+                        });
                 })
                 ->whereStoreId($this->store->id)
                 ->get();
@@ -424,16 +408,13 @@ class GenerateReception extends Component
 
     public function searchUnspscCode()
     {
-        if(Str::length($this->search_unspsc_code) == 8)
-        {
+        if (Str::length($this->search_unspsc_code) == 8) {
             $unspscProduct = UnspscProduct::whereCode($this->search_unspsc_code)->first();
 
             $this->unspsc_product_id = $unspscProduct->id;
             $this->unspsc_product_code = $unspscProduct->code;
             $this->unspsc_product_name = $unspscProduct->name;
-        }
-        else
-        {
+        } else {
             $this->unspsc_product_id = null;
             $this->unspsc_product_code = null;
             $this->unspsc_product_name = $this->product_name;
@@ -449,8 +430,7 @@ class GenerateReception extends Component
 
     public function updatedWreProductId($value)
     {
-        if($value != '')
-        {
+        if ($value != '') {
             $wre_product = Product::find($value);
             $this->wre_product_name = $wre_product->name;
             $this->barcode = $wre_product->barcode;
@@ -461,8 +441,8 @@ class GenerateReception extends Component
     {
         unset($items[$index]);
 
-        $newArray = array_filter($items, function($item) {
-            if($item['barcode'] != null)
+        $newArray = array_filter($items, function ($item) {
+            if ($item['barcode'] != null)
                 return $item;
         }, ARRAY_FILTER_USE_BOTH);
 
@@ -471,8 +451,8 @@ class GenerateReception extends Component
 
     public function quantityIsEqualToZero()
     {
-        $newArray = array_filter($this->po_items, function($item) {
-            if($item['quantity'] >= 1)
+        $newArray = array_filter($this->po_items, function ($item) {
+            if ($item['quantity'] >= 1)
                 return $item;
         }, ARRAY_FILTER_USE_BOTH);
 
@@ -482,11 +462,10 @@ class GenerateReception extends Component
     public function finish()
     {
         $dataValidated = $this->validate($this->getRulesReception());
-        if($this->quantityIsEqualToZero())
+        if ($this->quantityIsEqualToZero())
             throw ValidationException::withMessages(['po_items' => 'Todos los productos de la orden de compra tienen cantidad en cero.']);
 
-        if($this->store->visator == null)
-        {
+        if ($this->store->visator == null) {
             session()->flash('danger', 'Disculpe, la Bodega no tiene visador. Por favor agregue uno.');
             return;
         }
@@ -515,13 +494,17 @@ class GenerateReception extends Component
             'technical_signer_id' => $this->technical_signer_id,
             'completed_invoices' => false,
             'require_contract_manager_visation' => $dataValidated['require_contract_manager_visation'],
-             
+
         ]);
 
-        foreach($this->po_items as $item)
-        {
-            if($item['wre_product_id'] == null && $item['quantity'] > 0)
-            {
+        if ($control->require_contract_manager_visation == 1 and $this->request_form) {
+            $control->visation_contract_manager_user_id = $control->requestForm->contract_manager_id;
+            $control->visation_contract_manager_ou = $control->requestForm->contract_manager_ou_id;
+            $control->save();
+        }
+
+        foreach ($this->po_items as $item) {
+            if ($item['wre_product_id'] == null && $item['quantity'] > 0) {
                 $unspscProduct = UnspscProduct::whereCode($item['unspsc_product_code'])->first();
                 $wreProduct = Product::create([
                     'barcode' => $item['barcode'],
@@ -529,12 +512,10 @@ class GenerateReception extends Component
                     'unspsc_product_id' => $unspscProduct->id,
                     'store_id' => $this->store->id,
                 ]);
-            }
-            else
+            } else
                 $wreProduct = Product::find($item['wre_product_id']);
 
-            if($item['quantity'] > 0)
-            {
+            if ($item['quantity'] > 0) {
                 $lastBalance = Product::lastBalance($wreProduct, $program);
 
                 ControlItem::create([

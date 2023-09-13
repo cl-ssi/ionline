@@ -733,6 +733,13 @@
                             <i class="fas fa-fw fa-boxes"></i> {{ __('Inventario') }}
                         </a>
 
+                        @if(session()->has('god'))
+                            <a class="dropdown-item" href="{{ route('warehouse.visation_contract_manager.index') }}">
+                                <i class="fas fa-tasks"></i> Mis Visaciones Pendiente
+                            </a>
+                        @endif
+
+
                         <a class="dropdown-item" href="{{ route('rrhh.attendance.no-records.mgr') }}">
                             <i class="fas fa-fw fa-clock"></i> {{ __('Justificar asistencia') }}
                         </a>

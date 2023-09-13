@@ -65,6 +65,9 @@ use App\Http\Controllers\Warehouse\OriginController;
 use App\Http\Controllers\Warehouse\DestinationController;
 use App\Http\Controllers\Warehouse\ControlController;
 use App\Http\Controllers\Warehouse\CategoryController as WarehouseCategoryController;
+//todas las visaciones para confirma y visto bueno de proceso de inventario-finanza-fr
+use App\Http\Controllers\Warehouse\VisationContractManager;
+
 use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\Unspsc\SegmentController;
 use App\Http\Controllers\Unspsc\ProductController;
@@ -244,6 +247,7 @@ use App\Http\Controllers\Agreements\AgreementController;
 use App\Http\Controllers\Agreements\AddendumController;
 use App\Http\Controllers\Agreements\AccountabilityDetailController;
 use App\Http\Controllers\Agreements\AccountabilityController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1728,6 +1732,12 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
     });
 
+    Route::prefix('visation_contract_manager')->as('visation_contract_manager.')->group(function () {
+        Route::get('/{tray?}', [VisationContractManager::class, 'index'])->name('index');
+        Route::post('/accept/{control}', [VisationContractManager::class, 'accept'])->name('accept');
+        Route::post('/reject/{control}', [VisationContractManager::class, 'reject'])->name('reject');
+    });
+
 });
 
 Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.change.password'])->group(function () {
@@ -1938,6 +1948,7 @@ Route::prefix('finance')->as('finance.')->middleware(['auth', 'must.change.passw
 
     Route::prefix('purchase-orders')->as('purchase-orders.')->group(function () {
         Route::get('/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->name('show');
+        Route::get('/by-code/{po_code}', [PurchaseOrderController::class, 'showByCode'])->name('showByCode');
     });
 });
 
