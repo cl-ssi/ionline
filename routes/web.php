@@ -52,6 +52,8 @@ use App\Http\Livewire\Inventory\CreateTransfer;
 use App\Http\Livewire\Inventory\CheckTransfer;
 use App\Http\Livewire\Inventory\AssignedProducts;
 use App\Http\Livewire\InventoryLabel\InventoryLabelIndex;
+use App\Http\Livewire\His\NewModification;
+use App\Http\Livewire\His\ModificationMgr;
 use App\Http\Livewire\Finance\UploadDtes;
 use App\Http\Livewire\Finance\IndexDtes;
 use App\Http\Livewire\Finance\DteConfirmation;
@@ -2422,6 +2424,12 @@ Route::prefix('v2/documents')->as('v2.documents.')->middleware('auth')->group(fu
         Route::get('/index', SignatureIndex::class)->name('index');
         Route::get('/signature/{signature}/user/{user}/filename/{filename}/update', [SignSignatureController::class, 'update'])->name('update');
     });
+});
+
+/** Rutas de solicitudes de Rayen */
+Route::prefix('his')->as('his.')->middleware('auth')->group(function () {
+    Route::get('/new-modification', NewModification::class)->name('new-modification');
+    Route::get('/modification-mgr', ModificationMgr::class)->name('modification-mgr');
 });
 
 
