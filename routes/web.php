@@ -1727,7 +1727,6 @@ Route::prefix('warehouse')->as('warehouse.')->middleware(['auth', 'must.change.p
         Route::get('/download-file/{dte}', [StoreController::class, 'downloadFile'])->name('downloadFile');
         Route::delete('/delete-file/{dte}', [StoreController::class, 'deleteFile'])->name('deleteFile');
     });
-
 });
 
 Route::prefix('hotel_booking')->as('hotel_booking.')->middleware(['auth', 'must.change.password'])->group(function () {
@@ -1785,9 +1784,9 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::put('/update/{proposal}', [ProposalController::class, 'update'])->name('update');
         Route::get('/create', [ProposalController::class, 'create'])->name('create');
         Route::post('/store', [ProposalController::class, 'store'])->name('store');
-        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');  
+        Route::delete('/{proposal}/destroy', [ProposalController::class, 'destroy'])->name('destroy');
 
-        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');  
+        Route::get('/open_calendar', [ProposalController::class, 'open_calendar'])->name('open_calendar');
     });
 
     Route::prefix('agenda')->as('agenda.')->middleware(['auth'])->group(function () {
@@ -1810,7 +1809,7 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::get('/change_hour/{id}/{start_date}', [OpenHourController::class, 'change_hour'])->name('change_hour');
         Route::post('/block', [OpenHourController::class, 'block'])->name('block');
         Route::post('/unblock', [OpenHourController::class, 'unblock'])->name('unblock');
-        
+
         // Route::delete('/{openHour}/delete_reservation', [OpenHourController::class, 'delete_reservation'])->name('delete_reservation');  
     });
 
@@ -1820,10 +1819,8 @@ Route::prefix('prof_agenda')->as('prof_agenda.')->middleware(['auth'])->group(fu
         Route::put('/update/{activityType}', [ActivityTypeController::class, 'update'])->name('update');
         Route::get('/create', [ActivityTypeController::class, 'create'])->name('create');
         Route::post('/store', [ActivityTypeController::class, 'store'])->name('store');
-        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');    
+        Route::delete('/{activityType}/destroy', [ActivityTypeController::class, 'destroy'])->name('destroy');
     });
-    
-    
 });
 
 // Inventories
@@ -2479,9 +2476,9 @@ Route::prefix('test')->as('test.')->group(function () {
     /** Usuarios del servicio */
     Route::get('/usuarios', function () {
         echo "<pre>";
-        $users = User::with('organizationalUnit')->whereRelation('organizationalUnit','establishment_id', 38)->get();
-        foreach($users as $user) {
-            echo $user->id.';'.$user->dv.';'.$user->shortName.';'.$user->email.';'.optional($user->organizationalUnit)->name."\n";
+        $users = User::with('organizationalUnit')->whereRelation('organizationalUnit', 'establishment_id', 38)->get();
+        foreach ($users as $user) {
+            echo $user->id . ';' . $user->dv . ';' . $user->shortName . ';' . $user->email . ';' . optional($user->organizationalUnit)->name . "\n";
         }
         echo "</pre>";
     })->middleware('auth');
@@ -2506,7 +2503,10 @@ Route::get('/maquetas/vista', function () {
 
 
 /* Registro asistencia cena SST 2023 */
+
 use App\Http\Controllers\Attendances\PeopleController;
+use App\Http\Controllers\Inventory\MedicalEquipmentController;
+use App\Models\Inv\MedicalEquipment;
 
 Route::get('/attendances/', function () {
     return view('attendances.principal');
@@ -2517,6 +2517,16 @@ Route::get('/attendances/unregistered', function () {
     return view('attendances.unregistered');
 })->name('attendances.unregistered');
 
-Route::get('/attendances/main', function() {
+Route::get('/attendances/main', function () {
     return view('attendances.main');
 })->name('attendances.main');
+
+Route::prefix('medical-equipment')->name('medical-equipment.')->group(function () {
+    Route::get('/', [MedicalEquipmentController::class, 'index'])->name('index');
+    Route::get('create', [MedicalEquipmentController::class, 'create'])->name('create');
+    Route::post('store', [MedicalEquipmentController::class, 'store'])->name('store');
+    Route::get('{equipment}/edit', [MedicalEquipmentController::class, 'edit'])->name('edit');
+    Route::put('{equipment}/update', [MedicalEquipmentController::class, 'update'])->name('update');
+    Route::delete('{equipment}/destroy', [MedicalEquipmentController::class, 'destroy'])->name('destroy');
+    Route::get('export', [MedicalEquipmentController::class, 'export'])->name('export');
+});
