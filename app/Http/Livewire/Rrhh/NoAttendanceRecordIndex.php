@@ -76,7 +76,7 @@ class NoAttendanceRecordIndex extends Component
                 ->where('establishment_id', auth()->user()->organizationalUnit->establishment_id)
                 ->when($this->filter, function ($query) {
                     $query->whereHas('user', function ($userQuery) {
-                        $userQuery->search($this->filter);
+                        $userQuery->findByUser($this->filter);
                     });
                 })
                 ->latest()

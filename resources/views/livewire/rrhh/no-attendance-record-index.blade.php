@@ -34,6 +34,7 @@
                 <th>Observación</th>
                 <th width="95">Fecha revisión</th>
                 <th>Registro en SIRH</th>
+                <th>Fecha de solicitud de justificación</th>
             </tr>
         </thead>
         <tbody>
@@ -82,6 +83,10 @@
                             </button>
                         @endif
                     </td>
+                    <td>
+                    {{ $record->created_at }}
+                    </td>
+                    
                 </tr>
                 @if ($rejectForm == $record->id)
                     <tr>
