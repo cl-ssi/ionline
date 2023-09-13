@@ -31,6 +31,7 @@ class NewModification extends Component
         $modrequest->creator_id = auth()->id();
 
         $modrequest->save();
+        session()->flash('success', 'Se ha creado la nueva solicitud.');
     }
 
     public function render()

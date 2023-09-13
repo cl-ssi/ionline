@@ -94,6 +94,12 @@
             </div>
         </div>
 
+        <div class="form-group mt-3">
+            <label for="for_observation">Observacion interna</label>
+            <textarea class="form-control" id="for_observation" rows="5" wire:model.defer="modrequest.observation"></textarea>
+            @error('modrequest.observation') <span class="text-danger">{{ $message }}</span> @enderror
+        </div>
+
         <div class="form-row mt-3">
             <div class="form-group col-3">
                 <label for="for_type">Estado de la wea</label>
@@ -162,6 +168,7 @@
         
         <h5>Pendientes:</h5>
         <ol>
+            <li>Agregar campo observación en la BD</li>
             <li>Crear modelo para arhivos, una solicitud puede tener n archivos</li>
             <li>Habilitar la subida de archivos al crear la solicitud</li>
             <li>En el mgr (manager) listar los archivos asociados a la solicitud</li>

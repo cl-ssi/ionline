@@ -62,5 +62,7 @@
         </div>
     </div>
 
+    @include('layouts.partials.flash_message')
+    
     <button class="btn btn-primary" wire:click="save">Crear</button>
 </div>
