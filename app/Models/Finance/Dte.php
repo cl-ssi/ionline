@@ -242,7 +242,13 @@ class Dte extends Model implements Auditable
         return $this->belongsTo(User::class, 'confirmation_user_id');
     }
 
+    public function dtes()
+    {
+        return $this->hasMany(Dte::class,'id','dte_id');
+    }
+    
 
+    /** Creo que ya no se utiliza */
     public function scopeSearch($query, $filter)
     {
   
