@@ -33,10 +33,9 @@
         <label for="for_type">Tipo de solicitud</label>
         <select class="form-control" id="for_type" wire:model.defer="modrequest.type">
             <option></option>
-            <option>Propuesta</option>
-            <option>Propuesta</option>
             <option>Evolutivo</option>
             <option>Normativo</option>
+            <option>Propuesta</option>
         </select>
     </div>
 
