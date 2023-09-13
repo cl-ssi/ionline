@@ -68,7 +68,7 @@ class MercadoPublico extends Model
                 }
                 else {
                     // dd($e->getMessage());
-                    return "No existe en nuestros registros y no nos pudimos conectar con la integración de MercadoPublico";
+                    return "No existe en nuestros registros y no se pudo conectar con MercadoPublico.";
                 }
             }
 
