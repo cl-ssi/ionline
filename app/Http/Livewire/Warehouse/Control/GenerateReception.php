@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use App\User;
 
 class GenerateReception extends Component
 {
@@ -501,6 +502,14 @@ class GenerateReception extends Component
             $control->visation_contract_manager_user_id = $control->requestForm->contract_manager_id;
             $control->visation_contract_manager_ou = $control->requestForm->contract_manager_ou_id;
             $control->save();
+
+            // Notificación al Usuaro administrador de contrato
+            $user = User::findOrFail($control->visation_contract_manager_user_id);
+
+            $user->notify(new \App\Notifications\Warehouse\VisationContractManager);
+
+
+            
         }
 
         foreach ($this->po_items as $item) {
