@@ -87,6 +87,7 @@
                 @csrf
                 @method('POST')
                     <div class="row">
+                            <input class="openHours_id" type="hidden" id="" name="openHours_id">
                             <fieldset class="form-group col-12 col-md-12">
                                 <label for="for_deleted_bloqued_observation">Motivo del bloqueo de bloque horario</label>
                                 <textarea class="form-control" name="deleted_bloqued_observation" id="" cols="30" rows="5"></textarea>
@@ -102,7 +103,7 @@
                 <form method="POST" class="form-horizontal" onsubmit="return confirm('¿Está seguro de eliminar el bloque de horario?');" action="{{ route('prof_agenda.open_hour.destroy') }}">
                 @csrf
                 @method('POST')
-
+                    <input class="openHours_id" type="hidden" id="" name="openHours_id">
                     <button type="submit" class="form-control btn btn-danger">Eliminar</button>
                 </form>
 
@@ -221,6 +222,16 @@
 
                     <div class="row">
                         <input class="openHours_id" type="hidden" id="" name="openHours_id">
+                        <fieldset class="form-group col-12 col-md-12">
+                            <label for="for_users">Motivo</label>
+                            <textarea class="form-control" id="deleted_bloqued_observation" cols="30" rows="5" disabled></textarea>
+                        </fieldset>
+                    </div>
+
+                    
+
+                    <div class="row">
+                        <!-- <input class="openHours_id" type="hidden" id="" name="openHours_id"> -->
                         <fieldset class="form-group col-12 col-md-6">
                             <label for="for_profesion_id"><br></label>
                             <button type="submit" class="form-control btn btn-warning">Desbloquear</button>
@@ -267,7 +278,8 @@
                             $('#reservedHour').modal();
                         }
                         else if(info.event.extendedProps.status=="Bloqueado"){
-                            $('#unblockHour').modal();
+                            $('#deleted_bloqued_observation').val(info.event.extendedProps.deleted_bloqued_observation);
+                            $('#unblockHour').modal();   
                         }
                         // change the border color just for fun
                         // info.el.style.borderColor = 'red';

@@ -50,13 +50,13 @@
 
                 });
                 
-                console.log(@this.events),
+                // console.log(@this.events),
                 calendar.render();
 
                 @this.on('refreshCalendar', () => {
-                    console.log(@this.events),
-                    calendar.refetchEvents()
-                    // calendar.render()
+                    // console.log(@this.events),
+                    calendar.refetchEvents(),
+                    calendar.render()
                 });
 
                 // Livewire.on('refreshCalendar', () => {

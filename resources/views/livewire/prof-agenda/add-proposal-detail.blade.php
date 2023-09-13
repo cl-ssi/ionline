@@ -47,7 +47,7 @@
 
         <fieldset class="form-group col col-md-2">
             <label for="for_id_deis"><br></label>
-            <button type="submit" class="btn btn-primary form-control" @disabled($proposal->status == "Aperturado") wire:click="save()">Guardar</button>
+            <button type="submit" class="btn btn-primary form-control"  wire:click="save()">Guardar</button>
         </fieldset>
     
     </div>

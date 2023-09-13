@@ -24,20 +24,24 @@ class Agenda extends Component
                         $array[$count]['contact_number'] = $hour->contact_number;
                         $array[$count]['start'] = $hour->start_date;
                         $array[$count]['end'] = $hour->end_date;
+                        // reservado
                         if($hour->patient_id){
                             $array[$count]['color'] = "#EB9489";
                             $array[$count]['title'] = $hour->patient->shortName;
                             $array[$count]['status'] = "Reservado";
                         }
+                        // sin reserva
                         else{
                             $array[$count]['color'] = "#CACACA";
                             $array[$count]['title'] = $hour->detail->activityType->name;
                             $array[$count]['status'] = "Disponible";
                         }
+                        // bloqueado
                         if($hour->blocked){
                             $array[$count]['color'] = "#85C1E9";
                             $array[$count]['title'] = "Bloqueado";
                             $array[$count]['status'] = "Bloqueado";
+                            $array[$count]['deleted_bloqued_observation'] = $hour->deleted_bloqued_observation;
                         }
                         $count += 1;
                     }

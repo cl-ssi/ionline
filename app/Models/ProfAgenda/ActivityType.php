@@ -14,7 +14,7 @@ class ActivityType extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'id','name'
+        'id','name','reservable'
     ];
 
     protected $table = 'prof_agenda_activity_types';

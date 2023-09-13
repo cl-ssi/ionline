@@ -29,6 +29,11 @@ class AddProposalDetail extends Component
                             ->where('id','<>',$this->proposal->id)
                             ->get();
 
+        if($this->start_hour >= $this->end_hour){
+            session()->flash('message', 'No es posible agregar, horario de inicio es mayor o igual al horario de término.');
+            return 0;
+        }
+
         // dd($proposals);
         foreach($proposals as $proposal){
             // primero verifica que el rango de fechas de la propuesta coincida con otras propuestas que se revisan.
@@ -68,7 +73,10 @@ class AddProposalDetail extends Component
         $proposalDetail->save();
 
         $this->proposal->refresh();
-        // $this->emit('update_calendar', $this->proposal);
+        // $this->emit('update_calendar');
+
+        // dd(url()->current());
+        // return redirect()->to(url()->current());
     }
 
     public function delete($detail){

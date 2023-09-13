@@ -6,7 +6,7 @@
 
 @include('prof_agenda.partials.nav')
 
-<h3>Agenda</h3>
+<h3>Gestor de la agenda</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('prof_agenda.agenda.index') }}">
 
