@@ -135,6 +135,22 @@
                         @endif
                         <br>
                         {{ $dte->tipo_documento }}
+
+                        @foreach($dte->dtes as $dteAsociate)
+                            @if ($dteAsociate->tipo_documento != 'boleta_honorarios')
+                                <a href="http://dipres2303.acepta.com/ca4webv3/PdfView?url={{ $dteAsociate->uri }}"
+                                    target="_blank" class="btn btn-sm mb-1 btn-outline-secondary">
+                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                                </a>
+                            @else
+                                <a href="{{ $dteAsociate->uri }}" target="_blank"
+                                    class="btn btn-sm mb-1 btn-outline-secondary">
+                                    <i class="fas fa-file-pdf text-danger"></i> {{ $dteAsociate->folio }}
+                                </a>
+                            @endif
+                            <br>
+                            {{ $dteAsociate->tipo_documento }}
+                        @endforeach
                         <br>
                         {{ $dte->emisor }}
                     </td>
@@ -212,7 +228,7 @@
                     </td>
 
                     <td class="small">
-                        <button class="btn btn-sm btn-{{ $dte->confirmation_status === 0 ? 'danger':'primary' }}" wire:click="show({{$dte->id}})">
+                        <button class="btn btn-sm btn-primary" wire:click="show({{$dte->id}})">
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
@@ -223,18 +239,51 @@
                 <tr>
                     <td colspan="11">
 
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect1">Estado de confirmación</label>
-                            <select class="form-control" id="exampleFormControlSelect1" 
-                                wire:model.defer="confirmation_status">
-                                <option value=""></option>
-                                <option value="0">Rechazar</option>
-                            </select>
-                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="for_folio_oc">Folio OC</label>
+                                <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="folio_oc">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Observación</label>
-                            <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                            <div class="form-group col-md-2">
+                                <label for="for_monto_total">Monto Total</label>
+                                <input type="text" class="form-control" id="for_folio_oc" wire:model.defer="monto_total" disabled>
+                            </div>
+                            @switch($dte->tipo_documento)
+                                @case('guias_despacho')
+                                @case('nota_credito')
+                                @case('nota_debito')
+                                    <div class="form-group col-md-5">
+                                        <label for="for_asociate">Asociar a Factura</label>
+                                        <select class="form-control" id="for_asociate" wire:model.defer="asociate_dte_id">
+                                            <option></option>
+                                            @foreach($facturasEmisor as $factura)
+                                            <option value="{{ $factura->id }}">
+                                                {{ $factura->folio }} ( $ {{ money($factura->monto_total) }} ) </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @break
+                            @endswitch
+                            
+                            
+                            
+                        </div>
+        
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="for_confirmation_status">Estado de confirmación</label>
+                                <select class="form-control" id="for_confirmation_status" 
+                                    wire:model.defer="confirmation_status">
+                                    <option value=""></option>
+                                    <option value="0">Rechazar</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-9">
+                                <label for="for_confirmation_observation">Observación</label>
+                                <textarea class="form-control" wire:model.defer="confirmation_observation" rows="3"></textarea>
+                            </div>
                         </div>
                         <button type="submit" 
                             class="btn btn-outline-secondary"

@@ -29,8 +29,14 @@ class IndexDtes extends Component
     
     public $showEdit = null;
 
+    public $folio_oc = null;
     public $confirmation_status = null;
     public $confirmation_observation = null;
+    public $monto_total = null;
+
+    public $facturasEmisor;
+
+    public $asociate_dte_id;
 
     public function searchDtes()
     {
@@ -110,7 +116,6 @@ class IndexDtes extends Component
             'requestForm',
             'requestForm.contractManager',
         ])
-            ->whereNot('tipo_documento', 'guias_despacho')
             // ->whereNull('confirmation_status')
             // ->orWhere('confirmation_status',true)
             ->where(function ($query) {
@@ -166,8 +171,13 @@ class IndexDtes extends Component
     public function show(Dte $dte)
     {
         $this->showEdit = $dte->id;
+        $this->folio_oc = $dte->folio_oc;
         $this->confirmation_status = $dte->confirmation_status;
         $this->confirmation_observation = $dte->confirmation_observation;
+        $this->monto_total = '$ '.number_format($dte->monto_total, 0, '', '.');
+        $this->facturasEmisor = Dte::whereEmisor($dte->emisor)
+            ->whereTipoDocumento('factura_electronica')
+            ->get();
     }
 
     public function dismiss()
@@ -179,11 +189,13 @@ class IndexDtes extends Component
     public function save($dte_id)
     {
         Dte::whereId($dte_id)->update([
+            'folio_oc' => str_replace(' ', '', $this->folio_oc),
             'confirmation_status' => $this->confirmation_status,
             'confirmation_user_id' => auth()->id(),
             'confirmation_ou_id' => auth()->user()->organizational_unit_id,
             'confirmation_at' => now(),
             'confirmation_observation' => $this->confirmation_observation,
+            'dte_id' => $this->asociate_dte_id,
         ]);
         $this->showEdit = null;
     }
