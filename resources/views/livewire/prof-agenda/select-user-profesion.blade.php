@@ -11,7 +11,6 @@
 
     <fieldset class="form-group col col-md-4">
         <label for="for_type">Funcionario</label>
-        {{$user_id}}
         <select class="form-control" name="user_id">
             <option value=""></option>
             @if($users)

@@ -75,8 +75,8 @@ class AddProposalDetail extends Component
         $this->proposal->refresh();
         // $this->emit('update_calendar');
 
-        // dd(url()->current());
-        // return redirect()->to(url()->current());
+        // se hace de esta manera ya que no se puede actualizar fullcalendar a través del render (problema del complemento livewire/fullcalendar al parecer)
+        return redirect()->to('prof_agenda/proposals/edit/'.$this->proposal->id);
     }
 
     public function delete($detail){
