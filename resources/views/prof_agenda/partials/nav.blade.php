@@ -10,7 +10,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('prof_agenda.agenda.index') }}"
             href="{{ route('prof_agenda.agenda.index') }}">
-            <i class="fa fa-calendar"></i> Agenda
+            <i class="fa fa-calendar"></i> Gestor de agenda
         </a>
     </li>
 

@@ -15,6 +15,15 @@
         <label for="for_start_date">Nombre tipo de actividad</label>
         <input type="text" class="form-control" name="name" required>
     </fieldset>
+
+    <fieldset class="form-group col col-md">
+        <label for="for_start_date">Tipo</label>
+        <select class="form-control" name="reservable" id="">
+            <option value=""></option>
+            <option value="1">Reservable</option>
+            <option value="0">No reservable</option>
+        </select>
+    </fieldset>
 </div>
 
 <button type="submit" class="btn btn-primary">Guardar</button>

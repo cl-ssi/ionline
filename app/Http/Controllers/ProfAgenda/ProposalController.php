@@ -155,42 +155,43 @@ class ProposalController extends Controller
                 // solo si está dentro del segmento de la propuesta
                 if($date >= $proposal->start_date && $date <= $proposal->end_date){
                     foreach($proposal->details->where('day',$date->dayOfWeek) as $detail){
-                        // dd($detail);
-    
-                        // crea bloques de horarios
-                        $duration = $detail->duration . ' minutes';
-                        
-                        foreach (CarbonPeriod::create($detail->start_hour, $duration, $detail->end_hour)->excludeEndDate() as $key => $hour) {
-                            // dd($hour);
-    
-                            $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['start_date'] = $date->format('Y-m-d') . " " . $hour->format('H:i');
-                            $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['end_date'] = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
-                            $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['activity_name'] = $detail->activityType->name;
-    
-                            // verifica si existe el bloque, si no existe, lo crea.
-                            $openHour = OpenHour::where('proposal_detail_id',$detail->id)
-                                                ->where('start_date',$date->format('Y-m-d') . " " . $hour->format('H:i'))
-                                                ->where('end_date',Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i'))
-                                                ->get();
-    
-                            // dd($openHour);
-                            if($openHour->count()==0){
-                                // bloques nuevos
-                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9';
-                                $newOpenHour = new OpenHour();
-                                $newOpenHour->proposal_detail_id = $detail->id;
-                                $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
-                                $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
-                                // dd($newOpenHour);
-                                $newOpenHour->save();
-                                
-                                $count += 1;
-    
-                                $proposal->status = "Aperturado";
-                                $proposal->save();
-                            }else{
-                                // bloques ya existentes
-                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf';
+                        // solo si es de un tipo reservable
+                        if($detail->activityType->reservable){
+                            // crea bloques de horarios
+                            $duration = $detail->duration . ' minutes';
+                            
+                            foreach (CarbonPeriod::create($detail->start_hour, $duration, $detail->end_hour)->excludeEndDate() as $key => $hour) {
+                                // dd($hour);
+        
+                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['start_date'] = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['end_date'] = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
+                                $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['activity_name'] = $detail->activityType->name;
+        
+                                // verifica si existe el bloque, si no existe, lo crea.
+                                $openHour = OpenHour::where('proposal_detail_id',$detail->id)
+                                                    ->where('start_date',$date->format('Y-m-d') . " " . $hour->format('H:i'))
+                                                    ->where('end_date',Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i'))
+                                                    ->get();
+        
+                                // dd($openHour);
+                                if($openHour->count()==0){
+                                    // bloques nuevos
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#85C1E9';
+                                    $newOpenHour = new OpenHour();
+                                    $newOpenHour->proposal_detail_id = $detail->id;
+                                    $newOpenHour->start_date = $date->format('Y-m-d') . " " . $hour->format('H:i');
+                                    $newOpenHour->end_date = Carbon::parse($date->format('Y-m-d') . " " . $hour->format('H:i'))->addMinutes($detail->duration)->format('Y-m-d H:i');
+                                    // dd($newOpenHour);
+                                    $newOpenHour->save();
+                                    
+                                    $count += 1;
+        
+                                    $proposal->status = "Aperturado";
+                                    $proposal->save();
+                                }else{
+                                    // bloques ya existentes
+                                    $block_dates[$date->format('Y-m-d') . " " . $hour->format('H:i')]['color'] = '#f5c6bf';
+                                }
                             }
                         }
                     }

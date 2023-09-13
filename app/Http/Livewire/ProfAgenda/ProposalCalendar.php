@@ -18,12 +18,15 @@ class ProposalCalendar extends Component
  
     public function update_calendar(Proposal $proposal)
     {
+        // dd("");
         // $this->proposal = $proposal;
         // $this->proposal->refresh();
+        // $this->proposal->refresh();
         // $this->events;
-        $this->events = '';
-        $this->emit('refreshCalendar');
-        $this->mount();
+        // $this->events = '';
+        // $this->emit('refreshCalendar');
+        // $this->mount();
+        $this->render();
     }
 
     // public function mount(){
@@ -61,9 +64,11 @@ class ProposalCalendar extends Component
             }
         }
 
+        // dd($array);
         $this->events = json_encode($array);
+        // $this->emit('refreshCalendar');
         // $this->events = null;
-        $this->emit('refreshCalendar');
+        // $this->emit('refreshCalendar');
 
         // $this->clearCache();
         // $this->emit('refreshCalendar');

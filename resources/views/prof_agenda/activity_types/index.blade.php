@@ -15,6 +15,7 @@
 		<tr>
             <th>Id</th>
 			<th nowrap>Nombre</th>
+            <th nowrap>Reservable</th>
             <th style="width:10%"></th>
             <th style="width:10%"></th>
 		</tr>
@@ -24,6 +25,7 @@
 		<tr>
             <td>{{ $activityType->id}}</td>
 			<td nowrap>{{ $activityType->name }}</td>
+            <td nowrap>@if($activityType->reservable) Reservable @else No reservable @endif</td>
 			<td style="width:10%">
 				<a href="{{ route('prof_agenda.activity_types.edit', $activityType) }}"
 					class="btn btn-sm btn-outline-secondary">
