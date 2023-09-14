@@ -35,7 +35,7 @@ class DteController extends Controller
     }
 
     /** Testing, para probar el modulo de aprobaciones */
-    public function process($param1,$param2) {
-        logger()->info('Prueba de cola dte user:' . $param2);
+    public function process($approval_id, $param1, $param2) {
+        logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
     }
 }

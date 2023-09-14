@@ -1267,7 +1267,7 @@ Route::prefix('documents')->as('documents.')->middleware(['auth', 'must.change.p
     Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', [SignatureController::class, 'massSignModal'])->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', [SignatureController::class, 'callbackFirma'])->name('callbackFirma');
 
-    Route::get('/approvals', ApprovalsMgr::class)->name('approvals');
+    Route::get('/approvals/{approval?}', ApprovalsMgr::class)->name('approvals');
 });
 
 Route::resource('documents', DocumentController::class)->middleware(['auth', 'must.change.password']);

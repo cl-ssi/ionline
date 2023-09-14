@@ -17,8 +17,12 @@ class ApprovalsMgr extends Component
     /**
     * mount
     */
-    public function mount()
+    public function mount(Approval $approval)
     {
+        /** Si se pasa un modelo por parametro, se carga la hoja con el modal abierto */
+        if($approval->exists) {
+            $this->show($approval);
+        }
         $this->filter['status'] = '';
     }
 
@@ -74,8 +78,18 @@ class ApprovalsMgr extends Component
     */
     public function getApprovals()
     {
+        /** Soy manager de alguna OU hoy? */
+        $ous = auth()->user()->amIAuthorityFromOu->pluck('organizational_unit_id')->toArray();
+
         $query = Approval::query();
 
+        /** Filtrar los que son dirigidos a mi lista de ous o mi persona */
+        $query->where(function ($query) use($ous) {
+            $query->whereIn('approver_ou_id',$ous)
+                  ->orWhere('approver_id',auth()->id());
+        });
+
+        /** Filtro */
         switch($this->filter['status']) {
             case "0": $query->where('status',false); break;
             case "1": $query->where('status',true); break;

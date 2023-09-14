@@ -28,7 +28,7 @@
                 <th>Asunto</th>
                 <th width="140px">Fecha Acción</th>
                 <th>Observación</th>
-                <th width="90px"></th>
+                <th width="120px"></th>
             </tr>
         </thead>
         <tbody>
@@ -70,7 +70,7 @@
                         class="btn btn-primary btn-sm"
                         wire:click='show({{$approval}})'
                     >
-                        <i class="fas fa-fw fa-eye"></i>
+                        <i class="fas fa-fw fa-eye"></i> <i class="fas fa-fw {{ $approval->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i>
                     </button>
                 </td>
             </tr>
@@ -108,7 +108,13 @@
 
                                 <div class="col-6 text-left">
                                     <h5 class="modal-title">
-                                        Aprobará como {{ auth()->user()->tinnyName }}
+                                        Aprobará como 
+                                            <i class="fas fa-fw {{ $approvalSelected->approver_ou_id ? 'fa-chess-king' : 'fa-user' }}"></i> 
+                                            @if($approvalSelected->approver_ou_id)
+                                                de {{ $approvalSelected->organizationalUnit->name }}
+                                            @else
+                                                {{ auth()->user()->tinnyName }}
+                                            @endif
                                     </h5>
                                 </div>
     

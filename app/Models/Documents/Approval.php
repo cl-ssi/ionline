@@ -2,8 +2,10 @@
 
 namespace App\Models\Documents;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
 
 class Approval extends Model
 {
@@ -43,8 +45,8 @@ class Approval extends Model
             "callback_controller_method" => "App\Http\Controllers\Finance\DteController@process",
 
             /* (Opcional) Parámetros que se le pasarán al método callback */
-            /* Siempre se añadirá al principio de este arreglo el parámetro: 'approval_id' => xxx  */
             "callback_controller_params" => json_encode([
+                    //'approval_id' => xxx  <= este parámetro se agregará automáticamente al comienzo
                     'param1' => 15, 
                     'param2' => 'abc'
                 ]), 
@@ -56,11 +58,12 @@ class Approval extends Model
     }
 
     /**
-    * The primary key associated with the table.
+    * The table associated with the model.
     *
     * @var string
     */
     protected $table = 'sign_approvals';
+
 
     /**
     * The attributes that are mass assignable.
@@ -80,6 +83,17 @@ class Approval extends Model
         'callback_controller_params',
         'digital_signature',
     ];
+
+    public function organizationalUnit()
+    {
+        return $this->belongsTo(OrganizationalUnit::class,'approver_ou_id')->withTrashed();
+    }
+
+    public function aprover()
+    {
+        return $this->belongsTo(User::class,'approver_id')->withTrashed();
+    }
+
     /**
     * Get Color With status
     */
@@ -90,5 +104,26 @@ class Approval extends Model
             case '1': return 'success'; break;
             default: return ''; break;
         }
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($approval) {
+            /** Enviar notificación al jefe de la unidad  */
+            if($approval->approver_ou_id) {
+                $approval->organizationalUnit->currentManager?->user?->notify(new \App\Notifications\Documents\NewApproval($approval));
+            }
+            /** De lo contrario enviar al usuario específico */
+            else if($approval->approver_id) {
+                $approval->aprover->notify(new \App\Notifications\Documents\NewApproval($approval));
+            }
+
+            /** Agregar el approval_id al comienzo de los parámetros del callback */
+            $params = json_decode($approval->callback_controller_params,true);
+            $approval->callback_controller_params = json_encode(array_merge(array('approval_id' => $approval->id), $params));
+            $approval->save();
+        });
     }
 }
