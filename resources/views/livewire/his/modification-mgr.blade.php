@@ -11,7 +11,7 @@
             <a class="nav-link {{ active('his.modification-mgr') }}" 
                 href="{{ route('his.modification-mgr') }}">
                 <i class="fas fa-list"></i> Listado de solicitudes</a>
-        </li>    
+        </li>
     </ul>
 
     @if ($form)
@@ -35,9 +35,9 @@
             <label for="for_type">Tipo de solicitud</label>
             <select class="form-control" id="for_type" wire:model.defer="modrequest.type">
                 <option></option>
-                <option>Evolutivo</option>
-                <option>Normativo</option>
-                <option>Propuesta</option>
+                @foreach($param_types as $type)
+                    <option>{{ $type }}</option>
+                @endforeach
             </select>
         </div>
 
@@ -69,27 +69,23 @@
 
             <div class="col-9">
 
+                @foreach($ous as $ou)
                 <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
-                    <label class="custom-control-label" for="customSwitch1">
-                        Solicitar VB de Jefe Directo (Tatiana Molina) "Jefe del creador"
+                    <input type="checkbox" 
+                        class="custom-control-input" 
+                        id="for_switch_{{$ou->id}}" 
+                        wire:model.defer="vb.{{$ou->id}}"
+                        checked>
+                    <label class="custom-control-label" for="for_switch_{{$ou->id}}">
+                        {{ $ou->name }}
+                        ({{ $ou->currentManager?->user->shortName }})
                     </label>
                 </div>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                    <label class="custom-control-label" for="customSwitch2">
-                        Solicitar VB de Estadística (Irene Vásques) "parametrizar con el ou_id de estadisitca"
-                    </label>
-                </div>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch3" checked>
-                    <label class="custom-control-label" for="customSwitch3">
-                        Solicitar VB de Subdirector (Carlos Calvo) "Jefe del jefe del creador"
-                    </label>
-                </div>
+                @endforeach
+
             </div>
             <div class="col-3">
-                <button type="button" class="btn btn-primary" wire:click="index()">
+                <button type="button" class="btn btn-primary" wire:click="setApprovals({{$modrequest}})">
                     <i class="fas fa-paper-plane"></i> Enviar para VB</button>
             </div>
         </div>
@@ -117,6 +113,8 @@
                 <button type="button" class="btn btn-outline-secondary" wire:click="index()">Cancelar</button>
             </div>
         </div>
+
+        {{ print_r($vb) }}
     @else
 
         <h3 class="mb-3">Listado de modificaciones</h3>
@@ -175,5 +173,19 @@
             <li>Crear las aprobaciones (Atorres)</li>
         </ol>
 
+        @livewire('parameters.parameter.single-manager',[
+            'module'=>'his_modifications',
+            'parameterName' => 'tipos_de_solicitudes',
+            'type' => 'value'
+        ])
+
+        <label for="for-unidades">Ids de las unidades que vendrán después de la jefatura de la persona que hizo la solicitud</label>
+        @livewire('parameters.parameter.single-manager',[
+            'module'=>'his_modifications',
+            'parameterName' => 'ids_unidades_vb',
+            'type' => 'value'
+        ])
+
     @endif
+
 </div>

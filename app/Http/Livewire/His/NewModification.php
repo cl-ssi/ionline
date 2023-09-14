@@ -3,11 +3,13 @@
 namespace App\Http\Livewire\His;
 
 use Livewire\Component;
+use App\Models\Parameters\Parameter;
 use App\Models\His\ModificationRequest;
 
 class NewModification extends Component
 {
     public $modrequest;
+    public $types;
 
     protected $rules = [
         'modrequest.type' => 'required',
@@ -20,6 +22,14 @@ class NewModification extends Component
         'modrequest.type.required' => 'El tipo es obligatorio.',
         'modrequest.subject.required' => 'El asunto es obligatorio.',
     ];
+
+    /**
+    * mount
+    */
+    public function mount()
+    {
+        $this->types = explode(',',Parameter::get('his_modifications','tipos_de_solicitudes'));
+    }
 
     /**
     * Guardar
