@@ -7,6 +7,8 @@
         <link href="{{ asset('css/report.css') }}" rel="stylesheet">
     </head>
     <body onload="init()">
+        {{-- @include('documents.templates.partials.footer') --}}
+        
         <div class="content">
             <img style="padding-bottom: 4px;" src="{{ asset('images//Logo Servicio de Salud Tarapacá - Pluma.png') }}"
                 width="120" alt="Logo {{ env('APP_SS') }}"><br>

@@ -4,6 +4,8 @@ body {
 }
 .content {
     margin: 0 auto;
+    /* margin: .5in; */
+    margin-bottom: 100px;
     /*border: 1px solid #F2F2F2;*/
     width: 724px;
     /*height: 1100px;*/
