@@ -21,7 +21,7 @@ class Approval extends Model
             "module" => "Rayen",
 
             /* Ícono del módulo para que aparezca en la bandeja de aprobación */
-            "module_icon" => "edit",
+            "module_icon" => "fas fa-rocket",
 
             /* Asunto de la aprobación */
             "subject" => "Asunto",

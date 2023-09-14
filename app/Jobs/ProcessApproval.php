@@ -26,9 +26,9 @@ class ProcessApproval implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Approval $approval)
+    public function __construct(Approval $approvalSelected)
     {
-        $this->approval = $approval;
+        $this->approval = $approvalSelected;
     }
 
     /**
