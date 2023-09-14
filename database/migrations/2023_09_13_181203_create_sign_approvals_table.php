@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('callback_controller_params')->nullable();
             $table->boolean('status')->nullable();
             $table->string('reject_observation')->nullable();
+            $table->boolean('digital_signature')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
