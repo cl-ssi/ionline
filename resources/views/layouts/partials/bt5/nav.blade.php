@@ -90,26 +90,30 @@
 
                         @canany(['Documents: create','Documents: edit','Documents: add number', 'Documents: dev'])
                         <a class="dropdown-item {{ active('documents.index') }}" href="{{ route('documents.index') }}">
-                            <i class="fas fa-pen"></i> Generador de documentos
+                            <i class="fas fa-fw fa-pen"></i> Generador de documentos
                         </a>
                         @endcan
 
                         @canany(['Documents: signatures and distribution'])
                         <a class="dropdown-item {{ active('documents.signatures.*') }}" href="{{ route('documents.signatures.index', ['pendientes']) }}">
-                            <i class="fas fa-signature"></i> Solicitud de firmas
+                            <i class="fas fa-fw fa-signature"></i> Solicitudes de firma
+                        </a>
+
+                        <a class="dropdown-item {{ active('documents.approvals') }}" href="{{ route('documents.approvals') }}">
+                            <i class="fas fa-fw fa-thumbs-up"></i> Solicitudes de aprobacion
                         </a>
                         @endcan
 
                         @canany(['Partes: oficina','Partes: user','Partes: director'])
                         <a class="dropdown-item {{ active('documents.partes.*') }}" href="{{ route('documents.partes.index') }}">
-                            <i class="fas fa-file-import"></i> Partes
+                            <i class="fas fa-fw fa-file-import"></i> Partes
                         </a>
                         @endcan
 
                         @can('Agreement: view')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item {{ active('agreements.tracking.*') }}" href="{{ route('agreements.tracking.index') }}">
-                            <i class="fas fa-file"></i> Convenios
+                            <i class="fas fa-fw fa-file"></i> Convenios
                         </a>
                         @endcan
 

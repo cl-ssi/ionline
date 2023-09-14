@@ -1,5 +1,7 @@
 <div>
-    <h3 class="mb-3">Mis Aprobaciones</h3>
+    @section('title', "Solicitudes de aprobación")
+
+    <h3 class="mb-3">Solicitudes de aprobación</h3>
 
     <div class="form-row">
         <div class="form-group col-md-4">
