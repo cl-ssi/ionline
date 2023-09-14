@@ -8,17 +8,14 @@ use App\Models\Finance\Dte;
 class SigfeFolioDevengo extends Component
 {
     public $nuevoFolioDevengo = null;
-    public $dteId;
+    public $dte;
     public $successMessage = '';
     public $editing = false;
 
-    public function mount($dteId)
+    public function mount($dte)
     {
-        $this->dteId = $dteId;
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $this->nuevoFolioDevengo = $dte->folio_devengo_sigfe;
-        }
+        $this->dte = $dte;
+        $this->nuevoFolioDevengo = $dte->folio_devengo_sigfe;
     }
 
     public function render()
@@ -28,11 +25,9 @@ class SigfeFolioDevengo extends Component
 
     public function guardarFolioDevengo()
     {
-        // Aquí obtienes el Dte correspondiente y actualizas el campo
-        $dte = Dte::find($this->dteId);
-        if ($dte) {
-            $dte->folio_devengo_sigfe = $this->nuevoFolioDevengo;
-            $dte->save();
+        if ($this->dte) {
+            $this->dte->folio_devengo_sigfe = $this->nuevoFolioDevengo;
+            $this->dte->save();
             $this->successMessage = 'Folio devengo sigfe guardado exitosamente.';
         }
     }

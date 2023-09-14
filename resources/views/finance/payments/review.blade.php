@@ -124,17 +124,17 @@
                         @endif
                     </td>
                     <td class="small">
-                        @livewire('finance.sigfe-folio-compromiso', ['dteId' => $dte->id], key($dte->id))
+                        @livewire('finance.sigfe-folio-compromiso', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
-                        @livewire('finance.sigfe-archivo-compromiso', ['dteId' => $dte->id], key($dte->id))
+                        @livewire('finance.sigfe-archivo-compromiso', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
-                        @livewire('finance.sigfe-folio-devengo', ['dteId' => $dte->id], key($dte->id))
+                        @livewire('finance.sigfe-folio-devengo', ['dte' => $dte], key($dte->id))
                     </td>
 
                     <td class="small">
-                        @livewire('finance.sigfe-archivo-devengo', ['dteId' => $dte->id], key($dte->id))
+                        @livewire('finance.sigfe-archivo-devengo', ['dte' => $dte], key($dte->id))
                     </td>
                     <td class="small">
                         <a href="{{ route('finance.payments.sendToReadyInbox', ['dte' => $dte->id]) }}"
