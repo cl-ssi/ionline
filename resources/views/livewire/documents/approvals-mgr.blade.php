@@ -28,7 +28,7 @@
                 <th>Asunto</th>
                 <th width="140px">Fecha Acción</th>
                 <th>Observación</th>
-                <th width="120px"></th>
+                <th width="110px"></th>
             </tr>
         </thead>
         <tbody>

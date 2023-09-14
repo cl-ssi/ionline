@@ -20,13 +20,13 @@ class Approval extends Model
     public static function ejemplo_de_uso() {
         $approval = Approval::create([
             /* Nombre del Módulo que está enviando la solicitud de aprobación */
-            "module" => "Rayen",
+            "module" => "Estado de Pago",
 
             /* Ícono del módulo para que aparezca en la bandeja de aprobación */
             "module_icon" => "fas fa-rocket",
 
             /* Asunto de la aprobación */
-            "subject" => "Asunto",
+            "subject" => "Nueva orden de compra",
 
             /* Nombre de la ruta que se mostrará al hacer click en el documento */
             "document_route_name" => "finance.purchase-orders.showByCode",
@@ -55,6 +55,10 @@ class Approval extends Model
             "digital_signature" => false,
         ]);
 
+        /** Ejemplo de método del controlador que procesa el callback */
+        // public function process($approval_id, $param1, $param2) {
+        //     logger()->info('Prueba de callback modulo aprobaciones: id ' . $approval_id. ' param1: '. $param1);
+        // }
     }
 
     /**
